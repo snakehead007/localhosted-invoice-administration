@@ -14,10 +14,13 @@ html
                 form(action='/edit-factuur/'+contact._id+'/'+factuur._id,method='post')
                     p=msg
                     div(class="form-row")
-                      div(class="form-group col-md-6")
-                              label(for="title") Datum
-                              input(type="text",value=factuur.datum,name="datum")
-                      div(class="form-group col-md-6")
-                              label(for="title") Factuur Nummer
-                              input(type="number",value=factuur.factuurNr,name="factuurNr")
+                        div(class="form-group col-md-6")
+                                label(for="title") Datum
+                                input(type="text",class="form-control",value=factuur.datum,name="datum")
+                        div(class="form-group col-md-6")
+                                label(for="title") Factuur Nummer
+                                input(type="number",class="form-control",value=factuur.factuurNr,name="factuurNr")
+                        div(class="form-group col-md-6")
+                                label(for="title") voorschot
+                                input(type="number",class="form-control",value=factuur.voorschot,name="factuurNr")
                     button(type="submit",class="btn btn-primary") bijwerken

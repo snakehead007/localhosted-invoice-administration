@@ -46,7 +46,9 @@ var FactuurSchema=new Schema({
     factuurNr:{type:Number},
     aantalBestellingen:{type:Number,default:0},
     contact: {type: Schema.Types.ObjectId, ref:'Contact'},
-    bestellingen: [{type: Schema.Types.ObjectId, ref:'Bestelling'}]
+    bestellingen: [{type: Schema.Types.ObjectId, ref:'Bestelling'}],
+    isBetaald : {type:Boolean,default:false},
+    voorschot : {type: Number, default:0}
 })
 
 var Factuur=mongoose.model('Factuur',FactuurSchema);
@@ -372,6 +374,7 @@ app.get('/facturen/:idc',function(req,res){
         contact=_contact;
         Factuur.find({contact:req.params.idc},function(err,facturen){
         if(!err){
+            console.log(facturen);
             res.render('facturen',{'contact':contact,'facturenLijst':facturen,'description':"Facturen van "+contact.contactPersoon});
         }else{
           console.log("err factuur.find: "+err);
@@ -488,7 +491,8 @@ app.post('/edit-factuur/:idc/:idf',function(req,res){
   console.log("#edit-factuur GET");
   var updateFactuur={
     datum:req.body.datum,
-    factuurNr:req.body.factuurNr
+    factuurNr:req.body.factuurNr,
+    voorschot:req.body.voorschot
   };
   Contact.findOne({_id:req.params.idc},function(err,contact){
     Factuur.update({_id:req.params.idf},updateFactuur,function(err,factuur){
@@ -522,6 +526,10 @@ app.get('/view-bestelling/:idb',function(req,res){
       res.render('view-bestelling',{'bestelling':bestelling});
     }
   });
+});
+
+app.post('/change-betaald',function(req,res){
+
 });
 
 // Set the view engine
