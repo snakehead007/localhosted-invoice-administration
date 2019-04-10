@@ -1,0 +1,49 @@
+body{
+    font-family:Arial, Helvetica, sans-serif;
+}
+h1,ul{
+    margin: 0px;
+    padding: 0px;
+}
+.container{
+    width:1000px;
+    margin: 0 auto;
+    height: auto;
+    padding:10px;
+    border:1px solid #ccc;
+    box-shadow:0px 0px 5px #ccc;
+    margin-top:5%;
+    overflow: auto;
+}
+.top-menu{
+    border-bottom:1px solid #ddd;
+    padding-bottom:5px;
+    overflow: auto;
+    margin-bottom: 30px;
+}
+.page-heading{
+    float: left;
+}
+.top-menu ul{
+    float: right;
+}
+.top-menu ul li{
+    list-style: none;
+    display: inline-block;
+}
+.top-menu ul li a{
+    display: block;
+    padding: 10px 5px;
+    text-decoration: none;
+    font-size: 13px;
+
+}
+
+/* Button STyling */
+.button{
+    padding:5px;
+    font-size: 13px;
+    background: #ccc;
+    margin: 5px;
+    color: blue;
+}

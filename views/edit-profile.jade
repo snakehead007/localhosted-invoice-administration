@@ -1,0 +1,44 @@
+html
+    head
+        title=title
+        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous")
+    body
+          header          
+                  button(type="button",class="btn btn-outline-primary")
+                      a(class="nav-link",href='/') Home
+                  button(type="button",class="btn btn-outline-primary")
+                      a(class="nav-link",href='/edit-profile') Mijn profiel
+          div(class="jumbotron")
+            p(class="lead") profiel aanpassen
+                hr
+                form(action='/edit-profile/'+profile._id,method='post')
+                    p=msg
+                    div(class="form-row")
+                      div(class="form-group col-md-6")
+                              label(for="title") firma naam
+                              input(type="text",class="form-control",value=profile.firma,name="firma",placeholder="firma en co.")
+                      div(class="form-group col-md-6")
+                              label(for="title") naam
+                              input(type="text",class="form-control",value=profile.naam,name="naam",placeholder="Jan Janssens")
+                      div(class="form-group col-md-6")
+                              label(for="title") straatnaam
+                              input(type="text",class="form-control",value=profile.straat,name="straat",placeholder="grotestraat")                                
+                      div(class="form-group col-md-6")
+                              label(for="title") straat nr
+                              input(type="number",class="form-control",value=profile.straatNr,name="straatNr",placeholder="12")
+                      div(class="form-group col-md-6")
+                              label(for="title") postcode
+                              input(type="number",class="form-control",value=profile.postcode,name="postcode",placeholder="1234")
+                      div(class="form-group col-md-6")
+                              label(for="title") plaatsnaam
+                              input(type="text",class="form-control",value=profile.plaats,name="plaats",placeholder="Gent")
+                      div(class="form-group col-md-6")
+                              label(for="title") btw-nummer
+                              input(type="text",class="form-control",value=profile.btwNr,name="btwNr",placeholder="BE 0000.000.000")
+                      div(class="form-group col-md-6")
+                              label(for="title") IBAN-nr
+                              input(type="text",class="form-control",value=profile.iban,name="iban",placeholder="BE77 7777 7777 7777")
+                      div(class="form-group col-md-6")
+                              label(for="title") BIC-nr
+                              input(type="text",class="form-control",value=profile.bic,name="bic",placeholder="KREDBEBB")
+                    button(type="submit",class="btn btn-primary") toevoegen

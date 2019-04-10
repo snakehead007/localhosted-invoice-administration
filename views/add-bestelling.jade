@@ -1,0 +1,26 @@
+html
+    head
+        title=title
+        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous")
+    body
+          header          
+                  button(type="button",class="btn btn-outline-primary")
+                      a(class="nav-link",href='/') Home
+                  button(type="button",class="btn btn-outline-primary")
+                      a(class="nav-link",href='/edit-profile') Mijn profiel
+          div(class="jumbotron")
+            p(class="lead")=description
+                hr
+                form(action='/add-bestelling/'+factuur._id,method='post')
+                    p=msg
+                    div(class="form-row")
+                        div(class="form-group col-md-6")
+                                label(for="title") beschrijving
+                                input(type="text",class="form-control",name="beschrijving", required)
+                        div(class="form-group col-md-6")
+                                label(for="title") aantal
+                                input(type="number",class="form-control",name="aantal", required)                                
+                        div(class="form-group col-md-6")
+                                label(for="title") bedrag voor één
+                                input(type="number",class="form-control",name="bedrag", required)
+                    button(type="submit",class="btn btn-primary") toevoegen
