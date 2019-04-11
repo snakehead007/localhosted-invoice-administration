@@ -544,20 +544,14 @@ app.get('/change-betaald/:id',function(req,res){
       var voor = new Boolean();
       voor = !(factuur.isBetaald);
       console.log("betaald now: "+voor);
-      var updateFactuur={
-        datum:factuur.datum,
-        factuurNr:factuur.factuurNr,
-        voorschot:factuur.vooschot,
-        isBetaald:voor
-      };
-      Factuur.updateOne({_id:req.params.idf},updateFactuur,function(err,newfactuur){
+      //update(req.params.idf,voor);
+      Factuur.updateOne({_id:req.params.idf},{isBetaald:voor},function(err,result){
         if(!err){
           res.redirect('/facturen/'+factuur.contact);
         }
       });
     }
   });
-
 });
 
 // Set the view engine
@@ -573,3 +567,7 @@ app.listen('3000',function(){
 Schema=mongoose.Schema;
 
 });
+async function update(id,voor){
+  await Factuur.updateOne({_id:id},{isBetaald:voor});
+  console.log("updated");
+}

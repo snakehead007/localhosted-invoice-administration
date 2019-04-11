@@ -5,38 +5,36 @@ html
         link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous")
     body
           header          
-                  button(style="margin:.75%",type="button",class="btn btn-outline-primary")
-                      a(class="nav-link",href='/') Home
-                  button(style="margin:.75%",type="button",class="btn btn-outline-primary")
-                      a(class="nav-link",href='/edit-profile') Mijn profiel
-                  a(style="max-width:10%;max-height:5%",href="https://identity.basecone.com/authentication/login")
-                      img(style="max-width:8%;max-height:5%",src="https://www.itjobs.pt/empresa/basecone/logo/social", alt="basecone")
-          div(class="jumbotron")
-            p(class="lead")=description
-            hr
-            table(class="table")
-                tr(class="thead-dark")
-                    td
-                      a(href='/add-bestelling/'+factuur._id,class="button")
-                        button(type="button",class="btn btn-secondary btn-lg btn-block") Nieuwe Bestelling
-                    td
-                      a(href='/facturen/'+factuur.contact,class="button")
-                        button(type="button",class="btn btn-secondary") terug 
-                tr
-                    th(scope="col") Bestellingen
-                    th(scope="col") Acties
-          
-                each bestelling in bestellingen
-                    tr
-                        td=bestelling.beschrijving
-                        td
-                          ul(class="list-group")
-                            li(class="list-group-item")
-                              a(href='/edit-bestelling/'+bestelling._id,class="button") aanpassen
-                            li(class="list-group-item")
-                              a(href='/delete-bestelling/'+bestelling._id,class="button") verwijder
-                            li(class="list-group-item")
-                              a(href='/view-bestelling/'+bestelling._id,class="button") bekijk
+            button(type="button",href='/',class="btn btn-outline-primary") Home
+            button(type="button",href='/edit-profile',class="btn btn-outline-primary") Mijn profiel
+            a(style="max-width:10%;max-height:5%",href="https://identity.basecone.com/authentication/login")
+                img(style="max-width:8%;max-height:5%",src="https://www.itjobs.pt/empresa/basecone/logo/social", alt="basecone")
+            div(class="jumbotron")
+              p(class="lead")=description
+              hr
+              table(class="table")
+                  tr(class="thead-dark")
+                      td
+                        a(href='/add-bestelling/'+factuur._id,class="button")
+                          button(type="button",class="btn btn-secondary btn-lg btn-block") Nieuwe Bestelling
+                      td
+                        a(href='/facturen/'+factuur.contact,class="button")
+                          button(type="button",class="btn btn-secondary") terug 
+                  tr
+                      th(scope="col") Bestellingen
+                      th(scope="col") Acties
+            
+                  each bestelling in bestellingen
+                      tr
+                          td=bestelling.beschrijving
+                          td
+                            ul(class="list-group")
+                              li(class="list-group-item")
+                                a(href='/edit-bestelling/'+bestelling._id,class="button") aanpassen
+                              li(class="list-group-item")
+                                a(href='/delete-bestelling/'+bestelling._id,class="button") verwijder
+                              li(class="list-group-item")
+                                a(href='/view-bestelling/'+bestelling._id,class="button") bekijk
 
-                            
-                            
+                              
+                              
