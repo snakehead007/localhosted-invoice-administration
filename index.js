@@ -13,7 +13,7 @@ mongoose.connect('mongodb://localhost:27017/sample-website');
 mongoose.connection.on('open',function() {
     console.log('Mongoose connected.');
 });
-
+var maand = ["Januari","Februari","Maart","April","Mei","Juni","Juli","Augustus","September","Oktober","November","December"];
 Schema=mongoose.Schema;
 
 // Creat Task Schema
@@ -242,16 +242,17 @@ app.post('/edit-contact/:id',function(req,res){
 app.get('/add-factuur/:idc',function(req,res){
   console.log("-------------------------------------------------------------------------");
   console.log("#add factuur : idc:"+req.params.idc);
+
+
   var date=new Date();
-  var _d=date.toDateString();
-  var d = _d.substring(_d.length -4,_d.length);
-  var datum = date.getDay()+"/"+date.getMonth()+"/"+d;
+  var jaar = date.getFullYear();
+  var datum = date.getDate()+" "+maand[date.getMonth()]+" "+jaar;
   console.log(datum);
   var nr = 0;
   var idn;
   var _n = null;
   var factuurID;
-  console.log("factuur year: "+d);
+  console.log("factuur year: "+jaar);
   Contact.findOne({_id:req.params.idc},function(err,contact){
     if(!err){
       console.log("found contact");
@@ -280,7 +281,7 @@ app.get('/add-factuur/:idc',function(req,res){
           const newFactuur = new Factuur({
             contact: contact._id,
             datum: datum,
-            factuurNr: String(d+nr)
+            factuurNr: String(jaar+nr)
           });
           Contact.updateOne({aantalFacturen:contact.aantalFacturen+1},function(err){
             if(err){
