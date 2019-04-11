@@ -255,6 +255,7 @@ app.get('/add-factuur/:idc',function(req,res){
   Contact.findOne({_id:req.params.idc},function(err,contact){
     if(!err){
       console.log("found contact");
+      console.log("contact: "+contact);
       contact.save(function(err){
         if(!err){
           console.log("saving contact, no errors");
@@ -305,6 +306,7 @@ app.get('/add-factuur/:idc',function(req,res){
       Factuur.find({contact:req.params.idc},function(err,facturen){
       if(!err){
         //normally here redirect to facturen with params "facturenLijst:facturen"
+          //res.render('facturen',{'facturenLijst':facturen});
           }else{
         console.log("err factuur.find: "+err);
       }
@@ -488,16 +490,20 @@ app.get('/edit-factuur/:idc/:idf',function(req,res){
 
 app.post('/edit-factuur/:idc/:idf',function(req,res){
   console.log("-------------------------------------------------------------------------");
-  console.log("#edit-factuur GET");
+  console.log("#edit-factuur POST");
   var updateFactuur={
     datum:req.body.datum,
     factuurNr:req.body.factuurNr,
     voorschot:req.body.voorschot
   };
   Contact.findOne({_id:req.params.idc},function(err,contact){
+    console.log(contact)
     Factuur.update({_id:req.params.idf},updateFactuur,function(err,factuur){
       if(!err){
+        console.log(factuur);
         res.redirect('/facturen/'+contact._id);
+      }else{
+        console.log(err);
       }
     });
 
@@ -528,7 +534,28 @@ app.get('/view-bestelling/:idb',function(req,res){
   });
 });
 
-app.post('/change-betaald',function(req,res){
+app.get('/change-betaald/:id',function(req,res){
+  console.log("-------------------------------------------------------------------------");
+  console.log("#change-betaald GET");
+  Factuur.findOne({_id:req.params.id},function(err,factuur){
+    if(!err){
+      console.log("factuur found: "+factuur);
+      var voor = new Boolean();
+      voor = !(factuur.isBetaald);
+      console.log("betaald now: "+voor);
+      var updateFactuur={
+        datum:factuur.datum,
+        factuurNr:factuur.factuurNr,
+        voorschot:factuur.vooschot,
+        isBetaald:voor
+      };
+      Factuur.updateOne({_id:req.params.idf},updateFactuur,function(err,newfactuur){
+        if(!err){
+          res.redirect('/facturen/'+factuur.contact);
+        }
+      });
+    }
+  });
 
 });
 

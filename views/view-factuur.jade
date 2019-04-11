@@ -21,3 +21,8 @@ html
                   th(scope="row") Factuur Nr
                   td
                     h4=factuur.factuurNr
+                tr
+                  if factuur.voorschot!= 0
+                    th(scope="row") vooschot
+                    td
+                      h4=factuur.voorschot
