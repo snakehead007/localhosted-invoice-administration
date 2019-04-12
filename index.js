@@ -287,28 +287,15 @@ app.get('/add-factuur/:idc',function(req,res){
                       }
                     });
                     newFactuur.save(function(err){
-<<<<<<< HEAD
-=======
                       if(!err){
                         factuurID = newFactuur._id;
                         console.log("factuurID"+factuurID)
                         res.redirect('/edit-factuur/'+req.params.idc+'/'+newFactuur._id);
                       }
->>>>>>> d34cd2ccad4ceaa13bd51717ecf3c6a50f845418
                       if(err){
                         console.log("err newFactuur: "+err);
                       }
                     });
-<<<<<<< HEAD
-                    Factuur.find({contact:req.params.idc},function(err,facturen){
-                    if(!err){
-                      res.redirect('/facturen/'+contact._id);
-                        }else{
-                      console.log("err factuur.find: "+err);
-                    }
-                    });
-=======
->>>>>>> d34cd2ccad4ceaa13bd51717ecf3c6a50f845418
                   }
                 });
               });
