@@ -27,7 +27,7 @@ var ProfileSchema=new Schema({
   btwNr:{type:String},
   iban:{type:String},
   bic:{type:String},
-  nr:{type:Number,default:001}
+  nr:{type:Number,default:1}
 });
 
 var Profile=mongoose.model('Profile',ProfileSchema);
@@ -241,9 +241,7 @@ app.post('/edit-contact/:id',function(req,res){
 
 app.get('/add-factuur/:idc',function(req,res){
   console.log("-------------------------------------------------------------------------");
-  console.log("#add factuur : idc:"+req.params.idc);
-
-
+  console.log("#add factuur");
   var date=new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate()+" "+maand[date.getMonth()]+" "+jaar;
@@ -252,17 +250,13 @@ app.get('/add-factuur/:idc',function(req,res){
   var idn;
   var _n = null;
   var factuurID;
-  console.log("factuur year: "+jaar);
   Contact.findOne({_id:req.params.idc},function(err,contact){
     if(!err){
-      console.log("found contact");
-      console.log("contact: "+contact);
       contact.save(function(err){
         if(!err){
-          console.log("saving contact, no errors");
-          console.log("trying to find Profile...");
           Profile.find({},function(err,nummer){
               if(!err){
+                console.log("profile: "+nummer);
                 var _n = nummer;
                 nr = nummer[0].nr;
               }
@@ -271,46 +265,46 @@ app.get('/add-factuur/:idc',function(req,res){
                   if(err){
                     console.log("error in profile: "+err);
                   }else{
+                    var nr_str = nr.toString();
+                    if(nr_str.toString().length == 1){
+                      nr_str = "00"+nr.toString();
+                    }else if(nr_str.toString().length == 2){
+                      nr_str = "0"+nr.toString();
+                    }
+
                     console.log("updating nr in profile");
+                    console.log("getting factuur nr: "+jaar+nr_str);
+                    const newFactuur = new Factuur({
+                      contact: contact._id,
+                      datum: datum,
+                      factuurNr: String(jaar+nr_str)
+                    });
+                    Contact.updateOne({aantalFacturen:contact.aantalFacturen+1},function(err){
+                      if(err){
+                        console.log("err contact.updateOne: "+err);
+                      }else{
+                        contact.facturen.push(newFactuur._id);
+                      }
+                    });
+                    newFactuur.save(function(err){
+                      if(err){
+                        console.log("err newFactuur: "+err);
+                      }
+                    });
+                    Factuur.find({contact:req.params.idc},function(err,facturen){
+                    if(!err){
+                      res.redirect('/facturen/'+contact._id);
+                        }else{
+                      console.log("err factuur.find: "+err);
+                    }
+                    });
                   }
                 });
               });
-              console.log("updated profile "+nummer + " "+_n);
             });
-          console.log("getting factuur nr: "+nr);
-          const newFactuur = new Factuur({
-            contact: contact._id,
-            datum: datum,
-            factuurNr: String(jaar+nr)
-          });
-          Contact.updateOne({aantalFacturen:contact.aantalFacturen+1},function(err){
-            if(err){
-              console.log("err contact.updateOne: "+err);
-            }else{
-              contact.facturen.push(newFactuur._id);
-            }
-          });
-          newFactuur.save(function(err){
-            if(!err){
-              factuurID = newFactuur._id;
-              console.log("factuurID"+factuurID)
-              res.redirect('/edit-factuur/'+req.params.idc+'/'+newFactuur._id);
-            }
-            if(err){
-              console.log("err newFactuur: "+err);
-            }
-          });
         }else{
           console.log("err contact.save: "+ err);
         }
-      });
-      Factuur.find({contact:req.params.idc},function(err,facturen){
-      if(!err){
-        //normally here redirect to facturen with params "facturenLijst:facturen"
-          //res.render('facturen',{'facturenLijst':facturen});
-          }else{
-        console.log("err factuur.find: "+err);
-      }
       });
     }
   });
@@ -430,6 +424,9 @@ app.get('/edit-profile/',function(req,res){
       console.log("-------------------------------------------------------------------------");
       console.log("#edit-profile GET");
       var legeProfiel;
+      var date = new Date();
+      var _jaar = date.getFullYear();
+      var jaar = _jaar.toString();
       Profile.find({},function(err,profile){
             if(!err){
                   if(profile.length==0){
@@ -444,7 +441,14 @@ app.get('/edit-profile/',function(req,res){
                         res.render('edit-profile',{'profile':legeProfiel});
                     }else{
                         console.log("\nprofile: "+profile[0]);
-                        res.render('edit-profile',{'profile':profile[0]});
+                        var _nr = profile[0].nr;
+                        var nr_str = _nr.toString();
+                        if(nr_str.toString().length == 1){
+                          nr_str = "00"+_nr.toString();
+                        }else if(nr_str.toString().length == 2){
+                          nr_str = "0"+_nr.toString();
+                        }
+                        res.render('edit-profile',{'profile':profile[0],'nr':Number(jaar+nr_str)});
                     }
               }
       });
@@ -453,6 +457,8 @@ app.get('/edit-profile/',function(req,res){
 app.post('/edit-profile/:id',function(req,res){
   console.log("-------------------------------------------------------------------------");
   console.log("#edit-profile POST");
+  var _nr2 = req.body.nr.toString();
+  var _nr = Number(_nr2.substring(_nr2.length-3));
   var updateProfile={
     firma:req.body.firma,
     naam:req.body.naam,
@@ -462,7 +468,8 @@ app.post('/edit-profile/:id',function(req,res){
     plaats:req.body.plaats,
     btwNr:req.body.btwNr,
     iban:req.body.iban,
-    bic:req.body.bic
+    bic:req.body.bic,
+    nr:_nr
   }
   Profile.update({_id:req.params.id},updateProfile,function(err,updatedprofile){
     if(!err){
@@ -544,20 +551,14 @@ app.get('/change-betaald/:id',function(req,res){
       var voor = new Boolean();
       voor = !(factuur.isBetaald);
       console.log("betaald now: "+voor);
-      var updateFactuur={
-        datum:factuur.datum,
-        factuurNr:factuur.factuurNr,
-        voorschot:factuur.vooschot,
-        isBetaald:voor
-      };
-      Factuur.updateOne({_id:req.params.idf},updateFactuur,function(err,newfactuur){
+      //update(req.params.idf,voor);
+      Factuur.updateOne({_id:req.params.idf},{isBetaald:voor},function(err,result){
         if(!err){
           res.redirect('/facturen/'+factuur.contact);
         }
       });
     }
   });
-
 });
 
 // Set the view engine
@@ -573,3 +574,7 @@ app.listen('3000',function(){
 Schema=mongoose.Schema;
 
 });
+async function update(id,voor){
+  await Factuur.updateOne({_id:id},{isBetaald:voor});
+  console.log("updated");
+}
