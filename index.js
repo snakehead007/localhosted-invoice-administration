@@ -287,14 +287,16 @@ app.get('/add-factuur/:idc',function(req,res){
                       }
                     });
                     newFactuur.save(function(err){
-                      if(!err){
-                        factuurID = newFactuur._id;
-                        console.log("factuurID"+factuurID)
-                        res.redirect('/edit-factuur/'+req.params.idc+'/'+newFactuur._id);
-                      }
                       if(err){
                         console.log("err newFactuur: "+err);
                       }
+                    });
+                    Factuur.find({contact:req.params.idc},function(err,facturen){
+                    if(!err){
+                      res.redirect('/facturen/'+contact._id);
+                        }else{
+                      console.log("err factuur.find: "+err);
+                    }
                     });
                   }
                 });
@@ -303,14 +305,6 @@ app.get('/add-factuur/:idc',function(req,res){
         }else{
           console.log("err contact.save: "+ err);
         }
-      });
-      Factuur.find({contact:req.params.idc},function(err,facturen){
-      if(!err){
-        //normally here redirect to facturen with params "facturenLijst:facturen"
-          //res.render('facturen',{'facturenLijst':facturen});
-          }else{
-        console.log("err factuur.find: "+err);
-      }
       });
     }
   });
