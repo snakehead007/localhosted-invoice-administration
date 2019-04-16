@@ -1,40 +1,49 @@
-//- tasks.jade
 html
     head
         title=title
-        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous")
+        link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+        script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
+        script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
     body
-      header          
-        a(class="button",href='/')
-          button(style="margin:.75%",type="button",class="btn btn-outline-primary") Home
-        a(class="button",href='/edit-profile')
-          button(style="margin:.75%",type="button",class="btn btn-outline-primary") Mijn profiel
-        a(style="max-width:10%;max-height:5%",href="https://identity.basecone.com/authentication/login")
-          img(style="max-width:8%;max-height:5%",src="https://www.itjobs.pt/empresa/basecone/logo/social", alt="basecone")
+      header
+        nav(class="navbar navbar-expand-lg navbar-light bg-secondary")
+          div(class="collapse navbar-collapse", id="navbarNav")  
+            ul(class="navbar-nav mr-auto")
+              li(class="nav-item")
+                    a(class="nav-link", href='/') Home
+              li(class="nav-item")
+                  a(class="nav-link", href='/edit-profile') Mijn profiel    
+              li(class="nav-item")
+                  a(class="nav-link", href='https://identity.basecone.com/authentication/login')
+                    img(width="100", height="24", src="/basecone.png", alt="basecone")
+            span(class="navbar-text")
+              button(type="button", class="btn btn-light btn-sm", disabled)=description
       main
         div(class="jumbotron")
-              p(class="lead")=description
-              hr
-              table(class="table")
-                  tr(class="thead-dark")
-                      td
-                        a(href='/add-bestelling/'+factuur._id,class="button")
-                          button(type="button",class="btn btn-secondary btn-lg btn-block") Nieuwe Bestelling
-                      td
-                        a(href='/facturen/'+factuur.contact,class="button")
-                          button(type="button",class="btn btn-secondary") terug 
+          div(class="row no-gutters")
+            div(class="col-9 mr-auto")
+              a(href='/add-bestelling/'+factuur._id,class="button")
+                button(type="button",class="btn btn-secondary btn-lg btn-block") Nieuwe Bestelling
+                
+            div(class="col-2")
+              a(href='/facturen/'+factuur.contact,class="button")
+                button(type="button",class="btn btn-secondary btn-lg btn-block") terug
+          table(class="table")
+              tr(class="thead-dark")
+                  td
+                    td
+                    
+              tr
+                  th(scope="col") Bestellingen
+                  th(scope="col") Acties
+        
+              each bestelling in bestellingen
                   tr
-                      th(scope="col") Bestellingen
-                      th(scope="col") Acties
-            
-                  each bestelling in bestellingen
-                      tr
-                          td=bestelling.beschrijving
-                          td
-                            ul(class="list-group")
-                              li(class="list-group-item")
-                                a(href='/edit-bestelling/'+bestelling._id,class="button") aanpassen
-                              li(class="list-group-item")
-                                a(href='/delete-bestelling/'+bestelling._id,class="button") verwijder
-                              li(class="list-group-item")
-                                a(href='/view-bestelling/'+bestelling._id,class="button") bekijk
+                      td=bestelling.beschrijving
+                      td
+                        a(role="button", class="btn btn-secondary btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                        div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                          a(class="dropdown-item", href='/edit-bestelling/'+bestelling._id) aanpassen
+                          a(class="dropdown-item", href='/delete-bestelling/'+bestelling._id) verwijder
+                          a(class="dropdown-item", href='/view-bestelling/'+bestelling._id) bekijk  

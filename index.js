@@ -73,14 +73,14 @@ app.get('/',function(req,res){
     console.log("-------------------------------------------------------------------------")
     console.log("#localhost:3000/ GET");
     Contact.find({},function(err,docs){
-        res.render('contacten',{'contactenLijst':docs});
+        res.render('contacten',{'contactenLijst':docs,'description':"MDSArt factuurbeheer"});
     });
 });
 
 app.get('/add-contact',function(req,res){
     console.log("-------------------------------------------------------------------------");
     console.log("#add-contact GET");
-    res.render('add-contact');
+    res.render('add-contact',{'description':"Contact toevoegen"});
 });
 
 
@@ -107,7 +107,7 @@ app.post('/add-contact',function(req,res){
             }
         });
     }
-    res.render('add-contact',{msg:message});
+    res.render('add-contact',{msg:message,"description":"Contact toevoegen"});
 });
 
 app.post('/add-bestelling/:idf',function(req,res){
@@ -136,7 +136,7 @@ app.get('/add-bestelling/:idf',function(req,res){
     console.log("#add-bestelling GET");
     Factuur.findOne({_id:req.params.idf},function(err,factuur){
       if(!err){
-        res.render('add-bestelling',{'factuur':factuur});
+        res.render('add-bestelling',{'factuur':factuur,"description":"Bestelling toevoegen"});
       }
     });
 });
@@ -145,7 +145,7 @@ app.get('/edit-bestelling/:id',function(req,res){
   console.log("-------------------------------------------------------------------------");
   console.log("#edit-bestelling GET");
   Bestelling.findOne({_id:req.params.id},function(err,bestelling){
-    res.render('edit-bestelling',{'bestelling':bestelling});
+    res.render('edit-bestelling',{'bestelling':bestelling,"description":"Bestelling aanpassen"});
   });
 });
 
@@ -174,7 +174,7 @@ app.get('/edit-contact/:id',function(req,res){
   console.log("-------------------------------------------------------------------------");
   console.log("#edit-contact GET");
     Contact.findOne({_id:req.params.id},function(err,docs){
-        res.render('edit-contact',{'contact':docs});
+        res.render('edit-contact',{'contact':docs,"description":"Contact aanpassen"});
     });
 });
 
@@ -388,13 +388,17 @@ app.get('/bestellingen/:idf',function(req,res){
     console.log("#bestellingen GET");
     Factuur.findOne({_id:req.params.idf},function(err,factuur){
       if(!err){
-        console.log("factuur succesfully found: "+factuur);
-        console.log("factuur id :"+factuur._id);
-        Bestelling.find({factuur:req.params.idf},function(err,bestellingen){
+        Contact.findOne({_id:factuur.contact},function(err,contact){
           if(!err){
-            console.log("bestelling succesfully found: "+bestellingen);
-            res.render('bestellingen',{'factuur':factuur,'bestellingen':bestellingen,'description':"Bestellingen"});
-            }
+            console.log("factuur succesfully found: "+factuur);
+            console.log("factuur id :"+factuur._id);
+            Bestelling.find({factuur:req.params.idf},function(err,bestellingen){
+              if(!err){
+                console.log("bestelling succesfully found: "+bestellingen);
+                res.render('bestellingen',{'factuur':factuur,'bestellingen':bestellingen,'description':"Bestellingen van "+contact.contactPersoon+" ("+factuur.factuurNr+")"});
+                }
+            });
+          }
         });
       }
     });
@@ -405,7 +409,7 @@ app.get('/view-contact/:idc',function(req,res){
   console.log("#view-contact GET");
   Contact.findOne({_id:req.params.idc},function(err,contact){
     if(!err){
-          res.render('view-contact',{'contact':contact});
+          res.render('view-contact',{'contact':contact,"description":"Contact Bekijken"});
     }else{
       console.log("err view-contact: "+err);
     }
@@ -448,7 +452,7 @@ app.get('/edit-profile/',function(req,res){
                         }else if(nr_str.toString().length == 2){
                           nr_str = "0"+_nr.toString();
                         }
-                        res.render('edit-profile',{'profile':profile[0],'nr':Number(jaar+nr_str)});
+                        res.render('edit-profile',{'profile':profile[0],'nr':Number(jaar+nr_str),"description":"Profiel bijwerken"});
                     }
               }
       });
@@ -488,7 +492,7 @@ app.get('/edit-factuur/:idc/:idf',function(req,res){
     Factuur.findOne({_id:req.params.idf},function(err,factuur){
       if(!err){
           console.log("factuur succesfully found : "+factuur);
-          res.render('edit-factuur',{'factuur':factuur,'contact':contact});
+          res.render('edit-factuur',{'factuur':factuur,'contact':contact,"description":"Factuur aanpassen van "+contact.contactPersoon});
       }else{
         console.log("err edit-factuur GET: "+err);
       }
@@ -526,7 +530,7 @@ app.get('/view-factuur/:idf',function(req,res){
       console.log("factuur succesfully found: "+factuur);
       Contact.findOne({_id:factuur.contact},function(err,contact){
         console.log("contact from factuur succesfully found: "+contact);
-        res.render('view-factuur',{'factuur':factuur,'contact':contact});
+        res.render('view-factuur',{'factuur':factuur,'contact':contact,"description":"Bekijk factuur van "+contact.contactPersoon+" ("+factuur.factuurNr+")"});
       });
     }
   });
@@ -537,7 +541,7 @@ app.get('/view-bestelling/:idb',function(req,res){
   console.log("#view-bestelling GET");
   Bestelling.findOne({_id:req.params.idb},function(err,bestelling){
     if(!err){
-      res.render('view-bestelling',{'bestelling':bestelling});
+      res.render('view-bestelling',{'bestelling':bestelling,"description":"Bekijk bestelling"});
     }
   });
 });
