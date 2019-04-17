@@ -73,7 +73,7 @@ app.get('/',function(req,res){
     console.log("-------------------------------------------------------------------------")
     console.log("#localhost:3000/ GET");
     Contact.find({},function(err,docs){
-        res.render('contacten',{'contactenLijst':docs,'description':"MDSArt factuurbeheer"});
+        res.render('contacten',{'contactenLijst':docs,'description':"MDSART factuurbeheer"});
     });
 });
 
