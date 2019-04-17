@@ -21,10 +21,12 @@ html
               button(type="button", class="btn btn-light btn-sm", disabled)=description
       main
         div(class="jumbotron")
-            p(class="lead") contact aanpassen
-                hr
+                div(class="row no-gutters")
+                  div(class="col-9 mr-auto")
+                  div(class="col-2")
+                    a(href='/',class="button")
+                      button(type="button",class="btn btn-secondary btn-lg btn-block") terug
                 form(action='/edit-contact/'+contact._id,method='post')
-                    p=msg
                     div(class="form-row")
                       div(class="form-group col-md-6")
                               label(for="title") firma

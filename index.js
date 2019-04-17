@@ -145,7 +145,9 @@ app.get('/edit-bestelling/:id',function(req,res){
   console.log("-------------------------------------------------------------------------");
   console.log("#edit-bestelling GET");
   Bestelling.findOne({_id:req.params.id},function(err,bestelling){
-    res.render('edit-bestelling',{'bestelling':bestelling,"description":"Bestelling aanpassen"});
+    Factuur.findOne({_id:bestelling.factuur},function(err,factuur){
+      res.render('edit-bestelling',{'bestelling':bestelling,"factuur":factuur,"description":"Bestelling aanpassen"});
+    });
   });
 });
 
@@ -541,7 +543,11 @@ app.get('/view-bestelling/:idb',function(req,res){
   console.log("#view-bestelling GET");
   Bestelling.findOne({_id:req.params.idb},function(err,bestelling){
     if(!err){
-      res.render('view-bestelling',{'bestelling':bestelling,"description":"Bekijk bestelling"});
+      Factuur.findOne({_id:bestelling.factuur},function(err,factuur){
+        if(!err){
+          res.render('view-bestelling',{'bestelling':bestelling,"factuur":factuur,"description":"Bekijk bestelling"});
+        }
+      });
     }
   });
 });

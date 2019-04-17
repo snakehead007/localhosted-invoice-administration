@@ -22,8 +22,14 @@ html
               button(type="button", class="btn btn-light btn-sm", disabled)=description
       main
           div(class="jumbotron")
-            a(href='/add-factuur/'+contact._id,class="button")
-              button(type="button",id="knop", class="btn btn-secondary btn-lg btn-block")  Nieuwe Factuur
+            div(class="row no-gutters")
+              div(class="col-9 mr-auto")
+                a(href='/add-factuur/'+contact._id,class="button")
+                  button(type="button",id="knop", class="btn btn-secondary btn-lg btn-block")  Nieuwe Factuur
+              div(class="col-2")
+                a(href='/',class="button")
+                  button(type="button",class="btn btn-secondary btn-lg btn-block") terug
+          
             table(class="table")
                   tr
                     th(scope="col") Facturen

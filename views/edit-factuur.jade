@@ -21,18 +21,20 @@ html
               button(type="button", class="btn btn-light btn-sm", disabled)=description
       main
        div(class="jumbotron")  
-                    p(class="lead") factuur aanpassen
-                        hr
-                        form(action='/edit-factuur/'+contact._id+'/'+factuur._id,method='post')
-                            p=msg
-                            div(class="form-row")
-                                div(class="form-group col-md-6")
-                                        label(for="title") Datum
-                                        input(type="text",class="form-control",value=factuur.datum,name="datum")
-                                div(class="form-group col-md-6")
-                                        label(for="title") Factuur Nummer
-                                        input(type="number",class="form-control",value=factuur.factuurNr,name="factuurNr")
-                                div(class="form-group col-md-6")
-                                        label(for="title") voorschot
-                                        input(type="number",class="form-control",value=factuur.voorschot,name="voorschot")
-                            button(type="submit",class="btn btn-primary") bijwerken
+           div(class="row no-gutters")
+             div(class="col-9 mr-auto")
+             div(class="col-2")
+               a(href='/facturen/'+contact._id,class="button")
+                 button(type="button",class="btn btn-secondary btn-lg btn-block") terug
+           form(action='/edit-factuur/'+contact._id+'/'+factuur._id,method='post')
+              div(class="form-row")
+                  div(class="form-group col-md-6")
+                          label(for="title") Datum
+                          input(type="text",class="form-control",value=factuur.datum,name="datum")
+                  div(class="form-group col-md-6")
+                          label(for="title") Factuur Nummer
+                          input(type="number",class="form-control",value=factuur.factuurNr,name="factuurNr")
+                  div(class="form-group col-md-6")
+                          label(for="title") voorschot
+                          input(type="number",class="form-control",value=factuur.voorschot,name="voorschot")
+              button(type="submit",class="btn btn-primary") bijwerken
