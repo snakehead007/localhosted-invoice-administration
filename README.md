@@ -8,6 +8,7 @@ preparation
 --
 
 ```
+  npm install express -save
   npm install jade -save
   npm install mongodb -save
   npm install mongoose -save
