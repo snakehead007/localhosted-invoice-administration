@@ -1,0 +1,23 @@
+{
+  "name": "mdsart",
+  "version": "1.0.0",
+  "description": "this program is used for managing and administrating invoices and generating them into .pdf format",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snakehead007/localhosted-invoice-administration.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/snakehead007/localhosted-invoice-administration/issues"
+  },
+  "homepage": "https://github.com/snakehead007/localhosted-invoice-administration#readme",
+  "dependencies": {
+    "forever": "^1.0.0",
+    "forever-monitor": "^1.7.1"
+  }
+}
