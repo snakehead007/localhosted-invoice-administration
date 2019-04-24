@@ -32,14 +32,21 @@ html
           
             table(class="table")
                   tr
-                    th(scope="col") Facturen
-                    th
+                    th(scope="col") Factuur nummer
+                    th(scope="col") datum
+                    th(scope="col") voorschot
+                    //th  
                     th(scope="col") Bestellingen
                     th(scope="col") Acties
                         each factuur in facturenLijst
                             tr
                                 td=factuur.factuurNr
-                                td
+                                td=factuur.datum
+                                if factuur.voorschot != 0
+                                  td=factuur.voorschot+" €"
+                                if factuur.voorschot == 0
+                                  td=""
+                                //td
                                   input(class="form-check-input" type="checkbox" id="#{factuur._id}" onclick="knop()")
                                   script.
                                     var id = "#{factuur._id}";

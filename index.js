@@ -34,9 +34,10 @@ var Profile=mongoose.model('Profile',ProfileSchema);
 
 var BestellingSchema=new Schema({
     beschrijving:{type:String},
-    aantal:{type:String},
-    bedrag:{type:String},
-    factuur:{type: Schema.Types.ObjectId, ref:'Factuur'}
+    aantal:{type:Number},
+    bedrag:{type:Number},
+    factuur:{type: Schema.Types.ObjectId, ref:'Factuur'},
+    totaal:{type:Number}
 })
 
 var Bestelling=mongoose.model('Bestelling',BestellingSchema);
@@ -119,7 +120,8 @@ app.post('/add-bestelling/:idf',function(req,res){
             beschrijving:req.body.beschrijving,
             aantal:req.body.aantal,
             bedrag:req.body.bedrag,
-            factuur:req.params.idf
+            factuur:req.params.idf,
+            totaal:req.body.aantal*req.body.bedrag
           })
           newBestelling.save(function(err){
             if(err){
@@ -158,7 +160,8 @@ app.post('/edit-bestelling/:id',function(req,res){
   var updateBestelling={
     beschrijving:req.body.beschrijving,
     aantal:req.body.aantal,
-    bedrag:req.body.bedrag
+    bedrag:req.body.bedrag,
+    totaal:req.body.aantal*req.body.bedrag
   }
   Bestelling.update({_id:req.params.id},updateBestelling,function(err,numrows){
     Bestelling.findOne({_id:req.params.id},function(err,bestelling){

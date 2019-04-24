@@ -35,12 +35,18 @@ html
                     td
                     
               tr
-                  th(scope="col") Bestellingen
+                  th(scope="col") Beschrijving
+                  th(scope="col") Aantal
+                  th(scope="col") Bedrag
+                  th(scope="col") Totaal
                   th(scope="col") Acties
         
               each bestelling in bestellingen
                   tr
                       td=bestelling.beschrijving
+                      td=bestelling.aantal
+                      td=bestelling.bedrag+" €"
+                      td=bestelling.totaal+" €"
                       td
                         a(role="button", class="btn btn-secondary btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                         div(class="dropdown-menu", aria-labelledby="actionsDropdown")
