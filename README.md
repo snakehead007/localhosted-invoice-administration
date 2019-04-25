@@ -15,9 +15,16 @@ preparation
 ```
 
 start the server by:
+
+starting the database
 ```
   mongod
 ```
+
+starting node
 ```
-  node index.js
+  node start.js
+```
+```
+start node in debug mode:
 ```
