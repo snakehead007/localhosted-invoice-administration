@@ -17,15 +17,16 @@ plaats = "#{contact.plaats}";
 btwNr = "#{contact.btwNr}";
 factuurNr = "#{factuur.factuurNr}";
 datum = "#{factuur.datum}";
+voorschot = Number(#{factuur.voorschot});
 var doc = new jsPDF();
 console.log(doc.getFontList());
 doc.setFont(doc.getFontList()[0]);
 doc.setProperties({
-  title: 'factuur nr',
-  subject: 'factuur',
-  author: 'Merijn De Smet',
-  keywords: 'generated, javascript, web 2.0, jsPDF',
-  creator: 'mdsArt Systeembeheer'
+  title: 'MDSART factuur #{factuur.factuurNr}',
+  subject: 'Factuur van MDSART',
+  author: 'MDSART',
+  keywords: 'MDSART ,factuur ,#{factuur.factuurNr}',
+  creator: 'MDSART FactuurBeheer',
 });
 /**HEADER**/
 doc.setFontType("bold");
@@ -44,7 +45,7 @@ doc.text(c[0],c[1],Pnaam);
 
 doc.setFontType("bold");
 c[1] += 10;
-doc.text(c[0],c[1],"bedrijfgegevens");
+doc.text(c[0],c[1],"Bedrijfgegevens");
 doc.setFontType("courier");
 c[1] += 5;
 doc.text(c[0],c[1],Pnaam);
@@ -108,41 +109,73 @@ var current = JSON.parse(unusable_json_data.replace(/(&quot\;)/g,"\""));
 var bestellingen = [];
 var aantal = Number(#{lengte});
 var totaalEx = 0;
+var btw;
+var totaalInc;
 for(var i = 0; i <=aantal-1;i++){
     bestellingen.push([current[i].beschrijving,current[i].aantal,current[i].bedrag,current[i].totaal]);
 }
-for(var i = 0; i <=bestellingen.length; i++){
-  if((i+1)%4==0){
-    console.log(bestellingen[i][0],i+1);
+for(var i = 0; i <=bestellingen.length-1; i++){
+    console.log(bestellingen[i][3]);
     totaalEx +=bestellingen[i][3];
-  }
 }
 
-var btw = totaalEx*0.21;
-var totaalInc = totaalEx+btw;
-console.log(totaalEx.toFixed(2)+"+"+btw.toFixed(2)+"="+totaalInc.toFixed(2));
+var bestellingenPrint = [];
+for(var i = 0; i <=aantal-1;i++){
+    bestellingenPrint.push([current[i].beschrijving,current[i].aantal,current[i].bedrag.toFixed(2)+" €",current[i].totaal.toFixed(2)+" €"]);
+}
+
 doc.autoTable({
     theme: 'grid',
-    columnStyles: {0:{fillColor:[255,255,255]},1:{fillColor:[255,255,255]},2:{fillColor:[255,255,255]},3:{fillColor:[255,255,255]}},
+    columnStyles: {
+                  0:{fillColor:[255,255,255]},
+                  1:{fillColor:[255,255,255],halign:'right'},
+                  2:{fillColor:[255,255,255],halign:'right'},
+                  3:{fillColor:[255,255,255],halign:'right'}
+                  },
     styles: {fillColor: [200, 200, 200]},
     startY: 110,
     head: [['Beschrijving', 'Aantal', 'Bedrag','Totaal']],
-    body: bestellingen/*
-      [bestellingen[0],bestellingen[1],bestellingen[2],bestellingen[3]],
-      [bestellingen[4],bestellingen[5],bestellingen[6],bestellingen[7]],
-      [bestellingen[8],bestellingen[9],bestellingen[10],bestellingen[11]],
-      [bestellingen[12],bestellingen[13],bestellingen[14],bestellingen[15]],
-      [bestellingen[16],bestellingen[17],bestellingen[18],bestellingen[19]],
-      [bestellingen[20],bestellingen[21],bestellingen[22],bestellingen[23]],
-      [bestellingen[24],bestellingen[25],bestellingen[26],bestellingen[27]],
-      [bestellingen[28],bestellingen[29],bestellingen[30],bestellingen[31]]
-      */
+    body: bestellingenPrint
     });
-doc.autoTable({
-  theme: 'grid',
-  head: [['Subtotaal'],[]],
-  body: [[totaalInc]]
-})
+btw = Math.round((totaalEx-voorschot)*0.21*100)/100;
+totaalExSub  = totaalEx - voorschot;
+totaalInc = totaalExSub+btw;
+if(voorschot==0){
+
+  doc.autoTable({
+    theme: 'plain',
+    startX: 200,
+    columnStyles: {
+                  0:{fillColor:[255,255,255]},
+                  1:{fillColor:[255,255,255]},
+                  2:{fillColor:[255,255,255],halign:'right'},
+                  3:{fillColor:[230,230,230],halign:'right'}},
+    styles: {fillColor: [200, 200, 200]},
+    body: [
+    [[""],["                               "],["subtotaal"],[totaalEx.toFixed(2)+" €"]],
+    [[""],["                               "],["btw 21%"],[btw.toFixed(2)+" €"]],
+    [[""],["                               "],["totaal"],[totaalInc.toFixed(2)+" €"]]
+    ]
+  })
+}else{
+  doc.autoTable({
+    theme: 'plain',
+    startX: 200,
+    columnStyles: {
+                  0:{fillColor:[255,255,255]},
+                  1:{fillColor:[255,255,255]},
+                  2:{fillColor:[255,255,255],halign:'right'},
+                  3:{fillColor:[230,230,230],halign:'right'}},
+    styles: {fillColor: [200, 200, 200]},
+    body: [
+    [[""],["                               "],["subtotaal"],[totaalEx.toFixed(2)+" €"]],
+    [[""],["                               "],["voorschot"],["-"+voorschot.toFixed(2)+" €"]],
+    [[""],["                               "],["subtotaal"],[totaalExSub.toFixed(2)+" €"]],
+    [[""],["                               "],["btw 21%"],[btw.toFixed(2)+" €"]],
+    [[""],["                               "],["totaal"],[totaalInc.toFixed(2)+" €"]]
+    ]
+  })
+}
 /**Footer & Disclaimer**/
 doc.setFontType("courier");
 doc.setFontSize(10);
