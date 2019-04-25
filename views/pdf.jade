@@ -29,11 +29,11 @@ html
           console.log(doc.getFontList());
           doc.setFont(doc.getFontList()[0]);
           doc.setProperties({
-            title: 'factuur nr',
-            subject: 'factuur',
-            author: 'Merijn De Smet',
-            keywords: 'generated, javascript, web 2.0, jsPDF',
-            creator: 'mdsArt Systeembeheer'
+            title: 'MDSART factuur #{factuur.factuurNr}',
+            subject: 'Factuur van MDSART',
+            author: 'MDSART',
+            keywords: 'MDSART ,factuur ,#{factuur.factuurNr}',
+            creator: 'MDSART FactuurBeheer',
           });
           /**HEADER**/
           doc.setFontType("bold");
