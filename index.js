@@ -16,6 +16,14 @@ mongoose.connection.on('open',function() {
 var maand = ["Januari","Februari","Maart","April","Mei","Juni","Juli","Augustus","September","Oktober","November","December"];
 Schema=mongoose.Schema;
 
+var SettingsSchema = new Schema({
+  thema:{type:String,default:"secondary"},
+  oppo:{type:String,default:"light"},
+  nav:{type:String,default:"dark"}
+});
+
+var Settings=mongoose.model('Settings',SettingsSchema);
+
 // Creat Task Schema
 var ProfileSchema=new Schema({
   firma:{type:String},
@@ -74,14 +82,42 @@ app.get('/',function(req,res){
     console.log("-------------------------------------------------------------------------")
     console.log("#localhost:3000/ GET");
     Contact.find({},function(err,docs){
-        res.render('contacten',{'contactenLijst':docs,'description':"MDSART factuurbeheer"});
+      Settings.find({},function(err,settings){
+        if(!err && settings.length!=0){
+          console.log("settings found "+settings[0]);
+        }else{
+          console.log("ERR: settings not found!");
+          console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+          legeSettings = new Settings();
+          legeSettings.save(function(err){
+              if(err){
+                  console.log("err in settings: "+err);
+              }
+          });
+        }
+        res.render('contacten',{'contactenLijst':docs,'description':"MDSART factuurbeheer","settings":settings[0]});
+      });
     });
 });
 
 app.get('/add-contact',function(req,res){
     console.log("-------------------------------------------------------------------------");
     console.log("#add-contact GET");
-    res.render('add-contact',{'description':"Contact toevoegen"});
+    Settings.find({},function(err,settings){
+      if(!err && settings.length!=0){
+        console.log("settings found "+settings[0]);
+      }else{
+        console.log("ERR: settings not found!");
+        console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+        legeSettings = new Settings();
+        legeSettings.save(function(err){
+            if(err){
+                console.log("err in settings: "+err);
+            }
+        });
+      }
+      res.render('add-contact',{'description':"Contact toevoegen","settings":settings[0]});
+    });
 });
 
 
@@ -108,7 +144,21 @@ app.post('/add-contact',function(req,res){
             }
         });
     }
-    res.render('add-contact',{msg:message,"description":"Contact toevoegen"});
+    Settings.find({},function(err,settings){
+      if(!err && settings.length!=0){
+        console.log("settings found "+settings[0]);
+      }else{
+        console.log("ERR: settings not found!");
+        console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+        legeSettings = new Settings();
+        legeSettings.save(function(err){
+            if(err){
+                console.log("err in settings: "+err);
+            }
+        });
+      }
+      res.render('add-contact',{msg:message,"description":"Contact toevoegen","settings":settings[0]});
+    });
 });
 
 app.post('/add-bestelling/:idf',function(req,res){
@@ -138,7 +188,21 @@ app.get('/add-bestelling/:idf',function(req,res){
     console.log("#add-bestelling GET");
     Factuur.findOne({_id:req.params.idf},function(err,factuur){
       if(!err){
-        res.render('add-bestelling',{'factuur':factuur,"description":"Bestelling toevoegen"});
+        Settings.find({},function(err,settings){
+          if(!err && settings.length!=0){
+            console.log("settings found "+settings[0]);
+          }else{
+            console.log("ERR: settings not found!");
+            console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+            legeSettings = new Settings();
+            legeSettings.save(function(err){
+                if(err){
+                    console.log("err in settings: "+err);
+                }
+            });
+          }
+          res.render('add-bestelling',{'factuur':factuur,"description":"Bestelling toevoegen","settings":settings[0]});
+        });
       }
     });
 });
@@ -148,7 +212,21 @@ app.get('/edit-bestelling/:id',function(req,res){
   console.log("#edit-bestelling GET");
   Bestelling.findOne({_id:req.params.id},function(err,bestelling){
     Factuur.findOne({_id:bestelling.factuur},function(err,factuur){
-      res.render('edit-bestelling',{'bestelling':bestelling,"factuur":factuur,"description":"Bestelling aanpassen"});
+      Settings.find({},function(err,settings){
+        if(!err && settings.length!=0){
+          console.log("settings found "+settings[0]);
+        }else{
+          console.log("ERR: settings not found!");
+          console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+          legeSettings = new Settings();
+          legeSettings.save(function(err){
+              if(err){
+                  console.log("err in settings: "+err);
+              }
+          });
+        }
+      res.render('edit-bestelling',{'bestelling':bestelling,"factuur":factuur,"description":"Bestelling aanpassen","settings":settings[0]});
+    });
     });
   });
 });
@@ -165,7 +243,6 @@ app.post('/edit-bestelling/:id',function(req,res){
   }
   Bestelling.update({_id:req.params.id},updateBestelling,function(err,numrows){
     Bestelling.findOne({_id:req.params.id},function(err,bestelling){
-
         if(!err){
           res.redirect('/bestellingen/'+bestelling.factuur);
         }else{
@@ -179,7 +256,21 @@ app.get('/edit-contact/:id',function(req,res){
   console.log("-------------------------------------------------------------------------");
   console.log("#edit-contact GET");
     Contact.findOne({_id:req.params.id},function(err,docs){
-        res.render('edit-contact',{'contact':docs,"description":"Contact aanpassen"});
+      Settings.find({},function(err,settings){
+        if(!err && settings.length!=0){
+          console.log("settings found "+settings[0]);
+        }else{
+          console.log("ERR: settings not found!");
+          console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+          legeSettings = new Settings();
+          legeSettings.save(function(err){
+              if(err){
+                  console.log("err in settings: "+err);
+              }
+          });
+        }
+        res.render('edit-contact',{'contact':docs,"description":"Contact aanpassen","settings":settings[0]});
+      });
     });
 });
 
@@ -217,7 +308,21 @@ app.get('/createPDF/:idf', function(req,res){
           }
           json_data += "]";
           console.log("#BESTELLINGEN => "+json_data);
-          res.render('pdf',{'profile':profile[0],'contact':contact,'bestellingen':json_data,"factuur":factuur,'lengte':lengte});
+          Settings.find({},function(err,settings){
+            if(!err && settings.length!=0){
+              console.log("settings found "+settings[0]);
+            }else{
+              console.log("ERR: settings not found!");
+              console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+              legeSettings = new Settings();
+              legeSettings.save(function(err){
+                  if(err){
+                      console.log("err in settings: "+err);
+                  }
+              });
+            }
+          res.render('pdf',{'profile':profile[0],'contact':contact,'bestellingen':json_data,"factuur":factuur,'lengte':lengte,"settings":settings[0]});
+        });
         });
       });
     });
@@ -323,7 +428,21 @@ app.get('/delete-contact/:id',function(req,res){
         }
     });
     Contact.find({},function(err,contacten){
-        res.render('contacten',{'contactenLijst':contacten});
+      Settings.find({},function(err,settings){
+        if(!err && settings.length!=0){
+          console.log("settings found "+settings[0]);
+        }else{
+          console.log("ERR: settings not found!");
+          console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+          legeSettings = new Settings();
+          legeSettings.save(function(err){
+              if(err){
+                  console.log("err in settings: "+err);
+              }
+          });
+        }
+        res.render('contacten',{'contactenLijst':contacten,"settings":settings[0]});
+      });
     });
 });
 
@@ -336,7 +455,21 @@ app.get('/delete-factuur/:idc/:idf',function(req,res){
             Factuur.find({contact:req.params.idc},function(err,facturen){
               if(!err){
                 console.log("succesfully deleted factuur ( id:"+req.params.idf+" )");
-                res.render('facturen',{'contact':contact,'facturenLijst':facturen,'description':"Facturen van "+contact.contactPersoon});
+                Settings.find({},function(err,settings){
+                  if(!err && settings.length!=0){
+                    console.log("settings found "+settings[0]);
+                  }else{
+                    console.log("ERR: settings not found!");
+                    console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+                    legeSettings = new Settings();
+                    legeSettings.save(function(err){
+                        if(err){
+                            console.log("err in settings: "+err);
+                        }
+                    });
+                  }
+                res.render('facturen',{'contact':contact,'facturenLijst':facturen,'description':"Facturen van "+contact.contactPersoon,"settings":settings[0]});
+              });
                 }else{
                 console.log("err factuur.find: "+err);
               }
@@ -377,7 +510,21 @@ app.get('/facturen/:idc',function(req,res){
         Factuur.find({contact:req.params.idc},function(err,facturen){
         if(!err){
             console.log(facturen);
-            res.render('facturen',{'contact':contact,'facturenLijst':facturen,'description':"Facturen van "+contact.contactPersoon});
+            Settings.find({},function(err,settings){
+              if(!err && settings.length!=0){
+                console.log("settings found "+settings[0]);
+              }else{
+                console.log("ERR: settings not found!");
+                console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+                legeSettings = new Settings();
+                legeSettings.save(function(err){
+                    if(err){
+                        console.log("err in settings: "+err);
+                    }
+                });
+              }
+            res.render('facturen',{'contact':contact,'facturenLijst':facturen,'description':"Facturen van "+contact.contactPersoon,"settings":settings[0]});
+          });
         }else{
           console.log("err factuur.find: "+err);
         }
@@ -400,7 +547,21 @@ app.get('/bestellingen/:idf',function(req,res){
             Bestelling.find({factuur:req.params.idf},function(err,bestellingen){
               if(!err){
                 console.log("bestelling succesfully found: "+bestellingen);
-                res.render('bestellingen',{'factuur':factuur,'bestellingen':bestellingen,'description':"Bestellingen van "+contact.contactPersoon+" ("+factuur.factuurNr+")"});
+                Settings.find({},function(err,settings){
+                  if(!err && settings.length!=0){
+                    console.log("settings found "+settings[0]);
+                  }else{
+                    console.log("ERR: settings not found!");
+                    console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+                    legeSettings = new Settings();
+                    legeSettings.save(function(err){
+                        if(err){
+                            console.log("err in settings: "+err);
+                        }
+                    });
+                  }
+                res.render('bestellingen',{'factuur':factuur,'bestellingen':bestellingen,'description':"Bestellingen van "+contact.contactPersoon+" ("+factuur.factuurNr+")","settings":settings[0]});
+              });
                 }
             });
           }
@@ -414,7 +575,21 @@ app.get('/view-contact/:idc',function(req,res){
   console.log("#view-contact GET");
   Contact.findOne({_id:req.params.idc},function(err,contact){
     if(!err){
-          res.render('view-contact',{'contact':contact,"description":"Contact Bekijken"});
+      Settings.find({},function(err,settings){
+        if(!err && settings.length!=0){
+          console.log("settings found "+settings[0]);
+        }else{
+          console.log("ERR: settings not found!");
+          console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+          legeSettings = new Settings();
+          legeSettings.save(function(err){
+              if(err){
+                  console.log("err in settings: "+err);
+              }
+          });
+        }
+          res.render('view-contact',{'contact':contact,"description":"Contact Bekijken","settings":settings[0]});
+        });
     }else{
       console.log("err view-contact: "+err);
     }
@@ -426,7 +601,21 @@ app.get('/view-contact/:idc',function(req,res){
 app.get('/',function(req,res){
     console.log("-------------------------------------------------------------------------");
     console.log("localhost:3000 render");
-    res.render('contacten',{"description":"Contacten"});
+    Settings.find({},function(err,settings){
+      if(!err && settings.length!=0){
+        console.log("settings found "+settings[0]);
+      }else{
+        console.log("ERR: settings not found!");
+        console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+        legeSettings = new Settings();
+        legeSettings.save(function(err){
+            if(err){
+                console.log("err in settings: "+err);
+            }
+        });
+      }
+    res.render('contacten',{"description":"Contacten","settings":settings[0]});
+  });
 });
 
 app.get('/edit-profile/',function(req,res){
@@ -457,7 +646,21 @@ app.get('/edit-profile/',function(req,res){
                         }else if(nr_str.toString().length == 2){
                           nr_str = "0"+_nr.toString();
                         }
-                        res.render('edit-profile',{'profile':profile[0],'nr':Number(jaar+nr_str),"description":"Profiel bijwerken"});
+                        Settings.find({},function(err,settings){
+                          if(!err && settings.length!=0){
+                            console.log("settings found "+settings[0]);
+                          }else{
+                            console.log("ERR: settings not found!");
+                            console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+                            legeSettings = new Settings();
+                            legeSettings.save(function(err){
+                                if(err){
+                                    console.log("err in settings: "+err);
+                                }
+                            });
+                          }
+                        res.render('edit-profile',{'profile':profile[0],'nr':Number(jaar+nr_str),"description":"Profiel bijwerken","settings":settings[0]});
+                      });
                     }
               }
       });
@@ -497,7 +700,21 @@ app.get('/edit-factuur/:idc/:idf',function(req,res){
     Factuur.findOne({_id:req.params.idf},function(err,factuur){
       if(!err){
           console.log("factuur succesfully found : "+factuur);
-          res.render('edit-factuur',{'factuur':factuur,'contact':contact,"description":"Factuur aanpassen van "+contact.contactPersoon});
+          Settings.find({},function(err,settings){
+            if(!err && settings.length!=0){
+              console.log("settings found "+settings[0]);
+            }else{
+              console.log("ERR: settings not found!");
+              console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+              legeSettings = new Settings();
+              legeSettings.save(function(err){
+                  if(err){
+                      console.log("err in settings: "+err);
+                  }
+              });
+            }
+          res.render('edit-factuur',{'factuur':factuur,'contact':contact,"description":"Factuur aanpassen van "+contact.contactPersoon,"settings":settings[0]});
+        });
       }else{
         console.log("err edit-factuur GET: "+err);
       }
@@ -535,7 +752,21 @@ app.get('/view-factuur/:idf',function(req,res){
       console.log("factuur succesfully found: "+factuur);
       Contact.findOne({_id:factuur.contact},function(err,contact){
         console.log("contact from factuur succesfully found: "+contact);
-        res.render('view-factuur',{'factuur':factuur,'contact':contact,"description":"Bekijk factuur van "+contact.contactPersoon+" ("+factuur.factuurNr+")"});
+        Settings.find({},function(err,settings){
+          if(!err && settings.length!=0){
+            console.log("settings found "+settings[0]);
+          }else{
+            console.log("ERR: settings not found!");
+            console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+            legeSettings = new Settings();
+            legeSettings.save(function(err){
+                if(err){
+                    console.log("err in settings: "+err);
+                }
+            });
+          }
+        res.render('view-factuur',{'factuur':factuur,'contact':contact,"description":"Bekijk factuur van "+contact.contactPersoon+" ("+factuur.factuurNr+")","settings":settings[0]});
+      });
       });
     }
   });
@@ -548,7 +779,21 @@ app.get('/view-bestelling/:idb',function(req,res){
     if(!err){
       Factuur.findOne({_id:bestelling.factuur},function(err,factuur){
         if(!err){
-          res.render('view-bestelling',{'bestelling':bestelling,"factuur":factuur,"description":"Bekijk bestelling"});
+          Settings.find({},function(err,settings){
+            if(!err && settings.length!=0){
+              console.log("settings found "+settings[0]);
+            }else{
+              console.log("ERR: settings not found!");
+              console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+              legeSettings = new Settings();
+              legeSettings.save(function(err){
+                  if(err){
+                      console.log("err in settings: "+err);
+                  }
+              });
+            }
+          res.render('view-bestelling',{'bestelling':bestelling,"factuur":factuur,"description":"Bekijk bestelling","settings":settings[0]});
+        });
         }
       });
     }
@@ -570,6 +815,71 @@ app.get('/change-betaald/:id',function(req,res){
           res.redirect('/facturen/'+factuur.contact);
         }
       });
+    }
+  });
+});
+
+app.get('/settings',function(req,res){
+  console.log("-------------------------------------------------------------------------");
+  console.log("#settings GET");
+  Settings.find({},function(err,settings){
+    if(!err && settings.length!=0){
+    console.log("settings found "+settings[0]);
+    res.render('settings',{'settings':settings[0],'description':"Settings"});
+  }else{
+      console.log("ERR: settings not found!");
+      console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+      legeSettings = new Settings();
+      legeSettings.save(function(err){
+          if(err){
+              console.log("err in settings: "+err);
+          }
+      });
+      console.log(legeSettings);
+      res.redirect('/settings');
+      if(err){
+        console.log(err);
+      }
+    }
+  });
+});
+app.get('/change-theme/:th',function(req,res){
+  console.log("-------------------------------------------------------------------------");
+  console.log("#change-theme POST");
+  Settings.find({},function(err,settings){
+    if(!err){
+      console.log("found settings "+settings[0]);
+      var oppo;
+      var nav;
+      if(req.params.th=="dark"){
+        oppo = "light";
+        nav= "dark";
+      }else if(req.params.th=="primary"){
+        oppo = "outline-primary";
+        nav="dark";
+      }else if(req.params.th=="light"){
+        oppo = "secondary";
+        nav="light";
+      }else if(req.params.th=="secondary"){
+        oppo = "outline-secondary";
+        nav="dark";
+      }
+      var updateSettings={
+        thema:req.params.th,
+        oppo:oppo,
+        nav:nav
+      };
+      Settings.update({_id:settings[0]._id},updateSettings,function(err,updatedSettings){
+        if(!err){
+          console.log("updated settings!");
+          res.redirect('/settings');
+        }else{
+          console.log(err);
+        }
+      });
+    }else{
+      console.log("err");
+      res.redirect('/');
     }
   });
 });
