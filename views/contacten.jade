@@ -23,7 +23,7 @@ html
         div(class="jumbotron")          
           a(href='/add-contact',class="button") 
             button(type="button",class="btn btn-secondary btn-lg btn-block") Nieuwe Contactpersoon
-          table(class="table")    
+          table(class="table table-striped")    
               tr
                   th(scope="col") Contactpersonen
                   th(scope="col") Facturen
@@ -31,7 +31,10 @@ html
               
               each contact in contactenLijst
                   tr
-                      td=contact.contactPersoon
+                      td
+                        a(href='/view-contact/'+contact._id, class="button")
+                          button(type="button" class="btn btn-light" data-toggle="tooltip" data-placement="top" title="#{contact.firma}\n#{contact.straat} #{contact.straatNr}\n#{contact.postcode} #{contact.plaats}")=contact.contactPersoon
+
                       td
                         a(role="button", class="btn btn-secondary btn-sm", href='/facturen/'+contact._id) Facturen
                       td

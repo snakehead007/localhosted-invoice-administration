@@ -30,7 +30,7 @@ html
                 a(href='/',class="button")
                   button(type="button",class="btn btn-secondary btn-lg btn-block") terug
           
-            table(class="table")
+            table(class="table table-striped")
                   tr
                     th(scope="col") Factuur
                     //th  
@@ -39,7 +39,8 @@ html
                         each factuur in facturenLijst
                             tr
                                 td
-                                  button(type="button" class="btn btn-light" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €" disabled)=factuur.factuurNr
+                                  a(href='/view-factuur/'+factuur._id, class="button")
+                                    button(type="button" class="btn btn-light" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
 
                                 //td
                                   input(class="form-check-input" type="checkbox" id="#{factuur._id}" onclick="knop()")
@@ -64,5 +65,5 @@ html
                                   div(class="dropdown-menu", aria-labelledby="actionsDropdown")
                                     a(class="dropdown-item",href='/edit-factuur/'+contact._id+'/'+factuur._id) aanpassen
                                     a(class="dropdown-item", href='/delete-factuur/'+contact._id+'/'+factuur._id) verwijder
-                                    a(class="dropdown-item", href='/view-factuur/'+factuur._id,class="button") bekijk
+                                    //a(class="dropdown-item", href='/view-factuur/'+factuur._id,class="button") bekijk
                                     a(class="dropdown-item", href='/createPDF/'+factuur._id,id="target",target="_blank") maak pdf
