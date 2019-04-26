@@ -62,8 +62,6 @@ html
                                       if !factuur.isBetaald
                                         input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
                                         label(class="custom-control-label" for="#{factuur._id}") Niet betaald
-                                      else
-                                        p=factuur.isBetaald
                                   td 
                                     a(role="button", class="btn btn-#{settings.thema} btn-sm", href='/bestellingen/'+factuur._id) bestellingen
                                   td
@@ -100,8 +98,6 @@ html
                                       if !factuur.isBetaald
                                         input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
                                         label(class="custom-control-label" for="#{factuur._id}") Niet betaald
-                                      else
-                                        p=factuur.isBetaald
                                   td
                                     a(role="button", class="btn btn-#{settings.oppo} btn-sm", href='/bestellingen/'+factuur._id) bestellingen
                                   td
