@@ -26,15 +26,15 @@ html
             p(class="lead")=description
                 hr
                 form(action='/add-bestelling/'+factuur._id,method='post')
-                    p=msg
                     div(class="form-row")
-                        div(class="form-group col-md-6")
-                                label(for="title") beschrijving
-                                input(type="text",class="form-control",name="beschrijving", required)
-                        div(class="form-group col-md-6")
-                                label(for="title") aantal
-                                input(type="number",class="form-control",name="aantal", required)                                
-                        div(class="form-group col-md-6")
-                                label(for="title") bedrag voor één
-                                input(type="number",class="form-control",name="bedrag", required)
+                      div(class="form-group col-md-10")
+                              label(for="title") Beschrijving
+                              input(type="text",class="form-control",name="beschrijving", required)
+                      div(class="form-group col-md-2")
+                              label(for="title") Aantal
+                              input(type="number",class="form-control",name="aantal", required)                                
+                      div(class="form-group col-md-2")
+                              label(for="title") Bedrag voor één
+                              input(type="number",class="form-control",name="bedrag", required)
+                    hr
                     button(type="submit",class="btn btn-#{settings.oppo}") toevoegen

@@ -27,26 +27,31 @@ html
                 hr
                 form(action='/add-contact',method='post')
                   p=msg
-                    div(class="form-row")
-                      div(class="form-group col-md-6")
-                        label(for="title") firma
-                        input(type="text",name="firma",class="form-control",placeholder="firma en co.")
-                      div(class="form-group col-md-6")
-                        label(for="title") contact persoon (*)
-                        input(type="text",name="contactPersoon",class="form-control",placeholder="Jan janssens", required)
-                      div(class="form-group col-md-6")
-                        label(for="title") straatnaam (*)
-                        input(type="text",name="straat",class="form-control",placeholder="grotestraat", required)
-                      div(class="form-group col-md-6")
-                        label(for="title") straat nr
-                        input(type="number",name="straatNr",class="form-control",placeholder="12")
-                      div(class="form-group col-md-6")
-                        label(for="title") postcode
-                        input(type="text",name="postcode",class="form-control",placeholder="1234")
-                      div(class="form-group col-md-6")
-                        label(for="title") plaatsnaam (*)
-                        input(type="text",name="plaats",class="form-control",placeholder="Gent", required)
-                      div(class="form-group col-md-6")
-                        label(for="title") btw-nummer
-                        input(type="text",name="btwNr",class="form-control",placeholder="1234.123.123")
-                    button(type="submit",class="btn btn-#{settings.oppo}") toevoegen
+                  div(class="form-row")
+                    div(class="form-group col-md-5")
+                            label(for="title") Contact persoon
+                            input(type="text",class="form-control",name="contactPersoon")    
+                    div(class="form-group col-md-2")          
+                    div(class="form-group col-md-4")
+                            label(for="title") Firma
+                            input(type="text",class="form-control",name="firma")
+                    div(class="form-group col-md-1")
+                    div(class="form-group col-md-3")
+                            label(for="title") Straatnaam
+                            input(type="text",class="form-control",name="straat")                                
+                    div(class="form-group col-md-2")
+                            label(for="title") Straat Nr
+                            input(type="number",class="form-control",name="straatNr")
+                    div(class="form-group col-md-2")
+                    div(class="form-group col-md-2")
+                            label(for="title") BTW-nummer
+                            input(type="text",class="form-control",name="btwNr")
+                    div(class="form-group col-md-2")
+                    div(class="form-group col-md-2")
+                            label(for="title") Postcode
+                            input(type="number",class="form-control",name="postcode")
+                    div(class="form-group col-md-3")
+                            label(for="title") Plaatsnaam
+                            input(type="text",class="form-control",name="plaats")
+                  hr
+                  button(type="submit",class="btn btn-#{settings.oppo}") bijwerken

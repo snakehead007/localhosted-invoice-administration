@@ -23,11 +23,12 @@ html
               button(type="button", class="btn btn-light btn-sm", disabled)=description
       main
         div(class="jumbotron")
-          a(href='/add-contact',class="button") 
           if settings.thema == "light"
-              button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Nieuwe Contactpersoon
+              a(href='/add-contact',class="button") 
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Nieuwe Contactpersoon
           if settings.thema != "light"
-            button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Nieuwe Contactpersoon
+              a(href='/add-contact',class="button") 
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Nieuwe Contactpersoon
           hr          
           if settings.thema == "dark"
             table(class="table table-#{settings.oppo} table-striped")  
