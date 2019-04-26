@@ -107,10 +107,10 @@ html
                                         }
                                     div(class="custom-control custom-switch")
                                       if factuur.isBetaald
-                                        input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()" checked)
+                                        input(type="checkbox" class="custom-control-input bg-success" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()" checked)
                                         label(class="custom-control-label" for="#{factuur._id}") Betaald
                                       if !factuur.isBetaald
-                                        input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
+                                        input(type="checkbox" class="custom-control-input bg-success" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
                                         label(class="custom-control-label" for="#{factuur._id}") Niet betaald
                                   td
                                     a(role="button", class="btn btn-#{settings.oppo} btn-sm", href='/bestellingen/'+factuur._id) bestellingen

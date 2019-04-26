@@ -29,7 +29,7 @@ html
                 td
                   P(class="lead") Thema
                   div(class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups")
-                    div(class="btn-group mr-2" role="group" aria-label="First group")
+                    div(class="btn-group mr-4" role="group" aria-label="First group")
                       a(href='/change-theme/secondary',class="button")
                         if settings.thema == "secondary"
                           button(type="button" class="btn btn-outline-secondary") grey 
@@ -42,11 +42,17 @@ html
                           button(type="button" class="btn btn-dark") dark 
                       a(href='/change-theme/light',class="button")
                         if settings.thema == "light"
-                          button(type="button" class="btn btn-outline-light") light 
+                          button(type="button" class="btn btn-outline-light") white 
                         else
-                          button(type="button" class="btn btn-light") light 
-                      //a(href='/change-theme/primary',class="button")
-                        if settings.thema == "primary"
-                          button(type="button" class="btn btn-outline-primary") blue 
+                          button(type="button" class="btn btn-light") white 
+                      a(href='/change-theme/info',class="button")
+                        if settings.thema == "info"
+                          button(type="button" class="btn btn-outline-info") blue 
                         else
-                          button(type="button" class="btn btn-primary") blue 
+                          button(type="button" class="btn btn-info") blue 
+                      a(href='/change-theme/danger',class="button")
+                        if settings.thema == "danger"
+                          button(type="button" class="btn btn-outline-danger") red 
+                        else
+                          button(type="button" class="btn btn-danger") red 
+                          
