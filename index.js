@@ -73,9 +73,7 @@ var ContactSchema=new Schema({
     plaats:{type:String},
     btwNr:{type:String},
     facturen: [{type: Schema.Types.ObjectId,ref:'Factuur'}],
-    aantalFacturen:{type:Number,
-      default:0
-    }
+    aantalFacturen:{type:Number,default:0}
 });
 
 var Contact=mongoose.model('Contact',ContactSchema);
@@ -324,6 +322,60 @@ app.get('/createPDF/:idf', function(req,res){
               });
             }
           res.render('pdf',{'profile':profile[0],'contact':contact,'bestellingen':json_data,"factuur":factuur,'lengte':lengte,"settings":settings[0]});
+        });
+        });
+      });
+    });
+  });
+});
+
+app.get('/offerte/:idf', function(req,res){
+    console.log("-------------------------------------------------------------------------");
+    console.log("#offerte");
+  var id = req.params.id;
+
+  Profile.find({},function(err,profile){
+    console.log("found profile: "+profile);
+    Factuur.findOne({_id:req.params.idf},function(err,factuur){
+      console.log("found factuur: "+factuur);
+      if(err)
+        console.log("err: "+err);
+      Contact.findOne({_id:factuur.contact},function(err2,contact){
+        if(err2)
+          console.log("err: "+err2);
+        Bestelling.find({factuur:factuur._id},function(err3,bestellingen){
+          console.log("found :"+bestellingen);
+          if(err3){
+            console.log("err: "+err3);
+          }
+          var lengte=Number(bestellingen.length);
+          var json_data = "[";
+          for(var i = 0; i<= lengte-1;i++){
+            console.log("adding "+bestellingen[i]+"...");
+            json_data +=("{\"beschrijving\" : \""+bestellingen[Number(i)].beschrijving+"\", "
+                            +"\"aantal\" : "+bestellingen[Number(i)].aantal+", "
+                            +"\"bedrag\" : "+bestellingen[Number(i)].bedrag+", "
+                            +"\"totaal\" : "+Number(bestellingen[Number(i)].aantal*bestellingen[Number(i)].bedrag)+" }");
+            if(i <= lengte-2){
+              json_data +=",";
+            }
+          }
+          json_data += "]";
+          console.log("#BESTELLINGEN => "+json_data);
+          Settings.find({},function(err,settings){
+            if(!err && settings.length!=0){
+              console.log("settings found "+settings[0]);
+            }else{
+              console.log("ERR: settings not found!");
+              console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+              legeSettings = new Settings();
+              legeSettings.save(function(err){
+                  if(err){
+                      console.log("err in settings: "+err);
+                  }
+              });
+            }
+          res.render('offerte',{'profile':profile[0],'contact':contact,'bestellingen':json_data,"factuur":factuur,'lengte':lengte,"settings":settings[0]});
         });
         });
       });

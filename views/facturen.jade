@@ -57,7 +57,8 @@ html
                                       a(class="dropdown-item",href='/edit-factuur/'+contact._id+'/'+factuur._id) aanpassen
                                       a(class="dropdown-item", href='/delete-factuur/'+contact._id+'/'+factuur._id) verwijder
                                       //a(class="dropdown-item", href='/view-factuur/'+factuur._id,class="button") bekijk
-                                      a(class="dropdown-item", href='/createPDF/'+factuur._id,id="target",target="_blank") maak pdf
+                                      a(class="dropdown-item", href='/createPDF/'+factuur._id,id="target",target="_blank") download factuur
+                                      a(class="dropdown-item", href='/offerte/'+factuur._id,id="target",target="_blank") download offerte
             
             else
               table(class="table table-#{settings.thema} table-striped")
@@ -79,5 +80,6 @@ html
                                       a(class="dropdown-item",href='/edit-factuur/'+contact._id+'/'+factuur._id) aanpassen
                                       a(class="dropdown-item", href='/delete-factuur/'+contact._id+'/'+factuur._id) verwijder
                                       //a(class="dropdown-item", href='/view-factuur/'+factuur._id,class="button") bekijk
-                                      a(class="dropdown-item", href='/createPDF/'+factuur._id,id="target",target="_blank") maak pdf
+                                      a(class="dropdown-item", href='/createPDF/'+factuur._id,id="target",target="_blank") download factuur
+                                      a(class="dropdown-item", href='/offerte/'+factuur._id,id="target",target="_blank") download offerte
                                                                     
