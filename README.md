@@ -25,6 +25,8 @@ starting node
 ```
   node start.js
 ```
-```
+
 start node in debug mode:
+```
+  node index.js
 ```
