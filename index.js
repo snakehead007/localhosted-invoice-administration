@@ -859,18 +859,20 @@ app.get('/view-bestelling/:idb',function(req,res){
 app.get('/change-betaald/:id',function(req,res){
   console.log("-------------------------------------------------------------------------");
   console.log("#change-betaald GET");
-  Factuur.findOne({_id:req.params.id},function(err,factuur){
+  Factuur.findOne({factuurNr:req.params.id},function(err,factuur){
     if(!err){
       console.log("factuur found: "+factuur);
       var voor = new Boolean();
       voor = !(factuur.isBetaald);
       console.log("betaald now: "+voor);
       //update(req.params.idf,voor);
-      Factuur.updateOne({_id:req.params.idf},{isBetaald:voor},function(err,result){
+      Factuur.updateOne({factuurNr:req.params.id},{isBetaald:voor},function(err,result){
         if(!err){
           res.redirect('/facturen/'+factuur.contact);
         }
       });
+    }else{
+      console.log(err);
     }
   });
 });

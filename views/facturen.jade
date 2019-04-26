@@ -64,7 +64,7 @@ html
               table(class="table table-#{settings.thema} table-striped")
                     tr
                       th(scope="col") Factuur
-                      //th  
+                      th  
                       th(scope="col") Bestellingen
                       th(scope="col") Acties
                           each factuur in facturenLijst
@@ -72,7 +72,24 @@ html
                                   td
                                     a(href='/view-factuur/'+factuur._id, class="button")
                                       button(type="button" class="btn btn-light" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
-                                  td 
+                                  td
+                                    script.
+                                      var id = "#{factuur.factuurNr}";
+                                      var isBetaald = Boolean(#{factuur.isBetaald});
+                                      console.log(isBetaald);
+                                      if(isBetaald){
+                                        document.getElementById("#{factuur.factuurNr}").checked = true;
+                                        }else{
+                                          document.getElementById("#{factuur.factuurNr}").checked = false;
+                                        }
+                                        function knop(){
+                                          console.log("setting window location to: /change-betaald/"+#{factuur.factuurNr});
+                                          window.location="/change-betaald/"+#{factuur.factuurNr};
+                                      }
+                                    div(class="custom-control custom-switch")
+                                      input(type="checkbox" class="custom-control-input" id="#{factuur.factuurNr}" onclick="knop()")
+                                      label(class="custom-control-label" for="#{factuur.factuurNr}")
+                                  td
                                     a(role="button", class="btn btn-#{settings.oppo} btn-sm", href='/bestellingen/'+factuur._id) bestellingen
                                   td
                                     a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
