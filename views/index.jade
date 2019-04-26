@@ -23,3 +23,19 @@ html
               button(type="button", class="btn btn-light btn-sm", disabled)=description
       main
         div(class="jumbotron")
+          div(class="row")
+            div(class="col-1")
+            div(class="col-4 mr-auto")
+              if settings.thema == "light"
+                  a(href='/contacten',class="button") 
+                    button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Contacten
+              if settings.thema != "light"
+                  a(href='/contacten',class="button") 
+                    button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Contacten
+            div(class="col-4 mr-auto")
+              if settings.thema == "light"
+                  a(href='/facturen',class="button") 
+                    button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Alle facturen
+              if settings.thema != "light"
+                  a(href='/facturen',class="button") 
+                    button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Alle facturen

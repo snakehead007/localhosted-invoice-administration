@@ -23,12 +23,21 @@ html
               button(type="button", class="btn btn-light btn-sm", disabled)=description
       main
         div(class="jumbotron")
-          if settings.thema == "light"
-              a(href='/add-contact',class="button") 
-                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Nieuwe Contactpersoon
-          if settings.thema != "light"
-              a(href='/add-contact',class="button") 
-                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Nieuwe Contactpersoon
+          div(class="row no-gutters")
+            div(class="col-9 mr-auto")
+              if settings.thema == "light"
+                  a(href='/add-contact',class="button") 
+                    button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Nieuwe Contactpersoon
+              if settings.thema != "light"
+                  a(href='/add-contact',class="button") 
+                    button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Nieuwe Contactpersoon
+            div(class="col-2")
+              if settings.thema == "light"
+                  a(href='/',class="button") 
+                    button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Terug
+              if settings.thema != "light"
+                  a(href='/',class="button") 
+                    button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Terug
           hr          
           if settings.thema == "dark"
             table(class="table table-#{settings.oppo} table-striped")  

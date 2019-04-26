@@ -78,9 +78,31 @@ var ContactSchema=new Schema({
 
 var Contact=mongoose.model('Contact',ContactSchema);
 
+// Show the Index Page
 app.get('/',function(req,res){
+    console.log("-------------------------------------------------------------------------");
+    console.log("/ GET");
+          Settings.find({},function(err,settings){
+            if(!err && settings.length!=0){
+              console.log("settings found "+settings[0]);
+            }else{
+              console.log("ERR: settings not found!");
+              console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+              legeSettings = new Settings();
+              legeSettings.save(function(err){
+                  if(err){
+                      console.log("err in settings: "+err);
+                  }
+              });
+              res.redirect('/');
+            }
+          res.render('index',{"description":"MDSART factuurbeheer","settings":settings[0]});
+    });
+});
+
+app.get('/contacten',function(req,res){
     console.log("-------------------------------------------------------------------------")
-    console.log("#localhost:3000/ GET");
+    console.log("#Contacten GET");
     Contact.find({},function(err,docs){
       Settings.find({},function(err,settings){
         if(!err && settings.length!=0){
@@ -95,7 +117,7 @@ app.get('/',function(req,res){
               }
           });
         }
-        res.render('contacten',{'contactenLijst':docs,'description':"MDSART factuurbeheer","settings":settings[0]});
+        res.render('contacten',{'contactenLijst':docs,'description':"Contactpersonen","settings":settings[0]});
       });
     });
 });
@@ -589,6 +611,33 @@ app.get('/facturen/:idc',function(req,res){
     });
 });
 
+app.get('/facturen',function(req,res){
+  console.log("-------------------------------------------------------------------------");
+  console.log("#facturen GET : ALLES");
+    Factuur.find({},function(err,facturen){
+    if(!err){
+        console.log(facturen);
+        Settings.find({},function(err,settings){
+          if(!err && settings.length!=0){
+            console.log("settings found "+settings[0]);
+          }else{
+            console.log("ERR: settings not found!");
+            console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+            legeSettings = new Settings();
+            legeSettings.save(function(err){
+                if(err){
+                    console.log("err in settings: "+err);
+                }
+            });
+          }
+        res.render('facturen',{'facturenLijst':facturen,'description':"Alle facturen","settings":settings[0]});
+      });
+    }else{
+      console.log("err factuur.find: "+err);
+    }
+    });
+});
+
 app.get('/bestellingen/:idf',function(req,res){
     console.log("-------------------------------------------------------------------------");
     console.log("#bestellingen GET");
@@ -598,6 +647,7 @@ app.get('/bestellingen/:idf',function(req,res){
           if(!err){
             console.log("factuur succesfully found: "+factuur);
             console.log("factuur id :"+factuur._id);
+            console.log("found contact :"+contact);
             Bestelling.find({factuur:req.params.idf},function(err,bestellingen){
               if(!err){
                 console.log("bestelling succesfully found: "+bestellingen);
@@ -651,26 +701,6 @@ app.get('/view-contact/:idc',function(req,res){
 });
 
 
-// Show the Index Page
-app.get('/',function(req,res){
-    console.log("-------------------------------------------------------------------------");
-    console.log("localhost:3000 render");
-    Settings.find({},function(err,settings){
-      if(!err && settings.length!=0){
-        console.log("settings found "+settings[0]);
-      }else{
-        console.log("ERR: settings not found!");
-        console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
-        legeSettings = new Settings();
-        legeSettings.save(function(err){
-            if(err){
-                console.log("err in settings: "+err);
-            }
-        });
-      }
-    res.render('contacten',{"description":"Contacten","settings":settings[0]});
-  });
-});
 
 app.get('/edit-profile/',function(req,res){
       console.log("-------------------------------------------------------------------------");
@@ -870,6 +900,28 @@ app.get('/change-betaald/:id',function(req,res){
         if(!err){
           console.log("result"+result);
           res.redirect('/facturen/'+factuur.contact);
+        }
+      });
+    }else{
+      console.log(err);
+    }
+  });
+});
+
+app.get('/change-betaald2/:id',function(req,res){
+  console.log("-------------------------------------------------------------------------");
+  console.log("#change-betaald2 GET");
+  Factuur.findOne({_id:req.params.id},function(err,factuur){
+    if(!err){
+      console.log("factuur found: "+factuur);
+      var voor = new Boolean();
+      voor = !(factuur.isBetaald);
+      console.log("change betaald to "+voor);
+      //update(req.params.idf,voor);
+      Factuur.updateOne({_id:req.params.id},{isBetaald:voor},function(err,result){
+        if(!err){
+          console.log("result"+result);
+          res.redirect('/facturen/');
         }
       });
     }else{
