@@ -31,36 +31,47 @@ html
                         button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
                       if settings.thema != "light"
                         button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+                hr
                 form(action='/edit-profile/'+profile._id,method='post')
                     div(class="form-row")
-                      div(class="form-group col-md-6")
-                              label(for="title") firma naam
-                              input(type="text",class="form-control",value=profile.firma,name="firma",placeholder="firma en co.")
-                      div(class="form-group col-md-6")
-                              label(for="title") naam
+                      div(class="form-group col-md-5")
+                              label(for="title") Naam
                               input(type="text",class="form-control",value=profile.naam,name="naam",placeholder="Jan Janssens")
-                      div(class="form-group col-md-6")
-                              label(for="title") straatnaam
+                      div(class="form-group col-md-1")  
+                      div(class="form-group col-md-4")
+                              label(for="title") Firma naam
+                              input(type="text",class="form-control",value=profile.firma,name="firma",placeholder="firma en co.")
+                      div(class="form-group col-md-2")    
+                      div(class="form-group col-md-3")
+                              label(for="title") Straatnaam
                               input(type="text",class="form-control",value=profile.straat,name="straat",placeholder="grotestraat")                                
-                      div(class="form-group col-md-6")
-                              label(for="title") straat nr
+                      div(class="form-group col-md-2")
+                              label(for="title") Straat Nr
                               input(type="number",class="form-control",value=profile.straatNr,name="straatNr",placeholder="12")
-                      div(class="form-group col-md-6")
-                              label(for="title") postcode
-                              input(type="number",class="form-control",value=profile.postcode,name="postcode",placeholder="1234")
-                      div(class="form-group col-md-6")
-                              label(for="title") plaatsnaam
-                              input(type="text",class="form-control",value=profile.plaats,name="plaats",placeholder="Gent")
-                      div(class="form-group col-md-6")
-                              label(for="title") btw-nummer
+                      div(class="form-group col-md-1") 
+                      div(class="form-group col-md-2")
+                              label(for="title") BTW-nummer
                               input(type="text",class="form-control",value=profile.btwNr,name="btwNr",placeholder="BE 0000.000.000")
-                      div(class="form-group col-md-6")
+                      div(class="form-group col-md-2")
                               label(for="title") IBAN-nr
                               input(type="text",class="form-control",value=profile.iban,name="iban",placeholder="BE77 7777 7777 7777")
-                      div(class="form-group col-md-6")
+                      div(class="form-group col-md-2")
+                      div(class="form-group col-md-2")
+                              label(for="title") Postcode
+                              input(type="number",class="form-control",value=profile.postcode,name="postcode",placeholder="1234")
+                      div(class="form-group col-md-3")
+                              label(for="title") Plaatsnaam
+                              input(type="text",class="form-control",value=profile.plaats,name="plaats",placeholder="Gent")
+                      div(class="form-group col-md-1")
+                      div(class="form-group col-md-2")
                               label(for="title") BIC-nr
-                              input(type="text",class="form-control",value=profile.bic,name="bic",placeholder="KREDBEBB")
-                      div(class="form-group col-md-6")
-                              label(for="title") nieuwe factuur krijgt nummer:
+                              input(type="text",class="form-control",value=profile.bic,name="bic",placeholder="KREDBEBB") 
+                      div(class="form-group col-md-2")
+                              label(for="title") Nieuwe factuur krijgt nummer:
                               input(type="text",class="form-control",value=nr,name="nr")
+                      div(class="form-group col-md-2")
+                      div(class="form-group col-md-2")
+                              label(for="title") Telefoon Number
+                              input(type="text",class="form-control",value=profile.tele,name="tele",placeholder="0487654321")
+                    hr
                     button(type="submit",class="btn btn-#{settings.oppo}") bijwerken

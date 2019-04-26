@@ -35,7 +35,8 @@ var ProfileSchema=new Schema({
   btwNr:{type:String},
   iban:{type:String},
   bic:{type:String},
-  nr:{type:Number,default:1}
+  nr:{type:Number,default:1},
+  tele:{type:String}
 });
 
 var Profile=mongoose.model('Profile',ProfileSchema);
@@ -681,7 +682,8 @@ app.post('/edit-profile/:id',function(req,res){
     btwNr:req.body.btwNr,
     iban:req.body.iban,
     bic:req.body.bic,
-    nr:_nr
+    nr:_nr,
+    tele: req.body.tele
   }
   Profile.update({_id:req.params.id},updateProfile,function(err,updatedprofile){
     if(!err){
