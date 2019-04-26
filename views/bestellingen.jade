@@ -38,24 +38,46 @@ html
                 if settings.thema != "light"
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
           hr
-          table(class="table table-#{settings.thema} table-striped")
-                    
-              tr
-                  th(scope="col") Beschrijving
-                  th(scope="col") Aantal
-                  th(scope="col") Bedrag
-                  th(scope="col") Totaal
-                  th(scope="col") Acties
-        
-              each bestelling in bestellingen
-                  tr
-                      td=bestelling.beschrijving
-                      td=bestelling.aantal
-                      td=bestelling.bedrag+" €"
-                      td=bestelling.totaal+" €"
-                      td
-                        a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
-                        div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                          a(class="dropdown-item", href='/edit-bestelling/'+bestelling._id) aanpassen
-                          a(class="dropdown-item", href='/delete-bestelling/'+bestelling._id) verwijder
-                          a(class="dropdown-item", href='/view-bestelling/'+bestelling._id) bekijk  
+          if settings.thema == "dark"
+            table(class="table table-#{settings.oppo} table-striped")
+                tr
+                    th(scope="col") Beschrijving
+                    th(scope="col") Aantal
+                    th(scope="col") Bedrag
+                    th(scope="col") Totaal
+                    th(scope="col") Acties
+          
+                each bestelling in bestellingen
+                    tr
+                        td=bestelling.beschrijving
+                        td=bestelling.aantal
+                        td=bestelling.bedrag+" €"
+                        td=bestelling.totaal+" €"
+                        td
+                          a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                          div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                            a(class="dropdown-item", href='/edit-bestelling/'+bestelling._id) aanpassen
+                            a(class="dropdown-item", href='/delete-bestelling/'+bestelling._id) verwijder
+                            a(class="dropdown-item", href='/view-bestelling/'+bestelling._id) bekijk 
+          if settings.thema != "dark"
+            table(class="table table-#{settings.thema} table-striped")
+                      
+                tr
+                    th(scope="col") Beschrijving
+                    th(scope="col") Aantal
+                    th(scope="col") Bedrag
+                    th(scope="col") Totaal
+                    th(scope="col") Acties
+          
+                each bestelling in bestellingen
+                    tr
+                        td=bestelling.beschrijving
+                        td=bestelling.aantal
+                        td=bestelling.bedrag+" €"
+                        td=bestelling.totaal+" €"
+                        td
+                          a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                          div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                            a(class="dropdown-item", href='/edit-bestelling/'+bestelling._id) aanpassen
+                            a(class="dropdown-item", href='/delete-bestelling/'+bestelling._id) verwijder
+                            a(class="dropdown-item", href='/view-bestelling/'+bestelling._id) bekijk  

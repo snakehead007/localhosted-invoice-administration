@@ -31,23 +31,43 @@ html
                     button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
                   if settings.thema != "light"
                     button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
-          
-            table(class="table table-striped table-striped")
-              tbody
-                tr
-                  th(scope="row") beschrijving
-                  td
-                    h4=bestelling.beschrijving
-                tr
-                  th(scope="row") aantal
-                  td
-                    h4=bestelling.aantal
-                tr
-                  th(scope="row") bedrag
-                  td
-                    h4=bestelling.bedrag+" €"
-                tr
-                  th(scope="row") totaal
-                  td
-                    h4=(bestelling.aantal*bestelling.bedrag)+" €"
+            hr
+            if settings.thema == "dark"
+              table(class="table table-#{settings.oppo} table-striped")
+                tbody
+                  tr
+                    th(scope="row") beschrijving
+                    td
+                      h4=bestelling.beschrijving
+                  tr
+                    th(scope="row") aantal
+                    td
+                      h4=bestelling.aantal
+                  tr
+                    th(scope="row") bedrag
+                    td
+                      h4=bestelling.bedrag+" €"
+                  tr
+                    th(scope="row") totaal
+                    td
+                      h4=(bestelling.aantal*bestelling.bedrag)+" €"
+            else
+              table(class="table table-#{settings.thema} table-striped")
+                tbody
+                  tr
+                    th(scope="row") beschrijving
+                    td
+                      h4=bestelling.beschrijving
+                  tr
+                    th(scope="row") aantal
+                    td
+                      h4=bestelling.aantal
+                  tr
+                    th(scope="row") bedrag
+                    td
+                      h4=bestelling.bedrag+" €"
+                  tr
+                    th(scope="row") totaal
+                    td
+                      h4=(bestelling.aantal*bestelling.bedrag)+" €"
           

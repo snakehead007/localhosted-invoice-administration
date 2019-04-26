@@ -31,19 +31,36 @@ html
                     button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
                   if settings.thema != "light"
                     button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
-          
-            table(class="table table-striped table-striped")
-              tbody
-                tr
-                  th(scope="row") Datum
-                  td
-                    h4=factuur.datum
-                tr
-                  th(scope="row") Factuur Nr
-                  td
-                    h4=factuur.factuurNr
-                tr
-                  if factuur.voorschot!= 0
-                    th(scope="row") vooschot
+            hr
+            if settings.thema == "dark"
+              table(class="table table-#{settings.oppo} table-striped")
+                tbody
+                  tr
+                    th(scope="row") Datum
                     td
-                      h4=factuur.voorschot
+                      h4=factuur.datum
+                  tr
+                    th(scope="row") Factuur Nr
+                    td
+                      h4=factuur.factuurNr
+                  tr
+                    if factuur.voorschot!= 0
+                      th(scope="row") vooschot
+                      td
+                        h4=factuur.voorschot
+            else
+              table(class="table table-#{settings.thema} table-striped")
+                tbody
+                  tr
+                    th(scope="row") Datum
+                    td
+                      h4=factuur.datum
+                  tr
+                    th(scope="row") Factuur Nr
+                    td
+                      h4=factuur.factuurNr
+                  tr
+                    if factuur.voorschot!= 0
+                      th(scope="row") vooschot
+                      td
+                        h4=factuur.voorschot
