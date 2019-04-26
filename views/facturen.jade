@@ -74,21 +74,17 @@ html
                                       button(type="button" class="btn btn-light" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
                                   td
                                     script.
-                                      var id = "#{factuur.factuurNr}";
-                                      var isBetaald = Boolean(#{factuur.isBetaald});
-                                      console.log(isBetaald);
-                                      if(isBetaald){
-                                        document.getElementById("#{factuur.factuurNr}").checked = true;
-                                        }else{
-                                          document.getElementById("#{factuur.factuurNr}").checked = false;
-                                        }
-                                        function knop(){
-                                          console.log("setting window location to: /change-betaald/"+#{factuur.factuurNr});
-                                          window.location="/change-betaald/"+#{factuur.factuurNr};
+                                      var id = "#{factuur._id}";
+                                        function K#{factuur.factuurNr}(){
+                                          window.location="/change-betaald/"+"#{factuur._id}";
                                       }
                                     div(class="custom-control custom-switch")
-                                      input(type="checkbox" class="custom-control-input" id="#{factuur.factuurNr}" onclick="knop()")
-                                      label(class="custom-control-label" for="#{factuur.factuurNr}")
+                                      if factuur.isBetaald
+                                        input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()" checked)
+                                        label(class="custom-control-label" for="#{factuur._id}") Betaald
+                                      if !factuur.isBetaald
+                                        input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
+                                        label(class="custom-control-label" for="#{factuur._id}") Niet betaald
                                   td
                                     a(role="button", class="btn btn-#{settings.oppo} btn-sm", href='/bestellingen/'+factuur._id) bestellingen
                                   td
