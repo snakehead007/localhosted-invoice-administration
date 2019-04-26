@@ -4,7 +4,7 @@ html
         title download pdf
         script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous")
         script(src="https://unpkg.com/jspdf-autotable@3.1.0/dist/jspdf.plugin.autotable.js")
-        script.nloador o
+        script.
           c = [0,0];
           Pfirma = "#{profile.firma}";
           Pnaam = "#{profile.naam}";
@@ -26,14 +26,13 @@ html
           datum = "#{factuur.datum}";
           voorschot = Number(#{factuur.voorschot});
           var doc = new jsPDF();
-          console.log(doc.getFontList());
           doc.setFont(doc.getFontList()[0]);
           doc.setProperties({
-            title: 'MDSART factuur #{factuur.factuurNr}',
-            subject: 'Factuur van MDSART',
-            author: 'MDSART',
-            keywords: 'MDSART ,factuur ,#{factuur.factuurNr}',
-            creator: 'MDSART FactuurBeheer',
+            title: '#{profile.firma} factuur #{factuur.factuurNr}',
+            subject: 'Factuur van #{profile.firma}',
+            author: '#{profile.firma}',
+            keywords: '#{profile.firma} ,factuur ,#{factuur.factuurNr}',
+            creator: '#{profile.firma} FactuurBeheer',
           });
           /**HEADER**/
           doc.setFontType("bold");
@@ -188,7 +187,7 @@ html
           doc.setFontSize(10);
           doc.text(20,200,"U wordt verzocht het vermelde bedrag ten laatste binnen de 14 dagen na factuurdatum over te maken op bovenstaand");
           doc.text(20,205,"rekeningnummer, onder vermelding van het factuurnummer.");
-          doc.text(20,210,"Neem bij vragen over deze factuur contact op met Merijn De Smet, 0488146678, merijndesmet@live.be");
+          doc.text(20,210,"Neem bij vragen over deze factuur contact op met #{profile.naam}, #{profile.tele}, #{profile.mail}");
           doc.setFontType("bold");
           doc.text(70,220,"Wij danken u voor uw vertrouwen.");
           /**EINDE FACTUUR GENERATIE**/

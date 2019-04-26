@@ -31,27 +31,33 @@ html
                         button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
                       if settings.thema != "light"
                         button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+                hr
                 form(action='/edit-contact/'+contact._id,method='post')
                     div(class="form-row")
-                      div(class="form-group col-md-6")
+                      div(class="form-group col-md-3")
                               label(for="title") firma
                               input(type="text",class="form-control",value=contact.firma,name="firma")
-                      div(class="form-group col-md-6")
+                      div(class="form-group col-md-9")
+                      div(class="form-group col-md-3")
                               label(for="title") contact persoon
                               input(type="text",class="form-control",value=contact.contactPersoon,name="contactPersoon")                                
-                      div(class="form-group col-md-6")
+                      div(class="form-group col-md-9")
+                      div(class="form-group col-md-3")
                               label(for="title") straatnaam
                               input(type="text",class="form-control",value=contact.straat,name="straat")                                
-                      div(class="form-group col-md-6")
+                      div(class="form-group col-md-2")
                               label(for="title") straat nr
                               input(type="number",class="form-control",value=contact.straatNr,name="straatNr")
-                      div(class="form-group col-md-6")
+                      div(class="form-group col-md-7")
+                      div(class="form-group col-md-2")
                               label(for="title") postcode
                               input(type="number",class="form-control",value=contact.postcode,name="postcode")
-                      div(class="form-group col-md-6")
+                      div(class="form-group col-md-3")
                               label(for="title") plaatsnaam
                               input(type="text",class="form-control",value=contact.plaats,name="plaats")
-                      div(class="form-group col-md-6")
+                      div(class="form-group col-md-7")
+                      div(class="form-group col-md-2")
                               label(for="title") btw-nummer
                               input(type="text",class="form-control",value=contact.btwNr,name="btwNr")
+                    hr
                     button(type="submit",class="btn btn-#{settings.oppo}") bijwerken
