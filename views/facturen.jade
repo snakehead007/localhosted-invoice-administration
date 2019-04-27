@@ -38,7 +38,13 @@ html
                       button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
                     if settings.thema != "light"
                       button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
-                else
+                if terug
+                  a(href='/facturen',class="button")
+                    if settings.thema == "light"
+                      button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                    if settings.thema != "light"
+                      button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+                if !terug && !contact
                   a(href='/',class="button")
                     if settings.thema == "light"
                       button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
@@ -49,6 +55,8 @@ html
               table(class="table table-#{settings.oppo} table-striped")
                     tr
                       th(scope="col") Factuur
+                      if !contact
+                        th(scope="col") Contact persoon
                       th  
                       th(scope="col") Bestellingen
                       th(scope="col") Acties
@@ -57,6 +65,16 @@ html
                                   td
                                     a(href='/view-factuur/'+factuur._id, class="button")
                                       button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
+                                  if !contact
+                                    td
+                                      if factuur.contactPersoon == "Update deze factuur!"
+                                        a(href='/updateFactuur/'+factuur._id, class="button")
+                                          button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Klik hier om deze factuur up te daten")=factuur.contactPersoon
+                                      else
+                                        a(href='/facturen/'+factuur.contact/t, class="button")
+                                          button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
+                                    
+                                        
                                   td
                                     if contact
                                       script.
@@ -82,9 +100,14 @@ html
                                   td
                                     a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                                     div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                                      a(class="dropdown-item",href='/edit-factuur/'+factuur.contact+'/'+factuur._id) aanpassen
-                                      a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id) verwijder
-                                      a(class="dropdown-item", href='/view-factuur/'+factuur._id,class="button") bekijk
+                                      if !contact
+                                        a(class="dropdown-item",href='/edit-factuur/'+factuur.contact+'/'+factuur._id+'/t') aanpassen
+                                        a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id+'/t') verwijder
+                                        a(class="dropdown-item", href='/view-factuur/'+factuur._id+"/t",class="button") bekijk
+                                      if contact
+                                        a(class="dropdown-item",href='/edit-factuur/'+factuur.contact+'/'+factuur._id) aanpassen
+                                        a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id) verwijder
+                                        a(class="dropdown-item", href='/view-factuur/'+factuur._id,class="button") bekijk
                                       a(class="dropdown-item", href='/createPDF/'+factuur._id,id="target",target="_blank") download factuur
                                       a(class="dropdown-item", href='/offerte/'+factuur._id,id="target",target="_blank") download offerte
             else

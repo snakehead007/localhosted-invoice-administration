@@ -1,7 +1,6 @@
 FIXES: {
     Visuals from settings
-    checkbox, works but does not show correct value on screen
-    update blue theme
+    when deleting an invoice on all invoices, you do go back to all invoices
 }
 creations:{
       more settings options

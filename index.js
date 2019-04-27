@@ -59,7 +59,8 @@ var FactuurSchema=new Schema({
     contact: {type: Schema.Types.ObjectId, ref:'Contact'},
     bestellingen: [{type: Schema.Types.ObjectId, ref:'Bestelling'}],
     isBetaald : {type:Boolean,default:false},
-    voorschot : {type: Number, default:0}
+    voorschot : {type: Number, default:0},
+    contactPersoon: {type: String,default:"Update deze factuur!"}
 })
 
 var Factuur=mongoose.model('Factuur',FactuurSchema);
@@ -463,7 +464,8 @@ app.get('/add-factuur/:idc',function(req,res){
                     const newFactuur = new Factuur({
                       contact: contact._id,
                       datum: datum,
-                      factuurNr: String(jaar+nr_str)
+                      factuurNr: String(jaar+nr_str),
+                      contactPersoon: contact.contactPersoon
                     });
                     Contact.updateOne({aantalFacturen:contact.aantalFacturen+1},function(err){
                       if(err){
@@ -499,8 +501,18 @@ app.get('/add-factuur/:idc',function(req,res){
 app.get('/delete-contact/:id',function(req,res){
     console.log("-------------------------------------------------------------------------");
     console.log("#delete-contact GET");
+    var contact_id = req.params.id;
     Contact.remove({_id:req.params.id},function(err){
         if(!err){
+          Factuur.remove({contact:req.params.id},function(err){
+            if(!err){
+              console.log("deleted contact succesfully!");
+            }else{
+              console.log(err);
+            }
+          });
+        }else{
+          console.log(err);
         }
     });
     Contact.find({},function(err,contacten){
@@ -558,6 +570,42 @@ app.get('/delete-factuur/:idc/:idf',function(req,res){
     });
 });
 
+app.get('/delete-factuur/:idc/:idf/t',function(req,res){
+    console.log("-------------------------------------------------------------------------");
+    console.log("#delete-factuur GET");
+    Contact.findOne({_id:req.params.idc},function(err,contact){
+        Factuur.deleteOne({_id:req.params.idf},function(err){
+          if(!err){
+            Factuur.find({},function(err,facturen){
+              if(!err){
+                console.log("succesfully deleted factuur ( id:"+req.params.idf+" )");
+                Settings.find({},function(err,settings){
+                  if(!err && settings.length!=0){
+                    console.log("settings found "+settings[0]);
+                  }else{
+                    console.log("ERR: settings not found!");
+                    console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+                    legeSettings = new Settings();
+                    legeSettings.save(function(err){
+                        if(err){
+                            console.log("err in settings: "+err);
+                        }
+                    });
+                  }
+                res.render('facturen',{'facturenLijst':facturen,'description':'Alle facturen','settings':settings[0]});
+              });
+                }else{
+                console.log("err factuur.find: "+err);
+              }
+            });
+
+            }else{
+            console.log("err factuur.deleteOne: "+err);
+          }
+        });
+    });
+});
+
 app.get('/delete-bestelling/:idb',function(req,res){
     console.log("-------------------------------------------------------------------------");
     console.log("#delete-bestelling GET");
@@ -600,6 +648,41 @@ app.get('/facturen/:idc',function(req,res){
                 });
               }
             res.render('facturen',{'contact':contact,'facturenLijst':facturen,'description':"Facturen van "+contact.contactPersoon,"settings":settings[0]});
+          });
+        }else{
+          console.log("err factuur.find: "+err);
+        }
+        });
+      }else{
+        console.log("err contact.findOne: "+err);
+      }
+    });
+});
+
+app.get('/facturen/:idc/t',function(req,res){
+    console.log("-------------------------------------------------------------------------");
+    console.log("#facturen GET : idc:"+req.params.idc);
+    var contact;
+    Contact.findOne({_id:req.params.idc},function(err,_contact){
+      if(!err){
+        contact=_contact;
+        Factuur.find({contact:req.params.idc},function(err,facturen){
+        if(!err){
+            console.log(facturen);
+            Settings.find({},function(err,settings){
+              if(!err && settings.length!=0){
+                console.log("settings found "+settings[0]);
+              }else{
+                console.log("ERR: settings not found!");
+                console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+                legeSettings = new Settings();
+                legeSettings.save(function(err){
+                    if(err){
+                        console.log("err in settings: "+err);
+                    }
+                });
+              }
+            res.render('facturen',{'terug':1,'contact':contact,'facturenLijst':facturen,'description':"Facturen van "+contact.contactPersoon,"settings":settings[0]});
           });
         }else{
           console.log("err factuur.find: "+err);
@@ -808,6 +891,72 @@ app.get('/edit-factuur/:idc/:idf',function(req,res){
   });
 });
 
+app.get('/updateFactuur/:idf',function(req,res){
+  console.log("-------------------------------------------------------------------------");
+  console.log("#updatefactuur GET");
+  Factuur.findOne({_id:req.params.idf},function(err,factuur){
+    if(!err){
+      console.log("found factuur "+factuur);
+      Contact.findOne({_id:factuur.contact},function(err,contact){
+          Settings.find({},function(err,settings){
+            if(!err && settings.length!=0){
+              console.log("settings found "+settings[0]);
+            }else{
+              console.log("ERR: settings not found!");
+              console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+              legeSettings = new Settings();
+              legeSettings.save(function(err){
+                  if(err){
+                      console.log("err in settings: "+err);
+                  }
+              });
+            }
+            var updateFactuur={
+              contactPersoon:contact.contactPersoon
+            }
+            Factuur.update({_id:req.params.idf},updateFactuur,function(err,updateFactuur){
+              Factuur.find({},function(err,facturen){
+                res.render('facturen',{'facturenLijst':facturen,'description':"Alle facturen","settings":settings[0]})
+              });
+            });
+          });
+      })
+    }else{
+      console.log(err);
+    }
+  });
+});
+
+app.get('/edit-factuur/:idc/:idf/t',function(req,res){
+  console.log("-------------------------------------------------------------------------");
+  console.log("#edit-factuur GET");
+  Contact.findOne({_id:req.params.idc},function(err,contact){
+    console.log("contact succesfully found: "+contact );
+    Factuur.findOne({_id:req.params.idf},function(err,factuur){
+      if(!err){
+          console.log("factuur succesfully found : "+factuur);
+          Settings.find({},function(err,settings){
+            if(!err && settings.length!=0){
+              console.log("settings found "+settings[0]);
+            }else{
+              console.log("ERR: settings not found!");
+              console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+              legeSettings = new Settings();
+              legeSettings.save(function(err){
+                  if(err){
+                      console.log("err in settings: "+err);
+                  }
+              });
+            }
+          res.render('edit-factuur',{'terug':1,'factuur':factuur,'contact':contact,"description":"Factuur aanpassen van "+contact.contactPersoon,"settings":settings[0]});
+        });
+      }else{
+        console.log("err edit-factuur GET: "+err);
+      }
+    });
+  });
+});
+
 app.post('/edit-factuur/:idc/:idf',function(req,res){
   console.log("-------------------------------------------------------------------------");
   console.log("#edit-factuur POST");
@@ -822,6 +971,28 @@ app.post('/edit-factuur/:idc/:idf',function(req,res){
       if(!err){
         console.log(factuur);
         res.redirect('/facturen/'+contact._id);
+      }else{
+        console.log(err);
+      }
+    });
+
+  });
+});
+
+app.post('/edit-factuur/:idc/:idf/t',function(req,res){
+  console.log("-------------------------------------------------------------------------");
+  console.log("#edit-factuur POST");
+  var updateFactuur={
+    datum:req.body.datum,
+    factuurNr:req.body.factuurNr,
+    voorschot:req.body.voorschot
+  };
+  Contact.findOne({_id:req.params.idc},function(err,contact){
+    console.log(contact)
+    Factuur.update({_id:req.params.idf},updateFactuur,function(err,factuur){
+      if(!err){
+        console.log(factuur);
+        res.redirect('/facturen/');
       }else{
         console.log(err);
       }
@@ -852,6 +1023,34 @@ app.get('/view-factuur/:idf',function(req,res){
             });
           }
         res.render('view-factuur',{'factuur':factuur,'contact':contact,"description":"Bekijk factuur van "+contact.contactPersoon+" ("+factuur.factuurNr+")","settings":settings[0]});
+      });
+      });
+    }
+  });
+});
+
+app.get('/view-factuur/:idf/t',function(req,res){
+  console.log("-------------------------------------------------------------------------");
+  console.log("#edit-factuur GET");
+  Factuur.findOne({_id:req.params.idf},function(err,factuur){
+    if(!err){
+      console.log("factuur succesfully found: "+factuur);
+      Contact.findOne({_id:factuur.contact},function(err,contact){
+        console.log("contact from factuur succesfully found: "+contact);
+        Settings.find({},function(err,settings){
+          if(!err && settings.length!=0){
+            console.log("settings found "+settings[0]);
+          }else{
+            console.log("ERR: settings not found!");
+            console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
+            legeSettings = new Settings();
+            legeSettings.save(function(err){
+                if(err){
+                    console.log("err in settings: "+err);
+                }
+            });
+          }
+        res.render('view-factuur',{'terug':1,'factuur':factuur,'contact':contact,"description":"Bekijk factuur van "+contact.contactPersoon+" ("+factuur.factuurNr+")","settings":settings[0]});
       });
       });
     }

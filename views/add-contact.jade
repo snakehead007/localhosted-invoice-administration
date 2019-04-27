@@ -29,16 +29,16 @@ html
                   p=msg
                   div(class="form-row")
                     div(class="form-group col-md-5")
-                            label(for="title") Contact persoon
-                            input(type="text",class="form-control",name="contactPersoon")    
+                            label(for="title") Contact persoon *
+                            input(type="text",class="form-control",name="contactPersoon" required)    
                     div(class="form-group col-md-2")          
                     div(class="form-group col-md-4")
                             label(for="title") Firma
                             input(type="text",class="form-control",name="firma")
                     div(class="form-group col-md-1")
                     div(class="form-group col-md-3")
-                            label(for="title") Straatnaam
-                            input(type="text",class="form-control",name="straat")                                
+                            label(for="title") Straatnaam *
+                            input(type="text",class="form-control",name="straat" required)                                
                     div(class="form-group col-md-2")
                             label(for="title") Straat Nr
                             input(type="number",class="form-control",name="straatNr")
@@ -51,7 +51,7 @@ html
                             label(for="title") Postcode
                             input(type="number",class="form-control",name="postcode")
                     div(class="form-group col-md-3")
-                            label(for="title") Plaatsnaam
-                            input(type="text",class="form-control",name="plaats")
+                            label(for="title") Plaatsnaam *
+                            input(type="text",class="form-control",name="plaats" required)
                   hr
-                  button(type="submit",class="btn btn-#{settings.oppo}") bijwerken
+                  button(type="submit",class="btn btn-#{settings.oppo}") toevoegen

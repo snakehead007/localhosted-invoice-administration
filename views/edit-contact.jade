@@ -35,16 +35,16 @@ html
                 form(action='/edit-contact/'+contact._id,method='post')
                     div(class="form-row")
                       div(class="form-group col-md-5")
-                              label(for="title") Contact persoon
-                              input(type="text",class="form-control",value=contact.contactPersoon,name="contactPersoon")    
+                              label(for="title") Contact persoon *
+                              input(type="text",class="form-control",value=contact.contactPersoon,name="contactPersoon" required)    
                       div(class="form-group col-md-2")          
                       div(class="form-group col-md-4")
                               label(for="title") Firma
                               input(type="text",class="form-control",value=contact.firma,name="firma")
                       div(class="form-group col-md-1")
                       div(class="form-group col-md-3")
-                              label(for="title") Straatnaam
-                              input(type="text",class="form-control",value=contact.straat,name="straat")                                
+                              label(for="title") Straatnaam *
+                              input(type="text",class="form-control",value=contact.straat,name="straat" required)                                
                       div(class="form-group col-md-2")
                               label(for="title") Straat Nr
                               input(type="number",class="form-control",value=contact.straatNr,name="straatNr")
@@ -57,7 +57,7 @@ html
                               label(for="title") Postcode
                               input(type="number",class="form-control",value=contact.postcode,name="postcode")
                       div(class="form-group col-md-3")
-                              label(for="title") Plaatsnaam
-                              input(type="text",class="form-control",value=contact.plaats,name="plaats")
+                              label(for="title") Plaatsnaam *
+                              input(type="text",class="form-control",value=contact.plaats,name="plaats" required)
                     hr
                     button(type="submit",class="btn btn-#{settings.oppo}") bijwerken
