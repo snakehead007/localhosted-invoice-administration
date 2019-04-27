@@ -1,3 +1,4 @@
+//- V1.6
 html
     head
         title=title
@@ -38,13 +39,13 @@ html
                       button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
                     if settings.thema != "light"
                       button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
-                if terug
+                else if terug
                   a(href='/facturen',class="button")
                     if settings.thema == "light"
                       button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
                     if settings.thema != "light"
                       button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
-                if !terug && !contact
+                else
                   a(href='/',class="button")
                     if settings.thema == "light"
                       button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
@@ -96,7 +97,10 @@ html
                                         input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
                                         label(class="custom-control-label" for="#{factuur._id}") Niet betaald
                                   td 
-                                    a(role="button", class="btn btn-#{settings.thema} btn-sm", href='/bestellingen/'+factuur._id) bestellingen
+                                    if contact
+                                      a(role="button", class="btn btn-#{settings.oppo} btn-sm", href='/bestellingen/'+factuur._id) bestellingen
+                                    else
+                                      a(role="button", class="btn btn-#{settings.oppo} btn-sm", href='/bestellingen/'+factuur._id+'/t') bestellingen
                                   td
                                     a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                                     div(class="dropdown-menu", aria-labelledby="actionsDropdown")
@@ -143,7 +147,10 @@ html
                                         input(type="checkbox" class="custom-control-input bg-success" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
                                         label(class="custom-control-label" for="#{factuur._id}") Niet betaald
                                   td
-                                    a(role="button", class="btn btn-#{settings.oppo} btn-sm", href='/bestellingen/'+factuur._id) bestellingen
+                                    if contact
+                                      a(role="button", class="btn btn-#{settings.oppo} btn-sm", href='/bestellingen/'+factuur._id) bestellingen
+                                    else
+                                      a(role="button", class="btn btn-#{settings.oppo} btn-sm", href='/bestellingen/'+factuur._id+'/t') bestellingen
                                   td
                                     a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                                     div(class="dropdown-menu", aria-labelledby="actionsDropdown")
