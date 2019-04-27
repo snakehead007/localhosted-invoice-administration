@@ -34,17 +34,18 @@ html
                       button(type="button",id="knop", class="btn btn-#{settings.thema} btn-lg btn-block")  Nieuwe Factuur
               div(class="col-2")
                 if contact 
-                  a(href='/contacten',class="button")
-                    if settings.thema == "light"
-                      button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
-                    if settings.thema != "light"
-                      button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
-                else if terug
-                  a(href='/facturen',class="button")
-                    if settings.thema == "light"
-                      button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
-                    if settings.thema != "light"
-                      button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+                  if !terug
+                    a(href='/contacten',class="button")
+                      if settings.thema == "light"
+                        button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                      if settings.thema != "light"
+                        button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+                  else
+                    a(href='/facturen',class="button")
+                      if settings.thema == "light"
+                        button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                      if settings.thema != "light"
+                        button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
                 else
                   a(href='/',class="button")
                     if settings.thema == "light"
