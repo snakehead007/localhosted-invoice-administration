@@ -39,7 +39,7 @@ html
                   a(href='/',class="button") 
                     button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Terug
           hr          
-          if settings.thema == "dark"
+          if settings.thema == "dark" || settings.thema == "danger"
             table(class="table table-#{settings.oppo} table-striped")  
               tr
                   th(scope="col") Contactpersonen
@@ -59,7 +59,7 @@ html
                           a(class="dropdown-item", href='/edit-contact/'+contact._id) aanpassen
                           a(class="dropdown-item", href='/delete-contact/'+contact._id) verwijder
                           a(class="dropdown-item", href='/view-contact/'+contact._id) bekijk
-          if settings.thema != "dark"
+          else
             table(class="table table-#{settings.thema} table-striped")    
               tr
                   th(scope="col") Contactpersonen

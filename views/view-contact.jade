@@ -32,7 +32,7 @@ html
                     if settings.thema != "light"
                       button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
               hr
-              if settings.thema == "dark"
+              if settings.thema == "dark" || settings.thema == "danger"
                 table(class="table table-#{settings.oppo} table-striped")
                   tbody
                     tr

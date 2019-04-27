@@ -37,7 +37,7 @@ html
                 if settings.thema != "light"
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
           hr
-          if settings.thema == "dark"
+          if settings.thema == "dark" || settings.thema == "danger"
             table(class="table table-#{settings.oppo} table-striped")
                 tr
                     th(scope="col") Beschrijving
@@ -58,7 +58,7 @@ html
                             a(class="dropdown-item", href='/edit-bestelling/'+bestelling._id) aanpassen
                             a(class="dropdown-item", href='/delete-bestelling/'+bestelling._id) verwijder
                             a(class="dropdown-item", href='/view-bestelling/'+bestelling._id) bekijk 
-          if settings.thema != "dark"
+          else
             table(class="table table-#{settings.thema} table-striped")
                       
                 tr

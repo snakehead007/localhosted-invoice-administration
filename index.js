@@ -978,7 +978,7 @@ app.get('/change-theme/:th',function(req,res){
         oppo = "outline-info";
         nav = "dark"
       }else if (req.params.th=="danger"){
-        oppo = "outline-dark";
+        oppo = "outline-danger";
         nav = "dark";
       }
       var updateSettings={
