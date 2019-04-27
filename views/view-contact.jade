@@ -36,34 +36,41 @@ html
               if settings.thema == "dark" || settings.thema == "danger" || settings.thema == "info"
                 table(class="table table-#{settings.oppo} table-striped")
                   tbody
-                    tr
-                      th(scope="row") firma
-                      td
-                        h4=contact.firma
-                    tr
-                      th(scope="row") contact persoon
-                      td
-                        h4=contact.contactPersoon
-                    tr
-                      th(scope="row") straatnaam
-                      td
-                        h4=contact.straat
-                    tr
-                      th(scope="row") straat nr
-                      td
-                        h4=contact.straatNr
-                    tr
-                      th(scope="row") postcode
-                      td
-                        h4=contact.postcode
-                    tr
-                      th(scope="row") plaatsnaam
-                      td
-                        h4=contact.plaats
-                    tr
-                      th(scope="row") btw-Nummer
-                      td
-                        h4=contact.btwNr
+                    if contact.firma
+                      tr
+                        th(scope="row") firma
+                        td
+                          h4=contact.firma
+                    if contact.contactPersoon
+                      tr
+                        th(scope="row") contact persoon
+                        td
+                          h4=contact.contactPersoon
+                    if contact.straat
+                      tr
+                        th(scope="row") straatnaam
+                        td
+                          h4=contact.straat
+                    if contact.straatNr
+                      tr
+                        th(scope="row") straat nr
+                        td
+                          h4=contact.straatNr
+                    if contact.postcode
+                      tr
+                        th(scope="row") postcode
+                        td
+                          h4=contact.postcode
+                    if contact.plaats
+                      tr
+                        th(scope="row") plaatsnaam
+                        td
+                          h4=contact.plaats
+                    if contact.btwNr
+                      tr
+                        th(scope="row") btw-Nummer
+                        td
+                          h4=contact.btwNr
               else
                 table(class="table table-#{settings.thema} table-striped")
                   tbody
