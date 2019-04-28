@@ -37,6 +37,7 @@ var ProfileSchema=new Schema({
   iban:{type:String},
   bic:{type:String},
   nr:{type:Number,default:1},
+  nroff:{type:Number,default:1},
   tele:{type:String},
   mail:{type:String}
 });

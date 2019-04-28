@@ -44,16 +44,13 @@ html
             table(class="table table-#{settings.oppo} table-striped")  
               tr
                   th(scope="col") Contactpersonen
-                  th(scope="col") Facturen
                   th(scope="col") Actie
               
               each contact in contactenLijst
                   tr
                       td
-                        a(href='/view-contact/'+contact._id, class="button")
+                        a(href='/facturen/'+contact._id, class="button")
                           button(type="button" class="btn btn-outline-#{settings.thema}" data-toggle="tooltip" data-placement="top" title="#{contact.firma}\n#{contact.straat} #{contact.straatNr}\n#{contact.postcode} #{contact.plaats}")=contact.contactPersoon
-                      td
-                        a(role="button", class="btn btn-#{settings.thema} btn-sm", href='/facturen/'+contact._id) Facturen
                       td
                         a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                         div(class="dropdown-menu", aria-labelledby="actionsDropdown")

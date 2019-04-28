@@ -59,17 +59,16 @@ html
                       th(scope="col") Factuur
                       if !contact
                         th(scope="col") Contact persoon
-                      th  
-                      th(scope="col") Bestellingen
+                      th
                       th(scope="col") Acties
                           each factuur in facturenLijst
                               tr
                                   td
                                     if contact
-                                      a(href='/view-factuur/'+factuur._id, class="button")
+                                      a(href='/bestellingen/'+factuur._id, class="button")
                                         button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
                                     if !contact
-                                      a(href='/view-factuur/'+factuur._id+"/t", class="button")
+                                      a(href='/bestellingen/'+factuur._id+'/t', class="button")
                                         button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
                                       
                                   if !contact
@@ -102,11 +101,6 @@ html
                                       if !factuur.isBetaald
                                         input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
                                         label(class="custom-control-label" for="#{factuur._id}") Niet betaald
-                                  td 
-                                    if contact
-                                      a(role="button", class="btn btn-#{settings.oppo} btn-sm", href='/bestellingen/'+factuur._id) bestellingen
-                                    else
-                                      a(role="button", class="btn btn-#{settings.oppo} btn-sm", href='/bestellingen/'+factuur._id+'/t') bestellingen
                                   td
                                     a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                                     div(class="dropdown-menu", aria-labelledby="actionsDropdown")
