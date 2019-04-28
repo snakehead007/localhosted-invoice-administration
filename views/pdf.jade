@@ -39,7 +39,7 @@ html
           doc.setFontSize(22);
           doc.text(20,35,Pfirma);
           doc.setFontSize(36);
-          doc.setTextColor(194, 194, 194);
+          doc.setTextColor(170, 170, 170);
           doc.text(140,35,"Factuur");
 
           /**bedrijfgegevens**/
@@ -138,7 +138,7 @@ html
                             2:{fillColor:[255,255,255],halign:'right'},
                             3:{fillColor:[255,255,255],halign:'right'}
                             },
-              styles: {fillColor: [200, 200, 200]},
+              styles: {fillColor: [140, 140, 140]},
               startY: 110,
               head: [['Beschrijving', 'Aantal', 'Bedrag','Totaal']],
               body: bestellingenPrint
@@ -155,8 +155,8 @@ html
                             0:{fillColor:[255,255,255]},
                             1:{fillColor:[255,255,255]},
                             2:{fillColor:[255,255,255],halign:'right'},
-                            3:{fillColor:[230,230,230],halign:'right'}},
-              styles: {fillColor: [200, 200, 200]},
+                            3:{fillColor:[180,180,180],halign:'right'}},
+              styles: {fillColor: [140, 140, 140]},
               body: [
               [[""],["                               "],["subtotaal"],[totaalEx.toFixed(2)+" €"]],
               [[""],["                               "],["btw 21%"],[btw.toFixed(2)+" €"]],
@@ -171,8 +171,8 @@ html
                             0:{fillColor:[255,255,255]},
                             1:{fillColor:[255,255,255]},
                             2:{fillColor:[255,255,255],halign:'right'},
-                            3:{fillColor:[230,230,230],halign:'right'}},
-              styles: {fillColor: [200, 200, 200]},
+                            3:{fillColor:[140,140,140],halign:'right'}},
+              styles: {fillColor: [140, 140, 140]},
               body: [
               [[""],["                               "],["subtotaal"],[totaalEx.toFixed(2)+" €"]],
               [[""],["                               "],["voorschot"],["-"+voorschot.toFixed(2)+" €"]],
