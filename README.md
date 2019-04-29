@@ -8,13 +8,11 @@ preparation
 --
 
 ```
-  npm install express -save
-  npm install jade -save
-  npm install mongodb -save
-  npm install mongoose -save
+  npm install express jade mongodb mongoose forever forever-monitor
 ```
 
 start the server by:
+--
 
 starting the database
 ```
