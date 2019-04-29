@@ -8,22 +8,23 @@ preparation
 --
 
 ```
-  npm install express jade mongodb mongoose
+  npm install express jade mongodb mongoose forever forever-monitor
 ```
 
 start the server by:
+--
 
-  starting the database
-  ```
-    mongod
-  ```
+starting the database
+```
+  mongod
+```
 
-  starting node
-  ```
-    node start.js
-  ```
+starting node
+```
+  node start.js
+```
 
-  start node in debug mode:
-  ```
-    node index.js
-  ```
+start node in debug mode:
+```
+  node index.js
+```
