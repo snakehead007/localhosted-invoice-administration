@@ -682,7 +682,7 @@ app.get('/delete-contact/:id',function(req,res){
               }
           });
         }
-        res.render('contacten',{'contactenLijst':contacten,"description":"Factuur succesvol verwijderd","settings":settings[0]});
+        res.redirect('/contacten');
       });
     });
 });
