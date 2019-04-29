@@ -168,10 +168,10 @@ html
                                     td
                                       if factuur.contactPersoon == "Update deze factuur!"
                                         a(href='/updateFactuur/'+factuur._id, class="button")
-                                          button(type="button" class="btn btn-outline-#{settings.oppo}" data-html="true" data-toggle="tooltip" data-placement="top" title="Klik hier om deze factuur up te daten")=factuur.contactPersoon
+                                          button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Klik hier om deze factuur up te daten")=factuur.contactPersoon
                                       else
                                         a(href='/facturen/'+factuur.contact+"/t", class="button")
-                                          button(type="button" class="btn btn-outline-#{settings.oppo}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
+                                          button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
                                   if factuur.factuurNr
                                     td
                                       if contact
