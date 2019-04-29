@@ -21,7 +21,8 @@ html
                   a(class="nav-link", href='https://identity.basecone.com/authentication/login')
                     img(width="100", height="24", src="/basecone.png", alt="basecone")
             span(class="navbar-text")
-              button(type="button", class="btn btn-light btn-sm", disabled)=description
+              button(type="button", class="btn btn-light btn-sm", disabled)
+                h6=description
       main
         div(class="jumbotron")
             div(class="row no-gutters")
@@ -84,7 +85,7 @@ html
                                       if !contact
                                         a(href='/bestellingen/'+factuur._id+'/t', class="button")
                                           button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="Offerte "+factuur.offerteNr
-                                    if !contact
+                                  if !contact
                                     td
                                       if factuur.contactPersoon == "Update deze factuur!"
                                         a(href='/updateFactuur/'+factuur._id, class="button")
@@ -144,8 +145,7 @@ html
                       th(scope="col") Factuur
                       if !contact
                         th(scope="col") Contact persoon
-                      th  
-                      th(scope="col") Bestellingen
+                      th
                       th(scope="col") Acties
                           each factuur in facturenLijst
                               tr
@@ -164,7 +164,7 @@ html
                                       if !contact
                                         a(href='/bestellingen/'+factuur._id+'/t', class="button")
                                           button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="Offerte "+factuur.offerteNr
-                                    if !contact
+                                  if !contact
                                     td
                                       if factuur.contactPersoon == "Update deze factuur!"
                                         a(href='/updateFactuur/'+factuur._id, class="button")
@@ -195,11 +195,6 @@ html
                                           label(class="custom-control-label" for="#{factuur._id}") Niet betaald
                                   else
                                     td
-                                  td
-                                    if contact
-                                      a(role="button", class="btn btn-#{settings.oppo} btn-sm", href='/bestellingen/'+factuur._id) bestellingen
-                                    else
-                                      a(role="button", class="btn btn-#{settings.oppo} btn-sm", href='/bestellingen/'+factuur._id+'/t') bestellingen
                                   td
                                     a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                                     div(class="dropdown-menu", aria-labelledby="actionsDropdown")

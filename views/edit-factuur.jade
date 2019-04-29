@@ -45,17 +45,15 @@ html
                   div(class="form-group col-md-3")
                           label(for="title") Datum
                           input(type="text",class="form-control",value=factuur.datum,name="datum")
-                  div(class="form-group col-md-9")
                   if factuur.factuurNr
-                    div(class="form-group col-md-3")
+                    div(class="form-group col-md-2")
                             label(for="title") Factuur Nummer
                             input(type="number",class="form-control",value=factuur.factuurNr,name="factuurNr")
                   if factuur.offerteNr
-                    div(class="form-group col-md-3")
+                    div(class="form-group col-md-2")
                             label(for="title") Offerte nummer
                             input(type="number",class="form-control",value=factuur.offerteNr,name="offerteNr")
-                  div(class="form-group col-md-9")
-                  div(class="form-group col-md-3")
+                  div(class="form-group col-md-2")
                           label(for="title") voorschot
                           input(type="number",class="form-control",value=factuur.voorschot,name="voorschot")
               hr
