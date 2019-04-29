@@ -22,16 +22,16 @@ html
           postcode = "#{contact.postcode}";
           plaats = "#{contact.plaats}";
           btwNr = "#{contact.btwNr}";
-          factuurNr = "#{factuur.factuurNr}";
+          offerteNr = "#{factuur.offerteNr}";
           datum = "#{factuur.datum}";
           voorschot = Number(#{factuur.voorschot});
           var doc = new jsPDF();
           doc.setFont(doc.getFontList()[0]);
           doc.setProperties({
-            title: '#{profile.firma} offerte #{factuur.factuurNr}',
+            title: '#{profile.firma} offerte #{factuur.offerteNr}',
             subject: 'Offerte van #{profile.firma}',
             author: '#{profile.firma}',
-            keywords: '#{profile.firma} ,offerte ,#{factuur.factuurNr}',
+            keywords: '#{profile.firma} ,offerte ,#{factuur.offerteNr}',
             creator: '#{profile.firma} FactuurBeheer',
           });
           /**HEADER**/
@@ -80,7 +80,7 @@ html
           c[1] -= 5;
           doc.text(c[0],c[1],datum);
           c[1] += 5;
-          doc.text(c[0],c[1],factuurNr);
+          doc.text(c[0],c[1],offerteNr);
 
           /**factuur gegevens**/
           c = [120,75];
@@ -188,7 +188,7 @@ html
           doc.text(40,275,"Neem bij vragen over deze factuur contact op met #{profile.naam}, #{profile.tele}, #{profile.mail}");
           doc.setFontType("bold");
           doc.text(80,285,"Wij danken u voor uw vertrouwen.");
-          /**EINDE FACTUUR GENERATIE**/
-          doc.save('offerte '+factuurNr+'.pdf');
+          /**EINDE OFFERTE GENERATIE**/
+          doc.save('offerte '+offerteNr+'.pdf');
     body
           h1 Sluit deze pagina na het downloaden van de pdf

@@ -47,10 +47,16 @@ html
                     th(scope="row") Datum
                     td
                       h4=factuur.datum
-                  tr
-                    th(scope="row") Factuur Nr
-                    td
-                      h4=factuur.factuurNr
+                  if factuur.factuurNr
+                    tr
+                      th(scope="row") Factuur Nr
+                      td
+                        h4=factuur.factuurNr
+                  if factuur.offerteNr
+                    tr
+                      th(scope="row") Offerte Nr
+                      td
+                        h4=factuur.offerteNr
                   tr
                     if factuur.voorschot!= 0
                       th(scope="row") vooschot
@@ -63,10 +69,16 @@ html
                     th(scope="row") Datum
                     td
                       h4=factuur.datum
-                  tr
-                    th(scope="row") Factuur Nr
-                    td
-                      h4=factuur.factuurNr
+                  if factuur.factuurNr
+                    tr
+                      th(scope="row") Factuur Nr
+                      td
+                        h4=factuur.factuurNr
+                  if factuur.offerteNr
+                    tr
+                      th(scope="row") Offerte Nr
+                      td
+                        h4=factuur.offerteNr
                   tr
                     if factuur.voorschot!= 0
                       th(scope="row") vooschot
