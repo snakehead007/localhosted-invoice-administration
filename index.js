@@ -1379,7 +1379,7 @@ app.get('/change-theme/:th',function(req,res){
         oppo = "secondary";
         nav="light";
       }else if(req.params.th=="secondary"){
-        oppo = "outline-secondary";
+        oppo = "secondary";
         nav="dark";
       }else if(req.params.th=="info"){
         oppo = "outline-info";
