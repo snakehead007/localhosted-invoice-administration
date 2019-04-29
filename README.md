@@ -21,7 +21,7 @@ starting the database
 
 starting node
 ```
-  node start.js
+  node start
 ```
 
 start node in debug mode:
