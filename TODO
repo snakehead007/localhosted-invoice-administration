@@ -1,8 +1,12 @@
 //- V1.6
 FIXES: {
-    Visuals from settings
-    when deleting an invoice on all invoices, you do go back to all invoices
 }
 creations:{
       more settings options
+      in facturen.jade, add option for creating "Offerte".
+      Offerte has own number rows.
+      Escalating an Offerte to factuur. gets a factuurNR
+      able to download as factuur only then.
+      after escalating to factuur, still able to download its offerte.
+      Also able to de-escalte a factuur to an offerte.
 }
