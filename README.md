@@ -8,25 +8,22 @@ preparation
 --
 
 ```
-  npm install express -save
-  npm install jade -save
-  npm install mongodb -save
-  npm install mongoose -save
+  npm install express jade mongodb mongoose
 ```
 
 start the server by:
 
-starting the database
-```
-  mongod
-```
+  starting the database
+  ```
+    mongod
+  ```
 
-starting node
-```
-  node start.js
-```
+  starting node
+  ```
+    node start.js
+  ```
 
-start node in debug mode:
-```
-  node index.js
-```
+  start node in debug mode:
+  ```
+    node index.js
+  ```
