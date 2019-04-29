@@ -133,10 +133,11 @@ html
                                       if factuur.offerteNr
                                         a(class="dropdown-item", href='/offerte/'+factuur._id,id="target",target="_blank") download offerte
                                         div(class="dropdown-divider")
-                                        if contact
-                                          a(class="dropdown-item", href="/opwaardeer/"+factuur._id,class="button") opwaardeer naar factuur
-                                        if !contact
-                                          a(class="dropdown-item", href="/opwaardeer/"+factuur._id+"/t",class="button") opwaardeer naar factuur
+                                        if !factuur.factuurNr
+                                          if contact
+                                            a(class="dropdown-item", href="/opwaardeer/"+factuur._id,class="button") opwaardeer naar factuur
+                                          if !contact
+                                            a(class="dropdown-item", href="/opwaardeer/"+factuur._id+"/t",class="button") opwaardeer naar factuur
             else
               table(class="table table-#{settings.thema} table-striped")
                     tr
@@ -216,8 +217,9 @@ html
                                       if factuur.offerteNr
                                         a(class="dropdown-item", href='/offerte/'+factuur._id,id="target",target="_blank") download offerte
                                         div(class="dropdown-divider")
-                                        if contact
-                                          a(class="dropdown-item", href="/opwaardeer/"+factuur._id,class="button") opwaardeer naar factuur
-                                        if !contact
-                                          a(class="dropdown-item", href="/opwaardeer/"+factuur._id+"/t",class="button") opwaardeer naar factuur
+                                        if !factuur.factuurNr
+                                          if contact
+                                            a(class="dropdown-item", href="/opwaardeer/"+factuur._id,class="button") opwaardeer naar factuur
+                                          if !contact
+                                            a(class="dropdown-item", href="/opwaardeer/"+factuur._id+"/t",class="button") opwaardeer naar factuur
                                                                     
