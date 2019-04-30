@@ -139,6 +139,7 @@ html
                               a(class="dropdown-item", href="/opwaardeer/"+factuur._id,class="button") opwaardeer naar factuur
                             if !contact
                               a(class="dropdown-item", href="/opwaardeer/"+factuur._id+"/t",class="button") opwaardeer naar factuur
+                        a(class="dropdown-item", href='/bestelbon/'+factuur._id,id="target",target="_blank") download bestelbon
         else
           table(class="table table-#{settings.thema} table-striped")
             tr
@@ -217,4 +218,4 @@ html
                               a(class="dropdown-item", href="/opwaardeer/"+factuur._id,class="button") opwaardeer naar factuur
                             if !contact
                               a(class="dropdown-item", href="/opwaardeer/"+factuur._id+"/t",class="button") opwaardeer naar factuur
-
+                        a(class="dropdown-item", href='/bestelbon/'+factuur._id,id="target",target="_blank") download bestelbon

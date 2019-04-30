@@ -43,7 +43,7 @@ html
       doc.text(20,35,Pfirma);
       doc.setFontSize(36);
       doc.setTextColor(170, 170, 170);
-      doc.text(140,35,"Factuur");
+      doc.text(140,35,"Bestelbon");
 
       /**bedrijfgegevens**/
       doc.setTextColor(0,0,0);
@@ -146,51 +146,10 @@ html
         head: [['Beschrijving', 'Aantal', 'Bedrag','Totaal']],
         body: bestellingenPrint
         });
-      btw = Math.round((totaalEx-voorschot)*0.21*100)/100;
-      totaalExSub  = totaalEx - voorschot;
-      totaalInc = totaalExSub+btw;
-      if(voorschot==0){
-
-        doc.autoTable({
-          theme: 'plain',
-          startX: 200,
-          columnStyles: {
-            0:{fillColor:[255,255,255]},
-            1:{fillColor:[255,255,255]},
-            2:{fillColor:[255,255,255],halign:'right'},
-            3:{fillColor:[180,180,180],halign:'right'}},
-          styles: {fillColor: [140, 140, 140]},
-          body: [
-          [[""],["                               "],["subtotaal"],[totaalEx.toFixed(2)+" €"]],
-          [[""],["                               "],["btw 21%"],[btw.toFixed(2)+" €"]],
-          [[""],["                               "],["totaal"],[totaalInc.toFixed(2)+" €"]]
-          ]
-        })
-      }else{
-        doc.autoTable({
-          theme: 'plain',
-          startX: 200,
-          columnStyles: {
-            0:{fillColor:[255,255,255]},
-            1:{fillColor:[255,255,255]},
-            2:{fillColor:[255,255,255],halign:'right'},
-            3:{fillColor:[140,140,140],halign:'right'}},
-          styles: {fillColor: [140, 140, 140]},
-          body: [
-          [[""],["                               "],["subtotaal"],[totaalEx.toFixed(2)+" €"]],
-          [[""],["                               "],["voorschot"],["-"+voorschot.toFixed(2)+" €"]],
-          [[""],["                               "],["subtotaal"],[totaalExSub.toFixed(2)+" €"]],
-          [[""],["                               "],["btw 21%"],[btw.toFixed(2)+" €"]],
-          [[""],["                               "],["totaal"],[totaalInc.toFixed(2)+" €"]]
-          ]
-        })
-      }
       /**Footer & Disclaimer**/
       doc.setFontType("courier");
       doc.setFontSize(10);
-      doc.text(20,265,"U wordt verzocht het vermelde bedrag ten laatste binnen de 14 dagen na factuurdatum over te maken op bovenstaand");
-      doc.text(20,270,"rekeningnummer, onder vermelding van het factuurnummer.");
-      doc.text(20,275,"Neem bij vragen over deze factuur contact op met #{profile.naam}, #{profile.tele}, #{profile.mail}");
+      doc.text(20,275,"Neem bij vragen over deze bestelbon contact op met #{profile.naam}, #{profile.tele}, #{profile.mail}");
       doc.setFontType("bold");
       doc.text(20,285,"Wij danken u voor uw vertrouwen.");
       /**EINDE FACTUUR GENERATIE**/
