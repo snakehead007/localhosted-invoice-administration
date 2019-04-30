@@ -32,9 +32,14 @@ start node in debug mode:
 Screenshots
 -
 
-![screenshot 1](screenshots/1.png)
+![index page](screenshots/1.png)
 
-![screenshot 2](screenshots/2.png)
+![profile edit page](screenshots/3.png)
 
-![screenshot 3](screenshots/3.png)
+![invoices of 1 person](screenshots/4.png)
 
+![pdf generated invoice](screenshots/5.png)
+
+![All invoices](screenshots/6.png)
+
+![all contacts](screenshots/7.png)
