@@ -32,9 +32,9 @@ start node in debug mode:
 Screenshots
 -
 
-![Alt text](/screenshots/1.png?raw=true "screenshot 1")
+![screenshot3](/screenshots/1.png)
 
-![Alt text](/screenshots/2.png?raw=true "screenshot 1")
+![screenshot 2](/screenshots/2.png)
 
-![Alt text](/screenshots/3.png?raw=true "screenshot 1")
+![screenshot 3](/screenshots/3.png)
 
