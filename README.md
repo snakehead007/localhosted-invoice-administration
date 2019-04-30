@@ -32,7 +32,7 @@ start node in debug mode:
 Screenshots
 -
 
-![screenshot3](/screenshots/1.png)
+![screenshot 1](/screenshots/1.png)
 
 ![screenshot 2](/screenshots/2.png)
 
