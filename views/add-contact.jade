@@ -1,58 +1,58 @@
 //- V1.6
 html
-    head
-        title=title
-        link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
-        script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
-        script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
-        script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
-    body
-      header
-        nav(class="navbar navbar-expand navbar-#{settings.nav} bg-#{settings.thema}")
-          div(class="collapse navbar-collapse", id="navbarNav")  
-            ul(class="navbar-nav mr-auto")
-              li(class="nav-item")
-                    a(class="nav-link active" , href='/') Home
-              li(class="nav-item")
-                  a(class="nav-link active", href='/edit-profile') Mijn profiel    
-              li(class="nav-item")
-                  a(class="nav-link active", href='/settings') Settings
-              li(class="nav-item")
-                  a(class="nav-link", href='https://identity.basecone.com/authentication/login')
-                    img(width="100", height="24", src="/basecone.png", alt="basecone")
-            span(class="navbar-text")
-              button(type="button", class="btn btn-light btn-sm", disabled)=description
-      main
-        div(class="jumbotron")
-              p(class="lead") contact toevoegen
-                hr
-                form(action='/add-contact',method='post')
-                  p=msg
-                  div(class="form-row")
-                    div(class="form-group col-md-5")
-                            label(for="title") Contact persoon *
-                            input(type="text",class="form-control",name="contactPersoon" required)    
-                    div(class="form-group col-md-2")          
-                    div(class="form-group col-md-4")
-                            label(for="title") Firma
-                            input(type="text",class="form-control",name="firma")
-                    div(class="form-group col-md-1")
-                    div(class="form-group col-md-3")
-                            label(for="title") Straatnaam *
-                            input(type="text",class="form-control",name="straat" required)                                
-                    div(class="form-group col-md-2")
-                            label(for="title") Straat Nr
-                            input(type="text",class="form-control",name="straatNr")
-                    div(class="form-group col-md-2")
-                    div(class="form-group col-md-2")
-                            label(for="title") BTW-nummer
-                            input(type="text",class="form-control",name="btwNr")
-                    div(class="form-group col-md-2")
-                    div(class="form-group col-md-2")
-                            label(for="title") Postcode
-                            input(type="number",class="form-control",name="postcode")
-                    div(class="form-group col-md-3")
-                            label(for="title") Plaatsnaam *
-                            input(type="text",class="form-control",name="plaats" required)
-                  hr
-                  button(type="submit",class="btn btn-#{settings.oppo}") toevoegen
+  head
+    title=title
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+  body
+    header
+      nav(class="navbar navbar-expand navbar-#{settings.nav} bg-#{settings.thema}")
+        div(class="collapse navbar-collapse", id="navbarNav")  
+          ul(class="navbar-nav mr-auto")
+            li(class="nav-item")
+              a(class="nav-link active" , href='/') Home
+            li(class="nav-item")
+              a(class="nav-link active", href='/edit-profile') Mijn profiel    
+            li(class="nav-item")
+              a(class="nav-link active", href='/settings') Settings
+            li(class="nav-item")
+              a(class="nav-link", href='https://identity.basecone.com/authentication/login')
+                img(width="100", height="24", src="/basecone.png", alt="basecone")
+          span(class="navbar-text")
+            button(type="button", class="btn btn-light btn-sm", disabled)=description
+    main
+      div(class="jumbotron")
+        p(class="lead") contact toevoegen
+          hr
+          form(action='/add-contact',method='post')
+            p=msg
+            div(class="form-row")
+              div(class="form-group col-md-5")
+                label(for="title") Contact persoon *
+                input(type="text",class="form-control",name="contactPersoon" required)    
+              div(class="form-group col-md-2")          
+              div(class="form-group col-md-4")
+                label(for="title") Firma
+                input(type="text",class="form-control",name="firma")
+              div(class="form-group col-md-1")
+              div(class="form-group col-md-3")
+                label(for="title") Straatnaam *
+                input(type="text",class="form-control",name="straat" required)                                
+              div(class="form-group col-md-2")
+                label(for="title") Straat Nr
+                input(type="text",class="form-control",name="straatNr")
+              div(class="form-group col-md-2")
+              div(class="form-group col-md-2")
+                label(for="title") BTW-nummer
+                input(type="text",class="form-control",name="btwNr")
+              div(class="form-group col-md-2")
+              div(class="form-group col-md-2")
+                label(for="title") Postcode
+                input(type="number",class="form-control",name="postcode")
+              div(class="form-group col-md-3")
+                label(for="title") Plaatsnaam *
+                input(type="text",class="form-control",name="plaats" required)
+            hr
+            button(type="submit",class="btn btn-#{settings.oppo}") toevoegen

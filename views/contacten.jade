@@ -1,76 +1,76 @@
 //- V1.6
 html
-    head
-        title=title
-        link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
-        script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
-        script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
-        script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
-    body
-      header
-        nav(class="navbar navbar-expand navbar-#{settings.nav} bg-#{settings.thema}")
-          div(class="collapse navbar-collapse", id="navbarNav")  
-            ul(class="navbar-nav mr-auto")
-              li(class="nav-item")
-                    a(class="nav-link active" , href='/') Home
-              li(class="nav-item")
-                  a(class="nav-link active", href='/edit-profile') Mijn profiel    
-              li(class="nav-item")
-                  a(class="nav-link active", href='/settings') Settings
-              li(class="nav-item")
-                  a(class="nav-link", href='https://identity.basecone.com/authentication/login')
-                    img(width="100", height="24", src="/basecone.png", alt="basecone")
-            span(class="navbar-text")
-              button(type="button", class="btn btn-light btn-sm", disabled)=description
-      main
-        div(class="jumbotron")
-          div(class="row no-gutters")
-            div(class="col-9 mr-auto")
-              if settings.thema == "light"
-                  a(href='/add-contact',class="button") 
-                    button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Nieuwe Contactpersoon
-              if settings.thema != "light"
-                  a(href='/add-contact',class="button") 
-                    button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Nieuwe Contactpersoon
-            div(class="col-2")
-              if settings.thema == "light"
-                  a(href='/',class="button") 
-                    button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Terug
-              if settings.thema != "light"
-                  a(href='/',class="button") 
-                    button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Terug
-          hr          
-          if settings.thema == "dark" || settings.thema == "danger" || settings.thema == "info"
-            table(class="table table-#{settings.oppo} table-striped")  
+  head
+    title=title
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+  body
+    header
+      nav(class="navbar navbar-expand navbar-#{settings.nav} bg-#{settings.thema}")
+        div(class="collapse navbar-collapse", id="navbarNav")  
+          ul(class="navbar-nav mr-auto")
+            li(class="nav-item")
+              a(class="nav-link active" , href='/') Home
+            li(class="nav-item")
+              a(class="nav-link active", href='/edit-profile') Mijn profiel    
+            li(class="nav-item")
+              a(class="nav-link active", href='/settings') Settings
+            li(class="nav-item")
+              a(class="nav-link", href='https://identity.basecone.com/authentication/login')
+                img(width="100", height="24", src="/basecone.png", alt="basecone")
+          span(class="navbar-text")
+            button(type="button", class="btn btn-light btn-sm", disabled)=description
+    main
+      div(class="jumbotron")
+        div(class="row no-gutters")
+          div(class="col-9 mr-auto")
+            if settings.thema == "light"
+              a(href='/add-contact',class="button") 
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Nieuwe Contactpersoon
+            if settings.thema != "light"
+              a(href='/add-contact',class="button") 
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Nieuwe Contactpersoon
+          div(class="col-2")
+            if settings.thema == "light"
+              a(href='/',class="button") 
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Terug
+            if settings.thema != "light"
+              a(href='/',class="button") 
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Terug
+        hr          
+        if settings.thema == "dark" || settings.thema == "danger" || settings.thema == "info"
+          table(class="table table-#{settings.oppo} table-striped")  
+            tr
+              th(scope="col") Contactpersonen
+              th(scope="col") Actie
+
+            each contact in contactenLijst
               tr
-                  th(scope="col") Contactpersonen
-                  th(scope="col") Actie
-              
-              each contact in contactenLijst
-                  tr
-                      td
-                        a(href='/facturen/'+contact._id, class="button")
-                          button(type="button" class="btn btn-outline-#{settings.thema}" data-toggle="tooltip" data-placement="top" title="#{contact.firma}\n#{contact.straat} #{contact.straatNr}\n#{contact.postcode} #{contact.plaats}")=contact.contactPersoon
-                      td
-                        a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
-                        div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                          a(class="dropdown-item", href='/edit-contact/'+contact._id) aanpassen
-                          a(class="dropdown-item", href='/delete-contact/'+contact._id) verwijder
-                          a(class="dropdown-item", href='/view-contact/'+contact._id) bekijk
-          else
-            table(class="table table-#{settings.thema} table-striped")    
+                td
+                  a(href='/facturen/'+contact._id, class="button")
+                    button(type="button" class="btn btn-outline-#{settings.thema}" data-toggle="tooltip" data-placement="top" title="#{contact.firma}\n#{contact.straat} #{contact.straatNr}\n#{contact.postcode} #{contact.plaats}")=contact.contactPersoon
+                td
+                  a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                  div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                    a(class="dropdown-item", href='/edit-contact/'+contact._id) aanpassen
+                    a(class="dropdown-item", href='/delete-contact/'+contact._id) verwijder
+                    a(class="dropdown-item", href='/view-contact/'+contact._id) bekijk
+        else
+          table(class="table table-#{settings.thema} table-striped")    
+            tr
+              th(scope="col") Contactpersonen
+              th(scope="col") Actie
+
+            each contact in contactenLijst
               tr
-                  th(scope="col") Contactpersonen
-                  th(scope="col") Actie
-              
-              each contact in contactenLijst
-                  tr
-                      td
-                        a(href='/facturen/'+contact._id, class="button")
-                          button(type="button" class="btn btn-light" data-toggle="tooltip" data-placement="top" title="#{contact.firma}\n#{contact.straat} #{contact.straatNr}\n#{contact.postcode} #{contact.plaats}")=contact.contactPersoon
-                      td
-                        a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
-                        div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                          a(class="dropdown-item", href='/edit-contact/'+contact._id) aanpassen
-                          a(class="dropdown-item", href='/delete-contact/'+contact._id) verwijder
-                          a(class="dropdown-item", href='/view-contact/'+contact._id) bekijk
+                td
+                  a(href='/facturen/'+contact._id, class="button")
+                    button(type="button" class="btn btn-light" data-toggle="tooltip" data-placement="top" title="#{contact.firma}\n#{contact.straat} #{contact.straatNr}\n#{contact.postcode} #{contact.plaats}")=contact.contactPersoon
+                td
+                  a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                  div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                    a(class="dropdown-item", href='/edit-contact/'+contact._id) aanpassen
+                    a(class="dropdown-item", href='/delete-contact/'+contact._id) verwijder
+                    a(class="dropdown-item", href='/view-contact/'+contact._id) bekijk

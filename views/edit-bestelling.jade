@@ -1,48 +1,48 @@
 //- V1.6
 html
-    head
-        title=title
-        link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
-        script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
-        script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
-        script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
-    body
-      header
-        nav(class="navbar navbar-expand navbar-#{settings.nav} bg-#{settings.thema}")
-          div(class="collapse navbar-collapse", id="navbarNav")  
-            ul(class="navbar-nav mr-auto")
-              li(class="nav-item")
-                    a(class="nav-link active" , href='/') Home
-              li(class="nav-item")
-                  a(class="nav-link active", href='/edit-profile') Mijn profiel    
-              li(class="nav-item")
-                  a(class="nav-link active", href='/settings') Settings
-              li(class="nav-item")
-                  a(class="nav-link", href='https://identity.basecone.com/authentication/login')
-                    img(width="100", height="24", src="/basecone.png", alt="basecone")
-            span(class="navbar-text")
-              button(type="button", class="btn btn-light btn-sm", disabled)=description
-      main
-        div(class="jumbotron")
-                div(class="row no-gutters")
-                  div(class="col-9 mr-auto")
-                  div(class="col-2")
-                    a(href='/bestellingen/'+factuur._id,class="button")
-                      if settings.thema == "light"
-                        button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
-                      if settings.thema != "light"
-                        button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
-                hr
-                form(action='/edit-bestelling/'+bestelling._id,method='post')
-                    div(class="form-row")
-                      div(class="form-group col-md-10")
-                              label(for="title") Beschrijving
-                              input(type="text",class="form-control",value=bestelling.beschrijving,name="beschrijving", required)
-                      div(class="form-group col-md-2")
-                              label(for="title") Aantal
-                              input(type="number",class="form-control",value=bestelling.aantal,name="aantal", required)                                
-                      div(class="form-group col-md-2")
-                              label(for="title") Bedrag voor één
-                              input(type="number",class="form-control",value=bestelling.bedrag,name="bedrag", required)
-                    hr
-                    button(type="submit",class="btn btn-#{settings.oppo}") bijwerken
+  head
+    title=title
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+  body
+    header
+      nav(class="navbar navbar-expand navbar-#{settings.nav} bg-#{settings.thema}")
+        div(class="collapse navbar-collapse", id="navbarNav")  
+          ul(class="navbar-nav mr-auto")
+            li(class="nav-item")
+              a(class="nav-link active" , href='/') Home
+            li(class="nav-item")
+              a(class="nav-link active", href='/edit-profile') Mijn profiel    
+            li(class="nav-item")
+              a(class="nav-link active", href='/settings') Settings
+            li(class="nav-item")
+              a(class="nav-link", href='https://identity.basecone.com/authentication/login')
+                img(width="100", height="24", src="/basecone.png", alt="basecone")
+          span(class="navbar-text")
+            button(type="button", class="btn btn-light btn-sm", disabled)=description
+    main
+      div(class="jumbotron")
+        div(class="row no-gutters")
+          div(class="col-9 mr-auto")
+          div(class="col-2")
+            a(href='/bestellingen/'+factuur._id,class="button")
+              if settings.thema == "light"
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+              if settings.thema != "light"
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+        hr
+        form(action='/edit-bestelling/'+bestelling._id,method='post')
+          div(class="form-row")
+            div(class="form-group col-md-10")
+              label(for="title") Beschrijving
+              input(type="text",class="form-control",value=bestelling.beschrijving,name="beschrijving", required)
+            div(class="form-group col-md-2")
+              label(for="title") Aantal
+              input(type="number",class="form-control",value=bestelling.aantal,name="aantal", required)                                
+            div(class="form-group col-md-2")
+              label(for="title") Bedrag voor één
+              input(type="number",class="form-control",value=bestelling.bedrag,name="bedrag", required)
+          hr
+          button(type="submit",class="btn btn-#{settings.oppo}") bijwerken
