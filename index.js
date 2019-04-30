@@ -464,7 +464,7 @@ app.get('/createPDF/:idf', function(req, res) {
           var json_data = "[";
           for (var i = 0; i <= lengte - 1; i++) {
             console.log("adding " + bestellingen[i] + "...");
-            json_data += ("{\"beschrijving\" : \"" + bestellingen[Number(i)].beschrijving + "\", " +
+            json_data += ("{\"beschrijving\" : \"" + bestellingen[Number(i)]Pr.beschrijving + "\", " +
               "\"aantal\" : " + bestellingen[Number(i)].aantal + ", " +
               "\"bedrag\" : " + bestellingen[Number(i)].bedrag + ", " +
               "\"totaal\" : " + Number(bestellingen[Number(i)].aantal * bestellingen[Number(i)].bedrag) + " }");
@@ -506,7 +506,7 @@ app.get('/offerte/:idf', function(req, res) {
   console.log("-------------------------------------------------------------------------");
   console.log("#offerte");
   var id = req.params.id;
-
+  
   Profile.find({}, function(err, profile) {
     console.log("found profile: " + profile);
     Factuur.findOne({
@@ -1477,8 +1477,11 @@ app.get('/edit-factuur/:idc/:idf/t', function(req, res) {
 app.post('/edit-factuur/:idc/:idf', function(req, res) {
   console.log("-------------------------------------------------------------------------");
   console.log("#edit-factuur POST");
+  var date = new Date();
+  var jaar = date.getFullYear();
+  var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
   var updateFactuur = {
-    datum: req.body.datum,
+    datum: datum,
     factuurNr: req.body.factuurNr,
     voorschot: req.body.voorschot,
     offerteNr: req.body.offerteNr
@@ -1504,8 +1507,11 @@ app.post('/edit-factuur/:idc/:idf', function(req, res) {
 app.post('/edit-factuur/:idc/:idf/t', function(req, res) {
   console.log("-------------------------------------------------------------------------");
   console.log("#edit-factuur POST");
+  var date = new Date();
+  var jaar = date.getFullYear();
+  var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
   var updateFactuur = {
-    datum: req.body.datum,
+    datum: datum,
     factuurNr: req.body.factuurNr,
     voorschot: req.body.voorschot,
     offerteNr: req.body.offerteNr
