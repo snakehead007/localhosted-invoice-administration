@@ -28,3 +28,13 @@ start node in debug mode:
 ```
   node index.js
 ```
+
+Screenshots
+-
+
+![Alt text](/screenshots/1.png?raw=true "screenshot 1")
+
+![Alt text](/screenshots/2.png?raw=true "screenshot 1")
+
+![Alt text](/screenshots/3.png?raw=true "screenshot 1")
+
