@@ -21,10 +21,20 @@ starting the database
 
 starting node
 ```
-  node start.js
+  node start
 ```
 
 start node in debug mode:
 ```
   node index.js
 ```
+
+Screenshots
+-
+
+![screenshot 1](screenshots/1.png)
+
+![screenshot 2](screenshots/2.png)
+
+![screenshot 3](screenshots/3.png)
+
