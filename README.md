@@ -2,6 +2,7 @@
 this program is used for managing and administrating invoices and generating them into .pdf format
 
 v1.6: stable
+
 about
 --
 You can add contacts, invoices and quotations.
