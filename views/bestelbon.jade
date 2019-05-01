@@ -77,18 +77,15 @@ html
       c = [120,60];
       doc.text(c[0],c[1],"Datum:");
       c[1] +=5;
-      doc.text(c[0],c[1],"FactuurNr:");
       doc.setFontType("courier");
       c[0] += 30;
       c[1] -= 5;
       doc.text(c[0],c[1],datum);
-      c[1] += 5;
-      doc.text(c[0],c[1],factuurNr);
 
       /**factuur gegevens**/
-      c = [120,75];
+      c = [120,70];
       doc.setFontType("bold");
-      doc.text(c[0],c[1],"FactuurGegevens");
+      doc.text(c[0],c[1],"Gegevens");
       c[1] +=5;
       doc.setFontType("courier");
       if(firma){
@@ -130,20 +127,18 @@ html
 
       var bestellingenPrint = [];
       for(var i = 0; i <=aantal-1;i++){
-        bestellingenPrint.push([current[i].beschrijving,current[i].aantal,current[i].bedrag.toFixed(2)+" €",current[i].totaal.toFixed(2)+" €"]);
+        bestellingenPrint.push([current[i].beschrijving,current[i].aantal]);
       }
 
       doc.autoTable({
         theme: 'grid',
         columnStyles: {
           0:{fillColor:[255,255,255]},
-          1:{fillColor:[255,255,255],halign:'right'},
-          2:{fillColor:[255,255,255],halign:'right'},
-          3:{fillColor:[255,255,255],halign:'right'}
+          1:{fillColor:[255,255,255],halign:'right'}
           },
         styles: {fillColor: [140, 140, 140]},
         startY: 110,
-        head: [['Beschrijving', 'Aantal', 'Bedrag','Totaal']],
+        head: [['Beschrijving', 'Aantal']],
         body: bestellingenPrint
         });
       /**Footer & Disclaimer**/
