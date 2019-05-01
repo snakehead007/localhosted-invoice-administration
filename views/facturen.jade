@@ -129,7 +129,6 @@ html
                           a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id) verwijder
                           a(class="dropdown-item", href='/view-factuur/'+factuur._id,class="button") bekijk
                         div(class="dropdown-divider")
-                        a(class="dropdown-item", href='/bestelbon/'+factuur._id,id="target",target="_blank") download bestelbon
                         if factuur.factuurNr
                           a(class="dropdown-item", href='/createPDF/'+factuur._id,id="target",target="_blank") download factuur
                         if factuur.offerteNr
@@ -208,7 +207,6 @@ html
                           a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id) verwijder
                           a(class="dropdown-item", href='/view-factuur/'+factuur._id,class="button") bekijk
                         div(class="dropdown-divider")
-                        a(class="dropdown-item", href='/bestelbon/'+factuur._id,id="target",target="_blank") download bestelbon
                         if factuur.factuurNr
                           a(class="dropdown-item", href='/createPDF/'+factuur._id,id="target",target="_blank") download factuur
                         if factuur.offerteNr

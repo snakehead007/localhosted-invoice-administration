@@ -1548,7 +1548,7 @@ app.post('/edit-factuur/:idc/:idf', function(req, res) {
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
   var updateFactuur = {
-    datum: datum,
+    datum: req.body.datum,
     factuurNr: req.body.factuurNr,
     voorschot: req.body.voorschot,
     offerteNr: req.body.offerteNr
@@ -1578,7 +1578,7 @@ app.post('/edit-factuur/:idc/:idf/t', function(req, res) {
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
   var updateFactuur = {
-    datum: datum,
+    datum: req.body.datum,
     factuurNr: req.body.factuurNr,
     voorschot: req.body.voorschot,
     offerteNr: req.body.offerteNr
