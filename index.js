@@ -5,13 +5,11 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var app = express();
 
-// Form Data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-// Database Connectivity
 mongoose.connect('mongodb://localhost:27017/sample-website');
 mongoose.connection.on('open', function() {
   console.log('Mongoose connected.');
@@ -36,7 +34,6 @@ var SettingsSchema = new Schema({
 
 var Settings = mongoose.model('Settings', SettingsSchema);
 
-// Creat Task Schema
 var ProfileSchema = new Schema({
   firma: {
     type: String
@@ -137,6 +134,10 @@ var FactuurSchema = new Schema({
   contactPersoon: {
     type: String,
     default: "Update deze factuur!"
+  },
+  totaal: {
+    type:Number,
+    default: 0
   }
 })
 
@@ -176,16 +177,10 @@ var ContactSchema = new Schema({
 
 var Contact = mongoose.model('Contact', ContactSchema);
 
-// Show the Index Page
 app.get('/', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("/ GET");
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
-      console.log("settings found " + settings[0]);
     } else {
-      console.log("ERR: settings not found!");
-      console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
       legeSettings = new Settings();
       legeSettings.save(function(err) {
         if (err) {
@@ -202,15 +197,10 @@ app.get('/', function(req, res) {
 });
 
 app.get('/contacten', function(req, res) {
-  console.log("-------------------------------------------------------------------------")
-  console.log("#Contacten GET");
   Contact.find({}, function(err, docs) {
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
-        console.log("settings found " + settings[0]);
       } else {
-        console.log("ERR: settings not found!");
-        console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
         legeSettings = new Settings();
         legeSettings.save(function(err) {
           if (err) {
@@ -228,14 +218,9 @@ app.get('/contacten', function(req, res) {
 });
 
 app.get('/add-contact', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#add-contact GET");
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
-      console.log("settings found " + settings[0]);
     } else {
-      console.log("ERR: settings not found!");
-      console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
       legeSettings = new Settings();
       legeSettings.save(function(err) {
         if (err) {
@@ -251,8 +236,6 @@ app.get('/add-contact', function(req, res) {
 });
 
 app.post('/add-contact', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#add-contact POST");
   if (
     req.body.contactPersoon &&
     req.body.straat &&
@@ -295,8 +278,6 @@ app.post('/add-contact', function(req, res) {
 });
 
 app.post('/add-bestelling/:idf', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#add-bestelling POST");
   Factuur.findOne({
     _id: req.params.idf
   }, function(err, factuur) {
@@ -313,24 +294,20 @@ app.post('/add-bestelling/:idf', function(req, res) {
           console.log(err);
         }
       });
+      var
       res.redirect('/bestellingen/' + req.params.idf);
     }
   });
 });
 
 app.get('/add-bestelling/:idf', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#add-bestelling GET");
   Factuur.findOne({
     _id: req.params.idf
   }, function(err, factuur) {
     if (!err) {
       Settings.find({}, function(err, settings) {
         if (!err && settings.length != 0) {
-          console.log("settings found " + settings[0]);
         } else {
-          console.log("ERR: settings not found!");
-          console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
           legeSettings = new Settings();
           legeSettings.save(function(err) {
             if (err) {
@@ -349,8 +326,6 @@ app.get('/add-bestelling/:idf', function(req, res) {
 });
 
 app.get('/edit-bestelling/:id', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#edit-bestelling GET");
   Bestelling.findOne({
     _id: req.params.id
   }, function(err, bestelling) {
@@ -359,10 +334,7 @@ app.get('/edit-bestelling/:id', function(req, res) {
     }, function(err, factuur) {
       Settings.find({}, function(err, settings) {
         if (!err && settings.length != 0) {
-          console.log("settings found " + settings[0]);
         } else {
-          console.log("ERR: settings not found!");
-          console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
           legeSettings = new Settings();
           legeSettings.save(function(err) {
             if (err) {
@@ -382,14 +354,11 @@ app.get('/edit-bestelling/:id', function(req, res) {
 });
 
 app.post('/edit-bestelling/:id', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#edit-bestelling POST");
-  console.log("looking for bestelling with id:" + req.params.id);
   var updateBestelling = {
     beschrijving: req.body.beschrijving,
     aantal: req.body.aantal,
     bedrag: req.body.bedrag,
-    totaal: req.body.aantal * req.body.bedrag
+    totaal: req.body.aantal * req.body.bedrag,
   }
   Bestelling.update({
     _id: req.params.id
@@ -407,17 +376,12 @@ app.post('/edit-bestelling/:id', function(req, res) {
 });
 
 app.get('/edit-contact/:id', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#edit-contact GET");
   Contact.findOne({
     _id: req.params.id
   }, function(err, docs) {
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
-        console.log("settings found " + settings[0]);
       } else {
-        console.log("ERR: settings not found!");
-        console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
         legeSettings = new Settings();
         legeSettings.save(function(err) {
           if (err) {
@@ -435,16 +399,12 @@ app.get('/edit-contact/:id', function(req, res) {
 });
 
 app.get('/bestelbon/:idf', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#create-pdf");
   var id = req.params.id;
 
   Profile.find({}, function(err, profile) {
-    console.log("found profile: " + profile);
     Factuur.findOne({
       _id: req.params.idf
     }, function(err, factuur) {
-      console.log("found factuur: " + factuur);
       if (err)
         console.log("err: " + err);
       Contact.findOne({
@@ -455,14 +415,12 @@ app.get('/bestelbon/:idf', function(req, res) {
         Bestelling.find({
           factuur: factuur._id
         }, function(err3, bestellingen) {
-          console.log("found :" + bestellingen);
           if (err3) {
             console.log("err: " + err3);
           }
           var lengte = Number(bestellingen.length);
           var json_data = "[";
           for (var i = 0; i <= lengte - 1; i++) {
-            console.log("adding " + bestellingen[i] + "...");
             json_data += ("{\"beschrijving\" : \"" + bestellingen[Number(i)].beschrijving + "\", " +
               "\"aantal\" : " + bestellingen[Number(i)].aantal + ", " +
               "\"bedrag\" : " + bestellingen[Number(i)].bedrag + ", " +
@@ -472,13 +430,9 @@ app.get('/bestelbon/:idf', function(req, res) {
             }
           }
           json_data += "]";
-          console.log("#BESTELLINGEN => " + json_data);
           Settings.find({}, function(err, settings) {
             if (!err && settings.length != 0) {
-              console.log("settings found " + settings[0]);
             } else {
-              console.log("ERR: settings not found!");
-              console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
               legeSettings = new Settings();
               legeSettings.save(function(err) {
                 if (err) {
@@ -501,18 +455,12 @@ app.get('/bestelbon/:idf', function(req, res) {
   });
 });
 
-//request pdf generation
 app.get('/createPDF/:idf', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#create-pdf");
   var id = req.params.id;
-
   Profile.find({}, function(err, profile) {
-    console.log("found profile: " + profile);
     Factuur.findOne({
       _id: req.params.idf
     }, function(err, factuur) {
-      console.log("found factuur: " + factuur);
       if (err)
         console.log("err: " + err);
       Contact.findOne({
@@ -523,14 +471,12 @@ app.get('/createPDF/:idf', function(req, res) {
         Bestelling.find({
           factuur: factuur._id
         }, function(err3, bestellingen) {
-          console.log("found :" + bestellingen);
           if (err3) {
             console.log("err: " + err3);
           }
           var lengte = Number(bestellingen.length);
           var json_data = "[";
           for (var i = 0; i <= lengte - 1; i++) {
-            console.log("adding " + bestellingen[i] + "...");
             json_data += ("{\"beschrijving\" : \"" + bestellingen[Number(i)].beschrijving + "\", " +
               "\"aantal\" : " + bestellingen[Number(i)].aantal + ", " +
               "\"bedrag\" : " + bestellingen[Number(i)].bedrag + ", " +
@@ -540,13 +486,9 @@ app.get('/createPDF/:idf', function(req, res) {
             }
           }
           json_data += "]";
-          console.log("#BESTELLINGEN => " + json_data);
           Settings.find({}, function(err, settings) {
             if (!err && settings.length != 0) {
-              console.log("settings found " + settings[0]);
             } else {
-              console.log("ERR: settings not found!");
-              console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
               legeSettings = new Settings();
               legeSettings.save(function(err) {
                 if (err) {
@@ -570,16 +512,11 @@ app.get('/createPDF/:idf', function(req, res) {
 });
 
 app.get('/offerte/:idf', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#offerte");
   var id = req.params.id;
-
   Profile.find({}, function(err, profile) {
-    console.log("found profile: " + profile);
     Factuur.findOne({
       _id: req.params.idf
     }, function(err, factuur) {
-      console.log("found factuur: " + factuur);
       if (err)
         console.log("err: " + err);
       Contact.findOne({
@@ -590,14 +527,12 @@ app.get('/offerte/:idf', function(req, res) {
         Bestelling.find({
           factuur: factuur._id
         }, function(err3, bestellingen) {
-          console.log("found :" + bestellingen);
           if (err3) {
             console.log("err: " + err3);
           }
           var lengte = Number(bestellingen.length);
           var json_data = "[";
           for (var i = 0; i <= lengte - 1; i++) {
-            console.log("adding " + bestellingen[i] + "...");
             json_data += ("{\"beschrijving\" : \"" + bestellingen[Number(i)].beschrijving + "\", " +
               "\"aantal\" : " + bestellingen[Number(i)].aantal + ", " +
               "\"bedrag\" : " + bestellingen[Number(i)].bedrag + ", " +
@@ -607,13 +542,9 @@ app.get('/offerte/:idf', function(req, res) {
             }
           }
           json_data += "]";
-          console.log("#BESTELLINGEN => " + json_data);
           Settings.find({}, function(err, settings) {
             if (!err && settings.length != 0) {
-              console.log("settings found " + settings[0]);
             } else {
-              console.log("ERR: settings not found!");
-              console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
               legeSettings = new Settings();
               legeSettings.save(function(err) {
                 if (err) {
@@ -637,8 +568,6 @@ app.get('/offerte/:idf', function(req, res) {
 });
 
 app.post('/edit-contact/:id', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#edit-contact : idc:" + req.params.id);
   var updateData = {
     firma: req.body.firma,
     contactPersoon: req.body.contactPersoon,
@@ -659,8 +588,6 @@ app.post('/edit-contact/:id', function(req, res) {
 });
 
 app.get('/add-offerte/:idc', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#add offerte");
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
@@ -676,10 +603,8 @@ app.get('/add-offerte/:idc', function(req, res) {
       contact.save(function(err) {
         Profile.find({}, function(err, nummer) {
           if (!err) {
-            console.log("profile found: " + nummer[0]);
             var _n = nummer;
             nroff = nummer[0].nroff;
-            console.log("nroff: " + nroff);
             nummer[0].save(function(err) {
               if (!err) {
                 Profile.updateOne({
@@ -743,8 +668,6 @@ app.get('/add-offerte/:idc', function(req, res) {
 });
 
 app.get('/add-factuur/:idc', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#add factuur");
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
@@ -761,7 +684,6 @@ app.get('/add-factuur/:idc', function(req, res) {
         if (!err) {
           Profile.find({}, function(err, nummer) {
             if (!err) {
-              console.log("profile: " + nummer);
               var _n = nummer;
               nr = nummer[0].nr;
             }
@@ -819,10 +741,7 @@ app.get('/add-factuur/:idc', function(req, res) {
   });
 });
 
-
 app.get('/opwaardeer/:idf', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#opwaardeer GET");
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
@@ -865,8 +784,6 @@ app.get('/opwaardeer/:idf', function(req, res) {
 });
 
 app.get('/opwaardeer/:idf/t', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#opwaardeer GET");
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
@@ -910,8 +827,6 @@ app.get('/opwaardeer/:idf/t', function(req, res) {
 });
 
 app.get('/delete-contact/:id', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#delete-contact GET");
   var contact_id = req.params.id;
   Contact.remove({
     _id: req.params.id
@@ -921,7 +836,6 @@ app.get('/delete-contact/:id', function(req, res) {
         contact: req.params.id
       }, function(err) {
         if (!err) {
-          console.log("deleted contact succesfully!");
         } else {
           console.log(err);
         }
@@ -933,10 +847,7 @@ app.get('/delete-contact/:id', function(req, res) {
   Contact.find({}, function(err, contacten) {
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
-        console.log("settings found " + settings[0]);
       } else {
-        console.log("ERR: settings not found!");
-        console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
         legeSettings = new Settings();
         legeSettings.save(function(err) {
           if (err) {
@@ -950,8 +861,6 @@ app.get('/delete-contact/:id', function(req, res) {
 });
 
 app.get('/delete-factuur/:idc/:idf', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#delete-factuur GET");
   Contact.findOne({
     _id: req.params.idc
   }, function(err, contact) {
@@ -963,13 +872,9 @@ app.get('/delete-factuur/:idc/:idf', function(req, res) {
           contact: req.params.idc
         }, function(err, facturen) {
           if (!err) {
-            console.log("succesfully deleted factuur ( id:" + req.params.idf + " )");
             Settings.find({}, function(err, settings) {
               if (!err && settings.length != 0) {
-                console.log("settings found " + settings[0]);
               } else {
-                console.log("ERR: settings not found!");
-                console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
                 legeSettings = new Settings();
                 legeSettings.save(function(err) {
                   if (err) {
@@ -997,8 +902,6 @@ app.get('/delete-factuur/:idc/:idf', function(req, res) {
 });
 
 app.get('/delete-factuur/:idc/:idf/t', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#delete-factuur GET");
   Contact.findOne({
     _id: req.params.idc
   }, function(err, contact) {
@@ -1008,13 +911,9 @@ app.get('/delete-factuur/:idc/:idf/t', function(req, res) {
       if (!err) {
         Factuur.find({}, function(err, facturen) {
           if (!err) {
-            console.log("succesfully deleted factuur ( id:" + req.params.idf + " )");
             Settings.find({}, function(err, settings) {
               if (!err && settings.length != 0) {
-                console.log("settings found " + settings[0]);
               } else {
-                console.log("ERR: settings not found!");
-                console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
                 legeSettings = new Settings();
                 legeSettings.save(function(err) {
                   if (err) {
@@ -1041,8 +940,6 @@ app.get('/delete-factuur/:idc/:idf/t', function(req, res) {
 });
 
 app.get('/delete-bestelling/:idb', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#delete-bestelling GET");
   Bestelling.findOne({
     _id: req.params.idb
   }, function(err, bestelling) {
@@ -1053,8 +950,6 @@ app.get('/delete-bestelling/:idb', function(req, res) {
         _id: req.params.idb
       }, function(err) {
         if (!err) {
-          console.log("succesfully deleted bestelling ( id:" + req.params.idb + " )");
-          console.log(factuur);
           res.redirect('/bestellingen/' + factuur._id);
         } else {
           console.log("err bestelling.find: " + err);
@@ -1065,8 +960,6 @@ app.get('/delete-bestelling/:idb', function(req, res) {
 });
 
 app.get('/facturen/:idc', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#facturen GET : idc:" + req.params.idc);
   var contact;
   Contact.findOne({
     _id: req.params.idc
@@ -1109,8 +1002,6 @@ app.get('/facturen/:idc', function(req, res) {
 });
 
 app.get('/facturen/:idc/t', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#facturen GET : idc:" + req.params.idc);
   var contact;
   Contact.findOne({
     _id: req.params.idc
@@ -1124,10 +1015,7 @@ app.get('/facturen/:idc/t', function(req, res) {
           console.log(facturen);
           Settings.find({}, function(err, settings) {
             if (!err && settings.length != 0) {
-              console.log("settings found " + settings[0]);
             } else {
-              console.log("ERR: settings not found!");
-              console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
               legeSettings = new Settings();
               legeSettings.save(function(err) {
                 if (err) {
@@ -1154,17 +1042,12 @@ app.get('/facturen/:idc/t', function(req, res) {
 });
 
 app.get('/facturen', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#facturen GET : ALLES");
   Factuur.find({}, function(err, facturen) {
     if (!err) {
       console.log(facturen);
       Settings.find({}, function(err, settings) {
         if (!err && settings.length != 0) {
-          console.log("settings found " + settings[0]);
         } else {
-          console.log("ERR: settings not found!");
-          console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
           legeSettings = new Settings();
           legeSettings.save(function(err) {
             if (err) {
@@ -1185,8 +1068,6 @@ app.get('/facturen', function(req, res) {
 });
 
 app.get('/bestellingen/:idf', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#bestellingen GET");
   Factuur.findOne({
     _id: req.params.idf
   }, function(err, factuur) {
@@ -1195,20 +1076,13 @@ app.get('/bestellingen/:idf', function(req, res) {
         _id: factuur.contact
       }, function(err, contact) {
         if (!err) {
-          console.log("factuur succesfully found: " + factuur);
-          console.log("factuur id :" + factuur._id);
-          console.log("found contact :" + contact);
           Bestelling.find({
             factuur: req.params.idf
           }, function(err, bestellingen) {
             if (!err) {
-              console.log("bestelling succesfully found: " + bestellingen);
               Settings.find({}, function(err, settings) {
                 if (!err && settings.length != 0) {
-                  console.log("settings found " + settings[0]);
                 } else {
-                  console.log("ERR: settings not found!");
-                  console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
                   legeSettings = new Settings();
                   legeSettings.save(function(err) {
                     if (err) {
@@ -1232,8 +1106,6 @@ app.get('/bestellingen/:idf', function(req, res) {
 });
 
 app.get('/bestellingen/:idf/t', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#bestellingen GET");
   Factuur.findOne({
     _id: req.params.idf
   }, function(err, factuur) {
@@ -1242,20 +1114,13 @@ app.get('/bestellingen/:idf/t', function(req, res) {
         _id: factuur.contact
       }, function(err, contact) {
         if (!err) {
-          console.log("factuur succesfully found: " + factuur);
-          console.log("factuur id :" + factuur._id);
-          console.log("found contact :" + contact);
           Bestelling.find({
             factuur: req.params.idf
           }, function(err, bestellingen) {
             if (!err) {
-              console.log("bestelling succesfully found: " + bestellingen);
               Settings.find({}, function(err, settings) {
                 if (!err && settings.length != 0) {
-                  console.log("settings found " + settings[0]);
                 } else {
-                  console.log("ERR: settings not found!");
-                  console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
                   legeSettings = new Settings();
                   legeSettings.save(function(err) {
                     if (err) {
@@ -1279,20 +1144,14 @@ app.get('/bestellingen/:idf/t', function(req, res) {
   });
 });
 
-
 app.get('/view-contact/:idc', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#view-contact GET");
   Contact.findOne({
     _id: req.params.idc
   }, function(err, contact) {
     if (!err) {
       Settings.find({}, function(err, settings) {
         if (!err && settings.length != 0) {
-          console.log("settings found " + settings[0]);
         } else {
-          console.log("ERR: settings not found!");
-          console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
           legeSettings = new Settings();
           legeSettings.save(function(err) {
             if (err) {
@@ -1312,11 +1171,7 @@ app.get('/view-contact/:idc', function(req, res) {
   });
 });
 
-
-
 app.get('/edit-profile/', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#edit-profile GET");
   var legeProfiel;
   var date = new Date();
   var _jaar = date.getFullYear();
@@ -1324,7 +1179,6 @@ app.get('/edit-profile/', function(req, res) {
   Profile.find({}, function(err, profile) {
     if (!err) {
       if (profile.length == 0) {
-        console.log("profiel is nog niet gemaakt, nieuwe word gecreërd");
         legeProfiel = new Profile();
         legeProfiel.save(function(err) {
           if (err) {
@@ -1353,10 +1207,7 @@ app.get('/edit-profile/', function(req, res) {
         }
         Settings.find({}, function(err, settings) {
           if (!err && settings.length != 0) {
-            console.log("settings found " + settings[0]);
           } else {
-            console.log("ERR: settings not found!");
-            console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
             legeSettings = new Settings();
             legeSettings.save(function(err) {
               if (err) {
@@ -1378,8 +1229,6 @@ app.get('/edit-profile/', function(req, res) {
 });
 
 app.post('/edit-profile/:id', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#edit-profile POST");
 
   var _nr2 = req.body.nr.toString();
   console.log(_nr2);
@@ -1417,23 +1266,16 @@ app.post('/edit-profile/:id', function(req, res) {
 });
 
 app.get('/edit-factuur/:idc/:idf', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#edit-factuur GET");
   Contact.findOne({
     _id: req.params.idc
   }, function(err, contact) {
-    console.log("contact succesfully found: " + contact);
     Factuur.findOne({
       _id: req.params.idf
     }, function(err, factuur) {
       if (!err) {
-        console.log("factuur succesfully found : " + factuur);
         Settings.find({}, function(err, settings) {
           if (!err && settings.length != 0) {
-            console.log("settings found " + settings[0]);
           } else {
-            console.log("ERR: settings not found!");
-            console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
             legeSettings = new Settings();
             legeSettings.save(function(err) {
               if (err) {
@@ -1456,22 +1298,16 @@ app.get('/edit-factuur/:idc/:idf', function(req, res) {
 });
 
 app.get('/updateFactuur/:idf', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#updatefactuur GET");
   Factuur.findOne({
     _id: req.params.idf
   }, function(err, factuur) {
     if (!err) {
-      console.log("found factuur " + factuur);
       Contact.findOne({
         _id: factuur.contact
       }, function(err, contact) {
         Settings.find({}, function(err, settings) {
           if (!err && settings.length != 0) {
-            console.log("settings found " + settings[0]);
           } else {
-            console.log("ERR: settings not found!");
-            console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
             legeSettings = new Settings();
             legeSettings.save(function(err) {
               if (err) {
@@ -1502,23 +1338,16 @@ app.get('/updateFactuur/:idf', function(req, res) {
 });
 
 app.get('/edit-factuur/:idc/:idf/t', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#edit-factuur GET");
   Contact.findOne({
     _id: req.params.idc
   }, function(err, contact) {
-    console.log("contact succesfully found: " + contact);
     Factuur.findOne({
       _id: req.params.idf
     }, function(err, factuur) {
       if (!err) {
-        console.log("factuur succesfully found : " + factuur);
         Settings.find({}, function(err, settings) {
           if (!err && settings.length != 0) {
-            console.log("settings found " + settings[0]);
           } else {
-            console.log("ERR: settings not found!");
-            console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
             legeSettings = new Settings();
             legeSettings.save(function(err) {
               if (err) {
@@ -1542,8 +1371,6 @@ app.get('/edit-factuur/:idc/:idf/t', function(req, res) {
 });
 
 app.post('/edit-factuur/:idc/:idf', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#edit-factuur POST");
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
@@ -1572,8 +1399,6 @@ app.post('/edit-factuur/:idc/:idf', function(req, res) {
 });
 
 app.post('/edit-factuur/:idc/:idf/t', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#edit-factuur POST");
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
@@ -1602,23 +1427,16 @@ app.post('/edit-factuur/:idc/:idf/t', function(req, res) {
 });
 
 app.get('/view-factuur/:idf', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#edit-factuur GET");
   Factuur.findOne({
     _id: req.params.idf
   }, function(err, factuur) {
     if (!err) {
-      console.log("factuur succesfully found: " + factuur);
       Contact.findOne({
         _id: factuur.contact
       }, function(err, contact) {
-        console.log("contact from factuur succesfully found: " + contact);
         Settings.find({}, function(err, settings) {
           if (!err && settings.length != 0) {
-            console.log("settings found " + settings[0]);
           } else {
-            console.log("ERR: settings not found!");
-            console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
             legeSettings = new Settings();
             legeSettings.save(function(err) {
               if (err) {
@@ -1639,23 +1457,16 @@ app.get('/view-factuur/:idf', function(req, res) {
 });
 
 app.get('/view-factuur/:idf/t', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#edit-factuur GET");
   Factuur.findOne({
     _id: req.params.idf
   }, function(err, factuur) {
     if (!err) {
-      console.log("factuur succesfully found: " + factuur);
       Contact.findOne({
         _id: factuur.contact
       }, function(err, contact) {
-        console.log("contact from factuur succesfully found: " + contact);
         Settings.find({}, function(err, settings) {
           if (!err && settings.length != 0) {
-            console.log("settings found " + settings[0]);
           } else {
-            console.log("ERR: settings not found!");
-            console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
             legeSettings = new Settings();
             legeSettings.save(function(err) {
               if (err) {
@@ -1677,8 +1488,6 @@ app.get('/view-factuur/:idf/t', function(req, res) {
 });
 
 app.get('/view-bestelling/:idb', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#view-bestelling GET");
   Bestelling.findOne({
     _id: req.params.idb
   }, function(err, bestelling) {
@@ -1689,10 +1498,7 @@ app.get('/view-bestelling/:idb', function(req, res) {
         if (!err) {
           Settings.find({}, function(err, settings) {
             if (!err && settings.length != 0) {
-              console.log("settings found " + settings[0]);
             } else {
-              console.log("ERR: settings not found!");
-              console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
               legeSettings = new Settings();
               legeSettings.save(function(err) {
                 if (err) {
@@ -1714,8 +1520,6 @@ app.get('/view-bestelling/:idb', function(req, res) {
 });
 
 app.get('/change-betaald/:id', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#change-betaald GET");
   Factuur.findOne({
     _id: req.params.id
   }, function(err, factuur) {
@@ -1742,8 +1546,6 @@ app.get('/change-betaald/:id', function(req, res) {
 });
 
 app.get('/change-betaald2/:id', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#change-betaald2 GET");
   Factuur.findOne({
     _id: req.params.id
   }, function(err, factuur) {
@@ -1770,18 +1572,13 @@ app.get('/change-betaald2/:id', function(req, res) {
 });
 
 app.get('/settings', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#settings GET");
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
-      console.log("settings found " + settings[0]);
       res.render('settings', {
         'settings': settings[0],
         'description': "Settings"
       });
     } else {
-      console.log("ERR: settings not found!");
-      console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
       legeSettings = new Settings();
       legeSettings.save(function(err) {
         if (err) {
@@ -1796,12 +1593,10 @@ app.get('/settings', function(req, res) {
     }
   });
 });
+
 app.get('/change-theme/:th', function(req, res) {
-  console.log("-------------------------------------------------------------------------");
-  console.log("#change-theme POST");
   Settings.find({}, function(err, settings) {
     if (!err) {
-      console.log("found settings " + settings[0]);
       var oppo;
       var nav;
       if (req.params.th == "dark") {
@@ -1832,7 +1627,6 @@ app.get('/change-theme/:th', function(req, res) {
         _id: settings[0]._id
       }, updateSettings, function(err, updatedSettings) {
         if (!err) {
-          console.log("updated settings!");
           res.redirect('/settings');
         } else {
           console.log(err);
@@ -1845,19 +1639,18 @@ app.get('/change-theme/:th', function(req, res) {
   });
 });
 
-// Set the view engine
 app.set('views', path.join(__dirname, 'views'));
+
 app.set('view engine', 'jade');
 
-// Set Public Folder as static Path
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Run the Server
 app.listen('3000', function() {
   console.log('Server is running at PORT ' + 3000);
   Schema = mongoose.Schema;
 
 });
+
 async function update(id, voor) {
   await Factuur.updateOne({
     _id: id
