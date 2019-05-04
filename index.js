@@ -294,6 +294,22 @@ app.post('/add-bestelling/:idf', function(req, res) {
           console.log(err);
         }
       });
+      Factuur.findOne({_id: req.params.idf},function(err,factuur){
+        if(!err){
+          var newFactuur={
+            totaal: factuur.totaal+(req.body.aantal*req.body.bedrag)
+          }
+          Factuur.update({_id: req.params.idf},newFactuur,function(err,factuurnew){
+                if(!err){
+
+                }else{
+                  console.log(err);
+                }
+          });
+        }else{
+          console.log(err);
+        }
+      });
       res.redirect('/bestellingen/' + req.params.idf);
     }
   });
@@ -306,6 +322,11 @@ app.get('/add-bestelling/:idf', function(req, res) {
     if (!err) {
       Settings.find({}, function(err, settings) {
         if (!err && settings.length != 0) {
+          res.render('add-bestelling', {
+            'factuur': factuur,
+            "description": "Bestelling toevoegen",
+            "settings": settings[0]
+          });
         } else {
           legeSettings = new Settings();
           legeSettings.save(function(err) {
@@ -314,11 +335,6 @@ app.get('/add-bestelling/:idf', function(req, res) {
             }
           });
         }
-        res.render('add-bestelling', {
-          'factuur': factuur,
-          "description": "Bestelling toevoegen",
-          "settings": settings[0]
-        });
       });
     }
   });
@@ -353,25 +369,33 @@ app.get('/edit-bestelling/:id', function(req, res) {
 });
 
 app.post('/edit-bestelling/:id', function(req, res) {
-  var updateBestelling = {
-    beschrijving: req.body.beschrijving,
-    aantal: req.body.aantal,
-    bedrag: req.body.bedrag,
-    totaal: req.body.aantal * req.body.bedrag,
-  }
-  Bestelling.update({
-    _id: req.params.id
-  }, updateBestelling, function(err, numrows) {
-    Bestelling.findOne({
-      _id: req.params.id
-    }, function(err, bestelling) {
-      if (!err) {
-        res.redirect('/bestellingen/' + bestelling.factuur);
-      } else {
-        console.log("err edit-bestelling POST : " + err);
-      }
+  Bestelling.findOne({_id:req.params.id},function(err,bestellingOld){
+        var updateBestelling = {
+          beschrijving: req.body.beschrijving,
+          aantal: req.body.aantal,
+          bedrag: req.body.bedrag,
+          totaal: req.body.aantal * req.body.bedrag,
+        }
+        Bestelling.update({_id: req.params.id}, updateBestelling, function(err, numrows) {
+              Bestelling.findOne({_id: req.params.id}, function(err, bestelling) {
+                      Factuur.findOne({_id: bestelling.factuur},function(err,factuur){
+                          if(!err){
+                            var tot = factuur.totaal-(bestellingOld.aantal*bestellingOld.bedrag);
+                                var newFactuur={
+                                  totaal: tot+(req.body.aantal*req.body.bedrag)
+                                }
+                                Factuur.update({_id: bestelling.factuur},newFactuur,function(err,factuurnew){
+                                      if(!err){
+                                        res.redirect('/bestellingen/' + bestelling.factuur);
+                                      }else{
+                                        console.log(err);
+                                      }
+                                });
+                          }
+                    });
+              });
+        });
     });
-  });
 });
 
 app.get('/edit-contact/:id', function(req, res) {
@@ -670,7 +694,6 @@ app.get('/add-factuur/:idc', function(req, res) {
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
-  console.log(datum);
   var nr = 0;
   var idn;
   var _n = null;
@@ -703,7 +726,8 @@ app.get('/add-factuur/:idc', function(req, res) {
                     contact: contact._id,
                     datum: datum,
                     factuurNr: String(jaar + nr_str),
-                    contactPersoon: contact.contactPersoon
+                    contactPersoon: contact.contactPersoon,
+                    totaal:0
                   });
                   Contact.updateOne({
                     aantalFacturen: contact.aantalFacturen + 1
@@ -809,7 +833,6 @@ app.get('/opwaardeer/:idf/t', function(req, res) {
               Factuur.update({
                 _id: req.params.idf
               }, updateFactuur, function(err, factuur1) {
-                console.log(factuur);
                 res.redirect('/facturen');
               });
             });
@@ -949,6 +972,16 @@ app.get('/delete-bestelling/:idb', function(req, res) {
         _id: req.params.idb
       }, function(err) {
         if (!err) {
+              var newFactuur={
+                totaal: factuur.totaal-(bestelling.aantal*bestelling.bedrag)
+              }
+              Factuur.update({_id: factuur._id},newFactuur,function(err,factuurnew){
+                    if(!err){
+
+                    }else{
+                      console.log(err);
+                    }
+              });
           res.redirect('/bestellingen/' + factuur._id);
         } else {
           console.log("err bestelling.find: " + err);
@@ -969,13 +1002,9 @@ app.get('/facturen/:idc', function(req, res) {
         contact: req.params.idc
       }, function(err, facturen) {
         if (!err) {
-          console.log(facturen);
           Settings.find({}, function(err, settings) {
             if (!err && settings.length != 0) {
-              console.log("settings found " + settings[0]);
             } else {
-              console.log("ERR: settings not found!");
-              console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
               legeSettings = new Settings();
               legeSettings.save(function(err) {
                 if (err) {
@@ -1011,7 +1040,6 @@ app.get('/facturen/:idc/t', function(req, res) {
         contact: req.params.idc
       }, function(err, facturen) {
         if (!err) {
-          console.log(facturen);
           Settings.find({}, function(err, settings) {
             if (!err && settings.length != 0) {
             } else {
@@ -1043,7 +1071,6 @@ app.get('/facturen/:idc/t', function(req, res) {
 app.get('/facturen', function(req, res) {
   Factuur.find({}, function(err, facturen) {
     if (!err) {
-      console.log(facturen);
       Settings.find({}, function(err, settings) {
         if (!err && settings.length != 0) {
         } else {
@@ -1230,14 +1257,10 @@ app.get('/edit-profile/', function(req, res) {
 app.post('/edit-profile/:id', function(req, res) {
 
   var _nr2 = req.body.nr.toString();
-  console.log(_nr2);
   var _nr = Number(_nr2.substring(_nr2.length - 3));
-  console.log(_nr);
 
   var _nroff2 = req.body.nroff.toString();
-  console.log("\n" + _nroff2);
   var _nroff = Number(_nroff2.substring(_nroff2.length - 3));
-  console.log(_nroff);
   var updateProfile = {
     firma: req.body.firma,
     naam: req.body.naam,
