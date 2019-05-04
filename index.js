@@ -294,7 +294,6 @@ app.post('/add-bestelling/:idf', function(req, res) {
           console.log(err);
         }
       });
-      var
       res.redirect('/bestellingen/' + req.params.idf);
     }
   });
