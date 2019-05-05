@@ -296,8 +296,9 @@ app.post('/add-bestelling/:idf', function(req, res) {
       });
       Factuur.findOne({_id: req.params.idf},function(err,factuur){
         if(!err){
+          var totFac = ((factuur.totaal+(req.body.aantal*req.body.bedrag)-factuur.voorschot));
           var newFactuur={
-            totaal: factuur.totaal+(req.body.aantal*req.body.bedrag)
+            totaal: totFac
           }
           Factuur.update({_id: req.params.idf},newFactuur,function(err,factuurnew){
                 if(!err){
@@ -369,30 +370,30 @@ app.get('/edit-bestelling/:id', function(req, res) {
 });
 
 app.post('/edit-bestelling/:id', function(req, res) {
-  Bestelling.findOne({_id:req.params.id},function(err,bestellingOld){
+  Bestelling.findOne({_id:req.params.id},function(err,bestelling){
         var updateBestelling = {
           beschrijving: req.body.beschrijving,
           aantal: req.body.aantal,
           bedrag: req.body.bedrag,
           totaal: req.body.aantal * req.body.bedrag,
         }
-        Bestelling.update({_id: req.params.id}, updateBestelling, function(err, numrows) {
-              Bestelling.findOne({_id: req.params.id}, function(err, bestelling) {
-                      Factuur.findOne({_id: bestelling.factuur},function(err,factuur){
-                          if(!err){
-                            var tot = factuur.totaal-(bestellingOld.aantal*bestellingOld.bedrag);
-                                var newFactuur={
-                                  totaal: tot+(req.body.aantal*req.body.bedrag)
-                                }
-                                Factuur.update({_id: bestelling.factuur},newFactuur,function(err,factuurnew){
-                                      if(!err){
-                                        res.redirect('/bestellingen/' + bestelling.factuur);
-                                      }else{
-                                        console.log(err);
-                                      }
-                                });
+        Factuur.findOne({_id: bestelling.factuur},function(err,factuur){
+          Bestelling.update({_id: req.params.id}, updateBestelling, function(err, numrows) {
+                    if(!err){
+                      var tot = factuur.totaal-(bestelling.aantal*bestelling.bedrag);
+                      console.log(tot +"="+factuur.totaal+"-("+bestelling.aantal+"*"+bestelling.bedrag+")");
+                      console.log(tot+"+("+req.body.aantal+"*"+req.body.bedrag+")-"+factuur.voorschot+")");
+                          var newFactuur={
+                            totaal: ((tot+(req.body.aantal*req.body.bedrag)-factuur.voorschot))
                           }
-                    });
+                          Factuur.update({_id: bestelling.factuur},newFactuur,function(err,factuurnew){
+                                if(!err){
+                                  res.redirect('/bestellingen/' + bestelling.factuur);
+                                }else{
+                                  console.log(err);
+                                }
+                          });
+                    }
               });
         });
     });
@@ -973,7 +974,7 @@ app.get('/delete-bestelling/:idb', function(req, res) {
       }, function(err) {
         if (!err) {
               var newFactuur={
-                totaal: factuur.totaal-(bestelling.aantal*bestelling.bedrag)
+                totaal: factuur.totaal -(bestelling.aantal*bestelling.bedrag)
               }
               Factuur.update({_id: factuur._id},newFactuur,function(err,factuurnew){
                     if(!err){
@@ -1396,27 +1397,34 @@ app.post('/edit-factuur/:idc/:idf', function(req, res) {
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
-  var updateFactuur = {
-    datum: req.body.datum,
-    factuurNr: req.body.factuurNr,
-    voorschot: req.body.voorschot,
-    offerteNr: req.body.offerteNr
-  };
-  Contact.findOne({
-    _id: req.params.idc
-  }, function(err, contact) {
-    console.log(contact)
-    Factuur.update({
-      _id: req.params.idf
-    }, updateFactuur, function(err, factuur) {
-      if (!err) {
-        console.log(factuur);
-        res.redirect('/facturen/' + contact._id);
-      } else {
-        console.log(err);
-      }
-    });
-
+  Bestelling.find({factuur:req.params.idf},function(err,bestellingen){
+    Factuur.findOne({_id:req.params.idf},function(err,factuur){
+    var totBes = 0
+    for(var i= 0; i<=bestellingen.length-1; i++){
+      totBes += bestellingen[i].totaal;
+    }
+    console.log(totBes);
+    var updateFactuur = {
+      datum: req.body.datum,
+      factuurNr: req.body.factuurNr,
+      voorschot: req.body.voorschot,
+      offerteNr: req.body.offerteNr,
+      totaal:totBes-req.body.voorschot
+    };
+    Contact.findOne({
+      _id: req.params.idc
+    }, function(err, contact) {
+            Factuur.update({
+              _id: req.params.idf
+            }, updateFactuur, function(err, factuur) {
+              if (!err) {
+                res.redirect('/facturen/' + contact._id);
+              } else {
+                console.log(err);
+              }
+            });
+        });
+      });
   });
 });
 
@@ -1424,27 +1432,34 @@ app.post('/edit-factuur/:idc/:idf/t', function(req, res) {
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
-  var updateFactuur = {
-    datum: req.body.datum,
-    factuurNr: req.body.factuurNr,
-    voorschot: req.body.voorschot,
-    offerteNr: req.body.offerteNr
-  };
-  Contact.findOne({
-    _id: req.params.idc
-  }, function(err, contact) {
-    console.log(contact)
-    Factuur.update({
-      _id: req.params.idf
-    }, updateFactuur, function(err, factuur) {
-      if (!err) {
-        console.log(factuur);
-        res.redirect('/facturen/');
-      } else {
-        console.log(err);
-      }
-    });
-
+  Bestelling.find({factuur:req.params.idf},function(err,bestellingen){
+    Factuur.findOne({_id:req.params.idf},function(err,factuur){
+    var totBes = 0
+    for(var i= 0; i<=bestellingen.length-1; i++){
+      totBes += bestellingen[i].totaal;
+    }
+    console.log(totBes);
+    var updateFactuur = {
+      datum: req.body.datum,
+      factuurNr: req.body.factuurNr,
+      voorschot: req.body.voorschot,
+      offerteNr: req.body.offerteNr,
+      totaal:totBes-req.body.voorschot
+    };
+    Contact.findOne({
+      _id: req.params.idc
+    }, function(err, contact) {
+            Factuur.update({
+              _id: req.params.idf
+            }, updateFactuur, function(err, factuur) {
+              if (!err) {
+                res.redirect('/facturen/');
+              } else {
+                console.log(err);
+              }
+            });
+        });
+      });
   });
 });
 
