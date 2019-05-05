@@ -1,4 +1,4 @@
-//- V1.6
+﻿//- V1.6
 html
   head
     title=title
@@ -113,10 +113,10 @@ html
                         div(class="custom-control custom-switch")
                           if factuur.isBetaald
                             input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()" checked)
-                            label(class="custom-control-label" for="#{factuur._id}")=factuur.totaal+"€ ,  Betaald"
+                            label(class="custom-control-label" for="#{factuur._id}")=factuur.totaal*1.21+"€ ,  Betaald"
                           if !factuur.isBetaald
                             input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
-                            label(class="custom-control-label" for="#{factuur._id}")=factuur.totaal+"€ ,  Betaald"
+                            label(class="custom-control-label" for="#{factuur._id}")=factuur.totaal*1.21+"€ ,  Betaald"
                     else
                       td
                     td
@@ -194,10 +194,10 @@ html
                         div(class="custom-control custom-switch")
                           if factuur.isBetaald
                             input(type="checkbox" class="custom-control-input bg-success" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()" checked)
-                            label(class="custom-control-label" for="#{factuur._id}")=factuur.totaal+"€ ,  Betaald"
+                            label(class="custom-control-label" for="#{factuur._id}")=factuur.totaal*1.21	+"€ ,  Betaald"
                           if !factuur.isBetaald
                             input(type="checkbox" class="custom-control-input bg-success" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
-                            label(class="custom-control-label" for="#{factuur._id}")=factuur.totaal+"€ ,  Betaald"
+                            label(class="custom-control-label" for="#{factuur._id}")=factuur.totaal*1.21+"€ ,  Betaald"
                     else
                       td
                     td
