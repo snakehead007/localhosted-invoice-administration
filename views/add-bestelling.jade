@@ -36,6 +36,6 @@ html
                 input(type="number",class="form-control",name="aantal", required)                                
               div(class="form-group col-md-2")
                 label(for="title") Bedrag voor één
-                input(type="number",class="form-control",name="bedrag", required)
+                input(type="number",class="form-control",name="bedrag",step=".01" required)
             hr
             button(type="submit",class="btn btn-#{settings.oppo}") toevoegen
