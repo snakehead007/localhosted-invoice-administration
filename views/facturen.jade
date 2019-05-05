@@ -66,6 +66,7 @@ html
               th(scope="col") Factuur
               if !contact
                 th(scope="col") Contact persoon
+              th(scope="col") Datum
               th
               th(scope="col") Acties
                 each factuur in facturenLijst
@@ -93,7 +94,8 @@ html
                         else
                           a(href='/facturen/'+factuur.contact+"/t", class="button")
                             button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
-
+                    td
+                      p(class="lead")=factuur.datum
                     if factuur.factuurNr      
                       td
                         if contact
@@ -145,6 +147,7 @@ html
               th(scope="col") Factuur
               if !contact
                 th(scope="col") Contact persoon
+              th(scope="col") Datum
               th
               th(scope="col") Acties
                 each factuur in facturenLijst
@@ -172,6 +175,8 @@ html
                         else
                           a(href='/facturen/'+factuur.contact+"/t", class="button")
                             button(type="button" class="btn btn-outline-#{settings.oppo}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
+                    td
+                      p(class="lead")=factuur.datum
                     if factuur.factuurNr
                       td
                         if contact
