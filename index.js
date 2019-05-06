@@ -172,6 +172,10 @@ var ContactSchema = new Schema({
   aantalFacturen: {
     type: Number,
     default: 0
+  },
+  lang:{
+    type: String,
+    defaul: "nl"
   }
 });
 
@@ -247,7 +251,8 @@ app.post('/add-contact', function(req, res) {
       straatNr: req.body.straatNr,
       postcode: req.body.postcode,
       plaats: req.body.plaats,
-      btwNr: req.body.btwNr
+      btwNr: req.body.btwNr,
+      lang: req.body.lang
     });
     var message = 'Contact toegevoegd';
     newContact.save(function(err) {
@@ -258,6 +263,7 @@ app.post('/add-contact', function(req, res) {
   }
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
+      console.log(req.body.lang);
       console.log("settings found " + settings[0]);
     } else {
       console.log("ERR: settings not found!");
@@ -536,6 +542,62 @@ app.get('/createPDF/:idf', function(req, res) {
   });
 });
 
+app.get('/createPDF-eng/:idf', function(req, res) {
+  var id = req.params.id;
+  Profile.find({}, function(err, profile) {
+    Factuur.findOne({
+      _id: req.params.idf
+    }, function(err, factuur) {
+      if (err)
+        console.log("err: " + err);
+      Contact.findOne({
+        _id: factuur.contact
+      }, function(err2, contact) {
+        if (err2)
+          console.log("err: " + err2);
+        Bestelling.find({
+          factuur: factuur._id
+        }, function(err3, bestellingen) {
+          if (err3) {
+            console.log("err: " + err3);
+          }
+          var lengte = Number(bestellingen.length);
+          var json_data = "[";
+          for (var i = 0; i <= lengte - 1; i++) {
+            json_data += ("{\"beschrijving\" : \"" + bestellingen[Number(i)].beschrijving + "\", " +
+              "\"aantal\" : " + bestellingen[Number(i)].aantal + ", " +
+              "\"bedrag\" : " + bestellingen[Number(i)].bedrag + ", " +
+              "\"totaal\" : " + Number(bestellingen[Number(i)].aantal * bestellingen[Number(i)].bedrag) + " }");
+            if (i <= lengte - 2) {
+              json_data += ",";
+            }
+          }
+          json_data += "]";
+          Settings.find({}, function(err, settings) {
+            if (!err && settings.length != 0) {
+            } else {
+              legeSettings = new Settings();
+              legeSettings.save(function(err) {
+                if (err) {
+                  console.log("err in settings: " + err);
+                }
+              });
+            }
+            res.render('pdf-eng', {
+              'profile': profile[0],
+              'contact': contact,
+              'bestellingen': json_data,
+              "factuur": factuur,
+              'lengte': lengte,
+              "settings": settings[0]
+            });
+          });
+        });
+      });
+    });
+  });
+});
+
 app.get('/offerte/:idf', function(req, res) {
   var id = req.params.id;
   Profile.find({}, function(err, profile) {
@@ -601,6 +663,7 @@ app.post('/edit-contact/:id', function(req, res) {
     postcode: req.body.postcode,
     plaats: req.body.plaats,
     btwNr: req.body.btwNr,
+    lang: req.body.lang,
   };
   var message = 'Factuur niet geupdate';
   Contact.update({
