@@ -296,7 +296,8 @@ app.post('/add-bestelling/:idf', function(req, res) {
       });
       Factuur.findOne({_id: req.params.idf},function(err,factuur){
         if(!err){
-          var totFac = ((factuur.totaal+(req.body.aantal*req.body.bedrag)-factuur.voorschot));
+          var totFac = ((((factuur.totaal+factuur.voorschot)+(req.body.aantal*req.body.bedrag))-factuur.voorschot));
+          console.log(totFac+" = (("+factuur.totaal+"+("+req.body.aantal+"*"+req.body.bedrag+")-"+factuur.voorschot+"))");
           var newFactuur={
             totaal: totFac
           }
@@ -1400,13 +1401,33 @@ app.post('/edit-factuur/:idc/:idf', function(req, res) {
       totBes += bestellingen[i].totaal;
     }
     console.log(totBes);
-    var updateFactuur = {
-      datum: req.body.datum,
-      factuurNr: req.body.factuurNr,
-      voorschot: req.body.voorschot,
-      offerteNr: req.body.offerteNr,
-      totaal:totBes-req.body.voorschot
-    };
+    console.log(req.body.voorschot+"voorschot");
+    console.log(factuur.voorschot+" :voorschot oud");
+    var _t;
+    if(req.body.voorschot){
+       _t = totBes-req.body.voorschot;
+       console.log("new");
+     }else{
+       var _t = totBes
+    }
+    console.log(_t+"="+totBes+"-("+factuur.voorschot+"-"+req.body.voorschot+")");
+    if(req.body.voorschot != ""){
+      var updateFactuur = {
+        datum: req.body.datum,
+        factuurNr: req.body.factuurNr,
+        voorschot: req.body.voorschot,
+        offerteNr: req.body.offerteNr,
+        totaal:_t
+      };
+    }else{
+      var updateFactuur = {
+        datum: req.body.datum,
+        factuurNr: req.body.factuurNr,
+        voorschot: req.body.voorschot,
+        offerteNr: req.body.offerteNr
+      };
+    }
+
     Contact.findOne({
       _id: req.params.idc
     }, function(err, contact) {
@@ -1435,13 +1456,33 @@ app.post('/edit-factuur/:idc/:idf/t', function(req, res) {
       totBes += bestellingen[i].totaal;
     }
     console.log(totBes);
-    var updateFactuur = {
-      datum: req.body.datum,
-      factuurNr: req.body.factuurNr,
-      voorschot: req.body.voorschot,
-      offerteNr: req.body.offerteNr,
-      totaal:totBes-req.body.voorschot
-    };
+    console.log(req.body.voorschot+"voorschot");
+    console.log(factuur.voorschot+" :voorschot oud");
+    var _t;
+    if(req.body.voorschot){
+       _t = totBes-req.body.voorschot;
+       console.log("new");
+     }else{
+       var _t = totBes
+    }
+    console.log(_t+"="+totBes+"-("+factuur.voorschot+"-"+req.body.voorschot+")");
+    if(req.body.voorschot != ""){
+      var updateFactuur = {
+        datum: req.body.datum,
+        factuurNr: req.body.factuurNr,
+        voorschot: req.body.voorschot,
+        offerteNr: req.body.offerteNr,
+        totaal:_t
+      };
+    }else{
+      var updateFactuur = {
+        datum: req.body.datum,
+        factuurNr: req.body.factuurNr,
+        voorschot: req.body.voorschot,
+        offerteNr: req.body.offerteNr
+      };
+    }
+
     Contact.findOne({
       _id: req.params.idc
     }, function(err, contact) {
