@@ -20,12 +20,15 @@ Changing from computer, you will have to export and import all data manually (fo
 preparation
 --
 
-download and install nodejs:
+##### download and install nodejs:
 
 [Windows/MacOs](https://nodejs.org/en/download/)
 
 [Linux](https://nodejs.org/en/download/package-manager/)
 
+
+
+##### install these npm packages
 
 ```
   npm install express jade mongodb mongoose forever forever-monitor
