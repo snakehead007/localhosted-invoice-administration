@@ -24,6 +24,30 @@ preparation
   npm install express jade mongodb mongoose forever forever-monitor
 ```
 
+each package does:
+
+
+express:
+
+handles the application’s endpoints (URIs) to respond to its client request
+
+jade:
+
+A terse language for writing HTML, supports dynamic sites
+
+mongodb:
+
+A noSQL database, saves all the data from the user
+
+mongoose:
+
+A straight-forward, schema-based solution to model the application data, communicates with mongodb
+
+forever, forever-monitor:
+
+CLI tool for ensuring that a given script runs continuously
+
+
 start the server by:
 --
 
@@ -35,11 +59,6 @@ starting the database
 starting node
 ```
   node start
-```
-
-start node in debug mode:
-```
-  node index.js
 ```
 
 Screenshots
