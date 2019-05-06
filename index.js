@@ -999,9 +999,7 @@ app.get('/facturen/:idc', function(req, res) {
   }, function(err, _contact) {
     if (!err) {
       contact = _contact;
-      Factuur.find({
-        contact: req.params.idc
-      }, function(err, facturen) {
+      Factuur.find({  contact: req.params.idc}).sort('-factuurNr').exec(function(err, facturen) {
         if (!err) {
           Settings.find({}, function(err, settings) {
             if (!err && settings.length != 0) {
@@ -1037,9 +1035,7 @@ app.get('/facturen/:idc/t', function(req, res) {
   }, function(err, _contact) {
     if (!err) {
       contact = _contact;
-      Factuur.find({
-        contact: req.params.idc
-      }, function(err, facturen) {
+      Factuur.find({  contact: req.params.idc}).sort('-factuurNr').exec(function(err, facturen) {
         if (!err) {
           Settings.find({}, function(err, settings) {
             if (!err && settings.length != 0) {
@@ -1070,7 +1066,7 @@ app.get('/facturen/:idc/t', function(req, res) {
 });
 
 app.get('/facturen', function(req, res) {
-  Factuur.find({}, function(err, facturen) {
+  Factuur.find({}).sort('-factuurNr').exec(function(err, facturen) {
     if (!err) {
       Settings.find({}, function(err, settings) {
         if (!err && settings.length != 0) {
