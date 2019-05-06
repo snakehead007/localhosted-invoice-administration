@@ -8,8 +8,10 @@ html
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
   body
     header
-      nav(class="navbar navbar-expand navbar-#{settings.nav} bg-#{settings.thema}")
-        div(class="collapse navbar-collapse", id="navbarNav")  
+      nav(class="navbar navbar-expand-sm navbar-#{settings.nav} bg-#{settings.thema}")
+        button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
+          span(class="navbar-toggler-icon")
+        div(class="collapse navbar-collapse", id="navbarNav")   
           ul(class="navbar-nav mr-auto")
             li(class="nav-item")
               a(class="nav-link active" , href='/') Home
