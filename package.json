@@ -21,6 +21,7 @@
     "forever": "^1.0.0",
     "forever-monitor": "^1.7.1",
     "jade": "^1.11.0",
-    "mongoose": "^5.5.4"
+    "mongodb": "^3.2.3",
+    "mongoose": "^5.5.6"
   }
 }

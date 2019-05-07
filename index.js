@@ -665,6 +665,7 @@ app.post('/edit-contact/:id', function(req, res) {
     btwNr: req.body.btwNr,
     lang: req.body.lang,
   };
+  console.log(req.body.lang);
   var message = 'Factuur niet geupdate';
   Contact.update({
     _id: req.params.id
