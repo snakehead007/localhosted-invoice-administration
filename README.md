@@ -31,7 +31,7 @@ preparation
 ##### install these npm packages
 
 ```
-  npm install express jade mongodb mongoose forever forever-monitor
+  npm install express jade mongodb mongoose forever forever-monitor --save
 ```
 
 #### each package does:
