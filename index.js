@@ -203,6 +203,28 @@ app.get('/', function(req, res) {
 app.get('/chart', function(req, res) {
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
+      Factuur.find({},function(err,facturen){
+        if(!err){
+          var totaal = [0,0,0,0,0,0,0,0,0,0,0,0];
+          for(var i=0; i<=11;i++){
+            for(var factuur of facturen){
+              if(factuur.datum.includes(maand[i])){
+                totaal[i] += factuur.totaal;
+              }
+            }
+          }
+          res.render('chart', {
+            "totaal" : totaal,
+            "description": "Grafiek",
+            "settings": settings[0]
+          });
+        }else{
+          console.log(err);
+        }
+      });
+
+
+
     } else {
       legeSettings = new Settings();
       legeSettings.save(function(err) {
@@ -211,10 +233,6 @@ app.get('/chart', function(req, res) {
         }
       });
     }
-    res.render('chart', {
-      "description": "Grafiek",
-      "settings": settings[0]
-    });
   });
 });
 
