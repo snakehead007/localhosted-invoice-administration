@@ -45,8 +45,8 @@ html
                 button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Alle facturen
           div(class="col-3 mr-auto")
             if settings.thema == "light"
-              a(href='/chart',class="button") 
+              a(href='/chart/'+jaar,class="button") 
                 button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Grafiek
             if settings.thema != "light"
-              a(href='/chart',class="button") 
+              a(href='/chart/'+jaar,class="button") 
                 button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Grafiek

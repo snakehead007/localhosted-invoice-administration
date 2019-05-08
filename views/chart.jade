@@ -30,36 +30,52 @@ html
           span(class="navbar-text")
             button(type="button", class="btn btn-light btn-sm", disabled)=description
     main
-      canvas(id="myChart" width="100%" height="40%")
-      script.
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
-        var color = Chart.helpers.color;
-        var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [maand[0], maand[1], maand[2], maand[3], maand[4], maand[5], maand[6], maand[7], maand[8], maand[9], maand[10], maand[11]],
-            datasets: [{
-                label: 'Exlc. btw €',
-                data: [#{totaal[0]},#{totaal[1]}, #{totaal[2]}, #{totaal[3]}, #{totaal[4]}, #{totaal[5]}, #{totaal[6]}, #{totaal[7]}, #{totaal[8]}, #{totaal[9]}, #{totaal[10]}, #{totaal[11]}],
-                backgroundColor: color(window.chartColors.red).alpha(1).rgbString(),
-                borderColor: window.chartColors.red,
-                borderWidth: 1
-            },{
-                label: 'Incl. btw €',
-                data: [#{totaal[0]}*1.21,#{totaal[1]}*1.21, #{totaal[2]}*1.21, #{totaal[3]}*1.21, #{totaal[4]}*1.21, #{totaal[5]}*1.21, #{totaal[6]}*1.21, #{totaal[7]}*1.21, #{totaal[8]}*1.21, #{totaal[9]}*1.21, #{totaal[10]}*1.21, #{totaal[11]}*1.21],
-                backgroundColor: color(window.chartColors.blue).alpha(1).rgbString(),
-                borderColor: window.chartColors.blue,
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-        });
+        hr
+        div(class="row")
+          div(class="col-2")
+          div(class="col-1")
+            a(class="button" href="/chart/"+String(Number(jaar)-1))
+              if settings.thema == "light"
+                  button(type="button",class="btn btn-#{settings.oppo} btn-sm btn-block")=jaar-1
+              if settings.thema != "light"
+                  button(type="button",class="btn btn-#{settings.thema} btn-sm btn-block")=jaar-1
+          div(class="col-7")
+          div(class="col-1")
+            a(class="button" href="/chart/"+String(Number(jaar)+1))
+              if settings.thema == "light"
+                  button(type="button",class="btn btn-#{settings.oppo} btn-sm btn-blocks")=String(Number(jaar)+1)
+              if settings.thema != "light"
+                  button(type="button",class="btn btn-#{settings.thema} btn-sm btn-block")=String(Number(jaar)+1)
+        canvas(id="myChart" width="100%" height="40%")
+        script.
+          var ctx = document.getElementById('myChart').getContext('2d');
+          var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
+          var color = Chart.helpers.color;
+          var myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: [maand[0], maand[1], maand[2], maand[3], maand[4], maand[5], maand[6], maand[7], maand[8], maand[9], maand[10], maand[11]],
+              datasets: [{
+                  label: 'Exlc. btw €',
+                  data: [#{totaal[0]},#{totaal[1]}, #{totaal[2]}, #{totaal[3]}, #{totaal[4]}, #{totaal[5]}, #{totaal[6]}, #{totaal[7]}, #{totaal[8]}, #{totaal[9]}, #{totaal[10]}, #{totaal[11]}],
+                  backgroundColor: color(window.chartColors.red).alpha(1).rgbString(),
+                  borderColor: window.chartColors.red,
+                  borderWidth: 1
+              },{
+                  label: 'Incl. btw €',
+                  data: [#{totaal[0]}*1.21,#{totaal[1]}*1.21, #{totaal[2]}*1.21, #{totaal[3]}*1.21, #{totaal[4]}*1.21, #{totaal[5]}*1.21, #{totaal[6]}*1.21, #{totaal[7]}*1.21, #{totaal[8]}*1.21, #{totaal[9]}*1.21, #{totaal[10]}*1.21, #{totaal[11]}*1.21],
+                  backgroundColor: color(window.chartColors.blue).alpha(1).rgbString(),
+                  borderColor: window.chartColors.blue,
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero: true
+                      }
+                  }]
+              }
+          }
+          });

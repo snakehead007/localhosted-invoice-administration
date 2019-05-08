@@ -195,12 +195,14 @@ app.get('/', function(req, res) {
     }
     res.render('index', {
       "description": "MDSART factuurbeheer",
-      "settings": settings[0]
+      "settings": settings[0],
+      "jaar": new Date().getFullYear()
     });
   });
 });
 
-app.get('/chart', function(req, res) {
+
+app.get('/chart/:jaar', function(req, res) {
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       Factuur.find({},function(err,facturen){
@@ -209,7 +211,7 @@ app.get('/chart', function(req, res) {
           for(var i=0; i<=11;i++){
             for(var factuur of facturen){
               if(factuur.datum.includes(maand[i])){
-                if(factuur.factuurNr){
+                if(String(factuur.factuurNr).includes(req.params.jaar)){
                   totaal[i] += factuur.totaal;
                 }
               }
@@ -218,15 +220,13 @@ app.get('/chart', function(req, res) {
           res.render('chart', {
             "totaal" : totaal,
             "description": "Grafiek",
-            "settings": settings[0]
+            "settings": settings[0],
+            "jaar": req.params.jaar
           });
         }else{
           console.log(err);
         }
       });
-
-
-
     } else {
       legeSettings = new Settings();
       legeSettings.save(function(err) {
