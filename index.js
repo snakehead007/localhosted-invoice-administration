@@ -200,6 +200,24 @@ app.get('/', function(req, res) {
   });
 });
 
+app.get('/chart', function(req, res) {
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+    }
+    res.render('chart', {
+      "description": "Grafiek",
+      "settings": settings[0]
+    });
+  });
+});
+
 app.get('/contacten', function(req, res) {
   Contact.find({}, function(err, docs) {
     Settings.find({}, function(err, settings) {

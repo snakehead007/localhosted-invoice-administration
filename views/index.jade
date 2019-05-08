@@ -29,17 +29,24 @@ html
       div(class="jumbotron")
         div(class="row")
           div(class="col-1")
-          div(class="col-4 mr-auto")
+          div(class="col-3 mr-auto")
             if settings.thema == "light"
               a(href='/contacten',class="button") 
                 button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Contacten
             if settings.thema != "light"
               a(href='/contacten',class="button") 
                 button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Contacten
-          div(class="col-4 mr-auto")
+          div(class="col-3 mr-auto")
             if settings.thema == "light"
               a(href='/facturen',class="button") 
                 button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Alle facturen
             if settings.thema != "light"
               a(href='/facturen',class="button") 
                 button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Alle facturen
+          div(class="col-3 mr-auto")
+            if settings.thema == "light"
+              a(href='/chart',class="button") 
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Grafiek
+            if settings.thema != "light"
+              a(href='/chart',class="button") 
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Grafiek
