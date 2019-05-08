@@ -211,8 +211,10 @@ app.get('/chart/:jaar', function(req, res) {
           for(var i=0; i<=11;i++){
             for(var factuur of facturen){
               if(factuur.datum.includes(maand[i])){
-                if(String(factuur.factuurNr).includes(req.params.jaar)){
-                  totaal[i] += factuur.totaal;
+                if(factuur.datum.includes(req.params.jaar)){
+                  if(factuur.factuurNr){
+                    totaal[i] += factuur.totaal;
+                  }
                 }
               }
             }
