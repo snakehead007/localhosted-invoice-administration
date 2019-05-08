@@ -214,7 +214,7 @@ app.get('/chart/:jaar', function(req, res) {
                 if(factuur.datum.includes(req.params.jaar)){
                   if(factuur.factuurNr){
                     totaal[i] += factuur.totaal;
-                  }
+                  } 
                 }
               }
             }

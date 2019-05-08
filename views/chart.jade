@@ -39,7 +39,10 @@ html
                   button(type="button",class="btn btn-#{settings.oppo} btn-sm btn-block")=jaar-1
               if settings.thema != "light"
                   button(type="button",class="btn btn-#{settings.thema} btn-sm btn-block")=jaar-1
-          div(class="col-7")
+          div(class="col-3")
+          div(class="col-2")
+            h4=jaar
+          div(class="col-2")
           div(class="col-1")
             a(class="button" href="/chart/"+String(Number(jaar)+1))
               if settings.thema == "light"
