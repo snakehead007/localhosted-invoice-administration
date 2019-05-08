@@ -4,6 +4,6 @@ git stash
 git "updating files..."
 git pull
 echo "updating npm packages.."
-npm install express jade mongodb mongoose forever forever-monitor chartjs --save
+npm update
 echo "starting server..."
 node index.jst
