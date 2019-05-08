@@ -209,7 +209,9 @@ app.get('/chart', function(req, res) {
           for(var i=0; i<=11;i++){
             for(var factuur of facturen){
               if(factuur.datum.includes(maand[i])){
-                totaal[i] += factuur.totaal;
+                if(factuur.factuurNr){
+                  totaal[i] += factuur.totaal;
+                }
               }
             }
           }
