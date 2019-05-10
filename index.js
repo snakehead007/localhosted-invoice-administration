@@ -15,6 +15,7 @@ mongoose.connection.on('open', function() {
   console.log('Mongoose connected.');
 });
 var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
+var maand_klein = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
 Schema = mongoose.Schema;
 
 var SettingsSchema = new Schema({
@@ -210,11 +211,11 @@ app.get('/chart/:jaar', function(req, res) {
           var totaal = [0,0,0,0,0,0,0,0,0,0,0,0];
           for(var i=0; i<=11;i++){
             for(var factuur of facturen){
-              if(factuur.datum.includes(maand[i])){
-                if(factuur.datum.includes(req.params.jaar)){
-                  if(factuur.factuurNr){
+              if(factuur.datum.includes(maand[i]) || factuur.datum.includes(maand_klein[i])){
+                if(factuur.datum.includes(req.params.jaar)){ //current year
+                  if(factuur.factuurNr){ //only factuur not offerte
                     totaal[i] += factuur.totaal;
-                  } 
+                  }
                 }
               }
             }
