@@ -16,6 +16,18 @@ There are 4 themes: Grey, Dark, White, Blue, Red
 All data is kept locally by mongodb.
 Changing from computer, you will have to export and import all data manually (for now)
 
+start the server by:
+--
+
+starting the database
+```
+  mongod
+```
+
+starting node
+```
+  node start
+```
 
 preparation
 --
@@ -59,19 +71,6 @@ CLI tool for ensuring that a given script runs continuously
 
 ##### chartjs
 Simple and flexible JavaScript charting
-
-start the server by:
---
-
-starting the database
-```
-  mongod
-```
-
-starting node
-```
-  node start
-```
 
 Screenshots
 -
