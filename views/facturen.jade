@@ -118,7 +118,7 @@ html
                             label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal*1.21).toFixed(2)+"€ ,  Betaald"
                           if !factuur.isBetaald
                             input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
-                            label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal*1.21).toFixed(2)+"€ ,  Betaald"
+                            label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal*1.21).toFixed(2)+"€ ,  Openstaand"
                     else
                       td
                     td
@@ -200,7 +200,7 @@ html
                             label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal*1.21).toFixed(2)	+"€ ,  Betaald"
                           if !factuur.isBetaald
                             input(type="checkbox" class="custom-control-input bg-success" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
-                            label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal*1.21).toFixed(2)+"€ ,  Betaald"
+                            label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal*1.21).toFixed(2)+"€ ,  Openstaand"
                     else
                       td
                     td
