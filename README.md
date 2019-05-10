@@ -31,7 +31,7 @@ preparation
 ##### install these npm packages
 
 ```
-  npm install express jade mongodb mongoose forever forever-monitor --save
+  npm install express jade mongodb mongoose forever forever-monitor chartjs --save
 ```
 
 #### each package does:
@@ -57,6 +57,8 @@ A straight-forward, schema-based solution to model the application data, communi
 
 CLI tool for ensuring that a given script runs continuously
 
+##### chartjs
+Simple and flexible JavaScript charting
 
 start the server by:
 --
