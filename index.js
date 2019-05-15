@@ -177,6 +177,9 @@ var ContactSchema = new Schema({
   lang:{
     type: String,
     defaul: "nl"
+  },
+  mail:{
+    type: String
   }
 });
 
@@ -293,7 +296,8 @@ app.post('/add-contact', function(req, res) {
       postcode: req.body.postcode,
       plaats: req.body.plaats,
       btwNr: req.body.btwNr,
-      lang: req.body.lang
+      lang: req.body.lang,
+      mail: res.body.mail
     });
     var message = 'Contact toegevoegd';
     newContact.save(function(err) {
@@ -705,6 +709,7 @@ app.post('/edit-contact/:id', function(req, res) {
     plaats: req.body.plaats,
     btwNr: req.body.btwNr,
     lang: req.body.lang,
+    mail: req.body.mail
   };
   console.log(req.body.lang);
   var message = 'Factuur niet geupdate';
@@ -1495,6 +1500,141 @@ app.get('/edit-factuur/:idc/:idf/t', function(req, res) {
   });
 });
 
+app.post('/zoeken', function(req,res){
+  var str = req.body.search.toString();
+  var contacten = [];
+  var facturen = [];
+  var bestellingen = [];
+  console.log("ZOEKEN OP \""+str+"\"");
+  Contact.find({firma:String(str)},function(err,found){
+    if(!err){
+      console.log("In contacten zoeken...");
+      console.log("firma...");
+      for(var i of found){
+        contacten.push(i);
+      }
+      Contact.find({contactPersoon:String(str)},function(err,found){
+        if(!err){
+          console.log("contactpersoon...");
+          for(var i of found){
+            contacten.push(i);
+          }
+          Contact.find({straat:String(str)},function(err,found){
+            if(!err){
+              console.log("straat...");
+              for(var i of found){
+                contacten.push(i);
+              }
+              Contact.find({postcode:String(str)},function(err,found){
+                  if(!err){
+                    console.log("postcode...");
+                    for(var i of found){
+                      contacten.push(i);
+                    }
+                    Contact.find({plaats:String(str)},function(err,found){
+                      if(!err){
+                        console.log("plaats...");
+                        for(var i of found){
+                          contacten.push(i);
+                        }
+                        Contact.find({mail:String(str)},function(err,found){
+                          if(!err){
+                            console.log("mail...");
+                            for(var i of found){
+                              contacten.push(i);
+                            }
+                          Bestelling.find({beschrijving:String(str)},function(err,found){
+                            if(!err){
+                              console.log("In bestellingen zoeken...");
+                              console.log("Beschrijving...");
+                              for(var i of found){
+                                bestellingen.push(i);
+                              }
+                              if(isNumeric(str)){
+                                Factuur.find({factuurNr:Number(str)},function(err,found){
+                                  if(!err){
+                                    console.log("In facturen zoeken...");
+                                    console.log("factuurNr...");
+                                    for(var i of found){
+                                      facturen.push(i);
+                                    }
+                                    Factuur.find({OfferteNr:Number(str)},function(err,found){
+                                      if(!err){
+                                        console.log("OfferteNr...");
+                                        for(var i of found){
+                                          facturen.push(i);
+                                        }
+                                        Factuur.find({totaal:Number(str)},function(err,found){
+                                          if(!err){
+                                            console.log("totaal prijs...");
+                                            for(var i of found){
+                                              facturen.push(i);
+                                            }
+                                              Bestelling.find({bedrag:Number(str)},function(err,found){
+                                                if(!err){
+                                                  console.log("In bestellingen zoeken...");
+                                                  console.log("bedrag...");
+                                                  for(var i of found){
+                                                    bestellingen.push(i);
+                                                  }
+                                                  Settings.find({}, function(err, settings) {
+                                                    if (!err && settings.length != 0) {
+                                                      console.log("Dit gevonden:")
+                                                      console.log(contacten+bestellingen+facturen);
+                                                      console.log("redirecting");
+                                                      res.render('zoeken',{"description":"Zoeken op \""+str+"\"","settings":settings[0],"contacten":contacten,"bestellingen":bestellingen,"facturen":facturen});
+                                                    } else {
+                                                      legeSettings = new Settings();
+                                                      legeSettings.save(function(err) {
+                                                        if (err) {
+                                                          console.log("err in settings: " + err);
+                                                        }
+                                                      });
+                                                    }
+                                                  });
+                                                }else{console.log(err);}
+                                            });
+                                          }else{console.log(err);}
+                                        });
+                                      }else{console.log(err);}
+                                    });
+                                  }else{console.log(err);}
+                                });
+                              }else{//isNumeric
+                                Settings.find({}, function(err, settings) {
+                                  if (!err && settings.length != 0) {
+                                    console.log("Dit gevonden:")
+                                    console.log(contacten+bestellingen+facturen);
+                                    console.log("redirecting");
+                                    res.render('zoeken',{"description":"Zoeken op \""+str+"\"","settings":settings[0],"contacten":contacten,"bestellingen":bestellingen,"facturen":facturen});
+                                  } else {
+                                    legeSettings = new Settings();
+                                    legeSettings.save(function(err) {
+                                      if (err) {
+                                        console.log("err in settings: " + err);
+                                      }
+                                    });
+                                  }
+                                });
+                              }//isNumeric
+                            }else{console.log(err);}
+                          });
+                        }else{console.log(err);}
+                      });
+                      }else{console.log(err);}
+                    });
+                  }else{console.log(err);}
+                });
+            }else{console.log(err);}
+          });
+        }else{console.log(err);}
+      });
+    }else{console.log(err);}
+  });
+});
+
+app.get('/zoeken',function(req,res){res.redirect('/');});
+
 app.post('/edit-factuur/:idc/:idf', function(req, res) {
   var date = new Date();
   var jaar = date.getFullYear();
@@ -1837,4 +1977,8 @@ async function update(id, voor) {
     isBetaald: voor
   });
   console.log("updated");
+}
+
+function isNumeric(num){
+  return !isNaN(num)
 }

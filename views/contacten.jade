@@ -23,7 +23,13 @@ html
               a(class="nav-link", href='https://identity.basecone.com/authentication/login')
                 img(width="100", height="24", src="/basecone.png", alt="basecone")
           span(class="navbar-text")
-            button(type="button", class="btn btn-light btn-sm", disabled)=description
+            div(class="row")
+              div(class="col-4 mr-auto")
+                button(type="button", class="btn btn-light btn-sm", disabled)
+                  h6=description
+              div(class="col-8")  
+                form(class="form-inline" action="/zoeken" method="post")
+                  input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
     main
       div(class="jumbotron")
         div(class="row no-gutters")
@@ -46,6 +52,7 @@ html
           table(class="table table-#{settings.oppo} table-striped")  
             tr
               th(scope="col") Contactpersonen
+              th(scope="col") E-mail
               th(scope="col") Actie
 
             each contact in contactenLijst
@@ -53,6 +60,13 @@ html
                 td
                   a(href='/facturen/'+contact._id, class="button")
                     button(type="button" class="btn btn-outline-#{settings.thema}" data-toggle="tooltip" data-placement="top" title="#{contact.firma}\n#{contact.straat} #{contact.straatNr}\n#{contact.postcode} #{contact.plaats}")=contact.contactPersoon
+                if contact.mail
+                  td
+                    a(href="mailto:#{contact.mail}",class="button")
+                      button(type="button" class="btn btn-outline-#{settings.thema}")=contact.mail
+                else
+                  td
+                    button(type="button" class="btn btn-outline-#{settings.thema}") Geen e-mail
                 td
                   a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                   div(class="dropdown-menu", aria-labelledby="actionsDropdown")
@@ -63,6 +77,7 @@ html
           table(class="table table-#{settings.thema} table-striped")    
             tr
               th(scope="col") Contactpersonen
+              th(scope="col") E-mail
               th(scope="col") Actie
 
             each contact in contactenLijst
@@ -70,6 +85,13 @@ html
                 td
                   a(href='/facturen/'+contact._id, class="button")
                     button(type="button" class="btn btn-light" data-toggle="tooltip" data-placement="top" title="#{contact.firma}\n#{contact.straat} #{contact.straatNr}\n#{contact.postcode} #{contact.plaats}")=contact.contactPersoon
+                if contact.mail
+                  td
+                    a(href='/mailto:'+contact.mail,class="button")
+                      button(type="button" class="btn btn-outline-#{settings.oppo}")=contact.mail
+                else
+                  td
+                    button(type="button" class="btn btn-outline-#{settings.oppo}") Geen e-mail
                 td
                   a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                   div(class="dropdown-menu", aria-labelledby="actionsDropdown")

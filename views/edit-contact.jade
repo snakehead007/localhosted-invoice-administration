@@ -23,7 +23,13 @@ html
               a(class="nav-link", href='https://identity.basecone.com/authentication/login')
                 img(width="100", height="24", src="/basecone.png", alt="basecone")
           span(class="navbar-text")
-            button(type="button", class="btn btn-light btn-sm", disabled)=description
+            div(class="row")
+              div(class="col-4 mr-auto")
+                button(type="button", class="btn btn-light btn-sm", disabled)
+                  h6=description
+              div(class="col-8")  
+                form(class="form-inline" action="/zoeken" method="post")
+                  input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
     main
       div(class="jumbotron")
         div(class="row no-gutters")
@@ -41,26 +47,28 @@ html
               label(for="title") Contact persoon *
               input(type="text",class="form-control",value=contact.contactPersoon,name="contactPersoon" required)    
             div(class="form-group col-md-2")          
-            div(class="form-group col-md-4")
+            div(class="form-group col-md-5")
               label(for="title") Firma
               input(type="text",class="form-control",value=contact.firma,name="firma")
-            div(class="form-group col-md-1")
             div(class="form-group col-md-3")
               label(for="title") Straatnaam *
               input(type="text",class="form-control",value=contact.straat,name="straat" required)                                
             div(class="form-group col-md-2")
               label(for="title") Straat Nr
               input(type="text",class="form-control",value=contact.straatNr,name="straatNr")
-            div(class="form-group col-md-2")
+            div(class="col-md-2")
+            div(class="form-group col-md-3")
+              label(for="title") E-mail
+              input(type="text",class="form-control",value=contact.mail,name="mail",placeholder="voorbeel@email.be")
             div(class="form-group col-md-2")
               label(for="title") BTW-nummer
               input(type="text",class="form-control",value=contact.btwNr,name="btwNr")
-            div(class="form-group col-md-2")
             div(class="form-group col-md-2")
               label(for="title") Postcode
               input(type="number",class="form-control",value=contact.postcode,name="postcode")
             div(class="form-group col-md-3")
               label(for="title") Plaatsnaam *
               input(type="text",class="form-control",value=contact.plaats,name="plaats" required)
+            div(class="form-group col-md-2")
           hr
           button(type="submit",class="btn btn-#{settings.oppo}") bijwerken
