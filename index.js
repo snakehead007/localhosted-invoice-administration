@@ -1506,125 +1506,64 @@ app.post('/zoeken', function(req,res){
   var facturen = [];
   var bestellingen = [];
   console.log("ZOEKEN OP \""+str+"\"");
-  Contact.find({firma:String(str)},function(err,found){
+  Contact.find({},function(err,contacten_){
     if(!err){
-      console.log("In contacten zoeken...");
-      console.log("firma...");
-      for(var i of found){
-        contacten.push(i);
-      }
-      Contact.find({contactPersoon:String(str)},function(err,found){
+      Factuur.find({},function(err,facturen_){
         if(!err){
-          console.log("contactpersoon...");
-          for(var i of found){
-            contacten.push(i);
-          }
-          Contact.find({straat:String(str)},function(err,found){
+          Bestelling.find({},function(err,bestellingen_){
             if(!err){
-              console.log("straat...");
-              for(var i of found){
-                contacten.push(i);
+              //BESTELLINGEN
+              for(var bestelling of bestellingen_){
+                if(!isNumeric(str)){
+                  if(String(bestelling.beschrijving).toLowerCase().includes(String(str).toLowerCase())){
+                    bestellingen.push(bestelling);
+                  }
+                }else{
+                  if(bestelling.bedag == Number(str)){
+                    bestellingen.push(bestelling);
+                  }
+                }
               }
-              Contact.find({postcode:String(str)},function(err,found){
-                  if(!err){
-                    console.log("postcode...");
-                    for(var i of found){
-                      contacten.push(i);
+              //Facturen
+              for(var factuur of facturen_){
+                if(isNumeric(str)){
+                  if(String(factuur.factuurNr).includes(str)){
+                    facturen.push(factuur);
+                  }else if(String(factuur.offerteNr).includes(str)){
+                    facturen.push(factuur);
+                  }
+                  if(factuur.totaal == Number(str)){
+                    facturen.push(factuur);
+                  }
+                }
+              }
+              //Contacten
+              for(var contact of contacten_){
+                if(String(contact.postcode).includes(str)){
+                  contacten.push(contact);
+                }
+                if(String(contact.plaats).includes(str)){
+                  contacten.push(contact);
+                }
+                if(String(contact.mail).includes(str)){
+                  contacten.push(contact);
+                }
+              }
+              Settings.find({}, function(err, settings) {
+                if (!err && settings.length != 0) {
+                  console.log("Dit gevonden:")
+                  console.log(contacten+bestellingen+facturen);
+                  console.log("redirecting");
+                  res.render('zoeken',{"description":"Zoeken op \""+str+"\"","settings":settings[0],"contacten":contacten,"bestellingen":bestellingen,"facturen":facturen});
+                } else {
+                  legeSettings = new Settings();
+                  legeSettings.save(function(err) {
+                    if (err) {
+                      console.log("err in settings: " + err);
                     }
-                    Contact.find({plaats:String(str)},function(err,found){
-                      if(!err){
-                        console.log("plaats...");
-                        for(var i of found){
-                          contacten.push(i);
-                        }
-                        Contact.find({mail:String(str)},function(err,found){
-                          if(!err){
-                            console.log("mail...");
-                            for(var i of found){
-                              contacten.push(i);
-                            }
-                          Bestelling.find({beschrijving:String(str)},function(err,found){
-                            if(!err){
-                              console.log("In bestellingen zoeken...");
-                              console.log("Beschrijving...");
-                              for(var i of found){
-                                bestellingen.push(i);
-                              }
-                              if(isNumeric(str)){
-                                Factuur.find({factuurNr:Number(str)},function(err,found){
-                                  if(!err){
-                                    console.log("In facturen zoeken...");
-                                    console.log("factuurNr...");
-                                    for(var i of found){
-                                      facturen.push(i);
-                                    }
-                                    Factuur.find({OfferteNr:Number(str)},function(err,found){
-                                      if(!err){
-                                        console.log("OfferteNr...");
-                                        for(var i of found){
-                                          facturen.push(i);
-                                        }
-                                        Factuur.find({totaal:Number(str)},function(err,found){
-                                          if(!err){
-                                            console.log("totaal prijs...");
-                                            for(var i of found){
-                                              facturen.push(i);
-                                            }
-                                              Bestelling.find({bedrag:Number(str)},function(err,found){
-                                                if(!err){
-                                                  console.log("In bestellingen zoeken...");
-                                                  console.log("bedrag...");
-                                                  for(var i of found){
-                                                    bestellingen.push(i);
-                                                  }
-                                                  Settings.find({}, function(err, settings) {
-                                                    if (!err && settings.length != 0) {
-                                                      console.log("Dit gevonden:")
-                                                      console.log(contacten+bestellingen+facturen);
-                                                      console.log("redirecting");
-                                                      res.render('zoeken',{"description":"Zoeken op \""+str+"\"","settings":settings[0],"contacten":contacten,"bestellingen":bestellingen,"facturen":facturen});
-                                                    } else {
-                                                      legeSettings = new Settings();
-                                                      legeSettings.save(function(err) {
-                                                        if (err) {
-                                                          console.log("err in settings: " + err);
-                                                        }
-                                                      });
-                                                    }
-                                                  });
-                                                }else{console.log(err);}
-                                            });
-                                          }else{console.log(err);}
-                                        });
-                                      }else{console.log(err);}
-                                    });
-                                  }else{console.log(err);}
-                                });
-                              }else{//isNumeric
-                                Settings.find({}, function(err, settings) {
-                                  if (!err && settings.length != 0) {
-                                    console.log("Dit gevonden:")
-                                    console.log(contacten+bestellingen+facturen);
-                                    console.log("redirecting");
-                                    res.render('zoeken',{"description":"Zoeken op \""+str+"\"","settings":settings[0],"contacten":contacten,"bestellingen":bestellingen,"facturen":facturen});
-                                  } else {
-                                    legeSettings = new Settings();
-                                    legeSettings.save(function(err) {
-                                      if (err) {
-                                        console.log("err in settings: " + err);
-                                      }
-                                    });
-                                  }
-                                });
-                              }//isNumeric
-                            }else{console.log(err);}
-                          });
-                        }else{console.log(err);}
-                      });
-                      }else{console.log(err);}
-                    });
-                  }else{console.log(err);}
-                });
+                  });
+                }
+              });
             }else{console.log(err);}
           });
         }else{console.log(err);}
