@@ -180,6 +180,12 @@ var ContactSchema = new Schema({
   },
   mail:{
     type: String
+  },
+  mail1:{
+    type:String
+  },
+  mail2:{
+    type:String
   }
 });
 
@@ -297,7 +303,9 @@ app.post('/add-contact', function(req, res) {
       plaats: req.body.plaats,
       btwNr: req.body.btwNr,
       lang: req.body.lang,
-      mail: res.body.mail
+      mail: req.body.mail,
+      mail1: req.body.mail1,
+      mail2: req.body.mail2
     });
     var message = 'Contact toegevoegd';
     newContact.save(function(err) {
@@ -305,7 +313,6 @@ app.post('/add-contact', function(req, res) {
         var message = 'Contact niet toegevoegd';
       }
     });
-  }
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       console.log(req.body.lang);
@@ -326,6 +333,7 @@ app.post('/add-contact', function(req, res) {
       "settings": settings[0]
     });
   });
+  }
 });
 
 app.post('/add-bestelling/:idf', function(req, res) {
