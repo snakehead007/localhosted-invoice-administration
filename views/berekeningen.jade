@@ -25,39 +25,38 @@ html
           span(class="navbar-text")
             div(class="row")
               div(class="col-4 mr-auto")
-                button(type="button", class="btn btn-light btn-sm", disabled)=description
+                button(type="button", class="btn btn-light btn-sm", disabled)
+                  h6=description
               div(class="col-8")  
                 form(class="form-inline" action="/zoeken" method="post")
                   input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
     main
       div(class="jumbotron")
-        div(class="container")
-          div(class="row")
-            div(class="col")
+        div(class="row no-gutters")
+          div(class="col-9 mr-auto")
+          div(class="col-2")
+            a(href='/',class="button")
               if settings.thema == "light"
-                a(href='/contacten',class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Contacten
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
               if settings.thema != "light"
-                a(href='/contacten',class="button") 
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Contacten
-            div(class="col")
-              if settings.thema == "light"
-                a(href='/facturen',class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Alle facturen
-              if settings.thema != "light"
-                a(href='/facturen',class="button") 
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Alle facturen
-            div(class="col")
-              if settings.thema == "light"
-                a(href='/chart/'+jaar,class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Grafiek
-              if settings.thema != "light"
-                a(href='/chart/'+jaar,class="button") 
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Grafiek
-            div(class="col")
-              if settings.thema == "light"
-                a(href='/berekeningen/',class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Berekeningen
-              if settings.thema != "light"
-                a(href='/berekeningen/',class="button") 
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Berekeningen
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+        hr
+        form(action='/berekeningen/',method='post')
+          div(class="form-row")
+            div(class="form-group col-lg-7 col-md-6 col-sm-12")
+              label(for="title") Lengte (inch)
+              input(type="number",class="form-control",name="L",step=".01", required)
+            div(class="form-group col-lg-7  col-md-6 col-sm-12")
+              label(for="title") Breedte (inch)
+              input(type="number",class="form-control",name="B",step=".01", required)                                
+            div(class="form-group col-lg-7 col-md-6 col-sm-12")
+              label(for="title") Hoogte (inch)
+              input(type="number",class="form-control",name="H",step=".01", required)
+            div(class="form-group col-lg-7 col-md-6 col-sm-12")
+              label(for="title") Extra dikte van Siliconen (inch)
+              input(type="number",class="form-control",name="X",step=".01", required)
+            div(class="form-group col-lg-7   col-md-6 col-sm-12")
+              label(for="title") Werk tarief (€/uur)
+              input(type="number",class="form-control",name="W",step=".01", required)
+          hr
+          button(type="submit",class="btn btn-#{settings.oppo}") Berekenen

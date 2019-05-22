@@ -1905,6 +1905,84 @@ app.get('/change-theme/:th', function(req, res) {
   });
 });
 
+app.get('/berekeningen',function(req,res){
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+      res.render('berekeningen', {
+        'settings': settings[0],
+        'description': "Settings"
+      });
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+      console.log(legeSettings);
+      res.redirect('/settings');
+      if (err) {
+        console.log(err);
+      }
+    }
+  });
+});
+
+app.post('/berekeningen',function(req,res){
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+      var L = Number(req.body.L);
+      console.log("L: "+L);
+      var B = Number(req.body.B);
+      console.log("B: "+B);
+      var H = Number(req.body.H);
+      console.log("H: "+H);
+      var X = Number(req.body.X);
+      console.log("X: "+X);
+      var W = Number(req.body.W);
+      console.log("W: "+W);
+      //Siliconen
+      var As = (L*B*H)*0.0185;
+      console.log("As: "+As);
+      var Dos = ( (L+X) * (B+X) * (H+X) ) * 0.0185;
+      console.log("Dos: "+Dos);
+      var Ds = Dos - As;
+      console.log("Ds: "+Ds);
+      var Ms = (1/2.23)*Ds;
+      console.log("Ms: "+Ms);
+      var Pts = (W * Ms) + (13.5 * Ds);
+      console.log("Pts: "+Pts);
+      //Epoctie
+      var Ae = (L*B*H)*0.0185;
+      console.log("Ae: "+Ae);
+      var Doe = ( (L+0.4) * (B+0.4) * (H+0.4) ) * 0.018;
+      console.log("Doe: "+Doe);
+      var De = Doe - Ae;
+      console.log("De: "+De);
+      var Me = (1/3.50)*De;
+      console.log("Me: "+Me);
+      var Pte = (W * Me) + (19,6 * De);
+      console.log("Pte: "+Pte);
+      var Pt = Pte + Pts;
+      console.log("Pt: "+Pt);
+      res.render("oplossing",{"settings":settings[0],
+                              "L":L,"B":B,"H":H,"W":W,"Ds":De,"As":As,"Dos":Dos,"Ds":Ds,"Ms":Ms,"Pts":Pts,"Ae":Ae,"Doe":Doe,"De":De,"Me":Me,"Pte":Pte,"Pt":Pt});
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+      console.log(legeSettings);
+      res.redirect('/settings');
+      if (err) {
+        console.log(err);
+      }
+    }
+  });
+});
+
 app.set('views', path.join(__dirname, 'views'));
 
 app.set('view engine', 'jade');
