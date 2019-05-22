@@ -99,14 +99,29 @@ html
               tr
                 td
                   a(href='/facturen/'+contact._id, class="button")
-                    button(type="button" class="btn btn-light" data-toggle="tooltip" data-placement="top" title="#{contact.firma}\n#{contact.straat} #{contact.straatNr}\n#{contact.postcode} #{contact.plaats}")=contact.contactPersoon
-                if contact.mail
-                  td
-                    a(href='/mailto:'+contact.mail,class="button")
-                      button(type="button" class="btn btn-outline-#{settings.oppo}")=contact.mail
-                else
-                  td
-                    button(type="button" class="btn btn-outline-#{settings.oppo}") Geen e-mail
+                    button(type="button" class="btn btn-outline-#{settings.oppo}" data-toggle="tooltip" data-placement="top" title="#{contact.firma}\n#{contact.straat} #{contact.straatNr}\n#{contact.postcode} #{contact.plaats}")=contact.contactPersoon
+                    if contact.mail
+                      if contact.mail2
+                        td
+                          a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mail's
+                          div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
+                            a(class="dropdown-item", href='mailto:#{contact.mail}')=contact.mail
+                            a(class="dropdown-item", href='mailto:#{contact.mail1}')=contact.mail1
+                            a(class="dropdown-item", href='mailto:#{contact.mail2}')=contact.mail2
+                      else if contact.mail1
+                        td
+                          a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mail's
+                          div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
+                            a(class="dropdown-item", href='mailto:#{contact.mail}')=contact.mail
+                            a(class="dropdown-item", href='mailto:#{contact.mail1}')=contact.mail1
+                          
+                      if !contact.mail1
+                        td
+                          a(href="mailto:#{contact.mail}",class="button")
+                            button(type="button" class="btn btn-outline-#{settings.oppo}")=contact.mail
+                    else  
+                      td
+                        button(type="button" class="btn btn-outline-#{settings.oppo}") Geen e-mail
                 td
                   a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                   div(class="dropdown-menu", aria-labelledby="actionsDropdown")
