@@ -1966,7 +1966,8 @@ app.post('/berekeningen',function(req,res){
       var Pt = Pte + Pts;
       console.log("Pt: "+Pt);
       res.render("oplossing",{"settings":settings[0],
-                              "L":L,"B":B,"H":H,"W":W,"Ds":De,"As":As,"Dos":Dos,"Ds":Ds,"Ms":Ms,"Pts":Pts,"Ae":Ae,"Doe":Doe,"De":De,"Me":Me,"Pte":Pte,"Pt":Pt});
+                              "L":L,"B":B,"H":H,"W":W,"Ds":De,"As":As,"Dos":Dos,"Ds":Ds,"Ms":Ms,"Pts":Pts,"Ae":Ae,"Doe":Doe,"De":De,"Me":Me,"Pte":Pte,"Pt":Pt,
+                              "Ls":L+X,"Bs":B+X,"Hs":H+X,"Le":L+0.4,"Be":B+0.4,"He":H+0.4});
     } else {
       legeSettings = new Settings();
       legeSettings.save(function(err) {
