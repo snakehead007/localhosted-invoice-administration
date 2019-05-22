@@ -6,6 +6,7 @@ html
     script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+    script.
   body
     header
       nav(class="navbar navbar-expand-sm navbar-#{settings.nav} bg-#{settings.thema}")
@@ -69,6 +70,13 @@ html
             div(class="form-group col-md-3")
               label(for="title") Plaatsnaam *
               input(type="text",class="form-control",value=contact.plaats,name="plaats" required)
-            div(class="form-group col-md-2")
+            div(class="col-md-2")
+            div(id="mail1" class="form-group col-md-3" )
+              label(for="title") E-mail 2
+              input(type="text", class="form-control",value="#{contact.mail1}",name="mail1", placeholder="voorbeeld@email.be")
+            div(class="col-md-7")
+            div(id="mail2" class="form-group col-md-3")
+              label(for="title") E-mail 3
+              input(type="text", class="form-control",value="#{contact.mail2}",name="mail2", placeholder="voorbeeld@email.be")
           hr
           button(type="submit",class="btn btn-#{settings.oppo}") bijwerken

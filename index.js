@@ -315,7 +315,6 @@ app.post('/add-contact', function(req, res) {
     });
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
-      console.log(req.body.lang);
       console.log("settings found " + settings[0]);
     } else {
       console.log("ERR: settings not found!");
@@ -717,7 +716,9 @@ app.post('/edit-contact/:id', function(req, res) {
     plaats: req.body.plaats,
     btwNr: req.body.btwNr,
     lang: req.body.lang,
-    mail: req.body.mail
+    mail: req.body.mail,
+    mail1: req.body.mail1,
+    mail2: req.body.mail2
   };
   console.log(req.body.lang);
   var message = 'Factuur niet geupdate';
