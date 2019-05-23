@@ -72,21 +72,21 @@ html
               h4
                 span(class="badge badge-secondary") Berekening Epoxie
             div(class="col-6")
-              p(class="lead") ( #{L}" * #{B}" * #{H}" ) * 0.0185 = #{As.toFixed(2)} kg
+              p(class="lead") ( #{L}" * #{B}" * #{H}" ) * 0.0185 = #{As.toFixed(3)} kg
             div(class="col-6")
-              p(class="lead") ( #{L}" * #{B}" * #{H}" ) * 0.018 = #{Ae.toFixed(2)} kg
+              p(class="lead") ( #{L}" * #{B}" * #{H}" ) * 0.018 = #{Ae.toFixed(3)} kg
             div(class="col-6")
-              p(class="lead") ( #{Ls.toFixed(2)}" * #{Bs.toFixed(2)}" * #{Hs.toFixed(2)}" ) * 0.0185 = #{Dos.toFixed(2)} kg
+              p(class="lead") ( #{Ls.toFixed(2)}" * #{Bs.toFixed(2)}" * #{Hs.toFixed(2)}" ) * 0.0185 = #{Dos.toFixed(3)} kg
             div(class="col-6")
-              p(class="lead") ( #{Le.toFixed(2)}" * #{Be.toFixed(2)}" * #{He.toFixed(2)}" ) * 0.018 = #{Doe.toFixed(2)} kg
+              p(class="lead") ( #{Le.toFixed(2)}" * #{Be.toFixed(2)}" * #{He.toFixed(2)}" ) * 0.018 = #{Doe.toFixed(3)} kg
             div(class="col-6")
-              p(class="lead") #{Dos.toFixed(2)} kg - #{As.toFixed(2)} kg = #{Ds.toFixed(2)} kg
+              p(class="lead") #{Dos.toFixed(3)} kg - #{As.toFixed(3)} kg = #{Ds.toFixed(3)} kg
             div(class="col-6") 
-              p(class="lead") #{Doe.toFixed(2)} kg - #{Ae.toFixed(2)} kg = #{De.toFixed(2)} kg
+              p(class="lead") #{Doe.toFixed(3)} kg - #{Ae.toFixed(3)} kg = #{De.toFixed(3)} kg
             div(class="col-6")
-              p(class="lead") #{W} €/uur * ( 1/2.23 kg/uur ) + 13.50 €/uur * #{Ms.toFixed(2)} kg = #{Pts.toFixed(2)} €
+              p(class="lead") #{W} €/uur * ( 1/2.23 kg/uur ) + 13.50 €/uur * #{Ms.toFixed(3)} kg = #{Pts.toFixed(2)} €
             div(class="col-6") 
-              p(class="lead") #{W} €/uur * ( 1/3.50 kg/uur ) + 19.60 €/uur * #{Me.toFixed(2)} kg = #{Pte.toFixed(2)} €
+              p(class="lead") #{W} €/uur * ( 1/3.50 kg/uur ) + 19.60 €/uur * #{Me.toFixed(3)} kg = #{Pte.toFixed(2)} €
           hr    
           div(class="row")  
             div(class="col-5")
@@ -102,17 +102,17 @@ html
                   th(scope="row")
                     h4 Siliconen
                   td
-                    h4=Ds.toFixed(2)+" kg"
+                    h4=Ds.toFixed(3)+" kg"
+                tr
+                  th(scope="row")
+                    h4 Epoxie
+                  td
+                    h4=De.toFixed(3)+" kg"
                 tr
                   th(scope="row")
                     h4 Siliconen + Werkuren
                   td
                     h4=Pts.toFixed(2)+" €"
-                tr
-                  th(scope="row")
-                    h4 Epoxie
-                  td
-                    h4=De.toFixed(2)+" kg"
                 tr
                   th(scope="row") 
                     h4 Epoxie + Werkuren
@@ -130,17 +130,17 @@ html
                   th(scope="row")
                     h4 Siliconen
                   td
-                    h4=Ds.toFixed(2)+" kg"
+                    h4=Ds.toFixed(3)+" kg"
+                tr
+                  th(scope="row")
+                    h4 Epoxie
+                  td
+                    h4=De.toFixed(3)+" kg"
                 tr
                   th(scope="row")
                     h4 Siliconen + Werkuren
                   td
                     h4=Pts.toFixed(2)+" €"
-                tr
-                  th(scope="row")
-                    h4 Epoxie
-                  td
-                    h4=De.toFixed(2)+" kg"
                 tr
                   th(scope="row") 
                     h4 Epoxie + Werkuren
