@@ -1956,7 +1956,7 @@ app.post('/berekeningen',function(req,res){
       //Epoctie
       var Ae = (L*B*H)*0.0185;
       console.log("Ae: "+Ae);
-      var Doe = ( (L+0.4) * (B+0.4) * (H+0.4) ) * 0.018;
+      var Doe = ( (L+0.4+X) * (B+0.4+X) * (H+0.4+X) ) * 0.018;
       console.log("Doe: "+Doe);
       var De = Doe - Ae;
       console.log("De: "+De);
@@ -1968,7 +1968,7 @@ app.post('/berekeningen',function(req,res){
       console.log("Pt: "+Pt);
       res.render("oplossing",{"description":"Oplossing van berekening","settings":settings[0],
                               "L":L,"B":B,"H":H,"W":W,"Ds":De,"As":As,"Dos":Dos,"Ds":Ds,"Ms":Ms,"Pts":Pts,"Ae":Ae,"Doe":Doe,"De":De,"Me":Me,"Pte":Pte,"Pt":Pt,
-                              "Ls":L+X,"Bs":B+X,"Hs":H+X,"Le":L+0.4,"Be":B+0.4,"He":H+0.4});
+                              "Ls":L+X,"Bs":B+X,"Hs":H+X,"Le":L+0.4+X,"Be":B+0.4+X,"He":H+0.4+X});
     } else {
       legeSettings = new Settings();
       legeSettings.save(function(err) {
