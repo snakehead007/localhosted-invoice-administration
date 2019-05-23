@@ -72,7 +72,7 @@ html
       /**factuur info**/
       doc.setFontType("bold");
       c = [120,60];
-      doc.text(c[0],c[1],"Date:");
+      doc.text(c[0],c[1],"Invoice date:");
       c[1] +=5;
       doc.text(c[0],c[1],"Invoice nr:");
       doc.setFontType("courier");
@@ -160,7 +160,7 @@ html
           body: [
           [[""],["                               "],["Subtotal"],[totaalEx.toFixed(2)+" €"]],
           [[""],["                               "],["VAT 21%"],[btw.toFixed(2)+" €"]],
-          [[""],["                               "],["Total"],[totaalInc.toFixed(2)+" €"]]
+          [[""],["                               "],["Total amount"],[totaalInc.toFixed(2)+" €"]]
           ]
         })
       }else{
