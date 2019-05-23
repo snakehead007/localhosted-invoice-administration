@@ -1966,7 +1966,7 @@ app.post('/berekeningen',function(req,res){
       console.log("Me: "+Me);
       var Pwe = (W * Me); //prijs werkuren epoxie
       console.log("Pwe: "+Pwe);
-      var Pe = (19.6 * De);
+      var Pe = (10.88 * De);
       console.log("Pe: "+Pe);
       //TOTAAL
       var Ptw = Pwe + Pws;//Prijs totaal werkuren
