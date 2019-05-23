@@ -1911,7 +1911,7 @@ app.get('/berekeningen',function(req,res){
     if (!err && settings.length != 0) {
       res.render('berekeningen', {
         'settings': settings[0],
-        'description': "Settings"
+        'description': "berekeningen"
       });
     } else {
       legeSettings = new Settings();
