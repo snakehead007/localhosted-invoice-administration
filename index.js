@@ -1949,26 +1949,38 @@ app.post('/berekeningen',function(req,res){
       console.log("Dos: "+Dos);
       var Ds = Dos - As;
       console.log("Ds: "+Ds);
-      var Ms = (1/2.23)*Ds;
+      var Ms = (1/2.23)*Ds;//Materiaal Uren siliconen
       console.log("Ms: "+Ms);
-      var Pts = (W * Ms) + (13.5 * Ds);
-      console.log("Pts: "+Pts);
+      var Pws = (W * Ms) //prijs werkuren voor siliconen
+      console.log("Pws: "+Pws);
+      var Ps =(13.5 * Ds); //Prijs siliconen
+      console.log("Ps: "+Ps);
       //Epoctie
-      var Ae = (L*B*H)*0.0185;
+      var Ae = ((L+X)*(B+X)*(H+X))*0.0185;
       console.log("Ae: "+Ae);
-      var Doe = ( (L+0.4+X) * (B+0.4+X) * (H+0.4+X) ) * 0.018;
+      var Doe = ((L+X+0.4)*(B+X+0.4)*(H+X+0.4))*0.018;
       console.log("Doe: "+Doe);
       var De = Doe - Ae;
       console.log("De: "+De);
-      var Me = (1/3.50)*De;
+      var Me = (1/3.50)*De;//Materiaal Uren epoxie
       console.log("Me: "+Me);
-      var Pte = (W * Me) + (19,6 * De);
-      console.log("Pte: "+Pte);
-      var Pt = Pte + Pts;
+      var Pwe = (W * Me); //prijs werkuren epoxie
+      console.log("Pwe: "+Pwe);
+      var Pe = (19.6 * De);
+      console.log("Pe: "+Pe);
+      //TOTAAL
+      var Ptw = Pwe + Pws;//Prijs totaal werkuren
+      console.log("Ptw: "+Ptw);
+      var Ptm = Pe + Ps //Prijs totaal materiaal
+      console.log("Ptm: "+Ptm);
+      var Pt = Ptw + Ptm; //Prijs totaal (werkuren + materiaal)
       console.log("Pt: "+Pt);
+      var Mt = Me + Ms; //totaal uren voor alle materiaal
+      console.log("Mt: "+Mt);
       res.render("oplossing",{"description":"Oplossing van berekening","settings":settings[0],
-                              "L":L,"B":B,"H":H,"W":W,"Ds":De,"As":As,"Dos":Dos,"Ds":Ds,"Ms":Ms,"Pts":Pts,"Ae":Ae,"Doe":Doe,"De":De,"Me":Me,"Pte":Pte,"Pt":Pt,
-                              "Ls":L+X,"Bs":B+X,"Hs":H+X,"Le":L+0.4+X,"Be":B+0.4+X,"He":H+0.4+X});
+                              "L":L,"B":B,"H":H,"W":W,"Ds":De,"As":As,"Dos":Dos,"Ds":Ds,"Ms":Ms,"Ae":Ae,"Doe":Doe,"De":De,"Me":String(Me).toTime(),
+                              "Ls":L+X,"Bs":B+X,"Hs":H+X,"Le":L+0.4+X,"Be":B+0.4+X,"He":H+0.4+X,"Ms":String(Ms).toTime(),"Pws":Pws,"Ps":Ps,"Pwe":Pwe,
+                              "Ptw":Ptw,"Ptm":Ptm,"Pt":Pt,"Mt":String(Mt).toTime(),"Pe":Pe});
     } else {
       legeSettings = new Settings();
       legeSettings.save(function(err) {
@@ -2009,3 +2021,14 @@ async function update(id, voor) {
 function isNumeric(num){
   return !isNaN(num)
 }
+String.prototype.toTime = function () {
+  var sec_num = parseInt(this*3600, 10); // don't forget the second param
+  var hours   = Math.floor(sec_num / 3600);
+  var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+  var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+  if (hours   < 10) {hours   = "0"+hours;}
+  if (minutes < 10) {minutes = "0"+minutes;}
+  if (seconds < 10) {seconds = "0"+seconds;}
+  return hours + 'u ' + minutes + 'm';
+ }
