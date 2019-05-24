@@ -1955,8 +1955,8 @@ app.post('/berekeningen',function(req,res){
       console.log("Pws: "+Pws);
       var Ps =(13.5 * Ds); //Prijs siliconen
       console.log("Ps: "+Ps);
-      //Epoctie
-      var Ae = ((L+X)*(B+X)*(H+X))*0.0185;
+      //Epoxie
+      var Ae = ((L+X)*(B+X)*(H+X))*0.018;
       console.log("Ae: "+Ae);
       var Doe = ((L+X+0.4)*(B+X+0.4)*(H+X+0.4))*0.018;
       console.log("Doe: "+Doe);
