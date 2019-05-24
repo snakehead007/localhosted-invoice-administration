@@ -1510,7 +1510,7 @@ app.get('/edit-factuur/:idc/:idf/t', function(req, res) {
 });
 
 app.post('/zoeken', function(req,res){
-  var str = req.body.search.toString();
+  var str = req.body.search.toString().toLowerCase();
   var contacten = [];
   var facturen = [];
   var bestellingen = [];
@@ -1523,14 +1523,8 @@ app.post('/zoeken', function(req,res){
             if(!err){
               //BESTELLINGEN
               for(var bestelling of bestellingen_){
-                if(!isNumeric(str)){
-                  if(String(bestelling.beschrijving).toLowerCase().includes(String(str).toLowerCase())){
-                    bestellingen.push(bestelling);
-                  }
-                }else{
-                  if(bestelling.bedag == Number(str)){
-                    bestellingen.push(bestelling);
-                  }
+                if(String(bestelling.beschrijving).toLowerCase().includes(String(str).toLowerCase())){
+                  bestellingen.push(bestelling);
                 }
               }
               //Facturen
@@ -1541,29 +1535,45 @@ app.post('/zoeken', function(req,res){
                   }else if(String(factuur.offerteNr).includes(str)){
                     facturen.push(factuur);
                   }
-                  if(factuur.totaal == Number(str)){
-                    facturen.push(factuur);
-                  }
                 }
               }
               //Contacten
               for(var contact of contacten_){
+                if(String(contact.contactPersoon).toLowerCase().includes(str)){
+                  contacten.push(contact);
+                }
                 if(String(contact.postcode).includes(str)){
                   contacten.push(contact);
                 }
-                if(String(contact.plaats).includes(str)){
+                if(String(contact.plaats).toLowerCase().includes(str)){
                   contacten.push(contact);
                 }
-                if(String(contact.mail).includes(str)){
+                if(String(contact.mail).toLowerCase().includes(str)){
+                  contacten.push(contact);
+                }
+                if(String(contact.mail2).toLowerCase().includes(str)){
+                  contacten.push(contact);
+                }
+                if(String(contact.mail3).toLowerCase().includes(str)){
+                  contacten.push(contact);
+                }
+                if(String(contact.firma).toLowerCase().includes(str)){
+                  contacten.push(contact);
+                }
+                if(String(contact.straat).toLowerCase().includes(str)){
                   contacten.push(contact);
                 }
               }
+              //takes only 1 of each items, if found 2 or more of the same
+              var contacten_d = distinct(contacten);
+              var bestellingen_d = distinct(bestellingen);
+              var facturen_d = distinct(facturen);
               Settings.find({}, function(err, settings) {
                 if (!err && settings.length != 0) {
                   console.log("Dit gevonden:")
                   console.log(contacten+bestellingen+facturen);
                   console.log("redirecting");
-                  res.render('zoeken',{"description":"Zoeken op \""+str+"\"","settings":settings[0],"contacten":contacten,"bestellingen":bestellingen,"facturen":facturen});
+                  res.render('zoeken',{"description":"Zoeken op \""+str+"\"","settings":settings[0],"contacten":contacten_d,"bestellingen":bestellingen_d,"facturen":facturen_d});
                 } else {
                   legeSettings = new Settings();
                   legeSettings.save(function(err) {
@@ -1581,6 +1591,22 @@ app.post('/zoeken', function(req,res){
   });
 });
 
+function distinct(_array){
+  var array = _array;
+  var disctincts = [];
+  for(var o of array){
+    var isDistinct = true;
+    for(var d of disctincts){
+      if(d._id == o._id){
+        isDistinct = false;
+      }
+    }
+    if(isDistinct){
+      disctincts.push(o);
+    }
+  }
+  return disctincts;
+}
 app.get('/zoeken',function(req,res){res.redirect('/');});
 
 app.post('/edit-factuur/:idc/:idf', function(req, res) {
