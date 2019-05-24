@@ -1911,7 +1911,7 @@ app.get('/berekeningen',function(req,res){
     if (!err && settings.length != 0) {
       res.render('berekeningen', {
         'settings': settings[0],
-        'description': "berekeningen"
+        'description': "Alle berekeningen"
       });
     } else {
       legeSettings = new Settings();
@@ -1929,7 +1929,30 @@ app.get('/berekeningen',function(req,res){
   });
 });
 
-app.post('/berekeningen',function(req,res){
+app.get('/epo-sil',function(req,res){
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+      res.render('epo-sil', {
+        'settings': settings[0],
+        'description': "Berekening voor Epoxie & Siliconen"
+      });
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+      console.log(legeSettings);
+      res.redirect('/settings');
+      if (err) {
+        console.log(err);
+      }
+    }
+  });
+});
+
+app.post('/epo-sil-oplossing',function(req,res){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       var L = Number(req.body.L);
@@ -1977,10 +2000,94 @@ app.post('/berekeningen',function(req,res){
       console.log("Pt: "+Pt);
       var Mt = Me + Ms; //totaal uren voor alle materiaal
       console.log("Mt: "+Mt);
-      res.render("oplossing",{"description":"Oplossing van berekening","settings":settings[0],
+      res.render("epo-sil-oplossing",{"description":"Oplossing van berekening","settings":settings[0],
                               "L":L,"B":B,"H":H,"W":W,"Ds":De,"As":As,"Dos":Dos,"Ds":Ds,"Ms":Ms,"Ae":Ae,"Doe":Doe,"De":De,"Me":String(Me).toTime(),
                               "Ls":L+X,"Bs":B+X,"Hs":H+X,"Le":L+0.4+X,"Be":B+0.4+X,"He":H+0.4+X,"Ms":String(Ms).toTime(),"Pws":Pws,"Ps":Ps,"Pwe":Pwe,
                               "Ptw":Ptw,"Ptm":Ptm,"Pt":Pt,"Mt":String(Mt).toTime(),"Pe":Pe});
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+      console.log(legeSettings);
+      res.redirect('/settings');
+      if (err) {
+        console.log(err);
+      }
+    }
+  });
+});
+
+app.get('/inch',function(req,res){
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+      res.render('inch', {
+        'settings': settings[0],
+        'description': "Berekening voor inch & cm omzettingen"
+      });
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+      console.log(legeSettings);
+      res.redirect('/settings');
+      if (err) {
+        console.log(err);
+      }
+    }
+  });
+});
+
+app.post('/inch',function(req,res){
+  console.log("inch post")
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+      var inch = req.body.inch;
+      var cm = req.body.cm;
+      console.log("inch :"+inch);
+      console.log("cm :"+cm);
+      if(inch !== "" && cm !== ""){
+        console.log("error allebei ingevuld");
+        res.render('inch', {
+          'settings': settings[0],
+          'description': "Berekening voor inch & cm omzettingen",
+          "error":1
+        });
+      }else{
+        if(inch !==""){
+          var cm = inch/0.39370;
+          var cm_ = Number(cm).toFixed(2);
+          var inch_ = Number(inch).toFixed(2);
+          var oplossing = inch_+"\" = "+cm_+"cm";
+          res.render('inch', {
+            'settings': settings[0],
+            'description': "Berekening voor inch & cm omzettingen",
+            "oplossing":oplossing
+          });
+        }
+        if(cm !== ""){
+          var inch = cm*0.39370;
+          var cm_ = Number(cm).toFixed(2);
+          var inch_ = Number(inch).toFixed(2);
+          var oplossing = cm_+"cm = "+inch_+"\"";
+          res.render('inch', {
+            'settings': settings[0],
+            'description': "Berekening voor inch & cm omzettingen",
+            "oplossing":oplossing
+          });
+        }
+        console.log("error niets ingevuld");
+        res.render('inch', {
+          'settings': settings[0],
+          'description': "Berekening voor inch & cm omzettingen",
+          "error":2
+        });
+      }
     } else {
       legeSettings = new Settings();
       legeSettings.save(function(err) {
