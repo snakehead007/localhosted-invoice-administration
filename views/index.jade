@@ -61,3 +61,10 @@ html
               if settings.thema != "light"
                 a(href='/berekeningen/',class="button") 
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Berekeningen
+            div(class="col")
+              if settings.thema == "light"
+                a(href='/mat',class="button") 
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Materialens
+              if settings.thema != "light"
+                a(href='/mat',class="button") 
+                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Materialen

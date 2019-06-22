@@ -191,6 +191,18 @@ var ContactSchema = new Schema({
 
 var Contact = mongoose.model('Contact', ContactSchema);
 
+var MateriaalSchema = new Schema({
+  naam:{
+    type: String
+  },
+  prijs:{
+    type: Number,
+    default: 0
+  }
+});
+
+var Materiaal = mongoose.model('Materiaal',MateriaalSchema);
+
 app.get('/', function(req, res) {
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
@@ -1938,6 +1950,415 @@ app.get('/berekeningen',function(req,res){
       res.render('berekeningen', {
         'settings': settings[0],
         'description': "Alle berekeningen"
+      });
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+      console.log(legeSettings);
+      res.redirect('/settings');
+      if (err) {
+        console.log(err);
+      }
+    }
+  });
+});
+
+app.get('/prijs',function(req,res){
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+      Materiaal.find({},function(err,materialen){
+        if(!err){
+          res.render('prijs', {
+            'settings': settings[0],
+            'description': "Berekening voor Prijs",
+            'materialen': materialen
+          });
+        }else{console.log(err);}
+      });
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+      console.log(legeSettings);
+      res.redirect('/settings');
+      if (err) {
+        console.log(err);
+      }
+    }
+  });
+});
+
+app.post('/prijs',function(req,res){
+  var totaal = (req.body.uren*req.body.werkprijs);
+  Materiaal.findOne({naam:req.body.o001},function(err,m001){
+    totaal += req.body.i001*m001.prijs;
+  Materiaal.findOne({naam:req.body.o002},function(err,m002){
+    if(m002)
+      totaal += req.body.i002*m002.prijs;
+  Materiaal.findOne({naam:req.body.o003},function(err,m003){;
+    if(m003)
+      totaal += req.body.i003*m003.prijs;
+  Materiaal.findOne({naam:req.body.o004},function(err,m004){
+    if(m004)
+      totaal += req.body.i004*m004.prijs;
+  Materiaal.findOne({naam:req.body.o005},function(err,m005){
+    if(m005)
+      totaal += req.body.i005*m005.prijs;
+  Materiaal.findOne({naam:req.body.o006},function(err,m006){
+    if(m006)
+      totaal += req.body.i006*m006.prijs;
+  Materiaal.findOne({naam:req.body.o007},function(err,m007){
+    if(m007)
+      totaal += req.body.i007*m007.prijs;
+  Materiaal.findOne({naam:req.body.o008},function(err,m008){
+    if(m008)
+      totaal += req.body.i008*m008.prijs;
+  Materiaal.findOne({naam:req.body.o009},function(err,m009){
+    if(m009)
+      totaal += req.body.i009*m009.prijs;
+  Materiaal.findOne({naam:req.body.o010},function(err,m010){
+    if(m010)
+      totaal += req.body.i010*m010.prijs;
+  Materiaal.findOne({naam:req.body.o011},function(err,m011){
+    if(m011)
+      totaal += req.body.i011*m011.prijs;
+  Materiaal.findOne({naam:req.body.o012},function(err,m012){
+    if(m012)
+      totaal += req.body.i012*m012.prijs;
+  Materiaal.findOne({naam:req.body.o013},function(err,m013){
+    if(m013)
+      totaal += req.body.i013*m013.prijs;
+  Materiaal.findOne({naam:req.body.o014},function(err,m014){
+    if(m014)
+      totaal += req.body.i014*m014.prijs;
+  Materiaal.findOne({naam:req.body.o015},function(err,m015){
+    if(m015)
+      totaal += req.body.i015*m015.prijs;
+  Materiaal.findOne({naam:req.body.o016},function(err,m016){
+    if(m016)
+      totaal += req.body.i016*m016.prijs;
+  Materiaal.findOne({naam:req.body.o017},function(err,m017){
+    if(m017)
+      totaal += req.body.i017*m017.prijs;
+  Materiaal.findOne({naam:req.body.o018},function(err,m018){
+    if(m018)
+      totaal += req.body.i018*m018.prijs;
+  Materiaal.findOne({naam:req.body.o019},function(err,m019){
+    if(m019)
+      totaal += req.body.i019*m019.prijs;
+  Materiaal.findOne({naam:req.body.o020},function(err,m020){
+    if(m020)
+      totaal += req.body.i020*m020.prijs;
+  Materiaal.findOne({naam:req.body.o021},function(err,m021){
+    if(m021)
+      totaal += req.body.i021*m021.prijs;
+  Materiaal.findOne({naam:req.body.o022},function(err,m022){
+    if(m022)
+      totaal += req.body.i022*m022.prijs;
+  Materiaal.findOne({naam:req.body.o023},function(err,m023){
+    if(m023)
+      totaal += req.body.i023*m023.prijs;
+  Materiaal.findOne({naam:req.body.o024},function(err,m024){
+    if(m024)
+      totaal += req.body.i024*m024.prijs;
+  Materiaal.findOne({naam:req.body.o025},function(err,m025){
+    if(m025)
+      totaal += req.body.i025*m025.prijs;
+  Materiaal.findOne({naam:req.body.o026},function(err,m026){
+    if(m026)
+      totaal += req.body.i026*m026.prijs;
+  Materiaal.findOne({naam:req.body.o027},function(err,m027){
+    if(m027)
+      totaal += req.body.i027*m027.prijs;
+  Materiaal.findOne({naam:req.body.o028},function(err,m028){
+    if(m028)
+      totaal += req.body.i028*m028.prijs;
+  Materiaal.findOne({naam:req.body.o029},function(err,m029){
+    if(m029)
+      totaal += req.body.i029*m029.prijs;
+  Materiaal.findOne({naam:req.body.o030},function(err,m030){
+    if(m030)
+      totaal += req.body.i030*m030.prijs;
+  Materiaal.findOne({naam:req.body.o031},function(err,m031){
+    if(m031)
+      totaal += req.body.i031*m031.prijs;
+  Materiaal.findOne({naam:req.body.o032},function(err,m032){
+    if(m032)
+      totaal += req.body.i032*m032.prijs;
+  Materiaal.findOne({naam:req.body.o033},function(err,m033){
+    if(m033)
+      totaal += req.body.i033*m033.prijs;
+  Materiaal.findOne({naam:req.body.o034},function(err,m034){
+    if(m034)
+      totaal += req.body.i034*m034.prijs;
+  Materiaal.findOne({naam:req.body.o035},function(err,m035){
+    if(m035)
+      totaal += req.body.i035*m035.prijs;
+  Materiaal.findOne({naam:req.body.o036},function(err,m036){
+    if(m036)
+      totaal += req.body.i036*m036.prijs;
+  Materiaal.findOne({naam:req.body.o037},function(err,m037){
+    if(m037)
+      totaal += req.body.i037*m037.prijs;
+  Materiaal.findOne({naam:req.body.o038},function(err,m038){
+    if(m038)
+      totaal += req.body.i038*m038.prijs;
+  Materiaal.findOne({naam:req.body.o039},function(err,m039){
+    if(m039)
+      totaal += req.body.i039*m039.prijs;
+  Materiaal.findOne({naam:req.body.o040},function(err,m040){
+    if(m040)
+      totaal += req.body.i040*m040.prijs;
+  Materiaal.findOne({naam:req.body.o041},function(err,m041){
+    if(m041)
+      totaal += req.body.i041*m041.prijs;
+  Materiaal.findOne({naam:req.body.o042},function(err,m042){
+    if(m042)
+      totaal += req.body.i042*m042.prijs;
+  Materiaal.findOne({naam:req.body.o043},function(err,m043){
+    if(m043)
+      totaal += req.body.i043*m043.prijs;
+  Materiaal.findOne({naam:req.body.o044},function(err,m044){
+    if(m044)
+      totaal += req.body.i044*m044.prijs;
+  Materiaal.findOne({naam:req.body.o045},function(err,m045){
+    if(m045)
+      totaal += req.body.i045*m045.prijs;
+  Materiaal.findOne({naam:req.body.o046},function(err,m046){
+    if(m046)
+      totaal += req.body.i046*m046.prijs;
+  Materiaal.findOne({naam:req.body.o047},function(err,m047){
+    if(m047)
+      totaal += req.body.i047*m047.prijs;
+  Materiaal.findOne({naam:req.body.o048},function(err,m048){
+    if(m048)
+      totaal += req.body.i048*m048.prijs;
+  Materiaal.findOne({naam:req.body.o049},function(err,m049){
+    if(m049)
+      totaal += req.body.i049*m049.prijs;
+  Materiaal.findOne({naam:req.body.o050},function(err,m050){
+    if(m050)
+      totaal += req.body.i050*m050.prijs;
+    Settings.find({}, function(err, settings) {
+      if (!err && settings.length != 0) {
+        res.render('prijs-totaal',{"totaal":totaal.toFixed(2)+"€","description":"Berekenen van prijs","settings":settings[0]});
+    }
+    });
+  });});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});
+});
+
+app.post('/prijs/:totaal',function(req,res){
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+      var totaal_ = Number(req.params.totaal.substring(0, req.params.totaal.length - 1));
+      var totaal = req.params.totaal;
+      var marge = req.body.marge;
+      res.render("prijs-totaal",{"totmarge":String(((totaal_*marge/100.0)+totaal_).toFixed(2))+"€","totaal":totaal,"settings":settings[0],'description':"berekening van marge"});
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+    }
+  });
+});
+
+app.get('/mat',function(req,res){
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+      Materiaal.find({},function(err,materialen){
+        if(!err){
+          res.render('mat', {
+            'materialen':materialen,
+            'settings': settings[0],
+            'description': "Alle materialen"
+          });
+        }else{console.log(err);}
+      });
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+      console.log(legeSettings);
+      res.redirect('/settings');
+      if (err) {
+        console.log(err);
+      }
+    }
+  });
+});
+
+app.get('/edit-mat/:id',function(req,res){
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+      Materiaal.findOne({_id:req.params.id},function(err,materiaal){
+        console.log(materiaal);
+        res.render('edit-mat', {
+          'settings': settings[0],
+          'materiaal':materiaal,
+          'description': materiaal.naam +" aanpassen"
+        });
+      });
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+      console.log(legeSettings);
+      res.redirect('/settings');
+      if (err) {
+        console.log(err);
+      }
+    }
+  });
+});
+
+app.post('/edit-mat/:id',function(req,res){
+  var nieuwMat = {
+    naam:req.body.naam,
+    prijs:req.body.prijs
+  };
+  Materiaal.update({_id:req.params.id},nieuwMat,function(err,materiaal){
+    if(!err){
+      res.redirect('/mat');
+    }else{console.log(err); }
+  });
+});
+
+app.get('/add-mat',function(req,res){
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+      res.render('add-mat', {
+        'settings': settings[0],
+        'description': "Materiaal toevoegen"
+      });
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+      console.log(legeSettings);
+      res.redirect('/settings');
+      if (err) {
+        console.log(err);
+      }
+    }
+  });
+});
+
+app.post('/add-mat',function(req,res){
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+      var nieuwe_materiaal= new Materiaal({
+        prijs:req.body.prijs,
+        naam:req.body.naam
+      });
+      nieuwe_materiaal.save(function(err) {
+        if (err) {
+          console.log(err);
+        }
+      });
+      res.redirect('/mat');
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+      console.log(legeSettings);
+      res.redirect('/settings');
+      if (err) {
+        console.log(err);
+      }
+    }
+  });
+});
+
+app.get('/delete-mat/:id',function(req,res){
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+      Materiaal.remove({_id:req.params.id},function(err,mat){
+        console.log("succesfully deleted material");
+      });
+      res.redirect('/mat');
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+      console.log(legeSettings)   ;
+      res.redirect('/settings');
+      if (err) {
+        console.log(err);
+      }
+    }
+  });
+});
+
+app.get('/lam',function(req,res){
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+      res.render('lam', {
+        'settings': settings[0],
+        'description': "Berekening voor A1 Lamineren"
+      });
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+      console.log(legeSettings);
+      res.redirect('/settings');
+      if (err) {
+        console.log(err);
+      }
+    }
+  });
+});
+
+app.post('/lam-oplossing',function(req,res){
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+        //Ingevulde variabelen
+        var L = req.body.L;
+        var B = req.body.B;
+        var H = req.body.H
+        var X = req.body.X;
+        var M = req.body.M;
+        var F = req.body.F;
+        //Berekeningen
+        var C = M*(F*1.75);
+        var U = M*11;
+        var G = U*P;
+        var O = F*M;
+        var E1 = C*7.20;
+        var E2 = O*3.7;
+        var E = E1+E2;
+      res.render('lam-oplossing', {
+        'settings': settings[0],
+        'description': "Berekening voor A1 Lamineren",
+        "L":L,"B":B,"H":H,"X":X,"M":M,"F":F,"C":C,"U":U,"G":G,"O":O,"E1":E1,"E2":E2,"E":E
       });
     } else {
       legeSettings = new Settings();

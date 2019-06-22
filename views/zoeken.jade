@@ -242,7 +242,7 @@ html
                         if factuur.isBetaald
                           input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()" checked)
                           label(class="custom-control-label" for="#{factuur._id}") Betaald
-                        if !factuur.isBetaald
+                        if !factuur.isBetaald 
                           input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
                           label(class="custom-control-label" for="#{factuur._id}") Openstaand
 

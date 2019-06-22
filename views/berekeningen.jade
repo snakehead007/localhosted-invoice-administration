@@ -40,6 +40,20 @@ html
               if settings.thema != "light"
                 a(href='/epo-sil',class="button") 
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Epoxie & Siliconen berekenen
+            div(class="col")
+              if settings.thema == "light"
+                a(href='/lam',class="button") 
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") A1 Lamineren berekenen
+              if settings.thema != "light"
+                a(href='/lam',class="button") 
+                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") A1 Lamineren berekenen
+            div(class="col")
+              if settings.thema == "light"
+                a(href='/prijs',class="button") 
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Prijs berekeningen
+              if settings.thema != "light"
+                  a(href='/prijs',class="button") 
+                    button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Prijs berekeningen
              div(class="col")
               if settings.thema == "light"
                 a(href='/inch',class="button") 
