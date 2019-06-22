@@ -1,0 +1,717 @@
+//- V1.6
+html
+  head
+    title=title
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+    script.
+      function s001(){$("#d002").toggle();}
+      function s002(){$("#d003").toggle();}
+      function s003(){$("#d004").toggle();}
+      function s004(){$("#d005").toggle();}
+      function s005(){$("#d006").toggle();}
+      function s006(){$("#d007").toggle();}
+      function s007(){$("#d008").toggle();}
+      function s008(){$("#d009").toggle();}
+      function s009(){$("#d010").toggle();}
+      function s010(){$("#d011").toggle();}
+      function s011(){$("#d012").toggle();}
+      function s012(){$("#d013").toggle();}
+      function s013(){$("#d014").toggle();}
+      function s014(){$("#d015").toggle();}
+      function s015(){$("#d016").toggle();}
+      function s016(){$("#d017").toggle();}
+      function s017(){$("#d018").toggle();}
+      function s018(){$("#d019").toggle();}
+      function s019(){$("#d020").toggle();}
+      function s020(){$("#d021").toggle();}
+      function s021(){$("#d022").toggle();}
+      function s022(){$("#d023").toggle();}
+      function s023(){$("#d024").toggle();}
+      function s024(){$("#d025").toggle();}
+      function s025(){$("#d026").toggle();}
+      function s026(){$("#d027").toggle();}
+      function s027(){$("#d028").toggle();}
+      function s028(){$("#d029").toggle();}
+      function s029(){$("#d030").toggle();}
+      function s030(){$("#d031").toggle();}
+      function s031(){$("#d032").toggle();}
+      function s032(){$("#d033").toggle();}
+      function s033(){$("#d034").toggle();}
+      function s034(){$("#d035").toggle();}
+      function s035(){$("#d036").toggle();}
+      function s036(){$("#d037").toggle();}
+      function s037(){$("#d038").toggle();}
+      function s038(){$("#d039").toggle();}
+      function s039(){$("#d040").toggle();}
+      function s040(){$("#d041").toggle();}
+      function s041(){$("#d042").toggle();}
+      function s042(){$("#d043").toggle();}
+      function s043(){$("#d044").toggle();}
+      function s044(){$("#d045").toggle();}
+      function s045(){$("#d046").toggle();}
+      function s046(){$("#d047").toggle();}
+      function s047(){$("#d048").toggle();}
+      function s048(){$("#d049").toggle();}
+      function s049(){$("#d050").toggle();}
+  body
+    header
+      nav(class="navbar navbar-expand-sm navbar-#{settings.nav} bg-#{settings.thema}")
+        button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
+          span(class="navbar-toggler-icon")
+        div(class="collapse navbar-collapse", id="navbarNav")  
+          ul(class="navbar-nav mr-auto")
+            li(class="nav-item")
+              a(class="nav-link active" , href='/') Home
+            li(class="nav-item")
+              a(class="nav-link active", href='/edit-profile') Mijn profiel    
+            li(class="nav-item")
+              a(class="nav-link active", href='/settings') Settings
+            li(class="nav-item")
+              a(class="nav-link", href='https://identity.basecone.com/authentication/login')
+                img(width="100", height="24", src="/basecone.png", alt="basecone")
+          span(class="navbar-text")
+            div(class="row")
+              div(class="col-4 mr-auto")
+                button(type="button", class="btn btn-light btn-sm", disabled)
+                  h6=description
+              div(class="col-8")  
+                form(class="form-inline" action="/zoeken" method="post")
+                  input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
+    main
+      div(class="jumbotron")
+        div(class="row no-gutters")
+          div(class="col-9 mr-auto")
+          div(class="col-2")
+            a(href='/berekeningen',class="button")
+              if settings.thema == "light"
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+              if settings.thema != "light"
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+        h2 Prijs berekeningen
+        hr
+        div(class="row")
+          div(class="col-lg-2 col-md-1 col-lg-0")
+          if error == 1
+            div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") error 1
+          if error == 2
+            div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") error 2
+        form(action='/prijs',method='post')
+          div(class="form-row")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="col-lg-3 col-md-4 col-sm-12")
+              label Aantal werkuren
+              input(type="number",class="form-control",name="uren")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              label werkprijs (€/u)
+              input(type="number",step="0.01",class="form-control",name="werkprijs")
+          hr
+          ////////////////
+          div(class="form-row")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="i001",step=".01" required)
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3",name="o001" required)
+                option(selected) Kies materiaal
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s001()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////2
+          div(class="form-row",id="d002",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="i002",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3",name="o002")
+                option(selected)=" "
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s002()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////3
+          div(class="form-row",id="d003",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="i003",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3",name="o003")
+                option(selected)=" "
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s003()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////4
+          div(class="form-row",id="d004",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="i004",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3",name="o003")
+                option(selected)=" "
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s004()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////5
+          div(class="form-row",id="d005",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="i005",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3",name="o005")
+                option(selected)=" "
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s005()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////6
+          div(class="form-row",id="d006",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="i006",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3",name="o006")
+                option(selected)="  "
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s006()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////7
+          div(class="form-row",id="d007",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="i007",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3",name="o007")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s007()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////8
+          div(class="form-row",id="d008",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="i008",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3",name="o008")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s008()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////9
+          div(class="form-row",id="d009",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="i009",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3",name="i009")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s009()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d010",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="i010",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3",name="o010")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s010()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d011",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s011()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d012",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s012()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d013",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s013()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d014",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s014()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d015",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s015()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d016",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s016()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d017",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s017()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d018",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s018()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d019",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s019()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d020",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s020()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d021",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s021()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d022",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s022()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d023",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s023()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d024",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s024()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d025",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s025()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d026",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s026()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d027",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s027()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d028",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s028()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d029",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s029()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d030",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s030()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d031",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s031()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d032",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s032()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d033",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s033()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d034",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s034()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d035",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s035()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d036",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s036()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d037",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s037()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d038",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s038()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d039",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s039()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d040",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s040()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d041",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s041()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d042",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s042()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d043",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s043()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d044",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s044()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d045",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s045()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d046",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s046()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d047",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s047()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d048",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s048()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d049",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+            div(class="col-1")
+              button(type="button",onclick="s049()",class="btn btn-#{settings.oppo} btn-md") +
+          /////////////////
+          div(class="form-row",id="d050",style="display:none")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              input(type="number",class="form-control",placeholder="aantal", name="inch",step=".01")
+            div(class="col-lg-2 col-md-4 col-sm-12")
+              select(class="custom-select custom-select mb-3")
+                option(selected) 
+                each materiaal in materialen
+                  option(value="#{materiaal.naam}")=materiaal.naam
+          div(class="form-row")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+              button(type="submit",class="btn btn-#{settings.oppo}") Berekenen
+        hr
+        div(class="row")
+          div(class="col-lg-5 col-md-4 col-lg-0")
+          div(class="col-lg-3 col-md-2 col-sm-10")
+            h3=totaal
