@@ -70,15 +70,18 @@ html
               label(for="title") Plaatsnaam
               input(type="text",class="form-control",value=profile.plaats,name="plaats",placeholder="Gent")
             div(class="form-group col-md-3")
-            div(class="form-group col-md-2")
-              label(for="title") BIC-nr
-              input(type="text",class="form-control",value=profile.bic,name="bic",placeholder="KREDBEBB") 
             div(class="form-group col-md-1")
               label(for="title") Factuur nr:
               input(type="text",class="form-control",value=nr,name="nr")
             div(class="form-group col-md-1")
               label(for="title") Offerte nr:
               input(typ='text',class='form-control',value=nroff,name="nroff")
+            div(class="form-group col-md-1")
+              label(for="title") Creditnr:
+              input(typ='text',class='form-control',value=nrcred,name="nrcred")
+            div(class="form-group col-md-1")
+              label(for="title") BIC-nr
+              input(type="text",class="form-control",value=profile.bic,name="bic",placeholder="KREDBEBB") 
             div(class="form-group col-md-3")
               label(for="title") E-mail
               input(type="text",class="form-control",value=profile.mail,name="mail",placeholder="voorbeel@email.be")
