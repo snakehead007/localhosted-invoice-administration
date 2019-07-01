@@ -16,11 +16,11 @@ html
         div(class="collapse navbar-collapse", id="navbarNav")  
           ul(class="navbar-nav mr-auto")
             li(class="nav-item")
-              a(class="nav-link active" , href='/') Home
+              a(class="nav-link active" , href='/index'+"/"+loginHash) Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile') Mijn profiel    
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
             li(class="nav-item")
-              a(class="nav-link active", href='/settings') Settings
+              a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
             li(class="nav-item")
               a(class="nav-link", href='https://identity.basecone.com/authentication/login')
                 img(width="100", height="24", src="/basecone.png", alt="basecone")
@@ -30,14 +30,14 @@ html
                 button(type="button", class="btn btn-light btn-sm", disabled)
                   h6=description
               div(class="col-8")  
-                form(class="form-inline" action="/zoeken" method="post")
+                form(class="form-inline" action="/zoeken"+"/"+loginHash, method="post")
                   input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
     main
       div(class="jumbotron")
         div(class="row no-gutters")
           div(class="col-9 mr-auto")
           div(class="col-2")
-            a(href='/berekeningen',class="button")
+            a(href='/berekeningen'+"/"+loginHash,class="button")
               if settings.thema == "light"
                 button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
               if settings.thema != "light"
@@ -45,8 +45,7 @@ html
         h2 Berekenen van Lamineren
         hr
         div(class="alert alert-danger col-lg-7 col-md-12 col-sm-12" role="alert") Deze berekening werkt nog niet!
-        //div(class="alert alert-info col-lg-7 col-md-12 col-sm-12" role="alert") Gebruik een "." voor komma's
-        form(action='/deze-berekening-is-nog-niet-gemaakt',method='post') 
+        form(action='/deze-berekening-is-nog-niet-gemaakt'+"/"+loginHash,method='post') 
           div(class="form-row")
             div(class="form-group col-lg-7 col-md-6 col-sm-12")
               label(for="title") Lengte (inch)
@@ -58,7 +57,7 @@ html
               label(for="title") Hoogte (inch)
               input(type="number",class="form-control",name="H",step=".01", required)
             div(class="form-group col-lg-7 col-md-6 col-sm-12")
-              label(for="title") Extra dikte van siliconen (inch)
+              label(for="title") Extra dikte van laminatie (inch)
               input(type="number",class="form-control",name="X",step=".01", required)
             div(class="form-group col-lg-7 col-md-6 col-sm-12")
               label(for="title") m² (inch)
@@ -70,4 +69,5 @@ html
               label(for="title") Werk tarief (€/uur)
               input(type="number",class="form-control",name="W",step=".01", required)
           hr
-          button(type="submit",class="btn btn-#{settings.oppo}") Berekenen
+          button(type="submit",class="btn btn-#{settings.oppo}" disabled) Berekenen
+          //REMOVE "disabled" WHEN FIXED

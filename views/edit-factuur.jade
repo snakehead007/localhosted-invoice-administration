@@ -14,11 +14,11 @@ html
         div(class="collapse navbar-collapse", id="navbarNav")  
           ul(class="navbar-nav mr-auto")
             li(class="nav-item")
-              a(class="nav-link active" , href='/') Home
+              a(class="nav-link active" , href='/index'+"/"+loginHash) Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile') Mijn profiel    
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
             li(class="nav-item")
-              a(class="nav-link active", href='/settings') Settings
+              a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
             li(class="nav-item")
               a(class="nav-link", href='https://identity.basecone.com/authentication/login')
                 img(width="100", height="24", src="/basecone.png", alt="basecone")
@@ -28,7 +28,7 @@ html
                 button(type="button", class="btn btn-light btn-sm", disabled)
                   h6=description
               div(class="col-8")  
-                form(class="form-inline" action="/zoeken" method="post")
+                form(class="form-inline" action="/zoeken"+"/"+loginHash, method="post")
                   input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
     main
       div(class="jumbotron")
@@ -36,19 +36,19 @@ html
           div(class="col-9 mr-auto")
           div(class="col-2")
             if terug
-              a(href='/facturen/',class="button")
+              a(href='/facturen'+"/"+loginHash,class="button")
                 if settings.thema == "light"
                   button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
                 if settings.thema != "light"
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
             else
-              a(href='/facturen/'+contact._id,class="button")
+              a(href='/facturen/'+contact._id+"/"+loginHash,class="button")
                 if settings.thema == "light"
                   button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
                 if settings.thema != "light"
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug 
         hr
-        form(action='/edit-factuur/'+contact._id+'/'+factuur._id,method='post')
+        form(action='/edit-factuur/'+contact._id+'/'+factuur._id+"/"+loginHash,method='post')
           div(class="form-row")
             div(class="form-group col-md-3")
               label(for="title") Datum
