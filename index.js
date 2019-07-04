@@ -70,6 +70,10 @@ var ProfileSchema = new Schema({
     type: Number,
     default: 1
   },
+  nrcred:{
+    type:Number,
+    default: 1
+  },
   tele: {
     type: String
   },
@@ -106,6 +110,9 @@ var FactuurSchema = new Schema({
   },
   offerteNr: {
     type: Number
+  },
+  creditnr:{
+    type:Number
   },
   aantalBestellingen: {
     type: Number,
@@ -178,6 +185,9 @@ var ContactSchema = new Schema({
     type:String
   },
   mail2:{
+    type:String
+  },
+  rekeningnr:{
     type:String
   }
 });
@@ -327,7 +337,8 @@ app.post('/add-contact/:loginHash', function(req, res) {
       lang: req.body.lang,
       mail: req.body.mail,
       mail1: req.body.mail1,
-      mail2: req.body.mail2
+      mail2: req.body.mail2,
+      rekeningnr: req.body.rekeningnr
     });
     var message = 'Contact toegevoegd';
     newContact.save(function(err) {
@@ -570,6 +581,54 @@ app.get('/bestelbon/:idf/:loginHash', function(req, res) {
     });
   });}
 });
+
+app.get('/creditnota/:idc',function(req,res){
+  var id = req.params.idc;
+  Profile.find({},function(err,profile){
+    Factuur.findOne({_id:id},function(err,factuur){
+      if(err){
+        console.log(err);
+      }else{
+        Contact.findOne({_id:factuur.contact},function(err,contact){
+          Bestelling.find({factuur:factuur._id},function(err,bestellingen){
+            var lengte = Number(bestellingen.length);
+            var json_data = "[";
+            for (var i = 0; i <= lengte - 1; i++) {
+              json_data += ("{\"beschrijving\" : \"" + bestellingen[Number(i)].beschrijving + "\", " +
+                "\"aantal\" : " + bestellingen[Number(i)].aantal + ", " +
+                "\"bedrag\" : " + bestellingen[Number(i)].bedrag + ", " +
+                "\"totaal\" : " + Number(bestellingen[Number(i)].aantal * bestellingen[Number(i)].bedrag) + " }");
+              if (i <= lengte - 2) {
+                json_data += ",";
+              }
+            }
+            json_data += "]";
+            Settings.find({}, function(err, settings) {
+              if (!err && settings.length != 0) {
+              } else {
+                legeSettings = new Settings();
+                legeSettings.save(function(err) {
+                  if (err) {
+                    console.log("err in settings: " + err);
+                  }
+                });
+              }
+              res.render('creditnota', {
+                'profile': profile[0],
+                'contact': contact,
+                'bestellingen': json_data,
+                "factuur": factuur,
+                'lengte': lengte,
+                "settings": settings[0]
+              });
+            });
+          });
+        });
+      }
+    });
+  });
+});
+
 app.get('/createPDF/:idf/:loginHash', function(req, res) {
   if(checkSession(req.params.loginHash,res)){
   var id = req.params.id;
@@ -755,7 +814,8 @@ app.post('/edit-contact/:id/:loginHash', function(req, res) {
     lang: req.body.lang,
     mail: req.body.mail,
     mail1: req.body.mail1,
-    mail2: req.body.mail2
+    mail2: req.body.mail2,
+    rekeningnr: req.body.rekeningnr
   };
   console.log(req.body.lang);
   var message = 'Factuur niet geupdate';
@@ -848,6 +908,81 @@ app.get('/add-offerte/:idc/:loginHash', function(req, res) {
     }
   });}
 });
+app.get('/add-creditnota/:idc', function(req, res) {
+  var date = new Date();
+  var jaar = date.getFullYear();
+  var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+  var nr = 0;
+  var idn;
+  var _n = null;
+  var factuurID;
+  Contact.findOne({
+    _id: req.params.idc
+  }, function(err, contact) {
+    if (!err) {
+      contact.save(function(err) {
+        if (!err) {
+          Profile.find({}, function(err, nummer) {
+            if (!err) {
+              var _n = nummer;
+              nr = nummer[0].nrcred;
+            }
+            nummer[0].save(function(err) {
+              Profile.updateOne({
+                nrcred: nr + 1
+              }, function(err) {
+                if (err) {
+                  console.log("error in profile: " + err);
+                } else {
+                  var nr_str = nr.toString();
+                  if (nr_str.toString().length == 1) {
+                    nr_str = "00" + nr.toString();
+                  } else if (nr_str.toString().length == 2) {
+                    nr_str = "0" + nr.toString();
+                  }
+                  const newFactuur = new Factuur({
+                    contact: contact._id,
+                    datum: datum,
+                    creditnr: String(jaar + nr_str),
+                    contactPersoon: contact.contactPersoon,
+                    totaal:0,
+                  });
+                  console.log(newFactuur);
+                  Contact.updateOne({
+                    aantalFacturen: contact.aantalFacturen + 1
+                  }, function(err) {
+                    if (err) {
+                      console.log("err contact.updateOne: " + err);
+                    } else {
+                      contact.facturen.push(newFactuur._id);
+                    }
+                  });
+                  newFactuur.save(function(err) {
+                    if (err) {
+                      console.log("err newFactuur: " + err);
+                    }
+                  });
+                  Factuur.find({
+                    contact: req.params.idc
+                  }, function(err, facturen) {
+                    if (!err) {
+                      res.redirect('/facturen/' + contact._id);
+                    } else {
+                      console.log("err factuur.find: " + err);
+                    }
+                  });
+                }
+              });
+            });
+          });
+        } else {
+          console.log("err contact.save: " + err);
+        }
+      });
+    }
+  });
+});
+
 app.get('/add-factuur/:idc/:loginHash', function(req, res) {
   if(checkSession(req.params.loginHash,res)){
   var date = new Date();
@@ -1082,6 +1217,48 @@ app.get('/delete-factuur/:idc/:idf/:loginHash', function(req, res) {
     });
   });}
 });
+
+app.get('/delete-creditnota/:idc/:idf', function(req, res) {
+  Contact.findOne({
+    _id: req.params.idc
+  }, function(err, contact) {
+    Factuur.deleteOne({
+      _id: req.params.idf
+    }, function(err) {
+      if (!err) {
+        Factuur.find({
+          contact: req.params.idc
+        }, function(err, facturen) {
+          if (!err) {
+            Settings.find({}, function(err, settings) {
+              if (!err && settings.length != 0) {
+              } else {
+                legeSettings = new Settings();
+                legeSettings.save(function(err) {
+                  if (err) {
+                    console.log("err in settings: " + err);
+                  }
+                });
+              }
+              res.render('facturen', {
+                'contact': contact,
+                'facturenLijst': facturen,
+                'description': "Facturen van " + contact.contactPersoon,
+                "settings": settings[0]
+              });
+            });
+          } else {
+            console.log("err factuur.find: " + err);
+          }
+        });
+
+      } else {
+        console.log("err factuur.deleteOne: " + err);
+      }
+    });
+  });
+});
+
 app.get('/delete-factuur/:idc/:idf/t/:loginHash', function(req, res) {
   if(checkSession(req.params.loginHash,res)){
   Contact.findOne({
@@ -1395,6 +1572,13 @@ app.get('/edit-profile/:loginHash', function(req, res) {
         } else if (nroff_str.toString().length == 2) {
           nroff_str = "0" + _nroff.toString();
         }
+        var _nrcred = profile[0].nrcred;
+        var nrcred_str = _nrcred.toString();
+        if (nrcred_str.toString().length == 1) {
+          nrcred_str = "00" + _nrcred.toString();
+        } else if (nrcred_str.toString().length == 2) {
+          nrcred_str = "0" + _ncred.toString();
+        }
         Settings.find({}, function(err, settings) {
           if (!err && settings.length != 0) {
           } else {
@@ -1409,6 +1593,7 @@ app.get('/edit-profile/:loginHash', function(req, res) {
             'profile': profile[0],
             'nroff': Number(jaar + nroff_str),
             'nr': Number(jaar + nr_str),
+            'nrcred': Number(jaar+nrcred_str),
             "description": "Profiel bijwerken",
             "settings": settings[0],
             "loginHash":req.params.loginHash
@@ -1426,6 +1611,11 @@ app.post('/edit-profile/:id/loginHash', function(req, res) {
 
   var _nroff2 = req.body.nroff.toString();
   var _nroff = Number(_nroff2.substring(_nroff2.length - 3));
+
+  var _nrcred2 = req.body.nrcred.toString();
+  var _nrcred = Number(_nrcred2.substring(_nrcred2.length - 3));
+  console.log(_nrcred);
+
   var updateProfile = {
     firma: req.body.firma,
     naam: req.body.naam,
@@ -1438,6 +1628,7 @@ app.post('/edit-profile/:id/loginHash', function(req, res) {
     bic: req.body.bic,
     nr: _nr,
     nroff: _nroff,
+    nrcred: _nrcred,
     tele: req.body.tele,
     mail: req.body.mail
   };
@@ -1485,6 +1676,39 @@ app.get('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {
   });
 }
 });
+
+app.get('/edit-creditnota/:idc/:idf', function(req, res) {
+  Contact.findOne({
+    _id: req.params.idc
+  }, function(err, contact) {
+    Factuur.findOne({
+      _id: req.params.idf
+    }, function(err, factuur) {
+      if (!err) {
+        Settings.find({}, function(err, settings) {
+          if (!err && settings.length != 0) {
+          } else {
+            legeSettings = new Settings();
+            legeSettings.save(function(err) {
+              if (err) {
+                console.log("err in settings: " + err);
+              }
+            });
+          }
+          res.render('edit-creditnota', {
+            'factuur': factuur,
+            'contact': contact,
+            "description": "creditnota aanpassen van " + contact.contactPersoon,
+            "settings": settings[0]
+          });
+        });
+      } else {
+        console.log("err edit-factuur GET: " + err);
+      }
+    });
+  });
+});
+
 app.get('/updateFactuur/:idf/:loginHash', function(req, res) {
   if(checkSession(req.params.loginHash,res)){
   Factuur.findOne({
@@ -1698,6 +1922,121 @@ app.post('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {
       });
   });}
 });
+
+app.post('/edit-creditnota/:idc/:idf', function(req, res) {
+  var date = new Date();
+  var jaar = date.getFullYear();
+  var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+  Bestelling.find({factuur:req.params.idf},function(err,bestellingen){
+    Factuur.findOne({_id:req.params.idf},function(err,factuur){
+    var totBes = 0
+    for(var i= 0; i<=bestellingen.length-1; i++){
+      totBes += bestellingen[i].totaal;
+    }
+    console.log(totBes);
+    console.log(req.body.voorschot+"voorschot");
+    console.log(factuur.voorschot+" :voorschot oud");
+    var _t;
+    if(req.body.voorschot){
+       _t = totBes-req.body.voorschot;
+       console.log("new");
+     }else{
+       var _t = totBes
+    }
+    console.log(_t+"="+totBes+"-("+factuur.voorschot+"-"+req.body.voorschot+")");
+    if(req.body.voorschot != ""){
+      var updateFactuur = {
+        datum: req.body.datum,
+        factuurNr: req.body.factuurNr,
+        creditnr: req.body.creditnr,
+        voorschot: req.body.voorschot,
+        offerteNr: req.body.offerteNr,
+        totaal:_t
+      };
+    }else{
+      var updateFactuur = {
+        datum: req.body.datum,
+        factuurNr: req.body.factuurNr,
+        voorschot: req.body.voorschot,
+        creditnr: req.body.creditnr,
+        offerteNr: req.body.offerteNr
+      };
+    }
+
+    Contact.findOne({
+      _id: req.params.idc
+    }, function(err, contact) {
+            Factuur.update({
+              _id: req.params.idf
+            }, updateFactuur, function(err, factuur) {
+              if (!err) {
+                res.redirect('/facturen/' + contact._id);
+              } else {
+                console.log(err);
+              }
+            });
+        });
+      });
+  });
+});
+
+app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {
+  var date = new Date();
+  var jaar = date.getFullYear();
+  var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+  Bestelling.find({factuur:req.params.idf},function(err,bestellingen){
+    Factuur.findOne({_id:req.params.idf},function(err,factuur){
+    var totBes = 0
+    for(var i= 0; i<=bestellingen.length-1; i++){
+      totBes += bestellingen[i].totaal;
+    }
+    console.log(totBes);
+    console.log(req.body.voorschot+"voorschot");
+    console.log(factuur.voorschot+" :voorschot oud");
+    var _t;
+    if(req.body.voorschot){
+       _t = totBes-req.body.voorschot;
+       console.log("new");
+     }else{
+       var _t = totBes
+    }
+    console.log(_t+"="+totBes+"-("+factuur.voorschot+"-"+req.body.voorschot+")");
+    if(req.body.voorschot != ""){
+      var updateFactuur = {
+        datum: req.body.datum,
+        factuurNr: req.body.factuurNr,
+        creditnr: req.body.creditnr,
+        voorschot: req.body.voorschot,
+        offerteNr: req.body.offerteNr,
+        totaal:_t
+      };
+    }else{
+      var updateFactuur = {
+        datum: req.body.datum,
+        factuurNr: req.body.factuurNr,
+        creditnr: req.body.creditnr,
+        voorschot: req.body.voorschot,
+        offerteNr: req.body.offerteNr
+      };
+    }
+
+    Contact.findOne({
+      _id: req.params.idc
+    }, function(err, contact) {
+            Factuur.update({
+              _id: req.params.idf
+            }, updateFactuur, function(err, factuur) {
+              if (!err) {
+                res.redirect('/facturen/');
+              } else {
+                console.log(err);
+              }
+            });
+        });
+      });
+  });
+});
+    
 app.post('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {
   if(checkSession(req.params.loginHash,res)){
   var date = new Date();
@@ -1785,6 +2124,37 @@ app.get('/view-factuur/:idf/:loginHash', function(req, res) {
     }
   });}
 });
+
+app.get('/view-creditnota/:idf', function(req, res) {
+  Factuur.findOne({
+    _id: req.params.idf
+  }, function(err, factuur) {
+    if (!err) {
+      Contact.findOne({
+        _id: factuur.contact
+      }, function(err, contact) {
+        Settings.find({}, function(err, settings) {
+          if (!err && settings.length != 0) {
+          } else {
+            legeSettings = new Settings();
+            legeSettings.save(function(err) {
+              if (err) {
+                console.log("err in settings: " + err);
+              }
+            });
+          }
+          res.render('view-ceditnota', {
+            'factuur': factuur,
+            'contact': contact,
+            "description": "Bekijk creditnota van " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
+            "settings": settings[0]
+          });
+        });
+      });
+    }
+  });
+});
+    
 app.get('/view-factuur/:idf/t/:loginHash', function(req, res) {
   if(checkSession(req.params.loginHash,res)){
   Factuur.findOne({
@@ -1818,6 +2188,38 @@ app.get('/view-factuur/:idf/t/:loginHash', function(req, res) {
   });
 }
 });
+
+app.get('/view-creditnota/:idf/t', function(req, res) {
+  Factuur.findOne({
+    _id: req.params.idf
+  }, function(err, factuur) {
+    if (!err) {
+      Contact.findOne({
+        _id: factuur.contact
+      }, function(err, contact) {
+        Settings.find({}, function(err, settings) {
+          if (!err && settings.length != 0) {
+          } else {
+            legeSettings = new Settings();
+            legeSettings.save(function(err) {
+              if (err) {
+                console.log("err in settings: " + err);
+              }
+            });
+          }
+          res.render('view-factuur', {
+            'terug': 1,
+            'factuur': factuur,
+            'contact': contact,
+            "description": "Bekijk creditnota van " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
+            "settings": settings[0]
+          });
+        });
+      });
+    }
+  });
+});
+
 app.get('/view-bestelling/:idb/:loginHash', function(req, res) {
   if(checkSession(req.params.loginHash,res)){
   Bestelling.findOne({
