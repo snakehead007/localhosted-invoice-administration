@@ -32,7 +32,7 @@ html
     main
       div(class="jumbotron")
         div(class="container-fluid")
-          div(class="row")
+          div(class="row my-n10")
             div(class="col-sm-12 col-md-6 col-lg-4 col-12 mr-auto")
               if settings.thema == "light"
                 a(href='/contacten/#{loginHash}',class="button") 
@@ -40,7 +40,6 @@ html
               if settings.thema != "light"
                 a(href='/contacten/#{loginHash}',class="button") 
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Contacten
-          div(class="row")
             div(class="col-sm-12 col-md-6 col-lg-4 col-12 mr-auto")
               if settings.thema == "light"
                 a(href='/facturen/#{loginHash}',class="button") 
@@ -48,8 +47,6 @@ html
               if settings.thema != "light"
                 a(href='/facturen/#{loginHash}',class="button") 
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Alle facturen
-                  
-          div(class="row")
             div(class="col-sm-12 col-md-6 col-lg-4 col-12 mr-auto")
               if settings.thema == "light"
                 a(href='/chart/'+jaar+"/#{loginHash}",class="button") 
@@ -57,8 +54,6 @@ html
               if settings.thema != "light"
                 a(href='/chart/'+jaar+"/#{loginHash}",class="button") 
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Grafiek
-                  
-          div(class="row")
             div(class="col-sm-12 col-md-6 col-lg-4 col-12 mr-auto")
               if settings.thema == "light"
                 a(href='/berekeningen/#{loginHash}',class="button") 
@@ -66,8 +61,6 @@ html
               if settings.thema != "light"
                 a(href='/berekeningen/#{loginHash}',class="button") 
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Berekeningen
-                  
-          div(class="row")
             div(class="col-sm-12 col-md-12 col-lg-4 co-12 l")
               if settings.thema == "light"
                 a(href='/mat/#{loginHash}',class="button") 
