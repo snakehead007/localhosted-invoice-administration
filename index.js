@@ -218,13 +218,16 @@ app.get('/', function(req, res) {
   });
 });
 app.get('/index/:loginHash',function(req,res){
+  console.log("being redirected to index");
   if(checkSession(req.params.loginHash,res)){
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
+    console.log("rendering index page");
     res.render('index', {"description": "MDSART factuurbeheer","settings": settings[0],"jaar": new Date().getFullYear(),"loginHash":loginHash});
     }});
+  }else{
+    res.redirect('/login');
   }
-  res.redirect('/login');
 });
 app.get('/chart/:jaar/:loginHash', function(req, res) {
   if(checkSession(req.params.loginHash,res)){
@@ -516,7 +519,7 @@ app.get('/edit-contact/:id/:loginHash', function(req, res) {
         'contact': docs,
         "description": "Contact aanpassen",
         "settings": settings[0],
-        "LoginHash":req.params.loginHash
+        "loginHash":req.params.loginHash
       });
     });
   });
@@ -1608,7 +1611,7 @@ app.get('/edit-profile/:loginHash', function(req, res) {
     }
   });}
 });
-app.post('/edit-profile/:id/loginHash', function(req, res) {
+app.post('/edit-profile/:id/:loginHash', function(req, res) {
   if(checkSession(req.params.loginHash,res)){
   var _nr2 = req.body.nr.toString();
   var _nr = Number(_nr2.substring(_nr2.length - 3));
@@ -1640,7 +1643,7 @@ app.post('/edit-profile/:id/loginHash', function(req, res) {
     _id: req.params.id
   }, updateProfile, function(err, updatedprofile) {
     if (!err) {
-      res.redirect('/index/:loginHash');
+      res.redirect('/index/'+req.params.loginHash);
     } else {
       console.log(err);
     }
@@ -2270,7 +2273,6 @@ app.get('/change-betaald/:id/:loginHash', function(req, res) {
       var voor = new Boolean();
       voor = !(factuur.isBetaald);
       console.log("change betaald to " + voor);
-      //update(req.params.idf,voor);
       Factuur.updateOne({
         _id: req.params.id
       }, {
@@ -2304,7 +2306,7 @@ app.get('/change-betaald2/:id/:loginHash', function(req, res) {
       }, function(err, result) {
         if (!err) {
           console.log("result" + result);
-          res.redirect('/facturen/:loginHash');
+          res.redirect('/facturen/'+req.params.loginHash);
         }
       });
     } else {
@@ -2338,6 +2340,7 @@ app.get('/settings/:loginHash', function(req, res) {
 });
 app.get('/change-theme/:th/:loginHash', function(req, res) {
   if(checkSession(req.params.loginHash,res)){
+    console.log("changing theme...");
   Settings.find({}, function(err, settings) {
     if (!err) {
       var oppo;
@@ -2370,16 +2373,19 @@ app.get('/change-theme/:th/:loginHash', function(req, res) {
         _id: settings[0]._id
       }, updateSettings, function(err, updatedSettings) {
         if (!err) {
-          res.redirect('/settings/:loginHash');
+          res.redirect('/settings/'+req.params.loginHash);
         } else {
           console.log(err);
         }
       });
     } else {
       console.log("err");
-      res.redirect('/');
+        res.redirect('/settings/'+req.params.loginHash);
     }
-  });}
+  });}else{
+    console.log(err+"couldnt login, bad password");
+    res.redirect('/')
+  }
 });
 app.get('/berekeningen/:loginHash',function(req,res){
   if(checkSession(req.params.loginHash,res)){

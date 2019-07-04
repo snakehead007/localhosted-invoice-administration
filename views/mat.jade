@@ -60,8 +60,8 @@ html
                 td
                   a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                   div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                    a(class="dropdown-item", href='/edit-mat/'+materiaal._id) aanpassen
-                    a(class="dropdown-item", href='/delete-mat/'+materiaal._id) verwijder
+                    a(class="dropdown-item", href='/edit-mat/'+materiaal._id+"/#{loginHash}") aanpassen
+                    a(class="dropdown-item", href='/delete-mat/'+materiaal._id+"/#{loginHash}") verwijder
         else
           table(class="table table-#{settings.thema} table-striped")
 
@@ -77,5 +77,5 @@ html
                 td
                   a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                   div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                    a(class="dropdown-item", href='/edit-bestelling/'+materiaal._id) aanpassen
-                    a(class="dropdown-item", href='/delete-bestelling/'+materiaal._id) verwijder
+                    a(class="dropdown-item", href='/edit-bestelling/'+materiaal._id+"/#{loginHash}") aanpassen
+                    a(class="dropdown-item", href='/delete-bestelling/'+materiaal._id+"/#{loginHash}") verwijder

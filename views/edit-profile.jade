@@ -41,7 +41,7 @@ html
               if settings.thema != "light"
                 button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
         hr
-        form(action='/edit-profile/'+profile._id+"/"+loginHash,method='post')
+        form(action='/edit-profile/'+profile._id+"/#{loginHash}",method='post')
           div(class="form-row")
             div(class="form-group col-md-5")
               label(for="title") Naam

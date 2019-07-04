@@ -29,14 +29,14 @@ html
                 button(type="button", class="btn btn-light btn-sm", disabled)
                   h6=description
               div(class="col-8")  
-                form(class="form-inline" action="/zoeken+"/"+loginHash", method="post")
+                form(class="form-inline" action="/zoeken/#{loginHash}", method="post")
                   input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
     main
       div(class="jumbotron")
         div(class="row no-gutters")
           div(class="col-9 mr-auto")
           div(class="col-2")
-            a(href='/index'+"/"+loginHash,class="button")
+            a(href='/index'+"/#{loginHash}",class="button")
               if settings.thema == "light"
                 button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
               if settings.thema != "light"

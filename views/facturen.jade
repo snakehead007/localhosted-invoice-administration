@@ -36,19 +36,19 @@ html
         div(class="row no-gutters")
           if contact
             div(class="col-4 mr-auto")
-              a(href='/add-factuur/'+contact._id,class="button")
+              a(href='/add-factuur/'+contact._id+"/#{loginHash}",class="button")
                 if settings.thema == "light"
                   button(type="button",id="knop", class="btn btn-#{settings.oppo} btn-lg btn-block")  Nieuwe Factuur
                 if settings.thema != "light"
                   button(type="button",id="knop", class="btn btn-#{settings.thema} btn-lg btn-block")  Nieuwe Factuur
             div(class="col-4 mr-auto")
-              a(href='/add-offerte/'+contact._id,class="button")
+              a(href='/add-offerte/'+contact._id+"/#{loginHash}",class="button")
                 if settings.thema == "light"
                   button(type="button",id="knop", class="btn btn-#{settings.oppo} btn-lg btn-block")  Nieuwe Offerte
                 if settings.thema != "light"
                   button(type="button",id="knop", class="btn btn-#{settings.thema} btn-lg btn-block")  Nieuwe Offerte
             div(class="col-2 mr-auto")
-              a(href='/add-creditnota/'+contact._id,class="button")
+              a(href='/add-creditnota/'+contact._id+"/#{loginHash}",class="button")
                 if settings.thema == "light"
                   button(type="button",id="knop", class="btn btn-#{settings.oppo} btn-lg")  +CN
                 if settings.thema != "light"
@@ -119,13 +119,13 @@ html
                             script.
                               var id = "#{factuur._id}";
                               function K#{factuur.factuurNr}(){
-                                window.location="/change-betaald/"+"#{factuur._id}";
+                                window.location="/change-betaald/"+"#{factuur._id}/#{loginHash}";
                               }
                           if !contact
                             script.
                               var id = "#{factuur._id}";
                               function K#{factuur.factuurNr}(){
-                                window.location="/change-betaald2/"+"#{factuur._id}";
+                                window.location="/change-betaald2/"+"#{factuur._id}/#{loginHash}";
                               }
                           div(class="custom-control custom-switch")
                             if factuur.isBetaald
