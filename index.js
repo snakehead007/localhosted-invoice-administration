@@ -523,7 +523,6 @@ app.get('/edit-contact/:id/:loginHash', function(req, res) {
 }
 });
 app.get('/bestelbon/:idf/:loginHash', function(req, res) {
-
   if(checkSession(req.params.loginHash,res)){
     var id = req.params.id;
 
@@ -582,7 +581,8 @@ app.get('/bestelbon/:idf/:loginHash', function(req, res) {
   });}
 });
 
-app.get('/creditnota/:idc',function(req,res){
+app.get('/creditnota/:idc/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
   var id = req.params.idc;
   Profile.find({},function(err,profile){
     Factuur.findOne({_id:id},function(err,factuur){
@@ -619,7 +619,8 @@ app.get('/creditnota/:idc',function(req,res){
                 'bestellingen': json_data,
                 "factuur": factuur,
                 'lengte': lengte,
-                "settings": settings[0]
+                "settings": settings[0],
+                "loginHash":req.params.loginHash
               });
             });
           });
@@ -627,6 +628,7 @@ app.get('/creditnota/:idc',function(req,res){
       }
     });
   });
+}
 });
 
 app.get('/createPDF/:idf/:loginHash', function(req, res) {
@@ -908,7 +910,8 @@ app.get('/add-offerte/:idc/:loginHash', function(req, res) {
     }
   });}
 });
-app.get('/add-creditnota/:idc', function(req, res) {
+app.get('/add-creditnota/:idc/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
@@ -966,7 +969,7 @@ app.get('/add-creditnota/:idc', function(req, res) {
                     contact: req.params.idc
                   }, function(err, facturen) {
                     if (!err) {
-                      res.redirect('/facturen/' + contact._id);
+                      res.redirect('/facturen/' + contact._id+"/"+req.params.loginHash);
                     } else {
                       console.log("err factuur.find: " + err);
                     }
@@ -980,7 +983,7 @@ app.get('/add-creditnota/:idc', function(req, res) {
         }
       });
     }
-  });
+  });}
 });
 
 app.get('/add-factuur/:idc/:loginHash', function(req, res) {
@@ -1218,7 +1221,8 @@ app.get('/delete-factuur/:idc/:idf/:loginHash', function(req, res) {
   });}
 });
 
-app.get('/delete-creditnota/:idc/:idf', function(req, res) {
+app.get('/delete-creditnota/:idc/:idf/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Contact.findOne({
     _id: req.params.idc
   }, function(err, contact) {
@@ -1244,7 +1248,8 @@ app.get('/delete-creditnota/:idc/:idf', function(req, res) {
                 'contact': contact,
                 'facturenLijst': facturen,
                 'description': "Facturen van " + contact.contactPersoon,
-                "settings": settings[0]
+                "settings": settings[0],
+                "loginHash":req.params.loginHash
               });
             });
           } else {
@@ -1256,7 +1261,7 @@ app.get('/delete-creditnota/:idc/:idf', function(req, res) {
         console.log("err factuur.deleteOne: " + err);
       }
     });
-  });
+  });}
 });
 
 app.get('/delete-factuur/:idc/:idf/t/:loginHash', function(req, res) {
@@ -1604,7 +1609,6 @@ app.get('/edit-profile/:loginHash', function(req, res) {
   });}
 });
 app.post('/edit-profile/:id/loginHash', function(req, res) {
-
   if(checkSession(req.params.loginHash,res)){
   var _nr2 = req.body.nr.toString();
   var _nr = Number(_nr2.substring(_nr2.length - 3));
@@ -1677,7 +1681,8 @@ app.get('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {
 }
 });
 
-app.get('/edit-creditnota/:idc/:idf', function(req, res) {
+app.get('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Contact.findOne({
     _id: req.params.idc
   }, function(err, contact) {
@@ -1699,7 +1704,8 @@ app.get('/edit-creditnota/:idc/:idf', function(req, res) {
             'factuur': factuur,
             'contact': contact,
             "description": "creditnota aanpassen van " + contact.contactPersoon,
-            "settings": settings[0]
+            "settings": settings[0],
+            "loginHash":req.params.loginHash
           });
         });
       } else {
@@ -1707,6 +1713,7 @@ app.get('/edit-creditnota/:idc/:idf', function(req, res) {
       }
     });
   });
+}
 });
 
 app.get('/updateFactuur/:idf/:loginHash', function(req, res) {
@@ -2036,7 +2043,7 @@ app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {
       });
   });
 });
-    
+
 app.post('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {
   if(checkSession(req.params.loginHash,res)){
   var date = new Date();
@@ -2154,7 +2161,7 @@ app.get('/view-creditnota/:idf', function(req, res) {
     }
   });
 });
-    
+
 app.get('/view-factuur/:idf/t/:loginHash', function(req, res) {
   if(checkSession(req.params.loginHash,res)){
   Factuur.findOne({
