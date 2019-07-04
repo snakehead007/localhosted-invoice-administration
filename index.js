@@ -4,20 +4,21 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var app = express();
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-
 mongoose.connect('mongodb://localhost:27017/sample-website');
 mongoose.connection.on('open', function() {
   console.log('Mongoose connected.');
 });
+
 var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
 var maand_klein = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
 Schema = mongoose.Schema;
-
+var pass = "merijntje";
+var loginHash;
+var currentLogin = "";
 var SettingsSchema = new Schema({
   thema: {
     type: String,
@@ -32,9 +33,7 @@ var SettingsSchema = new Schema({
     default: "dark"
   }
 });
-
 var Settings = mongoose.model('Settings', SettingsSchema);
-
 var ProfileSchema = new Schema({
   firma: {
     type: String
@@ -82,9 +81,7 @@ var ProfileSchema = new Schema({
     type: String
   }
 });
-
 var Profile = mongoose.model('Profile', ProfileSchema);
-
 var BestellingSchema = new Schema({
   beschrijving: {
     type: String
@@ -103,9 +100,7 @@ var BestellingSchema = new Schema({
     type: Number
   }
 })
-
 var Bestelling = mongoose.model('Bestelling', BestellingSchema);
-
 var FactuurSchema = new Schema({
   datum: {
     type: String
@@ -148,9 +143,7 @@ var FactuurSchema = new Schema({
     default: 0
   }
 })
-
 var Factuur = mongoose.model('Factuur', FactuurSchema);
-
 var ContactSchema = new Schema({
   firma: {
     type: String
@@ -198,9 +191,7 @@ var ContactSchema = new Schema({
     type:String
   }
 });
-
 var Contact = mongoose.model('Contact', ContactSchema);
-
 var MateriaalSchema = new Schema({
   naam:{
     type: String
@@ -210,7 +201,6 @@ var MateriaalSchema = new Schema({
     default: 0
   }
 });
-
 var Materiaal = mongoose.model('Materiaal',MateriaalSchema);
 
 app.get('/', function(req, res) {
@@ -223,18 +213,21 @@ app.get('/', function(req, res) {
           console.log("err in settings: " + err);
         }
       });
-      res.redirect('/');
     }
-    res.render('index', {
-      "description": "MDSART factuurbeheer",
-      "settings": settings[0],
-      "jaar": new Date().getFullYear()
-    });
+    res.redirect('login');
   });
 });
-
-
-app.get('/chart/:jaar', function(req, res) {
+app.get('/index/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
+    Settings.find({}, function(err, settings) {
+      if (!err && settings.length != 0) {
+    res.render('index', {"description": "MDSART factuurbeheer","settings": settings[0],"jaar": new Date().getFullYear(),"loginHash":loginHash});
+    }});
+  }
+  res.redirect('/login');
+});
+app.get('/chart/:jaar/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       Factuur.find({},function(err,facturen){
@@ -255,7 +248,8 @@ app.get('/chart/:jaar', function(req, res) {
             "totaal" : totaal,
             "description": "Grafiek",
             "settings": settings[0],
-            "jaar": req.params.jaar
+            "jaar": req.params.jaar,
+            "loginHash":req.params.loginHash
           });
         }else{
           console.log(err);
@@ -270,9 +264,10 @@ app.get('/chart/:jaar', function(req, res) {
       });
     }
   });
+}
 });
-
-app.get('/contacten', function(req, res) {
+app.get('/contacten/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Contact.find({}, function(err, docs) {
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
@@ -287,13 +282,26 @@ app.get('/contacten', function(req, res) {
       res.render('contacten', {
         'contactenLijst': docs,
         'description': "Contactpersonen",
-        "settings": settings[0]
+        "settings": settings[0],
+        "loginHash":loginHash
       });
     });
-  });
+  });}
 });
-
-app.get('/add-contact', function(req, res) {
+app.get('/login',function(req,res){
+  res.render('login');
+});
+app.post('/',function(req,res){
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+    console.log(req.body.login);
+    if(checkSession(req.body.login,res)){
+      res.render('index', {"description": "MDSART factuurbeheer","settings": settings[0],"jaar": new Date().getFullYear(),"loginHash":loginHash});
+    }
+  }});
+});
+app.get('/add-contact/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
     } else {
@@ -306,12 +314,14 @@ app.get('/add-contact', function(req, res) {
     }
     res.render('add-contact', {
       'description': "Contact toevoegen",
-      "settings": settings[0]
+      "settings": settings[0],
+      "loginHash":req.params.loginHash
     });
   });
+}
 });
-
-app.post('/add-contact', function(req, res) {
+app.post('/add-contact/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   if (
     req.body.contactPersoon &&
     req.body.straat &&
@@ -352,13 +362,14 @@ app.post('/add-contact', function(req, res) {
     res.render('add-contact', {
       msg: message,
       "description": "Contact toevoegen",
-      "settings": settings[0]
+      "settings": settings[0],
+      "loginHash":req.params.loginHash
     });
   });
-  }
+}}
 });
-
-app.post('/add-bestelling/:idf', function(req, res) {
+app.post('/add-bestelling/:idf/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Factuur.findOne({
     _id: req.params.idf
   }, function(err, factuur) {
@@ -393,12 +404,13 @@ app.post('/add-bestelling/:idf', function(req, res) {
           console.log(err);
         }
       });
-      res.redirect('/bestellingen/' + req.params.idf);
+      res.redirect('/bestellingen/' + req.params.idf+"/"+req.params.loginHash);
     }
   });
+}
 });
-
-app.get('/add-bestelling/:idf', function(req, res) {
+app.get('/add-bestelling/:idf/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Factuur.findOne({
     _id: req.params.idf
   }, function(err, factuur) {
@@ -408,7 +420,8 @@ app.get('/add-bestelling/:idf', function(req, res) {
           res.render('add-bestelling', {
             'factuur': factuur,
             "description": "Bestelling toevoegen",
-            "settings": settings[0]
+            "settings": settings[0],
+            "loginHash":req.params.loginHash
           });
         } else {
           legeSettings = new Settings();
@@ -421,9 +434,10 @@ app.get('/add-bestelling/:idf', function(req, res) {
       });
     }
   });
+}
 });
-
-app.get('/edit-bestelling/:id', function(req, res) {
+app.get('/edit-bestelling/:id/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Bestelling.findOne({
     _id: req.params.id
   }, function(err, bestelling) {
@@ -444,14 +458,16 @@ app.get('/edit-bestelling/:id', function(req, res) {
           'bestelling': bestelling,
           "factuur": factuur,
           "description": "Bestelling aanpassen",
-          "settings": settings[0]
+          "settings": settings[0],
+          "loginHash":req.params.loginHash
         });
       });
     });
   });
+  }
 });
-
-app.post('/edit-bestelling/:id', function(req, res) {
+app.post('/edit-bestelling/:id/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Bestelling.findOne({_id:req.params.id},function(err,bestelling){
         var updateBestelling = {
           beschrijving: req.body.beschrijving,
@@ -470,7 +486,7 @@ app.post('/edit-bestelling/:id', function(req, res) {
                           }
                           Factuur.update({_id: bestelling.factuur},newFactuur,function(err,factuurnew){
                                 if(!err){
-                                  res.redirect('/bestellingen/' + bestelling.factuur);
+                                  res.redirect('/bestellingen/' + bestelling.factuur+"/"+req.params.loginHash);
                                 }else{
                                   console.log(err);
                                 }
@@ -479,9 +495,10 @@ app.post('/edit-bestelling/:id', function(req, res) {
               });
         });
     });
+}
 });
-
-app.get('/edit-contact/:id', function(req, res) {
+app.get('/edit-contact/:id/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Contact.findOne({
     _id: req.params.id
   }, function(err, docs) {
@@ -498,14 +515,17 @@ app.get('/edit-contact/:id', function(req, res) {
       res.render('edit-contact', {
         'contact': docs,
         "description": "Contact aanpassen",
-        "settings": settings[0]
+        "settings": settings[0],
+        "LoginHash":req.params.loginHash
       });
     });
   });
+}
 });
+app.get('/bestelbon/:idf/:loginHash', function(req, res) {
 
-app.get('/bestelbon/:idf', function(req, res) {
-  var id = req.params.id;
+  if(checkSession(req.params.loginHash,res)){
+    var id = req.params.id;
 
   Profile.find({}, function(err, profile) {
     Factuur.findOne({
@@ -552,13 +572,14 @@ app.get('/bestelbon/:idf', function(req, res) {
               'bestellingen': json_data,
               "factuur": factuur,
               'lengte': lengte,
-              "settings": settings[0]
+              "settings": settings[0],
+              "loginHash":req.params.loginHash
             });
           });
         });
       });
     });
-  });
+  });}
 });
 
 app.get('/creditnota/:idc',function(req,res){
@@ -608,7 +629,8 @@ app.get('/creditnota/:idc',function(req,res){
   });
 });
 
-app.get('/createPDF/:idf', function(req, res) {
+app.get('/createPDF/:idf/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   var id = req.params.id;
   Profile.find({}, function(err, profile) {
     Factuur.findOne({
@@ -655,16 +677,18 @@ app.get('/createPDF/:idf', function(req, res) {
               'bestellingen': json_data,
               "factuur": factuur,
               'lengte': lengte,
-              "settings": settings[0]
+              "settings": settings[0],
+              "loginHash":req.params.loginHash
             });
           });
         });
       });
     });
   });
+}
 });
-
-app.get('/createPDF-eng/:idf', function(req, res) {
+app.get('/createPDF-eng/:idf/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   var id = req.params.id;
   Profile.find({}, function(err, profile) {
     Factuur.findOne({
@@ -711,16 +735,17 @@ app.get('/createPDF-eng/:idf', function(req, res) {
               'bestellingen': json_data,
               "factuur": factuur,
               'lengte': lengte,
-              "settings": settings[0]
+              "settings": settings[0],
+              "loginHash":req.params.loginHash
             });
           });
         });
       });
     });
-  });
+  });}
 });
-
-app.get('/offerte/:idf', function(req, res) {
+app.get('/offerte/:idf/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   var id = req.params.id;
   Profile.find({}, function(err, profile) {
     Factuur.findOne({
@@ -767,16 +792,17 @@ app.get('/offerte/:idf', function(req, res) {
               'bestellingen': json_data,
               "factuur": factuur,
               'lengte': lengte,
-              "settings": settings[0]
+              "settings": settings[0],
+              "loginHash":req.params.loginHash
             });
           });
         });
       });
     });
-  });
+  });}
 });
-
-app.post('/edit-contact/:id', function(req, res) {
+app.post('/edit-contact/:id/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   var updateData = {
     firma: req.body.firma,
     contactPersoon: req.body.contactPersoon,
@@ -797,12 +823,13 @@ app.post('/edit-contact/:id', function(req, res) {
     _id: req.params.id
   }, updateData, function(err, numrows) {
     if (!err) {
-      res.redirect('/edit-contact/' + req.params.id);
+      res.redirect('/edit-contact/' + req.params.id+"/"+req.params.loginHash);
     }
   });
+}
 });
-
-app.get('/add-offerte/:idc', function(req, res) {
+app.get('/add-offerte/:idc/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
@@ -857,7 +884,7 @@ app.get('/add-offerte/:idc', function(req, res) {
                       contact: req.params.idc
                     }, function(err, facturen) {
                       if (!err) {
-                        res.redirect('/facturen/' + contact._id);
+                        res.redirect('/facturen/' + contact._id+"/"+req.params.loginHash);
                       } else {
                         console.log("err factuur.find: " + err);
                       }
@@ -879,9 +906,8 @@ app.get('/add-offerte/:idc', function(req, res) {
     } else {
       console.log("4" + err);
     }
-  });
+  });}
 });
-
 app.get('/add-creditnota/:idc', function(req, res) {
   var date = new Date();
   var jaar = date.getFullYear();
@@ -957,7 +983,8 @@ app.get('/add-creditnota/:idc', function(req, res) {
   });
 });
 
-app.get('/add-factuur/:idc', function(req, res) {
+app.get('/add-factuur/:idc/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
@@ -1014,7 +1041,7 @@ app.get('/add-factuur/:idc', function(req, res) {
                     contact: req.params.idc
                   }, function(err, facturen) {
                     if (!err) {
-                      res.redirect('/facturen/' + contact._id);
+                      res.redirect('/facturen/' + contact._id+"/"+req.params.loginHash);
                     } else {
                       console.log("err factuur.find: " + err);
                     }
@@ -1029,9 +1056,10 @@ app.get('/add-factuur/:idc', function(req, res) {
       });
     }
   });
+}
 });
-
-app.get('/opwaardeer/:idf', function(req, res) {
+app.get('/opwaardeer/:idf/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
@@ -1058,7 +1086,7 @@ app.get('/opwaardeer/:idf', function(req, res) {
               Factuur.update({
                 _id: req.params.idf
               }, updateFactuur, function(err, factuur1) {
-                res.redirect('/facturen/' + factuur.contact);
+                res.redirect('/facturen/' + factuur.contact+"/"+req.params.loginHash);
               });
             });
           });
@@ -1070,10 +1098,9 @@ app.get('/opwaardeer/:idf', function(req, res) {
     } else {
       console.log(err);
     }
-  });
+  });}
 });
-
-app.get('/opwaardeer/:idf/t', function(req, res) {
+app.get('/opwaardeer/:idf/t/:loginHash', function(req, res) {
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
@@ -1100,7 +1127,7 @@ app.get('/opwaardeer/:idf/t', function(req, res) {
               Factuur.update({
                 _id: req.params.idf
               }, updateFactuur, function(err, factuur1) {
-                res.redirect('/facturen');
+                res.redirect('/facturen/'+req.params.loginHash);
               });
             });
           });
@@ -1114,8 +1141,8 @@ app.get('/opwaardeer/:idf/t', function(req, res) {
     }
   });
 });
-
-app.get('/delete-contact/:id', function(req, res) {
+app.get('/delete-contact/:id/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   var contact_id = req.params.id;
   Contact.remove({
     _id: req.params.id
@@ -1144,12 +1171,12 @@ app.get('/delete-contact/:id', function(req, res) {
           }
         });
       }
-      res.redirect('/contacten');
+      res.redirect('/contacten/'+req.params.loginHash);
     });
-  });
+  });}
 });
-
-app.get('/delete-factuur/:idc/:idf', function(req, res) {
+app.get('/delete-factuur/:idc/:idf/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Contact.findOne({
     _id: req.params.idc
   }, function(err, contact) {
@@ -1175,7 +1202,8 @@ app.get('/delete-factuur/:idc/:idf', function(req, res) {
                 'contact': contact,
                 'facturenLijst': facturen,
                 'description': "Facturen van " + contact.contactPersoon,
-                "settings": settings[0]
+                "settings": settings[0],
+                "loginHash":req.params.loginHash
               });
             });
           } else {
@@ -1187,7 +1215,7 @@ app.get('/delete-factuur/:idc/:idf', function(req, res) {
         console.log("err factuur.deleteOne: " + err);
       }
     });
-  });
+  });}
 });
 
 app.get('/delete-creditnota/:idc/:idf', function(req, res) {
@@ -1231,7 +1259,8 @@ app.get('/delete-creditnota/:idc/:idf', function(req, res) {
   });
 });
 
-app.get('/delete-factuur/:idc/:idf/t', function(req, res) {
+app.get('/delete-factuur/:idc/:idf/t/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Contact.findOne({
     _id: req.params.idc
   }, function(err, contact) {
@@ -1254,7 +1283,8 @@ app.get('/delete-factuur/:idc/:idf/t', function(req, res) {
               res.render('facturen', {
                 'facturenLijst': facturen,
                 'description': 'Alle facturen',
-                'settings': settings[0]
+                'settings': settings[0],
+                "loginHash":req.params.loginHash
               });
             });
           } else {
@@ -1266,10 +1296,10 @@ app.get('/delete-factuur/:idc/:idf/t', function(req, res) {
         console.log("err factuur.deleteOne: " + err);
       }
     });
-  });
+  });}
 });
-
-app.get('/delete-bestelling/:idb', function(req, res) {
+app.get('/delete-bestelling/:idb/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Bestelling.findOne({
     _id: req.params.idb
   }, function(err, bestelling) {
@@ -1290,16 +1320,16 @@ app.get('/delete-bestelling/:idb', function(req, res) {
                       console.log(err);
                     }
               });
-          res.redirect('/bestellingen/' + factuur._id);
+          res.redirect('/bestellingen/' + factuur._id+"/"+req.params.loginHash);
         } else {
           console.log("err bestelling.find: " + err);
         }
       });
     });
-  });
+  });}
 });
-
-app.get('/facturen/:idc', function(req, res) {
+app.get('/facturen/:idc/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   var contact;
   Contact.findOne({
     _id: req.params.idc
@@ -1322,7 +1352,8 @@ app.get('/facturen/:idc', function(req, res) {
               'contact': contact,
               'facturenLijst': facturen,
               'description': "Facturen van " + contact.contactPersoon,
-              "settings": settings[0]
+              "settings": settings[0],
+              "loginHash":req.params.loginHash
             });
           });
         } else {
@@ -1333,9 +1364,10 @@ app.get('/facturen/:idc', function(req, res) {
       console.log("err contact.findOne: " + err);
     }
   });
+}
 });
-
-app.get('/facturen/:idc/t', function(req, res) {
+app.get('/facturen/:idc/t/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   var contact;
   Contact.findOne({
     _id: req.params.idc
@@ -1359,7 +1391,8 @@ app.get('/facturen/:idc/t', function(req, res) {
               'contact': contact,
               'facturenLijst': facturen,
               'description': "Facturen van " + contact.contactPersoon,
-              "settings": settings[0]
+              "settings": settings[0],
+              "loginHash":req.params.loginHash
             });
           });
         } else {
@@ -1369,10 +1402,10 @@ app.get('/facturen/:idc/t', function(req, res) {
     } else {
       console.log("err contact.findOne: " + err);
     }
-  });
+  });}
 });
-
-app.get('/facturen', function(req, res) {
+app.get('/facturen/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Factuur.find({}).sort('-factuurNr').exec(function(err, facturen) {
     if (!err) {
       Settings.find({}, function(err, settings) {
@@ -1388,16 +1421,17 @@ app.get('/facturen', function(req, res) {
         res.render('facturen', {
           'facturenLijst': facturen,
           'description': "Alle facturen",
-          "settings": settings[0]
+          "settings": settings[0],
+          "loginHash":loginHash
         });
       });
     } else {
       console.log("err factuur.find: " + err);
     }
-  });
+  });}
 });
-
-app.get('/bestellingen/:idf', function(req, res) {
+app.get('/bestellingen/:idf/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Factuur.findOne({
     _id: req.params.idf
   }, function(err, factuur) {
@@ -1424,7 +1458,8 @@ app.get('/bestellingen/:idf', function(req, res) {
                   'factuur': factuur,
                   'bestellingen': bestellingen,
                   'description': "Bestellingen van " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
-                  "settings": settings[0]
+                  "settings": settings[0],
+                  "loginHash":req.params.loginHash
                 });
               });
             }
@@ -1432,10 +1467,10 @@ app.get('/bestellingen/:idf', function(req, res) {
         }
       });
     }
-  });
+  });}
 });
-
-app.get('/bestellingen/:idf/t', function(req, res) {
+app.get('/bestellingen/:idf/t/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Factuur.findOne({
     _id: req.params.idf
   }, function(err, factuur) {
@@ -1463,7 +1498,8 @@ app.get('/bestellingen/:idf/t', function(req, res) {
                   'factuur': factuur,
                   'bestellingen': bestellingen,
                   'description': "Bestellingen van " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
-                  "settings": settings[0]
+                  "settings": settings[0],
+                  "loginHash":req.params.loginHash
                 });
               });
             }
@@ -1471,10 +1507,10 @@ app.get('/bestellingen/:idf/t', function(req, res) {
         }
       });
     }
-  });
+  });}
 });
-
-app.get('/view-contact/:idc', function(req, res) {
+app.get('/view-contact/:idc/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Contact.findOne({
     _id: req.params.idc
   }, function(err, contact) {
@@ -1492,16 +1528,17 @@ app.get('/view-contact/:idc', function(req, res) {
         res.render('view-contact', {
           'contact': contact,
           "description": "Contact Bekijken",
-          "settings": settings[0]
+          "settings": settings[0],
+          "loginHash":req.params.loginHash
         });
       });
     } else {
       console.log("err view-contact: " + err);
     }
-  });
+  });}
 });
-
-app.get('/edit-profile/', function(req, res) {
+app.get('/edit-profile/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   var legeProfiel;
   var date = new Date();
   var _jaar = date.getFullYear();
@@ -1558,16 +1595,17 @@ app.get('/edit-profile/', function(req, res) {
             'nr': Number(jaar + nr_str),
             'nrcred': Number(jaar+nrcred_str),
             "description": "Profiel bijwerken",
-            "settings": settings[0]
+            "settings": settings[0],
+            "loginHash":req.params.loginHash
           });
         });
       }
     }
-  });
+  });}
 });
+app.post('/edit-profile/:id/loginHash', function(req, res) {
 
-app.post('/edit-profile/:id', function(req, res) {
-
+  if(checkSession(req.params.loginHash,res)){
   var _nr2 = req.body.nr.toString();
   var _nr = Number(_nr2.substring(_nr2.length - 3));
 
@@ -1598,14 +1636,14 @@ app.post('/edit-profile/:id', function(req, res) {
     _id: req.params.id
   }, updateProfile, function(err, updatedprofile) {
     if (!err) {
-      res.redirect('/');
+      res.redirect('/index/:loginHash');
     } else {
       console.log(err);
     }
-  });
+  });}
 });
-
-app.get('/edit-factuur/:idc/:idf', function(req, res) {
+app.get('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Contact.findOne({
     _id: req.params.idc
   }, function(err, contact) {
@@ -1627,7 +1665,8 @@ app.get('/edit-factuur/:idc/:idf', function(req, res) {
             'factuur': factuur,
             'contact': contact,
             "description": "Factuur aanpassen van " + contact.contactPersoon,
-            "settings": settings[0]
+            "settings": settings[0],
+            "loginHash":req.params.loginHash
           });
         });
       } else {
@@ -1635,6 +1674,7 @@ app.get('/edit-factuur/:idc/:idf', function(req, res) {
       }
     });
   });
+}
 });
 
 app.get('/edit-creditnota/:idc/:idf', function(req, res) {
@@ -1669,7 +1709,8 @@ app.get('/edit-creditnota/:idc/:idf', function(req, res) {
   });
 });
 
-app.get('/updateFactuur/:idf', function(req, res) {
+app.get('/updateFactuur/:idf/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Factuur.findOne({
     _id: req.params.idf
   }, function(err, factuur) {
@@ -1697,7 +1738,8 @@ app.get('/updateFactuur/:idf', function(req, res) {
               res.render('facturen', {
                 'facturenLijst': facturen,
                 'description': "Alle facturen",
-                "settings": settings[0]
+                "settings": settings[0],
+                "loginHash":req.params.loginHash
               })
             });
           });
@@ -1706,10 +1748,10 @@ app.get('/updateFactuur/:idf', function(req, res) {
     } else {
       console.log(err);
     }
-  });
+  });}
 });
-
-app.get('/edit-factuur/:idc/:idf/t', function(req, res) {
+app.get('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Contact.findOne({
     _id: req.params.idc
   }, function(err, contact) {
@@ -1732,17 +1774,18 @@ app.get('/edit-factuur/:idc/:idf/t', function(req, res) {
             'factuur': factuur,
             'contact': contact,
             "description": "Factuur aanpassen van " + contact.contactPersoon,
-            "settings": settings[0]
+            "settings": settings[0],
+            "loginHash":req.params.loginHash
           });
         });
       } else {
         console.log("err edit-factuur GET: " + err);
       }
     });
-  });
+  });}
 });
-
-app.post('/zoeken', function(req,res){
+app.post('/zoeken/:loginHash', function(req,res){
+  if(checkSession(req.params.loginHash,res)){
   var str = req.body.search.toString().toLowerCase();
   var contacten = [];
   var facturen = [];
@@ -1806,7 +1849,7 @@ app.post('/zoeken', function(req,res){
                   console.log("Dit gevonden:")
                   console.log(contacten+bestellingen+facturen);
                   console.log("redirecting");
-                  res.render('zoeken',{"description":"Zoeken op \""+str+"\"","settings":settings[0],"contacten":contacten_d,"bestellingen":bestellingen_d,"facturen":facturen_d});
+                  res.render('zoeken',{"description":"Zoeken op \""+str+"\"","settings":settings[0],"contacten":contacten_d,"bestellingen":bestellingen_d,"facturen":facturen_d,"loginHash":req.params.loginHash});
                 } else {
                   legeSettings = new Settings();
                   legeSettings.save(function(err) {
@@ -1821,28 +1864,11 @@ app.post('/zoeken', function(req,res){
         }else{console.log(err);}
       });
     }else{console.log(err);}
-  });
+  });}
 });
-
-function distinct(_array){
-  var array = _array;
-  var disctincts = [];
-  for(var o of array){
-    var isDistinct = true;
-    for(var d of disctincts){
-      if(d._id == o._id){
-        isDistinct = false;
-      }
-    }
-    if(isDistinct){
-      disctincts.push(o);
-    }
-  }
-  return disctincts;
-}
 app.get('/zoeken',function(req,res){res.redirect('/');});
-
-app.post('/edit-factuur/:idc/:idf', function(req, res) {
+app.post('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
@@ -1887,14 +1913,14 @@ app.post('/edit-factuur/:idc/:idf', function(req, res) {
               _id: req.params.idf
             }, updateFactuur, function(err, factuur) {
               if (!err) {
-                res.redirect('/facturen/' + contact._id);
+                res.redirect('/facturen/' + contact._id+"/"+req.params.loginHash);
               } else {
                 console.log(err);
               }
             });
         });
       });
-  });
+  });}
 });
 
 app.post('/edit-creditnota/:idc/:idf', function(req, res) {
@@ -2010,8 +2036,9 @@ app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {
       });
   });
 });
-
-app.post('/edit-factuur/:idc/:idf/t', function(req, res) {
+    
+app.post('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
@@ -2056,7 +2083,7 @@ app.post('/edit-factuur/:idc/:idf/t', function(req, res) {
               _id: req.params.idf
             }, updateFactuur, function(err, factuur) {
               if (!err) {
-                res.redirect('/facturen/');
+                res.redirect('/facturen/'+req.params.loginHash);
               } else {
                 console.log(err);
               }
@@ -2064,9 +2091,10 @@ app.post('/edit-factuur/:idc/:idf/t', function(req, res) {
         });
       });
   });
+}
 });
-
-app.get('/view-factuur/:idf', function(req, res) {
+app.get('/view-factuur/:idf/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Factuur.findOne({
     _id: req.params.idf
   }, function(err, factuur) {
@@ -2088,12 +2116,13 @@ app.get('/view-factuur/:idf', function(req, res) {
             'factuur': factuur,
             'contact': contact,
             "description": "Bekijk factuur van " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
-            "settings": settings[0]
+            "settings": settings[0],
+            "loginHash":req.params.loginHash
           });
         });
       });
     }
-  });
+  });}
 });
 
 app.get('/view-creditnota/:idf', function(req, res) {
@@ -2125,8 +2154,9 @@ app.get('/view-creditnota/:idf', function(req, res) {
     }
   });
 });
-
-app.get('/view-factuur/:idf/t', function(req, res) {
+    
+app.get('/view-factuur/:idf/t/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Factuur.findOne({
     _id: req.params.idf
   }, function(err, factuur) {
@@ -2149,12 +2179,14 @@ app.get('/view-factuur/:idf/t', function(req, res) {
             'factuur': factuur,
             'contact': contact,
             "description": "Bekijk factuur van " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
-            "settings": settings[0]
+            "settings": settings[0],
+            "loginHash":req.params.loginHash
           });
         });
       });
     }
   });
+}
 });
 
 app.get('/view-creditnota/:idf/t', function(req, res) {
@@ -2188,7 +2220,8 @@ app.get('/view-creditnota/:idf/t', function(req, res) {
   });
 });
 
-app.get('/view-bestelling/:idb', function(req, res) {
+app.get('/view-bestelling/:idb/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Bestelling.findOne({
     _id: req.params.idb
   }, function(err, bestelling) {
@@ -2211,16 +2244,17 @@ app.get('/view-bestelling/:idb', function(req, res) {
               'bestelling': bestelling,
               "factuur": factuur,
               "description": "Bekijk bestelling",
-              "settings": settings[0]
+              "settings": settings[0],
+              "loginHash":req.params.loginHash
             });
           });
         }
       });
     }
-  });
+  });}
 });
-
-app.get('/change-betaald/:id', function(req, res) {
+app.get('/change-betaald/:id/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Factuur.findOne({
     _id: req.params.id
   }, function(err, factuur) {
@@ -2237,16 +2271,16 @@ app.get('/change-betaald/:id', function(req, res) {
       }, function(err, result) {
         if (!err) {
           console.log("result" + result);
-          res.redirect('/facturen/' + factuur.contact);
+          res.redirect('/facturen/' + factuur.contact+"/"+req.params.loginHash);
         }
       });
     } else {
       console.log(err);
     }
-  });
+  });}
 });
-
-app.get('/change-betaald2/:id', function(req, res) {
+app.get('/change-betaald2/:id/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Factuur.findOne({
     _id: req.params.id
   }, function(err, factuur) {
@@ -2263,21 +2297,22 @@ app.get('/change-betaald2/:id', function(req, res) {
       }, function(err, result) {
         if (!err) {
           console.log("result" + result);
-          res.redirect('/facturen/');
+          res.redirect('/facturen/:loginHash');
         }
       });
     } else {
       console.log(err);
     }
-  });
+  });}
 });
-
-app.get('/settings', function(req, res) {
+app.get('/settings/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       res.render('settings', {
         'settings': settings[0],
-        'description': "Settings"
+        'description': "Settings",
+        'loginHash' : req.params.loginHash
       });
     } else {
       legeSettings = new Settings();
@@ -2287,15 +2322,15 @@ app.get('/settings', function(req, res) {
         }
       });
       console.log(legeSettings);
-      res.redirect('/settings');
+      res.redirect('/');
       if (err) {
         console.log(err);
       }
     }
-  });
+  });}
 });
-
-app.get('/change-theme/:th', function(req, res) {
+app.get('/change-theme/:th/:loginHash', function(req, res) {
+  if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err) {
       var oppo;
@@ -2328,7 +2363,7 @@ app.get('/change-theme/:th', function(req, res) {
         _id: settings[0]._id
       }, updateSettings, function(err, updatedSettings) {
         if (!err) {
-          res.redirect('/settings');
+          res.redirect('/settings/:loginHash');
         } else {
           console.log(err);
         }
@@ -2337,15 +2372,16 @@ app.get('/change-theme/:th', function(req, res) {
       console.log("err");
       res.redirect('/');
     }
-  });
+  });}
 });
-
-app.get('/berekeningen',function(req,res){
+app.get('/berekeningen/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       res.render('berekeningen', {
         'settings': settings[0],
-        'description': "Alle berekeningen"
+        'description': "Alle berekeningen",
+        "loginHash":req.params.loginHash
       });
     } else {
       legeSettings = new Settings();
@@ -2360,10 +2396,9 @@ app.get('/berekeningen',function(req,res){
         console.log(err);
       }
     }
-  });
+  });}
 });
-
-app.get('/prijs',function(req,res){
+app.get('/prijs/:loginHash',function(req,res){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       Materiaal.find({},function(err,materialen){
@@ -2371,7 +2406,8 @@ app.get('/prijs',function(req,res){
           res.render('prijs', {
             'settings': settings[0],
             'description': "Berekening voor Prijs",
-            'materialen': materialen
+            'materialen': materialen,
+            "loginHash" : req.params.loginHash
           });
         }else{console.log(err);}
       });
@@ -2390,8 +2426,8 @@ app.get('/prijs',function(req,res){
     }
   });
 });
-
-app.post('/prijs',function(req,res){
+app.post('/prijs/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
   var totaal = (req.body.uren*req.body.werkprijs);
   Materiaal.findOne({naam:req.body.o001},function(err,m001){
     totaal += req.body.i001*m001.prijs;
@@ -2544,19 +2580,16 @@ app.post('/prijs',function(req,res){
       totaal += req.body.i050*m050.prijs;
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
-        res.render('prijs-totaal',{"totaal":totaal.toFixed(2)+"€","description":"Berekenen van prijs","settings":settings[0]});
-    }
-    });
-  });});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});
-});
-
-app.post('/prijs/:totaal',function(req,res){
+        res.render('prijs-totaal',{"totaal":totaal.toFixed(2)+"€","description":"Berekenen van prijs","settings":settings[0],"loginHash":req.params.loginHash});
+}});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});});}});
+app.post('/prijs/:totaal/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       var totaal_ = Number(req.params.totaal.substring(0, req.params.totaal.length - 1));
       var totaal = req.params.totaal;
       var marge = req.body.marge;
-      res.render("prijs-totaal",{"totmarge":String(((totaal_*marge/100.0)+totaal_).toFixed(2))+"€","totaal":totaal,"settings":settings[0],'description':"berekening van marge"});
+      res.render("prijs-totaal",{"totmarge":String(((totaal_*marge/100.0)+totaal_).toFixed(2))+"€","totaal":totaal,"settings":settings[0],'description':"berekening van marge","loginHash":req.params.loginHash});
     } else {
       legeSettings = new Settings();
       legeSettings.save(function(err) {
@@ -2565,10 +2598,10 @@ app.post('/prijs/:totaal',function(req,res){
         }
       });
     }
-  });
+  });}
 });
-
-app.get('/mat',function(req,res){
+app.get('/mat/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       Materiaal.find({},function(err,materialen){
@@ -2576,7 +2609,8 @@ app.get('/mat',function(req,res){
           res.render('mat', {
             'materialen':materialen,
             'settings': settings[0],
-            'description': "Alle materialen"
+            'description': "Alle materialen",
+            "loginHash":req.params.loginHash
           });
         }else{console.log(err);}
       });
@@ -2593,10 +2627,10 @@ app.get('/mat',function(req,res){
         console.log(err);
       }
     }
-  });
+  });}
 });
-
-app.get('/edit-mat/:id',function(req,res){
+app.get('/edit-mat/:id/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       Materiaal.findOne({_id:req.params.id},function(err,materiaal){
@@ -2604,7 +2638,8 @@ app.get('/edit-mat/:id',function(req,res){
         res.render('edit-mat', {
           'settings': settings[0],
           'materiaal':materiaal,
-          'description': materiaal.naam +" aanpassen"
+          'description': materiaal.naam +" aanpassen",
+          "loginHash":req.params.loginHash
         });
       });
     } else {
@@ -2620,27 +2655,28 @@ app.get('/edit-mat/:id',function(req,res){
         console.log(err);
       }
     }
-  });
+  });}
 });
-
-app.post('/edit-mat/:id',function(req,res){
+app.post('/edit-mat/:id/:loginHash',function(req,res){
+    if(checkSession(req.params.loginHash,res)){
   var nieuwMat = {
     naam:req.body.naam,
     prijs:req.body.prijs
   };
   Materiaal.update({_id:req.params.id},nieuwMat,function(err,materiaal){
     if(!err){
-      res.redirect('/mat');
+      res.redirect('/mat/'+req.params.loginHash);
     }else{console.log(err); }
-  });
+  });}
 });
-
-app.get('/add-mat',function(req,res){
+app.get('/add-mat/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       res.render('add-mat', {
         'settings': settings[0],
-        'description': "Materiaal toevoegen"
+        'description': "Materiaal toevoegen",
+        "loginHash" : req.params.loginHash
       });
     } else {
       legeSettings = new Settings();
@@ -2655,10 +2691,10 @@ app.get('/add-mat',function(req,res){
         console.log(err);
       }
     }
-  });
+  });}
 });
-
-app.post('/add-mat',function(req,res){
+app.post('/add-mat/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       var nieuwe_materiaal= new Materiaal({
@@ -2670,7 +2706,7 @@ app.post('/add-mat',function(req,res){
           console.log(err);
         }
       });
-      res.redirect('/mat');
+      res.redirect('/mat/'+req.params.loginHash);
     } else {
       legeSettings = new Settings();
       legeSettings.save(function(err) {
@@ -2684,16 +2720,16 @@ app.post('/add-mat',function(req,res){
         console.log(err);
       }
     }
-  });
+  });}
 });
-
-app.get('/delete-mat/:id',function(req,res){
+app.get('/delete-mat/:id/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       Materiaal.remove({_id:req.params.id},function(err,mat){
         console.log("succesfully deleted material");
       });
-      res.redirect('/mat');
+      res.redirect('/mat/'+req.params.loginHash);
     } else {
       legeSettings = new Settings();
       legeSettings.save(function(err) {
@@ -2707,15 +2743,16 @@ app.get('/delete-mat/:id',function(req,res){
         console.log(err);
       }
     }
-  });
+  });}
 });
-
-app.get('/lam',function(req,res){
+app.get('/lam/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       res.render('lam', {
         'settings': settings[0],
-        'description': "Berekening voor A1 Lamineren"
+        'description': "Berekening voor A1 Lamineren",
+        "loginHash" : req.params.loginHash
       });
     } else {
       legeSettings = new Settings();
@@ -2730,10 +2767,10 @@ app.get('/lam',function(req,res){
         console.log(err);
       }
     }
-  });
+  });}
 });
-
-app.post('/lam-oplossing',function(req,res){
+app.post('/lam-oplossing/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
         //Ingevulde variabelen
@@ -2754,7 +2791,8 @@ app.post('/lam-oplossing',function(req,res){
       res.render('lam-oplossing', {
         'settings': settings[0],
         'description': "Berekening voor A1 Lamineren",
-        "L":L,"B":B,"H":H,"X":X,"M":M,"F":F,"C":C,"U":U,"G":G,"O":O,"E1":E1,"E2":E2,"E":E
+        "L":L,"B":B,"H":H,"X":X,"M":M,"F":F,"C":C,"U":U,"G":G,"O":O,"E1":E1,"E2":E2,"E":E,
+        "loginHash":req.params.loginHash
       });
     } else {
       legeSettings = new Settings();
@@ -2769,15 +2807,16 @@ app.post('/lam-oplossing',function(req,res){
         console.log(err);
       }
     }
-  });
+  });}
 });
-
-app.get('/epo-sil',function(req,res){
+app.get('/epo-sil/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       res.render('epo-sil', {
         'settings': settings[0],
-        'description': "Berekening voor Epoxie & Siliconen"
+        'description': "Berekening voor Epoxie & Siliconen",
+        "loginHash" : req.params.loginHash
       });
     } else {
       legeSettings = new Settings();
@@ -2792,10 +2831,10 @@ app.get('/epo-sil',function(req,res){
         console.log(err);
       }
     }
-  });
+  });}
 });
-
-app.post('/epo-sil-oplossing',function(req,res){
+app.post('/epo-sil-oplossing/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       var L = Number(req.body.L);
@@ -2846,7 +2885,8 @@ app.post('/epo-sil-oplossing',function(req,res){
       res.render("epo-sil-oplossing",{"description":"Oplossing van berekening","settings":settings[0],
                               "L":L,"B":B,"H":H,"W":W,"Ds":De,"As":As,"Dos":Dos,"Ds":Ds,"Ms":Ms,"Ae":Ae,"Doe":Doe,"De":De,"Me":String(Me).toTime(),
                               "Ls":L+X,"Bs":B+X,"Hs":H+X,"Le":L+0.4+X,"Be":B+0.4+X,"He":H+0.4+X,"Ms":String(Ms).toTime(),"Pws":Pws,"Ps":Ps,"Pwe":Pwe,
-                              "Ptw":Ptw,"Ptm":Ptm,"Pt":Pt,"Mt":String(Mt).toTime(),"Pe":Pe});
+                              "Ptw":Ptw,"Ptm":Ptm,"Pt":Pt,"Mt":String(Mt).toTime(),"Pe":Pe,
+                              "loginHash":req.params.loginHash});
     } else {
       legeSettings = new Settings();
       legeSettings.save(function(err) {
@@ -2860,15 +2900,16 @@ app.post('/epo-sil-oplossing',function(req,res){
         console.log(err);
       }
     }
-  });
+  });}
 });
-
-app.get('/inch',function(req,res){
+app.get('/inch/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       res.render('inch', {
         'settings': settings[0],
-        'description': "Berekening voor inch & cm omzettingen"
+        'description': "Berekening voor inch & cm omzettingen",
+        "loginHash" : req.params.loginHash
       });
     } else {
       legeSettings = new Settings();
@@ -2884,9 +2925,10 @@ app.get('/inch',function(req,res){
       }
     }
   });
+}
 });
-
-app.post('/inch',function(req,res){
+app.post('/inch/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
   console.log("inch post")
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
@@ -2899,7 +2941,8 @@ app.post('/inch',function(req,res){
         res.render('inch', {
           'settings': settings[0],
           'description': "Berekening voor inch & cm omzettingen",
-          "error":1
+          "error":1,
+          "loginHash":req.params.loginHash
         });
       }else{
         if(inch !==""){
@@ -2910,7 +2953,8 @@ app.post('/inch',function(req,res){
           res.render('inch', {
             'settings': settings[0],
             'description': "Berekening voor inch & cm omzettingen",
-            "oplossing":oplossing
+            "oplossing":oplossing,
+            "loginHash":req.params.loginHash
           });
         }
         if(cm !== ""){
@@ -2921,14 +2965,16 @@ app.post('/inch',function(req,res){
           res.render('inch', {
             'settings': settings[0],
             'description': "Berekening voor inch & cm omzettingen",
-            "oplossing":oplossing
+            "oplossing":oplossing,
+            "loginHash":req.params.loginHash
           });
         }
         console.log("error niets ingevuld");
         res.render('inch', {
           'settings': settings[0],
           'description': "Berekening voor inch & cm omzettingen",
-          "error":2
+          "error":2,
+          "loginHash": req.params.loginHash
         });
       }
     } else {
@@ -2944,21 +2990,16 @@ app.post('/inch',function(req,res){
         console.log(err);
       }
     }
-  });
+  });}
 });
-
 app.set('views', path.join(__dirname, 'views'));
-
 app.set('view engine', 'jade');
-
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.listen('3000', function() {
   console.log('Server is running at PORT ' + 3000);
   Schema = mongoose.Schema;
 
 });
-
 async function update(id, voor) {
   await Factuur.updateOne({
     _id: id
@@ -2967,7 +3008,6 @@ async function update(id, voor) {
   });
   console.log("updated");
 }
-
 function isNumeric(num){
   return !isNaN(num)
 }
@@ -2981,4 +3021,30 @@ String.prototype.toTime = function () {
   if (minutes < 10) {minutes = "0"+minutes;}
   if (seconds < 10) {seconds = "0"+seconds;}
   return hours + 'u ' + minutes + 'm';
+ }
+ function checkSession(login,res){
+   console.log("logging in with: "+loginHash);
+   loginHash = login;
+   if(loginHash === pass){
+     console.log("passed");
+     return true;
+   }
+   console.log("not passed");
+   res.redirect('login');
+ }
+ function distinct(_array){
+   var array = _array;
+   var disctincts = [];
+   for(var o of array){
+     var isDistinct = true;
+     for(var d of disctincts){
+       if(d._id == o._id){
+         isDistinct = false;
+       }
+     }
+     if(isDistinct){
+       disctincts.push(o);
+     }
+   }
+   return disctincts;
  }

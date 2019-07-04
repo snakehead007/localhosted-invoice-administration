@@ -14,9 +14,9 @@ html
         div(class="collapse navbar-collapse", id="navbarNav")  
           ul(class="navbar-nav mr-auto")
             li(class="nav-item")
-              a(class="nav-link active" , href='/') Home
+              a(class="nav-link active" , href='/index'+"/"+loginHash) Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile') Mijn profiel    
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
             li(class="nav-item")
               a(class="nav-link active", href='/settings') Settings
             li(class="nav-item")
@@ -28,14 +28,14 @@ html
                 button(type="button", class="btn btn-light btn-sm", disabled)
                   h6=description
               div(class="col-8")  
-                form(class="form-inline" action="/zoeken" method="post")
+                form(class="form-inline" action="/zoeken"+"/"+loginHash, method="post")
                   input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
     main
       div(class="jumbotron")
         div(class="row no-gutters")
           div(class="col-9 mr-auto")
           div(class="col-2")
-            a(href='/berekeningen',class="button")
+            a(href='/berekeningen'+"/"+loginHash,class="button")
               if settings.thema == "light"
                 button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
               if settings.thema != "light"
@@ -48,9 +48,7 @@ html
             div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Enkel één veld invullen!
           if error == 2
             div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Niets ingevuld!
-          if !error
-            div(class="alert alert-info col-lg-8 col-md-10 col-sm-12" role="alert") Gebruik een "." voor komma's
-        form(action='/inch',method='post')
+        form(action='/inch'+"/"+loginHash,method='post')
           div(class="form-row")
             div(class="col-lg-2 col-md-1 col-sm-0")
             div(class="form-group col-lg-3 col-md-4 col-sm-12")

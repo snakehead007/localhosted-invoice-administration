@@ -14,11 +14,11 @@ html
         div(class="collapse navbar-collapse", id="navbarNav")  
           ul(class="navbar-nav mr-auto")
             li(class="nav-item")
-              a(class="nav-link active" , href='/') Home
+              a(class="nav-link active" , href='/index'+"/"+loginHash) Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile') Mijn profiel    
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
             li(class="nav-item")
-              a(class="nav-link active", href='/settings') Settings
+              a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
             li(class="nav-item")
               a(class="nav-link", href='https://identity.basecone.com/authentication/login')
                 img(width="100", height="24", src="/basecone.png", alt="basecone")
@@ -28,7 +28,7 @@ html
                 button(type="button", class="btn btn-light btn-sm", disabled)
                   h6=description
               div(class="col-8")  
-                form(class="form-inline" action="/zoeken" method="post")
+                form(class="form-inline" action="/zoeken"+"/"+loginHash, method="post")
                   input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
     main
       div(class="jumbotron")
@@ -36,7 +36,7 @@ html
           div(class="col-9 mr-auto")
           div(class="col-2")
             if terug
-              a(href='/',class="button")
+              a(href='/index'+"/"+loginHash,class="button")
                 if settings.thema == "light"
                   button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
                 if settings.thema != "light"
@@ -55,7 +55,7 @@ html
                 each contact in contacten 
                   tr
                     td
-                      a(href='/facturen/'+contact._id, class="button")
+                      a(href='/facturen/'+contact._id+"/"+loginHash, class="button")
                         button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=contact.contactPersoon
                     td=contact.firma
                     td=contact.straat
@@ -97,11 +97,11 @@ html
                   tr
                     if factuur.factuurNr
                       td
-                        a(href='/bestellingen/'+factuur._id, class="button")
+                        a(href='/bestellingen/'+factuur._id+"/"+loginHash, class="button")
                           button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
                     else
                       td
-                        a(href='/bestellingen/'+factuur._id, class="button")
+                        a(href='/bestellingen/'+factuur._id+"/"+loginHash, class="button")
                           button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="OfferteNr "+factuur.offerteNr
                     td
                       script.
@@ -126,24 +126,24 @@ html
                     td=factuur.totaal+"€"
                     td=(factuur.totaal*1.21).toFixed(2)+"€"
                     td
-                      a(href='/facturen/'+factuur.contact, class="button")
+                      a(href='/facturen/'+factuur.contact+"/"+loginHash, class="button")
                         button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
                     td=factuur.datum
                     td
                       a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                       div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                        a(class="dropdown-item",href='/edit-factuur/'+factuur.contact+'/'+factuur._id) aanpassen
-                        a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id) verwijder
-                        a(class="dropdown-item", href='/view-factuur/'+factuur._id,class="button") bekijk
+                        a(class="dropdown-item",href='/edit-factuur/'+factuur.contact+'/'+factuur._id+"/"+loginHash) aanpassen
+                        a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id+"/"+loginHash) verwijder
+                        a(class="dropdown-item", href='/view-factuur/'+factuur._id+"/"+loginHash,class="button") bekijk
                         div(class="dropdown-divider")
                         if factuur.factuurNr
-                          a(class="dropdown-item", href='/createPDF/'+factuur._id,id="target",target="_blank") download factuur (nl)
-                          a(class="dropdown-item", href='/createPDF-eng/'+factuur._id,id="target",target="_blank") download factuur (eng)
+                          a(class="dropdown-item", href='/createPDF/'+factuur._id+"/"+loginHash,id="target",target="_blank") download factuur (nl)
+                          a(class="dropdown-item", href='/createPDF-eng/'+factuur._id+"/"+loginHash,id="target",target="_blank") download factuur (eng)
                         if factuur.offerteNr
-                          a(class="dropdown-item", href='/offerte/'+factuur._id,id="target",target="_blank") download offerte
+                          a(class="dropdown-item", href='/offerte/'+factuur._id+"/"+loginHash,id="target",target="_blank") download offerte
                           if !factuur.factuurNr
                             div(class="dropdown-divider")
-                              a(class="dropdown-item", href="/opwaardeer/"+factuur._id,class="button") opwaardeer naar factuur
+                              a(class="dropdown-item", href="/opwaardeer/"+factuur._id+"/"+loginHash,class="button") opwaardeer naar factuur
           if bestellingen.length != 0
             table(class="table table-#{settings.oppo} table-striped")
               tbody
@@ -162,9 +162,9 @@ html
                     td
                       a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                       div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                        a(class="dropdown-item", href='/edit-bestelling/'+bestelling._id) aanpassen
+                        a(class="dropdown-item", href='/edit-bestelling/'+bestelling._id+"/"+loginHash) aanpassen
                         //Sa(class="dropdown-item", href='/delete-bestelling/'+bestelling._id) verwijder
-                        a(class="dropdown-item", href='/view-bestelling/'+bestelling._id) bekijk 
+                        a(class="dropdown-item", href='/view-bestelling/'+bestelling._id+"/"+loginHash) bekijk 
         else        
           if contacten.length != 0
             table(class="table table-#{settings.thema} table-striped")
@@ -178,7 +178,7 @@ html
                 each contact in contacten 
                   tr
                     td
-                      a(href='/facturen/'+contact._id, class="button")
+                      a(href='/facturen/'+contact._id+"/"+loginHash, class="button")
                         button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=contact.contactPersoon
                     td=contact.firma
                     td=contact.straat
@@ -220,23 +220,23 @@ html
                   tr
                     if factuur.factuurNr
                       td
-                        a(href='/bestellingen/'+factuur._id, class="button")
+                        a(href='/bestellingen/'+factuur._id+"/"+loginHash, class="button")
                           button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
                     else
                       td
-                        a(href='/bestellingen/'+factuur._id, class="button")
+                        a(href='/bestellingen/'+factuur._id+"/"+loginHash, class="button")
                           button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="OfferteNr "+factuur.offerteNr
                     td
                       script.
                           var id = "#{factuur._id}";
                           function K#{factuur.factuurNr}(){
-                            window.location="/change-betaald/"+"#{factuur._id}";
+                            window.location="/change-betaald/"+"#{factuur._id}/#{loginHash}";
                           }
                       if !contact
                           script.
                             var id = "#{factuur._id}";
                             function K#{factuur.factuurNr}(){
-                              window.location="/change-betaald2/"+"#{factuur._id}";
+                              window.location="/change-betaald2/"+"#{factuur._id}/#{loginHash}";
                             }
                       div(class="custom-control custom-switch")
                         if factuur.isBetaald
@@ -249,24 +249,24 @@ html
                     td=factuur.totaal+"€"
                     td=(factuur.totaal*1.21).toFixed(2)+"€"
                     td
-                      a(href='/facturen/'+factuur.contact, class="button")
+                      a(href='/facturen/'+factuur.contact+"/"+loginHash, class="button")
                         button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
                     td=factuur.datum
                     td
                       a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                       div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                        a(class="dropdown-item",href='/edit-factuur/'+factuur.contact+'/'+factuur._id) aanpassen
-                        a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id) verwijder
-                        a(class="dropdown-item", href='/view-factuur/'+factuur._id,class="button") bekijk
+                        a(class="dropdown-item",href='/edit-factuur/'+factuur.contact+'/'+factuur._id+"/"+loginHash) aanpassen
+                        a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id+"/"+loginHash) verwijder
+                        a(class="dropdown-item", href='/view-factuur/'+factuur._id+"/"+loginHash,class="button") bekijk
                         div(class="dropdown-divider")
                         if factuur.factuurNr
-                          a(class="dropdown-item", href='/createPDF/'+factuur._id,id="target",target="_blank") download factuur (nl)
-                          a(class="dropdown-item", href='/createPDF-eng/'+factuur._id,id="target",target="_blank") download factuur (eng)
+                          a(class="dropdown-item", href='/createPDF/'+factuur._id+"/"+loginHash,id="target",target="_blank") download factuur (nl)
+                          a(class="dropdown-item", href='/createPDF-eng/'+factuur._id+"/"+loginHash,id="target",target="_blank") download factuur (eng)
                         if factuur.offerteNr
-                          a(class="dropdown-item", href='/offerte/'+factuur._id,id="target",target="_blank") download offerte
+                          a(class="dropdown-item", href='/offerte/'+factuur._id+"/"+loginHash,id="target",target="_blank") download offerte
                           if !factuur.factuurNr
                             div(class="dropdown-divider")
-                              a(class="dropdown-item", href="/opwaardeer/"+factuur._id,class="button") opwaardeer naar factuur
+                              a(class="dropdown-item", href="/opwaardeer/"+factuur._id+"/"+loginHash,class="button") opwaardeer naar factuur
           if bestellingen.length != 0
             table(class="table table-#{settings.thema} table-striped")
               tbody
@@ -285,6 +285,6 @@ html
                     td
                       a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                       div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                        a(class="dropdown-item", href='/edit-bestelling/'+bestelling._id) aanpassen
+                        a(class="dropdown-item", href='/edit-bestelling/'+bestelling._id+"/"+loginHash) aanpassen
                         //a(class="dropdown-item", href='/delete-bestelling/'+bestelling._id) verwijder
-                        a(class="dropdown-item", href='/view-bestelling/'+bestelling._id) bekijk 
+                        a(class="dropdown-item", href='/view-bestelling/'+bestelling._id+"/"+loginHash) bekijk 
