@@ -65,3 +65,11 @@ html
                 a(href='/inch'+"/"+loginHash,class="button") 
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Inch & cm omzetten
               hr
+            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
+             if settings.thema == "light"
+               a(href='/percentage'+"/"+loginHash,class="button") 
+                 button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block" ) Percentage Berkenen
+             if settings.thema != "light"
+               a(href='/percentage'+"/"+loginHash,class="button") 
+                 button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Percentage Berkenen
+             hr

@@ -2915,6 +2915,72 @@ app.post('/epo-sil-oplossing/:loginHash',function(req,res){
     }
   });}
 });
+app.post('/percentage/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
+  console.log("inch post")
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+      var percent = req.body.percent;
+      var bedrag = req.body.bedrag;
+      if(percent !== "" && bedrag !== ""){
+        var oplossing = bedrag*(percent/100.0);
+        console.log("error allebei ingevuld");
+        res.render('percentage', {
+          'settings': settings[0],
+          'description': "Berekening voor percentage",
+          "oplossing":oplossing,
+          "loginHash":req.params.loginHash
+        });
+      }else{
+        console.log("error niets ingevuld");
+        res.render('inch', {
+          'settings': settings[0],
+          'description': "Berekening voor inch & cm omzettingen",
+          "error":1,
+          "loginHash": req.params.loginHash
+        });
+      }
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+      console.log(legeSettings);
+      res.redirect('/settings');
+      if (err) {
+        console.log(err);
+      }
+    }
+  });}
+});
+app.get('/percentage/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {
+      res.render('percentage', {
+        'settings': settings[0],
+        'description': "Berekening voor percentage",
+        "loginHash" : req.params.loginHash
+      });
+    } else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+      console.log(legeSettings);
+      res.redirect('/settings');
+      if (err) {
+        console.log(err);
+      }
+    }
+  });
+}
+});
+
 app.get('/inch/:loginHash',function(req,res){
   if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {

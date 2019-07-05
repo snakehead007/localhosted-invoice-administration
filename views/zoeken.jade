@@ -165,6 +165,8 @@ html
                         a(class="dropdown-item", href='/edit-bestelling/'+bestelling._id+"/"+loginHash) aanpassen
                         //Sa(class="dropdown-item", href='/delete-bestelling/'+bestelling._id) verwijder
                         a(class="dropdown-item", href='/view-bestelling/'+bestelling._id+"/"+loginHash) bekijk 
+          if bestellingen.length==0 && facturen.length==0 && contacten.length==0
+                div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Niets gevonden
         else        
           if contacten.length != 0
             table(class="table table-#{settings.thema} table-striped")
@@ -288,3 +290,6 @@ html
                         a(class="dropdown-item", href='/edit-bestelling/'+bestelling._id+"/"+loginHash) aanpassen
                         //a(class="dropdown-item", href='/delete-bestelling/'+bestelling._id) verwijder
                         a(class="dropdown-item", href='/view-bestelling/'+bestelling._id+"/"+loginHash) bekijk 
+                        
+          if bestellingen.length==0 && facturen.length==0 && contacten.length==0
+              div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Niets gevonden
