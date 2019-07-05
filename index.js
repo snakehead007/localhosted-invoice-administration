@@ -2617,7 +2617,7 @@ app.get('/mat/:loginHash',function(req,res){
   if(checkSession(req.params.loginHash,res)){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
-      Materiaal.find({},function(err,materialen){
+      Materiaal.find({}).sort('naam').exec(function(err,materialen){
         if(!err){
           res.render('mat', {
             'materialen':materialen,

@@ -31,33 +31,37 @@ html
                   input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
     main
       div(class="jumbotron")
-        div(class="container")
+        div(class="container-fluid")
           div(class="row")
-            div(class="col")
+            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/epo-sil'+"/"+loginHash,class="button") 
                   button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Epoxie & Siliconen berekenen
               if settings.thema != "light"
                 a(href='/epo-sil'+"/"+loginHash,class="button") 
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Epoxie & Siliconen berekenen
-            div(class="col")
+              hr
+            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/lam'+"/"+loginHash,class="button") 
                   button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block" disabled) A1 Lamineren berekenen
               if settings.thema != "light"
                 a(href='/lam'+"/"+loginHash,class="button") 
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block" disabled) A1 Lamineren berekenen
-            div(class="col")
+                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block" disabled) A1 Lamineren Berekenen
+              hr
+            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/prijs'+"/"+loginHash,class="button") 
                   button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Prijs berekeningen
               if settings.thema != "light"
                   a(href='/prijs'+"/"+loginHash,class="button") 
                     button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Prijs berekeningen
-             div(class="col")
+              hr
+             div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/inch'+"/"+loginHash,class="button") 
                   button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Inch & cm omzetten
               if settings.thema != "light"
                 a(href='/inch'+"/"+loginHash,class="button") 
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Inch & cm omzetten
+              hr
