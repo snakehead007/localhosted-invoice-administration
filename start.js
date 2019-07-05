@@ -1,4 +1,4 @@
-//- V1.6
+//- V1.8
 var forever=require('forever');
 
 var child = new (forever.Monitor)('index.js', {
