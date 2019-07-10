@@ -32,8 +32,8 @@ html
     main
       div(class="jumbotron")
         div(class="container-fluid")
-          div(class="row my-n10")
-            div(class="col-lg-6 col-12 col-sm-12 col-md-6 mr-auto")
+          div(class="row")
+            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/contacten/#{loginHash}',class="button") 
                   button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Contacten
@@ -41,7 +41,7 @@ html
                 a(href='/contacten/#{loginHash}',class="button") 
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Contacten
               hr
-            div(class="col-lg-6 col-12 col-sm-12 col-md-6 mr-auto")
+            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/facturen/#{loginHash}',class="button") 
                   button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Alle facturen
@@ -49,7 +49,7 @@ html
                 a(href='/facturen/#{loginHash}',class="button") 
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Alle facturen
               hr
-            div(class="col-lg-6 col-12 col-sm-12 col-md-6 mr-auto")
+            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/chart/'+jaar+"/#{loginHash}",class="button") 
                   button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Grafiek
@@ -57,7 +57,7 @@ html
                 a(href='/chart/'+jaar+"/#{loginHash}",class="button") 
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Grafiek
               hr
-            div(class="col-lg-6 col-12 col-sm-12 col-md-6 mr-auto")
+            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/berekeningen/#{loginHash}',class="button") 
                   button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Berekeningen
@@ -65,7 +65,7 @@ html
                 a(href='/berekeningen/#{loginHash}',class="button") 
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Berekeningen
               hr    
-            div(class="col-lg-6 col-12 col-sm-12 col-md-6 mr-auto")
+            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/mat/#{loginHash}',class="button") 
                   button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Materialens

@@ -218,11 +218,9 @@ app.get('/', function(req, res) {
   });
 });
 app.get('/index/:loginHash',function(req,res){
-  console.log("being redirected to index");
   if(checkSession(req.params.loginHash,res)){
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
-    console.log("rendering index page");
     res.render('index', {"description": "MDSART factuurbeheer","settings": settings[0],"jaar": new Date().getFullYear(),"loginHash":loginHash});
     }});
   }else{
@@ -297,7 +295,6 @@ app.get('/login',function(req,res){
 app.post('/',function(req,res){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
-    console.log(req.body.login);
     if(checkSession(req.body.login,res)){
       res.render('index', {"description": "MDSART factuurbeheer","settings": settings[0],"jaar": new Date().getFullYear(),"loginHash":loginHash});
     }
@@ -351,10 +348,7 @@ app.post('/add-contact/:loginHash', function(req, res) {
     });
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
-      console.log("settings found " + settings[0]);
     } else {
-      console.log("ERR: settings not found!");
-      console.log("settings object is nog niet gemaakt, nieuwe word gecreërd");
       legeSettings = new Settings();
       legeSettings.save(function(err) {
         if (err) {
@@ -482,8 +476,6 @@ app.post('/edit-bestelling/:id/:loginHash', function(req, res) {
           Bestelling.update({_id: req.params.id}, updateBestelling, function(err, numrows) {
                     if(!err){
                       var tot = factuur.totaal-(bestelling.aantal*bestelling.bedrag);
-                      console.log(tot +"="+factuur.totaal+"-("+bestelling.aantal+"*"+bestelling.bedrag+")");
-                      console.log(tot+"+("+req.body.aantal+"*"+req.body.bedrag+")-"+factuur.voorschot+")");
                           var newFactuur={
                             totaal: ((tot+(req.body.aantal*req.body.bedrag)-factuur.voorschot))
                           }
@@ -822,7 +814,6 @@ app.post('/edit-contact/:id/:loginHash', function(req, res) {
     mail2: req.body.mail2,
     rekeningnr: req.body.rekeningnr
   };
-  console.log(req.body.lang);
   var message = 'Factuur niet geupdate';
   Contact.update({
     _id: req.params.id
@@ -838,7 +829,6 @@ app.get('/add-offerte/:idc/:loginHash', function(req, res) {
   var date = new Date();
   var jaar = date.getFullYear();
   var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
-  console.log(datum);
   var nroff = 0;
   var idn;
   var _n = null;
@@ -896,20 +886,20 @@ app.get('/add-offerte/:idc/:loginHash', function(req, res) {
                     });
 
                   } else {
-                    console.log("1" + err);
+                    console.log("err: " + err);
                   }
                 });
               } else {
-                console.log("2" + err);
+                console.log("err: " + err);
               }
             });
           } else {
-            console.log("3" + err);
+            console.log("err: " + err);
           }
         });
       });
     } else {
-      console.log("4" + err);
+      console.log("err: " + err);
     }
   });}
 });
@@ -953,7 +943,6 @@ app.get('/add-creditnota/:idc/:loginHash', function(req, res) {
                     contactPersoon: contact.contactPersoon,
                     totaal:0,
                   });
-                  console.log(newFactuur);
                   Contact.updateOne({
                     aantalFacturen: contact.aantalFacturen + 1
                   }, function(err) {
@@ -1560,12 +1549,10 @@ app.get('/edit-profile/:loginHash', function(req, res) {
             console.log("err edit-profile: " + err);
           }
         });
-        console.log(legeProfiel)
         res.render('edit-profile', {
           'profile': legeProfiel
         });
       } else {
-        console.log("\nprofile: " + profile[0]);
         var _nr = profile[0].nr;
         var nr_str = _nr.toString();
         if (nr_str.toString().length == 1) {
@@ -1621,7 +1608,6 @@ app.post('/edit-profile/:id/:loginHash', function(req, res) {
 
   var _nrcred2 = req.body.nrcred.toString();
   var _nrcred = Number(_nrcred2.substring(_nrcred2.length - 3));
-  console.log(_nrcred);
 
   var updateProfile = {
     firma: req.body.firma,
@@ -1800,7 +1786,6 @@ app.post('/zoeken/:loginHash', function(req,res){
   var contacten = [];
   var facturen = [];
   var bestellingen = [];
-  console.log("ZOEKEN OP \""+str+"\"");
   Contact.find({},function(err,contacten_){
     if(!err){
       Factuur.find({},function(err,facturen_){
@@ -1856,9 +1841,6 @@ app.post('/zoeken/:loginHash', function(req,res){
               var facturen_d = distinct(facturen);
               Settings.find({}, function(err, settings) {
                 if (!err && settings.length != 0) {
-                  console.log("Dit gevonden:")
-                  console.log(contacten+bestellingen+facturen);
-                  console.log("redirecting");
                   res.render('zoeken',{"description":"Zoeken op \""+str+"\"","settings":settings[0],"contacten":contacten_d,"bestellingen":bestellingen_d,"facturen":facturen_d,"loginHash":req.params.loginHash});
                 } else {
                   legeSettings = new Settings();
@@ -1888,17 +1870,12 @@ app.post('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {
     for(var i= 0; i<=bestellingen.length-1; i++){
       totBes += bestellingen[i].totaal;
     }
-    console.log(totBes);
-    console.log(req.body.voorschot+"voorschot");
-    console.log(factuur.voorschot+" :voorschot oud");
     var _t;
     if(req.body.voorschot){
        _t = totBes-req.body.voorschot;
-       console.log("new");
      }else{
        var _t = totBes
     }
-    console.log(_t+"="+totBes+"-("+factuur.voorschot+"-"+req.body.voorschot+")");
     if(req.body.voorschot != ""){
       var updateFactuur = {
         datum: req.body.datum,
@@ -1943,17 +1920,12 @@ app.post('/edit-creditnota/:idc/:idf', function(req, res) {
     for(var i= 0; i<=bestellingen.length-1; i++){
       totBes += bestellingen[i].totaal;
     }
-    console.log(totBes);
-    console.log(req.body.voorschot+"voorschot");
-    console.log(factuur.voorschot+" :voorschot oud");
     var _t;
     if(req.body.voorschot){
        _t = totBes-req.body.voorschot;
-       console.log("new");
      }else{
        var _t = totBes
     }
-    console.log(_t+"="+totBes+"-("+factuur.voorschot+"-"+req.body.voorschot+")");
     if(req.body.voorschot != ""){
       var updateFactuur = {
         datum: req.body.datum,
@@ -2000,17 +1972,12 @@ app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {
     for(var i= 0; i<=bestellingen.length-1; i++){
       totBes += bestellingen[i].totaal;
     }
-    console.log(totBes);
-    console.log(req.body.voorschot+"voorschot");
-    console.log(factuur.voorschot+" :voorschot oud");
     var _t;
     if(req.body.voorschot){
        _t = totBes-req.body.voorschot;
-       console.log("new");
      }else{
        var _t = totBes
     }
-    console.log(_t+"="+totBes+"-("+factuur.voorschot+"-"+req.body.voorschot+")");
     if(req.body.voorschot != ""){
       var updateFactuur = {
         datum: req.body.datum,
@@ -2058,17 +2025,12 @@ app.post('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {
     for(var i= 0; i<=bestellingen.length-1; i++){
       totBes += bestellingen[i].totaal;
     }
-    console.log(totBes);
-    console.log(req.body.voorschot+"voorschot");
-    console.log(factuur.voorschot+" :voorschot oud");
     var _t;
     if(req.body.voorschot){
        _t = totBes-req.body.voorschot;
-       console.log("new");
      }else{
        var _t = totBes
     }
-    console.log(_t+"="+totBes+"-("+factuur.voorschot+"-"+req.body.voorschot+")");
     if(req.body.voorschot != ""){
       var updateFactuur = {
         datum: req.body.datum,
@@ -2269,17 +2231,14 @@ app.get('/change-betaald/:id/:loginHash', function(req, res) {
     _id: req.params.id
   }, function(err, factuur) {
     if (!err) {
-      console.log("factuur found: " + factuur);
       var voor = new Boolean();
       voor = !(factuur.isBetaald);
-      console.log("change betaald to " + voor);
       Factuur.updateOne({
         _id: req.params.id
       }, {
         isBetaald: voor
       }, function(err, result) {
         if (!err) {
-          console.log("result" + result);
           res.redirect('/facturen/' + factuur.contact+"/"+req.params.loginHash);
         }
       });
@@ -2294,10 +2253,8 @@ app.get('/change-betaald2/:id/:loginHash', function(req, res) {
     _id: req.params.id
   }, function(err, factuur) {
     if (!err) {
-      console.log("factuur found: " + factuur);
       var voor = new Boolean();
       voor = !(factuur.isBetaald);
-      console.log("change betaald to " + voor);
       //update(req.params.idf,voor);
       Factuur.updateOne({
         _id: req.params.id
@@ -2305,7 +2262,6 @@ app.get('/change-betaald2/:id/:loginHash', function(req, res) {
         isBetaald: voor
       }, function(err, result) {
         if (!err) {
-          console.log("result" + result);
           res.redirect('/facturen/'+req.params.loginHash);
         }
       });
@@ -2330,7 +2286,6 @@ app.get('/settings/:loginHash', function(req, res) {
           console.log("err in settings: " + err);
         }
       });
-      console.log(legeSettings);
       res.redirect('/');
       if (err) {
         console.log(err);
@@ -2340,7 +2295,6 @@ app.get('/settings/:loginHash', function(req, res) {
 });
 app.get('/change-theme/:th/:loginHash', function(req, res) {
   if(checkSession(req.params.loginHash,res)){
-    console.log("changing theme...");
   Settings.find({}, function(err, settings) {
     if (!err) {
       var oppo;
@@ -2403,7 +2357,6 @@ app.get('/berekeningen/:loginHash',function(req,res){
           console.log("err in settings: " + err);
         }
       });
-      console.log(legeSettings);
       res.redirect('/settings');
       if (err) {
         console.log(err);
@@ -2431,7 +2384,6 @@ app.get('/prijs/:loginHash',function(req,res){
           console.log("err in settings: " + err);
         }
       });
-      console.log(legeSettings);
       res.redirect('/settings');
       if (err) {
         console.log(err);
@@ -2634,7 +2586,6 @@ app.get('/mat/:loginHash',function(req,res){
           console.log("err in settings: " + err);
         }
       });
-      console.log(legeSettings);
       res.redirect('/settings');
       if (err) {
         console.log(err);
@@ -2698,7 +2649,6 @@ app.get('/add-mat/:loginHash',function(req,res){
           console.log("err in settings: " + err);
         }
       });
-      console.log(legeSettings);
       res.redirect('/settings');
       if (err) {
         console.log(err);
@@ -2727,7 +2677,6 @@ app.post('/add-mat/:loginHash',function(req,res){
           console.log("err in settings: " + err);
         }
       });
-      console.log(legeSettings);
       res.redirect('/settings');
       if (err) {
         console.log(err);
@@ -2740,7 +2689,6 @@ app.get('/delete-mat/:id/:loginHash',function(req,res){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       Materiaal.remove({_id:req.params.id},function(err,mat){
-        console.log("succesfully deleted material");
       });
       res.redirect('/mat/'+req.params.loginHash);
     } else {
@@ -2750,7 +2698,6 @@ app.get('/delete-mat/:id/:loginHash',function(req,res){
           console.log("err in settings: " + err);
         }
       });
-      console.log(legeSettings)   ;
       res.redirect('/settings');
       if (err) {
         console.log(err);
@@ -2774,7 +2721,6 @@ app.get('/lam/:loginHash',function(req,res){
           console.log("err in settings: " + err);
         }
       });
-      console.log(legeSettings);
       res.redirect('/settings');
       if (err) {
         console.log(err);
@@ -2814,7 +2760,6 @@ app.post('/lam-oplossing/:loginHash',function(req,res){
           console.log("err in settings: " + err);
         }
       });
-      console.log(legeSettings);
       res.redirect('/settings');
       if (err) {
         console.log(err);
@@ -2838,7 +2783,6 @@ app.get('/epo-sil/:loginHash',function(req,res){
           console.log("err in settings: " + err);
         }
       });
-      console.log(legeSettings);
       res.redirect('/settings');
       if (err) {
         console.log(err);
@@ -2851,50 +2795,29 @@ app.post('/epo-sil-oplossing/:loginHash',function(req,res){
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       var L = Number(req.body.L);
-      console.log("L: "+L);
       var B = Number(req.body.B);
-      console.log("B: "+B);
       var H = Number(req.body.H);
-      console.log("H: "+H);
       var X = Number(req.body.X);
-      console.log("X: "+X);
       var W = Number(req.body.W);
-      console.log("W: "+W);
       //Siliconen
       var As = (L*B*H)*0.0185;
-      console.log("As: "+As);
       var Dos = ( (L+X) * (B+X) * (H+X) ) * 0.0185;
-      console.log("Dos: "+Dos);
       var Ds = Dos - As;
-      console.log("Ds: "+Ds);
       var Ms = (1/2.23)*Ds;//Materiaal Uren siliconen
-      console.log("Ms: "+Ms);
       var Pws = (W * Ms) //prijs werkuren voor siliconen
-      console.log("Pws: "+Pws);
       var Ps =(13.5 * Ds); //Prijs siliconen
-      console.log("Ps: "+Ps);
       //Epoxie
       var Ae = ((L+X)*(B+X)*(H+X))*0.018;
-      console.log("Ae: "+Ae);
       var Doe = ((L+X+0.4)*(B+X+0.4)*(H+X+0.4))*0.018;
-      console.log("Doe: "+Doe);
       var De = Doe - Ae;
-      console.log("De: "+De);
       var Me = (1/3.50)*De;//Materiaal Uren epoxie
-      console.log("Me: "+Me);
       var Pwe = (W * Me); //prijs werkuren epoxie
-      console.log("Pwe: "+Pwe);
       var Pe = (10.88 * De);
-      console.log("Pe: "+Pe);
       //TOTAAL
       var Ptw = Pwe + Pws;//Prijs totaal werkuren
-      console.log("Ptw: "+Ptw);
       var Ptm = Pe + Ps //Prijs totaal materiaal
-      console.log("Ptm: "+Ptm);
       var Pt = Ptw + Ptm; //Prijs totaal (werkuren + materiaal)
-      console.log("Pt: "+Pt);
       var Mt = Me + Ms; //totaal uren voor alle materiaal
-      console.log("Mt: "+Mt);
       res.render("epo-sil-oplossing",{"description":"Oplossing van berekening","settings":settings[0],
                               "L":L,"B":B,"H":H,"W":W,"Ds":De,"As":As,"Dos":Dos,"Ds":Ds,"Ms":Ms,"Ae":Ae,"Doe":Doe,"De":De,"Me":String(Me).toTime(),
                               "Ls":L+X,"Bs":B+X,"Hs":H+X,"Le":L+0.4+X,"Be":B+0.4+X,"He":H+0.4+X,"Ms":String(Ms).toTime(),"Pws":Pws,"Ps":Ps,"Pwe":Pwe,
@@ -2917,14 +2840,12 @@ app.post('/epo-sil-oplossing/:loginHash',function(req,res){
 });
 app.post('/percentage/:loginHash',function(req,res){
   if(checkSession(req.params.loginHash,res)){
-  console.log("inch post")
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       var percent = req.body.percent;
       var bedrag = req.body.bedrag;
       if(percent !== "" && bedrag !== ""){
         var oplossing = bedrag*(percent/100.0);
-        console.log("error allebei ingevuld");
         res.render('percentage', {
           'settings': settings[0],
           'description': "Berekening voor percentage",
@@ -3008,13 +2929,10 @@ app.get('/inch/:loginHash',function(req,res){
 });
 app.post('/inch/:loginHash',function(req,res){
   if(checkSession(req.params.loginHash,res)){
-  console.log("inch post")
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       var inch = req.body.inch;
       var cm = req.body.cm;
-      console.log("inch :"+inch);
-      console.log("cm :"+cm);
       if(inch !== "" && cm !== ""){
         console.log("error allebei ingevuld");
         res.render('inch', {
@@ -3085,7 +3003,6 @@ async function update(id, voor) {
   }, {
     isBetaald: voor
   });
-  console.log("updated");
 }
 function isNumeric(num){
   return !isNaN(num)
@@ -3102,13 +3019,11 @@ String.prototype.toTime = function () {
   return hours + 'u ' + minutes + 'm';
  }
  function checkSession(login,res){
-   console.log("logging in with: "+loginHash);
    loginHash = login;
    if(loginHash === pass){
-     console.log("passed");
      return true;
    }
-   console.log("not passed");
+   console.log("User failed logging in");
    res.redirect('login');
  }
  function distinct(_array){
