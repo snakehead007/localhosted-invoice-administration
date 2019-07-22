@@ -35,24 +35,28 @@ html
       div(class="jumbotron")
         div(class="row no-gutters")
           if contact
-            div(class="col-4 mr-auto")
-              a(href='/add-factuur/'+contact._id+"/#{loginHash}",class="button")
+            a(role="button", class="btn btn-#{settings.oppo} btn-lg col-4 mr-auto dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Maak
+            div(class="dropdown-menu col-4 mr-auto", aria-labelledby="actionsDropdown")
+              a(href='/add-factuur/'+contact._id+"/#{loginHash}",class="dropdown-item")
                 if settings.thema == "light"
                   button(type="button",id="knop", class="btn btn-#{settings.oppo} btn-lg btn-block")  Nieuwe Factuur
                 if settings.thema != "light"
                   button(type="button",id="knop", class="btn btn-#{settings.thema} btn-lg btn-block")  Nieuwe Factuur
-            div(class="col-4 mr-auto")
-              a(href='/add-offerte/'+contact._id+"/#{loginHash}",class="button")
+              a(href='/add-offerte/'+contact._id+"/#{loginHash}",class="dropdown-item")
                 if settings.thema == "light"
                   button(type="button",id="knop", class="btn btn-#{settings.oppo} btn-lg btn-block")  Nieuwe Offerte
                 if settings.thema != "light"
                   button(type="button",id="knop", class="btn btn-#{settings.thema} btn-lg btn-block")  Nieuwe Offerte
-            div(class="col-2 mr-auto")
-              a(href='/add-creditnota/'+contact._id+"/#{loginHash}",class="button")
+              a(href='/add-creditnota/'+contact._id+"/#{loginHash}",class="dropdown-item")
                 if settings.thema == "light"
-                  button(type="button",id="knop", class="btn btn-#{settings.oppo} btn-lg")  +CN
+                  button(type="button",id="knop", class="btn btn-#{settings.oppo} btn-lg btn-block")  Nieuwe Creditnota
                 if settings.thema != "light"
-                  button(type="button",id="knop", class="btn btn-#{settings.thema} btn-lg")  +CN
+                  button(type="button",id="knop", class="btn btn-#{settings.thema} btn-lg btn-block")  Nieuwe Creditnota
+              a(href='/add-project/'+contact._id+"/#{loginHash}",class="dropdown-item")
+                if settings.thema == "light"
+                  button(type="button",id="knop", class="btn btn-#{settings.oppo} btn-lg btn-block")  Nieuw Project
+                if settings.thema != "light"
+                  button(type="button",id="knop", class="btn btn-#{settings.thema} btn-lg btn-block")  Nieuw Project
           div(class="col-2")
             if contact 
               if !terug
@@ -68,7 +72,7 @@ html
                   if settings.thema != "light"
                     button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
             else
-              a(href='/index/:/#{loginHash}',class="button")
+              a(href='/index/#{loginHash}',class="button")
                 if settings.thema == "light"
                   button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
                 if settings.thema != "light"
