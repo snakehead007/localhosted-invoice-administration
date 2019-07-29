@@ -3388,7 +3388,7 @@ app.post('/add-project/:idc/:loginHash',function(req,res){
                     newProject.save(function(err){
                       console.log(err);
                     });
-            }});
+            }}});
           }
         });
         res.render('add-project', {
@@ -3587,7 +3587,7 @@ app.get('/epo-sil/:loginHash', function(req, res) {
       if (!err && settings.length != 0) {
         res.render('epo-sil', {
           'settings': settings[0],
-          'description': "Berekening voor Epoxie & Siliconen",
+          'description': "Siliconen mal berekenen",
           "loginHash": req.params.loginHash
         });
       } else {
