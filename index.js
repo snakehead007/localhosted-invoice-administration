@@ -206,12 +206,22 @@ var ProjectSchema = new Schema({
   naam: {
     type: String
   },
-  prijs:{
+    werkuren:{
     type:Number
   },
-  materials:[{
+    werkprijs:{
+    type:Number
+  },
+    aantallen:[{
+    type:Number
+  }],
+  materialen:[{
     type:String
-  }]
+  }],
+  contact:{
+    type: Schema.Types.ObjectId,
+    ref: 'Contact'
+  }
 })
 //
 //                                        dddddddd
@@ -3354,6 +3364,56 @@ app.get('/add-project/:idc/:loginHash',function(req,res){
   }
 });
 
+app.post('/add-project/:idc/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash,res)){
+    var materialen = [];
+    var aantallen = [];
+    Settings.find({}, function(err, settings) {
+      if (!err && settings.length != 0) {
+        Contact.find({},function(err,contact){
+          if(!contact){
+            res.redirect('add-project/'+req.params.loginHash);
+          }else if(contact){
+            Materiaal.findOne({naam: req.body.o001,function(err,m001){if(m001){
+                    materialen.push(m001.naam);
+                    aantallen.push(m001.prijs);
+                    var newProject = new Project({
+                      naam: req.body.naam,
+                      werkuren: req.body.werkuren,
+                      werkprijs: req.body.werprijs,
+                      materialen: materialen,
+                      aantallen: aantallen,
+                      contact: contact._id
+                    });
+                    newProject.save(function(err){
+                      console.log(err);
+                    });
+            }});
+          }
+        });
+        res.render('add-project', {
+          'materialen':materialen,
+          'settings': settings[0],
+          'description': "Project toevoegen",
+          "loginHash": req.params.loginHash
+        });
+      } else {
+        legeSettings = new Settings();
+        legeSettings.save(function(err) {
+          if (err) {
+            console.log("err in settings: " + err);
+          }
+        });
+        console.log(legeSettings);
+        res.redirect('/settings');
+        if (err) {
+          console.log(err);
+        }
+      }
+    });
+  }
+});
+
 
 
 
@@ -3559,7 +3619,7 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {
         var As = (L * B * H) * 0.0185;
         var Dos = ((L + X) * (B + X) * (H + X)) * 0.0185;
         var Ds = Dos - As;
-        var Ms = (1 / 2.23) * Ds; //Materiaal Uren siliconen
+        var Ms = (1 / 2.5) * Ds; //Materiaal Uren siliconen
         var Pws = (W * Ms) //prijs werkuren voor siliconen
         var Ps = (13.5 * Ds); //Prijs siliconen
         //Epoxie
