@@ -10,6 +10,11 @@ Quotations can be upgraded to an invoice.
 Both invoices and quotations are available for download.
 The ability to edit your own profile for the invoices and quotations are also available.
 For invoices there is a switch, to keep that it has been payed or not.
+Other functionalities are:
+  - yearly chart
+  - adding materials (with calculations)
+  - calculations (inch to cm, percentage, ...)
+  - search function
 
 There are 4 themes: Grey, Dark, White, Blue, Red
 
@@ -38,7 +43,9 @@ preparation
 
 [Linux](https://nodejs.org/en/download/package-manager/)
 
+#### download and install Mongodb community server:
 
+[MongoDB Download Center: Community Center](https://www.mongodb.com/download-center/community)
 
 ##### install these npm packages
 
