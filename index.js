@@ -3641,6 +3641,7 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {
           "B": B,
           "H": H,
           "W": W,
+          "X": X,
           "Ds": De,
           "As": As,
           "Dos": Dos,
@@ -3666,6 +3667,90 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {
           "Mt": String(Mt).toTime(),
           "Pe": Pe,
           "loginHash": req.params.loginHash
+        });
+      } else {
+        legeSettings = new Settings();
+        legeSettings.save(function(err) {
+          if (err) {
+            console.log("err in settings: " + err);
+          }
+        });
+        console.log(legeSettings);
+        res.redirect('/settings');
+        if (err) {
+          console.log(err);
+        }
+      }
+    });
+  }
+});
+
+app.post('/epo-sil-marge/:loginHash', function(req, res) {
+  if (checkSession(req.params.loginHash, res)) {
+    Settings.find({}, function(err, settings) {
+      if (!err && settings.length != 0) {
+        var L = Number(req.body.L);
+        var B = Number(req.body.B);
+        var H = Number(req.body.H);
+        var X = Number(req.body.X);
+        var W = Number(req.body.W);
+        var marge = Number(req.body.marge);
+        //Siliconen
+        var As = (L * B * H) * 0.0185;
+        var Dos = ((L + X) * (B + X) * (H + X)) * 0.0185;
+        var Ds = Dos - As;
+        var Ms = (1 / 2.5) * Ds; //Materiaal Uren siliconen
+        var Pws = (W * Ms) //prijs werkuren voor siliconen
+        var Ps = (13.5 * Ds); //Prijs siliconen
+        //Epoxie
+        var Ae = ((L + X) * (B + X) * (H + X)) * 0.018;
+        var Doe = ((L + X + 0.4) * (B + X + 0.4) * (H + X + 0.4)) * 0.018;
+        var De = Doe - Ae;
+        var Me = (1 / 3.50) * De; //Materiaal Uren epoxie
+        var Pwe = (W * Me); //prijs werkuren epoxie
+        var Pe = (10.88 * De);
+        //TOTAAL
+        var Ptw = Pwe + Pws; //Prijs totaal werkuren
+        var Ptm = Pe + Ps //Prijs totaal materiaal
+        var Pt = Ptw + Ptm; //Prijs totaal (werkuren + materiaal)
+        var Mt = Me + Ms; //totaal uren voor alle materiaal
+
+        var totmarge = Pt + (Pt/100)*marge;
+        res.render("epo-sil-oplossing", {
+          "description": "Oplossing van berekening",
+          "settings": settings[0],
+          "L": L,
+          "B": B,
+          "H": H,
+          "W": W,
+          "X": X,
+          "Ds": De,
+          "As": As,
+          "Dos": Dos,
+          "Ds": Ds,
+          "Ms": Ms,
+          "Ae": Ae,
+          "Doe": Doe,
+          "De": De,
+          "Me": String(Me).toTime(),
+          "Ls": L + X,
+          "Bs": B + X,
+          "Hs": H + X,
+          "Le": L + 0.4 + X,
+          "Be": B + 0.4 + X,
+          "He": H + 0.4 + X,
+          "Ms": String(Ms).toTime(),
+          "Pws": Pws,
+          "Ps": Ps,
+          "Pwe": Pwe,
+          "Ptw": Ptw,
+          "Ptm": Ptm,
+          "Pt": Pt,
+          "Mt": String(Mt).toTime(),
+          "Pe": Pe,
+          "loginHash": req.params.loginHash,
+          "marge":marge,
+          "totmarge":totmarge.toFixed(2)+" €"
         });
       } else {
         legeSettings = new Settings();

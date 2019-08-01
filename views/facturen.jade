@@ -191,7 +191,7 @@ html
                         if !contact
                           a(href='/bestellingen/'+factuur._id+'/t'+"/#{loginHash}", class="button")
                             button(type="button" class="btn btn-outline-#{settings.oppo}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="Offerte "+factuur.offerteNr
-                      if factuur.creditnr && !factuur.offerteNr && !factuur.factuur.Nr  
+                      if factuur.creditnr && !factuur.offerteNr && !factuur.factuurNr  
                         a(href='/bestellingen/'+factuur._id+"/#{loginHash}", class="button")
                           button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="Creditnota "+factuur.creditnr
                     if !contact
@@ -226,10 +226,9 @@ html
                             input(type="checkbox" class="custom-control-input bg-success" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
                             label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal*1.21).toFixed(2)+"€ ,  Openstaand"
                     else
-                      td
                     td
                       a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
-                        div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                      div(class="dropdown-menu", aria-labelledby="actionsDropdown")
                         if !contact
                           a(class="dropdown-item",href='/edit-factuur/'+factuur.contact+'/'+factuur._id+'/t/#{loginHash}') aanpassen
                           a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id+'/t/#{loginHash}') verwijder
