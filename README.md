@@ -24,15 +24,32 @@ Changing from computer, you will have to export and import all data manually (fo
 start the server by:
 --
 
-starting the database
+#### starting the database
+ 
+Linux:
+
 ```
   mongod
 ```
 
-starting node
+Windows/MacOS:
+
+Ensure that Mongodb server is running, and you have database running on port 27017
+
+#### starting node
+
+Linux/MacOs:
+
+use this command in the installed directory
+
 ```
   node start
 ```
+
+Windows:
+
+Execute file "start.bat"
+
 
 preparation
 --
