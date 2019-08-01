@@ -26,19 +26,19 @@ start the server by:
 
 #### starting the database
  
-Linux:
+- Linux:
 
 ```
   mongod
 ```
 
-Windows/MacOS:
+- Windows/MacOS:
 
 Ensure that Mongodb server is running, and you have database running on port 27017
 
 #### starting node
 
-Linux/MacOs:
+- Linux/MacOs:
 
 use this command in the installed directory
 
@@ -46,7 +46,7 @@ use this command in the installed directory
   node start
 ```
 
-Windows:
+- Windows:
 
 Execute file "start.bat"
 
