@@ -322,7 +322,9 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {
                 if (factuur.datum.includes(maand[i]) || factuur.datum.includes(maand_klein[i])) {
                   if (factuur.datum.includes(req.params.jaar)) { //current year
                     if (factuur.factuurNr) { //only factuur not offerte
-                      totaal[i] += factuur.totaal;
+                      if(factuur.isBetaald) {
+                        totaal[i] += factuur.totaal;
+                      }
                     }
                   }
                 }
