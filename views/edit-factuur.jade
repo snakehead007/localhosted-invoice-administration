@@ -53,6 +53,9 @@ html
             div(class="form-group col-md-3")
               label(for="title") Datum
               input(type="text",class="form-control",value=factuur.datum,name="datum")
+            div(class="form-group col-md-3")
+              label(for="title") Betaaldatum
+              input(type="text",class="form-control",value=factuur.datumBetaald,name="datumBetaald")
             if factuur.factuurNr
               div(class="form-group col-md-2")
                 label(for="title") Factuur Nummer

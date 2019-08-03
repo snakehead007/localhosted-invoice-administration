@@ -105,6 +105,9 @@ var FactuurSchema = new Schema({
   datum: {
     type: String
   },
+  datumBetaald:{
+    type: String
+  },
   factuurNr: {
     type: Number
   },
@@ -319,11 +322,13 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {
             var totaal = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             for (var i = 0; i <= 11; i++) {
               for (var factuur of facturen) {
-                if (factuur.datum.includes(maand[i]) || factuur.datum.includes(maand_klein[i])) {
-                  if (factuur.datum.includes(req.params.jaar)) { //current year
-                    if (factuur.factuurNr) { //only factuur not offerte
-                      if(factuur.isBetaald) {
-                        totaal[i] += factuur.totaal;
+                if(factuur.factuurNr){
+                  if (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i])) {
+                    if (factuur.datumBetaald.includes(req.params.jaar)) { //current year
+                      if (factuur.factuurNr) { //only factuur not offerte
+                        if(factuur.isBetaald) {
+                          totaal[i] += factuur.totaal;
+                        }
                       }
                     }
                   }
@@ -627,6 +632,7 @@ app.get('/bestellingen/:idf/:loginHash', function(req, res) {
                       }
                     });
                   }
+                  console.log(factuur);
                   res.render('bestellingen', {
                     'factuur': factuur,
                     'bestellingen': bestellingen,
@@ -666,6 +672,7 @@ app.get('/bestellingen/:idf/t/:loginHash', function(req, res) {
                       }
                     });
                   }
+                  console.log(factuur);
                   res.render('bestellingen', {
                     'terug': 1,
                     'factuur': factuur,
@@ -1003,7 +1010,7 @@ app.get('/facturen/:loginHash', function(req, res) {
             'facturenLijst': facturen,
             'description': "Alle facturen",
             "settings": settings[0],
-            "loginHash": loginHash
+            "loginHash": req.params.loginHash
           });
         });
       } else {
@@ -1051,7 +1058,8 @@ app.get('/add-factuur/:idc/:loginHash', function(req, res) {
                       datum: datum,
                       factuurNr: String(jaar + nr_str),
                       contactPersoon: contact.contactPersoon,
-                      totaal: 0
+                      totaal: 0,
+                      datumBetaald: datum
                     });
                     Contact.updateOne({
                       aantalFacturen: contact.aantalFacturen + 1
@@ -1344,6 +1352,7 @@ app.post('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {
             factuurNr: req.body.factuurNr,
             voorschot: req.body.voorschot,
             offerteNr: req.body.offerteNr,
+            datumBetaald: req.body.datumBetaald,
             totaal: _t
           };
         } else {
@@ -1351,7 +1360,8 @@ app.post('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {
             datum: req.body.datum,
             factuurNr: req.body.factuurNr,
             voorschot: req.body.voorschot,
-            offerteNr: req.body.offerteNr
+            offerteNr: req.body.offerteNr,
+            datumBetaald: req.body.datumBetaald
           };
         }
 
@@ -1401,6 +1411,7 @@ app.post('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {
             factuurNr: req.body.factuurNr,
             voorschot: req.body.voorschot,
             offerteNr: req.body.offerteNr,
+            datumBetaald: req.body.datumBetaald,
             totaal: _t
           };
         } else {
@@ -1408,7 +1419,8 @@ app.post('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {
             datum: req.body.datum,
             factuurNr: req.body.factuurNr,
             voorschot: req.body.voorschot,
-            offerteNr: req.body.offerteNr
+            offerteNr: req.body.offerteNr,
+            datumBetaald: req.body.datumBetaald
           };
         }
 
@@ -1688,6 +1700,7 @@ app.get('/bestelbon/:idf/:loginHash', function(req, res) {
     });
   }
 });
+
 //  PPPPPPPPPPPPPPPPP                                            ffffffffffffffff    iiii  lllllll
 //  P::::::::::::::::P                                          f::::::::::::::::f  i::::i l:::::l
 //  P::::::PPPPPP:::::P                                        f::::::::::::::::::f  iiii  l:::::l
@@ -3439,10 +3452,14 @@ app.get('/change-betaald/:id/:loginHash', function(req, res) {
       if (!err) {
         var voor = new Boolean();
         voor = !(factuur.isBetaald);
+        var date = new Date();
+        var jaar = date.getFullYear();
+        var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar
         Factuur.updateOne({
           _id: req.params.id
         }, {
-          isBetaald: voor
+          isBetaald: voor,
+          datumBetaald: datum
         }, function(err, result) {
           if (!err) {
             res.redirect('/facturen/' + factuur.contact + "/" + req.params.loginHash);
@@ -3463,11 +3480,14 @@ app.get('/change-betaald2/:id/:loginHash', function(req, res) {
       if (!err) {
         var voor = new Boolean();
         voor = !(factuur.isBetaald);
-        //update(req.params.idf,voor);
+        var date = new Date();
+        var jaar = date.getFullYear();
+        var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar
         Factuur.updateOne({
           _id: req.params.id
         }, {
-          isBetaald: voor
+          isBetaald: voor,
+          datumBetaald: datum
         }, function(err, result) {
           if (!err) {
             res.redirect('/facturen/' + req.params.loginHash);
