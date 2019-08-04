@@ -1,8 +1,33 @@
 {
   "name": "mdsart",
-  "version": "1.8",
+  "version": "1.0.0",
   "description": "this program is used for managing and administrating invoices and generating them into .pdf format",
   "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "braces": "^2.3.2",
+    "bytes": "^3.1.0",
+    "chartjs": "^0.3.24",
+    "clean-css": "^4.2.1",
+    "constantinople": "^3.1.2",
+    "content-disposition": "^0.5.3",
+    "express": "^4.17.1",
+    "finalhandler": "^1.1.2",
+    "forever": "^1.0.0",
+    "forever-monitor": "^1.7.1",
+    "iconv-lite": "^0.4.24",
+    "jade": "^1.11.0",
+    "lodash": "^4.17.15",
+    "mongodb": "^3.2.7",
+    "mongodb-core": "^3.2.7",
+    "mongoose": "^5.6.8",
+    "mquery": "^3.2.1",
+    "npm": "^6.10.2",
+    "qs": "^6.7.0",
+    "raw-body": "^2.4.1",
+    "serve-static": "^1.14.1"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,14 +40,5 @@
   "bugs": {
     "url": "https://github.com/snakehead007/localhosted-invoice-administration/issues"
   },
-  "homepage": "https://github.com/snakehead007/localhosted-invoice-administration#readme",
-  "dependencies": {
-    "chartjs": "^0.3.24",
-    "express": "^4.16.4",
-    "forever": "^1.0.0",
-    "forever-monitor": "^1.7.1",
-    "jade": "^1.11.0",
-    "mongodb": "^3.2.3",
-    "mongoose": "^5.5.6"
-  }
+  "homepage": "https://github.com/snakehead007/localhosted-invoice-administration#readme"
 }
