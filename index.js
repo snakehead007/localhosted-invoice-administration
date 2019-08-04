@@ -323,10 +323,20 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {
             for (var i = 0; i <= 11; i++) {
               for (var factuur of facturen) {
                 if(factuur.factuurNr){
-                  if (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i])) {
-                    if (factuur.datumBetaald.includes(req.params.jaar)) { //current year
-                      if (factuur.factuurNr) { //only factuur not offerte
-                        if(factuur.isBetaald) {
+                  if(factuur.datumBetaald){
+                    if (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i])){
+                      if (factuur.datumBetaald.includes(req.params.jaar)){ //current year
+                        if (factuur.factuurNr) { //only factuur not offerte
+                          if(factuur.isBetaald) {
+                            totaal[i] += factuur.totaal;
+                          }
+                        }
+                      }
+                    }
+                  }else if(factuur.datum.includes(maand[i]) || factuur.datum.includes(maand_klein[i])){
+                    if(factuur.datum.includes(req.params.jaar)){
+                      if(factuur.factuurNr){
+                        if(factuur.isBetaald){
                           totaal[i] += factuur.totaal;
                         }
                       }
