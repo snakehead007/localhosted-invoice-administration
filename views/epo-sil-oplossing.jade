@@ -73,16 +73,16 @@ html
               h4
                 span(class="badge badge-secondary") Berekening Epoxie
             div(class="col-6")
-              p(class="lead") ( #{L}" * #{B}" * #{H}" ) * 0.0185 = #{As.toFixed(3)} kg
+              p(class="lead") ( #{L}" * #{B}" * #{H}" ) * #{s1} = #{As.toFixed(3)} kg
               //Berekening Aantal Siliconen
             div(class="col-6")
-              p(class="lead") ( #{Ls}" * #{Bs}" * #{Hs}" ) * 0.018 = #{Ae.toFixed(3)} kg 
+              p(class="lead") ( #{Ls}" * #{Bs}" * #{Hs}" ) * #{e1} = #{Ae.toFixed(3)} kg 
               //Berekening Aantal epoxie
             div(class="col-6")
-              p(class="lead") ( #{Ls.toFixed(2)}" * #{Bs.toFixed(2)}" * #{Hs.toFixed(2)}" ) * 0.0185 = #{Dos.toFixed(3)} kg
+              p(class="lead") ( #{Ls.toFixed(2)}" * #{Bs.toFixed(2)}" * #{Hs.toFixed(2)}" ) * #{s2} = #{Dos.toFixed(3)} kg
               //Dikte totaal van siliconen
             div(class="col-6")
-              p(class="lead") ( #{Le.toFixed(2)}" * #{Be.toFixed(2)}" * #{He.toFixed(2)}" ) * 0.018 = #{Doe.toFixed(3)} kg
+              p(class="lead") ( #{Le.toFixed(2)}" * #{Be.toFixed(2)}" * #{He.toFixed(2)}" ) * #{e2} = #{Doe.toFixed(3)} kg
               //Dikte totaal van epoxie
             div(class="col-6")
               p(class="lead") #{Dos.toFixed(3)} kg - #{As.toFixed(3)} kg = #{Ds.toFixed(3)} kg
@@ -93,10 +93,10 @@ html
           hr
           div(class="row")
             div(class="col-6")
-              p(class="lead") #{Ds.toFixed(3)} kg / 2.5 kg/uur = #{Ms}
+              p(class="lead") #{Ds.toFixed(3)} kg / #{s3} kg/uur = #{Ms}
               //Uren voor Siliconen
             div(class="col-6")
-              p(class="lead") #{De.toFixed(3)} kg / 3.50 kg/uur = #{Me}
+              p(class="lead") #{De.toFixed(3)} kg / #{e3} kg/uur = #{Me}
               //uren voor epoxie
             div(class="col-6")
               p(class="lead") #{W.toFixed(2)} € * #{Ms} = #{Pws.toFixed(2)} €
@@ -105,10 +105,10 @@ html
               p(class="lead") #{W.toFixed(2)} € * #{Me} = #{Pwe.toFixed(2)} €
               //prijs werkuren voor siliconen
             div(class="col-6")
-              p(class="lead") 13.50 €/uur * #{Ds.toFixed(3)} kg = #{Ps.toFixed(2)} €
+              p(class="lead") #{s4} €/uur * #{Ds.toFixed(3)} kg = #{Ps.toFixed(2)} €
               //Prijs siliconen
             div(class="col-6")
-              p(class="lead") 10.88 €/uur * #{De.toFixed(3)} kg = #{Pe.toFixed(2)} €
+              p(class="lead") #{e4} €/uur * #{De.toFixed(3)} kg = #{Pe.toFixed(2)} €
           hr
         if settings.thema == "dark" || settings.thema == "danger" || settings.thema == "info"
           div(class="row")
