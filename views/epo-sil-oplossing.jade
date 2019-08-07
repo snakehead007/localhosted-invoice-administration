@@ -277,7 +277,7 @@ html
             div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Enkel één veld invullen!
           if error == 2
             div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Niets ingevuld!
-            
+            div(class="col-lg-2 col-md-1 col-sm-0")
         div(class="col-lg-2 col-md-1 col-sm-0")
         button(type="button",onclick="aanpassen()",class="btn btn-#{settings.oppo} btn-md") Gegevens aanpassen
         form(action='/epo-sil-marge/'+loginHash,method='post')
@@ -308,6 +308,7 @@ html
               input(type="number",class="form-control",name="marge",step=".01",placeholder="aantal %")
             div(class="col-lg-2 col-md-1 col-sm-0")
             button(type="submit",class="btn btn-#{settings.oppo}") bereken marge
+            
         hr
         div(class="row")
           div(class="col-lg-5 col-md-4 col-lg-0")

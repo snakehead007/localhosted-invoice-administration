@@ -4,15 +4,15 @@
 #run with sudo to ensure 'killall' command works, you might need sudo also on the 'monogd' command.
 
 clear
-printf "\n-------------------STARTING MONGOD--------------------\n"
+printf "\nSTARTING MONGOD\n"
 mongod --quiet &     #starts mongod as deamon
 sleep 3     #waits for connection start, no more than 3 seconds
-printf "\n-------------------STARTING NODEJS--------------------\n"
+printf "\nSTARTING NODEJS\n"
 node . &    #starts node in directory (index.js)
-printf "\n---------------MongoDB & NodeJS are up!---------------\n";
-read -n1 -r -p "\n----------------Press any key to stop-----------------\n";    #when any key is pressed, the script will commence
+printf "\nMongoDB & NodeJS are up!\n";
+read -n1 -r -p "\nPress any key to stop-\n";    #when any key is pressed, the script will commence
 
-printf "\n--------------Killing Node & Mongod-----------------\n";
+printf "\nKilling Node & Mongod\n";
 killall node;   #kills the node process
 mongod --shutdown;   #kills the mongod process
 

@@ -31,6 +31,38 @@ var SettingsSchema = new Schema({
   nav: {
     type: String,
     default: "dark"
+  },
+  s1:{
+    type: Number,
+    default: 0.039
+  },
+  s2:{
+    type: Number,
+    default: 0.0185
+  },
+  s3:{
+    type: Number,
+    default: 2.23
+  },
+  s4:{
+    type: Number,
+    default: 13.5
+  },
+  e1:{
+    type: Number,
+    default: 0.018
+  },
+  e2:{
+    type: Number,
+    default: 0.018
+  },
+  e3:{
+    type: Number,
+    default: 2
+  },
+  e4:{
+    type: Number,
+    default: 11
   }
 });
 var Settings = mongoose.model('Settings', SettingsSchema);
@@ -553,9 +585,7 @@ app.post('/edit-contact/:id/:loginHash', function(req, res) {
       rekeningnr: req.body.rekeningnr
     };
     var message = 'Factuur niet geupdate';
-    Contact.update({
-      _id: req.params.id
-    }, updateData, function(err, numrows) {
+    Contact.update({ _id: req.params.id}, updateData, function(err, numrows) {
       if (!err) {
         res.redirect('/edit-contact/' + req.params.id + "/" + req.params.loginHash);
       }
@@ -3620,7 +3650,15 @@ app.get('/epo-sil/:loginHash', function(req, res) {
         res.render('epo-sil', {
           'settings': settings[0],
           'description': "Siliconen mal berekenen",
-          "loginHash": req.params.loginHash
+          "loginHash": req.params.loginHash,
+          "e1":settings[0].e1,
+          "e2":settings[0].e2,
+          "e3":settings[0].e3,
+          "e4":settings[0].e4,
+          "s1":settings[0].s1,
+          "s2":settings[0].s2,
+          "s3":settings[0].s3,
+          "s4":settings[0].s4
         });
       } else {
         legeSettings = new Settings();
@@ -3647,20 +3685,21 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {
         var H = Number(req.body.H);
         var X = Number(req.body.X);
         var W = Number(req.body.W);
+        //FORMULE IN BROWSER KUNNEN AANPASSEN
         //Siliconen
-        var As = (L * B * H) * 0.0185;
-        var Dos = ((L + X) * (B + X) * (H + X)) * 0.0185;
+        var As = (L * B * H) * settings[0].s1;//S1
+        var Dos = ((L + X) * (B + X) * (H + X)) * settings[0].s2;//S2
         var Ds = Dos - As;
-        var Ms = (1 / 2.5) * Ds; //Materiaal Uren siliconen
+        var Ms = (1 / settings[0].s3) * Ds; //Materiaal Uren siliconen //S3
         var Pws = (W * Ms) //prijs werkuren voor siliconen
-        var Ps = (13.5 * Ds); //Prijs siliconen
+        var Ps = (settings[0].s4 * Ds); //Prijs siliconen  //S4
         //Epoxie
-        var Ae = ((L + X) * (B + X) * (H + X)) * 0.018;
-        var Doe = ((L + X + 0.4) * (B + X + 0.4) * (H + X + 0.4)) * 0.018;
+        var Ae = ((L + X) * (B + X) * (H + X)) * settings[0].e1;//E1
+        var Doe = ((L + X + 0.4) * (B + X + 0.4) * (H + X + 0.4)) * settings[0].e2;//E2
         var De = Doe - Ae;
-        var Me = (1 / 3.50) * De; //Materiaal Uren epoxie
+        var Me = (1 / settings[0].e3) * De; //Materiaal Uren epoxie //E3
         var Pwe = (W * Me); //prijs werkuren epoxie
-        var Pe = (10.88 * De);
+        var Pe = (settings[0].e4 * De); //E4
         //TOTAAL
         var Ptw = Pwe + Pws; //Prijs totaal werkuren
         var Ptm = Pe + Ps //Prijs totaal materiaal
@@ -3698,7 +3737,15 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {
           "Pt": Pt,
           "Mt": String(Mt).toTime(),
           "Pe": Pe,
-          "loginHash": req.params.loginHash
+          "loginHash": req.params.loginHash,
+          "e1":settings[0].e1,
+          "e2":settings[0].e2,
+          "e3":settings[0].e3,
+          "e4":settings[0].e4,
+          "s1":settings[0].s1,
+          "s2":settings[0].s2,
+          "s3":settings[0].s3,
+          "s4":settings[0].s4
         });
       } else {
         legeSettings = new Settings();
@@ -3728,19 +3775,19 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {
         var W = Number(req.body.W);
         var marge = Number(req.body.marge);
         //Siliconen
-        var As = (L * B * H) * 0.0185;
-        var Dos = ((L + X) * (B + X) * (H + X)) * 0.0185;
+        var As = (L * B * H) * settings[0].s1;
+        var Dos = ((L + X) * (B + X) * (H + X)) * settings[0].s2;
         var Ds = Dos - As;
-        var Ms = (1 / 2.5) * Ds; //Materiaal Uren siliconen
+        var Ms = (1 / settings[0].s3) * Ds; //Materiaal Uren siliconen
         var Pws = (W * Ms) //prijs werkuren voor siliconen
-        var Ps = (13.5 * Ds); //Prijs siliconen
+        var Ps = (settings[0].s4 * Ds); //Prijs siliconen
         //Epoxie
-        var Ae = ((L + X) * (B + X) * (H + X)) * 0.018;
-        var Doe = ((L + X + 0.4) * (B + X + 0.4) * (H + X + 0.4)) * 0.018;
+        var Ae = ((L + X) * (B + X) * (H + X)) * settings[0].e1;
+        var Doe = ((L + X + 0.4) * (B + X + 0.4) * (H + X + 0.4)) * settings[0].e2;
         var De = Doe - Ae;
-        var Me = (1 / 3.50) * De; //Materiaal Uren epoxie
+        var Me = (1 / settings[0].e3) * De; //Materiaal Uren epoxie
         var Pwe = (W * Me); //prijs werkuren epoxie
-        var Pe = (10.88 * De);
+        var Pe = (settings[0].e4 * De);
         //TOTAAL
         var Ptw = Pwe + Pws; //Prijs totaal werkuren
         var Ptm = Pe + Ps //Prijs totaal materiaal
@@ -3782,9 +3829,17 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {
           "Pe": Pe,
           "loginHash": req.params.loginHash,
           "marge":marge,
-          "totmarge":totmarge.toFixed(2)+" €"
+          "totmarge":totmarge.toFixed(2)+" €",
+          "e1":settings[0].e1,
+          "e2":settings[0].e2,
+          "e3":settings[0].e3,
+          "e4":settings[0].e4,
+          "s1":settings[0].s1,
+          "s2":settings[0].s2,
+          "s3":settings[0].s3,
+          "s4":settings[0].s4
         });
-      } else {
+      } else {anpassen/merijntje
         legeSettings = new Settings();
         legeSettings.save(function(err) {
           if (err) {
@@ -3801,6 +3856,77 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {
   }
 });
 
+
+
+app.post('/epo-sil/update-vars/:loginHash',function(req,res){
+  if (checkSession(req.params.loginHash, res)) {
+      Settings.find({}, function(err, settings) {
+        if(!err){
+        var sett = settings[0];
+        var updateData = {
+          e1: req.body.e1,
+          e2: req.body.e2,
+          e3: req.body.e3,
+          e4: req.body.e4,
+          s1: req.body.s1,
+          s2: req.body.s2,
+          s3: req.body.s3,
+          s4: req.body.s4
+        };
+        Settings.update({_id:settings[0]},updateData,function(err,n){
+          if(!err){
+            res.redirect('/epo-sil/aanpassen/'+req.params.loginHash);
+          };
+        });
+      }else {
+        legeSettings = new Settings();
+        legeSettings.save(function(err) {
+          if (err) {
+            console.log("err in settings: " + err);
+          }
+        });
+        console.log(legeSettings);
+        res.redirect('/settings');
+        if (err) {
+          console.log(err);
+        }
+      }
+    });
+    }
+});
+app.get('/epo-sil/aanpassen/:loginHash', function(req, res) {
+  if (checkSession(req.params.loginHash, res)) {
+    Settings.find({}, function(err, settings) {
+      if (!err && settings.length != 0) {
+        res.render('epo-sil', {
+          'settings': settings[0],
+          'description': "Siliconen mal berekenen",
+          "loginHash": req.params.loginHash,
+          "aangepast":1,
+          "e1":settings[0].e1,
+          "e2":settings[0].e2,
+          "e3":settings[0].e3,
+          "e4":settings[0].e4,
+          "s1":settings[0].s1,
+          "s2":settings[0].s2,
+          "s3":settings[0].s3,
+          "s4":settings[0].s4
+        });
+      } else {
+        legeSettings = new Settings();
+        legeSettings.save(function(err) {
+          if (err) {
+            console.log("err in settings: " + err);
+          }
+        });
+        res.redirect('/settings');
+        if (err) {
+          console.log(err);
+        }
+      }
+    });
+  }
+});
 
 app.get('/inch/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
