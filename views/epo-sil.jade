@@ -73,25 +73,26 @@ html
             div(id="vars_id" class="col-12",style="display:none")
               div(class="col-lg-8 col-md-6 col-sm-4")
                 label(for="e1") Ae = ((L + X) * (B + X) * (H + X)) * ____
-                input(type="number",class="form-control",value=e1,name="e1",step=".001",placeholder="e1", required)
+                input(type="string",class="form-control",value=e1,name="e1",placeholder="e1", required)
               div(class="col-lg-8 col-md-6 col-sm-4")
                 label(for="e2") Doe = ((L + X + 0.4) * (B + X + 0.4) * (H + X + 0.4)) * ____
-                input(type="number",class="form-control",value=e2,name="e2",step=".001",placeholder="e2", required)
+                input(type="string",class="form-control",value=e2,name="e2",placeholder="e2", required)
               div(class="col-lg-8 col-md-6 col-sm-4")
                 label(for="e3") Me = (1 / ____) * De
-                input(type="number",class="form-control",value=e3,name="e3",step=".001",placeholder="e3", required)
+                input(type="string",class="form-control",value=e3,name="e3",placeholder="e3", required)
               div(class="col-lg-8 col-md-6 col-sm-4")
                 label(for="e4") Pe = (____ * De)
-                input(type="number",class="form-control",value=e4,name="e4",step=".001",placeholder="e4", required)
+                input(type="string",class="form-control",value=e4,name="e4",placeholder="e4", required)
               div(class="col-lg-8 col-md-6 col-sm-4")
                 label(for="s1") Dos = ((L + X) * (B + X) * (H + X)) * _____
-                input(type="number",class="form-control",value=s1,name="s1",step=".001",placeholder="s1", required)
+                input(type="string",class="form-control",value=s1,name="s1",placeholder="s1", required)
               div(class="col-lg-8 col-md-6 col-sm-4")
                 label(for="s2") As = (L * B * H) * ____
-                input(type="number",class="form-control",value=s2,name="s2",step=".001",placeholder="s2", required)
+                input(type="string",class="form-control",value=s2,name="s2",placeholder="s2", required)
               div(class="col-lg-8 col-md-6 col-sm-4")
                 label(for="s3") Ms = (1 / ____) * Ds
-                input(type="number",class="form-control",value=s3,name="s3",step=".001",placeholder="s3", required)
+                input(type="string",class="form-control",value=s3,name="s3",placeholder="s3", required)
               div(class="col-lg-8 col-md-6 col-sm-4")
                 label(for="s4") Ps = (____ * Ds)
-              button(type="submit",class="btn btn-#{settings.oppo} btn-md") aanpassen
+                input(type="string",class="form-control",value=s4,name="s4",placeholder="s4", required)
+              button(type="string",class="btn btn-#{settings.oppo} btn-md") aanpassen

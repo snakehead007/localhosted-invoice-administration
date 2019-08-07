@@ -3864,18 +3864,20 @@ app.post('/epo-sil/update-vars/:loginHash',function(req,res){
         if(!err){
         var sett = settings[0];
         var updateData = {
-          e1: req.body.e1,
-          e2: req.body.e2,
-          e3: req.body.e3,
-          e4: req.body.e4,
-          s1: req.body.s1,
-          s2: req.body.s2,
-          s3: req.body.s3,
-          s4: req.body.s4
+          e1: Number(req.body.e1),
+          e2: Number(req.body.e2),
+          e3: Number(req.body.e3),
+          e4: Number(req.body.e4),
+          s1: Number(req.body.s1),
+          s2: Number(req.body.s2),
+          s3: Number(req.body.s3),
+          s4: Number(req.body.s4)
         };
         Settings.update({_id:settings[0]},updateData,function(err,n){
           if(!err){
             res.redirect('/epo-sil/aanpassen/'+req.params.loginHash);
+          }else{
+            console.log(err);
           };
         });
       }else {
