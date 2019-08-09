@@ -110,6 +110,10 @@ html
             div(class="col-6")
               p(class="lead") #{e4} €/uur * #{De.toFixed(3)} kg = #{Pe.toFixed(2)} €
           hr
+        div(class="row")
+          div(class="col-lg-2 col-md-1 col-lg-0")
+          if error == 1
+            div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Error! Berekening is negatief. Check de ingegeven en interne data.
         if settings.thema == "dark" || settings.thema == "danger" || settings.thema == "info"
           div(class="row")
             div(class="col-6")
@@ -272,9 +276,6 @@ html
                     h4=Mt
         hr
         div(class="row")
-          div(class="col-lg-2 col-md-1 col-lg-0")
-          if error == 1
-            div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Enkel één veld invullen!
           if error == 2
             div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Niets ingevuld!
             div(class="col-lg-2 col-md-1 col-sm-0")

@@ -3315,9 +3315,9 @@ app.post('/percentage/:loginHash', function(req, res) {
           });
         } else {
           console.log("error niets ingevuld");
-          res.render('inch', {
+          res.render('percentage', {
             'settings': settings[0],
-            'description': "Berekening voor inch & cm omzettingen",
+            'description': "Berekening voor percentage",
             "error": 1,
             "loginHash": req.params.loginHash
           });
@@ -3680,6 +3680,7 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
+        var error = 0; //1== negatif numbers
         var L = Number(req.body.L);
         var B = Number(req.body.B);
         var H = Number(req.body.H);
@@ -3705,6 +3706,9 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {
         var Ptm = Pe + Ps //Prijs totaal materiaal
         var Pt = Ptw + Ptm; //Prijs totaal (werkuren + materiaal)
         var Mt = Me + Ms; //totaal uren voor alle materiaal
+        if(Mt<0 || Pt<0){
+          error = 1;
+        }
         res.render("epo-sil-oplossing", {
           "description": "Oplossing van berekening",
           "settings": settings[0],
@@ -3745,7 +3749,8 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {
           "s1":settings[0].s1,
           "s2":settings[0].s2,
           "s3":settings[0].s3,
-          "s4":settings[0].s4
+          "s4":settings[0].s4,
+          "error":error
         });
       } else {
         legeSettings = new Settings();
@@ -3768,6 +3773,7 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
+        var error = 0;
         var L = Number(req.body.L);
         var B = Number(req.body.B);
         var H = Number(req.body.H);
@@ -3795,6 +3801,10 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {
         var Mt = Me + Ms; //totaal uren voor alle materiaal
 
         var totmarge = Pt + (Pt/100)*marge;
+
+        if(Mt<0 || Pt<0){
+          error = 1;
+        }
         res.render("epo-sil-oplossing", {
           "description": "Oplossing van berekening",
           "settings": settings[0],
@@ -3837,7 +3847,8 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {
           "s1":settings[0].s1,
           "s2":settings[0].s2,
           "s3":settings[0].s3,
-          "s4":settings[0].s4
+          "s4":settings[0].s4,
+          "error":error
         });
       } else {anpassen/merijntje
         legeSettings = new Settings();
