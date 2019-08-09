@@ -1,6 +1,12 @@
 //- V1.8
 FIXES: {
+  check all calculations for error catching
+  check all 'back' buttons if working correctly.
+  beautify,cleanup and refactor all files.
+  create better hierarchy (folders)
 }
 creations:{
       more settings options
+      finish 'project update'
+      add English version of site
 }
