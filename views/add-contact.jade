@@ -46,55 +46,63 @@ html
                   input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
     main
       div(class="jumbotron")
-        p(class="lead") contact toevoegen
-          hr
-          form(action='/add-contact/#{loginHash}',method='post')
-            p=msg
-            div(class="form-row")
-              div(class="form-group col-md-5")
-                label(for="title") Contact persoon *
-                input(type="text",class="form-control",name="contactPersoon" required)    
-              div(class="form-group col-md-2")          
-              div(class="form-group col-md-5")
-                label(for="title") Firma
-                input(type="text",class="form-control",name="firma")
-              div(class="form-group col-md-3")
-                label(for="title") Straatnaam *
-                input(type="text",class="form-control",name="straat" required)                                
-              div(class="form-group col-md-2")
-                label(for="title") Straat Nr
-                input(type="text",class="form-control",name="straatNr")
-              div(class="col-md-2")
-              div(class="form-group col-md-3")
-                label(for="title") E-mail
-                input(type="text",class="form-control",name="mail",placeholder="voorbeeld@email.be")
-              div(class="form-group col-md-2")
-                label(for="title") BTW-nummer
-                input(type="text",class="form-control",name="btwNr")
-              div(class="form-group col-md-1")
-                label(for="title") rekeningnummer
-                input(type="text",class="form-control",name="rekeningnr")
-              div(class="form-group col-md-2")
-                label(for="title") Postcode
-                input(type="number",class="form-control",name="postcode")
-              div(class="form-group col-md-3")
-                label(for="title") Plaatsnaam *
-                input(type="text",class="form-control",name="plaats" required)
-              div(class="col-md-2")
-              div(id="col3_1", class="form-group col-md-3")
-              div(id="mail1" class="form-group col-md-3" style="display:none;")
-                label(for="title") E-mail 2
-                input(type="text", class="form-control",name="mail1", placeholder="voorbeeld@email.be")
-              div(class="form-group col-md-2", id="extra_mail1")
-                label(for="title")=" "
-                button(type="button",onclick="show_mail1()",class="btn btn-#{settings.oppo} btn-sm btn-block") extra e-mail
-              div(id="col10", class="form-group col-md-10" style="display:none;")
-              div(id="col7", class="form-group col-md-7" style="display:none;")
-              div(id="mail2" class="form-group col-md-3" style="display:none;")
-                label(for="title") E-mail 3
-                input(type="text", class="form-control",name="mail2", placeholder="voorbeeld@email.be")
-              div(class="form-group col-md-2", id="extra_mail2" style="display:none;")
-                label(for="title")=" "
-                button(type="button",onclick="show_mail2()",class="btn btn-#{settings.oppo} btn-sm btn-block") extra e-mail
-            hr 
-            button(type="submit",class="btn btn-#{settings.oppo}") toevoegen
+        div(class="row no-gutters")
+          div(class="col-9 mr-auto")
+            p(class="lead") contact toevoegen
+          div(class="col-2")
+              a(href='/contacten'+"/"+loginHash,class="button")
+                if settings.thema == "light"
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                if settings.thema != "light"
+                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+        hr
+        form(action='/add-contact/#{loginHash}',method='post')
+          p=msg
+          div(class="form-row")
+            div(class="form-group col-md-5")
+              label(for="title") Contact persoon *
+              input(type="text",class="form-control",name="contactPersoon" required)    
+            div(class="form-group col-md-2")          
+            div(class="form-group col-md-5")
+              label(for="title") Firma
+              input(type="text",class="form-control",name="firma")
+            div(class="form-group col-md-3")
+              label(for="title") Straatnaam *
+              input(type="text",class="form-control",name="straat" required)                                
+            div(class="form-group col-md-2")
+              label(for="title") Straat Nr
+              input(type="text",class="form-control",name="straatNr")
+            div(class="col-md-2")
+            div(class="form-group col-md-3")
+              label(for="title") E-mail
+              input(type="text",class="form-control",name="mail",placeholder="voorbeeld@email.be")
+            div(class="form-group col-md-2")
+              label(for="title") BTW-nummer
+              input(type="text",class="form-control",name="btwNr")
+            div(class="form-group col-md-2")
+              label(for="title") rekeningnummer
+              input(type="text",class="form-control",name="rekeningnr")
+            div(class="form-group col-md-1")
+              label(for="title") Postcode
+              input(type="number",class="form-control",name="postcode")
+            div(class="form-group col-md-2")
+              label(for="title") Plaatsnaam *
+              input(type="text",class="form-control",name="plaats" required)
+            div(class="col-md-2")
+            div(id="col3_1", class="form-group col-md-3")
+            div(id="mail1" class="form-group col-md-3" style="display:none;")
+              label(for="title") E-mail 2
+              input(type="text", class="form-control",name="mail1", placeholder="voorbeeld@email.be")
+            div(class="form-group col-md-2", id="extra_mail1")
+              label(for="title")=" "
+              button(type="button",onclick="show_mail1()",class="btn btn-#{settings.oppo} btn-sm btn-block") extra e-mail
+            div(id="col10", class="form-group col-md-10" style="display:none;")
+            div(id="col7", class="form-group col-md-7" style="display:none;")
+            div(id="mail2" class="form-group col-md-3" style="display:none;")
+              label(for="title") E-mail 3
+              input(type="text", class="form-control",name="mail2", placeholder="voorbeeld@email.be")
+            div(class="form-group col-md-2", id="extra_mail2" style="display:none;")
+              label(for="title")=" "
+              button(type="button",onclick="show_mail2()",class="btn btn-#{settings.oppo} btn-sm btn-block") extra e-mail
+          hr 
+          button(type="submit",class="btn btn-#{settings.oppo}") toevoegen
