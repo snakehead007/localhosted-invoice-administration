@@ -21,37 +21,6 @@ There are 4 themes: Grey, Dark, White, Blue, Red
 All data is kept locally by mongodb.
 Changing from computer, you will have to export and import all data manually (for now)
 
-start the server by:
---
-
-#### start the database and nodeJS
- 
-- Linux/MacOs:
-
-use the prepared script
-
-```
-bash ./_linuxstart.bash -a
-```
-
-or manually start the processes
-
-```
-  mongod
-```
-
-```
-  node start
-```
-
-- Windows:
-
-Ensure that Mongodb server is running, and you have database running on port 27017
-
-Execute file "start.bat"
-
-(this will also update the program before it starts up)
-
 preparation
 --
 
@@ -79,8 +48,39 @@ For windows users these steps are also nessesary:
   node nodeservice.js
 ```
 
-#### each package does:
+start the server by:
+--
+ 
+##### Linux/MacOs:
 
+use the prepared script
+
+```
+bash ./_linuxstart.bash -a
+```
+
+or manually start the processes
+
+```
+  mongod
+```
+
+```
+  node start
+```
+
+#### Windows:
+
+Ensure that Mongodb server is running, and you have database running on port 27017
+
+Execute file "start.bat"
+
+(this will also update the program before it starts up)
+
+
+
+npm package list
+--
 
 ##### express:
 
