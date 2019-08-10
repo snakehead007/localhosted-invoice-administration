@@ -295,7 +295,7 @@ app.get('/index/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
-        res.render('index', {
+        res.render('nl/index', {
           "description": "MDSART factuurbeheer",
           "settings": settings[0],
           "jaar": new Date().getFullYear(),
@@ -309,14 +309,14 @@ app.get('/index/:loginHash', function(req, res) {
 });
 
 app.get('/login', function(req, res) {
-  res.render('login');
+  res.render('nl/login');
 });
 
 app.post('/', function(req, res) {
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {
       if (checkSession(req.body.login, res)) {
-        res.render('index', {
+        res.render('nl/index', {
           "description": "MDSART factuurbeheer",
           "settings": settings[0],
           "jaar": new Date().getFullYear(),
@@ -377,7 +377,7 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {
                 }
               }
             }
-            res.render('chart', {
+            res.render('nl/chart', {
               "totaal": totaal,
               "description": "Grafiek",
               "settings": settings[0],
@@ -432,7 +432,7 @@ app.get('/contacten/:loginHash', function(req, res) {
             }
           });
         }
-        res.render('contacten', {
+        res.render('nl/contacten', {
           'contactenLijst': docs,
           'description': "Contactpersonen",
           "settings": settings[0],
@@ -488,7 +488,7 @@ app.get('/add-contact/:loginHash', function(req, res) {
           }
         });
       }
-      res.render('add-contact', {
+      res.render('nl/add/add-contact', {
         'description': "Contact toevoegen",
         "settings": settings[0],
         "loginHash": req.params.loginHash
@@ -532,7 +532,7 @@ app.post('/add-contact/:loginHash', function(req, res) {
             }
           });
         }
-        res.render('add-contact', {
+        res.render('nl/add/add-contact', {
           msg: message,
           "description": "Contact toevoegen",
           "settings": settings[0],
@@ -557,7 +557,7 @@ app.get('/edit-contact/:id/:loginHash', function(req, res) {
             }
           });
         }
-        res.render('edit-contact', {
+        res.render('nl/edit/edit-contact', {
           'contact': docs,
           "description": "Contact aanpassen",
           "settings": settings[0],
@@ -608,7 +608,7 @@ app.get('/view-contact/:idc/:loginHash', function(req, res) {
               }
             });
           }
-          res.render('view-contact', {
+          res.render('nl/view/view-contact', {
             'contact': contact,
             "description": "Contact Bekijken",
             "settings": settings[0],
@@ -673,7 +673,7 @@ app.get('/bestellingen/:idf/:loginHash', function(req, res) {
                     });
                   }
                   console.log(factuur);
-                  res.render('bestellingen', {
+                  res.render('nl/bestellingen', {
                     'factuur': factuur,
                     'bestellingen': bestellingen,
                     'description': "Bestellingen van " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
@@ -713,7 +713,7 @@ app.get('/bestellingen/:idf/t/:loginHash', function(req, res) {
                     });
                   }
                   console.log(factuur);
-                  res.render('bestellingen', {
+                  res.render('nl/bestellingen', {
                     'terug': 1,
                     'factuur': factuur,
                     'bestellingen': bestellingen,
@@ -783,7 +783,7 @@ app.get('/add-bestelling/:idf/:loginHash', function(req, res) {
       if (!err) {
         Settings.find({}, function(err, settings) {
           if (!err && settings.length != 0) {
-            res.render('add-bestelling', {
+            res.render('nl/add/add-bestelling', {
               'factuur': factuur,
               "description": "Bestelling toevoegen",
               "settings": settings[0],
@@ -819,7 +819,7 @@ app.get('/edit-bestelling/:id/:loginHash', function(req, res) {
               }
             });
           }
-          res.render('edit-bestelling', {
+          res.render('nl/edit/edit-bestelling', {
             'bestelling': bestelling,
             "factuur": factuur,
             "description": "Bestelling aanpassen",
@@ -922,7 +922,7 @@ app.get('/view-bestelling/:idb/:loginHash', function(req, res) {
                   }
                 });
               }
-              res.render('view-bestelling', {
+              res.render('nl/view/view-bestelling', {
                 'bestelling': bestelling,
                 "factuur": factuur,
                 "description": "Bekijk bestelling",
@@ -975,7 +975,7 @@ app.get('/facturen/:idc/:loginHash', function(req, res) {
                   }
                 });
               }
-              res.render('facturen', {
+              res.render('nl/facturen', {
                 'contact': contact,
                 'facturenLijst': facturen,
                 'description': "Facturen van " + contact.contactPersoon,
@@ -1014,7 +1014,7 @@ app.get('/facturen/:idc/t/:loginHash', function(req, res) {
                   }
                 });
               }
-              res.render('facturen', {
+              res.render('nl/facturen', {
                 'terug': 1,
                 'contact': contact,
                 'facturenLijst': facturen,
@@ -1046,7 +1046,7 @@ app.get('/facturen/:loginHash', function(req, res) {
               }
             });
           }
-          res.render('facturen', {
+          res.render('nl/facturen', {
             'facturenLijst': facturen,
             'description': "Alle facturen",
             "settings": settings[0],
@@ -1159,7 +1159,7 @@ app.get('/delete-factuur/:idc/:idf/:loginHash', function(req, res) {
                     }
                   });
                 }
-                res.render('facturen', {
+                res.render('nl/facturen', {
                   'contact': contact,
                   'facturenLijst': facturen,
                   'description': "Facturen van " + contact.contactPersoon,
@@ -1200,7 +1200,7 @@ app.get('/delete-factuur/:idc/:idf/t/:loginHash', function(req, res) {
                     }
                   });
                 }
-                res.render('facturen', {
+                res.render('nl/facturen', {
                   'facturenLijst': facturen,
                   'description': 'Alle facturen',
                   'settings': settings[0],
@@ -1238,7 +1238,7 @@ app.get('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {
                 }
               });
             }
-            res.render('edit-factuur', {
+            res.render('nl/edit/edit-factuur', {
               'factuur': factuur,
               'contact': contact,
               "description": "Factuur aanpassen van " + contact.contactPersoon,
@@ -1272,7 +1272,7 @@ app.get('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {
                 }
               });
             }
-            res.render('edit-factuur', {
+            res.render('nl/edit/edit-factuur', {
               'factuur': factuur,
               'contact': contact,
               "description": "Factuur aanpassen van " + contact.contactPersoon,
@@ -1306,7 +1306,7 @@ app.get('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {
                 }
               });
             }
-            res.render('edit-factuur', {
+            res.render('nl/edit/edit-factuur', {
               'terug': 1,
               'factuur': factuur,
               'contact': contact,
@@ -1348,7 +1348,7 @@ app.get('/updateFactuur/:idf/:loginHash', function(req, res) {
               _id: req.params.idf
             }, updateFactuur, function(err, updateFactuur) {
               Factuur.find({}, function(err, facturen) {
-                res.render('facturen', {
+                res.render('nl/facturen', {
                   'facturenLijst': facturen,
                   'description': "Alle facturen",
                   "settings": settings[0],
@@ -1500,7 +1500,7 @@ app.get('/view-factuur/:idf/:loginHash', function(req, res) {
                 }
               });
             }
-            res.render('view-factuur', {
+            res.render('nl/view/view-factuur', {
               'factuur': factuur,
               'contact': contact,
               "description": "Bekijk factuur van " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
@@ -1532,7 +1532,7 @@ app.get('/view-factuur/:idf/t/:loginHash', function(req, res) {
                 }
               });
             }
-            res.render('view-factuur', {
+            res.render('nl/view/view-factuur', {
               'terug': 1,
               'factuur': factuur,
               'contact': contact,
@@ -1607,7 +1607,7 @@ app.get('/createPDF/:idf/:loginHash', function(req, res) {
                   }
                 });
               }
-              res.render('pdf', {
+              res.render('nl/pdf/pdf', {
                 'profile': profile[0],
                 'contact': contact,
                 'bestellingen': json_data,
@@ -1664,7 +1664,7 @@ app.get('/createPDF-eng/:idf/:loginHash', function(req, res) {
                   }
                 });
               }
-              res.render('pdf-eng', {
+              res.render('nl/pdf/pdf-eng', {
                 'profile': profile[0],
                 'contact': contact,
                 'bestellingen': json_data,
@@ -1724,7 +1724,7 @@ app.get('/bestelbon/:idf/:loginHash', function(req, res) {
                   }
                 });
               }
-              res.render('bestelbon', {
+              res.render('nl/pdf/bestelbon', {
                 'profile': profile[0],
                 'contact': contact,
                 'bestellingen': json_data,
@@ -1773,7 +1773,7 @@ app.get('/edit-profile/:loginHash', function(req, res) {
               console.log("err edit-profile: " + err);
             }
           });
-          res.render('edit-profile', {
+          res.render('nl/edit/edit-profile', {
             'profile': legeProfiel
           });
         } else {
@@ -1807,7 +1807,7 @@ app.get('/edit-profile/:loginHash', function(req, res) {
                 }
               });
             }
-            res.render('edit-profile', {
+            res.render('nl/edit/edit-profile', {
               'profile': profile[0],
               'nroff': Number(jaar + nroff_str),
               'nr': Number(jaar + nr_str),
@@ -1920,7 +1920,7 @@ app.get('/offerte/:idf/:loginHash', function(req, res) {
                   }
                 });
               }
-              res.render('offerte', {
+              res.render('nl/pdf/offerte', {
                 'profile': profile[0],
                 'contact': contact,
                 'bestellingen': json_data,
@@ -2074,7 +2074,7 @@ app.get('/creditnota/:idc/:loginHash', function(req, res) {
                     }
                   });
                 }
-                res.render('creditnota', {
+                res.render('nl/pdf/creditnota', {
                   'profile': profile[0],
                   'contact': contact,
                   'bestellingen': json_data,
@@ -2185,7 +2185,7 @@ app.get('/view-creditnota/:idf', function(req, res) {
               }
             });
           }
-          res.render('view-ceditnota', {
+          res.render('nl/view/view-ceditnota', {
             'factuur': factuur,
             'contact': contact,
             "description": "Bekijk creditnota van " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
@@ -2214,7 +2214,7 @@ app.get('/view-creditnota/:idf/t', function(req, res) {
               }
             });
           }
-          res.render('view-factuur', {
+          res.render('nl/view/view-factuur', {
             'terug': 1,
             'factuur': factuur,
             'contact': contact,
@@ -2335,7 +2335,7 @@ app.get('/delete-creditnota/:idc/:idf/:loginHash', function(req, res) {
                     }
                   });
                 }
-                res.render('facturen', {
+                res.render('nl/facturen', {
                   'contact': contact,
                   'facturenLijst': facturen,
                   'description': "Facturen van " + contact.contactPersoon,
@@ -2374,7 +2374,7 @@ app.get('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {
                 }
               });
             }
-            res.render('edit-creditnota', {
+            res.render('nl/edit/edit-creditnota', {
               'factuur': factuur,
               'contact': contact,
               "description": "creditnota aanpassen van " + contact.contactPersoon,
@@ -2451,7 +2451,7 @@ app.post('/zoeken/:loginHash', function(req, res) {
                 var facturen_d = distinct(facturen);
                 Settings.find({}, function(err, settings) {
                   if (!err && settings.length != 0) {
-                    res.render('zoeken', {
+                    res.render('nl/zoeken', {
                       "description": "Zoeken op \"" + str + "\"",
                       "settings": settings[0],
                       "contacten": contacten_d,
@@ -2625,7 +2625,7 @@ app.get('/prijs/:loginHash', function(req, res) {
       if (!err && settings.length != 0) {
         Materiaal.find({}, function(err, materialen) {
           if (!err) {
-            res.render('prijs', {
+            res.render('nl/calc/prijs', {
               'settings': settings[0],
               'description': "Berekening voor Prijs",
               'materialen': materialen,
@@ -2906,7 +2906,7 @@ app.post('/prijs/:loginHash', function(req, res) {
                                                                                                           totaal += req.body.i050 * m050.prijs;
                                                                                                         Settings.find({}, function(err, settings) {
                                                                                                           if (!err && settings.length != 0) {
-                                                                                                            res.render('prijs-totaal', {
+                                                                                                            res.render('nl/calc/prijs-totaal', {
                                                                                                               "totaal": totaal.toFixed(2) + "€",
                                                                                                               "description": "Berekenen van prijs",
                                                                                                               "settings": settings[0],
@@ -2974,7 +2974,7 @@ app.post('/prijs/:totaal/:loginHash', function(req, res) {
         var totaal_ = Number(req.params.totaal.substring(0, req.params.totaal.length - 1));
         var totaal = req.params.totaal;
         var marge = req.body.marge;
-        res.render("prijs-totaal", {
+        res.render("nl/calc/prijs-totaal", {
           "totmarge": String(((totaal_ * marge / 100.0) + totaal_).toFixed(2)) + "€",
           "totaal": totaal,
           "settings": settings[0],
@@ -3016,7 +3016,7 @@ app.get('/mat/:loginHash', function(req, res) {
       if (!err && settings.length != 0) {
         Materiaal.find({}).sort('naam').exec(function(err, materialen) {
           if (!err) {
-            res.render('mat', {
+            res.render('nl/mat', {
               'materialen': materialen,
               'settings': settings[0],
               'description': "Alle materialen",
@@ -3050,7 +3050,7 @@ app.get('/edit-mat/:id/:loginHash', function(req, res) {
           _id: req.params.id
         }, function(err, materiaal) {
           console.log(materiaal);
-          res.render('edit-mat', {
+          res.render('nl/edit/edit-mat', {
             'settings': settings[0],
             'materiaal': materiaal,
             'description': materiaal.naam + " aanpassen",
@@ -3096,7 +3096,7 @@ app.get('/add-mat/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
-        res.render('add-mat', {
+        res.render('nl/add/add-mat', {
           'settings': settings[0],
           'description': "Materiaal toevoegen",
           "loginHash": req.params.loginHash
@@ -3200,7 +3200,7 @@ app.get('/settings/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
-        res.render('settings', {
+        res.render('nl/settings', {
           'settings': settings[0],
           'description': "Settings",
           'loginHash': req.params.loginHash
@@ -3307,7 +3307,7 @@ app.post('/percentage/:loginHash', function(req, res) {
         var bedrag = req.body.bedrag;
         if (percent !== "" && bedrag !== "") {
           var oplossing = bedrag * (percent / 100.0);
-          res.render('percentage', {
+          res.render('nl/calc/percentage', {
             'settings': settings[0],
             'description': "Berekening voor percentage",
             "oplossing": oplossing,
@@ -3315,7 +3315,7 @@ app.post('/percentage/:loginHash', function(req, res) {
           });
         } else {
           console.log("error niets ingevuld");
-          res.render('percentage', {
+          res.render('nl/calc/percentage', {
             'settings': settings[0],
             'description': "Berekening voor percentage",
             "error": 1,
@@ -3343,7 +3343,7 @@ app.get('/percentage/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
-        res.render('percentage', {
+        res.render('nl/calc/percentage', {
           'settings': settings[0],
           'description': "Berekening voor percentage",
           "loginHash": req.params.loginHash
@@ -3395,7 +3395,7 @@ app.get('/add-project/:idc/:loginHash',function(req,res){
       Settings.find({}, function(err, settings) {
 
         if (!err && settings.length != 0) {
-          res.render('add-project', {
+          res.render('nl/add/add-project', {
             'materialen':materialen,
             'settings': settings[0],
             'description': "Project toevoegen",
@@ -3446,7 +3446,7 @@ app.post('/add-project/:idc/:loginHash',function(req,res){
             }}});
           }
         });
-        res.render('add-project', {
+        res.render('nl/add/add-project', {
           'materialen':materialen,
           'settings': settings[0],
           'description': "Project toevoegen",
@@ -3544,7 +3544,7 @@ app.get('/berekeningen/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
-        res.render('berekeningen', {
+        res.render('nl/berekeningen', {
           'settings': settings[0],
           'description': "Alle berekeningen",
           "loginHash": req.params.loginHash
@@ -3569,7 +3569,7 @@ app.get('/lam/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
-        res.render('lam', {
+        res.render('nl/calc/lam', {
           'settings': settings[0],
           'description': "Berekening voor A1 Lamineren",
           "loginHash": req.params.loginHash
@@ -3609,7 +3609,7 @@ app.post('/lam-oplossing/:loginHash', function(req, res) {
         var E1 = C * 7.20;
         var E2 = O * 3.7;
         var E = E1 + E2;
-        res.render('lam-oplossing', {
+        res.render('nl/calclam-oplossing', {
           'settings': settings[0],
           'description': "Berekening voor A1 Lamineren",
           "L": L,
@@ -3647,7 +3647,7 @@ app.get('/epo-sil/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
-        res.render('epo-sil', {
+        res.render('nl/calc/epo-sil', {
           'settings': settings[0],
           'description': "Siliconen mal berekenen",
           "loginHash": req.params.loginHash,
@@ -3709,7 +3709,7 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {
         if(Mt<0 || Pt<0){
           error = 1;
         }
-        res.render("epo-sil-oplossing", {
+        res.render("nl/calc/epo-sil-oplossing", {
           "description": "Oplossing van berekening",
           "settings": settings[0],
           "L": L,
@@ -3805,7 +3805,7 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {
         if(Mt<0 || Pt<0){
           error = 1;
         }
-        res.render("epo-sil-oplossing", {
+        res.render("nl/calc/epo-sil-oplossing", {
           "description": "Oplossing van berekening",
           "settings": settings[0],
           "L": L,
@@ -3911,7 +3911,7 @@ app.get('/epo-sil/aanpassen/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
-        res.render('epo-sil', {
+        res.render('nl/calc/epo-sil', {
           'settings': settings[0],
           'description': "Siliconen mal berekenen",
           "loginHash": req.params.loginHash,
@@ -3945,7 +3945,7 @@ app.get('/inch/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
-        res.render('inch', {
+        res.render('nl/calc/inch', {
           'settings': settings[0],
           'description': "Berekening voor inch & cm omzettingen",
           "loginHash": req.params.loginHash
@@ -3975,7 +3975,7 @@ app.post('/inch/:loginHash', function(req, res) {
         var cm = req.body.cm;
         if (inch !== "" && cm !== "") {
           console.log("error allebei ingevuld");
-          res.render('inch', {
+          res.render('nl/calc/inch', {
             'settings': settings[0],
             'description': "Berekening voor inch & cm omzettingen",
             "error": 1,
@@ -3987,7 +3987,7 @@ app.post('/inch/:loginHash', function(req, res) {
             var cm_ = Number(cm).toFixed(2);
             var inch_ = Number(inch).toFixed(2);
             var oplossing = inch_ + "\" = " + cm_ + "cm";
-            res.render('inch', {
+            res.render('nl/calc/inch', {
               'settings': settings[0],
               'description': "Berekening voor inch & cm omzettingen",
               "oplossing": oplossing,
@@ -3999,7 +3999,7 @@ app.post('/inch/:loginHash', function(req, res) {
             var cm_ = Number(cm).toFixed(2);
             var inch_ = Number(inch).toFixed(2);
             var oplossing = cm_ + "cm = " + inch_ + "\"";
-            res.render('inch', {
+            res.render('nl/calc/inch', {
               'settings': settings[0],
               'description': "Berekening voor inch & cm omzettingen",
               "oplossing": oplossing,
@@ -4007,7 +4007,7 @@ app.post('/inch/:loginHash', function(req, res) {
             });
           }
           console.log("error niets ingevuld");
-          res.render('inch', {
+          res.render('nl/calc/inch', {
             'settings': settings[0],
             'description': "Berekening voor inch & cm omzettingen",
             "error": 2,
