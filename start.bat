@@ -4,4 +4,4 @@ git stash
 echo "updating files..."
 git pull
 echo "starting server..."
-node index.js
+node nodeservice.js

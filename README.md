@@ -28,6 +28,14 @@ start the server by:
  
 - Linux/MacOs:
 
+use the prepared script
+
+```
+bash ./_linuxstart.bash -a
+```
+
+or manually start the processes
+
 ```
   mongod
 ```
@@ -36,18 +44,13 @@ start the server by:
   node start
 ```
 
-or 
-
-```
-bash ./_linuxstart.bash
-```
-
 - Windows:
 
 Ensure that Mongodb server is running, and you have database running on port 27017
 
 Execute file "start.bat"
 
+(this will also update the program before it starts up)
 
 preparation
 --
@@ -65,7 +68,15 @@ preparation
 ##### install these npm packages
 
 ```
-  npm install express jade mongodb mongoose forever forever-monitor chartjs --save
+  npm install -g express jade mongodb mongoose forever forever-monitor chartjs --save
+```
+
+For windows users these steps are also nessesary:
+
+```
+  npm install -g node-windows --save
+  npm link node-windows
+  node nodeservice.js
 ```
 
 #### each package does:
@@ -93,6 +104,9 @@ CLI tool for ensuring that a given script runs continuously
 
 ##### chartjs
 Simple and flexible JavaScript charting
+
+#### node-windows
+A tool to create the server startup as an .exe file
 
 Screenshots
 -
