@@ -10,7 +10,7 @@ html
       function vars(){$("#vars_id").toggle();}  
   body
     header
-      nav(class="navbar navbar-expand-x1 navbar-#{settings.nav} bg-#{settings.thema}")
+      nav(class="navbar navbar-expand-md navbar-#{settings.nav} bg-#{settings.thema}")
         button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
           span(class="navbar-toggler-icon")
         div(class="collapse navbar-collapse", id="navbarNav")  
@@ -42,12 +42,12 @@ html
                 button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
               if settings.thema != "light"
                 button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
-        h2 Berekenen van Epoxie en Siliconen
-        hr
-        div(class="row")
-          div(class="col-lg-2 col-md-1 col-lg-0")
-          if aangepast == 1
-            div(class="alert alert-success col-lg-8 col-md-10 col-sm-12" role="alert") Interne variablen zijn aangepast!
+          h2 Berekenen van Epoxie en Siliconen
+          hr
+          div(class="row")
+            div(class="col-lg-2 col-md-1 col-lg-0")
+            if aangepast == 1
+              div(class="alert alert-success col-lg-8 col-md-10 col-sm-12" role="alert") Interne variablen zijn aangepast!
         form(action='/epo-sil-oplossing/'+loginHash,method='post')
           div(class="form-row")
             div(class="form-group col-lg-7 col-md-6 col-sm-12")
