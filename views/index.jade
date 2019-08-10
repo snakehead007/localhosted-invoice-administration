@@ -58,17 +58,67 @@ html
               hr
             div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
-                a(href='/berekeningen/#{loginHash}',class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Berekeningen
+                a(role="button",href='/berekeningen/#{loginHash}',id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false",class="btn btn-#{settings.oppo} btn-lg btn-block") Berekeningen
+                div(class="dropdown-menu col-lg-12 col-12 col-sm-12 col-md-12 mr-auto", aria-labelledby="actionsDropdown")
+                  a(href='/epo-sil'+"/#{loginHash}",class="dropdown-item")
+                    if settings.thema == "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.oppo} btn-lg btn-block") Siliconen mal berekenen
+                    if settings.thema != "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.thema} btn-lg btn-block") Siliconen mal berekenen
+                  a(href='/lam'+"/#{loginHash}",class="dropdown-item")
+                    if settings.thema == "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.oppo} btn-lg btn-block" disabled) A1 Lamineren berekenen
+                    if settings.thema != "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.thema} btn-lg btn-block" disabled) A1 Lamineren berekenen
+                  a(href='/prijs'+"/#{loginHash}",class="dropdown-item")
+                    if settings.thema == "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.oppo} btn-lg btn-block") Prijs berekeningen
+                    if settings.thema != "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.thema} btn-lg btn-block") Prijs berekeningen
+                  a(href='/inch'+"/#{loginHash}",class="dropdown-item")
+                    if settings.thema == "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.oppo} btn-lg btn-block") Inch & cm omzetten
+                    if settings.thema != "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.thema} btn-lg btn-block") Inch & cm omzetten
+                  a(href='/percentage'+"/#{loginHash}",class="dropdown-item")
+                    if settings.thema == "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.oppo} btn-lg btn-block") Percentage berekenen
+                    if settings.thema != "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.thema} btn-lg btn-block") Percentage berekenen
               if settings.thema != "light"
-                a(href='/berekeningen/#{loginHash}',class="button") 
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Berekeningen
+                a(role="button",href='/berekeningen/#{loginHash}',id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false",class="btn btn-#{settings.thema} btn-lg btn-block") Berekeningen
+                div(class="dropdown-menu col-lg-12 col-12 col-sm-12 col-md-12 mr-auto", aria-labelledby="actionsDropdown")
+                  a(href='/epo-sil'+"/#{loginHash}",class="dropdown-item")
+                    if settings.thema == "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.oppo} btn-lg btn-block") Siliconen mal berekenen
+                    if settings.thema != "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.thema} btn-lg btn-block") Siliconen mal berekenen
+                  a(href='/lam'+"/#{loginHash}",class="dropdown-item")
+                    if settings.thema == "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.oppo} btn-lg btn-block" disabled) A1 Lamineren berekenen
+                    if settings.thema != "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.thema} btn-lg btn-block" disabled) A1 Lamineren berekenen
+                  a(href='/prijs'+"/#{loginHash}",class="dropdown-item")
+                    if settings.thema == "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.oppo} btn-lg btn-block") Prijs berekeningen
+                    if settings.thema != "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.thema} btn-lg btn-block") Prijs berekeningen
+                  a(href='/inch'+"/#{loginHash}",class="dropdown-item")
+                    if settings.thema == "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.oppo} btn-lg btn-block") Inch & cm omzetten
+                    if settings.thema != "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.thema} btn-lg btn-block") Inch & cm omzetten
+                  a(href='/percentage'+"/#{loginHash}",class="dropdown-item")
+                    if settings.thema == "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.oppo} btn-lg btn-block") Percentage berekenen
+                    if settings.thema != "light"
+                      button(type="button",id="knop", class="btn btn-outline-#{settings.thema} btn-lg btn-block") Percentage berekenen
               hr    
             div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/mat/#{loginHash}',class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Materialens
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Materialen
               if settings.thema != "light"
-                a(href='/mat/#{loginHash  }',class="button") 
+                a(href='/mat/'+jaar+"/#{loginHash}",class="button") 
                   button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Materialen
               hr
