@@ -146,7 +146,7 @@ html
                           if !contact
                             a(class="dropdown-item",href='/edit-factuur/'+factuur.contact+'/'+factuur._id+'/t'+"/#{loginHash}") aanpassen
                             a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id+'/t'+"/#{loginHash}") verwijder
-                            a(class="dropdown-item", href='/view-factuur/'+factuur._id+"/t",class="button"+"/#{loginHash}") bekijk
+                            a(class="dropdown-item", href='/view-factuur/'+factuur._id+"/t"+"#{loginHash}",class="button"+"/#{loginHash}") bekijk
                           if contact
                             a(class="dropdown-item",href='/edit-factuur/'+factuur.contact+'/'+factuur._id+"/#{loginHash}") aanpassen
                             a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id+"/#{loginHash}") verwijder
