@@ -1,0 +1,120 @@
+//- V1.8
+html
+  head
+    title=title
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+  body
+    header
+      nav(class="navbar navbar-expand-md navbar-#{settings.nav} bg-#{settings.thema}")
+        button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
+          span(class="navbar-toggler-icon")
+        div(class="collapse navbar-collapse", id="navbarNav")  
+          ul(class="navbar-nav mr-auto")
+            li(class="nav-item")
+              a(class="nav-link active" , href='/index'+"/"+loginHash) Home
+            li(class="nav-item")
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
+            li(class="nav-item")
+              a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
+            li(class="nav-item")
+              a(class="nav-link", href='https://identity.basecone.com/authentication/login')
+                img(width="100", height="24", src="/basecone.png", alt="basecone")
+          span(class="navbar-text")
+            div(class="row")
+              div(class="col-4 mr-auto")
+                button(type="button", class="btn btn-light btn-sm", disabled)
+                  h6=description
+              div(class="col-8")  
+                form(class="form-inline" action="/zoeken"+"/"+loginHash, method="post")
+                  input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
+    main
+      div(class="jumbotron")
+        div(class="row no-gutters")
+          div(class="col-9 mr-auto")
+          div(class="col-2")
+            a(href='/contacten'+"/"+loginHash,class="button")
+              if settings.thema == "light"
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+              if settings.thema != "light"
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+        hr
+        if settings.thema == "dark" || settings.thema == "danger" || settings.thema == "info"
+          table(class="table table-#{settings.oppo} table-striped")
+            tbody
+              if contact.firma
+                tr
+                  th(scope="row") firma
+                  td
+                    h4=contact.firma
+              if contact.contactPersoon
+                tr
+                  th(scope="row") contact persoon
+                  td
+                    h4=contact.contactPersoon
+              if contact.straat
+                tr
+                  th(scope="row") straatnaam
+                  td
+                    h4=contact.straat
+              if contact.straatNr
+                tr
+                  th(scope="row") straat nr
+                  td
+                    h4=contact.straatNr
+              if contact.postcode
+                tr
+                  th(scope="row") postcode
+                  td
+                    h4=contact.postcode
+              if contact.plaats
+                tr
+                  th(scope="row") plaatsnaam
+                  td
+                    h4=contact.plaats
+              if contact.btwNr
+                tr
+                  th(scope="row") btw-Nummer
+                  td
+                    h4=contact.btwNr
+              tr
+                th(scope="row") rekeningnummer
+                td
+                  h4=contact.rekeningnr
+        else
+          table(class="table table-#{settings.thema} table-striped")
+            tbody
+              tr
+                th(scope="row") fima
+                td
+                  h4=contact.firma
+              tr
+                th(scope="row") contact persoon
+                td
+                  h4=contact.contactPersoon
+              tr
+                th(scope="row") straatnaam
+                td
+                  h4=contact.straat
+              tr
+                th(scope="row") straat nr
+                td
+                  h4=contact.straatNr
+              tr
+                th(scope="row") postcode
+                td
+                  h4=contact.postcode
+              tr
+                th(scope="row") plaatsnaam
+                td
+                  h4=contact.plaats
+              tr
+                th(scope="row") btw-Nummer
+                td
+                  h4=contact.btwNr
+              tr
+                th(scope="row") rekeningnummer
+                td
+                  h4=contact.rekeningnr
