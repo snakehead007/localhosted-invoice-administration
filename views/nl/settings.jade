@@ -64,4 +64,17 @@ html
                         button(type="button" class="btn btn-outline-danger") red 
                       else
                         button(type="button" class="btn btn-danger") red
-            
+            tr
+              td
+                p(class="lead") Language
+                  div(class="btn-group" role="group" aria-label="Basic example")
+                    a(href="/change-lang/nl/"+loginHash,class="button")
+                      if settings.lang == "nl"
+                        button(type="button" class="btn btn-outline-#{settings.thema}") Nederlands
+                      else
+                        button(type="button" class="btn btn-#{settings.thema}") Nederlands
+                    a(href="/change-lang/eng/"+loginHash,class="button")
+                      if settings.lang == "eng"
+                        button(type="button" class="btn btn-outline-#{settings.thema}") English
+                      else 
+                        button(type="button" class="btn btn-#{settings.thema}") English

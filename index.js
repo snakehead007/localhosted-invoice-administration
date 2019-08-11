@@ -20,6 +20,10 @@ var pass = "merijntje";
 var loginHash;
 var currentLogin = "";
 var SettingsSchema = new Schema({
+  lang:{
+    type: String,
+    default: "nl"
+  },
   thema: {
     type: String,
     default: "secondary"
@@ -3249,7 +3253,7 @@ app.get('/change-theme/:th/:loginHash', function(req, res) {
         var updateSettings = {
           thema: req.params.th,
           oppo: oppo,
-          nav: nav
+          nav: nav,
         };
         Settings.update({
           _id: settings[0]._id
@@ -3269,6 +3273,28 @@ app.get('/change-theme/:th/:loginHash', function(req, res) {
     console.log(err + "couldnt login, bad password");
     res.redirect('/')
   }
+});
+
+app.get('/change-lang/:lang/:loginHash',function(req,res){
+  if(checkSession(req.params.loginHash, res) ){
+    Settings.find({},function(err,settings){
+      if(!err){
+        var settings = settings[0];
+        var updateSettings = {
+          lang: req.params.lang
+        }
+        Settings.update({_id:settings}, updateSettings, function(err,updatedSettings){
+          if(!err){
+            res.redirect('/settings/'+req.params.loginHash);
+          }else{
+            console.log(err);
+          }
+        });
+      }else{
+        console.log(err);
+      }
+    });
+  };
 });
 
 app.get('/zoeken', function(req, res) {
