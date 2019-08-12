@@ -37,7 +37,7 @@ preparation
 ##### install these npm packages
 
 ```
-  npm install -g express jade mongodb mongoose forever forever-monitor chartjs --save
+  npm install -g express jade mongodb mongoose chartjs --save
 ```
 
 For windows users these steps are also nessesary:
@@ -76,8 +76,6 @@ Ensure that Mongodb server is running, and you have database running on port 270
 Execute file "start.bat"
 
 (this will also update the program before it starts up)
-
-
 
 npm package list
 --
