@@ -41,6 +41,7 @@ preparation
 ```
 
 For windows users these steps are also nessesary:
+(for more info, check the wiki this repo)
 
 ```
   npm install -g node-windows --save
