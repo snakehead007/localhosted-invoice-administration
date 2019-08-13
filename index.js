@@ -20,7 +20,7 @@ var pass = "merijntje";
 var loginHash;
 var currentLogin = "";
 var SettingsSchema = new Schema({
-  lang:{
+  lang: {
     type: String,
     default: "nl"
   },
@@ -36,35 +36,35 @@ var SettingsSchema = new Schema({
     type: String,
     default: "dark"
   },
-  s1:{
+  s1: {
     type: Number,
     default: 0.039
   },
-  s2:{
+  s2: {
     type: Number,
     default: 0.0185
   },
-  s3:{
+  s3: {
     type: Number,
     default: 2.23
   },
-  s4:{
+  s4: {
     type: Number,
     default: 13.5
   },
-  e1:{
+  e1: {
     type: Number,
     default: 0.018
   },
-  e2:{
+  e2: {
     type: Number,
     default: 0.018
   },
-  e3:{
+  e3: {
     type: Number,
     default: 2
   },
-  e4:{
+  e4: {
     type: Number,
     default: 11
   }
@@ -141,7 +141,7 @@ var FactuurSchema = new Schema({
   datum: {
     type: String
   },
-  datumBetaald:{
+  datumBetaald: {
     type: String
   },
   factuurNr: {
@@ -245,19 +245,19 @@ var ProjectSchema = new Schema({
   naam: {
     type: String
   },
-    werkuren:{
-    type:Number
+  werkuren: {
+    type: Number
   },
-    werkprijs:{
-    type:Number
+  werkprijs: {
+    type: Number
   },
-    aantallen:[{
-    type:Number
+  aantallen: [{
+    type: Number
   }],
-  materialen:[{
-    type:String
+  materialen: [{
+    type: String
   }],
-  contact:{
+  contact: {
     type: Schema.Types.ObjectId,
     ref: 'Contact'
   }
@@ -323,21 +323,21 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {
             var totaal = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             for (var i = 0; i <= 11; i++) {
               for (var factuur of facturen) {
-                if(factuur.factuurNr){
-                  if(factuur.datumBetaald){
-                    if (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i])){
-                      if (factuur.datumBetaald.includes(req.params.jaar)){ //current year
+                if (factuur.factuurNr) {
+                  if (factuur.datumBetaald) {
+                    if (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i])) {
+                      if (factuur.datumBetaald.includes(req.params.jaar)) { //current year
                         if (factuur.factuurNr) { //only factuur not offerte
-                          if(factuur.isBetaald) {
+                          if (factuur.isBetaald) {
                             totaal[i] += factuur.totaal;
                           }
                         }
                       }
                     }
-                  }else if(factuur.datum.includes(maand[i]) || factuur.datum.includes(maand_klein[i])){
-                    if(factuur.datum.includes(req.params.jaar)){
-                      if(factuur.factuurNr){
-                        if(factuur.isBetaald){
+                  } else if (factuur.datum.includes(maand[i]) || factuur.datum.includes(maand_klein[i])) {
+                    if (factuur.datum.includes(req.params.jaar)) {
+                      if (factuur.factuurNr) {
+                        if (factuur.isBetaald) {
                           totaal[i] += factuur.totaal;
                         }
                       }
@@ -534,7 +534,9 @@ app.post('/edit-contact/:id/:loginHash', function(req, res) {
       rekeningnr: req.body.rekeningnr
     };
     var message = 'Factuur niet geupdate';
-    Contact.update({ _id: req.params.id}, updateData, function(err, numrows) {
+    Contact.update({
+      _id: req.params.id
+    }, updateData, function(err, numrows) {
       if (!err) {
         res.redirect('/edit-contact/' + req.params.id + "/" + req.params.loginHash);
       }
@@ -3039,22 +3041,24 @@ app.get('/change-theme/:th/:loginHash', function(req, res) {
   }
 });
 
-app.get('/change-lang/:lang/:loginHash',function(req,res){
-  if(checkSession(req.params.loginHash, res) ){
-    Settings.find({},function(err,settings){
-      if(!err){
+app.get('/change-lang/:lang/:loginHash', function(req, res) {
+  if (checkSession(req.params.loginHash, res)) {
+    Settings.find({}, function(err, settings) {
+      if (!err) {
         var settings = settings[0];
         var updateSettings = {
           lang: req.params.lang
         }
-        Settings.update({_id:settings}, updateSettings, function(err,updatedSettings){
-          if(!err){
-            res.redirect('/settings/'+req.params.loginHash);
-          }else{
+        Settings.update({
+          _id: settings
+        }, updateSettings, function(err, updatedSettings) {
+          if (!err) {
+            res.redirect('/settings/' + req.params.loginHash);
+          } else {
             console.log(err);
           }
         });
-      }else{
+      } else {
         console.log(err);
       }
     });
@@ -3132,14 +3136,14 @@ app.get('/percentage/:loginHash', function(req, res) {
 });
 
 
-app.get('/add-project/:idc/:loginHash',function(req,res){
+app.get('/add-project/:idc/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
-    Materiaal.find({}, function(err,materialen){
+    Materiaal.find({}, function(err, materialen) {
       Settings.find({}, function(err, settings) {
 
         if (!err && settings.length != 0) {
           res.render('nl/add/add-project', {
-            'materialen':materialen,
+            'materialen': materialen,
             'settings': settings[0],
             'description': "Project toevoegen",
             "loginHash": req.params.loginHash
@@ -3158,39 +3162,44 @@ app.get('/add-project/:idc/:loginHash',function(req,res){
           }
         }
       });
-  });
+    });
   }
 });
 
-app.post('/add-project/:idc/:loginHash',function(req,res){
-  if(checkSession(req.params.loginHash,res)){
+app.post('/add-project/:idc/:loginHash', function(req, res) {
+  if (checkSession(req.params.loginHash, res)) {
     var materialen = [];
     var aantallen = [];
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
-        Contact.find({},function(err,contact){
-          if(!contact){
-            res.redirect('add-project/'+req.params.loginHash);
-          }else if(contact){
-            Materiaal.findOne({naam: req.body.o001,function(err,m001){if(m001){
-                    materialen.push(m001.naam);
-                    aantallen.push(m001.prijs);
-                    var newProject = new Project({
-                      naam: req.body.naam,
-                      werkuren: req.body.werkuren,
-                      werkprijs: req.body.werprijs,
-                      materialen: materialen,
-                      aantallen: aantallen,
-                      contact: contact._id
-                    });
-                    newProject.save(function(err){
-                      console.log(err);
-                    });
-            }}});
+        Contact.find({}, function(err, contact) {
+          if (!contact) {
+            res.redirect('add-project/' + req.params.loginHash);
+          } else if (contact) {
+            Materiaal.findOne({
+              naam: req.body.o001,
+              function(err, m001) {
+                if (m001) {
+                  materialen.push(m001.naam);
+                  aantallen.push(m001.prijs);
+                  var newProject = new Project({
+                    naam: req.body.naam,
+                    werkuren: req.body.werkuren,
+                    werkprijs: req.body.werprijs,
+                    materialen: materialen,
+                    aantallen: aantallen,
+                    contact: contact._id
+                  });
+                  newProject.save(function(err) {
+                    console.log(err);
+                  });
+                }
+              }
+            });
           }
         });
         res.render('nl/add/add-project', {
-          'materialen':materialen,
+          'materialen': materialen,
           'settings': settings[0],
           'description': "Project toevoegen",
           "loginHash": req.params.loginHash
@@ -3379,14 +3388,14 @@ app.get('/epo-sil/:loginHash', function(req, res) {
           'settings': settings[0],
           'description': "Siliconen mal berekenen",
           "loginHash": req.params.loginHash,
-          "e1":settings[0].e1,
-          "e2":settings[0].e2,
-          "e3":settings[0].e3,
-          "e4":settings[0].e4,
-          "s1":settings[0].s1,
-          "s2":settings[0].s2,
-          "s3":settings[0].s3,
-          "s4":settings[0].s4
+          "e1": settings[0].e1,
+          "e2": settings[0].e2,
+          "e3": settings[0].e3,
+          "e4": settings[0].e4,
+          "s1": settings[0].s1,
+          "s2": settings[0].s2,
+          "s3": settings[0].s3,
+          "s4": settings[0].s4
         });
       } else {
         legeSettings = new Settings();
@@ -3416,15 +3425,15 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {
         var W = Number(req.body.W);
         //FORMULE IN BROWSER KUNNEN AANPASSEN
         //Siliconen
-        var As = (L * B * H) * settings[0].s1;//S1
-        var Dos = ((L + X) * (B + X) * (H + X)) * settings[0].s2;//S2
+        var As = (L * B * H) * settings[0].s1; //S1
+        var Dos = ((L + X) * (B + X) * (H + X)) * settings[0].s2; //S2
         var Ds = Dos - As;
         var Ms = (1 / settings[0].s3) * Ds; //Materiaal Uren siliconen //S3
         var Pws = (W * Ms) //prijs werkuren voor siliconen
         var Ps = (settings[0].s4 * Ds); //Prijs siliconen  //S4
         //Epoxie
-        var Ae = ((L + X) * (B + X) * (H + X)) * settings[0].e1;//E1
-        var Doe = ((L + X + 0.4) * (B + X + 0.4) * (H + X + 0.4)) * settings[0].e2;//E2
+        var Ae = ((L + X) * (B + X) * (H + X)) * settings[0].e1; //E1
+        var Doe = ((L + X + 0.4) * (B + X + 0.4) * (H + X + 0.4)) * settings[0].e2; //E2
         var De = Doe - Ae;
         var Me = (1 / settings[0].e3) * De; //Materiaal Uren epoxie //E3
         var Pwe = (W * Me); //prijs werkuren epoxie
@@ -3434,7 +3443,7 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {
         var Ptm = Pe + Ps //Prijs totaal materiaal
         var Pt = Ptw + Ptm; //Prijs totaal (werkuren + materiaal)
         var Mt = Me + Ms; //totaal uren voor alle materiaal
-        if(Mt<0 || Pt<0){
+        if (Mt < 0 || Pt < 0) {
           error = 1;
         }
         res.render("nl/calc/epo-sil-oplossing", {
@@ -3470,15 +3479,15 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {
           "Mt": String(Mt).toTime(),
           "Pe": Pe,
           "loginHash": req.params.loginHash,
-          "e1":settings[0].e1,
-          "e2":settings[0].e2,
-          "e3":settings[0].e3,
-          "e4":settings[0].e4,
-          "s1":settings[0].s1,
-          "s2":settings[0].s2,
-          "s3":settings[0].s3,
-          "s4":settings[0].s4,
-          "error":error
+          "e1": settings[0].e1,
+          "e2": settings[0].e2,
+          "e3": settings[0].e3,
+          "e4": settings[0].e4,
+          "s1": settings[0].s1,
+          "s2": settings[0].s2,
+          "s3": settings[0].s3,
+          "s4": settings[0].s4,
+          "error": error
         });
       } else {
         legeSettings = new Settings();
@@ -3528,9 +3537,9 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {
         var Pt = Ptw + Ptm; //Prijs totaal (werkuren + materiaal)
         var Mt = Me + Ms; //totaal uren voor alle materiaal
 
-        var totmarge = Pt + (Pt/100)*marge;
+        var totmarge = Pt + (Pt / 100) * marge;
 
-        if(Mt<0 || Pt<0){
+        if (Mt < 0 || Pt < 0) {
           error = 1;
         }
         res.render("nl/calc/epo-sil-oplossing", {
@@ -3566,19 +3575,20 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {
           "Mt": String(Mt).toTime(),
           "Pe": Pe,
           "loginHash": req.params.loginHash,
-          "marge":marge,
-          "totmarge":totmarge.toFixed(2)+" €",
-          "e1":settings[0].e1,
-          "e2":settings[0].e2,
-          "e3":settings[0].e3,
-          "e4":settings[0].e4,
-          "s1":settings[0].s1,
-          "s2":settings[0].s2,
-          "s3":settings[0].s3,
-          "s4":settings[0].s4,
-          "error":error
+          "marge": marge,
+          "totmarge": totmarge.toFixed(2) + " €",
+          "e1": settings[0].e1,
+          "e2": settings[0].e2,
+          "e3": settings[0].e3,
+          "e4": settings[0].e4,
+          "s1": settings[0].s1,
+          "s2": settings[0].s2,
+          "s3": settings[0].s3,
+          "s4": settings[0].s4,
+          "error": error
         });
-      } else {anpassen/merijntje
+      } else {
+        anpassen / merijntje
         legeSettings = new Settings();
         legeSettings.save(function(err) {
           if (err) {
@@ -3597,10 +3607,10 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {
 
 
 
-app.post('/epo-sil/update-vars/:loginHash',function(req,res){
+app.post('/epo-sil/update-vars/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
-      Settings.find({}, function(err, settings) {
-        if(!err){
+    Settings.find({}, function(err, settings) {
+      if (!err) {
         var sett = settings[0];
         var updateData = {
           e1: Number(req.body.e1),
@@ -3612,14 +3622,16 @@ app.post('/epo-sil/update-vars/:loginHash',function(req,res){
           s3: Number(req.body.s3),
           s4: Number(req.body.s4)
         };
-        Settings.update({_id:settings[0]},updateData,function(err,n){
-          if(!err){
-            res.redirect('/epo-sil/aanpassen/'+req.params.loginHash);
-          }else{
+        Settings.update({
+          _id: settings[0]
+        }, updateData, function(err, n) {
+          if (!err) {
+            res.redirect('/epo-sil/aanpassen/' + req.params.loginHash);
+          } else {
             console.log(err);
           };
         });
-      }else {
+      } else {
         legeSettings = new Settings();
         legeSettings.save(function(err) {
           if (err) {
@@ -3633,7 +3645,7 @@ app.post('/epo-sil/update-vars/:loginHash',function(req,res){
         }
       }
     });
-    }
+  }
 });
 app.get('/epo-sil/aanpassen/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
@@ -3643,15 +3655,15 @@ app.get('/epo-sil/aanpassen/:loginHash', function(req, res) {
           'settings': settings[0],
           'description': "Siliconen mal berekenen",
           "loginHash": req.params.loginHash,
-          "aangepast":1,
-          "e1":settings[0].e1,
-          "e2":settings[0].e2,
-          "e3":settings[0].e3,
-          "e4":settings[0].e4,
-          "s1":settings[0].s1,
-          "s2":settings[0].s2,
-          "s3":settings[0].s3,
-          "s4":settings[0].s4
+          "aangepast": 1,
+          "e1": settings[0].e1,
+          "e2": settings[0].e2,
+          "e3": settings[0].e3,
+          "e4": settings[0].e4,
+          "s1": settings[0].s1,
+          "s2": settings[0].s2,
+          "s3": settings[0].s3,
+          "s4": settings[0].s4
         });
       } else {
         legeSettings = new Settings();
