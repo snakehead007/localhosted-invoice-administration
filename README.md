@@ -45,7 +45,6 @@ For windows users these steps are also nessesary:
 ```
   npm install -g node-windows --save
   npm link node-windows
-  node nodeservice.js
 ```
 
 start the server by:
