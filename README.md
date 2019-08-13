@@ -104,7 +104,7 @@ CLI tool for ensuring that a given script runs continuously
 Simple and flexible JavaScript charting
 
 #### node-windows
-A tool to create the server startup as an .exe file
+A tool to create the server startup as a .exe file
 
 Screenshots
 -
