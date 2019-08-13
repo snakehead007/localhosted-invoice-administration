@@ -6,6 +6,8 @@ html
     script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+    script.
+     function info(){$("#info").toggle();};
   body
     header
       nav(class="navbar navbar-expand-md navbar-#{settings.nav} bg-#{settings.thema}")
@@ -37,7 +39,7 @@ html
             tr
               td
                 p(class="lead") Thema
-                div(class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups")
+                div(class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups")
                   div(class="btn-group mr-4" role="group" aria-label="First group")
                     a(href='/change-theme/secondary'+"/"+loginHash,class="button")
                       if settings.thema == "secondary"
@@ -67,14 +69,53 @@ html
             tr
               td
                 p(class="lead") Language
-                  div(class="btn-group" role="group" aria-label="Basic example")
-                    a(href="/change-lang/nl/"+loginHash,class="button")
-                      if settings.lang == "nl"
-                        button(type="button" class="btn btn-outline-#{settings.thema}") Nederlands
-                      else
-                        button(type="button" class="btn btn-#{settings.thema}") Nederlands
-                    a(href="/change-lang/eng/"+loginHash,class="button")
-                      if settings.lang == "eng"
-                        button(type="button" class="btn btn-outline-#{settings.thema}") English
-                      else 
-                        button(type="button" class="btn btn-#{settings.thema}") English
+                div(class="btn-group mb-3" role="group" aria-label="Basic example")
+                  a(href="/change-lang/nl/"+loginHash,class="button")
+                    if settings.lang == "nl"
+                      button(type="button" class="btn btn-outline-#{settings.thema}") Nederlands
+                    else
+                      button(type="button" class="btn btn-#{settings.thema}") Nederlands
+                  a(href="/change-lang/eng/"+loginHash,class="button")
+                    if settings.lang == "eng"
+                      button(type="button" class="btn btn-outline-#{settings.thema}") English
+                    else 
+                      button(type="button" class="btn btn-#{settings.thema}") English
+            tr
+              td  
+                form(action='/edit-pdf-text/#{loginHash}',method='post')    
+                    p(class="lead") Text aanpassingen   
+                      button(type="button" class="mb-1 btn-sm btn btn-#{settings.thema}" onclick="info()") info
+                    div(class="input-group mb-3")
+                      div(class="input-group-prepend")
+                        span(class="input-group-text") Factuur tekst
+                      textarea(input="text",name="factuurtext",class="form-control" aria-label="With textarea") #{settings.factuurtext}
+                    div(class="input-group mb-3")
+                      div(class="input-group-prepend")
+                        span(class="input-group-text") Creditnota tekst
+                      textarea(input="text",name="creditnotatext",class="form-control" aria-label="With textarea") #{settings.creditnotatext}
+                    div(class="input-group mb-3")
+                      div(class="input-group-prepend")
+                        span(class="input-group-text") Offerte tekst
+                      textarea(input="text",name="offertetext",class="form-control" aria-label="With textarea") #{settings.offertetext}
+                    button(type="submit",class="btn btn-#{settings.oppo}") bijwerken
+                    div(class="",id="info",style="display:none")
+                      p To use variables from the program type them like this in the text:
+                      samp 
+                        pre
+                          code 
+                              &#35;&#123;profile.firma&#125;     : firma naam
+                              &#35;&#123;profile.naam&#125;      : volledige naam
+                              &#35;&#123;profile.straat&#125;    : straatnaam
+                              &#35;&#123;profile.straatNr&#125;  : straatnummer
+                              &#35;&#123;profile.postcode&#125;  : postcode
+                              &#35;&#123;profile.plaats&#125;    : plaatsnaam 
+                              &#35;&#123;profile.btwNr&#125;     : btw nummer
+                              &#35;&#123;profile.iban&#125;      : Iban nummer
+                              &#35;&#123;profile.bic&#125;       : Bic nummer
+                              &#35;&#123;profile.tele&#125;      : Telefoon nummer
+                              &#35;&#123;profile.bic&#125;       : mail
+                              &#35;&#123;factuur.datum&#125;     : Datum van creatie van het document in het programma
+                              &#35;&#123;factuur.offerteNr&#125; : Nummer van de offerte
+                              &#35;&#123;factuur.creditnr&#125;  : Nummer van de creditnota
+                              &#35;&#123;factuur.voorschot&#125; : het voorschot bedrag
+                              &#35;&#123;factuur.totaal&#125;    : het totaal aantal bedrag
