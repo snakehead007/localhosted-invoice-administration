@@ -262,24 +262,6 @@ var ProjectSchema = new Schema({
     ref: 'Contact'
   }
 })
-//
-//                                        dddddddd
-//   iiii                                  d::::::d
-//  i::::i                                d::::::d
-//   iiii                                  d::::::d
-//                                         d:::::d
-//  iiiiiii  nnnn  nnnnnnnn        ddddddddd:::::d     eeeeeeeeeeee    xxxxxxx      xxxxxxx
-//  i:::::i  n:::nn::::::::nn    dd::::::::::::::d   ee::::::::::::ee   x:::::x    x:::::x
-//   i::::i  n::::::::::::::nn  d::::::::::::::::d  e::::::eeeee:::::ee  x:::::x  x:::::x
-//   i::::i  nn:::::::::::::::nd:::::::ddddd:::::d e::::::e     e:::::e   x:::::xx:::::x
-//   i::::i   n:::::nnnn:::::nd::::::d    d:::::d e:::::::eeeee::::::e    x::::::::::x
-//   i::::i   n::::n    n::::nd:::::d     d:::::d e:::::::::::::::::e      x::::::::x
-//   i::::i   n::::n    n::::nd:::::d     d:::::d e::::::eeeeeeeeeee       x::::::::x
-//   i::::i   n::::n    n::::nd:::::d     d:::::d e:::::::e               x::::::::::x
-//  i::::::i  n::::n    n::::nd::::::ddddd::::::dde::::::::e             x:::::xx:::::x
-//  i::::::i  n::::n    n::::n d:::::::::::::::::d e::::::::eeeeeeee    x:::::x  x:::::x
-//  i::::::i  n::::n    n::::n  d:::::::::ddd::::d  ee:::::::::::::e   x:::::x    x:::::x
-//  iiiiiiii  nnnnnn    nnnnnn   ddddddddd   ddddd    eeeeeeeeeeeeee  xxxxxxx      xxxxxxx
 
 app.get('/', function(req, res) {
   Settings.find({}, function(err, settings) {
@@ -330,23 +312,6 @@ app.post('/', function(req, res) {
     }
   });
 });
-
-//  CCCCCCCCCCCCC              hhhhhhh                                                            tttt
-//  CCC::::::::::::C           h:::::h                                                         ttt:::t
-//  CC:::::::::::::::C         h:::::h                                                         t:::::t
-//  C:::::CCCCCCCC::::C        h:::::h                                                         t:::::t
-//  C:::::C       CCCCCC       h::::h hhhhh         aaaaaaaaaaaaa   rrrrr   rrrrrrrrr   ttttttt:::::ttttttt
-//  C:::::C                    h::::hh:::::hhh      a::::::::::::a  r::::rrr:::::::::r  t:::::::::::::::::t
-//  C:::::C                    h::::::::::::::hh    aaaaaaaaa:::::a r:::::::::::::::::r t:::::::::::::::::t
-//  C:::::C                    h:::::::hhh::::::h            a::::a rr::::::rrrrr::::::rtttttt:::::::tttttt
-//  C:::::C                    h::::::h   h::::::h    aaaaaaa:::::a  r:::::r     r:::::r      t:::::t
-//  C:::::C                    h:::::h     h:::::h  aa::::::::::::a  r:::::r     rrrrrrr      t:::::t
-//  C:::::C                    h:::::h     h:::::h a::::aaaa::::::a  r:::::r                  t:::::t
-//  C:::::C       CCCCCC       h:::::h     h:::::ha::::a    a:::::a  r:::::r                  t:::::t    tttttt
-//  C:::::CCCCCCCC::::C        h:::::h     h:::::ha::::a    a:::::a  r:::::r                  t::::::tttt:::::t
-//  CC:::::::::::::::C         h:::::h     h:::::ha:::::aaaa::::::a  r:::::r                  tt::::::::::::::t
-//  CCC::::::::::::C           h:::::h     h:::::h a::::::::::aa:::a r:::::r                    tt:::::::::::tt
-//  CCCCCCCCCCCCC              hhhhhhh     hhhhhhh  aaaaaaaaaa  aaaa rrrrrrr                      ttttttttttt
 
 
 app.get('/chart/:jaar/:loginHash', function(req, res) {
@@ -403,26 +368,6 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {
     });
   }
 });
-
-
-
-
-//  CCCCCCCCCCCCC                                                 tttt                                                         tttt
-//  CCC::::::::::::C                                            ttt:::t                                                      ttt:::t
-//  CC:::::::::::::::C                                          t:::::t                                                      t:::::t
-//  C:::::CCCCCCCC::::C                                         t:::::t                                                      t:::::t
-//  C:::::C       CCCCCC   ooooooooooo   nnnn  nnnnnnnn    ttttttt:::::ttttttt      aaaaaaaaaaaaa       ccccccccccccccccttttttt:::::ttttttt
-//  C:::::C               oo:::::::::::oo n:::nn::::::::nn  t:::::::::::::::::t      a::::::::::::a    cc:::::::::::::::ct:::::::::::::::::t
-//  C:::::C              o:::::::::::::::on::::::::::::::nn t:::::::::::::::::t      aaaaaaaaa:::::a  c:::::::::::::::::ct:::::::::::::::::t
-//  C:::::C              o:::::ooooo:::::onn:::::::::::::::ntttttt:::::::tttttt               a::::a c:::::::cccccc:::::ctttttt:::::::tttttt
-//  C:::::C              o::::o     o::::o  n:::::nnnn:::::n      t:::::t              aaaaaaa:::::a c::::::c     ccccccc      t:::::t
-//  C:::::C              o::::o     o::::o  n::::n    n::::n      t:::::t            aa::::::::::::a c:::::c                   t:::::t
-//  C:::::C              o::::o     o::::o  n::::n    n::::n      t:::::t           a::::aaaa::::::a c:::::c                   t:::::t
-//  C:::::C       CCCCCC o::::o     o::::o  n::::n    n::::n      t:::::t    tttttta::::a    a:::::a c::::::c     ccccccc      t:::::t    tttttt
-//  C:::::CCCCCCCC::::C  o:::::ooooo:::::o  n::::n    n::::n      t::::::tttt:::::ta::::a    a:::::a c:::::::cccccc:::::c      t::::::tttt:::::t
-//  CC:::::::::::::::C   o:::::::::::::::o  n::::n    n::::n      tt::::::::::::::ta:::::aaaa::::::a  c:::::::::::::::::c      tt::::::::::::::t
-//  CCC::::::::::::C      oo:::::::::::oo   n::::n    n::::n        tt:::::::::::tt a::::::::::aa:::a  cc:::::::::::::::c        tt:::::::::::tt
-//  CCCCCCCCCCCCC           ooooooooooo     nnnnnn    nnnnnn          ttttttttttt    aaaaaaaaaa  aaaa    cccccccccccccccc          ttttttttttt
 
 app.get('/contacten/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
@@ -625,32 +570,6 @@ app.get('/view-contact/:idc/:loginHash', function(req, res) {
     });
   }
 });
-
-
-
-//  BBBBBBBBBBBBBBBBB                                                 tttt                              lllllll lllllll   iiii
-//  B::::::::::::::::B                                             ttt:::t                              l:::::l l:::::l  i::::i
-//  B::::::BBBBBB:::::B                                            t:::::t                              l:::::l l:::::l   iiii
-//  BB:::::B     B:::::B                                           t:::::t                              l:::::l l:::::l
-//    B::::B     B:::::B    eeeeeeeeeeee        ssssssssss   ttttttt:::::ttttttt        eeeeeeeeeeee     l::::l  l::::l iiiiiii nnnn  nnnnnnnn       ggggggggg   ggggg
-//    B::::B     B:::::B  ee::::::::::::ee    ss::::::::::s  t:::::::::::::::::t      ee::::::::::::ee   l::::l  l::::l i:::::i n:::nn::::::::nn    g:::::::::ggg::::g
-//    B::::BBBBBB:::::B  e::::::eeeee:::::eess:::::::::::::s t:::::::::::::::::t     e::::::eeeee:::::ee l::::l  l::::l  i::::i n::::::::::::::nn  g:::::::::::::::::g
-//    B:::::::::::::BB  e::::::e     e:::::es::::::ssss:::::stttttt:::::::tttttt    e::::::e     e:::::e l::::l  l::::l  i::::i nn:::::::::::::::ng::::::ggggg::::::gg
-//    B::::BBBBBB:::::B e:::::::eeeee::::::e s:::::s  ssssss       t:::::t          e:::::::eeeee::::::e l::::l  l::::l  i::::i   n:::::nnnn:::::ng:::::g     g:::::g
-//    B::::B     B:::::Be:::::::::::::::::e    s::::::s            t:::::t          e:::::::::::::::::e  l::::l  l::::l  i::::i   n::::n    n::::ng:::::g     g:::::g
-//    B::::B     B:::::Be::::::eeeeeeeeeee        s::::::s         t:::::t          e::::::eeeeeeeeeee   l::::l  l::::l  i::::i   n::::n    n::::ng:::::g     g:::::g
-//    B::::B     B:::::Be:::::::e           ssssss   s:::::s       t:::::t    tttttte:::::::e            l::::l  l::::l  i::::i   n::::n    n::::ng::::::g    g:::::g
-//  BB:::::BBBBBB::::::Be::::::::e          s:::::ssss::::::s      t::::::tttt:::::te::::::::e          l::::::ll::::::li::::::i  n::::n    n::::ng:::::::ggggg:::::g
-//  B:::::::::::::::::B  e::::::::eeeeeeee  s::::::::::::::s       tt::::::::::::::t e::::::::eeeeeeee  l::::::ll::::::li::::::i  n::::n    n::::n g::::::::::::::::g
-//  B::::::::::::::::B    ee:::::::::::::e   s:::::::::::ss          tt:::::::::::tt  ee:::::::::::::e  l::::::ll::::::li::::::i  n::::n    n::::n  gg::::::::::::::g
-//  BBBBBBBBBBBBBBBBB       eeeeeeeeeeeeee    sssssssssss              ttttttttttt      eeeeeeeeeeeeee  lllllllllllllllliiiiiiii  nnnnnn    nnnnnn    gggggggg::::::g
-//                                                                                                                                                            g:::::g
-//                                                                                                                                                gggggg      g:::::g
-//                                                                                                                                                g:::::gg   gg:::::g
-//                                                                                                                                                 g::::::ggg:::::::g
-//                                                                                                                                                   gg:::::::::::::g
-//                                                                                                                                                      ggg::::::ggg
-//                                                                                                                                                         gggggg
 
 
 app.get('/bestellingen/:idf/:loginHash', function(req, res) {
@@ -940,23 +859,6 @@ app.get('/view-bestelling/:idb/:loginHash', function(req, res) {
     });
   }
 });
-
-//  FFFFFFFFFFFFFFFFFFFFFF                                               tttt
-//  F::::::::::::::::::::F                                            ttt:::t
-//  F::::::::::::::::::::F                                            t:::::t
-//  FF::::::FFFFFFFFF::::F                                            t:::::t
-//    F:::::F       FFFFFF  aaaaaaaaaaaaa       ccccccccccccccccttttttt:::::ttttttt    uuuuuu    uuuuuu  uuuuuu    uuuuuu  rrrrr   rrrrrrrrr
-//    F:::::F               a::::::::::::a    cc:::::::::::::::ct:::::::::::::::::t    u::::u    u::::u  u::::u    u::::u  r::::rrr:::::::::r
-//    F::::::FFFFFFFFFF     aaaaaaaaa:::::a  c:::::::::::::::::ct:::::::::::::::::t    u::::u    u::::u  u::::u    u::::u  r:::::::::::::::::r
-//    F:::::::::::::::F              a::::a c:::::::cccccc:::::ctttttt:::::::tttttt    u::::u    u::::u  u::::u    u::::u  rr::::::rrrrr::::::r
-//    F:::::::::::::::F       aaaaaaa:::::a c::::::c     ccccccc      t:::::t          u::::u    u::::u  u::::u    u::::u   r:::::r     r:::::r
-//    F::::::FFFFFFFFFF     aa::::::::::::a c:::::c                   t:::::t          u::::u    u::::u  u::::u    u::::u   r:::::r     rrrrrrr
-//    F:::::F              a::::aaaa::::::a c:::::c                   t:::::t          u::::u    u::::u  u::::u    u::::u   r:::::r
-//    F:::::F             a::::a    a:::::a c::::::c     ccccccc      t:::::t    ttttttu:::::uuuu:::::u  u:::::uuuu:::::u   r:::::r
-//  FF:::::::FF           a::::a    a:::::a c:::::::cccccc:::::c      t::::::tttt:::::tu:::::::::::::::uuu:::::::::::::::uu r:::::r
-//  F::::::::FF           a:::::aaaa::::::a  c:::::::::::::::::c      tt::::::::::::::t u:::::::::::::::u u:::::::::::::::u r:::::r
-//  F::::::::FF            a::::::::::aa:::a  cc:::::::::::::::c        tt:::::::::::tt  uu::::::::uu:::u  uu::::::::uu:::u r:::::r
-//  FFFFFFFFFFF             aaaaaaaaaa  aaaa    cccccccccccccccc          ttttttttttt      uuuuuuuu  uuuu    uuuuuuuu  uuuu rrrrrrr
 
 app.get('/facturen/:idc/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
@@ -1551,25 +1453,6 @@ app.get('/view-factuur/:idf/t/:loginHash', function(req, res) {
   }
 });
 
-
-//  PPPPPPPPPPPPPPPPP   DDDDDDDDDDDDD        FFFFFFFFFFFFFFFFFFFFFF
-//  P::::::::::::::::P  D::::::::::::DDD     F::::::::::::::::::::F
-//  P::::::PPPPPP:::::P D:::::::::::::::DD   F::::::::::::::::::::F
-//  PP:::::P     P:::::PDDD:::::DDDDD:::::D  FF::::::FFFFFFFFF::::F
-//    P::::P     P:::::P  D:::::D    D:::::D   F:::::F       FFFFFF
-//    P::::P     P:::::P  D:::::D     D:::::D  F:::::F
-//    P::::PPPPPP:::::P   D:::::D     D:::::D  F::::::FFFFFFFFFF
-//    P:::::::::::::PP    D:::::D     D:::::D  F:::::::::::::::F
-//    P::::PPPPPPPPP      D:::::D     D:::::D  F:::::::::::::::F
-//    P::::P              D:::::D     D:::::D  F::::::FFFFFFFFFF
-//    P::::P              D:::::D     D:::::D  F:::::F
-//    P::::P              D:::::D    D:::::D   F:::::F
-//  PP::::::PP          DDD:::::DDDDD:::::D  FF:::::::FF
-//  P::::::::P          D:::::::::::::::DD   F::::::::FF
-//  P::::::::P          D::::::::::::DDD     F::::::::FF
-//  PPPPPPPPPP          DDDDDDDDDDDDD        FFFFFFFFFFF
-
-
 app.get('/createPDF/:idf/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     var id = req.params.id;
@@ -1745,23 +1628,6 @@ app.get('/bestelbon/:idf/:loginHash', function(req, res) {
   }
 });
 
-//  PPPPPPPPPPPPPPPPP                                            ffffffffffffffff    iiii  lllllll
-//  P::::::::::::::::P                                          f::::::::::::::::f  i::::i l:::::l
-//  P::::::PPPPPP:::::P                                        f::::::::::::::::::f  iiii  l:::::l
-//  PP:::::P     P:::::P                                       f::::::fffffff:::::f        l:::::l
-//    P::::P     P:::::Prrrrr   rrrrrrrrr      ooooooooooo     f:::::f       ffffffiiiiiii  l::::l     eeeeeeeeeeee
-  //  P::::P     P:::::Pr::::rrr:::::::::r   oo:::::::::::oo   f:::::f             i:::::i  l::::l   ee::::::::::::ee
-  //  P::::PPPPPP:::::P r:::::::::::::::::r o:::::::::::::::o f:::::::ffffff        i::::i  l::::l  e::::::eeeee:::::ee
-  //  P:::::::::::::PP  rr::::::rrrrr::::::ro:::::ooooo:::::o f::::::::::::f        i::::i  l::::l e::::::e     e:::::e
-  //  P::::PPPPPPPPP     r:::::r     r:::::ro::::o     o::::o f::::::::::::f        i::::i  l::::l e:::::::eeeee::::::e
-  //  P::::P             r:::::r     rrrrrrro::::o     o::::o f:::::::ffffff        i::::i  l::::l e:::::::::::::::::e
-  //  P::::P             r:::::r            o::::o     o::::o  f:::::f              i::::i  l::::l e::::::eeeeeeeeeee
-  //  P::::P             r:::::r            o::::o     o::::o  f:::::f              i::::i  l::::l e:::::::e
-//  PP::::::PP           r:::::r            o:::::ooooo:::::o f:::::::f            i::::::il::::::le::::::::e
-//  P::::::::P           r:::::r            o:::::::::::::::o f:::::::f            i::::::il::::::l e::::::::eeeeeeee
-//  P::::::::P           r:::::r             oo:::::::::::oo  f:::::::f            i::::::il::::::l  ee:::::::::::::e
-//  PPPPPPPPPP           rrrrrrr               ooooooooooo    fffffffff            iiiiiiiillllllll    eeeeeeeeeeeeee
-
 app.get('/edit-profile/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     var legeProfiel;
@@ -1865,23 +1731,6 @@ app.post('/edit-profile/:id/:loginHash', function(req, res) {
     });
   }
 });
-
-//       OOOOOOOOO         ffffffffffffffff      ffffffffffffffff                                                   tttt
-//     OO:::::::::OO      f::::::::::::::::f    f::::::::::::::::f                                               ttt:::t
-//   OO:::::::::::::OO   f::::::::::::::::::f  f::::::::::::::::::f                                              t:::::t
-//  O:::::::OOO:::::::O  f::::::fffffff:::::f  f::::::fffffff:::::f                                              t:::::t
-//  O::::::O   O::::::O  f:::::f       ffffff  f:::::f       ffffff    eeeeeeeeeeee    rrrrr   rrrrrrrrr   ttttttt:::::ttttttt        eeeeeeeeeeee
-//  O:::::O     O:::::O  f:::::f               f:::::f               ee::::::::::::ee  r::::rrr:::::::::r  t:::::::::::::::::t      ee::::::::::::ee
-//  O:::::O     O:::::O f:::::::ffffff        f:::::::ffffff        e::::::eeeee:::::eer:::::::::::::::::r t:::::::::::::::::t     e::::::eeeee:::::ee
-//  O:::::O     O:::::O f::::::::::::f        f::::::::::::f       e::::::e     e:::::err::::::rrrrr::::::rtttttt:::::::tttttt    e::::::e     e:::::e
-//  O:::::O     O:::::O f::::::::::::f        f::::::::::::f       e:::::::eeeee::::::e r:::::r     r:::::r      t:::::t          e:::::::eeeee::::::e
-//  O:::::O     O:::::O f:::::::ffffff        f:::::::ffffff       e:::::::::::::::::e  r:::::r     rrrrrrr      t:::::t          e:::::::::::::::::e
-//  O:::::O     O:::::O  f:::::f               f:::::f             e::::::eeeeeeeeeee   r:::::r                  t:::::t          e::::::eeeeeeeeeee
-//  O::::::O   O::::::O  f:::::f               f:::::f             e:::::::e            r:::::r                  t:::::t    tttttte:::::::e
-//  O:::::::OOO:::::::O f:::::::f             f:::::::f            e::::::::e           r:::::r                  t::::::tttt:::::te::::::::e
-//   OO:::::::::::::OO  f:::::::f             f:::::::f             e::::::::eeeeeeee   r:::::r                  tt::::::::::::::t e::::::::eeeeeeee
-//    OO:::::::::OO    f:::::::f             f:::::::f              ee:::::::::::::e   r:::::r                    tt:::::::::::tt  ee:::::::::::::e
-//      OOOOOOOOO      fffffffff             fffffffff                eeeeeeeeeeeeee   rrrrrrr                      ttttttttttt      eeeeeeeeeeeeee
 
 app.get('/offerte/:idf/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
@@ -2021,25 +1870,6 @@ app.get('/add-offerte/:idc/:loginHash', function(req, res) {
     });
   }
 });
-
-//                                                                           dddddddd
-//          CCCCCCCCCCCCC                                                    d::::::d  iiii           tttt          NNNNNNNN        NNNNNNNN                          tttt
-//       CCC::::::::::::C                                                    d::::::d i::::i       ttt:::t          N:::::::N       N::::::N                       ttt:::t
-//     CC:::::::::::::::C                                                    d::::::d  iiii        t:::::t          N::::::::N      N::::::N                       t:::::t
-//     C:::::CCCCCCCC::::C                                                    d:::::d               t:::::t          N:::::::::N     N::::::N                       t:::::t
-//   C:::::C       CCCCCCrrrrr   rrrrrrrrr       eeeeeeeeeeee        ddddddddd:::::d iiiiiii ttttttt:::::ttttttt    N::::::::::N    N::::::N   ooooooooooo   ttttttt:::::ttttttt      aaaaaaaaaaaaa
-//  C:::::C              r::::rrr:::::::::r    ee::::::::::::ee    dd::::::::::::::d i:::::i t:::::::::::::::::t    N:::::::::::N   N::::::N oo:::::::::::oo t:::::::::::::::::t      a::::::::::::a
-//  C:::::C              r:::::::::::::::::r  e::::::eeeee:::::ee d::::::::::::::::d  i::::i t:::::::::::::::::t    N:::::::N::::N  N::::::No:::::::::::::::ot:::::::::::::::::t      aaaaaaaaa:::::a
-//  C:::::C              rr::::::rrrrr::::::re::::::e     e:::::ed:::::::ddddd:::::d  i::::i tttttt:::::::tttttt    N::::::N N::::N N::::::No:::::ooooo:::::otttttt:::::::tttttt               a::::a
-//  C:::::C               r:::::r     r:::::re:::::::eeeee::::::ed::::::d    d:::::d  i::::i       t:::::t          N::::::N  N::::N:::::::No::::o     o::::o      t:::::t              aaaaaaa:::::a
-//  C:::::C               r:::::r     rrrrrrre:::::::::::::::::e d:::::d     d:::::d  i::::i       t:::::t          N::::::N   N:::::::::::No::::o     o::::o      t:::::t            aa::::::::::::a
-//  C:::::C               r:::::r            e::::::eeeeeeeeeee  d:::::d     d:::::d  i::::i       t:::::t          N::::::N    N::::::::::No::::o     o::::o      t:::::t           a::::aaaa::::::a
-//   C:::::C       CCCCCC r:::::r            e:::::::e           d:::::d     d:::::d  i::::i       t:::::t    ttttttN::::::N     N:::::::::No::::o     o::::o      t:::::t    tttttta::::a    a:::::a
-//    C:::::CCCCCCCC::::C r:::::r            e::::::::e          d::::::ddddd::::::ddi::::::i      t::::::tttt:::::tN::::::N      N::::::::No:::::ooooo:::::o      t::::::tttt:::::ta::::a    a:::::a
-//     CC:::::::::::::::C r:::::r             e::::::::eeeeeeee   d:::::::::::::::::di::::::i      tt::::::::::::::tN::::::N       N:::::::No:::::::::::::::o      tt::::::::::::::ta:::::aaaa::::::a
-//       CCC::::::::::::C r:::::r              ee:::::::::::::e    d:::::::::ddd::::di::::::i        tt:::::::::::ttN::::::N        N::::::N oo:::::::::::oo         tt:::::::::::tt a::::::::::aa:::a
-//          CCCCCCCCCCCCC rrrrrrr                eeeeeeeeeeeeee     ddddddddd   dddddiiiiiiii          ttttttttttt  NNNNNNNN         NNNNNNN   ooooooooooo             ttttttttttt    aaaaaaaaaa  aaaa
-
 
 app.get('/creditnota/:idc/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
@@ -2598,30 +2428,6 @@ app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {
     });
   });
 });
-//  PPPPPPPPPPPPPPPPP                         iiii               jjjj
-//  P::::::::::::::::P                       i::::i             j::::j
-//  P::::::PPPPPP:::::P                       iiii               jjjj
-//  PP:::::P     P:::::P
-//    P::::P     P:::::Prrrrr   rrrrrrrrr   iiiiiii            jjjjjjj    ssssssssss
-//    P::::P     P:::::Pr::::rrr:::::::::r  i:::::i            j:::::j  ss::::::::::s
-//    P::::PPPPPP:::::P r:::::::::::::::::r  i::::i             j::::jss:::::::::::::s
-//    P:::::::::::::PP  rr::::::rrrrr::::::r i::::i             j::::js::::::ssss:::::s
-//    P::::PPPPPPPPP     r:::::r     r:::::r i::::i             j::::j s:::::s  ssssss
-//    P::::P             r:::::r     rrrrrrr i::::i             j::::j   s::::::s
-//    P::::P             r:::::r             i::::i             j::::j      s::::::s
-//    P::::P             r:::::r             i::::i             j::::jssssss   s:::::s
-//  PP::::::PP           r:::::r            i::::::i            j::::js:::::ssss::::::s
-//  P::::::::P           r:::::r            i::::::i            j::::js::::::::::::::s
-//  P::::::::P           r:::::r            i::::::i            j::::j s:::::::::::ss
-//  PPPPPPPPPP           rrrrrrr            iiiiiiii            j::::j  sssssssssss
-//                                                              j::::j
-//                                                    jjjj      j::::j
-//                                                   j::::jj   j:::::j
-//                                                   j::::::jjj::::::j
-//                                                    jj::::::::::::j
-//                                                      jjj::::::jjj
-//                                                         jjjjjj
-
 
 app.get('/prijs/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
@@ -2997,23 +2803,6 @@ app.post('/prijs/:totaal/:loginHash', function(req, res) {
   }
 });
 
-//  MMMMMMMM               MMMMMMMM                           tttt
-//  M:::::::M             M:::::::M                        ttt:::t
-//  M::::::::M           M::::::::M                        t:::::t
-//  M:::::::::M         M:::::::::M                        t:::::t
-//  M::::::::::M       M::::::::::M  aaaaaaaaaaaaa   ttttttt:::::ttttttt
-//  M:::::::::::M     M:::::::::::M  a::::::::::::a  t:::::::::::::::::t
-//  M:::::::M::::M   M::::M:::::::M  aaaaaaaaa:::::a t:::::::::::::::::t
-//  M::::::M M::::M M::::M M::::::M           a::::a tttttt:::::::tttttt
-//  M::::::M  M::::M::::M  M::::::M    aaaaaaa:::::a       t:::::t
-//  M::::::M   M:::::::M   M::::::M  aa::::::::::::a       t:::::t
-//  M::::::M    M:::::M    M::::::M a::::aaaa::::::a       t:::::t
-//  M::::::M     MMMMM     M::::::Ma::::a    a:::::a       t:::::t    tttttt
-//  M::::::M               M::::::Ma::::a    a:::::a       t::::::tttt:::::t
-//  M::::::M               M::::::Ma:::::aaaa::::::a       tt::::::::::::::t
-//  M::::::M               M::::::M a::::::::::aa:::a        tt:::::::::::tt
-//  MMMMMMMM               MMMMMMMM  aaaaaaaaaa  aaaa          ttttttttttt
-
 app.get('/mat/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     Settings.find({}, function(err, settings) {
@@ -3175,31 +2964,6 @@ app.get('/delete-mat/:id/:loginHash', function(req, res) {
   }
 });
 
-//     SSSSSSSSSSSSSSS                              tttt                   tttt            iiii
-//   SS:::::::::::::::S                          ttt:::t                ttt:::t           i::::i
-//  S:::::SSSSSS::::::S                          t:::::t                t:::::t            iiii
-//  S:::::S     SSSSSSS                          t:::::t                t:::::t
-//  S:::::S                eeeeeeeeeeee    ttttttt:::::ttttttt    ttttttt:::::ttttttt    iiiiiii nnnn  nnnnnnnn       ggggggggg   ggggg    ssssssssss
-//  S:::::S              ee::::::::::::ee  t:::::::::::::::::t    t:::::::::::::::::t    i:::::i n:::nn::::::::nn    g:::::::::ggg::::g  ss::::::::::s
-//   S::::SSSS          e::::::eeeee:::::eet:::::::::::::::::t    t:::::::::::::::::t     i::::i n::::::::::::::nn  g:::::::::::::::::gss:::::::::::::s
-//    SS::::::SSSSS    e::::::e     e:::::etttttt:::::::tttttt    tttttt:::::::tttttt     i::::i nn:::::::::::::::ng::::::ggggg::::::ggs::::::ssss:::::s
-//      SSS::::::::SS  e:::::::eeeee::::::e      t:::::t                t:::::t           i::::i   n:::::nnnn:::::ng:::::g     g:::::g  s:::::s  ssssss
-//         SSSSSS::::S e:::::::::::::::::e       t:::::t                t:::::t           i::::i   n::::n    n::::ng:::::g     g:::::g    s::::::s
-//              S:::::Se::::::eeeeeeeeeee        t:::::t                t:::::t           i::::i   n::::n    n::::ng:::::g     g:::::g       s::::::s
-//              S:::::Se:::::::e                 t:::::t    tttttt      t:::::t    tttttt i::::i   n::::n    n::::ng::::::g    g:::::g ssssss   s:::::s
-//  SSSSSSS     S:::::Se::::::::e                t::::::tttt:::::t      t::::::tttt:::::ti::::::i  n::::n    n::::ng:::::::ggggg:::::g s:::::ssss::::::s
-//  S::::::SSSSSS:::::S e::::::::eeeeeeee        tt::::::::::::::t      tt::::::::::::::ti::::::i  n::::n    n::::n g::::::::::::::::g s::::::::::::::s
-//  S:::::::::::::::SS   ee:::::::::::::e          tt:::::::::::tt        tt:::::::::::tti::::::i  n::::n    n::::n  gg::::::::::::::g  s:::::::::::ss
-//   SSSSSSSSSSSSSSS       eeeeeeeeeeeeee            ttttttttttt            ttttttttttt  iiiiiiii  nnnnnn    nnnnnn    gggggggg::::::g   sssssssssss
-//                                                                                                                             g:::::g
-//                                                                                                                 gggggg      g:::::g
-//                                                                                                                 g:::::gg   gg:::::g
-//                                                                                                                  g::::::ggg:::::::g
-//                                                                                                                   gg:::::::::::::g
-//                                                                                                                      ggg::::::ggg
-//                                                                                                                         gggggg
-
-
 app.get('/settings/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     Settings.find({}, function(err, settings) {
@@ -3301,30 +3065,6 @@ app.get('/zoeken', function(req, res) {
   res.redirect('/');
 });
 
-//  PPPPPPPPPPPPPPPPP                                                                                                              tttt
-//  P::::::::::::::::P                                                                                                          ttt:::t
-//  P::::::PPPPPP:::::P                                                                                                         t:::::t
-//  PP:::::P     P:::::P                                                                                                        t:::::t
-//    P::::P     P:::::P    eeeeeeeeeeee    rrrrr   rrrrrrrrr       cccccccccccccccc    eeeeeeeeeeee    nnnn  nnnnnnnn    ttttttt:::::ttttttt      aaaaaaaaaaaaa      ggggggggg   ggggg    eeeeeeeeeeee
-//    P::::P     P:::::P  ee::::::::::::ee  r::::rrr:::::::::r    cc:::::::::::::::c  ee::::::::::::ee  n:::nn::::::::nn  t:::::::::::::::::t      a::::::::::::a    g:::::::::ggg::::g  ee::::::::::::ee
-//    P::::PPPPPP:::::P  e::::::eeeee:::::eer:::::::::::::::::r  c:::::::::::::::::c e::::::eeeee:::::een::::::::::::::nn t:::::::::::::::::t      aaaaaaaaa:::::a  g:::::::::::::::::g e::::::eeeee:::::ee
-//    P:::::::::::::PP  e::::::e     e:::::err::::::rrrrr::::::rc:::::::cccccc:::::ce::::::e     e:::::enn:::::::::::::::ntttttt:::::::tttttt               a::::a g::::::ggggg::::::gge::::::e     e:::::e
-//    P::::PPPPPPPPP    e:::::::eeeee::::::e r:::::r     r:::::rc::::::c     ccccccce:::::::eeeee::::::e  n:::::nnnn:::::n      t:::::t              aaaaaaa:::::a g:::::g     g:::::g e:::::::eeeee::::::e
-//    P::::P            e:::::::::::::::::e  r:::::r     rrrrrrrc:::::c             e:::::::::::::::::e   n::::n    n::::n      t:::::t            aa::::::::::::a g:::::g     g:::::g e:::::::::::::::::e
-//    P::::P            e::::::eeeeeeeeeee   r:::::r            c:::::c             e::::::eeeeeeeeeee    n::::n    n::::n      t:::::t           a::::aaaa::::::a g:::::g     g:::::g e::::::eeeeeeeeeee
-//    P::::P            e:::::::e            r:::::r            c::::::c     ccccccce:::::::e             n::::n    n::::n      t:::::t    tttttta::::a    a:::::a g::::::g    g:::::g e:::::::e
-//  PP::::::PP          e::::::::e           r:::::r            c:::::::cccccc:::::ce::::::::e            n::::n    n::::n      t::::::tttt:::::ta::::a    a:::::a g:::::::ggggg:::::g e::::::::e
-//  P::::::::P           e::::::::eeeeeeee   r:::::r             c:::::::::::::::::c e::::::::eeeeeeee    n::::n    n::::n      tt::::::::::::::ta:::::aaaa::::::a  g::::::::::::::::g  e::::::::eeeeeeee
-//  P::::::::P            ee:::::::::::::e   r:::::r              cc:::::::::::::::c  ee:::::::::::::e    n::::n    n::::n        tt:::::::::::tt a::::::::::aa:::a  gg::::::::::::::g   ee:::::::::::::e
-//  PPPPPPPPPP              eeeeeeeeeeeeee   rrrrrrr                cccccccccccccccc    eeeeeeeeeeeeee    nnnnnn    nnnnnn          ttttttttttt    aaaaaaaaaa  aaaa    gggggggg::::::g     eeeeeeeeeeeeee
-//                                                                                                                                                                             g:::::g
-//                                                                                                                                                                 gggggg      g:::::g
-//                                                                                                                                                                 g:::::gg   gg:::::g
-//                                                                                                                                                                  g::::::ggg:::::::g
-//                                                                                                                                                                   gg:::::::::::::g
-//                                                                                                                                                                     ggg::::::ggg
-//                                                                                                                                                                        gggggg
-
 app.post('/percentage/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     Settings.find({}, function(err, settings) {
@@ -3391,29 +3131,6 @@ app.get('/percentage/:loginHash', function(req, res) {
   }
 });
 
-//  PPPPPPPPPPPPPPPPP                                                     jjjj                              tttt
-//  P::::::::::::::::P                                                   j::::j                          ttt:::t
-//  P::::::PPPPPP:::::P                                                   jjjj                           t:::::t
-//  PP:::::P     P:::::P                                                                                 t:::::t
-//    P::::P     P:::::Prrrrr   rrrrrrrrr      ooooooooooo              jjjjjjj    eeeeeeeeeeee    ttttttt:::::ttttttt
-//    P::::P     P:::::Pr::::rrr:::::::::r   oo:::::::::::oo            j:::::j  ee::::::::::::ee  t:::::::::::::::::t
-//    P::::PPPPPP:::::P r:::::::::::::::::r o:::::::::::::::o            j::::j e::::::eeeee:::::eet:::::::::::::::::t
-//    P:::::::::::::PP  rr::::::rrrrr::::::ro:::::ooooo:::::o            j::::je::::::e     e:::::etttttt:::::::tttttt
-//    P::::PPPPPPPPP     r:::::r     r:::::ro::::o     o::::o            j::::je:::::::eeeee::::::e      t:::::t
-//    P::::P             r:::::r     rrrrrrro::::o     o::::o            j::::je:::::::::::::::::e       t:::::t
-//    P::::P             r:::::r            o::::o     o::::o            j::::je::::::eeeeeeeeeee        t:::::t
-//    P::::P             r:::::r            o::::o     o::::o            j::::je:::::::e                 t:::::t    tttttt
-//  PP::::::PP           r:::::r            o:::::ooooo:::::o            j::::je::::::::e                t::::::tttt:::::t
-//  P::::::::P           r:::::r            o:::::::::::::::o            j::::j e::::::::eeeeeeee        tt::::::::::::::t
-//  P::::::::P           r:::::r             oo:::::::::::oo             j::::j  ee:::::::::::::e          tt:::::::::::tt
-//  PPPPPPPPPP           rrrrrrr               ooooooooooo               j::::j    eeeeeeeeeeeeee            ttttttttttt
-//                                                                       j::::j
-//                                                             jjjj      j::::j
-//                                                            j::::jj   j:::::j
-//                                                            j::::::jjj::::::j
-//                                                             jj::::::::::::j
-//                                                               jjj::::::jjj
-//                                                                  jjjjjj
 
 app.get('/add-project/:idc/:loginHash',function(req,res){
   if (checkSession(req.params.loginHash, res)) {
@@ -3494,21 +3211,6 @@ app.post('/add-project/:idc/:loginHash',function(req,res){
     });
   }
 });
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////    REST    REST    REST    REST    REST    REST    REST    REST    REST    REST    REST    REST    REST    REST    REST    REST    REST
 
 app.get('/change-betaald/:id/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
