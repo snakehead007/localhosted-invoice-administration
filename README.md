@@ -41,7 +41,7 @@ preparation
 ```
 
 For windows users these steps are also nessesary:
-(for more info, check the wiki this repo)
+(for more info, check the [wiki](https://github.com/snakehead007/simple-invoice-administration/wiki))
 
 ```
   npm install -g node-windows --save
