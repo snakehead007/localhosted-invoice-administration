@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({
 }));
 mongoose.connect('mongodb://localhost:27017/sample-website');
 mongoose.connection.on('open', function() {
-  console.log('Mongoose connected.');
+  console.log('Mongoose connected!');
 });
 
 var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
@@ -67,6 +67,18 @@ var SettingsSchema = new Schema({
   e4: {
     type: Number,
     default: 11
+  },
+  factuurtext: {
+    type: String,
+    default:""
+  },
+  creditnotatext:{
+    type: String,
+    default:""
+  },
+  offertetext:{
+    type: String,
+    default:""
   }
 });
 var Settings = mongoose.model('Settings', SettingsSchema);
@@ -3064,6 +3076,34 @@ app.get('/change-lang/:lang/:loginHash', function(req, res) {
     });
   };
 });
+
+app.post('/edit-pdf-text/:loginHash', function(req, res) {
+  if (checkSession(req.params.loginHash, res)) {
+    Settings.find({}, function(err, settings) {
+      if (!err) {
+        var settings = settings[0];
+        console.log(settings)
+        var updateSettings = {
+          factuurtext: req.body.factuurtext,
+          creditnotatext:req.body.creditnotatext,
+          offertetext:req.body.offertetext
+        }
+        Settings.update({
+          _id: settings
+        }, updateSettings, function(err, updatedSettings) {
+          if (!err) {
+            res.redirect('/settings/' + req.params.loginHash);
+          } else {
+            console.log(err);
+          }
+        });
+      } else {
+        console.log(err);
+      }
+    });
+  };
+});
+
 
 app.get('/zoeken', function(req, res) {
   res.redirect('/');
