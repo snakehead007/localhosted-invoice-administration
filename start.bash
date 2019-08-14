@@ -7,7 +7,7 @@
 QUIET='false'
 VERBOSE='false';
 NODE='false';
-package="_linuxstart.bash";
+package="start.bash";
 function start_all_quiet(){
 	nohup mongod --quiet &
 	sleep 3
