@@ -21,61 +21,10 @@ There are 4 themes: Grey, Dark, White, Blue, Red
 All data is kept locally by mongodb.
 Changing from computer, you will have to export and import all data manually (for now)
 
-preparation
+Installation and preparation
 --
 
-##### download and install nodejs:
-
-[Windows/MacOs](https://nodejs.org/en/download/)
-
-[Linux](https://nodejs.org/en/download/package-manager/)
-
-#### download and install Mongodb community server:
-
-[MongoDB Download Center: Community Center](https://www.mongodb.com/download-center/community)
-
-##### install these npm packages
-
-```
-  npm install -g express jade mongodb mongoose chartjs --save
-```
-
-For windows users these steps are also nessesary:
-(for more info, check the [wiki](https://github.com/snakehead007/simple-invoice-administration/wiki))
-
-```
-  npm install -g node-windows --save
-  npm link node-windows
-```
-
-start the server by:
---
- 
-##### Linux/MacOs:
-
-use the prepared script
-
-```
-bash ./_linuxstart.bash -a
-```
-
-or manually start the processes
-
-```
-  mongod
-```
-
-```
-  node start
-```
-
-#### Windows:
-
-Ensure that Mongodb server is running, and you have database running on port 27017
-
-Execute file "start.bat"
-
-(this will also update the program before it starts up)
+Check the [Wiki](https://github.com/snakehead007/simple-invoice-administration/wiki)
 
 npm package list
 --
