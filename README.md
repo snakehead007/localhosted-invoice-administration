@@ -24,7 +24,7 @@ Changing from computer, you will have to export and import all data manually (fo
 Installation and preparation
 --
 
-Check the [Wiki](https://github.com/snakehead007/simple-invoice-administration/wiki)
+Check the [wiki](https://github.com/snakehead007/simple-invoice-administration/wiki) for more information.
 
 Screenshots
 -
