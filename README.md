@@ -26,35 +26,6 @@ Installation and preparation
 
 Check the [Wiki](https://github.com/snakehead007/simple-invoice-administration/wiki)
 
-npm package list
---
-
-##### express:
-
-handles the application’s endpoints (URIs) to respond to its client request
-
-##### jade:
-
-A terse language for writing HTML, supports dynamic sites
-
-##### mongodb:
-
-A noSQL database, saves all the data from the user
-
-##### mongoose:
-
-A straight-forward, schema-based solution to model the application data, communicates with mongodb
-
-##### forever, forever-monitor:
-
-CLI tool for ensuring that a given script runs continuously
-
-##### chartjs
-Simple and flexible JavaScript charting
-
-#### node-windows
-A tool to create the server startup as a .exe file
-
 Screenshots
 -
 
