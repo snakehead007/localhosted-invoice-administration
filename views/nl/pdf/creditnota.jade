@@ -26,6 +26,13 @@ html
       factuurNr = "#{factuur.creditnr}";
       datum = "#{factuur.datum}";
       voorschot = Number(#{factuur.voorschot});
+      creditnotatext = [];
+      creditnotatext.push("#{creditnotatext[0]}");
+      creditnotatext.push("#{creditnotatext[1]}");
+      creditnotatext.push("#{creditnotatext[2]}");
+      creditnotatext.push("#{creditnotatext[3]}");
+      creditnotatext.push("#{creditnotatext[4]}");
+      creditnotatext.push("#{creditnotatext[5]}");
       var doc = new jsPDF();
       doc.setFont(doc.getFontList()[0]);
       doc.setProperties({
@@ -187,9 +194,10 @@ html
       /**Footer & Disclaimer**/
       doc.setFontType("courier");
       doc.setFontSize(10);
-      doc.text(20,265,"");
-      doc.text(20,270,"Totaal bedrag terugbetaalt op #{contact.rekeningnr} op datum #{factuur.datum} ");
-      doc.text(20,275,"Neem bij vragen over deze creditnota contact op met #{profile.naam}, #{profile.tele}, #{profile.mail}");
+      doc.text(20,265,creditnotatext[0]);
+      doc.text(20,270,creditnotatext[1]);
+      doc.text(20,275,creditnotatext[2]);
+      doc.text(20,280,creditnotatext[3]);
       doc.setFontType("bold");
       doc.text(20,285,"Wij danken u voor uw vertrouwen.");
       /**EINDE FACTUUR GENERATIE**/

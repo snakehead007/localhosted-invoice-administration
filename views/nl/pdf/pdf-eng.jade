@@ -26,6 +26,13 @@ html
       factuurNr = "#{factuur.factuurNr}";
       datum = "#{factuur.datum}";
       voorschot = Number(#{factuur.voorschot});
+      factuurtext = [];
+      factuurtext.push("#{factuurtext[0]}");
+      factuurtext.push("#{factuurtext[1]}");
+      factuurtext.push("#{factuurtext[2]}");
+      factuurtext.push("#{factuurtext[3]}");
+      factuurtext.push("#{factuurtext[4]}");
+      factuurtext.push("#{factuurtext[5]}");
       var doc = new jsPDF();
       doc.setFont(doc.getFontList()[0]);
       doc.setProperties({

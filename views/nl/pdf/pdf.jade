@@ -25,6 +25,16 @@ html
       btwNr = "#{contact.btwNr}";
       factuurNr = "#{factuur.factuurNr}";
       datum = "#{factuur.datum}";
+      factuurtext = [];
+      factuurtext.push("#{factuurtext[0]}");
+      factuurtext.push("#{factuurtext[1]}");
+      factuurtext.push("#{factuurtext[2]}");
+      factuurtext.push("#{factuurtext[3]}");
+      factuurtext.push("#{factuurtext[4]}");
+      factuurtext.push("#{factuurtext[5]}");
+      
+      console.log()
+      console.log("up")
       voorschot = Number(#{factuur.voorschot});
       var doc = new jsPDF();
       doc.setFont(doc.getFontList()[0]);
@@ -191,9 +201,10 @@ html
       /**Footer & Disclaimer**/
       doc.setFontType("courier");
       doc.setFontSize(10);
-      doc.text(20,265,"U wordt verzocht het vermelde bedrag ten laatste binnen de 14 dagen na factuurdatum over te maken op bovenstaand");
-      doc.text(20,270,"rekeningnummer, onder vermelding van het factuurnummer.");
-      doc.text(20,275,"Neem bij vragen over deze factuur contact op met #{profile.naam}, #{profile.tele}, #{profile.mail}");
+      doc.text(20,265,factuurtext[0]);
+      doc.text(20,270,factuurtext[1]);
+      doc.text(20,275,factuurtext[2]);
+      doc.text(20,280,factuurtext[3]);
       doc.setFontType("bold");
       doc.text(20,285,"Wij danken u voor uw vertrouwen.");
       /**EINDE FACTUUR GENERATIE**/
