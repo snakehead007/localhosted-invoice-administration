@@ -34,8 +34,19 @@ html
                   input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search" )
     main
       div(class="jumbotron")
+        div(class="row")
+          div(class="col-lg-2 col-md-1 col-lg-0")
+          if error == 1
+            div(class="alert alert-success col-lg-8 col-md-10 col-sm-12" role="alert") Password succefully updated.
+          
+        hr
         table(class="table table-striped table-striped")
           tbody
+            tr
+              td
+                p(class="lead") Change password
+                a(href='/pass'+"/"+loginHash,class="button")
+                    button(type="button" class="btn btn-#{settings.thema}") Change now 
             tr
               td
                 p(class="lead") Thema

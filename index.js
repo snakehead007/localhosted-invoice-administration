@@ -16,7 +16,6 @@ mongoose.connection.on('open', function() {
 var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
 var maand_klein = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
 Schema = mongoose.Schema;
-var pass = "merijntje";
 var loginHash;
 var currentLogin = "";
 var SettingsSchema = new Schema({
@@ -79,6 +78,10 @@ var SettingsSchema = new Schema({
   offertetext:{
     type: String,
     default:""
+  },
+  pass:{
+    type:String,
+    default:"password"
   }
 });
 var Settings = mongoose.model('Settings', SettingsSchema);
@@ -3824,6 +3827,68 @@ app.post('/inch/:loginHash', function(req, res) {
   }
 });
 
+
+app.get('/pass/:loginHash', function(req, res) {
+  if (checkSession(req.params.loginHash, res)) {
+    Settings.find({}, function(err, settings) {
+      if (!err && settings.length != 0) {
+        res.render('nl/pass',{"loginHash":req.params.loginHash,"settings":settings[0]});
+      } else {
+        legeSettings = new Settings();
+        legeSettings.save(function(err) {
+          if (err) {
+            console.log("err in settings: " + err);
+          }
+        });
+        console.log(legeSettings);
+        res.redirect('/settings');
+        if (err) {
+          console.log(err);
+        }
+      }
+    });
+  }
+});
+
+app.post('/pass/:loginHash', function(req, res) {
+  if (checkSession(req.params.loginHash, res)) {
+    Settings.find({}, function(err, settings) {
+      if (!err && settings.length != 0) {
+        if(req.body.pass === req.body.passRep){
+          var updateSettings = {
+            pass:req.body.pass
+          };
+          Settings.update({
+            _id: settings[0]._id
+          }, updateSettings, function(err, updatedSettings) {
+            if(err){
+              console.log(err);
+            }
+          });
+          res.render('nl/settings',{"loginHash":req.body.pass,"settings":settings[0],
+                                    "error":1});
+        }else{
+          res.render('nl/pass',{"loginHash":req.params.loginHash,"settings":settings[0],
+                                "error":1});
+        }
+      } else {
+        legeSettings = new Settings();
+        legeSettings.save(function(err) {
+          if (err) {
+            console.log("err in settings: " + err);
+          }
+        });
+        console.log(legeSettings);
+        res.redirect('/settings');
+        if (err) {
+          console.log(err);
+        }
+      }
+    });
+  }
+});
+
+
 app.set('views', path.join(__dirname, 'views'));
 
 app.set('view engine', 'jade');
@@ -3866,11 +3931,16 @@ String.prototype.toTime = function() {
 
 function checkSession(login, res) {
   loginHash = login;
-  if (loginHash === pass) {
-    return true;
+  Settings.find({}, function(err, settings) {
+  if (loginHash === String(settings[0].pass)) {
+    console.log("succefully logged in");
+  }else{
+    console.log("User failed logging in");
+    res.redirect('login');
+    return false;
   }
-  console.log("User failed logging in");
-  res.redirect('login');
+  });
+  return true
 }
 
 function distinct(_array) {
