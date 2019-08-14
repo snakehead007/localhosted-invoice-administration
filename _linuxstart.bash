@@ -9,9 +9,9 @@ VERBOSE='false';
 NODE='false';
 package="_linuxstart.bash";
 function start_all_quiet(){
-	mongod --quiet &
+	nohup mongod --quiet &
 	sleep 3
-	node start &
+	nohup node start &
 }
 	
 function start_node(){
@@ -19,7 +19,7 @@ function start_node(){
 }
 
 function start_node_quiet(){
-	node . & nohup &
+	nohup node . &
 }
 function start_all(){
 	mongod &
@@ -71,7 +71,7 @@ function restart_node(){
 function start(){
 start_all_c
 while true; do        	
-	read -n1 -r -p "\nPress any key to stop-\n"    #when any key is pressed, the script will commence
+	read -n1 -r -p "   --Press any key to stop--         "    #when any key is pressed, the script will commence
 	read -p "Do you want to restart the script? (y/n) " yn
     case $yn in
         [Yy]* ) 
@@ -87,7 +87,7 @@ while true; do
     esac
 done
 }
-while test $# -gt 0; do
+while :; do
   case "$1" in
    	 -h|--help)
       		echo "$package - script to start and restart database and server";
@@ -99,29 +99,44 @@ while test $# -gt 0; do
 	    	echo "-n, --node	:	Only restarts node";
 	     	echo "-q, --quiet	:	no output is shown";
 	      	echo "-v, --verbose	:	verbose output (more output)";
-		echo '-a		: 	starts the script in normal mode';
+		echo "without flags	:	restarts mongodb and node every restart";
 	      	exit 0
 	      	;;
    	-n|--node)
+		case "$2" in
+			-q|--quiet)
+				QUIET='true'	
+		esac
 		NODE='true'
 		echo "Starting node only mode"
 		start
 		;;	
-	-q|--quiet)	
+	-q|--quiet)
+		case "$2" in
+			-n|--node)
+				NODE='true'
+		esac
 		QUIET='true'
 		echo 'start script'
 		start
 		;;
 	-v|--verbose)
-		VERBOSE="true"
+		case "$2" in
+			-n|--node)
+				NODE='true'
+		esac
+		VERBOSE='true'
 		echo 'Starting in verbose mode'
 		start
 		;;
-	-a )
+
+	"")
+		echo 'starting in normal mode'
 		start
 		;;
 	*)	
-		echo "use $package -h for the help message"
+		echo 'invalid argument(s)'
+		echo "use the '-h' flag for the help message"
       		break
       		;;
 esac
