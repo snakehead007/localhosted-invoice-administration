@@ -26,6 +26,8 @@ Installation and preparation
 
 Check the [wiki](https://github.com/snakehead007/simple-invoice-administration/wiki) for more information.
 
+The default password is "password".
+
 Screenshots
 -
 
