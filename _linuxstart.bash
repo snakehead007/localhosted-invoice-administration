@@ -71,7 +71,7 @@ function restart_node(){
 function start(){
 start_all_c
 while true; do        	
-	read -n1 -r -p "   --Press any key to stop--         "    #when any key is pressed, the script will commence
+	read -n1 -r -p "   --Press any key to stop--               "    #when any key is pressed, the script will commence
 	read -p "Do you want to restart the script? (y/n) " yn
     case $yn in
         [Yy]* ) 

@@ -1508,6 +1508,7 @@ app.get('/createPDF/:idf/:loginHash', function(req, res) {
                   }
                 });
               }
+              factuurtext = replaceAll(settings[0].factuurtext,profile[0],contact,factuur);
               res.render('nl/pdf/pdf', {
                 'profile': profile[0],
                 'contact': contact,
@@ -1515,7 +1516,8 @@ app.get('/createPDF/:idf/:loginHash', function(req, res) {
                 "factuur": factuur,
                 'lengte': lengte,
                 "settings": settings[0],
-                "loginHash": req.params.loginHash
+                "loginHash": req.params.loginHash,
+                "factuurtext": factuurtext
               });
             });
           });
@@ -1527,6 +1529,7 @@ app.get('/createPDF/:idf/:loginHash', function(req, res) {
 app.get('/createPDF-eng/:idf/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     var id = req.params.id;
+    var factuurtext = [];
     Profile.find({}, function(err, profile) {
       Factuur.findOne({
         _id: req.params.idf
@@ -1565,6 +1568,8 @@ app.get('/createPDF-eng/:idf/:loginHash', function(req, res) {
                   }
                 });
               }
+              factuurtext = replaceAll(settings[0].factuurtext,profile[0],contact,factuur);
+              console.log(factuurtext);
               res.render('nl/pdf/pdf-eng', {
                 'profile': profile[0],
                 'contact': contact,
@@ -1572,7 +1577,8 @@ app.get('/createPDF-eng/:idf/:loginHash', function(req, res) {
                 "factuur": factuur,
                 'lengte': lengte,
                 "settings": settings[0],
-                "loginHash": req.params.loginHash
+                "loginHash": req.params.loginHash,
+                "factuurtext": factuurtext
               });
             });
           });
@@ -1749,6 +1755,7 @@ app.post('/edit-profile/:id/:loginHash', function(req, res) {
 app.get('/offerte/:idf/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     var id = req.params.id;
+    var offertetext;
     Profile.find({}, function(err, profile) {
       Factuur.findOne({
         _id: req.params.idf
@@ -1787,6 +1794,8 @@ app.get('/offerte/:idf/:loginHash', function(req, res) {
                   }
                 });
               }
+
+              offertetext = replaceAll(settings[0].offertetext,profile[0],contact,factuur);
               res.render('nl/pdf/offerte', {
                 'profile': profile[0],
                 'contact': contact,
@@ -1794,7 +1803,8 @@ app.get('/offerte/:idf/:loginHash', function(req, res) {
                 "factuur": factuur,
                 'lengte': lengte,
                 "settings": settings[0],
-                "loginHash": req.params.loginHash
+                "loginHash": req.params.loginHash,
+                "offertetext":offertetext
               });
             });
           });
@@ -1888,6 +1898,7 @@ app.get('/add-offerte/:idc/:loginHash', function(req, res) {
 app.get('/creditnota/:idc/:loginHash', function(req, res) {
   if (checkSession(req.params.loginHash, res)) {
     var id = req.params.idc;
+    var creditnotatext;
     Profile.find({}, function(err, profile) {
       Factuur.findOne({
         _id: id
@@ -1922,6 +1933,7 @@ app.get('/creditnota/:idc/:loginHash', function(req, res) {
                     }
                   });
                 }
+                creditnotatext = replaceAll(settings[0].creditnotatext,profile[0],contact,factuur);
                 res.render('nl/pdf/creditnota', {
                   'profile': profile[0],
                   'contact': contact,
@@ -1929,7 +1941,8 @@ app.get('/creditnota/:idc/:loginHash', function(req, res) {
                   "factuur": factuur,
                   'lengte': lengte,
                   "settings": settings[0],
-                  "loginHash": req.params.loginHash
+                  "loginHash": req.params.loginHash,
+                  "creditnotatext":creditnotatext
                 });
               });
             });
@@ -3875,4 +3888,28 @@ function distinct(_array) {
     }
   }
   return disctincts;
+}
+
+function replaceAll(str,profiel,contact,factuur){
+  var res;
+  var str = String(str);
+  res = str.replace("[firma]",profiel.firma);
+  res = str.replace("[mail]",profiel.mail);
+  res = res.replace("[naam]",profiel.naam);
+  res = res.replace("[straat]",profiel.straat);
+  res = res.replace("[straatnr]",profiel.straatnr);
+  res = res.replace("[postcode]",profiel.postcode);
+  res = res.replace("[plaats]",profiel.plaats);
+  res = res.replace("[btw]",profiel.btwNr);
+  res = res.replace("[iban]",profiel.iban);
+  res = res.replace("[bic]",profiel.bic);
+  res = res.replace("[tele]",profiel.tele);
+  res = res.replace("[contact.rekeningnr]",contact.rekeningnr);
+  res = res.replace("[factuur.datum]",factuur.datum);
+  //res = res.replace("[factuur.offertenr]",factuur.);
+  //res = res.replace("[factuur.creditnr]",);
+  //res = res.replace("[factuur.factuurnr]",);
+  res = res.replace("[factuur.voorschot]",factuur.voorschot+" €");
+  res = res.replace("[factuur.totaal]",factuur.totaal+" €");
+  return res.split('\r\n')
 }

@@ -26,6 +26,13 @@ html
       btwNr = "#{contact.btwNr}";
       datum = "#{factuur.datum}";
       voorschot = Number(#{factuur.voorschot});
+      offertetext = [];
+      offertetext.push("#{offertetext[0]}");
+      offertetext.push("#{offertetext[1]}");
+      offertetext.push("#{offertetext[2]}");
+      offertetext.push("#{offertetext[3]}");
+      offertetext.push("#{offertetext[4]}");
+      offertetext.push("#{offertetext[5]}");
       var doc = new jsPDF();
       doc.setFont(doc.getFontList()[0]);
       doc.setProperties({
@@ -185,7 +192,10 @@ html
       /**Footer & Disclaimer**/
       doc.setFontType("courier");
       doc.setFontSize(10);
-      doc.text(40,275,"Neem bij vragen over deze offerte contact op met #{profile.naam}, #{profile.tele}, #{profile.mail}");
+      doc.text(20,265,offertetext[0]);
+      doc.text(20,270,offertetext[1]);
+      doc.text(20,275,offertetext[2]);
+      doc.text(20,280,offertetext[3]);
       doc.setFontType("bold");
       doc.text(80,285,"Wij danken u voor uw vertrouwen.");
       /**EINDE OFFERTE GENERATIE**/
