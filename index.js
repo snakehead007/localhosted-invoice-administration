@@ -4301,6 +4301,8 @@ var getBase64 = () => {
           resolve(imgData);
         }).catch((error) =>{
           console.log(error);
+          //Needs better catching when having no logo!!
+          resolve("");
         });
   });
 }
