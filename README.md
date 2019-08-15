@@ -18,8 +18,13 @@ Other functionalities are:
 
 There are 4 themes: Grey, Dark, White, Blue, Red
 
+### About (technical)
 All data is kept locally by mongodb.
-Changing from computer, you will have to export and import all data manually (for now)
+(Changing from computer, you will have to export and import all data manually,for now.)
+
+The front end view is handled by 'Jade' and the backend is runned by 'nodejs'.
+All the request are run with 'Express'.
+For more information about all the packages that are used in this project check the [wiki](https://github.com/snakehead007/simple-invoice-administration/wiki) .
 
 Installation and preparation
 --
