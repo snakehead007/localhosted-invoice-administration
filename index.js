@@ -332,7 +332,7 @@ app.post('/', function(req, res) {
       if(err){console.log(err);};
       if (!err && settings.length != 0) {
         res.render('nl/index', {
-      "description": "MDSART factuurbeheer",
+      "description": "",
       "settings": settings[0],
       "jaar": new Date().getFullYear(),
       "loginHash": req.body.loginHash
