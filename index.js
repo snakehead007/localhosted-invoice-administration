@@ -5,6 +5,7 @@ var bodyParser = require('body-parser'); //npm install body-parser
 var mongoose = require('mongoose');
 var multer = require('multer') // v1.0.5
 var upload = multer() // for parsing multipart/form-data //npm i multer
+var fs = require('fs')
 var fileUpload = require('express-fileupload');
 var imageToBase64 = require('image-to-base64'); //npm i image-to-base64
 var app = express();
@@ -4295,17 +4296,28 @@ var callFindPass = async () => {
 
 var getBase64 = () => {
   return new Promise((resolve,reject) => {
-      imageToBase64('public/logo.png').then((response) => {
+    var path = 'public/logo.jpeg';
+    fs.access(path, fs.F_OK, (err) => {
+      if (err) {
+        console.error("File not found using no file"+err);
+        resolve("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACWCAYAAABkW7XSAAAAxUlEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOA1v9QAATX68/0AAAAASUVORK5CYII=");
+        return;
+      }else{
+        console.log("file found!");
+      imageToBase64(path).then((response) => {
           var imgData ="data:image/jpeg;base64,";
           imgData +=response;
           resolve(imgData);
         }).catch((error) =>{
-          console.log(error);
-          //Needs better catching when having no logo!!
-          resolve("");
+          console.log("::err::");
         });
+    }});
   });
 }
+
+process.on('unhandledRejection', error => {
+  console.log('unhandledRejection', error.message);
+});
 
 var callGetBase64 = async () => {
   console.log("calling getBase64");
