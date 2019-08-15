@@ -4173,7 +4173,7 @@ app.post('/upload-logo/:loginHash', function (req, res) {
     if (err)
       console.log(err);
 
-    res.send('Logo uploaded! You can close this page.');
+    res.redirect('/edit-profile/'+req.params.loginHash);
   });
 })
 
@@ -4182,8 +4182,21 @@ app.get('/upload/:loginHash',function(req,res){
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
-  res.render('nl/upload',{"loginHash":req.params.loginHash});
-
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {} else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+    }
+    res.render('nl/upload',{
+      "loginHash":req.params.loginHash,
+      "settings":settings[0],
+      "description":"Upload logo"
+    });
+  });
 });
 
 
@@ -4275,7 +4288,6 @@ var findPass = () => {
     setTimeout(() => reject('Seems like something went wrong'), 500);
     Settings.find({}, function(err, settings) {
       if(!err){
-        console.log("Finding pass in Promise...");
         resolve(settings[0].pass);
       }else{
         console.log(err);
@@ -4288,7 +4300,6 @@ var findPass = () => {
 //Async promise handler for getting the pass
 var callFindPass = async () => {
   var loginHash = await (findPass());
-  console.log(loginHash);
   return loginHash
 };
 
@@ -4297,17 +4308,14 @@ var getBase64 = () => {
     var path = 'public/logo.jpeg';
     fs.access(path, fs.F_OK, (err) => {
       if (err) {
-        console.error("File not found using no file"+err);
         resolve("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACWCAYAAABkW7XSAAAAxUlEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOA1v9QAATX68/0AAAAASUVORK5CYII=");
         return;
       }else{
-        console.log("file found!");
       imageToBase64(path).then((response) => {
           var imgData ="data:image/jpeg;base64,";
           imgData +=response;
           resolve(imgData);
         }).catch((error) =>{
-          console.log("::err::");
         });
     }});
   });
