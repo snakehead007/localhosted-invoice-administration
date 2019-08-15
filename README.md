@@ -31,14 +31,16 @@ The default password is "password".
 Screenshots
 -
 
-![index page](screenshots/1.png)
+![Profile edit page](screenshots/1.png)
 
-![profile edit page](screenshots/3.png)
+![Settings page](screenshots/2.png)
 
-![invoices of 1 person](screenshots/4.png)
+![index page](screenshots/3.png)
 
-![pdf generated invoice](screenshots/5.png)
+![pdf generated invoice ](screenshots/4.png)
 
-![All invoices](screenshots/6.png)
+![contacts page](screenshots/5.png)
 
-![all contacts](screenshots/7.png)
+![Invoices and others of 1 contact](screenshots/6.png)
+
+![the chart](screenshots/7.png)
