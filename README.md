@@ -3,7 +3,7 @@ this program is used for managing and administrating invoices and generating the
 
 v1.8: stable, v2.0 coming soon
 
-This project is not ready for use it still needs translations, currently only in ##### Dutch
+This project is not ready for use it still needs translations, currently only in Dutch!
 
 This program is created and maintained for [www.mdsart.be/](https://www.mdsart.be/)
 
