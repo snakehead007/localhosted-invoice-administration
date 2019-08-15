@@ -20,8 +20,6 @@ mongoose.connection.on('open', function() {
   console.log('Mongoose connected!');
 });
 
-var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/++[++^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/\r\n/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
-
 var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
 var maand_klein = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
 Schema = mongoose.Schema;
@@ -90,7 +88,7 @@ var SettingsSchema = new Schema({
   },
   pass:{
     type:String,
-    default:"password"
+    default:"cGFzc3dvcmQ="
   }
 });
 var Settings = mongoose.model('Settings', SettingsSchema);
@@ -325,7 +323,7 @@ app.get('/login', function(req, res) {
 
 app.post('/', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.body.loginHash) === loginHash)) {
+  if (!(enc(String(req.body.loginHash)) === loginHash)) {
     res.redirect('login');
   }});
     Settings.find({}, function(err, settings) {
@@ -335,7 +333,7 @@ app.post('/', function(req, res) {
       "description": "",
       "settings": settings[0],
       "jaar": new Date().getFullYear(),
-      "loginHash": req.body.loginHash
+      "loginHash": enc(req.body.loginHash)
     });
       }
     });
@@ -4127,7 +4125,7 @@ app.post('/pass/:loginHash', function(req, res) {
       if (!err && settings.length != 0) {
         if(req.body.pass === req.body.passRep){
           var updateSettings = {
-            pass:req.body.pass
+            pass:enc(req.body.pass)
           };
           Settings.update({
             _id: settings[0]._id
@@ -4136,7 +4134,7 @@ app.post('/pass/:loginHash', function(req, res) {
               console.log(err);
             }
           });
-          res.render('nl/settings',{"loginHash":req.body.pass,"settings":settings[0],
+          res.render('nl/settings',{"loginHash":enc(req.body.pass),"settings":settings[0],
                                     "error":1});
         }else{
           res.render('nl/pass',{"loginHash":req.params.loginHash,"settings":settings[0],
@@ -4274,6 +4272,7 @@ function replaceAll(str,profiel,contact,factuur){
 
 var findPass = () => {
   return new Promise((resolve, reject) => {
+    setTimeout(() => reject('Seems like something went wrong'), 500);
     Settings.find({}, function(err, settings) {
       if(!err){
         console.log("Finding pass in Promise...");
@@ -4288,9 +4287,8 @@ var findPass = () => {
 
 //Async promise handler for getting the pass
 var callFindPass = async () => {
-  console.log("Getting pass... ");
   var loginHash = await (findPass());
-  console.log("Found! \'"+loginHash+"\'");
+  console.log(loginHash);
   return loginHash
 };
 
@@ -4320,7 +4318,14 @@ process.on('unhandledRejection', error => {
 });
 
 var callGetBase64 = async () => {
-  console.log("calling getBase64");
   var imgData = await (getBase64());
   return imgData
+}
+
+function enc(s){
+  return String(Buffer.from(s).toString('base64'));
+}
+
+function dec(s){
+  return String(Buffer.from(s, 'base64').toString());
 }
