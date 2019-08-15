@@ -1,11 +1,12 @@
 //- V1.8
 var path = require('path');
 var express = require('express');
-var bodyParser = require('body-parser');
+var bodyParser = require('body-parser'); //npm install body-parser
 var mongoose = require('mongoose');
 var multer = require('multer') // v1.0.5
-var upload = multer() // for parsing multipart/form-data
-const fileUpload = require('express-fileupload');
+var upload = multer() // for parsing multipart/form-data //npm i multer
+var fileUpload = require('express-fileupload');
+var imageToBase64 = require('image-to-base64'); //npm i image-to-base64
 var app = express();
 app.locals.title = 'Simple-invoice-administrator';
 app.locals.email = 'snakehead007@pm.me';
@@ -1617,6 +1618,8 @@ app.get('/createPDF/:idf/:loginHash', function(req, res) {
                   }
                 });
               }
+              console.log("====>>>><<<<<=====");
+              callGetBase64().then(function(imgData){
               factuurtext = replaceAll(settings[0].factuurtext,profile[0],contact,factuur);
               res.render('nl/pdf/pdf', {
                 'profile': profile[0],
@@ -1626,8 +1629,10 @@ app.get('/createPDF/:idf/:loginHash', function(req, res) {
                 'lengte': lengte,
                 "settings": settings[0],
                 "loginHash": req.params.loginHash,
-                "factuurtext": factuurtext
+                "factuurtext": factuurtext,
+                "imgData":imgData
               });
+            });//scope of imgData;
             });
           });
         });
@@ -1681,6 +1686,7 @@ app.get('/createPDF-eng/:idf/:loginHash', function(req, res) {
                   }
                 });
               }
+              callGetBase64().then(function(imgData){
               factuurtext = replaceAll(settings[0].factuurtext,profile[0],contact,factuur);
               console.log(factuurtext);
               res.render('nl/pdf/pdf-eng', {
@@ -1691,8 +1697,10 @@ app.get('/createPDF-eng/:idf/:loginHash', function(req, res) {
                 'lengte': lengte,
                 "settings": settings[0],
                 "loginHash": req.params.loginHash,
-                "factuurtext": factuurtext
+                "factuurtext": factuurtext,
+                "imgData":imgData
               });
+            });
             });
           });
         });
@@ -1919,6 +1927,7 @@ app.get('/offerte/:idf/:loginHash', function(req, res) {
                 });
               }
 
+              callGetBase64().then(function(imgData){
               offertetext = replaceAll(settings[0].offertetext,profile[0],contact,factuur);
               res.render('nl/pdf/offerte', {
                 'profile': profile[0],
@@ -1928,8 +1937,10 @@ app.get('/offerte/:idf/:loginHash', function(req, res) {
                 'lengte': lengte,
                 "settings": settings[0],
                 "loginHash": req.params.loginHash,
-                "offertetext":offertetext
+                "offertetext":offertetext,
+                "imgData":imgData
               });
+            });
             });
           });
         });
@@ -2063,6 +2074,7 @@ app.get('/creditnota/:idc/:loginHash', function(req, res) {
                     }
                   });
                 }
+                callGetBase64().then(function(imgData){
                 creditnotatext = replaceAll(settings[0].creditnotatext,profile[0],contact,factuur);
                 res.render('nl/pdf/creditnota', {
                   'profile': profile[0],
@@ -2072,8 +2084,10 @@ app.get('/creditnota/:idc/:loginHash', function(req, res) {
                   'lengte': lengte,
                   "settings": settings[0],
                   "loginHash": req.params.loginHash,
-                  "creditnotatext":creditnotatext
+                  "creditnotatext":creditnotatext,
+                  "imgData":imgData
                 });
+              });
               });
             });
           });
@@ -4278,3 +4292,21 @@ var callFindPass = async () => {
   console.log("Found! \'"+loginHash+"\'");
   return loginHash
 };
+
+var getBase64 = () => {
+  return new Promise((resolve,reject) => {
+      imageToBase64('public/logo.png').then((response) => {
+          var imgData ="data:image/jpeg;base64,";
+          imgData +=response;
+          resolve(imgData);
+        }).catch((error) =>{
+          console.log(error);
+        });
+  });
+}
+
+var callGetBase64 = async () => {
+  console.log("calling getBase64");
+  var imgData = await (getBase64());
+  return imgData
+}

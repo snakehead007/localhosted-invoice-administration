@@ -6,21 +6,8 @@ html
     script(src="https://unpkg.com/jspdf-autotable@3.1.0/dist/jspdf.plugin.autotable.js")
   body
     h1 Sluit deze pagina na het downloaden van de pdf
-    canvas(id="myCanvas")
   script.
-    function getBase64Image(img) {
-      var canvas = document.getElementById("myCanvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      var ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0);
-      var dataURL = canvas.toDataURL("image/png");
-      return dataURL;
-    }
-    var img = new Image();
-    img.src = '/logo.png';
-    var imgData = getBase64Image(img);
-    console.log(imgData);
+    var imgData = "#{imgData}";
     Pfirma = "#{profile.firma}";
     Pnaam = "#{profile.naam}";
     Pstraat = "#{profile.straat}";
