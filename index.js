@@ -303,7 +303,7 @@ app.get('/index/:loginHash', function(req, res) {
           "description": "MDSART factuurbeheer",
           "settings": settings[0],
           "jaar": new Date().getFullYear(),
-          "loginHash": loginHash
+          "loginHash": req.params.loginHash
         });
       }
     });
@@ -316,7 +316,6 @@ app.get('/login', function(req, res) {
 
 app.post('/', function(req, res) {
   callFindPass().then(function(loginHash){
-    console.log(loginHash);
   if (!(String(req.body.loginHash) === loginHash)) {
     res.redirect('login');
   }});
@@ -411,7 +410,7 @@ app.get('/contacten/:loginHash', function(req, res) {
           'contactenLijst': docs,
           'description': "Contactpersonen",
           "settings": settings[0],
-          "loginHash": loginHash
+          "loginHash": req.params.loginHash
         });
       });
     });
