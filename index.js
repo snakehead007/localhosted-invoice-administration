@@ -277,7 +277,7 @@ var ProjectSchema = new Schema({
     ref: 'Contact'
   }
 })
-
+//GLOBAL VARIABLES
 app.get('/', function(req, res) {
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {} else {
@@ -314,18 +314,21 @@ app.get('/login', function(req, res) {
 });
 
 app.post('/', function(req, res) {
-  Settings.find({}, function(err, settings) {
-    if (!err && settings.length != 0) {
       if (checkSession(req.body.login, res)) {
-        res.render('nl/index', {
+        Settings.find({}, function(err, settings) {
+          if(err){console.log(err);};
+          if (!err && settings.length != 0) {
+            res.render('nl/index', {
           "description": "MDSART factuurbeheer",
           "settings": settings[0],
           "jaar": new Date().getFullYear(),
           "loginHash": loginHash
         });
+          }
+        });
+      }else{
+        console.log("err, not logged in, but still got trought login process");
       }
-    }
-  });
 });
 
 
@@ -3930,17 +3933,39 @@ String.prototype.toTime = function() {
 }
 
 function checkSession(login, res) {
-  loginHash = login;
-  Settings.find({}, function(err, settings) {
-  if (loginHash === String(settings[0].pass)) {
-    console.log("succefully logged in");
-  }else{
-    console.log("User failed logging in");
-    res.redirect('login');
-    return false;
-  }
-  });
-  return true
+
+  console.log("using login as "+login);
+
+  var findPass = () => {
+    return new Promise((resolve, reject) => {
+      Settings.find({}, function(err, settings) {
+        if(!err){
+          console.log("getting pass... ");
+          resolve(settings[0].pass);
+        }else{
+          reject(err);
+        }
+      });
+    });
+  };
+
+  var callFindPass = async () => {
+    var result = await (findPass());
+    console.log("waiting for pass, found "+result);
+    return result;
+  };
+
+  callFindPass().then(function(result) {
+    if (String(login) === result) {
+      console.log("succefully logged in");
+      return true;
+    }else {
+      console.log("User failed logging in");
+      res.redirect('login');
+      return false;
+    }
+   });
+
 }
 
 function distinct(_array) {
