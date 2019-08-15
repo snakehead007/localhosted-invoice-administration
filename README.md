@@ -6,10 +6,15 @@ v1.8: stable
 about
 --
 You can add contacts, invoices and quotations.
+
 Quotations can be upgraded to an invoice.
+
 Both invoices and quotations are available for download.
+
 The ability to edit your own profile for the invoices and quotations are also available.
+
 For invoices there is a switch, to keep that it has been payed or not.
+
 Other functionalities are:
   - yearly chart
   - adding materials (with calculations)
@@ -20,10 +25,13 @@ There are 4 themes: Grey, Dark, White, Blue, Red
 
 ### About (technical)
 All data is kept locally by mongodb.
+
 (Changing from computer, you will have to export and import all data manually,for now.)
 
 The front end view is handled by 'Jade' and the backend is runned by 'nodejs'.
+
 All the request are run with 'Express'.
+
 For more information about all the packages that are used in this project check the [wiki](https://github.com/snakehead007/simple-invoice-administration/wiki) .
 
 Installation and preparation
