@@ -4170,7 +4170,7 @@ app.post('/upload-logo/:loginHash', function (req, res) {
       return res.status(400).send('No files were uploaded.');
     }
     let sampleFile = req.files.sampleFile;
-    sampleFile.mv('public/logo.png', function(err) {
+    sampleFile.mv('public/logo.jpeg', function(err) {
     if (err)
       console.log(err);
 
