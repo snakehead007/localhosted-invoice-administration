@@ -17,37 +17,37 @@ html
       Piban = "#{profile.iban}";
       Pbic = "#{profile.bic}";
       firma = "#{contact.firma}";
+      offerteNr = "#{factuur.offerteNr}";
       contactPersoon = "#{contact.contactPersoon}";
       straat = "#{contact.straat}";
       straatNr = "#{contact.straatNr}";
       postcode = "#{contact.postcode}";
       plaats = "#{contact.plaats}";
       btwNr = "#{contact.btwNr}";
-      factuurNr = "#{factuur.factuurNr}";
       datum = "#{factuur.datum}";
       voorschot = Number(#{factuur.voorschot});
-      factuurtext = [];
-      factuurtext.push("#{factuurtext[0]}");
-      factuurtext.push("#{factuurtext[1]}");
-      factuurtext.push("#{factuurtext[2]}");
-      factuurtext.push("#{factuurtext[3]}");
-      factuurtext.push("#{factuurtext[4]}");
-      factuurtext.push("#{factuurtext[5]}");
+      offertetext = [];
+      offertetext.push("#{offertetext[0]}");
+      offertetext.push("#{offertetext[1]}");
+      offertetext.push("#{offertetext[2]}");
+      offertetext.push("#{offertetext[3]}");
+      offertetext.push("#{offertetext[4]}");
+      offertetext.push("#{offertetext[5]}");
       var doc = new jsPDF();
       doc.setFont(doc.getFontList()[0]);
       doc.setProperties({
-        title: '#{profile.firma} invoice #{factuur.factuurNr}',
-        subject: 'Invoice from #{profile.firma}',
+        title: '#{profile.firma} offer #{factuur.offerteNr}',
+        subject: 'Offer from #{profile.firma}',
         author: '#{profile.firma}',
-        keywords: '#{profile.firma} ,Invoice ,#{factuur.factuurNr}',
-        creator: '#{profile.firma} Invoice-administrating-system',
+        keywords: '#{profile.firma} ,Offer ,#{factuur.offerteNr}',
+        creator: '#{profile.firma} Invoice administrator',
       });
-      /**HEADER**/      
+      /**HEADER**/
       doc.addImage(imgData, 'JPEG', 15, 5, 50, 50);
       doc.setFontType("bold");
       doc.setFontSize(36);
       doc.setTextColor(170, 170, 170);
-      doc.text(140,35,"Invoice");
+      doc.text(140,35,"Offer");
 
       /**bedrijfgegevens**/
       doc.setTextColor(0,0,0);
@@ -58,14 +58,14 @@ html
 
       doc.setFontType("bold");
       c[1] += 10;
-      doc.text(c[0],c[1],"Business information ");
+      doc.text(c[0],c[1],"Business information");
       doc.setFontType("courier");
       c[1] += 5;
       doc.text(c[0],c[1],Pnaam);
       c[1] += 5;
       doc.text(c[0],c[1],Pstraat + " " + PstraatNr);
       c[1] += 5;
-      doc.text(c[0],c[1],"VAT nr: "+ PbtwNr);
+      doc.text(c[0],c[1],"VAT N°: "+ PbtwNr);
 
       doc.setFontType("bold");
       c[1] += 10;
@@ -79,20 +79,20 @@ html
       /**factuur info**/
       doc.setFontType("bold");
       c = [120,60];
-      doc.text(c[0],c[1],"Invoice date:");
+      doc.text(c[0],c[1],"Date:");
       c[1] +=5;
-      doc.text(c[0],c[1],"Invoice nr:");
+      doc.text(c[0],c[1],"Offer N°:");
       doc.setFontType("courier");
       c[0] += 30;
       c[1] -= 5;
       doc.text(c[0],c[1],datum);
       c[1] += 5;
-      doc.text(c[0],c[1],factuurNr);
+      doc.text(c[0],c[1],offerteNr);
 
       /**factuur gegevens**/
       c = [120,75];
       doc.setFontType("bold");
-      doc.text(c[0],c[1],"Invoice information");
+      doc.text(c[0],c[1],"Offer information");
       c[1] +=5;
       doc.setFontType("courier");
       if(firma){
@@ -112,7 +112,7 @@ html
         c[1] +=5;
       }
       if(btwNr){
-        doc.text(c[0],c[1],"BTW nr: "+btwNr);
+        doc.text(c[0],c[1],"VAT N°: "+btwNr);
 
       }
       /**Beschrijvingen**/
@@ -147,7 +147,7 @@ html
           },
         styles: {fillColor: [140, 140, 140]},
         startY: 110,
-        head: [['Description', 'Amount', 'Price','Total']],
+        head: [['Beschrijving', 'Aantal', 'Bedrag','Totaal']],
         body: bestellingenPrint
         });
       btw = Math.round((totaalEx-voorschot)*0.21*100)/100;
@@ -167,7 +167,7 @@ html
           body: [
           [[""],["                               "],["Subtotal"],[totaalEx.toFixed(2)+" €"]],
           [[""],["                               "],["VAT 21%"],[btw.toFixed(2)+" €"]],
-          [[""],["                               "],["Total amount"],[totaalInc.toFixed(2)+" €"]]
+          [[""],["                               "],["Total"],[totaalInc.toFixed(2)+" €"]]
           ]
         })
       }else{
@@ -185,18 +185,20 @@ html
           [[""],["                               "],["Advance"],["-"+voorschot.toFixed(2)+" €"]],
           [[""],["                               "],["Subtotal"],[totaalExSub.toFixed(2)+" €"]],
           [[""],["                               "],["VAT 21%"],[btw.toFixed(2)+" €"]],
-          [[""],["                               "],["Total"],[totaalInc.toFixed(2)+" €"]]
+          [[""],["                               "],["TOTAL"],[totaalInc.toFixed(2)+" €"]]
           ]
         })
       }
       /**Footer & Disclaimer**/
       doc.setFontType("courier");
       doc.setFontSize(10);
-      doc.text(20,265,"You are requested to deposit the calculated total amount after 14 days of the invoice date on the account number mentioned above.");
-      doc.text(20,270,"For any question about this invoice, you can contact: #{profile.naam}, #{profile.tele}, #{profile.mail}");
+      doc.text(20,265,offertetext[0]);
+      doc.text(20,270,offertetext[1]);
+      doc.text(20,275,offertetext[2]);
+      doc.text(20,280,offertetext[3]);
       doc.setFontType("bold");
-      doc.text(20,280,"We thank you for your trust.");
-      /**EINDE FACTUUR GENERATIE**/
-      doc.save(factuurNr+'.pdf');
+      doc.text(80,285,"We thank you for your trust.");
+      /**EINDE OFFERTE GENERATIE**/
+      doc.save('offerte '+offerteNr+'.pdf');
   body
-    h1 Sluit deze pagina na het downloaden van de pdf
+    h1 Close this page after download the pdf
