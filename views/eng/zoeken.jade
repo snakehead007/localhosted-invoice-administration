@@ -89,7 +89,6 @@ html
                   th(scope="row") Invoice N°
                   td
                   th(scope="row") Total (Excl.)
-                  th(scope="row") Total (Incl.)
                   th(scope="row") Contact
                   th(scope="row") Date
                   th(scope="row") Action
@@ -124,7 +123,6 @@ html
                           label(class="custom-control-label" for="#{factuur._id}") Unpaid
 
                     td=factuur.totaal+"€"
-                    td=(factuur.totaal*1.21).toFixed(2)+"€"
                     td
                       a(href='/facturen/'+factuur.contact+"/"+loginHash, class="button")
                         button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Go to this persons invoices")=factuur.contactPersoon
@@ -213,7 +211,6 @@ html
                   th(scope="row") Invoice N°
                   td
                   th(scope="row") Total (Excl.)
-                  th(scope="row") Total (Incl.)
                   th(scope="row") Contact
                   th(scope="row") Date
                   th(scope="row") Actions
@@ -248,7 +245,6 @@ html
                           label(class="custom-control-label" for="#{factuur._id}") Unpaid
 
                     td=factuur.totaal+"€"
-                    td=(factuur.totaal*1.21).toFixed(2)+"€"
                     td
                       a(href='/facturen/'+factuur.contact+"/"+loginHash, class="button")
                         button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Go to this person invoices")=factuur.contactPersoon

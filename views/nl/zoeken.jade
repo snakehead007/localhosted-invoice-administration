@@ -89,7 +89,6 @@ html
                   th(scope="row") factuurNr
                   td
                   th(scope="row") totaal (Excl.)
-                  th(scope="row") totaal (Incl.)
                   th(scope="row") contact persoon
                   th(scope="row") datum
                   th(scope="row") Acties
@@ -124,7 +123,6 @@ html
                           label(class="custom-control-label" for="#{factuur._id}") Openstaand
 
                     td=factuur.totaal+"€"
-                    td=(factuur.totaal*1.21).toFixed(2)+"€"
                     td
                       a(href='/facturen/'+factuur.contact+"/"+loginHash, class="button")
                         button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
@@ -213,7 +211,6 @@ html
                   th(scope="row") factuurNr
                   td
                   th(scope="row") totaal (Excl.)
-                  th(scope="row") totaal (Incl.)
                   th(scope="row") contact persoon
                   th(scope="row") datum
                   th(scope="row") Acties
@@ -248,7 +245,6 @@ html
                           label(class="custom-control-label" for="#{factuur._id}") Openstaand
 
                     td=factuur.totaal+"€"
-                    td=(factuur.totaal*1.21).toFixed(2)+"€"
                     td
                       a(href='/facturen/'+factuur.contact+"/"+loginHash, class="button")
                         button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
