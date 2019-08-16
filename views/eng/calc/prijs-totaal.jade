@@ -16,7 +16,7 @@ html
             li(class="nav-item")
               a(class="nav-link active" , href='/index'+"/"+loginHash) Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) My profile    
             li(class="nav-item")
               a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
             li(class="nav-item")
@@ -37,29 +37,29 @@ html
           div(class="col-2")
             a(href='/prijs'+"/"+loginHash,class="button")
               if settings.thema == "light"
-                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
               if settings.thema != "light"
-                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
-        h2 Prijs berekenen
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back
+        h2 Calculate price
         hr
         div(class="row")
           div(class="col-lg-2 col-md-1 col-lg-0")
           if error == 1
-            div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Enkel één veld invullen!
+            div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Fill only 1 field, please.
           if error == 2
-            div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Niets ingevuld!
+            div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Nothing filled in.
         form(action='/prijs/'+totaal+"/"+loginHash,method='post')
           div(class="form-row")
             div(class="col-lg-2 col-md-1 col-sm-0")
             div(class="form-group col-lg-3 col-md-4 col-sm-12")
-              label(for="title") subtotaal
+              label(for="title") Subtotal
               h4=totaal
             div(class="col-lg-2 col-md-2 col-sm-12")
             div(class="form-group col-lg-3  col-md-4 col-sm-12")
-              label(for="title") % marge
+              label(for="title") % extra margin
               input(type="number",class="form-control",name="marge",step=".01",placeholder="aantal %")
             div(class="col-lg-2 col-md-1 col-sm-0")
-            button(type="submit",class="btn btn-#{settings.oppo}") bereken marge
+            button(type="submit",class="btn btn-#{settings.oppo}") Calculate extra margin
         hr
         div(class="row")
           div(class="col-lg-5 col-md-4 col-lg-0")
