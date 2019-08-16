@@ -1,0 +1,67 @@
+//- V1.8
+html
+  head
+    title=title
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+  body
+    header
+      nav(class="navbar navbar-expand-md navbar-#{settings.nav} bg-#{settings.thema}")
+        button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
+          span(class="navbar-toggler-icon")
+        div(class="collapse navbar-collapse", id="navbarNav")  
+          ul(class="navbar-nav mr-auto")
+            li(class="nav-item")
+              a(class="nav-link active" , href='/index'+"/"+loginHash) Home
+            li(class="nav-item")
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
+            li(class="nav-item")
+              a(class="nav-link active", href='/settings') Settings
+            li(class="nav-item")
+              a(class="nav-link", href='https://identity.basecone.com/authentication/login')
+                img(width="100", height="24", src="/basecone.png", alt="basecone")
+          span(class="navbar-text")
+            div(class="row")
+              div(class="col-4 mr-auto")
+                button(type="button", class="btn btn-light btn-sm", disabled)
+                  h6=description
+              div(class="col-8")  
+                form(class="form-inline" action="/zoeken"+"/"+loginHash, method="post")
+                  input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
+    main
+      div(class="jumbotron")
+        div(class="row no-gutters")
+          div(class="col-9 mr-auto")
+          div(class="col-2")
+            a(href='/index/#{loginHash}',class="button")
+              if settings.thema == "light"
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+              if settings.thema != "light"
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+        h2 Inch en centimeter omzetten
+        hr
+        div(class="row")
+          div(class="col-lg-2 col-md-1 col-lg-0")
+          if error == 1
+            div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Enkel één veld invullen!
+          if error == 2
+            div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Niets ingevuld!
+        form(action='/inch'+"/"+loginHash,method='post')
+          div(class="form-row")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            div(class="form-group col-lg-3 col-md-4 col-sm-12")
+              label(for="title") inch
+              input(type="number",class="form-control",name="inch",step=".01")
+            div(class="col-lg-2 col-md-2 col-sm-12")
+            div(class="form-group col-lg-3  col-md-4 col-sm-12")
+              label(for="title") centimeter
+              input(type="number",class="form-control",name="cm",step=".01")
+            div(class="col-lg-2 col-md-1 col-sm-0")
+            button(type="submit",class="btn btn-#{settings.oppo}") Berekenen
+        hr
+        div(class="row")
+          div(class="col-lg-5 col-md-4 col-lg-0")
+          div(class="col-lg-3 col-md-2 col-sm-10")
+            h3=oplossing

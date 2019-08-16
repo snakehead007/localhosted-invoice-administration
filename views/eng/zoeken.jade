@@ -1,0 +1,295 @@
+//- V1.8
+html
+  head
+    title=title
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+  body
+    header
+      nav(class="navbar navbar-expand-md navbar-#{settings.nav} bg-#{settings.thema}")
+        button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
+          span(class="navbar-toggler-icon")
+        div(class="collapse navbar-collapse", id="navbarNav")  
+          ul(class="navbar-nav mr-auto")
+            li(class="nav-item")
+              a(class="nav-link active" , href='/index'+"/"+loginHash) Home
+            li(class="nav-item")
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
+            li(class="nav-item")
+              a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
+            li(class="nav-item")
+              a(class="nav-link", href='https://identity.basecone.com/authentication/login')
+                img(width="100", height="24", src="/basecone.png", alt="basecone")
+          span(class="navbar-text")
+            div(class="row")
+              div(class="col-4 mr-auto")
+                button(type="button", class="btn btn-light btn-sm", disabled)
+                  h6=description
+              div(class="col-8")  
+                form(class="form-inline" action="/zoeken"+"/"+loginHash, method="post")
+                  input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
+    main
+      div(class="jumbotron")
+        div(class="row no-gutters")
+          div(class="col-9 mr-auto")
+          div(class="col-2")
+            if terug
+              a(href='/index'+"/"+loginHash,class="button")
+                if settings.thema == "light"
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                if settings.thema != "light"
+                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+        hr
+        if settings.thema == "dark" || settings.thema == "danger" || settings.thema == "info"
+          if contacten.length != 0
+            table(class="table table-#{settings.oppo} table-striped")
+              tbody
+                tr
+                  th(scope="row") Contactpersonen
+                  th(scope="row") firma
+                  th(scope="row") Straat
+                  th(scope="row") btwNr
+                  th(scope="row") E-mail
+                each contact in contacten 
+                  tr
+                    td
+                      a(href='/facturen/'+contact._id+"/"+loginHash, class="button")
+                        button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=contact.contactPersoon
+                    td=contact.firma
+                    td=contact.straat
+                    td=contact.btwNr
+                    if contact.mail
+                      if contact.mail2
+                        td
+                          a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mail's
+                          div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
+                            a(class="dropdown-item", href='mailto:#{contact.mail}')=contact.mail
+                            a(class="dropdown-item", href='mailto:#{contact.mail1}')=contact.mail1
+                            a(class="dropdown-item", href='mailto:#{contact.mail2}')=contact.mail2
+                      else if contact.mail1
+                        td
+                          a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mail's
+                          div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
+                            a(class="dropdown-item", href='mailto:#{contact.mail}')=contact.mail
+                            a(class="dropdown-item", href='mailto:#{contact.mail1}')=contact.mail1
+                          
+                      if !contact.mail1
+                        td
+                          a(href="mailto:#{contact.mail}",class="button")
+                            button(type="button" class="btn btn-outline-#{settings.oppo}")=contact.mail
+                    else  
+                      td
+                        button(type="button" class="btn btn-outline-#{settings.oppo}") Geen e-mail
+          if facturen.length != 0
+            table(class="table table-#{settings.oppo} table-striped")
+              tbody
+                tr
+                  th(scope="row") factuurNr
+                  td
+                  th(scope="row") totaal (Excl.)
+                  th(scope="row") totaal (Incl.)
+                  th(scope="row") contact persoon
+                  th(scope="row") datum
+                  th(scope="row") Acties
+                each factuur in facturen 
+                  tr
+                    if factuur.factuurNr
+                      td
+                        a(href='/bestellingen/'+factuur._id+"/"+loginHash, class="button")
+                          button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
+                    else
+                      td
+                        a(href='/bestellingen/'+factuur._id+"/"+loginHash, class="button")
+                          button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="OfferteNr "+factuur.offerteNr
+                    td
+                      script.
+                          var id = "#{factuur._id}";
+                          function K#{factuur.factuurNr}(){
+                            window.location="/change-betaald/"+"#{factuur._id}";
+                          }
+                      if !contact
+                          script.
+                            var id = "#{factuur._id}";
+                            function K#{factuur.factuurNr}(){
+                              window.location="/change-betaald2/"+"#{factuur._id}";
+                            }
+                      div(class="custom-control custom-switch")
+                        if factuur.isBetaald
+                          input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()" checked)
+                          label(class="custom-control-label" for="#{factuur._id}") Betaald
+                        if !factuur.isBetaald
+                          input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
+                          label(class="custom-control-label" for="#{factuur._id}") Openstaand
+
+                    td=factuur.totaal+"€"
+                    td=(factuur.totaal*1.21).toFixed(2)+"€"
+                    td
+                      a(href='/facturen/'+factuur.contact+"/"+loginHash, class="button")
+                        button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
+                    td=factuur.datum
+                    td
+                      a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                      div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                        a(class="dropdown-item",href='/edit-factuur/'+factuur.contact+'/'+factuur._id+"/"+loginHash) aanpassen
+                        a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id+"/"+loginHash) verwijder
+                        a(class="dropdown-item", href='/view-factuur/'+factuur._id+"/"+loginHash,class="button") bekijk
+                        div(class="dropdown-divider")
+                        if factuur.factuurNr
+                          a(class="dropdown-item", href='/createPDF/'+factuur._id+"/"+loginHash,id="target",target="_blank") download factuur (nl)
+                          a(class="dropdown-item", href='/createPDF-eng/'+factuur._id+"/"+loginHash,id="target",target="_blank") download factuur (eng)
+                        if factuur.offerteNr
+                          a(class="dropdown-item", href='/offerte/'+factuur._id+"/"+loginHash,id="target",target="_blank") download offerte
+                          if !factuur.factuurNr
+                            div(class="dropdown-divider")
+                              a(class="dropdown-item", href="/opwaardeer/"+factuur._id+"/"+loginHash,class="button") opwaardeer naar factuur
+          if bestellingen.length != 0
+            table(class="table table-#{settings.oppo} table-striped")
+              tbody
+                tr
+                  th(scope="row") Beschrijving
+                  th(scope="row") aantal
+                  th(scope="row") bedrag
+                  th(scope="row") totaal
+                  th(scope="row") Acties
+                each bestelling in bestellingen
+                  tr
+                    td=bestelling.beschrijving
+                    td=bestelling.aantal
+                    td=bestelling.bedrag
+                    td=bestelling.totaal
+                    td
+                      a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                      div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                        a(class="dropdown-item", href='/edit-bestelling/'+bestelling._id+"/"+loginHash) aanpassen
+                        //Sa(class="dropdown-item", href='/delete-bestelling/'+bestelling._id) verwijder
+                        a(class="dropdown-item", href='/view-bestelling/'+bestelling._id+"/"+loginHash) bekijk 
+          if bestellingen.length==0 && facturen.length==0 && contacten.length==0
+                div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Niets gevonden
+        else        
+          if contacten.length != 0
+            table(class="table table-#{settings.thema} table-striped")
+              tbody
+                tr
+                  th(scope="row") Contactpersonen
+                  th(scope="row") firma
+                  th(scope="row") Straat
+                  th(scope="row") btwNr
+                  th(scope="row") E-mail
+                each contact in contacten 
+                  tr
+                    td
+                      a(href='/facturen/'+contact._id+"/"+loginHash, class="button")
+                        button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=contact.contactPersoon
+                    td=contact.firma
+                    td=contact.straat
+                    td=contact.btwNr
+                    if contact.mail
+                      if contact.mail2
+                        td
+                          a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mail's
+                          div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
+                            a(class="dropdown-item", href='mailto:#{contact.mail}')=contact.mail
+                            a(class="dropdown-item", href='mailto:#{contact.mail1}')=contact.mail1
+                            a(class="dropdown-item", href='mailto:#{contact.mail2}')=contact.mail2
+                      else if contact.mail1
+                        td
+                          a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mail's
+                          div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
+                            a(class="dropdown-item", href='mailto:#{contact.mail}')=contact.mail
+                            a(class="dropdown-item", href='mailto:#{contact.mail1}')=contact.mail1
+                          
+                      if !contact.mail1
+                        td
+                          a(href="mailto:#{contact.mail}",class="button")
+                            button(type="button" class="btn btn-outline-#{settings.oppo}")=contact.mail
+                    else  
+                      td
+                        button(type="button" class="btn btn-outline-#{settings.oppo}") Geen e-mail
+          if facturen.length != 0
+            table(class="table table-#{settings.thema} table-striped")
+              tbody
+                tr
+                  th(scope="row") factuurNr
+                  td
+                  th(scope="row") totaal (Excl.)
+                  th(scope="row") totaal (Incl.)
+                  th(scope="row") contact persoon
+                  th(scope="row") datum
+                  th(scope="row") Acties
+                each factuur in facturen 
+                  tr
+                    if factuur.factuurNr
+                      td
+                        a(href='/bestellingen/'+factuur._id+"/"+loginHash, class="button")
+                          button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
+                    else
+                      td
+                        a(href='/bestellingen/'+factuur._id+"/"+loginHash, class="button")
+                          button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="OfferteNr "+factuur.offerteNr
+                    td
+                      script.
+                          var id = "#{factuur._id}";
+                          function K#{factuur.factuurNr}(){
+                            window.location="/change-betaald/"+"#{factuur._id}/#{loginHash}";
+                          }
+                      if !contact
+                          script.
+                            var id = "#{factuur._id}";
+                            function K#{factuur.factuurNr}(){
+                              window.location="/change-betaald2/"+"#{factuur._id}/#{loginHash}";
+                            }
+                      div(class="custom-control custom-switch")
+                        if factuur.isBetaald
+                          input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()" checked)
+                          label(class="custom-control-label" for="#{factuur._id}") Betaald
+                        if !factuur.isBetaald 
+                          input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
+                          label(class="custom-control-label" for="#{factuur._id}") Openstaand
+
+                    td=factuur.totaal+"€"
+                    td=(factuur.totaal*1.21).toFixed(2)+"€"
+                    td
+                      a(href='/facturen/'+factuur.contact+"/"+loginHash, class="button")
+                        button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
+                    td=factuur.datum
+                    td
+                      a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                      div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                        a(class="dropdown-item",href='/edit-factuur/'+factuur.contact+'/'+factuur._id+"/"+loginHash) aanpassen
+                        a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id+"/"+loginHash) verwijder
+                        a(class="dropdown-item", href='/view-factuur/'+factuur._id+"/"+loginHash,class="button") bekijk
+                        div(class="dropdown-divider")
+                        if factuur.factuurNr
+                          a(class="dropdown-item", href='/createPDF/'+factuur._id+"/"+loginHash,id="target",target="_blank") download factuur (nl)
+                          a(class="dropdown-item", href='/createPDF-eng/'+factuur._id+"/"+loginHash,id="target",target="_blank") download factuur (eng)
+                        if factuur.offerteNr
+                          a(class="dropdown-item", href='/offerte/'+factuur._id+"/"+loginHash,id="target",target="_blank") download offerte
+                          if !factuur.factuurNr
+                            div(class="dropdown-divider")
+                              a(class="dropdown-item", href="/opwaardeer/"+factuur._id+"/"+loginHash,class="button") opwaardeer naar factuur
+          if bestellingen.length != 0
+            table(class="table table-#{settings.thema} table-striped")
+              tbody
+                tr
+                  th(scope="row") Beschrijving
+                  th(scope="row") aantal
+                  th(scope="row") bedrag
+                  th(scope="row") totaal
+                  th(scope="row") Acties
+                each bestelling in bestellingen
+                  tr
+                    td=bestelling.beschrijving
+                    td=bestelling.aantal
+                    td=bestelling.bedrag
+                    td=bestelling.totaal
+                    td
+                      a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                      div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                        a(class="dropdown-item", href='/edit-bestelling/'+bestelling._id+"/"+loginHash) aanpassen
+                        //a(class="dropdown-item", href='/delete-bestelling/'+bestelling._id) verwijder
+                        a(class="dropdown-item", href='/view-bestelling/'+bestelling._id+"/"+loginHash) bekijk 
+                        
+          if bestellingen.length==0 && facturen.length==0 && contacten.length==0
+              div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Niets gevonden
