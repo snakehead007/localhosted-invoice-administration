@@ -66,7 +66,7 @@ html
             li(class="nav-item")
               a(class="nav-link active" , href='/index'+"/"+loginHash) Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) My profile    
             li(class="nav-item")
               a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
             li(class="nav-item")
@@ -87,10 +87,10 @@ html
           div(class="col-2")
             a(href='/contacten'+"/"+loginHash,class="button")
               if settings.thema == "light"
-                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
               if settings.thema != "light"
-                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
-        h2 Nieuw Project
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back
+        h2 New Project
         hr
         div(class="row")
           div(class="col-lg-2 col-md-1 col-lg-0")
@@ -102,13 +102,13 @@ html
           div(class="form-row")
             div(class="col-lg-2 col-md-1 col-sm-0")
             div(class="col-lg-3 col-md-4 col-sm-12")
-              label Naam Project
+              label Name Project
               input(type="number",class="form-control",name="naam",placeholder="Naam Project", step=".01")
             div(class="col-lg-3 col-md-4 col-sm-12")
-              label Aantal werkuren
+              label Amount of working hours
               input(type="number",class="form-control",name="uren",placeholder="aantal uren", step=".01")
             div(class="col-lg-2 col-md-4 col-sm-12")
-              label werkprijs (€/u)
+              label Price for 1 hour (€/u)
               input(type="number",step="0.01",class="form-control",name="werkprijs", placeholder="prijs per uur")
           hr
           ////////////////
@@ -118,7 +118,7 @@ html
               input(type="number",class="form-control",placeholder="hoeveelheid", name="i001",step=".01" required)
             div(class="col-lg-2 col-md-4 col-sm-12")
               select(class="custom-select custom-select mb-3",name="o001" required)
-                option(selected) Kies materiaal
+                option(selected) Choose material
                 each materiaal in materialen
                   option(value="#{materiaal.naam}")=materiaal.naam
             div(class="col-1")
@@ -712,7 +712,7 @@ html
           div(class="form-row")
             div(class="col-lg-2 col-md-1 col-sm-0")
             div(class="col-lg-2 col-md-1 col-sm-0")
-              button(type="submit",class="btn btn-#{settings.oppo}") Berekenen
+              button(type="submit",class="btn btn-#{settings.oppo}") Calculate
         hr
         div(class="row")
           div(class="col-lg-5 col-md-4 col-lg-0")

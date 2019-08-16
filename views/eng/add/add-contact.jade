@@ -30,7 +30,7 @@ html
             li(class="nav-item")
               a(class="nav-link active" , href='/index/#{loginHash}') Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile/#{loginHash}') Mijn profiel    
+              a(class="nav-link active", href='/edit-profile/#{loginHash}') My profile  
             li(class="nav-item")
               a(class="nav-link active", href='/settings/#{loginHash}') Settings
             li(class="nav-item")
@@ -48,7 +48,7 @@ html
       div(class="jumbotron")
         div(class="row no-gutters")
           div(class="col-9 mr-auto")
-            p(class="lead") contact toevoegen
+            p(class="lead") Add contact
           div(class="col-2")
               a(href='/contacten'+"/"+loginHash,class="button")
                 if settings.thema == "light"

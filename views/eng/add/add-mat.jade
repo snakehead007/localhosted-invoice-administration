@@ -16,7 +16,7 @@ html
             li(class="nav-item")
               a(class="nav-link active" , href='/index/#{loginHash}') Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile/#{loginHash}') Mijn profiel    
+              a(class="nav-link active", href='/edit-profile/#{loginHash}') My profile    
             li(class="nav-item")
               a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
             li(class="nav-item")
@@ -38,17 +38,17 @@ html
             div(class="col-2")
                 a(href='/mat'+"/"+loginHash,class="button")
                   if settings.thema == "light"
-                    button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                    button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
                   if settings.thema != "light"
-                    button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+                    button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back
           hr
           form(action='/add-mat'+"/"+loginHash,method='post')
             div(class="form-row")
               div(class="form-group col-md-10")
-                label(for="title") Naam
+                label(for="title") Name
                 input(type="text",class="form-control",name="naam", required)
               div(class="form-group col-md-2")
-                label(for="title") Prijs
+                label(for="title") Price
                 input(type="number",class="form-control",name="prijs",step=".01" required)
             hr
-            button(type="submit",class="btn btn-#{settings.oppo}") toevoegen
+            button(type="submit",class="btn btn-#{settings.oppo}") Add
