@@ -28,7 +28,7 @@ html
             li(class="nav-item")
               a(class="nav-link active" , href='/index'+"/"+loginHash) Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) My profile    
             li(class="nav-item")
               a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
             li(class="nav-item")
@@ -47,31 +47,31 @@ html
         div(class="row no-gutters")
           div(class="col-3" id="toon_knop")
             if settings.thema == "light"
-              button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block", onclick="toon()") Toon berekeningen
+              button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block", onclick="toon()") Show calculations
             if settings.thema != "light"
-              button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block", onclick="toon()") Toon berekeningen
+              button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block", onclick="toon()") Show calculations
           div(class="col-3" id="verberg_knop",style="display:none;" )
             if settings.thema == "light"
-              button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block", onclick="verberg()") Verberg berekeningen
+              button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block", onclick="verberg()") Hide calculations
             if settings.thema != "light"
-              button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block", onclick="verberg()") Verberg berekeningen
+              button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block", onclick="verberg()") Hide calculations
           div(class="col-7")
           div(class="col-2")
             a(href='/epo-sil'+"/"+loginHash,class="button")
               if settings.thema == "light"
-                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
               if settings.thema != "light"
-                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back
         hr 
         div(id="berekeningen", style="display:none;")
           div(class="row")
             div(class="col-2")
               h4
-                span(class="badge badge-secondary") Berekening Siliconen
+                span(class="badge badge-secondary") Calculate Silicon
             div(class="col-4")
             div(class="col-2")
               h4
-                span(class="badge badge-secondary") Berekening Epoxie
+                span(class="badge badge-secondary") Calculate Epoxy
             div(class="col-6")
               p(class="lead") ( #{L}" * #{B}" * #{H}" ) * #{s1} = #{As.toFixed(3)} kg
               //Berekening Aantal Siliconen
@@ -121,54 +121,54 @@ html
                 tbody
                   tr
                     th(scope="row")
-                      h4 Siliconen
+                      h4 Silicon
                     td
                       h4=Ds.toFixed(3)+" kg"
                   tr
                     th(scope="row")
-                      h4 Prijs Materiaal Siliconen
+                      h4 Price Material Silicon
                     td
                       h4=Ps.toFixed(2)+" €"
                   tr
                     th(scope="row")
-                      h4 Prijs Werkuren Siliconen
+                      h4 Price working hours silicon
                     td
                       h4=Pws.toFixed(2)+" €"
                   tr
                     th(scope="row") 
-                      h4 Totaalprijs Siliconen
+                      h4 Total price of silicon
                     td
                       h4=Number(Ps+Pws).toFixed(2)+" €"
                   tr
                     th(scope="row") 
-                      h4 Totaal Tijd Siliconen
+                      h4 Total time for silicon
                     td
                       h4=Ms
             div(class="col-6")
               table(class="table table-#{settings.oppo} table-striped")
                 tr
                   th(scope="row")
-                    h4 Epoxie
+                    h4 Epoxy
                   td
                     h4=De.toFixed(3)+" kg"
                 tr
                   th(scope="row")
-                    h4 Prijs Materiaal Epoxie
+                    h4 Price material epxoy
                   td
                     h4=Pe.toFixed(2)+" €"
                 tr
                   th(scope="row")
-                    h4 Prijs Werkuren Epoxie
+                    h4 Price working hours epxoy
                   td
                     h4=Pwe.toFixed(2)+" €"
                 tr
                   th(scope="row") 
-                    h4 Totaal Prijs Epoxie
+                    h4 Total price of epoxy
                   td
                     h4=Number(Pe+Pwe).toFixed(2)+" €"
                 tr
                   th(scope="row") 
-                    h4 Totaal Tijd Epoxie
+                    h4 Total time for epoxy
                   td
                     h4=Me
             div(class="col-3")
@@ -176,22 +176,22 @@ html
               table(class="table table-#{settings.oppo} table-striped")
                 tr
                   th(scope="row")
-                    h4 Totaalprijs Werkuren
+                    h4 Total price for working hours
                   td
                     h4=Ptw.toFixed(2)+" €"
                 tr
                   th(scope="row")
-                    h4 Totaal Prijs Materiaal
+                    h4 Total price for materials
                   td
                     h4=Ptm.toFixed(2)+" €"
                 tr
                   th(scope="row")
-                    h4 Totaal Prijs Alles
+                    h4 Total Price
                   td
                     h4=Pt.toFixed(2)+" €"
                 tr
                   th(scope="row") 
-                    h4 Totaal Uren Alles
+                    h4 Total time
                   td
                     h4=Mt
         else
@@ -201,54 +201,54 @@ html
                 tbody
                   tr
                     th(scope="row")
-                      h4 Siliconen
+                      h4 Silicon
                     td
                       h4=Ds.toFixed(3)+" kg"
                   tr
                     th(scope="row")
-                      h4 Prijs Materiaal Siliconen
+                      h4 Price material epoxy
                     td
                       h4=Ps.toFixed(2)+" €"
                   tr
                     th(scope="row")
-                      h4 Prijs Werkuren Siliconen
+                      h4 Price working hours silicon
                     td
                       h4=Pws.toFixed(2)+" €"
                   tr
                     th(scope="row") 
-                      h4 Totaalprijs Siliconen
+                      h4 Total price silicon
                     td
                       h4=Number(Ps+Pws).toFixed(2)+" €"
                   tr
                     th(scope="row") 
-                      h4 Totaal Tijd Siliconen
+                      h4 Tottal time silicon
                     td
                       h4=Ms
             div(class="col-6")
               table(class="table table-#{settings.oppo} table-striped")
                 tr
                   th(scope="row")
-                    h4 Epoxie
+                    h4 Epoxy
                   td
                     h4=De.toFixed(3)+" kg"
                 tr
                   th(scope="row")
-                    h4 Prijs Materiaal Epoxie
+                    h4 Price material epoxy
                   td
                     h4=Pe.toFixed(2)+" €"
                 tr
                   th(scope="row")
-                    h4 Prijs Werkuren Epoxie
+                    h4 Price working hours epoxy
                   td
                     h4=Pwe.toFixed(2)+" €"
                 tr
                   th(scope="row") 
-                    h4 Totaal Prijs Epoxie
+                    h4 Total price epoxy
                   td
                     h4=Number(Pe+Pwe).toFixed(2)+" €"
                 tr
                   th(scope="row") 
-                    h4 Totaal Tijd Epoxie
+                    h4 Total time epoxy
                   td
                     h4=Me
             div(class="col-3")
@@ -256,59 +256,59 @@ html
               table(class="table table-#{settings.oppo} table-striped")
                 tr
                   th(scope="row")
-                    h4 Totaalprijs Werkuren
+                    h4 Total price for working hours
                   td
                     h4=Ptw.toFixed(2)+" €"
                 tr
                   th(scope="row")
-                    h4 Totaal Prijs Materiaal
+                    h4 Total price for materials
                   td
                     h4=Ptm.toFixed(2)+" €"
                 tr
                   th(scope="row")
-                    h4 Totaal Prijs Alles
+                    h4 Total Price
                   td
                     h4=Pt.toFixed(2)+" €"
                 tr
                   th(scope="row") 
-                    h4 Totaal Uren Alles
+                    h4 Total time
                   td
                     h4=Mt
         hr
         div(class="row")
           if error == 2
-            div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Niets ingevuld!
+            div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Nothing filled in!
             div(class="col-lg-2 col-md-1 col-sm-0")
         div(class="col-lg-2 col-md-1 col-sm-0")
-        button(type="button",onclick="aanpassen()",class="btn btn-#{settings.oppo} btn-md") Gegevens aanpassen
+        button(type="button",onclick="aanpassen()",class="btn btn-#{settings.oppo} btn-md") Edit given data
         form(action='/epo-sil-marge/'+loginHash,method='post')
           div(class="form-row")
             div(id="aanpas" class="col-12",style="display:none")
               div(class="col-lg-8 col-md-6 col-sm-4")
-                label(for="L") Lengte (inch)
+                label(for="L") Length (inch)
                 input(type="number",class="form-control",value=L,name="L",step=".01",placeholder="Lengte (inch)", required)
               div(class="col-lg-8 col-md-6 col-sm-4")
-                label(for="B") Breedte (inch)
+                label(for="B") Width (inch)
                 input(type="number",class="form-control",value=B,name="B",step=".01",placeholder="Breedte (inch)", required)
               div(class="col-lg-8 col-md-6 col-sm-4")
-                label(for="H") Hoogte (inch)
+                label(for="H") Height (inch)
                 input(type="number",class="form-control",value=H,name="H",step=".01",placeholder="Hoogte (inch)", required)
               div(class="col-lg-8 col-md-6 col-sm-4")
-                label(for="X") Extra dikte van Siliconen (inch)
+                label(for="X") Extra layer of thick silicon (inch)
                 input(type="number",class="form-control",value=X,name="X",step=".01",placeholder="Extra dikte van Siliconen (inch)", required)
               div(class="col-lg-8 col-md-6 col-sm-4")
-                label(for="W") Werk tarief (€/uur)
+                label(for="W") Working price (€/uur)
                 input(type="number",class="form-control",value=W,name="W",step=".01",placeholder="Werk tarief (€/uur)", required)
             div(class="col-lg-2 col-md-1 col-sm-0")
             div(class="form-group col-lg-3 col-md-4 col-sm-12")
-              label(for="title") subtotaal
+              label(for="title") Subtotal
               h4 #{Pt.toFixed(2)} €
             div(class="col-lg-2 col-md-2 col-sm-12")
             div(class="form-group col-lg-3  col-md-4 col-sm-12")
-              label(for="title") % marge
+              label(for="title") % extra margin
               input(type="number",class="form-control",name="marge",step=".01",placeholder="aantal %")
             div(class="col-lg-2 col-md-1 col-sm-0")
-            button(type="submit",class="btn btn-#{settings.oppo}") bereken marge
+            button(type="submit",class="btn btn-#{settings.oppo}") Calculate extra margin
             
         hr
         div(class="row")
