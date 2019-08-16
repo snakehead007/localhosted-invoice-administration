@@ -1,44 +1,58 @@
 //- V1.8
+
+//Required npm packages
 var path = require('path');
 var express = require('express');
-var bodyParser = require('body-parser'); //npm install body-parser
+var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var multer = require('multer') // v1.0.5
+var multer = require('multer');
 var fs = require('fs')
 var fileUpload = require('express-fileupload');
-var imageToBase64 = require('image-to-base64'); //npm i image-to-base64
+var imageToBase64 = require('image-to-base64');
+
+//Express initializing
 var app = express();
 app.locals.title = 'Simple-invoice-administrator';
 app.locals.email = 'snakehead007@pm.me';
+
+//Bodyparser initializing
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-mongoose.connect('mongodb://localhost:27017/sample-website');
+
+//Mongoose initializing
+mongoose.connect('mongodb://localhost:27017/test011'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
 mongoose.connection.on('open', function() {
   console.log('Mongoose connected!');
 });
 
+//Global variables initializing
 var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
 var maand_klein = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
 var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Oktober", "November", "December"];
 var month_small = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "oktober", "november", "december"];
+var year = new Date().getFullYear();
+
+//Schema initializing
 Schema = mongoose.Schema;
-var loginHash;
-var currentLogin = "";
 var SettingsSchema = new Schema({
+  //Language of the user, can be "eng" or "nl"
   lang: {
     type: String,
     default: "eng"
   },
+  //Theme of the user, currenlty working with bootstrap built-in themes
   thema: {
     type: String,
     default: "secondary"
   },
+  //Theme opposite colour that suits the main chosen theme
   oppo: {
     type: String,
     default: "light"
   },
+  //Navbars theme (This is only for the 'light' theme, otherwise it isnt readable)
   nav: {
     type: String,
     default: "dark"
@@ -286,47 +300,49 @@ var ProjectSchema = new Schema({
   }
 })
 
-app.get('/', function(req, res) {
-  Settings.find({}, function(err, settings) {
-    if (!err && settings.length != 0) {} else {
-      legeSettings = new Settings();
-      legeSettings.save(function(err) {
-        if (err) {
-          console.log("err in settings: " + err);
-        }
-      });
-    }
-    res.redirect('login');
-  });
+//TEST AREAS START///////////////////////////////////
+
+app.get('/get',function(req,res,next){
+
 });
+
+app.post('/post',function(req,res,next){
+
+
+  res.send('Post \'em!');
+});
+
+
+
+//TEST AREAS END////////////////////////////
+
+app.get('/', function(req, res) {
+  Settings.findOne({}, function(err, settings) {
+    //Make the callCheckSettings, checking for first time use
+    callCheckSettings(settings).then(function(){
+      res.render('login');
+    });
+  });
+});//REWORKED
 
 app.get('/index/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
-    Settings.find({}, function(err, settings) {
-      if (!err && settings.length != 0) {
-        if(settings[0].lang=="nl"){
-        res.render('nl/index', {
-          "description": "MDSART factuurbeheer",
-          "settings": settings[0],
-          "jaar": new Date().getFullYear(),
+    Settings.findOne({}, function(err, settings) {
+      if (!err) {
+        res.render(settings.lang+'/index', {
+          "settings": settings,
+          "jaar": year,
           "loginHash": req.params.loginHash
-        });}else{
-          res.render('eng/index', {
-            "description": "MDSART factuurbeheer",
-            "settings": settings[0],
-            "jaar": new Date().getFullYear(),
-            "loginHash": req.params.loginHash
-        });}
+        });
       }
     });
+});//REWORKED
 
-});
-
-app.get('/login', function(req, res) {
-  res.render('nl/login');
+app.get('/login', function(req, res) {//REWORKED
+  res.render('/login');
 });
 
 app.post('/', function(req, res) {
@@ -334,35 +350,25 @@ app.post('/', function(req, res) {
   if (!(enc(String(req.body.loginHash)) === loginHash)) {
     res.redirect('login');
   }});
-    Settings.find({}, function(err, settings) {
-      if(err){console.log(err);};
-      if (!err && settings.length != 0) {
-
-          if(settings[0].lang=="nl"){
-        res.render('nl/index', {
-      "description": "",
-      "settings": settings[0],
-      "jaar": new Date().getFullYear(),
-      "loginHash": enc(req.body.loginHash)
-    });}else{res.render('eng/index', {
-      "description": "",
-      "settings": settings[0],
-      "jaar": new Date().getFullYear(),
-      "loginHash": enc(req.body.loginHash)
-});}
-
+    Settings.findOne({}, function(err, settings) {
+        if (!err) {
+          res.render(settings.lang+'/index', {
+        "description": "",
+        "settings": settings,
+        "jaar": year,
+        "loginHash": enc(req.body.loginHash)
+        });
       }
     });
-
-});
+});//REWORKED
 
 app.get('/chart/:jaar/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
-    Settings.find({}, function(err, settings) {
-      if (!err && settings.length != 0) {
+    Settings.findOne({}, function(err, settings) {
+      if (!err) {
         Factuur.find({}, function(err, facturen) {
           if (!err) {
             var totaal = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -370,39 +376,30 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {
               for (var factuur of facturen) {
                 if (factuur.factuurNr) {
                   if (factuur.datumBetaald) {
-                    if (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i]) || factuur.datumBetaald.includes(month[i]) || factuur.datumBetaald.includes(month_small[i]) ) {
-                      if (factuur.datumBetaald.includes(req.params.jaar)) { //current year
-                        if (factuur.factuurNr) { //only factuur not offerte
-                          if (factuur.isBetaald) {
+                    if (  (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i]) || factuur.datumBetaald.includes(month[i]) || factuur.datumBetaald.includes(month_small[i]))
+                        && factuur.datumBetaald.includes(req.params.jaar) && factuur.factuurNr && factuur.isBetaald) {
                             totaal[i] += factuur.totaal;
-                          }
-                        }
-                      }
                     }
-                  } else if (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i]) || factuur.datumBetaald.includes(month[i]) || factuur.datumBetaald.includes(month_small[i])) {
-                    if (factuur.datum.includes(req.params.jaar)) {
-                      if (factuur.factuurNr) {
-                        if (factuur.isBetaald) {
-                          totaal[i] += factuur.totaal;
-                        }
-                      }
+                  } else if ( (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i]) || factuur.datumBetaald.includes(month[i]) || factuur.datumBetaald.includes(month_small[i]))
+                            && factuur.datum.includes(req.params.jaar) && factuur.factuurNr && factuur.isBetaald){
+                      totaal[i] += factuur.totaal;
                     }
-                  }
                 }
-              }
+                }
             }
-            if(settings[0].lang=="nl"){
-            res.render('nl/chart', {
-              "totaal": totaal,
-              "description": "Grafiek",
-              "settings": settings[0],
-              "jaar": req.params.jaar,
-              "loginHash": req.params.loginHash
-            });}else{
-              res.render('eng/chart', {
+            if(settings.lang=="nl"){
+              res.render('nl/chart', {
                 "totaal": totaal,
                 "description": "Grafiek",
-                "settings": settings[0],
+                "settings": settings,
+                "jaar": req.params.jaar,
+                "loginHash": req.params.loginHash
+              });
+            }else{
+              res.render('eng/chart', {
+                "totaal": totaal,
+                "description": "Graph",
+                "settings": settings,
                 "jaar": req.params.jaar,
                 "loginHash": req.params.loginHash
               });
@@ -411,46 +408,33 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {
             console.log(err);
           }
         });
-      } else {
-        legeSettings = new Settings();
-        legeSettings.save(function(err) {
-          if (err) {
-            console.log("err in settings: " + err);
-          }
-        });
       }
     });
+});//REWORKED
 
-});
-
-app.get('/contacten/:loginHash', function(req, res) {
+app.get('/contacten/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
-    Contact.find({}, function(err, docs) {
-      Settings.find({}, function(err, settings) {
-        if (!err && settings.length != 0) {} else {
-          legeSettings = new Settings();
-          legeSettings.save(function(err) {
-            if (err) {
-              console.log("err in settings: " + err);
-            }
-          });
-        }
+    Contact.find({}, function(err, contacts) {
+      Settings.findOne({}, function(err, settings) {
+        console.log(settings);
+        if (!err ) {
         if(settings[0].lang=="nl"){
         res.render('nl/contacten', {
-          'contactenLijst': docs,
+          'contactenLijst': contacts,
           'description': "Contactpersonen",
           "settings": settings[0],
           "loginHash": req.params.loginHash
         });}else{
           res.render('eng/contacten', {
-            'contactenLijst': docs,
+            'contactenLijst': contacts,
             'description': "Contacts",
             "settings": settings[0],
             "loginHash": req.params.loginHash
           });}
+        }
       });
     });
 });
@@ -4961,6 +4945,27 @@ var callGetBase64 = async () => {
   var imgData = await (getBase64());
   return imgData
 }
+
+var checkSettings = (sett) => {
+  return new Promise((resolve,reject) => {
+    if(!sett){
+        console.log("Settings not found, creating a new Settings with default options");
+        legeSettings = new Settings();
+        legeSettings.save(function(err) {
+          if (err) {
+            reject("Err creating new settings: " + err);
+          }else{
+            resolve();
+          }
+        });
+    }
+    resolve();
+  });
+};
+
+var callCheckSettings = async (sett) => {
+  await(checkSettings(sett));
+};
 
 function enc(s){
   return String(Buffer.from(s).toString('base64'));
