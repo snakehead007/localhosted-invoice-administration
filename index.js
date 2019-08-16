@@ -530,7 +530,7 @@ app.get('/edit-contact/:id/:loginHash', function(req, res) {//REWORKED & needs t
     }, function(err, contacts) {
       Settings.findOne({                                                                            }, function(err, settings) {
         if (!err) {
-          if(settings[0].lang=="nl"){
+          if(settings.lang=="nl"){
           res.render('nl/edit/edit-contact', {
             'contact': contacts,
             "description": "Contact aanpassen",
