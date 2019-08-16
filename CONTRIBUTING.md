@@ -2,5 +2,12 @@
 
 If you want to help create, fix or review the code. Thanks!
 
-contact me at my e-mail "snakehead007@pm.me" and tell when what and why you want to contribute.
+Contact me at my e-mail "snakehead007@pm.me" and tell when what and why you want to contribute.
 
+Or contact me with any kind of other question regarding this repository
+
+##### State of current code:
+
+All functions and files are created with their Dutch name.
+The views engine currenlty is 'jade', which is an outdated version of 'pug'
+All files are written in jade, having no issue. but needs a rewrite to pug files.
