@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 //Mongoose initializing
-mongoose.connect('mongodb://localhost:27017/test017'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
+mongoose.connect('mongodb://localhost:27017/test018'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
 mongoose.connection.on('open', function() {
   console.log('Mongoose connected!');
 });
@@ -520,37 +520,31 @@ app.post('/add-contact/:loginHash', function(req, res) {//REWORKED & tested
 
 });
 
-app.get('/edit-contact/:id/:loginHash', function(req, res) {
+app.get('/edit-contact/:id/:loginHash', function(req, res) {//REWORKED & needs testing
   callFindPass().then(function(loginHash){
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
     Contact.findOne({
       _id: req.params.id
-    }, function(err, docs) {
-      Settings.find({}, function(err, settings) {
-        if (!err && settings.length != 0) {} else {
-          legeSettings = new Settings();
-          legeSettings.save(function(err) {
-            if (err) {
-              console.log("err in settings: " + err);
-            }
-          });
-        }
-        if(settings[0].lang=="nl"){
-        res.render('nl/edit/edit-contact', {
-          'contact': docs,
-          "description": "Contact aanpassen",
-          "settings": settings[0],
-          "loginHash": req.params.loginHash
-        });}else{
-          res.render('eng/edit/edit-contact', {
-            'contact': docs,
-            "description": "Edit Contact",
-            "settings": settings[0],
+    }, function(err, contacts) {
+      Settings.findOne({                                                                            }, function(err, settings) {
+        if (!err) {
+          if(settings[0].lang=="nl"){
+          res.render('nl/edit/edit-contact', {
+            'contact': contacts,
+            "description": "Contact aanpassen",
+            "settings": settings,
             "loginHash": req.params.loginHash
-          });
-        }
+          });}else{
+            res.render('eng/edit/edit-contact', {
+              'contact': docs,
+              "description": "Edit Contact",
+              "settings": settings,
+              "loginHash": req.params.loginHash
+            });
+          }
+        };s
       });
     });
 
