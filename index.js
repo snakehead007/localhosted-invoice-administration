@@ -4128,7 +4128,7 @@ app.get('/epo-sil/:loginHash', function(req, res) {
           "s3": settings[0].s3,
           "s4": settings[0].s4
         });}else{
-          res.render('nl/calc/epo-sil', {
+          res.render('eng/calc/epo-sil', {
             'settings': settings[0],
             'description': "Calculate silicon mold",
             "loginHash": req.params.loginHash,
@@ -4238,7 +4238,7 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {
           "s4": settings[0].s4,
           "error": error
         });}else{
-          res.render("nl/calc/epo-sil-oplossing", {
+          res.render("eng/calc/epo-sil-oplossing", {
             "description": "Results of calculations",
             "settings": settings[0],
             "L": L,
@@ -4384,7 +4384,7 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {
           "s4": settings[0].s4,
           "error": error
         });}else{
-          res.render("nl/calc/epo-sil-oplossing", {
+          res.render("eng/calc/epo-sil-oplossing", {
             "description": "Results of calculations",
             "settings": settings[0],
             "L": L,
