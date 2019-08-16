@@ -20,7 +20,7 @@ html
             li(class="nav-item")
               a(class="nav-link active" , href='/index'+"/"+loginHash) Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) My profile    
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Back    
             li(class="nav-item")
               a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
             li(class="nav-item")
@@ -33,7 +33,7 @@ html
                   h6=description
               div(class="col-8")  
                 form(class="form-inline" action="/zoeken"+"/"+loginHash, method="post")
-                  input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
+                  input(class="form-control" type="search" placeholder="Search" aria-label="Search" name="search")
     main
         hr
         div(class="row")
@@ -57,20 +57,20 @@ html
         canvas(id="myChart" width="100%" height="40%")
         script.
           var ctx = document.getElementById('myChart').getContext('2d');
-          var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
+          var maand = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Oktober", "November", "December"];
           var color = Chart.helpers.color;
           var myChart = new Chart(ctx, {
           type: 'bar',
           data: {
               labels: [maand[0], maand[1], maand[2], maand[3], maand[4], maand[5], maand[6], maand[7], maand[8], maand[9], maand[10], maand[11]],
               datasets: [{
-                  label: 'Exlc. btw €',
+                  label: 'Excl. VAT €',
                   data: [#{totaal[0]},#{totaal[1]}, #{totaal[2]}, #{totaal[3]}, #{totaal[4]}, #{totaal[5]}, #{totaal[6]}, #{totaal[7]}, #{totaal[8]}, #{totaal[9]}, #{totaal[10]}, #{totaal[11]}],
                   backgroundColor: color(window.chartColors.red).alpha(1).rgbString(),
                   borderColor: window.chartColors.red,
                   borderWidth: 1
               },{
-                  label: 'Incl. btw €',
+                  label: 'Incl. VAT €',
                   data: [#{totaal[0]}*1.21,#{totaal[1]}*1.21, #{totaal[2]}*1.21, #{totaal[3]}*1.21, #{totaal[4]}*1.21, #{totaal[5]}*1.21, #{totaal[6]}*1.21, #{totaal[7]}*1.21, #{totaal[8]}*1.21, #{totaal[9]}*1.21, #{totaal[10]}*1.21, #{totaal[11]}*1.21],
                   backgroundColor: color(window.chartColors.blue).alpha(1).rgbString(),
                   borderColor: window.chartColors.blue,

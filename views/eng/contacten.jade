@@ -29,31 +29,31 @@ html
                   h6=description
               div(class="col-8")  
                 form(class="form-inline" action="/zoeken"+"/"+loginHash, method="post")
-                  input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
+                  input(class="form-control" type="search" placeholder="Search" aria-label="Search" name="search")
     main
       div(class="jumbotron")
         div(class="row no-gutters")
           div(class="col-9 mr-auto")
             if settings.thema == "light"
               a(href='/add-contact'+"/"+loginHash,class="button") 
-                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Nieuwe Contactpersoon
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") New Contact
             if settings.thema != "light"
               a(href='/add-contact'+"/"+loginHash,class="button") 
-                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Nieuwe Contactpersoon
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") New Contact
           div(class="col-2")
             if settings.thema == "light"
               a(href='/index'+"/"+loginHash,class="button") 
-                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Terug
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
             if settings.thema != "light"
               a(href='/index'+"/"+loginHash,class="button") 
-                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Terug
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back
         hr          
         if settings.thema == "dark" || settings.thema == "danger" || settings.thema == "info"
           table(class="table table-#{settings.oppo} table-striped")  
             tr
-              th(scope="col") Contactpersonen
+              th(scope="col") Contact
               th(scope="col") E-mail
-              th(scope="col") Actie
+              th(scope="col") Action
 
             each contact in contactenLijst
               tr
@@ -85,15 +85,15 @@ html
                 td
                   a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                   div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                    a(class="dropdown-item", href='/edit-contact/'+contact._id+"/"+loginHash) aanpassen
-                    a(class="dropdown-item", href='/delete-contact/'+contact._id+"/"+loginHash) verwijder
-                    a(class="dropdown-item", href='/view-contact/'+contact._id+"/"+loginHash) bekijk
+                    a(class="dropdown-item", href='/edit-contact/'+contact._id+"/"+loginHash) Edit
+                    a(class="dropdown-item", href='/delete-contact/'+contact._id+"/"+loginHash) Delete
+                    a(class="dropdown-item", href='/view-contact/'+contact._id+"/"+loginHash) View
         else
           table(class="table table-#{settings.thema} table-striped")    
             tr
-              th(scope="col") Contactpersonen
+              th(scope="col") Contact
               th(scope="col") E-mail
-              th(scope="col") Actie
+              th(scope="col") Action
 
             each contact in contactenLijst
               tr
@@ -121,10 +121,10 @@ html
                             button(type="button" class="btn btn-outline-#{settings.oppo}")=contact.mail
                     else  
                       td
-                        button(type="button" class="btn btn-outline-#{settings.oppo}") Geen e-mail
+                        button(type="button" class="btn btn-outline-#{settings.oppo}") No e-mail
                 td
                   a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                   div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                    a(class="dropdown-item", href='/edit-contact/'+contact._id+"/"+loginHash) aanpassen
-                    a(class="dropdown-item", href='/delete-contact/'+contact._id+"/"+loginHash) verwijder
-                    a(class="dropdown-item", href='/view-contact/'+contact._id+"/"+loginHash) bekijk
+                    a(class="dropdown-item", href='/edit-contact/'+contact._id+"/"+loginHash) Edit
+                    a(class="dropdown-item", href='/delete-contact/'+contact._id+"/"+loginHash) Delete
+                    a(class="dropdown-item", href='/view-contact/'+contact._id+"/"+loginHash) View

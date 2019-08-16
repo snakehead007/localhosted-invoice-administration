@@ -137,8 +137,7 @@ html
                         a(class="dropdown-item", href='/view-factuur/'+factuur._id+"/"+loginHash,class="button") bekijk
                         div(class="dropdown-divider")
                         if factuur.factuurNr
-                          a(class="dropdown-item", href='/createPDF/'+factuur._id+"/"+loginHash,id="target",target="_blank") download factuur (nl)
-                          a(class="dropdown-item", href='/createPDF-eng/'+factuur._id+"/"+loginHash,id="target",target="_blank") download factuur (eng)
+                          a(class="dropdown-item", href='/createPDF/'+factuur._id+"/"+loginHash,id="target",target="_blank") download factuur
                         if factuur.offerteNr
                           a(class="dropdown-item", href='/offerte/'+factuur._id+"/"+loginHash,id="target",target="_blank") download offerte
                           if !factuur.factuurNr
@@ -263,7 +262,6 @@ html
                         div(class="dropdown-divider")
                         if factuur.factuurNr
                           a(class="dropdown-item", href='/createPDF/'+factuur._id+"/"+loginHash,id="target",target="_blank") download factuur (nl)
-                          a(class="dropdown-item", href='/createPDF-eng/'+factuur._id+"/"+loginHash,id="target",target="_blank") download factuur (eng)
                         if factuur.offerteNr
                           a(class="dropdown-item", href='/offerte/'+factuur._id+"/"+loginHash,id="target",target="_blank") download offerte
                           if !factuur.factuurNr

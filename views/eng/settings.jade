@@ -31,7 +31,7 @@ html
                   h6=description
               div(class="col-8")  
                 form(class="form-inline" action="/zoeken"+"/"+loginHash, method="post")
-                  input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search" )
+                  input(class="form-control" type="search" placeholder="Search" aria-label="Search" name="search" )
     main
       div(class="jumbotron")
         div(class="row")
@@ -49,7 +49,7 @@ html
                     button(type="button" class="btn btn-#{settings.thema}") Change now 
             tr
               td
-                p(class="lead") Thema
+                p(class="lead") Theme
                 div(class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups")
                   div(class="btn-group mr-4" role="group" aria-label="First group")
                     a(href='/change-theme/secondary'+"/"+loginHash,class="button")
@@ -94,41 +94,41 @@ html
             tr
               td  
                 form(action='/edit-pdf-text/#{loginHash}',method='post')    
-                    p(class="lead") Text aanpassingen   
+                    p(class="lead") Pdf footnotes  
                       button(type="button" class="mb-1 btn-sm btn btn-#{settings.thema}" onclick="info()") info
                     div(class="input-group mb-3")
                       div(class="input-group-prepend")
-                        span(class="input-group-text") Factuur tekst
+                        span(class="input-group-text") Invoice
                       textarea(input="text",name="factuurtext",class="form-control" aria-label="With textarea") #{settings.factuurtext}
                     div(class="input-group mb-3")
                       div(class="input-group-prepend")
-                        span(class="input-group-text") Creditnota tekst
+                        span(class="input-group-text") Creditnote
                       textarea(input="text",name="creditnotatext",class="form-control" aria-label="With textarea") #{settings.creditnotatext}
                     div(class="input-group mb-3")
                       div(class="input-group-prepend")
-                        span(class="input-group-text") Offerte tekst
+                        span(class="input-group-text") Offer
                       textarea(input="text",name="offertetext",class="form-control" aria-label="With textarea") #{settings.offertetext}
-                    button(type="submit",class="btn btn-#{settings.oppo}") bijwerken
+                    button(type="submit",class="btn btn-#{settings.oppo}") Update pdf footnotes
                     div(class="",id="info",style="display:none")
                       p To use variables from the program type them like this in the text:
                       samp 
                         pre
                           code 
-                              &#91;firma&#93;     : firma naam
-                              &#91;naam&#93;      : volledige naam
-                              &#91;straat&#93;    : straatnaam
-                              &#91;straatnr&#93;  : straatnummer
-                              &#91;postcode&#93;  : postcode
-                              &#91;plaats&#93;    : plaatsnaam 
-                              &#91;btw&#93;     : btw nummer
-                              &#91;iban&#93;      : Iban nummer
-                              &#91;bic&#93;       : Bic nummer
-                              &#91;tele&#93;      : Telefoon nummer
-                              &#91;bic&#93;       : mail
-                              &#91;contact.rekeningnr&#93;: mail van contactpersoon die bij de factuur hoort
-                              &#91;factuur.datum&#93;     : Datum van creatie van het document in het programma
-                              &#91;factuur.factuurnr&#93; : Nummer van de factuur
-                              &#91;factuur.offertenr&#93; : Nummer van de offerte
-                              &#91;factuur.creditnr&#93;  : Nummer van de creditnota
-                              &#91;factuur.voorschot&#93; : het voorschot bedrag
-                              &#91;factuur.totaal&#93;    : het totaal aantal bedrag
+                              &#91;firma&#93;     : firm name
+                              &#91;naam&#93;      : full naam
+                              &#91;straat&#93;    : street name
+                              &#91;straatnr&#93;  : street N°
+                              &#91;postcode&#93;  : postalcode
+                              &#91;plaats&#93;    : place 
+                              &#91;btw&#93;       : VAT N°
+                              &#91;iban&#93;      : IBAN
+                              &#91;bic&#93;       : BIC
+                              &#91;tele&#93;      : Thelephone N°
+                              &#91;bic&#93;       : E-mail
+                              &#91;contact.rekeningnr&#93;: Mail of the contact of the current document
+                              &#91;factuur.datum&#93;     : Date of creation on this program of the current document
+                              &#91;factuur.factuurnr&#93; : Nu° of the invoice
+                              &#91;factuur.offertenr&#93; : N° of the offer
+                              &#91;factuur.creditnr&#93;  : N° of the creditnote
+                              &#91;factuur.voorschot&#93; : the amount of advance 
+                              &#91;factuur.totaal&#93;    : the total amount

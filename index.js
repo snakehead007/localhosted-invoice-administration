@@ -21,6 +21,8 @@ mongoose.connection.on('open', function() {
 
 var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
 var maand_klein = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
+var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Oktober", "November", "December"];
+var month_small = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "oktober", "november", "december"];
 Schema = mongoose.Schema;
 var loginHash;
 var currentLogin = "";
@@ -364,7 +366,7 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {
               for (var factuur of facturen) {
                 if (factuur.factuurNr) {
                   if (factuur.datumBetaald) {
-                    if (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i])) {
+                    if (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i]) || factuur.datumBetaald.includes(month[i]) || factuur.datumBetaald.includes(month_small[i]) ) {
                       if (factuur.datumBetaald.includes(req.params.jaar)) { //current year
                         if (factuur.factuurNr) { //only factuur not offerte
                           if (factuur.isBetaald) {
@@ -373,7 +375,7 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {
                         }
                       }
                     }
-                  } else if (factuur.datum.includes(maand[i]) || factuur.datum.includes(maand_klein[i])) {
+                  } else if (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i]) || factuur.datumBetaald.includes(month[i]) || factuur.datumBetaald.includes(month_small[i])) {
                     if (factuur.datum.includes(req.params.jaar)) {
                       if (factuur.factuurNr) {
                         if (factuur.isBetaald) {
@@ -1186,9 +1188,16 @@ app.get('/add-factuur/:idc/:loginHash', function(req, res) {
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
+    Settings.find({}, function(err, settings) {
     var date = new Date();
     var jaar = date.getFullYear();
-    var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+    var datum;
+    if(settings[0].lang=="nl"){
+    datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+    }else {
+
+      datum = date.getDate() + " " + month[date.getMonth()] + " " + jaar;
+    }
     var nr = 0;
     var idn;
     var _n = null;
@@ -1258,7 +1267,7 @@ app.get('/add-factuur/:idc/:loginHash', function(req, res) {
         });
       }
     });
-
+});
 });
 
 app.get('/delete-factuur/:idc/:idf/:loginHash', function(req, res) {
@@ -1566,9 +1575,16 @@ app.post('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
+    Settings.find({}, function(err, settings) {
     var date = new Date();
     var jaar = date.getFullYear();
-    var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+    var datum;
+    if(settings[0].lang=="nl"){
+    datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+    }else {
+
+      datum = date.getDate() + " " + month[date.getMonth()] + " " + jaar;
+    }
     Bestelling.find({
       factuur: req.params.idf
     }, function(err, bestellingen) {
@@ -1619,7 +1635,7 @@ app.post('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {
         });
       });
     });
-
+});
 });
 
 app.post('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {
@@ -1627,9 +1643,16 @@ app.post('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
+    Settings.find({}, function(err, settings) {
     var date = new Date();
     var jaar = date.getFullYear();
-    var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+    var datum;
+    if(settings[0].lang=="nl"){
+    datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+    }else {
+
+      datum = date.getDate() + " " + month[date.getMonth()] + " " + jaar;
+    }
     Bestelling.find({
       factuur: req.params.idf
     }, function(err, bestellingen) {
@@ -1680,7 +1703,7 @@ app.post('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {
         });
       });
     });
-
+  });
 });
 
 app.get('/view-factuur/:idf/:loginHash', function(req, res) {
@@ -1853,86 +1876,6 @@ app.get('/createPDF/:idf/:loginHash', function(req, res) {
 
 });
 
-app.get('/createPDF-eng/:idf/:loginHash', function(req, res) {
-  callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
-    var id = req.params.id;
-    var factuurtext = [];
-    Profile.find({}, function(err, profile) {
-      Factuur.findOne({
-        _id: req.params.idf
-      }, function(err, factuur) {
-        if (err)
-          console.log("err: " + err);
-        Contact.findOne({
-          _id: factuur.contact
-        }, function(err2, contact) {
-          if (err2)
-            console.log("err: " + err2);
-          Bestelling.find({
-            factuur: factuur._id
-          }, function(err3, bestellingen) {
-            if (err3) {
-              console.log("err: " + err3);
-            }
-            var lengte = Number(bestellingen.length);
-            var json_data = "[";
-            for (var i = 0; i <= lengte - 1; i++) {
-              json_data += ("{\"beschrijving\" : \"" + bestellingen[Number(i)].beschrijving + "\", " +
-                "\"aantal\" : " + bestellingen[Number(i)].aantal + ", " +
-                "\"bedrag\" : " + bestellingen[Number(i)].bedrag + ", " +
-                "\"totaal\" : " + Number(bestellingen[Number(i)].aantal * bestellingen[Number(i)].bedrag) + " }");
-              if (i <= lengte - 2) {
-                json_data += ",";
-              }
-            }
-            json_data += "]";
-            Settings.find({}, function(err, settings) {
-              if (!err && settings.length != 0) {} else {
-                legeSettings = new Settings();
-                legeSettings.save(function(err) {
-                  if (err) {
-                    console.log("err in settings: " + err);
-                  }
-                });
-              }
-              callGetBase64().then(function(imgData){
-              factuurtext = replaceAll(settings[0].factuurtext,profile[0],contact,factuur);
-              console.log(factuurtext);
-              if(settings[0].lang=="nl"){
-              res.render('nl/pdf/pdf-eng', {
-                'profile': profile[0],
-                'contact': contact,
-                'bestellingen': json_data,
-                "factuur": factuur,
-                'lengte': lengte,
-                "settings": settings[0],
-                "loginHash": req.params.loginHash,
-                "factuurtext": factuurtext,
-                "imgData":imgData
-              });}else{
-                res.render('eng/pdf/pdf-eng', {
-                  'profile': profile[0],
-                  'contact': contact,
-                  'bestellingen': json_data,
-                  "factuur": factuur,
-                  'lengte': lengte,
-                  "settings": settings[0],
-                  "loginHash": req.params.loginHash,
-                  "factuurtext": factuurtext,
-                  "imgData":imgData
-                });
-              }
-            });
-            });
-          });
-        });
-      });
-    });
-
-});
 
 app.get('/bestelbon/:idf/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
@@ -2203,9 +2146,17 @@ app.get('/add-offerte/:idc/:loginHash', function(req, res) {
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
+
+    Settings.find({}, function(err, settings) {
     var date = new Date();
     var jaar = date.getFullYear();
-    var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+    var datum;
+    if(settings[0].lang=="nl"){
+    datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+    }else {
+
+      datum = date.getDate() + " " + month[date.getMonth()] + " " + jaar;
+    }
     var nroff = 0;
     var idn;
     var _n = null;
@@ -2279,7 +2230,7 @@ app.get('/add-offerte/:idc/:loginHash', function(req, res) {
         console.log("err: " + err);
       }
     });
-
+  });
 });
 
 app.get('/creditnota/:idc/:loginHash', function(req, res) {
@@ -2364,9 +2315,17 @@ app.get('/add-creditnota/:idc/:loginHash', function(req, res) {
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
+
+    Settings.find({}, function(err, settings) {
     var date = new Date();
     var jaar = date.getFullYear();
-    var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+    var datum;
+    if(settings[0].lang=="nl"){
+    datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+    }else {
+
+      datum = date.getDate() + " " + month[date.getMonth()] + " " + jaar;
+    }
     var nr = 0;
     var idn;
     var _n = null;
@@ -2435,7 +2394,7 @@ app.get('/add-creditnota/:idc/:loginHash', function(req, res) {
         });
       }
     });
-
+  });
 });
 
 app.get('/view-creditnota/:idf/:loginHash', function(req, res) {
@@ -2534,9 +2493,17 @@ app.get('/opwaardeer/:idf/:loginHash', function(req, res) {
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
+
+    Settings.find({}, function(err, settings) {
     var date = new Date();
     var jaar = date.getFullYear();
-    var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+    var datum;
+    if(settings[0].lang=="nl"){
+    datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+    }else {
+
+      datum = date.getDate() + " " + month[date.getMonth()] + " " + jaar;
+    }
     Factuur.findOne({
       _id: req.params.idf
     }, function(err, factuur) {
@@ -2573,7 +2540,7 @@ app.get('/opwaardeer/:idf/:loginHash', function(req, res) {
         console.log(err);
       }
     });
-
+  });
 });
 
 app.get('/opwaardeer/:idf/t/:loginHash', function(req, res) {
@@ -2581,9 +2548,17 @@ app.get('/opwaardeer/:idf/t/:loginHash', function(req, res) {
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
+
+    Settings.find({}, function(err, settings) {
   var date = new Date();
   var jaar = date.getFullYear();
-  var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+  var datum;
+  if(settings[0].lang=="nl"){
+  datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+  }else {
+
+    datum = date.getDate() + " " + month[date.getMonth()] + " " + jaar;
+  }
   Factuur.findOne({
     _id: req.params.idf
   }, function(err, factuur) {
@@ -2620,7 +2595,7 @@ app.get('/opwaardeer/:idf/t/:loginHash', function(req, res) {
       console.log(err);
     }
   });
-
+});
 });
 
 app.get('/delete-creditnota/:idc/:idf/:loginHash', function(req, res) {
@@ -2835,9 +2810,16 @@ app.post('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
+    Settings.find({}, function(err, settings) {
   var date = new Date();
   var jaar = date.getFullYear();
-  var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+  var datum;
+  if(settings[0].lang=="nl"){
+  datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+  }else {
+
+    datum = date.getDate() + " " + month[date.getMonth()] + " " + jaar;
+  }
   Bestelling.find({
     factuur: req.params.idf
   }, function(err, bestellingen) {
@@ -2888,7 +2870,7 @@ app.post('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {
       });
     });
   });
-
+});
 });
 
 app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {
@@ -2896,9 +2878,17 @@ app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
+
+    Settings.find({}, function(err, settings) {
   var date = new Date();
   var jaar = date.getFullYear();
-  var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+  var datum;
+  if(settings[0].lang=="nl"){
+  datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+  }else {
+
+    datum = date.getDate() + " " + month[date.getMonth()] + " " + jaar;
+  }
   Bestelling.find({
     factuur: req.params.idf
   }, function(err, bestellingen) {
@@ -2949,7 +2939,7 @@ app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {
       });
     });
   });
-
+});
 });
 
 app.get('/prijs/:loginHash', function(req, res) {
@@ -3909,6 +3899,8 @@ app.get('/change-betaald/:id/:loginHash', function(req, res) {
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
+
+    Settings.find({}, function(err, settings) {
     Factuur.findOne({
       _id: req.params.id
     }, function(err, factuur) {
@@ -3917,7 +3909,13 @@ app.get('/change-betaald/:id/:loginHash', function(req, res) {
         voor = !(factuur.isBetaald);
         var date = new Date();
         var jaar = date.getFullYear();
-        var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar
+        var datum;
+        if(settings[0].lang=="nl"){
+        datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+        }else {
+
+          datum = date.getDate() + " " + month[date.getMonth()] + " " + jaar;
+        }
         Factuur.updateOne({
           _id: req.params.id
         }, {
@@ -3932,7 +3930,7 @@ app.get('/change-betaald/:id/:loginHash', function(req, res) {
         console.log(err);
       }
     });
-
+  });
 });
 
 app.get('/change-betaald2/:id/:loginHash', function(req, res) {
@@ -3940,6 +3938,7 @@ app.get('/change-betaald2/:id/:loginHash', function(req, res) {
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
+    Settings.find({}, function(err, settings) {
     Factuur.findOne({
       _id: req.params.id
     }, function(err, factuur) {
@@ -3948,7 +3947,13 @@ app.get('/change-betaald2/:id/:loginHash', function(req, res) {
         voor = !(factuur.isBetaald);
         var date = new Date();
         var jaar = date.getFullYear();
-        var datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar
+        var datum;
+        if(settings[0].lang=="nl"){
+        datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+        }else {
+
+          datum = date.getDate() + " " + month[date.getMonth()] + " " + jaar;
+        }
         Factuur.updateOne({
           _id: req.params.id
         }, {
@@ -3963,7 +3968,7 @@ app.get('/change-betaald2/:id/:loginHash', function(req, res) {
         console.log(err);
       }
     });
-
+  });
 });
 
 app.get('/berekeningen/:loginHash', function(req, res) {
@@ -4627,7 +4632,7 @@ app.post('/inch/:loginHash', function(req, res) {
           }
           if(settings[0].lang=="nl"){
           console.log("error niets ingevuld");
-          res.render('nl/calc/inch', { 
+          res.render('nl/calc/inch', {
             'settings': settings[0],
             'description': "Berekening voor inch & cm omzettingen",
             "error": 2,

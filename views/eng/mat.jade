@@ -29,22 +29,22 @@ html
                   h6=description
               div(class="col-8")  
                 form(class="form-inline" action="/zoeken"+"/"+loginHash, method="post")
-                  input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
+                  input(class="form-control" type="search" placeholder="Search" aria-label="Search" name="search")
     main
       div(class="jumbotron")
         div(class="row no-gutters")
           div(class="col-9 mr-auto")
             a(href='/add-mat'+"/"+loginHash,class="button")
               if settings.thema == "light"
-                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Nieuw materiaal
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") New material
               if settings.thema != "light"
-                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Nieuwe materiaal
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") New material
           div(class="col-2")
               a(href='/index'+"/"+loginHash,class="button")
                 if settings.thema == "light"
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
                 if settings.thema != "light"
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back
         hr
         if settings.thema == "dark" || settings.thema == "danger" || settings.thema == "info"
           table(class="table table-#{settings.oppo} table-striped")
@@ -58,10 +58,10 @@ html
                 td=materiaal.naam
                 td=materiaal.prijs.toFixed(2)+"€ /kg"
                 td
-                  a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                  a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions
                   div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                    a(class="dropdown-item", href='/edit-mat/'+materiaal._id+"/#{loginHash}") aanpassen
-                    a(class="dropdown-item", href='/delete-mat/'+materiaal._id+"/#{loginHash}") verwijder
+                    a(class="dropdown-item", href='/edit-mat/'+materiaal._id+"/#{loginHash}") Edit
+                    a(class="dropdown-item", href='/delete-mat/'+materiaal._id+"/#{loginHash}") Delete
         else
           table(class="table table-#{settings.thema} table-striped")
 
@@ -75,7 +75,7 @@ html
                 td=materiaal.naam
                 td=materiaal.prijs.toFixed(2)+"€ /kg"
                 td
-                  a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                  a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions
                   div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                    a(class="dropdown-item", href='/edit-bestelling/'+materiaal._id+"/#{loginHash}") aanpassen
-                    a(class="dropdown-item", href='/delete-bestelling/'+materiaal._id+"/#{loginHash}") verwijder
+                    a(class="dropdown-item", href='/edit-bestelling/'+materiaal._id+"/#{loginHash}") Edit
+                    a(class="dropdown-item", href='/delete-bestelling/'+materiaal._id+"/#{loginHash}") Delete

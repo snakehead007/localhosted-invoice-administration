@@ -155,8 +155,7 @@ html
                           if factuur.creditnr
                             a(class="dropdown-item", href='/creditnota/'+factuur._id+"/#{loginHash}",id="target",target="_blank") download creditnota
                           if factuur.factuurNr
-                            a(class="dropdown-item", href='/createPDF/'+factuur._id+"/#{loginHash}",id="target",target="_blank") download factuur (nl)
-                            a(class="dropdown-item", href='/createPDF-eng/'+factuur._id+"/#{loginHash}",id="target",target="_blank") download factuur (eng)
+                            a(class="dropdown-item", href='/createPDF/'+factuur._id+"/#{loginHash}",id="target",target="_blank") download factuur
                           if factuur.offerteNr
                             a(class="dropdown-item", href='/offerte/'+factuur._id+"/#{loginHash}",id="target",target="_blank") download offerte
                             if !factuur.factuurNr
@@ -241,8 +240,7 @@ html
                         if factuur.creditnr
                           a(class="dropdown-item", href='/creditnota/'+factuur._id+"/#{loginHash}",id="target",target="_blank") download creditnota 
                         if factuur.factuurNr
-                          a(class="dropdown-item", href='/createPDF/'+factuur._id+"/#{loginHash}",id="target",target="_blank") download factuur (nl)
-                          a(class="dropdown-item", href='/createPDF-eng/'+factuur._id+"/#{loginHash}",id="target",target="_blank") download factuur (eng)
+                          a(class="dropdown-item", href='/createPDF/'+factuur._id+"/#{loginHash}",id="target",target="_blank") download factuur
                         if factuur.offerteNr
                           a(class="dropdown-item", href='/offerte/'+factuur._id+"/#{loginHash}",id="target",target="_blank") download offerte
                           if !factuur.factuurNr
