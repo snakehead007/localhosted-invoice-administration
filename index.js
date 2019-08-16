@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 //Mongoose initializing
-mongoose.connect('mongodb://localhost:27017/test011'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
+mongoose.connect('mongodb://localhost:27017/test017'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
 mongoose.connection.on('open', function() {
   console.log('Mongoose connected!');
 });
@@ -316,16 +316,16 @@ app.post('/post',function(req,res,next){
 
 //TEST AREAS END////////////////////////////
 
-app.get('/', function(req, res) {
+app.get('/', function(req, res) {//REWORKED & tested
   Settings.findOne({}, function(err, settings) {
     //Make the callCheckSettings, checking for first time use
     callCheckSettings(settings).then(function(){
       res.render('login');
     });
   });
-});//REWORKED
+});
 
-app.get('/index/:loginHash', function(req, res) {
+app.get('/index/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
@@ -339,13 +339,13 @@ app.get('/index/:loginHash', function(req, res) {
         });
       }
     });
-});//REWORKED
+});
 
-app.get('/login', function(req, res) {//REWORKED
+app.get('/login', function(req, res) {//REWORKED & tested
   res.render('/login');
 });
 
-app.post('/', function(req, res) {
+app.post('/', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
   if (!(enc(String(req.body.loginHash)) === loginHash)) {
     res.redirect('login');
@@ -360,9 +360,9 @@ app.post('/', function(req, res) {
         });
       }
     });
-});//REWORKED
+});
 
-app.get('/chart/:jaar/:loginHash', function(req, res) {
+app.get('/chart/:jaar/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
@@ -410,102 +410,81 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {
         });
       }
     });
-});//REWORKED
+});
 
-app.get('/contacten/:loginHash', function(req, res) {//REWORKED
+app.get('/contacten/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
     Contact.find({}, function(err, contacts) {
       Settings.findOne({}, function(err, settings) {
-        console.log(settings);
         if (!err ) {
-        if(settings[0].lang=="nl"){
-        res.render('nl/contacten', {
-          'contactenLijst': contacts,
-          'description': "Contactpersonen",
-          "settings": settings[0],
-          "loginHash": req.params.loginHash
-        });}else{
-          res.render('eng/contacten', {
+          if(settings.lang=="nl"){
+          res.render('nl/contacten', {
             'contactenLijst': contacts,
-            'description': "Contacts",
-            "settings": settings[0],
+            'description': "Contactpersonen",
+            "settings": settings,
             "loginHash": req.params.loginHash
+          });}else{
+            res.render('eng/contacten', {
+              'contactenLijst': contacts,
+              'description': "Contacts",
+              "settings": settings,
+              "loginHash": req.params.loginHash
           });}
         }
       });
     });
 });
 
-app.get('/delete-contact/:id/:loginHash', function(req, res) {
+app.get('/delete-contact/:id/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
-    var contact_id = req.params.id;
-    Contact.remove({
+    Contact.deleteOne({
       _id: req.params.id
     }, function(err) {
       if (!err) {
-        Factuur.remove({
+        Factuur.deleteOne({
           contact: req.params.id
         }, function(err) {
-          if (!err) {} else {
-            console.log(err);
-          }
+          //deleteOne are async, but we dont need to await for them.
         });
-      } else {
-        console.log(err);
-      }
+      };
     });
-    Contact.find({}, function(err, contacten) {
-      Settings.find({}, function(err, settings) {
-        if (!err && settings.length != 0) {} else {
-          legeSettings = new Settings();
-          legeSettings.save(function(err) {
-            if (err) {
-              console.log("err in settings: " + err);
-            }
-          });
-        }
-        res.redirect('/contacten/' + req.params.loginHash);
-      });
+    Contact.find({}, function(err, contacten){
+        if(!err) {
+          res.redirect('/contacten/' + req.params.loginHash);
+        };
     });
 });
 
-app.get('/add-contact/:loginHash', function(req, res) {
+app.get('/add-contact/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
-    Settings.find({}, function(err, settings) {
-      if (!err && settings.length != 0) {} else {
-        legeSettings = new Settings();
-        legeSettings.save(function(err) {
-          if (err) {
-            console.log("err in settings: " + err);
-          }
-        });
-      }
-      if(settings[0].lang=="nl"){
-      res.render('nl/add/add-contact', {
-        'description': "Contact toevoegen",
-        "settings": settings[0],
-        "loginHash": req.params.loginHash
-      });}else{
-        res.render('eng/add/add-contact', {
-          'description': "Add contact",
-          "settings": settings[0],
+    Settings.findOne({}, function(err, settings) {
+      if (!err) {
+        if(settings.lang=="nl"){
+        res.render('nl/add/add-contact', {
+          'description': "Contact toevoegen",
+          "settings": settings,
           "loginHash": req.params.loginHash
-        });
-      }
+        });}else{
+          res.render('eng/add/add-contact', {
+            'description': "Add contact",
+            "settings": settings,
+            "loginHash": req.params.loginHash
+          });
+        }
+      };
     });
-
 });
 
-app.post('/add-contact/:loginHash', function(req, res) {
+app.post('/add-contact/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
@@ -530,32 +509,12 @@ app.post('/add-contact/:loginHash', function(req, res) {
       });
       var message = 'Contact toegevoegd';
       newContact.save(function(err) {
-        if (err) {
-          var message = 'Contact niet toegevoegd';
-        }
+
       });
-      Settings.find({}, function(err, settings) {
-        if (!err && settings.length != 0) {} else {
-          legeSettings = new Settings();
-          legeSettings.save(function(err) {
-            if (err) {
-              console.log("err in settings: " + err);
-            }
-          });
-        }
-        if(settings[0].lang=="nl"){
-        res.render('nl/add/add-contact', {
-          msg: message,
-          "description": "Contact toevoegen",
-          "settings": settings[0],
-          "loginHash": req.params.loginHash
-        });}else{
-          res.render('eng/add/add-contact', {
-            msg: message,
-            "description": "Add contact",
-            "settings": settings[0],
-            "loginHash": req.params.loginHash
-          });}
+      Settings.findOne({}, function(err, settings) {
+        if (!err) {
+          res.redirect('/contacten/'+req.params.loginHash);
+        };
       });
     }
 
