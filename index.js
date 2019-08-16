@@ -4878,6 +4878,18 @@ function distinct(_array) {
 }
 
 function replaceAll(str,profiel,contact,factuur){
+  Setting.find({},function(err,settings){
+  var date = new Date();
+  var jaar = date.getFullYear();
+  var datum;
+  var _maand;
+  if(settings[0].lang=="nl"){
+    _maand=maand[date.getMonth()];
+  datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
+  }else {
+    _maand=month[date.getMonth()];
+    datum = date.getDate() + " " + month[date.getMonth()] + " " + jaar;
+  }
   var res;
   var str = String(str);
   res = str.replace("[firma]",profiel.firma);
@@ -4893,12 +4905,14 @@ function replaceAll(str,profiel,contact,factuur){
   res = res.replace("[tele]",profiel.tele);
   res = res.replace("[contact.rekeningnr]",contact.rekeningnr);
   res = res.replace("[factuur.datum]",factuur.datum);
-  //res = res.replace("[factuur.offertenr]",factuur.);
-  //res = res.replace("[factuur.creditnr]",);
-  //res = res.replace("[factuur.factuurnr]",);
+  res = res.replace("[date]",datum);
+  res = res.replace("[date.y]",jaar);
+  res = res.replace("[date.m]",_maand);
+  res = res.replace("[date.d]",date.getDate());
   res = res.replace("[factuur.voorschot]",factuur.voorschot+" €");
   res = res.replace("[factuur.totaal]",factuur.totaal+" €");
   return res.split('\r\n');
+  });
 }
 
 var findPass = () => {
