@@ -52,38 +52,38 @@ html
           div(class="col-2")
               a(href='/contacten'+"/"+loginHash,class="button")
                 if settings.thema == "light"
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
                 if settings.thema != "light"
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back
         hr
         form(action='/add-contact/#{loginHash}',method='post')
           p=msg
           div(class="form-row")
             div(class="form-group col-md-5")
-              label(for="title") Contact persoon *
+              label(for="title") Contact person *
               input(type="text",class="form-control",name="contactPersoon" required)    
             div(class="form-group col-md-2")          
             div(class="form-group col-md-5")
-              label(for="title") Firma
+              label(for="title") Firm
               input(type="text",class="form-control",name="firma")
             div(class="form-group col-md-3")
-              label(for="title") Straatnaam *
+              label(for="title") Streetname *
               input(type="text",class="form-control",name="straat" required)                                
             div(class="form-group col-md-2")
-              label(for="title") Straat Nr
+              label(for="title") Street N°
               input(type="text",class="form-control",name="straatNr")
             div(class="col-md-2")
             div(class="form-group col-md-3")
               label(for="title") E-mail
               input(type="text",class="form-control",name="mail",placeholder="voorbeeld@email.be")
             div(class="form-group col-md-2")
-              label(for="title") BTW-nummer
+              label(for="title") VAT N°
               input(type="text",class="form-control",name="btwNr")
             div(class="form-group col-md-2")
-              label(for="title") rekeningnummer
+              label(for="title") Bank account N°
               input(type="text",class="form-control",name="rekeningnr")
             div(class="form-group col-md-1")
-              label(for="title") Postcode
+              label(for="title") Postal code
               input(type="number",class="form-control",name="postcode")
             div(class="form-group col-md-2")
               label(for="title") Plaatsnaam *
@@ -105,4 +105,4 @@ html
               label(for="title")=" "
               button(type="button",onclick="show_mail2()",class="btn btn-#{settings.oppo} btn-sm btn-block") extra e-mail
           hr 
-          button(type="submit",class="btn btn-#{settings.oppo}") toevoegen
+          button(type="submit",class="btn btn-#{settings.oppo}") Add

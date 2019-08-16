@@ -36,11 +36,11 @@ html
       var doc = new jsPDF();
       doc.setFont(doc.getFontList()[0]);
       doc.setProperties({
-        title: '#{profile.firma} factuur #{factuur.creditnr}',
-        subject: 'Factuur van #{profile.firma}',
+        title: '#{profile.firma} Creditnote N° #{factuur.creditnr}',
+        subject: 'Creditnote of #{profile.firma}',
         author: '#{profile.firma}',
-        keywords: '#{profile.firma} ,factuur ,#{factuur.creditnr}',
-        creator: '#{profile.firma} FactuurBeheer',
+        keywords: '#{profile.firma} ,creditnote ,#{factuur.creditnr}',
+        creator: '#{profile.firma} Invoice adiministrator',
       });
       /**HEADER**/
       doc.setFontType("bold");
@@ -49,7 +49,7 @@ html
       //doc.text(20,35,Pfirma);
       doc.setFontSize(36);
       doc.setTextColor(170, 170, 170);
-      doc.text(140,35,"Creditnota");
+      doc.text(140,35,"Creditnote");
 
       /**bedrijfgegevens**/
       doc.setTextColor(0,0,0);
@@ -60,18 +60,18 @@ html
 
       doc.setFontType("bold");
       c[1] += 10;
-      doc.text(c[0],c[1],"Bedrijfgegevens");
+      doc.text(c[0],c[1],"Business information");
       doc.setFontType("courier");
       c[1] += 5;
       doc.text(c[0],c[1],Pnaam);
       c[1] += 5;
       doc.text(c[0],c[1],Pstraat + " " + PstraatNr);
       c[1] += 5;
-      doc.text(c[0],c[1],"BTW nr: "+ PbtwNr);
+      doc.text(c[0],c[1],"Vat N°: "+ PbtwNr);
 
       doc.setFontType("bold");
       c[1] += 10;
-      doc.text(c[0],c[1],"Bankgegevens");
+      doc.text(c[0],c[1],"Bank information");
       doc.setFontType("courier");
       c[1] += 5;
       doc.text(c[0],c[1],"IBAN: "+Piban);
@@ -81,9 +81,9 @@ html
       /**factuur info**/
       doc.setFontType("bold");
       c = [120,60];
-      doc.text(c[0],c[1],"Datum:");
+      doc.text(c[0],c[1],"Date:");
       c[1] +=5;
-      doc.text(c[0],c[1],"CreditNota Nr:");
+      doc.text(c[0],c[1],"CreditNote N°:");
       doc.setFontType("courier");
       c[0] += 30;
       c[1] -= 5;
@@ -94,7 +94,7 @@ html
       /**factuur gegevens**/
       c = [120,75];
       doc.setFontType("bold");
-      doc.text(c[0],c[1],"Creditnota gegevens");
+      doc.text(c[0],c[1],"Creditnote information");
       c[1] +=5;
       doc.setFontType("courier");
       if(firma){
@@ -114,7 +114,7 @@ html
         c[1] +=5;
       }
       if(btwNr){
-        doc.text(c[0],c[1],"BTW nr: "+btwNr);
+        doc.text(c[0],c[1],"VAT N°: "+btwNr);
 
       }
       /**Beschrijvingen**/
@@ -149,7 +149,7 @@ html
           },
         styles: {fillColor: [140, 140, 140]},
         startY: 110,
-        head: [['Beschrijving', 'Aantal', 'Bedrag','Totaal']],
+        head: [['Description', 'Amount', 'Pric','Sum']],
         body: bestellingenPrint
         });
       btw = Math.round((totaalEx-voorschot)*0.21*100)/100;
@@ -167,9 +167,9 @@ html
             3:{fillColor:[180,180,180],halign:'right'}},
           styles: {fillColor: [140, 140, 140]},
           body: [
-          [[""],["                               "],["subtotaal"],[totaalEx.toFixed(2)+" €"]],
-          [[""],["                               "],["btw 21%"],[btw.toFixed(2)+" €"]],
-          [[""],["                               "],["totaal"],[totaalInc.toFixed(2)+" €"]]
+          [[""],["                               "],["Subtotal"],[totaalEx.toFixed(2)+" €"]],
+          [[""],["                               "],["VAT 21%"],[btw.toFixed(2)+" €"]],
+          [[""],["                               "],["Total"],[totaalInc.toFixed(2)+" €"]]
           ]
         })
       }else{
@@ -183,11 +183,11 @@ html
             3:{fillColor:[140,140,140],halign:'right'}},
           styles: {fillColor: [140, 140, 140]},
           body: [
-          [[""],["                               "],["subtotaal"],[totaalEx.toFixed(2)+" €"]],
-          [[""],["                               "],["voorschot"],["-"+voorschot.toFixed(2)+" €"]],
-          [[""],["                               "],["subtotaal"],[totaalExSub.toFixed(2)+" €"]],
-          [[""],["                               "],["btw 21%"],[btw.toFixed(2)+" €"]],
-          [[""],["                               "],["totaal"],[totaalInc.toFixed(2)+" €"]]
+          [[""],["                               "],["Subtotal"],[totaalEx.toFixed(2)+" €"]],
+          [[""],["                               "],["Advance"],["-"+voorschot.toFixed(2)+" €"]],
+          [[""],["                               "],["Subtotal"],[totaalExSub.toFixed(2)+" €"]],
+          [[""],["                               "],["VAT 21%"],[btw.toFixed(2)+" €"]],
+          [[""],["                               "],["Total"],[totaalInc.toFixed(2)+" €"]]
           ]
         })
       }
@@ -199,8 +199,8 @@ html
       doc.text(20,275,creditnotatext[2]);
       doc.text(20,280,creditnotatext[3]);
       doc.setFontType("bold");
-      doc.text(20,285,"Wij danken u voor uw vertrouwen.");
+      doc.text(20,285,"We thank you for your trust.");
       /**EINDE FACTUUR GENERATIE**/
       doc.save(factuurNr+'.pdf');
   body
-    h1 Sluit deze pagina na het downloaden van de pdf
+    h1 Close this page after downloading

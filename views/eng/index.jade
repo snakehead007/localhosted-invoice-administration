@@ -17,7 +17,7 @@ html
             li(class="nav-item")
               a(class="nav-link active" , href='/index/#{loginHash}') Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile/#{loginHash}') Mijn profiel    
+              a(class="nav-link active", href='/edit-profile/#{loginHash}') My profile    
             li(class="nav-item")
               a(class="nav-link active", href='/settings/#{loginHash}') Settings
             li(class="nav-item")
@@ -38,26 +38,26 @@ html
             div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/contacten/#{loginHash}',class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Contacten
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Contacts
               if settings.thema != "light"
                 a(href='/contacten/#{loginHash}',class="button") 
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Contacten
+                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Contacts
               hr
             div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/facturen/#{loginHash}',class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Alle facturen
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") All Invoices
               if settings.thema != "light"
                 a(href='/facturen/#{loginHash}',class="button") 
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Alle facturen
+                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") All Invoices
               hr
             div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/chart/'+jaar+"/#{loginHash}",class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Grafiek
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Graph
               if settings.thema != "light"
                 a(href='/chart/'+jaar+"/#{loginHash}",class="button") 
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Grafiek
+                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Graph
               hr
             div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"

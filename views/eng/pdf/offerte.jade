@@ -36,18 +36,18 @@ html
       var doc = new jsPDF();
       doc.setFont(doc.getFontList()[0]);
       doc.setProperties({
-        title: '#{profile.firma} offerte #{factuur.offerteNr}',
-        subject: 'Offerte van #{profile.firma}',
+        title: '#{profile.firma} offer #{factuur.offerteNr}',
+        subject: 'Offer from #{profile.firma}',
         author: '#{profile.firma}',
-        keywords: '#{profile.firma} ,offerte ,#{factuur.offerteNr}',
-        creator: '#{profile.firma} FactuurBeheer',
+        keywords: '#{profile.firma} ,Offer ,#{factuur.offerteNr}',
+        creator: '#{profile.firma} Invoice administrator',
       });
       /**HEADER**/
       doc.addImage(imgData, 'JPEG', 15, 5, 50, 50);
       doc.setFontType("bold");
       doc.setFontSize(36);
       doc.setTextColor(170, 170, 170);
-      doc.text(140,35,"Offerte");
+      doc.text(140,35,"Offer");
 
       /**bedrijfgegevens**/
       doc.setTextColor(0,0,0);
@@ -58,18 +58,18 @@ html
 
       doc.setFontType("bold");
       c[1] += 10;
-      doc.text(c[0],c[1],"Bedrijfgegevens");
+      doc.text(c[0],c[1],"Business information");
       doc.setFontType("courier");
       c[1] += 5;
       doc.text(c[0],c[1],Pnaam);
       c[1] += 5;
       doc.text(c[0],c[1],Pstraat + " " + PstraatNr);
       c[1] += 5;
-      doc.text(c[0],c[1],"BTW nr: "+ PbtwNr);
+      doc.text(c[0],c[1],"VAT N°: "+ PbtwNr);
 
       doc.setFontType("bold");
       c[1] += 10;
-      doc.text(c[0],c[1],"Bankgegevens");
+      doc.text(c[0],c[1],"Bank information");
       doc.setFontType("courier");
       c[1] += 5;
       doc.text(c[0],c[1],"IBAN: "+Piban);
@@ -79,9 +79,9 @@ html
       /**factuur info**/
       doc.setFontType("bold");
       c = [120,60];
-      doc.text(c[0],c[1],"Datum:");
+      doc.text(c[0],c[1],"Date:");
       c[1] +=5;
-      doc.text(c[0],c[1],"OfferteNr:");
+      doc.text(c[0],c[1],"Offer N°:");
       doc.setFontType("courier");
       c[0] += 30;
       c[1] -= 5;
@@ -92,7 +92,7 @@ html
       /**factuur gegevens**/
       c = [120,75];
       doc.setFontType("bold");
-      doc.text(c[0],c[1],"Offerte gegevens");
+      doc.text(c[0],c[1],"Offer information");
       c[1] +=5;
       doc.setFontType("courier");
       if(firma){
@@ -112,7 +112,7 @@ html
         c[1] +=5;
       }
       if(btwNr){
-        doc.text(c[0],c[1],"BTW nr: "+btwNr);
+        doc.text(c[0],c[1],"VAT N°: "+btwNr);
 
       }
       /**Beschrijvingen**/
@@ -165,9 +165,9 @@ html
             3:{fillColor:[180,180,180],halign:'right'}},
           styles: {fillColor: [140, 140, 140]},
           body: [
-          [[""],["                               "],["subtotaal"],[totaalEx.toFixed(2)+" €"]],
-          [[""],["                               "],["btw 21%"],[btw.toFixed(2)+" €"]],
-          [[""],["                               "],["totaal"],[totaalInc.toFixed(2)+" €"]]
+          [[""],["                               "],["Subtotal"],[totaalEx.toFixed(2)+" €"]],
+          [[""],["                               "],["VAT 21%"],[btw.toFixed(2)+" €"]],
+          [[""],["                               "],["Total"],[totaalInc.toFixed(2)+" €"]]
           ]
         })
       }else{
@@ -181,11 +181,11 @@ html
             3:{fillColor:[140,140,140],halign:'right'}},
           styles: {fillColor: [140, 140, 140]},
           body: [
-          [[""],["                               "],["subtotaal"],[totaalEx.toFixed(2)+" €"]],
-          [[""],["                               "],["voorschot"],["-"+voorschot.toFixed(2)+" €"]],
-          [[""],["                               "],["subtotaal"],[totaalExSub.toFixed(2)+" €"]],
-          [[""],["                               "],["btw 21%"],[btw.toFixed(2)+" €"]],
-          [[""],["                               "],["totaal"],[totaalInc.toFixed(2)+" €"]]
+          [[""],["                               "],["Subtotal"],[totaalEx.toFixed(2)+" €"]],
+          [[""],["                               "],["Advance"],["-"+voorschot.toFixed(2)+" €"]],
+          [[""],["                               "],["Subtotal"],[totaalExSub.toFixed(2)+" €"]],
+          [[""],["                               "],["VAT 21%"],[btw.toFixed(2)+" €"]],
+          [[""],["                               "],["TOTAL"],[totaalInc.toFixed(2)+" €"]]
           ]
         })
       }
@@ -197,8 +197,8 @@ html
       doc.text(20,275,offertetext[2]);
       doc.text(20,280,offertetext[3]);
       doc.setFontType("bold");
-      doc.text(80,285,"Wij danken u voor uw vertrouwen.");
+      doc.text(80,285,"We thank you for your trust.");
       /**EINDE OFFERTE GENERATIE**/
       doc.save('offerte '+offerteNr+'.pdf');
   body
-    h1 Sluit deze pagina na het downloaden van de pdf
+    h1 Close this page after download the pdf
