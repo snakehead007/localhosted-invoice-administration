@@ -17,7 +17,7 @@ html
             li(class="nav-item")
               a(class="nav-link active" , href='/index'+"/"+loginHash) Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) My profile    
             li(class="nav-item")
               a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
             li(class="nav-item")
@@ -35,45 +35,45 @@ html
       div(class="jumbotron")  
         div(class="row no-gutters")
           div(class="col-9 mr-auto")
-            p(class="lead") contact aanpassen
+            p(class="lead") Edit contact
           div(class="col-2")
             a(href='/contacten'+"/#{loginHash}",class="button")
               if settings.thema == "light"
-                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
               if settings.thema != "light"
-                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back
         hr
         form(action='/edit-contact/'+contact._id+"/#{loginHash}" ,method='post')
           p=msg
           div(class="form-row")
             div(class="form-group col-md-5")
-              label(for="title") Contact persoon *
+              label(for="title") Contact person *
               input(type="text",class="form-control",value=contact.contactPersoon,name="contactPersoon" required)    
             div(class="form-group col-md-2")          
             div(class="form-group col-md-5")
-              label(for="title") Firma
+              label(for="title") Firm
               input(type="text",class="form-control",value=contact.firma,name="firma")
             div(class="form-group col-md-3")
-              label(for="title") Straatnaam *
+              label(for="title") Streetname *
               input(type="text",class="form-control",value=contact.straat,name="straat" required)                                
             div(class="form-group col-md-2")
-              label(for="title") Straat Nr
+              label(for="title") Straat N°
               input(type="text",class="form-control",value=contact.straatNr,name="straatNr")
             div(class="col-md-2")
             div(class="form-group col-md-3")
               label(for="title") E-mail
               input(type="text",class="form-control",value=contact.mail,name="mail",placeholder="voorbeel@email.be")
             div(class="form-group col-md-2")
-              label(for="title") BTW-nummer
+              label(for="title") VAT N°
               input(type="text",class="form-control",value=contact.btwNr,name="btwNr")
             div(class="form-group col-md-2")
-              label(for="title") Rekeningnr
+              label(for="title") Bank account N°
               input(type="text",class="form-control",value=contact.rekeningnr,name="rekeningnr")
             div(class="form-group col-md-1")
-              label(for="title") Postcode
+              label(for="title") Postal code
               input(type="number",class="form-control",value=contact.postcode,name="postcode")
             div(class="form-group col-md-2")
-              label(for="title") Plaatsnaam *
+              label(for="title") Place *
               input(type="text",class="form-control",value=contact.plaats,name="plaats" required)
             div(class="col-md-2")
             div(id="mail1" class="form-group col-md-3" )
@@ -84,4 +84,4 @@ html
               label(for="title") E-mail 3
               input(type="text", class="form-control",value="#{contact.mail2}",name="mail2", placeholder="voorbeeld@email.be")
           hr
-          button(type="submit",class="btn btn-#{settings.oppo}") bijwerken
+          button(type="submit",class="btn btn-#{settings.oppo}") Make changes

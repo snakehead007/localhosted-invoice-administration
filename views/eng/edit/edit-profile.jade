@@ -16,7 +16,7 @@ html
             li(class="nav-item")
               a(class="nav-link active" , href='/index'+"/"+loginHash) Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) My profile    
             li(class="nav-item")
               a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
             li(class="nav-item")
@@ -37,59 +37,59 @@ html
           div(class="col-2")
             a(href='/index'+"/"+loginHash,class="button")
               if settings.thema == "light"
-                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
               if settings.thema != "light"
-                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back
         hr
         form(action='/edit-profile/'+profile._id+"/#{loginHash}",method='post')
           div(class="form-row")
             div(class="form-group col-md-5")
-              label(for="title") Naam
-              input(type="text",class="form-control",value=profile.naam,name="naam",placeholder="Jan Janssens")
+              label(for="title") Name
+              input(type="text",class="form-control",value=profile.naam,name="naam",placeholder="John Doe")
             div(class="form-group col-md-3")  
             div(class="form-group col-md-4")
-              label(for="title") Firma naam
-              input(type="text",class="form-control",value=profile.firma,name="firma",placeholder="firma en co.")
+              label(for="title") Firm name
+              input(type="text",class="form-control",value=profile.firma,name="firma",placeholder="firm inc.")
             div(class="form-group col-md-3")
-              label(for="title") Straatnaam
-              input(type="text",class="form-control",value=profile.straat,name="straat",placeholder="grotestraat")                                
+              label(for="title") Street name
+              input(type="text",class="form-control",value=profile.straat,name="straat",placeholder="Highstreet")                                
             div(class="form-group col-md-2")
-              label(for="title") Straat Nr
+              label(for="title") Street N°
               input(type="text",class="form-control",value=profile.straatNr,name="straatNr",placeholder="12")
             div(class="form-group col-md-3") 
             div(class="form-group col-md-2")
-              label(for="title") BTW-nummer
-              input(type="text",class="form-control",value=profile.btwNr,name="btwNr",placeholder="BE 0000.000.000")
+              label(for="title") VAT N°
+              input(type="text",class="form-control",value=profile.btwNr,name="btwNr",placeholder="BTW 0000.000.000")
             div(class="form-group col-md-2")
-              label(for="title") IBAN-nr
-              input(type="text",class="form-control",value=profile.iban,name="iban",placeholder="BE77 7777 7777 7777")
+              label(for="title") IBAN N°
+              input(type="text",class="form-control",value=profile.iban,name="iban",placeholder="UK77 7777 7777 7777")
             div(class="form-group col-md-2")
-              label(for="title") Postcode
-              input(type="number",class="form-control",value=profile.postcode,name="postcode",placeholder="1234")
+              label(for="title") Postalcode
+              input(type="number",class="form-control",value=profile.postcode,name="postcode",placeholder="12345")
             div(class="form-group col-md-3")
-              label(for="title") Plaatsnaam
-              input(type="text",class="form-control",value=profile.plaats,name="plaats",placeholder="Gent")
+              label(for="title") Place
+              input(type="text",class="form-control",value=profile.plaats,name="plaats",placeholder="Brussels")
             div(class="form-group col-md-3")
             div(class="form-group col-md-1")
-              label(for="title") Factuur nr:
+              label(for="title") Invoice N°:
               input(type="text",class="form-control",value=nr,name="nr")
             div(class="form-group col-md-1")
-              label(for="title") Offerte nr:
+              label(for="title") Offer N°:
               input(typ='text',class='form-control',value=nroff,name="nroff")
             div(class="form-group col-md-1")
-              label(for="title") Creditnr:
+              label(for="title") Credit N°:
               input(typ='text',class='form-control',value=nrcred,name="nrcred")
             div(class="form-group col-md-1")
-              label(for="title") BIC-nr
+              label(for="title") BIC
               input(type="text",class="form-control",value=profile.bic,name="bic",placeholder="KREDBEBB") 
             div(class="form-group col-md-3")
               label(for="title") E-mail
-              input(type="text",class="form-control",value=profile.mail,name="mail",placeholder="voorbeel@email.be")
+              input(type="text",class="form-control",value=profile.mail,name="mail",placeholder="mail@example.co.uk")
             div(class="form-group col-md-2")
-              label(for="title") Telefoon nummer
-              input(type="text",class="form-control",value=profile.tele,name="tele",placeholder="0487654321")
+              label(for="title") Telephone N°
+              input(type="text",class="form-control",value=profile.tele,name="tele",placeholder="0032487654321")
           hr
-          button(type="submit",class="btn btn-#{settings.oppo}") bijwerken
+          button(type="submit",class="btn btn-#{settings.oppo}") Make changes
           hr(class="mb-3")
           
         div(class="row no-gutters")    

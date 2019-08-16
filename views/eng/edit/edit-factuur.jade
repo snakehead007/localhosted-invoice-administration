@@ -16,7 +16,7 @@ html
             li(class="nav-item")
               a(class="nav-link active" , href='/index'+"/"+loginHash) Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) My profile    
             li(class="nav-item")
               a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
             li(class="nav-item")
@@ -38,34 +38,34 @@ html
             if terug
               a(href='/facturen'+"/"+loginHash,class="button")
                 if settings.thema == "light"
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
                 if settings.thema != "light"
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back
             else
               a(href='/facturen/'+contact._id+"/"+loginHash,class="button")
                 if settings.thema == "light"
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
                 if settings.thema != "light"
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug 
+                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back 
         hr
         form(action='/edit-factuur/'+contact._id+'/'+factuur._id+"/"+loginHash,method='post')
           div(class="form-row")
             div(class="form-group col-md-3")
-              label(for="title") Datum
+              label(for="title") Date
               input(type="text",class="form-control",value=factuur.datum,name="datum")
             div(class="form-group col-md-3")
-              label(for="title") Betaaldatum
+              label(for="title") Paydate
               input(type="text",class="form-control",value=factuur.datumBetaald,name="datumBetaald")
             if factuur.factuurNr
               div(class="form-group col-md-2")
-                label(for="title") Factuur Nummer
+                label(for="title") Invoice N°
                 input(type="number",class="form-control",value=factuur.factuurNr,name="factuurNr")
             if factuur.offerteNr
               div(class="form-group col-md-2")
-                label(for="title") Offerte nummer
+                label(for="title") Offer N°
                 input(type="number",class="form-control",value=factuur.offerteNr,name="offerteNr")
             div(class="form-group col-md-2")
-              label(for="title") voorschot
+              label(for="title") Amount in advance
               input(type="number",class="form-control",value=factuur.voorschot,name="voorschot",step=".01")
           hr
           button(type="submit",class="btn btn-#{settings.oppo}") bijwerken
