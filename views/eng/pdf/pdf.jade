@@ -192,10 +192,12 @@ html
       /**Footer & Disclaimer**/
       doc.setFontType("courier");
       doc.setFontSize(10);
-      doc.text(20,265,"You are requested to deposit the calculated total amount after 14 days of the invoice date on the account number mentioned above.");
-      doc.text(20,270,"For any question about this invoice, you can contact: #{profile.naam}, #{profile.tele}, #{profile.mail}");
+      doc.text(20,265,factuurtext[0]);
+      doc.text(20,270,factuurtext[1]);
+      doc.text(20,275,factuurtext[2]);
+      doc.text(20,280,factuurtext[3]);
       doc.setFontType("bold");
-      doc.text(20,280,"We thank you for your trust.");
+      doc.text(80,285,"We thank you for your trust.");
       /**EINDE FACTUUR GENERATIE**/
       doc.save(factuurNr+'.pdf');
   body
