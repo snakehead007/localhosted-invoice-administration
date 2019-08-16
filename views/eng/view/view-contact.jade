@@ -16,7 +16,7 @@ html
             li(class="nav-item")
               a(class="nav-link active" , href='/index'+"/"+loginHash) Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Back    
             li(class="nav-item")
               a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
             li(class="nav-item")
@@ -46,75 +46,82 @@ html
             tbody
               if contact.firma
                 tr
-                  th(scope="row") firma
+                  th(scope="row") Firm
                   td
                     h4=contact.firma
               if contact.contactPersoon
                 tr
-                  th(scope="row") contact persoon
+                  th(scope="row") Contact person
                   td
                     h4=contact.contactPersoon
               if contact.straat
                 tr
-                  th(scope="row") straatnaam
+                  th(scope="row") Street name
                   td
                     h4=contact.straat
               if contact.straatNr
                 tr
-                  th(scope="row") straat nr
+                  th(scope="row") Street N°
                   td
                     h4=contact.straatNr
               if contact.postcode
                 tr
-                  th(scope="row") postcode
+                  th(scope="row") Postalcode
                   td
                     h4=contact.postcode
               if contact.plaats
                 tr
-                  th(scope="row") plaatsnaam
+                  th(scope="row") Place
                   td
                     h4=contact.plaats
               if contact.btwNr
                 tr
-                  th(scope="row") btw-Nummer
+                  th(scope="row") VAT N°
                   td
                     h4=contact.btwNr
               tr
-                th(scope="row") rekeningnummer
+                th(scope="row") Bank account N°
                 td
                   h4=contact.rekeningnr
         else
           table(class="table table-#{settings.thema} table-striped")
             tbody
+              if contact.firma
+                tr
+                  th(scope="row") Firm
+                  td
+                    h4=contact.firma
+              if contact.contactPersoon
+                tr
+                  th(scope="row") Contact person
+                  td
+                    h4=contact.contactPersoon
+              if contact.straat
+                tr
+                  th(scope="row") Street name
+                  td
+                    h4=contact.straat
+              if contact.straatNr
+                tr
+                  th(scope="row") Street N°
+                  td
+                    h4=contact.straatNr
+              if contact.postcode
+                tr
+                  th(scope="row") Postalcode
+                  td
+                    h4=contact.postcode
+              if contact.plaats
+                tr
+                  th(scope="row") Place
+                  td
+                    h4=contact.plaats
+              if contact.btwNr
+                tr
+                  th(scope="row") VAT N°
+                  td
+                    h4=contact.btwNr
               tr
-                th(scope="row") fima
-                td
-                  h4=contact.firma
-              tr
-                th(scope="row") contact persoon
-                td
-                  h4=contact.contactPersoon
-              tr
-                th(scope="row") straatnaam
-                td
-                  h4=contact.straat
-              tr
-                th(scope="row") straat nr
-                td
-                  h4=contact.straatNr
-              tr
-                th(scope="row") postcode
-                td
-                  h4=contact.postcode
-              tr
-                th(scope="row") plaatsnaam
-                td
-                  h4=contact.plaats
-              tr
-                th(scope="row") btw-Nummer
-                td
-                  h4=contact.btwNr
-              tr
-                th(scope="row") rekeningnummer
+                th(scope="row") Bank account N°
                 td
                   h4=contact.rekeningnr

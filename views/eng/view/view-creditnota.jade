@@ -16,7 +16,7 @@ html
             li(class="nav-item")
               a(class="nav-link active" , href='/index/#{loginHash}') Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile/#{loginHash}') Mijn profiel    
+              a(class="nav-link active", href='/edit-profile/#{loginHash}') Back    
             li(class="nav-item")
               a(class="nav-link active", href='/settings/#{loginHash}') Settings
             li(class="nav-item")
@@ -52,43 +52,43 @@ html
           table(class="table table-#{settings.oppo} table-striped")
             tbody
               tr
-                th(scope="row") Datum
+                th(scope="row") Date
                 td
                   h4=factuur.datum
               if factuur.factuurNr
                 tr
-                  th(scope="row") Factuur Nr
+                  th(scope="row") Invoice N°
                   td
                     h4=factuur.factuurNr
               if factuur.offerteNr
                 tr
-                  th(scope="row") Creditnota Nr
+                  th(scope="row") Creditnote N°
                   td
                     h4=factuur.creditnr
               tr
                 if factuur.voorschot!= 0
-                  th(scope="row") vooschot
+                  th(scope="row") Advance
                   td
                     h4=factuur.voorschot
         else
           table(class="table table-#{settings.thema} table-striped")
             tbody
               tr
-                th(scope="row") Datum
+                th(scope="row") Date
                 td
                   h4=factuur.datum
               if factuur.factuurNr
                 tr
-                  th(scope="row") Factuur Nr
+                  th(scope="row") Invoice N°
                   td
                     h4=factuur.factuurNr
               if factuur.offerteNr
                 tr
-                  th(scope="row") Creditnota Nr
+                  th(scope="row") Creditnote N°
                   td
                     h4=factuur.creditnr
               tr
                 if factuur.voorschot!= 0
-                  th(scope="row") vooschot
+                  th(scope="row") Advance
                   td
                     h4=factuur.voorschot

@@ -16,7 +16,7 @@ html
             li(class="nav-item")
               a(class="nav-link active" , href='/index'+"/"+loginHash) Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) My profile    
             li(class="nav-item")
               a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
             li(class="nav-item")
@@ -37,45 +37,45 @@ html
           div(class="col-2")
             a(href='/bestellingen/'+factuur._id+"/"+loginHash,class="button")
               if settings.thema == "light"
-                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
               if settings.thema != "light"
-                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back
         hr
         if settings.thema == "dark" || settings.thema == "danger" || settings.thema == "info"
           table(class="table table-#{settings.oppo} table-striped")
             tbody
               tr
-                th(scope="row") beschrijving
+                th(scope="row") Description
                 td
                   h4=bestelling.beschrijving
               tr
-                th(scope="row") aantal
+                th(scope="row") Amount
                 td
                   h4=bestelling.aantal
               tr
-                th(scope="row") bedrag
+                th(scope="row") Price
                 td
                   h4=bestelling.bedrag+" €"
               tr
-                th(scope="row") totaal
+                th(scope="row") Total
                 td
                   h4=(bestelling.aantal*bestelling.bedrag)+" €"
         else
           table(class="table table-#{settings.thema} table-striped")
             tbody
               tr
-                th(scope="row") beschrijving
+                th(scope="row") Description
                 td
                   h4=bestelling.beschrijving
               tr
-                th(scope="row") aantal
+                th(scope="row") Amount
                 td
                   h4=bestelling.aantal
               tr
-                th(scope="row") bedrag
+                th(scope="row") Price
                 td
                   h4=bestelling.bedrag+" €"
               tr
-                th(scope="row") totaal
+                th(scope="row") Total
                 td
                   h4=(bestelling.aantal*bestelling.bedrag)+" €"

@@ -16,7 +16,7 @@ html
             li(class="nav-item")
               a(class="nav-link active" , href='/index'+"/"+loginHash) Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Back    
             li(class="nav-item")
               a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
             li(class="nav-item")
@@ -36,40 +36,39 @@ html
             div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/epo-sil'+"/"+loginHash,class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Siliconen mal berekenen
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Silicon mold calculating
               if settings.thema != "light"
                 a(href='/epo-sil'+"/"+loginHash,class="button") 
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Siliconen mal berekenen
-              hr
+                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Silicon mold calculating
             div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/lam'+"/"+loginHash,class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block" disabled) A1 Lamineren berekenen
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block" disabled) A1 laminating calculating
               if settings.thema != "light"
                 a(href='/lam'+"/"+loginHash,class="button") 
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block" disabled) A1 Lamineren Berekenen
+                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block" disabled) A1 laminating calculating
               hr
             div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/prijs'+"/"+loginHash,class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Prijs berekeningen
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Price calculating
               if settings.thema != "light"
                   a(href='/prijs'+"/"+loginHash,class="button") 
-                    button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Prijs berekeningen
+                    button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Price calculating
               hr
              div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
               if settings.thema == "light"
                 a(href='/inch'+"/"+loginHash,class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Inch & cm omzetten
+                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Inch & cm calculating
               if settings.thema != "light"
                 a(href='/inch'+"/"+loginHash,class="button") 
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Inch & cm omzetten
+                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Inch & cm calculating
               hr
             div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
              if settings.thema == "light"
                a(href='/percentage'+"/"+loginHash,class="button") 
-                 button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block" ) Percentage Berkenen
+                 button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block" ) Percentage calculating
              if settings.thema != "light"
                a(href='/percentage'+"/"+loginHash,class="button") 
-                 button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Percentage Berkenen
+                 button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Percentage calculating
              hr
