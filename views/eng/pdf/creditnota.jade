@@ -27,6 +27,7 @@ html
       datum = "#{factuur.datum}";
       voorschot = Number(#{factuur.voorschot});
       creditnotatext = [];
+      var btw = Number(#{btw});
       creditnotatext.push("#{creditnotatext[0]}");
       creditnotatext.push("#{creditnotatext[1]}");
       creditnotatext.push("#{creditnotatext[2]}");
@@ -152,7 +153,7 @@ html
         head: [['Description', 'Amount', 'Pric','Sum']],
         body: bestellingenPrint
         });
-      btw = Math.round((totaalEx-voorschot)*0.21*100)/100;
+      _btw = Math.round((totaalEx-voorschot)*btw)/100;
       totaalExSub  = totaalEx - voorschot;
       totaalInc = totaalExSub+btw;
       if(voorschot==0){
@@ -168,7 +169,7 @@ html
           styles: {fillColor: [140, 140, 140]},
           body: [
           [[""],["                               "],["Subtotal"],[totaalEx.toFixed(2)+" €"]],
-          [[""],["                               "],["VAT 21%"],[btw.toFixed(2)+" €"]],
+          [[""],["                               "],["VAT "+btw+"%"],[_btw.toFixed(2)+" €"]],
           [[""],["                               "],["Total"],[totaalInc.toFixed(2)+" €"]]
           ]
         })
@@ -186,7 +187,7 @@ html
           [[""],["                               "],["Subtotal"],[totaalEx.toFixed(2)+" €"]],
           [[""],["                               "],["Advance"],["-"+voorschot.toFixed(2)+" €"]],
           [[""],["                               "],["Subtotal"],[totaalExSub.toFixed(2)+" €"]],
-          [[""],["                               "],["VAT 21%"],[btw.toFixed(2)+" €"]],
+          [[""],["                               "],["VAT "+btw"21%"],[_btw.toFixed(2)+" €"]],
           [[""],["                               "],["Total"],[totaalInc.toFixed(2)+" €"]]
           ]
         })

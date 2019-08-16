@@ -38,15 +38,19 @@ html
           div(class="col-lg-2 col-md-1 col-lg-0")
           if error == 1
             div(class="alert alert-success col-lg-8 col-md-10 col-sm-12" role="alert") Password succefully updated.
-          
         hr
         table(class="table table-striped table-striped")
           tbody
             tr
               td
-                p(class="lead") Change password
+                p(class="lead") Verander
                 a(href='/pass'+"/"+loginHash,class="button")
-                    button(type="button" class="btn btn-#{settings.thema}") Change now 
+                    button(type="button" class="btn btn-#{settings.thema}") Verander
+            tr
+              td
+                p(class="lead") Verander BTW waarden
+                p Btw staat op: #{settings.btw}% 
+                a(href='/btw'+"/"+loginHash,class="button",class="btn btn-#{settings.thema}") Verander
             tr
               td
                 p(class="lead") Thema

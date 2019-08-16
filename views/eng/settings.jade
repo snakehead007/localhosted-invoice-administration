@@ -49,6 +49,11 @@ html
                     button(type="button" class="btn btn-#{settings.thema}") Change now 
             tr
               td
+                p(class="lead") Change VAT value
+                p VAT is currenlty: #{settings.btw}% 
+                a(href='/btw'+"/"+loginHash,class="button",class="btn btn-#{settings.thema}") Change
+            tr
+              td
                 p(class="lead") Theme
                 div(class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups")
                   div(class="btn-group mr-4" role="group" aria-label="First group")

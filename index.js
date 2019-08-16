@@ -90,6 +90,10 @@ var SettingsSchema = new Schema({
   pass:{
     type:String,
     default:"cGFzc3dvcmQ="
+  },
+  btw:{
+    type:Number,
+    default:21
   }
 });
 var Settings = mongoose.model('Settings', SettingsSchema);
@@ -1853,7 +1857,8 @@ app.get('/createPDF/:idf/:loginHash', function(req, res) {
                 "settings": settings[0],
                 "loginHash": req.params.loginHash,
                 "factuurtext": factuurtext,
-                "imgData":imgData
+                "imgData":imgData,
+                "btw":settings[0].btw
               });}else{
                 res.render('eng/pdf/pdf', {
                   'profile': profile[0],
@@ -1864,7 +1869,8 @@ app.get('/createPDF/:idf/:loginHash', function(req, res) {
                   "settings": settings[0],
                   "loginHash": req.params.loginHash,
                   "factuurtext": factuurtext,
-                  "imgData":imgData
+                  "imgData":imgData,
+                  "btw":settings[0].btw
                 });
               }
             });//scope of imgData;
@@ -2118,7 +2124,8 @@ app.get('/offerte/:idf/:loginHash', function(req, res) {
                 "settings": settings[0],
                 "loginHash": req.params.loginHash,
                 "offertetext":offertetext,
-                "imgData":imgData
+                "imgData":imgData,
+                "btw":settings[0].btw
               });}else{
                 res.render('eng/pdf/offerte', {
                   'profile': profile[0],
@@ -2129,7 +2136,8 @@ app.get('/offerte/:idf/:loginHash', function(req, res) {
                   "settings": settings[0],
                   "loginHash": req.params.loginHash,
                   "offertetext":offertetext,
-                  "imgData":imgData
+                  "imgData":imgData,
+                  "btw":settings[0].btw
                 });
               }
             });
@@ -2286,7 +2294,8 @@ app.get('/creditnota/:idc/:loginHash', function(req, res) {
                   "settings": settings[0],
                   "loginHash": req.params.loginHash,
                   "creditnotatext":creditnotatext,
-                  "imgData":imgData
+                  "imgData":imgData,
+                  "btw":settings[0].btw
                 });}else{
                   res.render('eng/pdf/creditnota', {
                     'profile': profile[0],
@@ -2297,7 +2306,8 @@ app.get('/creditnota/:idc/:loginHash', function(req, res) {
                     "settings": settings[0],
                     "loginHash": req.params.loginHash,
                     "creditnotatext":creditnotatext,
-                    "imgData":imgData
+                    "imgData":imgData,
+                    "btw":settings[0].btw
                   });
                 }
               });
@@ -4770,6 +4780,43 @@ app.get('/upload/:loginHash',function(req,res){
   });
 });
 
+app.get('/btw/:loginHash',function(req,res){
+  callFindPass().then(function(loginHash){
+  if (!(String(req.params.loginHash) === loginHash)) {
+    res.redirect('login');
+  }});
+  Settings.find({}, function(err, settings) {
+    if (!err && settings.length != 0) {} else {
+      legeSettings = new Settings();
+      legeSettings.save(function(err) {
+        if (err) {
+          console.log("err in settings: " + err);
+        }
+      });
+    }
+    res.render(settings[0].lang+'/btw',{
+      "loginHash":req.params.loginHash,
+      "settings":settings[0],
+      "description":"Updating..."
+    });
+  });
+});
+
+app.post('/btw/:loginHash', function (req, res) {
+    callFindPass().then(function(loginHash){
+    if (!(String(req.params.loginHash) === loginHash)) {
+      res.redirect('login');
+    }});
+    Settings.find({},function(err,settings){
+      Settings.updateOne({_id: settings[0]._id}, {btw:req.body.btw},function(err,settings2){
+        if(err){
+          console.log(err);
+        }else{
+          res.redirect('/settings/'+req.params.loginHash);
+        }
+      });
+    });
+})
 
 app.set('views', path.join(__dirname, 'views'));
 

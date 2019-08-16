@@ -26,6 +26,7 @@ html
     btwNr = "#{contact.btwNr}";
     factuurNr = "#{factuur.factuurNr}";
     datum = "#{factuur.datum}";
+    var btw = Number(#{btw});
     factuurtext = [];
     factuurtext.push("#{factuurtext[0]}");
     factuurtext.push("#{factuurtext[1]}");
@@ -50,7 +51,7 @@ html
     var bestellingen = [];
     var aantal = Number(#{lengte});
     var totaalEx = 0;
-    var btw;
+    var _btw;
     var totaalInc;
     for(var i = 0; i <=aantal-1;i++){
       bestellingen.push([current[i].beschrijving,current[i].aantal,current[i].bedrag,current[i].totaal]);
@@ -80,7 +81,7 @@ html
       head: [['Beschrijving', 'Aantal', 'Bedrag','Totaal']],
       body: bestellingenPrint
       });
-    btw = Math.round((totaalEx-voorschot)*0.21*100)/100;
+    _btw = Math.round((totaalEx-voorschot)*btw)/100;
     totaalExSub  = totaalEx - voorschot;
     totaalInc = totaalExSub+btw;
     if(voorschot==0){
@@ -96,7 +97,7 @@ html
         styles: {fillColor: [140, 140, 140]},
         body: [
         [[""],["                               "],["subtotaal"],[totaalEx.toFixed(2)+" €"]],
-        [[""],["                               "],["btw 21%"],[btw.toFixed(2)+" €"]],
+        [[""],["                               "],["btw "+btw+"%"],[_btw.toFixed(2)+" €"]],
         [[""],["                               "],["totaal"],[totaalInc.toFixed(2)+" €"]]
         ]
       })
@@ -114,7 +115,7 @@ html
         [[""],["                               "],["subtotaal"],[totaalEx.toFixed(2)+" €"]],
         [[""],["                               "],["voorschot"],["-"+voorschot.toFixed(2)+" €"]],
         [[""],["                               "],["subtotaal"],[totaalExSub.toFixed(2)+" €"]],
-        [[""],["                               "],["btw 21%"],[btw.toFixed(2)+" €"]],
+        [[""],["                               "],["btw "+btw+"%"],[_btw.toFixed(2)+" €"]],
         [[""],["                               "],["totaal"],[totaalInc.toFixed(2)+" €"]]
         ]
       })

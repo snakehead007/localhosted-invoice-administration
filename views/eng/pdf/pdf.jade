@@ -25,6 +25,7 @@ html
       btwNr = "#{contact.btwNr}";
       factuurNr = "#{factuur.factuurNr}";
       datum = "#{factuur.datum}";
+      var btw = Number(#{btw});
       voorschot = Number(#{factuur.voorschot});
       factuurtext = [];
       factuurtext.push("#{factuurtext[0]}");
@@ -122,7 +123,7 @@ html
       var bestellingen = [];
       var aantal = Number(#{lengte});
       var totaalEx = 0;
-      var btw;
+      var _btw;
       var totaalInc;
       for(var i = 0; i <=aantal-1;i++){
         bestellingen.push([current[i].beschrijving,current[i].aantal,current[i].bedrag,current[i].totaal]);
@@ -150,7 +151,7 @@ html
         head: [['Description', 'Amount', 'Price','Total']],
         body: bestellingenPrint
         });
-      btw = Math.round((totaalEx-voorschot)*0.21*100)/100;
+      _btw = Math.round((totaalEx-voorschot)*btw)/100;
       totaalExSub  = totaalEx - voorschot;
       totaalInc = totaalExSub+btw;
       if(voorschot==0){
@@ -166,7 +167,7 @@ html
           styles: {fillColor: [140, 140, 140]},
           body: [
           [[""],["                               "],["Subtotal"],[totaalEx.toFixed(2)+" €"]],
-          [[""],["                               "],["VAT 21%"],[btw.toFixed(2)+" €"]],
+          [[""],["                               "],["VAT "+btw+"%"],[_btw.toFixed(2)+" €"]],
           [[""],["                               "],["Total amount"],[totaalInc.toFixed(2)+" €"]]
           ]
         })
@@ -184,7 +185,7 @@ html
           [[""],["                               "],["Subtotal"],[totaalEx.toFixed(2)+" €"]],
           [[""],["                               "],["Advance"],["-"+voorschot.toFixed(2)+" €"]],
           [[""],["                               "],["Subtotal"],[totaalExSub.toFixed(2)+" €"]],
-          [[""],["                               "],["VAT 21%"],[btw.toFixed(2)+" €"]],
+          [[""],["                               "],["VAT "+btw+"%"],[_btw.toFixed(2)+" €"]],
           [[""],["                               "],["Total"],[totaalInc.toFixed(2)+" €"]]
           ]
         })
