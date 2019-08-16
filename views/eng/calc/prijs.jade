@@ -90,7 +90,7 @@ html
                 button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
               if settings.thema != "light"
                 button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back
-        h2 Prijs berekeningen
+        h2 Calculate Price
         hr
         div(class="row")
           div(class="col-lg-2 col-md-1 col-lg-0")
@@ -102,10 +102,10 @@ html
           div(class="form-row")
             div(class="col-lg-2 col-md-1 col-sm-0")
             div(class="col-lg-3 col-md-4 col-sm-12")
-              label Aantal werkuren
+              label Amount of working hours
               input(type="number",class="form-control",name="uren",placeholder="aantal uren", step=".01" required)
             div(class="col-lg-2 col-md-4 col-sm-12")
-              label werkprijs (€/u)
+              label Working hour price (€/u)
               input(type="number",step="0.01",class="form-control",name="werkprijs", placeholder="prijs per uur" required)
           hr
           ////////////////
@@ -708,7 +708,7 @@ html
           div(class="form-row")
             div(class="col-lg-2 col-md-1 col-sm-0")
             div(class="col-lg-2 col-md-1 col-sm-0")
-              button(type="submit",class="btn btn-#{settings.oppo}") Berekenen
+              button(type="submit",class="btn btn-#{settings.oppo}") Calculate
         hr
         div(class="row")
           div(class="col-lg-5 col-md-4 col-lg-0")
