@@ -4627,7 +4627,7 @@ app.post('/inch/:loginHash', function(req, res) {
           }
           if(settings[0].lang=="nl"){
           console.log("error niets ingevuld");
-          res.render('nl/calc/inch', {
+          res.render('nl/calc/inch', { 
             'settings': settings[0],
             'description': "Berekening voor inch & cm omzettingen",
             "error": 2,
