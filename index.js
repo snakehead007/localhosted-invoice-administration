@@ -4,7 +4,6 @@ var express = require('express');
 var bodyParser = require('body-parser'); //npm install body-parser
 var mongoose = require('mongoose');
 var multer = require('multer') // v1.0.5
-var upload = multer() // for parsing multipart/form-data //npm i multer
 var fs = require('fs')
 var fileUpload = require('express-fileupload');
 var imageToBase64 = require('image-to-base64'); //npm i image-to-base64
@@ -4207,7 +4206,7 @@ app.set('view engine', 'jade');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen('3000', function() {
-  console.log('Server i s running at PORT ' + 3000);
+  console.log('Server is running at PORT ' + 3000);
   Schema = mongoose.Schema;
 
 });
