@@ -18,7 +18,7 @@ html
             li(class="nav-item")
               a(class="nav-link active" , href='/index'+"/"+loginHash) Home
             li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) Mijn profiel    
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) My profile    
             li(class="nav-item")
               a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
             li(class="nav-item")
@@ -39,35 +39,35 @@ html
           div(class="col-2")
             a(href='/index'+"/"+loginHash,class="button")
               if settings.thema == "light"
-                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
               if settings.thema != "light"
-                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
-          h2 Berekenen van Epoxie en Siliconen
+                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back
+          h2 Calulating for epoxy and silicon
         hr
         div(class="row")
           div(class="col-lg-2 col-md-1 col-lg-0")
           if aangepast == 1
-            div(class="alert alert-success col-lg-8 col-md-10 col-sm-12" role="alert") Interne variablen zijn aangepast!
+            div(class="alert alert-success col-lg-8 col-md-10 col-sm-12" role="alert") Internal variables successfully changed.
         form(action='/epo-sil-oplossing/'+loginHash,method='post')
           div(class="form-row")
             div(class="form-group col-lg-7 col-md-6 col-sm-12")
-              label(for="title") Lengte (inch)
+              label(for="title") length (inch)
               input(type="number",class="form-control",name="L",step=".01", required)
             div(class="form-group col-lg-7  col-md-6 col-sm-12")
-              label(for="title") Breedte (inch)
+              label(for="title") width (inch)
               input(type="number",class="form-control",name="B",step=".01", required)                                
             div(class="form-group col-lg-7 col-md-6 col-sm-12")
-              label(for="title") Hoogte (inch)
+              label(for="title") Height (inch)
               input(type="number",class="form-control",name="H",step=".01", required)
             div(class="form-group col-lg-7 col-md-6 col-sm-12")
-              label(for="title") Extra dikte van Siliconen (inch)
+              label(for="title") Extra layer of thick silicon (inch)
               input(type="number",class="form-control",name="X",step=".01", required)
             div(class="form-group col-lg-7   col-md-6 col-sm-12")
-              label(for="title") Werk tarief (€/uur)
+              label(for="title") Working price (€/uur)
               input(type="number",class="form-control",name="W",step=".01", required)
           hr
-          button(type="submit",class="btn btn-#{settings.oppo}") Berekenen
-        button(type="button",onclick="vars()",class="btn btn-#{settings.oppo} btn-md") Interne gegevens aanpassen
+          button(type="submit",class="btn btn-#{settings.oppo}") Calulate
+        button(type="button",onclick="vars()",class="btn btn-#{settings.oppo} btn-md") Edit interal variables
         form(action='/epo-sil/update-vars/'+loginHash,method='post')
           div(class="form-row")
             div(id="vars_id" class="col-12",style="display:none")
@@ -95,4 +95,4 @@ html
               div(class="col-lg-8 col-md-6 col-sm-4")
                 label(for="s4") Ps = (____ * Ds)
                 input(type="string",class="form-control",value=s4,name="s4",placeholder="s4", required)
-              button(type="string",class="btn btn-#{settings.oppo} btn-md") aanpassen
+              button(type="string",class="btn btn-#{settings.oppo} btn-md") Upload changes
