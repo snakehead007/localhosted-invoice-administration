@@ -648,7 +648,7 @@ app.get('/bestellingen/:idf/:loginHash', function(req, res) {//REWORKED & tested
 
 });
 
-app.get('/bestellingen/:idf/t/:loginHash', function(req, res) {//REWORK
+app.get('/bestellingen/:idf/t/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
@@ -657,36 +657,28 @@ app.get('/bestellingen/:idf/t/:loginHash', function(req, res) {//REWORK
       if (!err) {
         Contact.findOne({_id: factuur.contact}, function(err, contact) {
           if (!err) {
-            Bestelling.find({
-              factuur: req.params.idf
-            }, function(err, bestellingen) {
+            Bestelling.find({factuur: req.params.idf}, function(err, bestellingen) {
               if (!err) {
-                Settings.find({}, function(err, settings) {
-                  if (!err && settings.length != 0) {} else {
-                    legeSettings = new Settings();
-                    legeSettings.save(function(err) {
-                      if (err) {
-                        console.log("err in settings: " + err);
-                      }
-                    });
-                  }
-                  if(settings[0].lang=="nl"){
-                  res.render('nl/bestellingen', {
-                    'terug': 1,
-                    'factuur': factuur,
-                    'bestellingen': bestellingen,
-                    'description': "Bestellingen van " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
-                    "settings": settings[0],
-                    "loginHash": req.params.loginHash
-                  });}else{
-                    res.render('eng/bestellingen', {
+                Settings.findOne({}, function(err, settings) {
+                  if (!err) {
+                    if(settings.lang=="nl"){
+                    res.render('nl/bestellingen', {
                       'terug': 1,
                       'factuur': factuur,
                       'bestellingen': bestellingen,
-                      'description': "Order(s) of " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
-                      "settings": settings[0],
+                      'description': "Bestellingen van " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
+                      "settings": settings,
                       "loginHash": req.params.loginHash
-                    });
+                    });}else{
+                      res.render('eng/bestellingen', {
+                        'terug': 1,
+                        'factuur': factuur,
+                        'bestellingen': bestellingen,
+                        'description': "Order(s) of " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
+                        "settings": settings,
+                        "loginHash": req.params.loginHash
+                      });
+                    }
                   }
                 });
               }
@@ -695,17 +687,14 @@ app.get('/bestellingen/:idf/t/:loginHash', function(req, res) {//REWORK
         });
       }
     });
-
 });
 
-app.post('/add-bestelling/:idf/:loginHash', function(req, res) {
+app.post('/add-bestelling/:idf/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
-    Factuur.findOne({
-      _id: req.params.idf
-    }, function(err, factuur) {
+    Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
       if (!err) {
         var newBestelling = new Bestelling({
           beschrijving: req.body.beschrijving,
@@ -713,197 +702,123 @@ app.post('/add-bestelling/:idf/:loginHash', function(req, res) {
           bedrag: req.body.bedrag,
           factuur: req.params.idf,
           totaal: req.body.aantal * req.body.bedrag
-        })
-        newBestelling.save(function(err) {
-          if (err) {
-            console.log(err);
-          }
         });
-        Factuur.findOne({
-          _id: req.params.idf
-        }, function(err, factuur) {
+        newBestelling.save();
+        Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
           if (!err) {
             var totFac = ((((factuur.totaal + factuur.voorschot) + (req.body.aantal * req.body.bedrag)) - factuur.voorschot));
-            var newFactuur = {
-              totaal: totFac
-            }
-            Factuur.update({
-              _id: req.params.idf
-            }, newFactuur, function(err, factuurnew) {
-              if (!err) {
-
-              } else {
-                console.log(err);
-              }
-            });
-          } else {
-            console.log(err);
-          }
+            var newFactuur = {totaal: totFac};
+            Factuur.update({_id: req.params.idf}, newFactuur);
+          };
         });
         res.redirect('/bestellingen/' + req.params.idf + "/" + req.params.loginHash);
       }
     });
-
 });
 
-app.get('/add-bestelling/:idf/:loginHash', function(req, res) {
+app.get('/add-bestelling/:idf/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
-    Factuur.findOne({
-      _id: req.params.idf
-    }, function(err, factuur) {
+    Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
       if (!err) {
-        Settings.find({}, function(err, settings) {
-          if (!err && settings.length != 0) {
-
-            if(settings[0].lang=="nl"){
+        Settings.findOne({}, function(err, settings) {
+          if (!err) {
+            if(settings.lang=="nl"){
             res.render('nl/add/add-bestelling', {
               'factuur': factuur,
               "description": "Bestelling toevoegen",
-              "settings": settings[0],
+              "settings": settings,
               "loginHash": req.params.loginHash
             });}else{
               res.render('eng/add/add-bestelling', {
                 'factuur': factuur,
                 "description": "Add order",
-                "settings": settings[0],
+                "settings": settings,
+                "loginHash": req.params.loginHash
+              });
+            };
+          };
+        });
+      };
+    });
+});
+
+app.get('/edit-bestelling/:id/:loginHash', function(req, res) {//REWORKED & tested
+  callFindPass().then(function(loginHash){
+  if (!(String(req.params.loginHash) === loginHash)) {
+    res.redirect('login');
+  }});
+    Bestelling.findOne({_id: req.params.id}, function(err, bestelling) {
+      Factuur.findOne({_id: bestelling.factuur}, function(err, factuur) {
+        Settings.findOne({}, function(err, settings) {
+          if (!err) {
+            if(settings.lang=="nl"){
+            res.render('nl/edit/edit-bestelling', {
+              'bestelling': bestelling,
+              "factuur": factuur,
+              "description": "Bestelling aanpassen",
+              "settings": settings,
+              "loginHash": req.params.loginHash
+            });}else{
+              res.render('eng/edit/edit-bestelling', {
+                'bestelling': bestelling,
+                "factuur": factuur,
+                "description": "Edit order",
+                "settings": settings,
                 "loginHash": req.params.loginHash
               });
             }
-          } else {
-            legeSettings = new Settings();
-            legeSettings.save(function(err) {
-              if (err) {
-                console.log("err in settings: " + err);
-              }
-            });
-          }
-        });
-      }
-    });
-
-});
-
-app.get('/edit-bestelling/:id/:loginHash', function(req, res) {
-  callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
-    Bestelling.findOne({
-      _id: req.params.id
-    }, function(err, bestelling) {
-      Factuur.findOne({
-        _id: bestelling.factuur
-      }, function(err, factuur) {
-        Settings.find({}, function(err, settings) {
-          if (!err && settings.length != 0) {} else {
-            legeSettings = new Settings();
-            legeSettings.save(function(err) {
-              if (err) {
-                console.log("err in settings: " + err);
-              }
-            });
-          }
-          if(settings[0].lang=="nl"){
-          res.render('nl/edit/edit-bestelling', {
-            'bestelling': bestelling,
-            "factuur": factuur,
-            "description": "Bestelling aanpassen",
-            "settings": settings[0],
-            "loginHash": req.params.loginHash
-          });}else{
-            res.render('eng/edit/edit-bestelling', {
-              'bestelling': bestelling,
-              "factuur": factuur,
-              "description": "Edit order",
-              "settings": settings[0],
-              "loginHash": req.params.loginHash
-            });
           }
         });
       });
     });
-
 });
 
-app.post('/edit-bestelling/:id/:loginHash', function(req, res) {
+app.post('/edit-bestelling/:id/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
-    Bestelling.findOne({
-      _id: req.params.id
-    }, function(err, bestelling) {
-      var updateBestelling = {
-        beschrijving: req.body.beschrijving,
-        aantal: req.body.aantal,
-        bedrag: req.body.bedrag,
-        totaal: req.body.aantal * req.body.bedrag,
-      }
-      Factuur.findOne({
-        _id: bestelling.factuur
-      }, function(err, factuur) {
-        Bestelling.update({
-          _id: req.params.id
-        }, updateBestelling, function(err, numrows) {
+  Bestelling.findOne({_id: req.params.id}, function(err, bestelling) {
+    var updateBestelling = {
+      beschrijving: req.body.beschrijving,
+      aantal: req.body.aantal,
+      bedrag: req.body.bedrag,
+      totaal: req.body.aantal * req.body.bedrag,
+    }
+    Factuur.findOne({_id: bestelling.factuur}, function(err, factuur) {
+      Bestelling.updateOne({_id: req.params.id}, updateBestelling,function(err){
+        var tot = factuur.totaal - (bestelling.aantal * bestelling.bedrag);
+        var newFactuur = {totaal: ((tot + (req.body.aantal * req.body.bedrag) - factuur.voorschot))};
+        Factuur.updateOne({_id: bestelling.factuur}, newFactuur, function(err) {
           if (!err) {
-            var tot = factuur.totaal - (bestelling.aantal * bestelling.bedrag);
-            var newFactuur = {
-              totaal: ((tot + (req.body.aantal * req.body.bedrag) - factuur.voorschot))
-            }
-            Factuur.update({
-              _id: bestelling.factuur
-            }, newFactuur, function(err, factuurnew) {
-              if (!err) {
-                res.redirect('/bestellingen/' + bestelling.factuur + "/" + req.params.loginHash);
-              } else {
-                console.log(err);
-              }
-            });
-          }
+            res.redirect('/bestellingen/' + bestelling.factuur + "/" + req.params.loginHash);
+          };
         });
       });
     });
-
+  });
 });
 
-app.get('/delete-bestelling/:idb/:loginHash', function(req, res) {
+app.get('/delete-bestelling/:idb/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
   if (!(String(req.params.loginHash) === loginHash)) {
     res.redirect('login');
   }});
-    Bestelling.findOne({
-      _id: req.params.idb
-    }, function(err, bestelling) {
-      Factuur.findOne({
-        _id: bestelling.factuur
-      }, function(err, factuur) {
-        Bestelling.deleteOne({
-          _id: req.params.idb
-        }, function(err) {
+    Bestelling.findOne({_id: req.params.idb}, function(err, bestelling) {
+      Factuur.findOne({_id: bestelling.factuur}, function(err, factuur) {
+        Bestelling.deleteOne({_id: req.params.idb}, function(err) {
           if (!err) {
-            var newFactuur = {
-              totaal: factuur.totaal - (bestelling.aantal * bestelling.bedrag)
-            }
-            Factuur.update({
-              _id: factuur._id
-            }, newFactuur, function(err, factuurnew) {
-              if (!err) {
-
-              } else {
-                console.log(err);
-              }
+            var newFactuur = {totaal: factuur.totaal - (bestelling.aantal * bestelling.bedrag)};
+            Factuur.updateOne({_id: factuur._id}, newFactuur, function(err){;
+              res.redirect('/bestellingen/' + factuur._id + "/" + req.params.loginHash);
             });
-            res.redirect('/bestellingen/' + factuur._id + "/" + req.params.loginHash);
-          } else {
-            console.log("err bestelling.find: " + err);
-          }
+          };
         });
       });
     });
-
 });
 
 app.get('/view-bestelling/:idb/:loginHash', function(req, res) {
