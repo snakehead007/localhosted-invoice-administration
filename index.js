@@ -1773,7 +1773,7 @@ app.get('/opwaardeer/:idf/t/:loginHash', function(req, res) {//REWORKED
   });
 });
 
-app.get('/delete-creditnota/:idc/:idf/:loginHash', function(req, res) {//REWORK
+app.get('/delete-creditnota/:idc/:idf/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
@@ -1809,53 +1809,40 @@ app.get('/delete-creditnota/:idc/:idf/:loginHash', function(req, res) {//REWORK
     });
 });
 
-app.get('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {
+app.get('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-    Contact.findOne({
-      _id: req.params.idc
-    }, function(err, contact) {
-      Factuur.findOne({
-        _id: req.params.idf
-      }, function(err, factuur) {
+    Contact.findOne({_id: req.params.idc}, function(err, contact) {
+      Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
         if (!err) {
-          Settings.find({}, function(err, settings) {
-            if (!err && settings.length != 0) {} else {
-              legeSettings = new Settings();
-              legeSettings.save(function(err) {
-                if (err) {
-                  console.log("err in settings: " + err);
-                }
-              });
-            }
-            if(settings[0].lang=="nl"){
-            res.render('nl/edit/edit-creditnota', {
-              'factuur': factuur,
-              'contact': contact,
-              "description": "creditnota aanpassen van " + contact.contactPersoon,
-              "settings": settings[0],
-              "loginHash": req.params.loginHash
-            });}else{
-              res.render('eng/edit/edit-creditnota', {
+          Settings.findOne({}, function(err, settings) {
+            if (!err){
+              if(settings.lang=="nl"){
+              res.render('nl/edit/edit-creditnota', {
                 'factuur': factuur,
                 'contact': contact,
-                "description": "Edit creditnote of " + contact.contactPersoon,
-                "settings": settings[0],
+                "description": "creditnota aanpassen van " + contact.contactPersoon,
+                "settings": settings,
                 "loginHash": req.params.loginHash
-              });
+              });}else{
+                res.render('eng/edit/edit-creditnota', {
+                  'factuur': factuur,
+                  'contact': contact,
+                  "description": "Edit creditnote of " + contact.contactPersoon,
+                  "settings": settings,
+                  "loginHash": req.params.loginHash
+                });
+              }
             }
           });
-        } else {
-          console.log("err edit-factuur GET: " + err);
-        }
+        };
       });
     });
-
 });
 
-app.post('/zoeken/:loginHash', function(req, res) {
+app.post('/zoeken/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
@@ -1864,15 +1851,14 @@ app.post('/zoeken/:loginHash', function(req, res) {
     var contacten = [];
     var facturen = [];
     var bestellingen = [];
+    var materialen = [];
     Contact.find({}, function(err, contacten_) {
-      if (!err) {
         Factuur.find({}, function(err, facturen_) {
-          if (!err) {
             Bestelling.find({}, function(err, bestellingen_) {
-              if (!err) {
+              Materiaal.find({},function(err, mats_){
                 //BESTELLINGEN
                 for (var bestelling of bestellingen_) {
-                  if (String(bestelling.beschrijving).toLowerCase().includes(String(str).toLowerCase())) {
+                  if (String(bestelling.beschrijving).toLowerCase().includes(str)) {
                     bestellingen.push(bestelling);
                   }
                 }
@@ -1913,75 +1899,55 @@ app.post('/zoeken/:loginHash', function(req, res) {
                     contacten.push(contact);
                   }
                 }
+              //Matterialen
+              for (var mat of mats_){
+                if(String(mat.naam).toLowerCase().include(str)){
+                  materialen.push(mat);
+                }
+              }
                 //takes only 1 of each items, if found 2 or more of the same
                 var contacten_d = distinct(contacten);
                 var bestellingen_d = distinct(bestellingen);
                 var facturen_d = distinct(facturen);
-                Settings.find({}, function(err, settings) {
-                  if (!err && settings.length != 0) {
-                    if(settings[0].lang=="nl"){
+                var materialen_d = distinct(materialen);
+                Settings.findOne({}, function(err, settings) {
+                  if (!err) {
+                    if(settings.lang=="nl"){
                     res.render('nl/zoeken', {
                       "description": "Zoeken op \"" + str + "\"",
-                      "settings": settings[0],
+                      "settings": settings,
                       "contacten": contacten_d,
                       "bestellingen": bestellingen_d,
                       "facturen": facturen_d,
+                      "materialen":materialen_d,
                       "loginHash": req.params.loginHash
                     });}else{
                       res.render('eng/zoeken', {
                         "description": "Search for \"" + str + "\"",
-                        "settings": settings[0],
+                        "settings": settings,
                         "contacten": contacten_d,
                         "bestellingen": bestellingen_d,
                         "facturen": facturen_d,
+                        "materialen":materialen_d,
                         "loginHash": req.params.loginHash
                       });
                     }
-                  } else {
-                    legeSettings = new Settings();
-                    legeSettings.save(function(err) {
-                      if (err) {
-                        console.log("err in settings: " + err);
-                      }
-                    });
-                  }
-                });
-              } else {
-                console.log(err);
-              }
-            });
-          } else {
-            console.log(err);
-          }
-        });
-      } else {
-        console.log(err);
-      }
-    });
-
+                  };
+                  });
+              });
+          });
+      });
+  });
 });
 
-app.post('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {
+app.post('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-    Settings.find({}, function(err, settings) {
-  var date = new Date();
-  var jaar = date.getFullYear();
-  var datum;
-  if(settings[0].lang=="nl"){
-  datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
-  }else {
-
-    datum = date.getDate() + " " + month[date.getMonth()] + " " + jaar;
-  }
-  Bestelling.find({
-    factuur: req.params.idf
-  }, function(err, bestellingen) {
-    Factuur.findOne({
-      _id: req.params.idf
-    }, function(err, factuur) {
+    Settings.findOne({}, function(err, settings) {
+  Bestelling.find({factuur: req.params.idf}, function(err, bestellingen) {
+    Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
       var totBes = 0
       for (var i = 0; i <= bestellingen.length - 1; i++) {
         totBes += bestellingen[i].totaal;
@@ -2010,18 +1976,11 @@ app.post('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {
           offerteNr: req.body.offerteNr
         };
       }
-
-      Contact.findOne({
-        _id: req.params.idc
-      }, function(err, contact) {
-        Factuur.update({
-          _id: req.params.idf
-        }, updateFactuur, function(err, factuur) {
+      Contact.findOne({_id: req.params.idc}, function(err, contact) {
+        Factuur.update({_id: req.params.idf}, updateFactuur, function(err) {
           if (!err) {
             res.redirect('/facturen/' + contact._id+ "/"+req.params.loginHash);
-          } else {
-            console.log(err);
-          }
+          };
         });
       });
     });
@@ -2029,22 +1988,13 @@ app.post('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {
 });
 });
 
-app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {
+app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
 
-    Settings.find({}, function(err, settings) {
-  var date = new Date();
-  var jaar = date.getFullYear();
-  var datum;
-  if(settings[0].lang=="nl"){
-  datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
-  }else {
-
-    datum = date.getDate() + " " + month[date.getMonth()] + " " + jaar;
-  }
+    Settings.findOne({}, function(err, settings) {
   Bestelling.find({
     factuur: req.params.idf
   }, function(err, bestellingen) {
@@ -2080,17 +2030,11 @@ app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {
         };
       }
 
-      Contact.findOne({
-        _id: req.params.idc
-      }, function(err, contact) {
-        Factuur.update({
-          _id: req.params.idf
-        }, updateFactuur, function(err, factuur) {
+      Contact.findOne({_id: req.params.idc}, function(err, contact) {
+        Factuur.update({_id: req.params.idf}, updateFactuur, function(err, factuur) {
           if (!err) {
             res.redirect('/facturen/'+req.params.loginHash);
-          } else {
-            console.log(err);
-          }
+          };
         });
       });
     });
@@ -2098,45 +2042,32 @@ app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {
 });
 });
 
-app.get('/prijs/:loginHash', function(req, res) {
+app.get('/prijs/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-    Settings.find({}, function(err, settings) {
-      if (!err && settings.length != 0) {
+    Settings.findOne({}, function(err, settings) {
+      if (!err) {
         Materiaal.find({}, function(err, materialen) {
           if (!err) {
-            if(settings[0].lang=="nl"){
+            if(settings.lang=="nl"){
             res.render('nl/calc/prijs', {
-              'settings': settings[0],
+              'settings': settings,
               'description': "Berekening voor Prijs",
               'materialen': materialen,
               "loginHash": req.params.loginHash
             });}else{
               res.render('eng/calc/prijs', {
-                'settings': settings[0],
+                'settings': settings,
                 'description': "Calculating price",
                 'materialen': materialen,
                 "loginHash": req.params.loginHash
               });
             }
-          } else {
-            console.log(err);
-          }
+          };
         });
-      } else {
-        legeSettings = new Settings();
-        legeSettings.save(function(err) {
-          if (err) {
-            console.log("err in settings: " + err);
-          }
-        });
-        res.redirect('/settings');
-        if (err) {
-          console.log(err);
-        }
-      }
+      };
     });
 
 });
@@ -2469,122 +2400,84 @@ app.post('/prijs/:loginHash', function(req, res) {
 
 });
 
-app.post('/prijs/:totaal/:loginHash', function(req, res) {
+app.post('/prijs/:totaal/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-    Settings.find({}, function(err, settings) {
-      if (!err && settings.length != 0) {
+    Settings.findOne({}, function(err, settings) {
+      if (!er) {
         var totaal_ = Number(req.params.totaal.substring(0, req.params.totaal.length - 1));
         var totaal = req.params.totaal;
         var marge = req.body.marge;
         res.render("nl/calc/prijs-totaal", {
           "totmarge": String(((totaal_ * marge / 100.0) + totaal_).toFixed(2)) + "€",
           "totaal": totaal,
-          "settings": settings[0],
+          "settings": settings,
           'description': "berekening van marge",
           "loginHash": req.params.loginHash
         });
-      } else {
-        legeSettings = new Settings();
-        legeSettings.save(function(err) {
-          if (err) {
-            console.log("err in settings: " + err);
-          }
-        });
-      }
+      };
     });
-
 });
 
-app.get('/mat/:loginHash', function(req, res) {
+app.get('/mat/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-    Settings.find({}, function(err, settings) {
-      if (!err && settings.length != 0) {
+    Settings.findOne({}, function(err, settings) {
+      if (!err) {
         Materiaal.find({}).sort('naam').exec(function(err, materialen) {
           if (!err) {
-            if(settings[0].lang=="nl"){
+            if(settings.lang=="nl"){
             res.render('nl/mat', {
               'materialen': materialen,
-              'settings': settings[0],
+              'settings': settings,
               'description': "Alle materialen",
               "loginHash": req.params.loginHash
             });}else{
               res.render('eng/mat', {
                 'materialen': materialen,
-                'settings': settings[0],
+                'settings': settings,
                 'description': "All materials",
                 "loginHash": req.params.loginHash
               });
             }
-          } else {
-            console.log(err);
-          }
+          };
         });
-      } else {
-        legeSettings = new Settings();
-        legeSettings.save(function(err) {
-          if (err) {
-            console.log("err in settings: " + err);
-          }
-        });
-        res.redirect('/settings');
-        if (err) {
-          console.log(err);
-        }
-      }
+      };
     });
-
 });
 
-app.get('/edit-mat/:id/:loginHash', function(req, res) {
+app.get('/edit-mat/:id/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-    Settings.find({}, function(err, settings) {
+    Settings.findOne({}, function(err, settings) {
       if (!err && settings.length != 0) {
-        Materiaal.findOne({
-          _id: req.params.id
-        }, function(err, materiaal) {
-          console.log(materiaal);
-          if(settings[0].lang=="nl"){
+        Materiaal.findOne({_id: req.params.id}, function(err, materiaal) {
+          if(settings.lang=="nl"){
           res.render('nl/edit/edit-mat', {
-            'settings': settings[0],
+            'settings': settings,
             'materiaal': materiaal,
             'description': materiaal.naam + " aanpassen",
             "loginHash": req.params.loginHash
           });}else{
             res.render('eng/edit/edit-mat', {
-              'settings': settings[0],
+              'settings': settings,
               'materiaal': materiaal,
               'description': "Edit "+materiaal.naam ,
               "loginHash": req.params.loginHash
             });
-          }
+          };
         });
-      } else {
-        legeSettings = new Settings();
-        legeSettings.save(function(err) {
-          if (err) {
-            console.log("err in settings: " + err);
-          }
-        });
-        console.log(legeSettings);
-        res.redirect('/settings');
-        if (err) {
-          console.log(err);
-        }
-      }
+      };
     });
-
 });
 
-app.post('/edit-mat/:id/:loginHash', function(req, res) {
+app.post('/edit-mat/:id/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
@@ -2593,196 +2486,106 @@ app.post('/edit-mat/:id/:loginHash', function(req, res) {
       naam: req.body.naam,
       prijs: req.body.prijs
     };
-    Materiaal.update({
-      _id: req.params.id
-    }, nieuwMat, function(err, materiaal) {
-      if (!err) {
-        res.redirect('/mat/' + req.params.loginHash);
-      } else {
-        console.log(err);
-      }
+    Materiaal.update({_id: req.params.id}, nieuwMat, function(err, materiaal) {
+      res.redirect('/mat/' + req.params.loginHash);
     });
-
 });
 
-app.get('/add-mat/:loginHash', function(req, res) {
+app.get('/add-mat/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-    Settings.find({}, function(err, settings) {
-      if (!err && settings.length != 0) {
-      if(settings[0].lang=="nl"){
+    Settings.findOne({}, function(err, settings) {
+      if (!err) {
+      if(settings.lang=="nl"){
         res.render('nl/add/add-mat', {
-          'settings': settings[0],
+          'settings': settings,
           'description': "Materiaal toevoegen",
           "loginHash": req.params.loginHash
         });}else{
           res.render('eng/add/add-mat', {
-            'settings': settings[0],
+            'settings': settings,
             'description': "Add material",
             "loginHash": req.params.loginHash
           });}
-
-      } else {
-        legeSettings = new Settings();
-        legeSettings.save(function(err) {
-          if (err) {
-            console.log("err in settings: " + err);
-          }
-        });
-        res.redirect('/settings');
-        if (err) {
-          console.log(err);
-        }
-      }
+      };
     });
-
 });
 
-app.post('/add-mat/:loginHash', function(req, res) {
+app.post('/add-mat/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-    Settings.find({}, function(err, settings) {
-      if (!err && settings.length != 0) {
-        var nieuwe_materiaal = new Materiaal({
-          prijs: req.body.prijs,
-          naam: req.body.naam
-        });
-        nieuwe_materiaal.save(function(err) {
-          if (err) {
-            console.log(err);
-          }
-        });
-        res.redirect('/mat/' + req.params.loginHash);
-      } else {
-        legeSettings = new Settings();
-        legeSettings.save(function(err) {
-          if (err) {
-            console.log("err in settings: " + err);
-          }
-        });
-        res.redirect('/settings');
-        if (err) {
-          console.log(err);
-        }
-      }
+    var nieuwe_materiaal = new Materiaal({
+      prijs: req.body.prijs,
+      naam: req.body.naam
     });
-
+    nieuwe_materiaal.save();
+    res.redirect('/mat/' + req.params.loginHash);
 });
 
-app.get('/delete-mat/:id/:loginHash', function(req, res) {
+app.get('/delete-mat/:id/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-    Settings.find({}, function(err, settings) {
-      if (!err && settings.length != 0) {
-        Materiaal.remove({
-          _id: req.params.id
-        }, function(err, mat) {});
-        res.redirect('/mat/' + req.params.loginHash);
-      } else {
-        legeSettings = new Settings();
-        legeSettings.save(function(err) {
-          if (err) {
-            console.log("err in settings: " + err);
-          }
-        });
-        res.redirect('/settings');
-        if (err) {
-          console.log(err);
-        }
-      }
-    });
-
+    Materiaal.remove({_id: req.params.id});
+    res.redirect('/mat/' + req.params.loginHash);
 });
 
-app.get('/settings/:loginHash', function(req, res) {
+app.get('/settings/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-    Settings.find({}, function(err, settings) {
-      if (!err && settings.length != 0) {
-      if(settings[0].lang=="nl"){
-        res.render('nl/settings', {
-          'settings': settings[0],
-          'description': "Settings",
-          'loginHash': req.params.loginHash
-        });}else{
-          res.render('eng/settings', {
-            'settings': settings[0],
-            'description': "Settings",
-            'loginHash': req.params.loginHash
-          });
-        }
-      } else {
-        legeSettings = new Settings();
-        legeSettings.save(function(err) {
-          if (err) {
-            console.log("err in settings: " + err);
-          }
-        });
-        res.redirect('/');
-        if (err) {
-          console.log(err);
-        }
-      }
+  Settings.findOne({}, function(err, settings) {
+    res.render(settings.lang+'/settings', {
+      'settings': settings,
+      'description': "Settings",
+      'loginHash': req.params.loginHash
     });
-
+  });
 });
 
-app.get('/change-theme/:th/:loginHash', function(req, res) {
+app.get('/change-theme/:th/:loginHash', function(req, res) {//REWORK
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-    Settings.find({}, function(err, settings) {
-      if (!err) {
-        var oppo;
-        var nav;
-        if (req.params.th == "dark") {
+    Settings.findOne({}, function(err, settings) {
+      var oppo;
+      var nav = (req.params.th==="light") ? "light" : "dark";
+      switch(req.params.th){
+        case "dark":
           oppo = "light";
-          nav = "dark";
-        } else if (req.params.th == "primary") {
+          break;
+        case "primary":
           oppo = "outline-primary";
-          nav = "dark";
-        } else if (req.params.th == "light") {
+          break;
+        case "light":
           oppo = "secondary";
-          nav = "light";
-        } else if (req.params.th == "secondary") {
-          oppo = "secondary";
-          nav = "dark";
-        } else if (req.params.th == "info") {
+          break;
+        case "secondary":
+          oppo = "secondary"
+          break;
+        case "info":
           oppo = "outline-info";
-          nav = "dark"
-        } else if (req.params.th == "danger") {
+          break;
+        case "danger":
           oppo = "outline-danger";
-          nav = "dark";
-        }
-        var updateSettings = {
-          thema: req.params.th,
-          oppo: oppo,
-          nav: nav,
-        };
-        Settings.update({
-          _id: settings[0]._id
-        }, updateSettings, function(err, updatedSettings) {
-          if (!err) {
-            res.redirect('/settings/' + req.params.loginHash);
-          } else {
-            console.log(err);
-          }
-        });
-      } else {
-        console.log("err");
-        res.redirect('/settings/' + req.params.loginHash);
+          break;
       }
-    });
-
+      var updateSettings = {
+        thema: req.params.th,
+        oppo: oppo,
+        nav: nav,
+      };
+      Settings.updateOne({_id: settings._id}, updateSettings, function(err) {
+          res.redirect('/settings/' + req.params.loginHash);
+      });
+  });
 });
 
 app.get('/change-lang/:lang/:loginHash', function(req, res) {
