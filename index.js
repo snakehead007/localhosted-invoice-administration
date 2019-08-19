@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 //Mongoose initializing
-mongoose.connect('mongodb://localhost:27017/test026'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
+mongoose.connect('mongodb://localhost:27017/test027'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
 mongoose.connection.on('open', function() {
   console.log('Mongoose connected!');
 });
@@ -309,11 +309,16 @@ app.get('/', function(req, res) {//REWORKED & tested
     });
 });
 
+app.get('/login', function(req, res) {//REWORKED & tested
+  res.render('/login');
+});
+
 app.get('/index/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+  if (String(req.params.loginHash) !== loginHash) {
+    res.render('login');
+  };
+  });
     Settings.findOne({}, function(err, settings) {
       if (!err) {
         res.render(settings.lang+'/index', {
@@ -321,13 +326,10 @@ app.get('/index/:loginHash', function(req, res) {//REWORKED & tested
           "jaar": year,
           "loginHash": req.params.loginHash
         });
-      }
+      };
     });
 });
 
-app.get('/login', function(req, res) {//REWORKED & tested
-  res.render('/login');
-});
 
 app.post('/', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
@@ -348,9 +350,9 @@ app.post('/', function(req, res) {//REWORKED & tested
 
 app.get('/chart/:jaar/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
         Factuur.find({}, function(err, facturen) {
@@ -396,9 +398,9 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {//REWORKED & tested
 
 app.get('/contacten/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Contact.find({}, function(err, contacts) {
       Settings.findOne({}, function(err, settings) {
         if (!err ) {
@@ -422,9 +424,9 @@ app.get('/contacten/:loginHash', function(req, res) {//REWORKED & tested
 
 app.get('/delete-contact/:id/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Contact.deleteOne({
       _id: req.params.id
     }, function(err) {
@@ -445,9 +447,9 @@ app.get('/delete-contact/:id/:loginHash', function(req, res) {//REWORKED & teste
 
 app.get('/add-contact/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
         if(settings.lang=="nl"){
@@ -468,9 +470,9 @@ app.get('/add-contact/:loginHash', function(req, res) {//REWORKED & tested
 
 app.post('/add-contact/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     if (
       req.body.contactPersoon &&
       req.body.straat &&
@@ -504,9 +506,9 @@ app.post('/add-contact/:loginHash', function(req, res) {//REWORKED & tested
 
 app.get('/edit-contact/:id/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Contact.findOne({
       _id: req.params.id
     }, function(err, contacts) {
@@ -534,9 +536,9 @@ app.get('/edit-contact/:id/:loginHash', function(req, res) {//REWORKED & tested
 
 app.post('/edit-contact/:id/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     var updateData = {
       firma: req.body.firma,
       contactPersoon: req.body.contactPersoon,
@@ -563,9 +565,9 @@ app.post('/edit-contact/:id/:loginHash', function(req, res) {//REWORKED & tested
 
 app.get('/view-contact/:idc/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Contact.findOne({
       _id: req.params.idc
     }, function(err, contact) {
@@ -594,9 +596,9 @@ app.get('/view-contact/:idc/:loginHash', function(req, res) {//REWORKED & tested
 
 app.get('/bestellingen/:idf/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
       if (!err) {
         Contact.findOne({_id: factuur.contact}, function(err, contact) {
@@ -634,9 +636,9 @@ app.get('/bestellingen/:idf/:loginHash', function(req, res) {//REWORKED & tested
 
 app.get('/bestellingen/:idf/t/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
       if (!err) {
         Contact.findOne({_id: factuur.contact}, function(err, contact) {
@@ -675,9 +677,9 @@ app.get('/bestellingen/:idf/t/:loginHash', function(req, res) {//REWORKED & test
 
 app.post('/add-bestelling/:idf/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
       if (!err) {
         var newBestelling = new Bestelling({
@@ -702,9 +704,9 @@ app.post('/add-bestelling/:idf/:loginHash', function(req, res) {//REWORKED & tes
 
 app.get('/add-bestelling/:idf/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
       if (!err) {
         Settings.findOne({}, function(err, settings) {
@@ -731,9 +733,9 @@ app.get('/add-bestelling/:idf/:loginHash', function(req, res) {//REWORKED & test
 
 app.get('/edit-bestelling/:id/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Bestelling.findOne({_id: req.params.id}, function(err, bestelling) {
       Factuur.findOne({_id: bestelling.factuur}, function(err, factuur) {
         Settings.findOne({}, function(err, settings) {
@@ -762,9 +764,9 @@ app.get('/edit-bestelling/:id/:loginHash', function(req, res) {//REWORKED & test
 
 app.post('/edit-bestelling/:id/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
   Bestelling.findOne({_id: req.params.id}, function(err, bestelling) {
     var updateBestelling = {
       beschrijving: req.body.beschrijving,
@@ -788,9 +790,9 @@ app.post('/edit-bestelling/:id/:loginHash', function(req, res) {//REWORKED & tes
 
 app.get('/delete-bestelling/:idb/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Bestelling.findOne({_id: req.params.idb}, function(err, bestelling) {
       Factuur.findOne({_id: bestelling.factuur}, function(err, factuur) {
         Bestelling.deleteOne({_id: req.params.idb}, function(err) {
@@ -807,9 +809,9 @@ app.get('/delete-bestelling/:idb/:loginHash', function(req, res) {//REWORKED & t
 
 app.get('/view-bestelling/:idb/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Bestelling.findOne({_id: req.params.idb}, function(err, bestelling) {
       if (!err) {
         Factuur.findOne({_id: bestelling.factuur}, function(err, factuur) {
@@ -842,9 +844,9 @@ app.get('/view-bestelling/:idb/:loginHash', function(req, res) {//REWORKED & tes
 
 app.get('/facturen/:idc/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
   Contact.findOne({_id: req.params.idc}, function(err, contact) {
     if (!err) {
       Factuur.find({contact: req.params.idc}).sort('-factuurNr').exec(function(err, facturen) {
@@ -877,9 +879,9 @@ app.get('/facturen/:idc/:loginHash', function(req, res) {//REWORKED & tested
 
 app.get('/facturen/:idc/t/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Contact.findOne({_id: req.params.idc}, function(err, contact) {
       if (!err) {
         Factuur.find({contact: req.params.idc}).sort('-factuurNr').exec(function(err, facturen) {
@@ -914,9 +916,9 @@ app.get('/facturen/:idc/t/:loginHash', function(req, res) {//REWORKED & tested
 
 app.get('/facturen/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Factuur.find({}).sort('-factuurNr').exec(function(err, facturen) {
       if (!err) {
         Settings.findOne({}, function(err, settings) {
@@ -943,9 +945,9 @@ app.get('/facturen/:loginHash', function(req, res) {//REWORKED & tested
 
 app.get('/add-factuur/:idc/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
   Settings.findOne({}, function(err, settings) {
     Contact.findOne({_id: req.params.idc}, function(err, contact) {
       if (!err) {
@@ -990,9 +992,9 @@ app.get('/add-factuur/:idc/:loginHash', function(req, res) {//REWORKED & tested
 
 app.get('/delete-factuur/:idc/:idf/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Contact.findOne({_id: req.params.idc}, function(err, contact) {
       Factuur.deleteOne({_id: req.params.idf}, function(err) {
         if (!err) {
@@ -1027,9 +1029,9 @@ app.get('/delete-factuur/:idc/:idf/:loginHash', function(req, res) {//REWORKED &
 
 app.get('/delete-factuur/:idc/:idf/t/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Contact.findOne({_id: req.params.idc}, function(err, contact) {
       Factuur.deleteOne({_id: req.params.idf}, function(err) {
         if (!err) {
@@ -1062,9 +1064,9 @@ app.get('/delete-factuur/:idc/:idf/t/:loginHash', function(req, res) {//REWORKED
 
 app.get('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Contact.findOne({_id: req.params.idc}, function(err, contact) {
       Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
         if (!err) {
@@ -1095,9 +1097,9 @@ app.get('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {//REWORKED & t
 
 app.get('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Contact.findOne({_id: req.params.idc}, function(err, contact) {
       Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
         if (!err) {
@@ -1130,9 +1132,9 @@ app.get('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {//REWORKED &
 
 app.get('/updateFactuur/:idf/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
       if (!err) {
         Contact.findOne({_id: factuur.contact}, function(err, contact) {
@@ -1168,9 +1170,9 @@ app.get('/updateFactuur/:idf/:loginHash', function(req, res) {//REWORKED
 
 app.post('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.findOne({}, function(err, settings) {
       Bestelling.find({
         factuur: req.params.idf
@@ -1212,9 +1214,9 @@ app.post('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {//REWORKED & 
 
 app.post('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.findOne({}, function(err, settings) {
     Bestelling.find({factuur: req.params.idf}, function(err, bestellingen) {
       Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
@@ -1255,9 +1257,9 @@ app.post('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {//REWORKED 
 
 app.get('/view-factuur/:idf/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
       if (!err) {
         Contact.findOne({_id: factuur.contact}, function(err, contact) {
@@ -1288,9 +1290,9 @@ app.get('/view-factuur/:idf/:loginHash', function(req, res) {//REWORKED
 
 app.get('/view-factuur/:idf/t/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
       if (!err) {
         Contact.findOne({_id: factuur.contact}, function(err, contact) {
@@ -1323,9 +1325,9 @@ app.get('/view-factuur/:idf/t/:loginHash', function(req, res) {//REWORKED
 
 app.get('/createPDF/:idf/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Profile.findOne({}, function(err, profile) {
       Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
         Contact.findOne({_id: factuur.contact}, function(err, contact) {
@@ -1372,9 +1374,9 @@ app.get('/createPDF/:idf/:loginHash', function(req, res) {//REWORKED
 
 app.get('/edit-profile/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     var legeProfiel;
     var date = new Date();
     var _jaar = date.getFullYear();
@@ -1432,9 +1434,9 @@ app.get('/edit-profile/:loginHash', function(req, res) {//REWORKED
 
 app.post('/edit-profile/:id/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     var updateProfile = {
       firma: req.body.firma,
       naam: req.body.naam,
@@ -1458,265 +1460,157 @@ app.post('/edit-profile/:id/:loginHash', function(req, res) {//REWORKED
     });
 });
 
-app.get('/offerte/:idf/:loginHash', function(req, res) {//REWORK
+app.get('/offerte/:idf/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
-    var id = req.params.id;
-    var offertetext;
-    Profile.find({}, function(err, profile) {
-      Factuur.findOne({
-        _id: req.params.idf
-      }, function(err, factuur) {
-        if (err)
-          console.log("err: " + err);
-        Contact.findOne({
-          _id: factuur.contact
-        }, function(err2, contact) {
-          if (err2)
-            console.log("err: " + err2);
-          Bestelling.find({
-            factuur: factuur._id
-          }, function(err3, bestellingen) {
-            if (err3) {
-              console.log("err: " + err3);
-            }
-            var lengte = Number(bestellingen.length);
-            var json_data = "[";
-            for (var i = 0; i <= lengte - 1; i++) {
-              json_data += ("{\"beschrijving\" : \"" + bestellingen[Number(i)].beschrijving + "\", " +
-                "\"aantal\" : " + bestellingen[Number(i)].aantal + ", " +
-                "\"bedrag\" : " + bestellingen[Number(i)].bedrag + ", " +
-                "\"totaal\" : " + Number(bestellingen[Number(i)].aantal * bestellingen[Number(i)].bedrag) + " }");
-              if (i <= lengte - 2) {
-                json_data += ",";
-              }
-            }
-            json_data += "]";
-            Settings.find({}, function(err, settings) {
-              if (!err && settings.length != 0) {} else {
-                legeSettings = new Settings();
-                legeSettings.save(function(err) {
-                  if (err) {
-                    console.log("err in settings: " + err);
-                  }
-                });
-              }
-
-              callGetBase64().then(function(imgData){
-              offertetext = replaceAll(settings[0].offertetext,profile[0],contact,factuur);
-              if(settings[0].lang=="nl"){
-              res.render('nl/pdf/offerte', {
-                'profile': profile[0],
-                'contact': contact,
-                'bestellingen': json_data,
-                "factuur": factuur,
-                'lengte': lengte,
-                "settings": settings[0],
-                "loginHash": req.params.loginHash,
-                "offertetext":offertetext,
-                "imgData":imgData,
-                "btw":settings[0].btw
-              });}else{
-                res.render('eng/pdf/offerte', {
-                  'profile': profile[0],
-                  'contact': contact,
-                  'bestellingen': json_data,
-                  "factuur": factuur,
-                  'lengte': lengte,
-                  "settings": settings[0],
-                  "loginHash": req.params.loginHash,
-                  "offertetext":offertetext,
-                  "imgData":imgData,
-                  "btw":settings[0].btw
-                });
-              }
-            });
-            });
-          });
-        });
-      });
-    });
-
-});
-
-app.get('/add-offerte/:idc/:loginHash', function(req, res) {
-  callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
-
-    Settings.find({}, function(err, settings) {
-    var date = new Date();
-    var jaar = date.getFullYear();
-    var datum;
-    if(settings[0].lang=="nl"){
-    datum = date.getDate() + " " + maand[date.getMonth()] + " " + jaar;
-    }else {
-
-      datum = date.getDate() + " " + month[date.getMonth()] + " " + jaar;
-    }
-    var nroff = 0;
-    var idn;
-    var _n = null;
-    var factuurID;
-    Contact.findOne({
-      _id: req.params.idc
-    }, function(err, contact) {
-      if (!err) {
-        contact.save(function(err) {
-          Profile.find({}, function(err, nummer) {
-            if (!err) {
-              var _n = nummer;
-              nroff = nummer[0].nroff;
-              nummer[0].save(function(err) {
-                if (!err) {
-                  Profile.updateOne({
-                    nroff: nroff + 1
-                  }, function(err) {
-                    if (!err) {
-                      var nr_str = nroff.toString();
-                      if (nr_str.toString().length == 1) {
-                        nr_str = "00" + nroff.toString();
-                      } else if (nr_str.toString().length == 2) {
-                        nr_str = "0" + nroff.toString();
-                      }
-
-                      const newFactuur = new Factuur({
-                        contact: contact._id,
-                        datum: datum,
-                        offerteNr: String(jaar + nr_str),
-                        contactPersoon: contact.contactPersoon
-                      });
-                      Contact.updateOne({
-                        aantalFacturen: contact.aantalFacturen + 1
-                      }, function(err) {
-                        if (err) {
-                          console.log("err contact.updateOne: " + err);
-                        } else {
-                          contact.facturen.push(newFactuur._id);
-                        }
-                      });
-                      newFactuur.save(function(err) {
-                        if (err) {
-                          console.log("err newFactuur: " + err);
-                        }
-                      });
-                      Factuur.find({
-                        contact: req.params.idc
-                      }, function(err, facturen) {
-                        if (!err) {
-                          res.redirect('/facturen/' + contact._id + "/" + req.params.loginHash);
-                        } else {
-                          console.log("err factuur.find: " + err);
-                        }
-                      });
-
-                    } else {
-                      console.log("err: " + err);
-                    }
-                  });
-                } else {
-                  console.log("err: " + err);
-                }
-              });
-            } else {
-              console.log("err: " + err);
-            }
-          });
-        });
-      } else {
-        console.log("err: " + err);
-      }
-    });
-  });
-});
-
-app.get('/creditnota/:idc/:loginHash', function(req, res) {
-  callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
-    var id = req.params.idc;
-    var creditnotatext;
-    Profile.find({}, function(err, profile) {
-      Factuur.findOne({
-        _id: id
-      }, function(err, factuur) {
-        if (err) {
-          console.log(err);
-        } else {
-          Contact.findOne({
-            _id: factuur.contact
-          }, function(err, contact) {
-            Bestelling.find({
-              factuur: factuur._id
-            }, function(err, bestellingen) {
-              var lengte = Number(bestellingen.length);
-              var json_data = "[";
-              for (var i = 0; i <= lengte - 1; i++) {
-                json_data += ("{\"beschrijving\" : \"" + bestellingen[Number(i)].beschrijving + "\", " +
-                  "\"aantal\" : " + bestellingen[Number(i)].aantal + ", " +
-                  "\"bedrag\" : " + bestellingen[Number(i)].bedrag + ", " +
-                  "\"totaal\" : " + Number(bestellingen[Number(i)].aantal * bestellingen[Number(i)].bedrag) + " }");
-                if (i <= lengte - 2) {
-                  json_data += ",";
-                }
-              }
-              json_data += "]";
-              Settings.find({}, function(err, settings) {
-                if (!err && settings.length != 0) {} else {
-                  legeSettings = new Settings();
-                  legeSettings.save(function(err) {
-                    if (err) {
-                      console.log("err in settings: " + err);
-                    }
-                  });
-                }
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
+    Profile.findOne({}, function(err, profile) {
+      Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
+        Contact.findOne({_id: factuur.contact}, function(err2, contact) {
+          Bestelling.find({factuur: factuur._id}, function(err3, bestellingen) {
+            Settings.findOne({}, function(err, settings) {
                 callGetBase64().then(function(imgData){
-                creditnotatext = replaceAll(settings[0].creditnotatext,profile[0],contact,factuur);
-                if(settings[0].lang=="nl"){
-                res.render('nl/pdf/creditnota', {
-                  'profile': profile[0],
+                var json_data = createJSON(bestellingen);
+                if(settings.lang=="nl"){
+                res.render('nl/pdf/offerte', {
+                  'profile': profile,
                   'contact': contact,
-                  'bestellingen': json_data,
+                  'bestellingen': createJSON(bestellingen),
                   "factuur": factuur,
                   'lengte': lengte,
-                  "settings": settings[0],
+                  "settings": settings,
                   "loginHash": req.params.loginHash,
-                  "creditnotatext":creditnotatext,
+                  "offertetext":replaceAll(settings.offertetext,profile,contact,factuur),
                   "imgData":imgData,
-                  "btw":settings[0].btw
+                  "btw":settings.btw
                 });}else{
-                  res.render('eng/pdf/creditnota', {
-                    'profile': profile[0],
+                  res.render('eng/pdf/offerte', {
+                    'profile': profile,
                     'contact': contact,
                     'bestellingen': json_data,
                     "factuur": factuur,
                     'lengte': lengte,
-                    "settings": settings[0],
+                    "settings": settings,
                     "loginHash": req.params.loginHash,
-                    "creditnotatext":creditnotatext,
+                    "offertetext":replaceAll(settings.offertetext,profile,contact,factuur),
                     "imgData":imgData,
-                    "btw":settings[0].btw
+                    "btw":settings.btw
                   });
                 }
               });
-              });
             });
           });
-        }
+        });
       });
     });
 
 });
 
+app.get('/add-offerte/:idc/:loginHash', function(req, res) {//REWORKED
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
+    Settings.findOne({}, function(err, settings) {
+    var nroff = 0;
+    var idn;
+    var _n = null;
+    var factuurID;
+    Contact.findOne({_id: req.params.idc}, function(err, contact) {
+      if (!err) {
+        contact.save(function(err) {
+          Profile.findOne({}, function(err, profile) {
+            if (!err) {
+              profile.save(function(err) {
+                if (!err) {
+                  Profile.updateOne({nroff: profile.nroff + 1}, function(err) {
+                    if (!err) {
+                      var nr_str;
+                      if (profile.nroff.toString().length == 1) {
+                        nr_str = "00" + profile.nroff.toString();
+                      } else if (profile.nroff.toString().length == 2) {
+                        nr_str = "0" + profile.nroff.toString();
+                      };
+                      const newFactuur = new Factuur({
+                        contact: contact._id,
+                        datum: getDatum(settings.lang),
+                        offerteNr: String(year + nr_str),
+                        contactPersoon: contact.contactPersoon
+                      });
+                      Contact.updateOne({aantalFacturen: contact.aantalFacturen + 1}, function(err) {
+                          contact.facturen.push(newFactuur._id);
+                        });
+                      newFactuur.save();
+                      Factuur.find({contact: req.params.idc}, function(err, facturen) {
+                        if (!err) {
+                          res.redirect('/facturen/' + contact._id + "/" + req.params.loginHash);
+                        };
+                      });
+                    };
+                  });
+                };
+              });
+            };
+          });
+        });
+      };
+    });
+  });
+});
+
+app.get('/creditnota/:idc/:loginHash', function(req, res) {//REWORKED
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
+    Profile.findOne({}, function(err, profile) {
+      Factuur.findOne({_id: req.params.idc}, function(err, factuur) {
+        if (!err){
+          Contact.findOne({_id: factuur.contact}, function(err, contact) {
+            Bestelling.find({factuur: factuur._id}, function(err, bestellingen) {
+              Settings.findOne({}, function(err, settings) {
+                  callGetBase64().then(function(imgData){
+                  if(settings.lang=="nl"){
+                  res.render('nl/pdf/creditnota', {
+                    'profile': profile,
+                    'contact': contact,
+                    'bestellingen':  createJSON(bestellingen),
+                    "factuur": factuur,
+                    'lengte': lengte,
+                    "settings": settings,
+                    "loginHash": req.params.loginHash,
+                    "creditnotatext":replaceAll(settings.creditnotatext,profile,contact,factuur),
+                    "imgData":imgData,
+                    "btw":settings.btw
+                  });}else{
+                    res.render('eng/pdf/creditnota', {
+                      'profile': profile,
+                      'contact': contact,
+                      'bestellingen':  createJSON(bestellingen),
+                      "factuur": factuur,
+                      'lengte': lengte,
+                      "settings": settings,
+                      "loginHash": req.params.loginHash,
+                      "creditnotatext":replaceAll(settings.creditnotatext,profile,contact,factuur),
+                      "imgData":imgData,
+                      "btw":settings.btw
+                    });
+                  };
+                });
+              });
+            });
+          });
+        };
+      });
+    });
+});
+
 app.get('/add-creditnota/:idc/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
 
     Settings.find({}, function(err, settings) {
     var date = new Date();
@@ -1801,9 +1695,9 @@ app.get('/add-creditnota/:idc/:loginHash', function(req, res) {
 
 app.get('/view-creditnota/:idf/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
 
   Factuur.findOne({
     _id: req.params.idf
@@ -1846,9 +1740,9 @@ app.get('/view-creditnota/:idf/:loginHash', function(req, res) {
 
 app.get('/view-creditnota/:idf/t/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
   Factuur.findOne({
     _id: req.params.idf
   }, function(err, factuur) {
@@ -1892,9 +1786,9 @@ app.get('/view-creditnota/:idf/t/:loginHash', function(req, res) {
 
 app.get('/opwaardeer/:idf/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
 
     Settings.find({}, function(err, settings) {
     var date = new Date();
@@ -1947,9 +1841,9 @@ app.get('/opwaardeer/:idf/:loginHash', function(req, res) {
 
 app.get('/opwaardeer/:idf/t/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
 
     Settings.find({}, function(err, settings) {
   var date = new Date();
@@ -2002,9 +1896,9 @@ app.get('/opwaardeer/:idf/t/:loginHash', function(req, res) {
 
 app.get('/delete-creditnota/:idc/:idf/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Contact.findOne({
       _id: req.params.idc
     }, function(err, contact) {
@@ -2057,9 +1951,9 @@ app.get('/delete-creditnota/:idc/:idf/:loginHash', function(req, res) {
 
 app.get('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Contact.findOne({
       _id: req.params.idc
     }, function(err, contact) {
@@ -2103,9 +1997,9 @@ app.get('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {
 
 app.post('/zoeken/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     var str = req.body.search.toString().toLowerCase();
     var contacten = [];
     var facturen = [];
@@ -2209,9 +2103,9 @@ app.post('/zoeken/:loginHash', function(req, res) {
 
 app.post('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
   var date = new Date();
   var jaar = date.getFullYear();
@@ -2277,9 +2171,9 @@ app.post('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {
 
 app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
 
     Settings.find({}, function(err, settings) {
   var date = new Date();
@@ -2346,9 +2240,9 @@ app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {
 
 app.get('/prijs/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
         Materiaal.find({}, function(err, materialen) {
@@ -2389,9 +2283,9 @@ app.get('/prijs/:loginHash', function(req, res) {
 
 app.post('/prijs/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     var totaal = (req.body.uren * req.body.werkprijs);
     Materiaal.findOne({
       naam: req.body.o001
@@ -2717,9 +2611,9 @@ app.post('/prijs/:loginHash', function(req, res) {
 
 app.post('/prijs/:totaal/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
         var totaal_ = Number(req.params.totaal.substring(0, req.params.totaal.length - 1));
@@ -2746,9 +2640,9 @@ app.post('/prijs/:totaal/:loginHash', function(req, res) {
 
 app.get('/mat/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
         Materiaal.find({}).sort('naam').exec(function(err, materialen) {
@@ -2789,9 +2683,9 @@ app.get('/mat/:loginHash', function(req, res) {
 
 app.get('/edit-mat/:id/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
         Materiaal.findOne({
@@ -2832,9 +2726,9 @@ app.get('/edit-mat/:id/:loginHash', function(req, res) {
 
 app.post('/edit-mat/:id/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     var nieuwMat = {
       naam: req.body.naam,
       prijs: req.body.prijs
@@ -2853,9 +2747,9 @@ app.post('/edit-mat/:id/:loginHash', function(req, res) {
 
 app.get('/add-mat/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
       if(settings[0].lang=="nl"){
@@ -2888,9 +2782,9 @@ app.get('/add-mat/:loginHash', function(req, res) {
 
 app.post('/add-mat/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
         var nieuwe_materiaal = new Materiaal({
@@ -2921,9 +2815,9 @@ app.post('/add-mat/:loginHash', function(req, res) {
 
 app.get('/delete-mat/:id/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
         Materiaal.remove({
@@ -2948,9 +2842,9 @@ app.get('/delete-mat/:id/:loginHash', function(req, res) {
 
 app.get('/settings/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
       if(settings[0].lang=="nl"){
@@ -2983,9 +2877,9 @@ app.get('/settings/:loginHash', function(req, res) {
 
 app.get('/change-theme/:th/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err) {
         var oppo;
@@ -3033,9 +2927,9 @@ app.get('/change-theme/:th/:loginHash', function(req, res) {
 
 app.get('/change-lang/:lang/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err) {
         var settings = settings[0];
@@ -3060,9 +2954,9 @@ app.get('/change-lang/:lang/:loginHash', function(req, res) {
 
 app.post('/edit-pdf-text/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err) {
         var settings = settings[0];
@@ -3094,9 +2988,9 @@ app.get('/zoeken', function(req, res) {
 
 app.post('/percentage/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
         var percent = req.body.percent;
@@ -3154,9 +3048,9 @@ app.post('/percentage/:loginHash', function(req, res) {
 
 app.get('/percentage/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
         console.log("error niets ingevuld");
@@ -3191,9 +3085,9 @@ app.get('/percentage/:loginHash', function(req, res) {
 
 app.get('/add-project/:idc/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Materiaal.find({}, function(err, materialen) {
       Settings.find({}, function(err, settings) {
 
@@ -3232,9 +3126,9 @@ app.get('/add-project/:idc/:loginHash', function(req, res) {
 
 app.post('/add-project/:idc/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     var materialen = [];
     var aantallen = [];
     Settings.find({}, function(err, settings) {
@@ -3298,9 +3192,9 @@ app.post('/add-project/:idc/:loginHash', function(req, res) {
 
 app.get('/change-betaald/:id/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
 
     Settings.find({}, function(err, settings) {
     Factuur.findOne({
@@ -3337,9 +3231,9 @@ app.get('/change-betaald/:id/:loginHash', function(req, res) {
 
 app.get('/change-betaald2/:id/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
     Factuur.findOne({
       _id: req.params.id
@@ -3375,9 +3269,9 @@ app.get('/change-betaald2/:id/:loginHash', function(req, res) {
 
 app.get('/berekeningen/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
       if(settings[0].lang=="nl"){
@@ -3410,9 +3304,9 @@ app.get('/berekeningen/:loginHash', function(req, res) {
 
 app.get('/lam/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
       if(settings[0].lang=="nl"){
@@ -3445,9 +3339,9 @@ app.get('/lam/:loginHash', function(req, res) {
 
 app.post('/lam-oplossing/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
         //Ingevulde variabelen
@@ -3501,9 +3395,9 @@ app.post('/lam-oplossing/:loginHash', function(req, res) {
 
 app.get('/epo-sil/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
       if(settings[0].lang=="nl"){
@@ -3552,9 +3446,9 @@ app.get('/epo-sil/:loginHash', function(req, res) {
 
 app.post('/epo-sil-oplossing/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
         var error = 0; //1== negatif numbers
@@ -3693,9 +3587,9 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {
 
 app.post('/epo-sil-marge/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
         var error = 0;
@@ -3842,9 +3736,9 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {
 
 app.post('/epo-sil/update-vars/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err) {
         var sett = settings[0];
@@ -3886,9 +3780,9 @@ app.post('/epo-sil/update-vars/:loginHash', function(req, res) {
 
 app.get('/epo-sil/aanpassen/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
       if(settings[0].lang=="nl"){
@@ -3939,9 +3833,9 @@ app.get('/epo-sil/aanpassen/:loginHash', function(req, res) {
 
 app.get('/inch/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
         res.render('nl/calc/inch', {
@@ -3968,9 +3862,9 @@ app.get('/inch/:loginHash', function(req, res) {
 
 app.post('/inch/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
         var inch = req.body.inch;
@@ -4066,9 +3960,9 @@ app.post('/inch/:loginHash', function(req, res) {
 
 app.get('/pass/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
         res.render('nl/pass',{"loginHash":req.params.loginHash,"settings":settings[0]});
@@ -4091,9 +3985,9 @@ app.get('/pass/:loginHash', function(req, res) {
 
 app.post('/pass/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
     Settings.find({}, function(err, settings) {
       if (!err && settings.length != 0) {
         if(req.body.pass === req.body.passRep){
@@ -4152,9 +4046,9 @@ app.post('/upload-logo/:loginHash', function (req, res) {
 
 app.get('/upload/:loginHash',function(req,res){
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {} else {
       legeSettings = new Settings();
@@ -4174,9 +4068,9 @@ app.get('/upload/:loginHash',function(req,res){
 
 app.get('/btw/:loginHash',function(req,res){
   callFindPass().then(function(loginHash){
-  if (!(String(req.params.loginHash) === loginHash)) {
-    res.redirect('login');
-  }});
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    };});
   Settings.find({}, function(err, settings) {
     if (!err && settings.length != 0) {} else {
       legeSettings = new Settings();
