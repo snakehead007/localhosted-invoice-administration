@@ -1,4 +1,12 @@
-echo "Starting node install";
+echo "Starting installation"
+echo "stashing..."
+git stash
+echo "updating files..."
+git pull
+echo "installing node files"
+node win-install.js
+echo "Installation is complete, you can close the program"
+pause
 //npm install -g express jade mongodb mongoose node-windows chartjs express-fileupload image-to-base64 --save
 echo "Installing npm packages";
 echo "Installing express";
@@ -20,21 +28,4 @@ npm i -g image-to-base64 --save;
 
 echo "Done installing npm packages";
 echo "Linking node-windows";
-npm link node-windows;
-
-var Service = require('node-windows').Service;
-
-// Create a new service object
-var svc = new Service({
-  name:'Local-hosted-administrator',
-  description: 'Create and manage your invoices.',
-  script: require('path').join(__dirname,'index.js')
-});
-
-// Listen for the "install" event, which indicates the
-// process is available as a service.
-svc.on('install',function(){
-  svc.start();
-});
-
-svc.install();
+npm link node-windows;  
