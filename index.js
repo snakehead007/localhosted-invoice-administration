@@ -887,7 +887,7 @@ app.get('/facturen/:idc/t/:loginHash', function(req, res) {//REWORKED & tested
           if (!err) {
             Settings.findOne({}, function(err, settings) {
               if (!err) {
-                if(settings[0].lang=="nl"){
+                if(settings.lang=="nl"){
                 res.render('nl/facturen', {
                   'terug': 1,
                   'contact': contact,
@@ -2331,17 +2331,17 @@ app.post('/prijs/:loginHash', function(req, res) {
                                                                                                         Settings.find({}, function(err, settings) {
                                                                                                           if (!err && settings.length != 0) {
 
-                                                                                                            if(settings[0].lang=="nl"){
+                                                                                                            if(settings.lang=="nl"){
                                                                                                             res.render('nl/calc/prijs-totaal', {
                                                                                                               "totaal": totaal.toFixed(2) + "€",
                                                                                                               "description": "Berekenen van prijs",
-                                                                                                              "settings": settings[0],
+                                                                                                              "settings": settings,
                                                                                                               "loginHash": req.params.loginHash
                                                                                                             });}else{
                                                                                                               res.render('eng/calc/prijs-totaal', {
                                                                                                                 "totaal": totaal.toFixed(2) + "€",
                                                                                                                 "description": "Calculating price",
-                                                                                                                "settings": settings[0],
+                                                                                                                "settings": settings,
                                                                                                                 "loginHash": req.params.loginHash
                                                                                                               });
                                                                                                             }
@@ -3140,7 +3140,7 @@ app.post('/epo-sil/update-vars/:loginHash', function(req, res) {//REWORKED
           s3: Number(req.body.s3),
           s4: Number(req.body.s4)
         };
-        Settings.update({_id: settings._id}, updateData, function(err) {
+        Settings.updateOne({_id: settings._id}, updateData, function(err) {
           if (!err) {
             res.redirect('/epo-sil/aanpassen/' + req.params.loginHash);
           };
@@ -3149,108 +3149,82 @@ app.post('/epo-sil/update-vars/:loginHash', function(req, res) {//REWORKED
     });
 });
 
-app.get('/epo-sil/aanpassen/:loginHash', function(req, res) {
+app.get('/epo-sil/aanpassen/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-    Settings.find({}, function(err, settings) {
-      if (!err && settings.length != 0) {
-      if(settings[0].lang=="nl"){
+    Settings.findOne({}, function(err, settings) {
+      if (!err) {
+      if(settings.lang=="nl"){
         res.render('nl/calc/epo-sil', {
-          'settings': settings[0],
+          'settings': settings,
           'description': "Siliconen mal berekenen",
           "loginHash": req.params.loginHash,
           "aangepast": 1,
-          "e1": settings[0].e1,
-          "e2": settings[0].e2,
-          "e3": settings[0].e3,
-          "e4": settings[0].e4,
-          "s1": settings[0].s1,
-          "s2": settings[0].s2,
-          "s3": settings[0].s3,
-          "s4": settings[0].s4
+          "e1": settings.e1,
+          "e2": settings.e2,
+          "e3": settings.e3,
+          "e4": settings.e4,
+          "s1": settings.s1,
+          "s2": settings.s2,
+          "s3": settings.s3,
+          "s4": settings.s4
         });}else{
             res.render('eng/calc/epo-sil', {
-              'settings': settings[0],
+              'settings': settings,
               'description': "Calculating silicon mold",
               "loginHash": req.params.loginHash,
               "aangepast": 1,
-              "e1": settings[0].e1,
-              "e2": settings[0].e2,
-              "e3": settings[0].e3,
-              "e4": settings[0].e4,
-              "s1": settings[0].s1,
-              "s2": settings[0].s2,
-              "s3": settings[0].s3,
-              "s4": settings[0].s4
+              "e1": settings.e1,
+              "e2": settings.e2,
+              "e3": settings.e3,
+              "e4": settings.e4,
+              "s1": settings.s1,
+              "s2": settings.s2,
+              "s3": settings.s3,
+              "s4": settings.s4
             });
         }
-      } else {
-        legeSettings = new Settings();
-        legeSettings.save(function(err) {
-          if (err) {
-            console.log("err in settings: " + err);
-          }
-        });
-        res.redirect('/settings');
-        if (err) {
-          console.log(err);
-        }
-      }
+      };
     });
-
 });
 
-app.get('/inch/:loginHash', function(req, res) {
+app.get('/inch/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-    Settings.find({}, function(err, settings) {
-      if (!err && settings.length != 0) {
+    Settings.findOne({}, function(err, settings) {
+      if (!err) {
         res.render('nl/calc/inch', {
-          'settings': settings[0],
+          'settings': settings,
           'description': "Berekening voor inch & cm omzettingen",
           "loginHash": req.params.loginHash
         });
-      } else {
-        legeSettings = new Settings();
-        legeSettings.save(function(err) {
-          if (err) {
-            console.log("err in settings: " + err);
-          }
-        });
-        console.log(legeSettings);
-        res.redirect('/settings');
-        if (err) {
-          console.log(err);
-        }
-      }
+      };
     });
-
 });
 
-app.post('/inch/:loginHash', function(req, res) {
+app.post('/inch/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-    Settings.find({}, function(err, settings) {
-      if (!err && settings.length != 0) {
+    Settings.findOne({}, function(err, settings) {
+      if (!err) {
         var inch = req.body.inch;
         var cm = req.body.cm;
         if (inch !== "" && cm !== "") {
-          console.log("error allebei ingevuld");
-          if(settings[0].lang=="nl"){
+          if(settings.lang=="nl"){
           res.render('nl/calc/inch', {
-            'settings': settings[0],
+            'settings': settings,
             'description': "Berekening voor inch & cm omzettingen",
             "error": 1,
             "loginHash": req.params.loginHash
           });}else{
             res.render('eng/calc/inch', {
-              'settings': settings[0],
+              'settings': settings,
               'description': "Calculations for inch & cm",
               "error": 1,
               "loginHash": req.params.loginHash
@@ -3262,15 +3236,15 @@ app.post('/inch/:loginHash', function(req, res) {
             var cm_ = Number(cm).toFixed(2);
             var inch_ = Number(inch).toFixed(2);
             var oplossing = inch_ + "\" = " + cm_ + "cm";
-            if(settings[0].lang=="nl"){
+            if(settings.lang=="nl"){
             res.render('nl/calc/inch', {
-              'settings': settings[0],
+              'settings': settings,
               'description': "Berekening voor inch & cm omzettingen",
               "oplossing": oplossing,
               "loginHash": req.params.loginHash
             });}else{
               res.render('nl/calc/inch', {
-                'settings': settings[0],
+                'settings': settings,
                 'description': "Calculations for inch & cm",
                 "oplossing": oplossing,
                 "loginHash": req.params.loginHash
@@ -3282,190 +3256,118 @@ app.post('/inch/:loginHash', function(req, res) {
             var cm_ = Number(cm).toFixed(2);
             var inch_ = Number(inch).toFixed(2);
             var oplossing = cm_ + "cm = " + inch_ + "\"";
-            if(settings[0].lang=="nl"){
+            if(settings.lang=="nl"){
             res.render('nl/calc/inch', {
-              'settings': settings[0],
+              'settings': settings,
               'description': "Berekening voor inch & cm omzettingen",
               "oplossing": oplossing,
               "loginHash": req.params.loginHash
             });}else{
               res.render('nl/calc/inch', {
-                'settings': settings[0],
+                'settings': settings,
                 'description': "Calculations for inch & cm",
                 "oplossing": oplossing,
                 "loginHash": req.params.loginHash
               });
             }
           }
-          if(settings[0].lang=="nl"){
+          if(settings.lang=="nl"){
           console.log("error niets ingevuld");
           res.render('nl/calc/inch', {
-            'settings': settings[0],
+            'settings': settings,
             'description': "Berekening voor inch & cm omzettingen",
             "error": 2,
             "loginHash": req.params.loginHash
           });}else{
             res.render('eng/calc/inch', {
-              'settings': settings[0],
+              'settings': settings,
               'description': "Calculations for inch & cm",
               "error": 2,
               "loginHash": req.params.loginHash
             });}
           }
-      } else {
-        legeSettings = new Settings();
-        legeSettings.save(function(err) {
-          if (err) {
-            console.log("err in settings: " + err);
-          }
-        });
-        console.log(legeSettings);
-        res.redirect('/settings');
-        if (err) {
-          console.log(err);
-        }
-      }
+      };
     });
-
 });
 
-app.get('/pass/:loginHash', function(req, res) {
+app.get('/pass/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-    Settings.find({}, function(err, settings) {
-      if (!err && settings.length != 0) {
-        res.render('nl/pass',{"loginHash":req.params.loginHash,"settings":settings[0]});
-      } else {
-        legeSettings = new Settings();
-        legeSettings.save(function(err) {
-          if (err) {
-            console.log("err in settings: " + err);
-          }
-        });
-        console.log(legeSettings);
-        res.redirect('/settings');
-        if (err) {
-          console.log(err);
-        }
-      }
+    Settings.findOne({}, function(err, settings) {
+        res.render(settings.lang+'/pass',{"loginHash":req.params.loginHash,"settings":settings});
     });
-
 });
 
-app.post('/pass/:loginHash', function(req, res) {
+app.post('/pass/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-    Settings.find({}, function(err, settings) {
-      if (!err && settings.length != 0) {
+    Settings.findOne({}, function(err, settings) {
+      if (!err) {
         if(req.body.pass === req.body.passRep){
-          var updateSettings = {
-            pass:enc(req.body.pass)
-          };
-          Settings.update({
-            _id: settings[0]._id
-          }, updateSettings, function(err, updatedSettings) {
-            if(err){
-              console.log(err);
-            }
-          });
-          res.render(settings[0].lang+'/settings',{"loginHash":enc(req.body.pass),"settings":settings[0],
-                                    "error":1});
+          Settings.updateOne({_id: settings._id}, pass:enc(req.body.pass));
+          res.render(settings.lang+'/settings',{"loginHash":enc(req.body.pass),"settings":settings,"error":1});
         }else{
-          res.render(settings[0].lang+'/pass',{"loginHash":req.params.loginHash,"settings":settings[0],
-                                "error":1});
+          res.render(settings.lang+'/pass',{"loginHash":req.params.loginHash,"settings":settings,"error":1});
         }
-      } else {
-        legeSettings = new Settings();
-        legeSettings.save(function(err) {
-          if (err) {
-            console.log("err in settings: " + err);
-          }
-        });
-        console.log(legeSettings);
-        res.redirect('/settings');
-        if (err) {
-          console.log(err);
-        }
-      }
+      };
     });
-
 });
 
-app.use(fileUpload());
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(fileUpload());// TODO: check if this is needed?
+app.use(bodyParser.urlencoded({ extended: true }))// TODO: Check if this is needed?
 
-app.post('/upload-logo/:loginHash', function (req, res) {
+app.post('/upload-logo/:loginHash', function (req, res) {//REWORKED
     callFindPass().then(function(loginHash){
     if (!(String(req.params.loginHash) === loginHash)) {
       res.redirect('login');
     }});
-    if (Object.keys(req.files).length == 0) {
+    if (Object.keys(req.files).length == 0) { // TODO: THIS CHECK DOESNT WORK
       return res.status(400).send('No files were uploaded.');
-    }
     let sampleFile = req.files.sampleFile;
     sampleFile.mv('public/logo.jpeg', function(err) {
-    if (err)
-      console.log(err);
-
     res.redirect('/edit-profile/'+req.params.loginHash);
   });
 })
 
-app.get('/upload/:loginHash',function(req,res){
+app.get('/upload/:loginHash',function(req,res){//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-  Settings.find({}, function(err, settings) {
-    if (!err && settings.length != 0) {} else {
-      legeSettings = new Settings();
-      legeSettings.save(function(err) {
-        if (err) {
-          console.log("err in settings: " + err);
-        }
-      });
-    }
-    res.render(settings[0].lang+'/upload',{
+  Settings.findOne({}, function(err, settings) {
+    res.render(settings.lang+'/upload',{
       "loginHash":req.params.loginHash,
-      "settings":settings[0],
+      "settings":settings,
       "description":"Upload logo"
     });
   });
 });
 
-app.get('/btw/:loginHash',function(req,res){
+app.get('/btw/:loginHash',function(req,res){//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     };});
-  Settings.find({}, function(err, settings) {
-    if (!err && settings.length != 0) {} else {
-      legeSettings = new Settings();
-      legeSettings.save(function(err) {
-        if (err) {
-          console.log("err in settings: " + err);
-        }
-      });
-    }
-    res.render(settings[0].lang+'/btw',{
+  Settings.findOne({}, function(err, settings) {
+    res.render(settings.lang+'/btw',{
       "loginHash":req.params.loginHash,
-      "settings":settings[0],
+      "settings":settings,
       "description":"Updating..."
     });
   });
 });
 
-app.post('/btw/:loginHash', function (req, res) {
+app.post('/btw/:loginHash', function (req, res) {//REWORKED
     callFindPass().then(function(loginHash){
     if (!(String(req.params.loginHash) === loginHash)) {
       res.redirect('login');
     }});
     Settings.find({},function(err,settings){
-      Settings.updateOne({_id: settings[0]._id}, {btw:req.body.btw},function(err,settings2){
+      Settings.updateOne({_id: settings._id}, {btw:req.body.btw},function(err,settings2){
         if(err){
           console.log(err);
         }else{
@@ -3477,14 +3379,13 @@ app.post('/btw/:loginHash', function (req, res) {
 
 app.set('views', path.join(__dirname, 'views'));
 
-app.set('view engine', 'jade');
+app.set('view engine', 'jade');// TODO: Needs this to update to 'pug'
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen('3000', function() {
   console.log('Server is running at PORT ' + 3000);
   Schema = mongoose.Schema;
-
 });
 
 async function update(id, voor) {
@@ -3570,7 +3471,7 @@ var findPass = () => {
     setTimeout(() => reject('Seems like something went wrong'), 500);
     Settings.find({}, function(err, settings) {
       if(!err){
-        resolve(settings[0].pass);
+        resolve(settings.pass);
       }else{
         console.log(err);
         reject(err);
@@ -3590,6 +3491,7 @@ var getBase64 = () => {
     var path = 'public/logo.jpeg';
     fs.access(path, fs.F_OK, (err) => {
       if (err) {
+        //BASE64 image if no logo is uploaded
         resolve("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACWCAYAAABkW7XSAAAAxUlEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOA1v9QAATX68/0AAAAASUVORK5CYII=");
         return;
       }else{
