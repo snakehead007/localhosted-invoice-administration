@@ -2771,7 +2771,7 @@ app.get('/berekeningen/:loginHash', function(req, res) {//REWORKED
             "loginHash": req.params.loginHash
           });
         }
-      };
+      }
     });
 });
 
@@ -2779,7 +2779,7 @@ app.get('/epo-sil/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
       if(settings.lang=="nl"){
@@ -2809,8 +2809,8 @@ app.get('/epo-sil/:loginHash', function(req, res) {//REWORKED
             "s3": settings.s3,
             "s4": settings.s4
           });
-        };
-      };
+        }
+      }
     });
 });
 
@@ -2818,9 +2818,9 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
-      if (!err && settings.length != 0) {
+      if (!err) {
         var error = 0;//Error is 1 when negative numbers end as result
         var L = Number(req.body.L);
         var B = Number(req.body.B);
@@ -2832,7 +2832,7 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {//REWORKED
         var Dos = ((L + X) * (B + X) * (H + X)) * settings.s2; //S2
         var Ds = Dos - As;
         var Ms = (1 / settings.s3) * Ds; //Materiaal Uren siliconen //S3
-        var Pws = (W * Ms) //prijs werkuren voor siliconen
+        var Pws = (W * Ms); //prijs werkuren voor siliconen
         var Ps = (settings.s4 * Ds); //Prijs siliconen  //S4
         //Epoxie
         var Ae = ((L + X) * (B + X) * (H + X)) * settings.e1; //E1
@@ -2843,7 +2843,7 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {//REWORKED
         var Pe = (settings.e4 * De); //E4
         //TOTAAL
         var Ptw = Pwe + Pws; //Prijs totaal werkuren
-        var Ptm = Pe + Ps //Prijs totaal materiaal
+        var Ptm = Pe + Ps; //Prijs totaal materiaal
         var Pt = Ptw + Ptm; //Prijs totaal (werkuren + materiaal)
         var Mt = Me + Ms; //totaal uren voor alle materiaal
         if (Mt < 0 || Pt < 0) {
@@ -2936,8 +2936,8 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {//REWORKED
             "s4": settings.s4,
             "error": error
           });
-        };
-      };
+        }
+      }
     });
 });
 
@@ -2945,7 +2945,7 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
         var error = 0;
@@ -2960,7 +2960,7 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {//REWORKED
         var Dos = ((L + X) * (B + X) * (H + X)) * settings.s2;
         var Ds = Dos - As;
         var Ms = (1 / settings.s3) * Ds; //Materiaal Uren siliconen
-        var Pws = (W * Ms) //prijs werkuren voor siliconen
+        var Pws = (W * Ms); //prijs werkuren voor siliconen
         var Ps = (settings.s4 * Ds); //Prijs siliconen
         //Epoxie
         var Ae = ((L + X) * (B + X) * (H + X)) * settings.e1;
@@ -2971,7 +2971,7 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {//REWORKED
         var Pe = (settings.e4 * De);
         //TOTAAL
         var Ptw = Pwe + Pws; //Prijs totaal werkuren
-        var Ptm = Pe + Ps //Prijs totaal materiaal
+        var Ptm = Pe + Ps; //Prijs totaal materiaal
         var Pt = Ptw + Ptm; //Prijs totaal (werkuren + materiaal)
         var Mt = Me + Ms; //totaal uren voor alle materiaal
 
@@ -3071,8 +3071,8 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {//REWORKED
             "s4": settings.s4,
             "error": error
           });
-        };
-      };
+        }
+      }
     });
 });
 
@@ -3080,10 +3080,9 @@ app.post('/epo-sil/update-vars/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
-        var sett = settings;
         var updateData = {
           e1: Number(req.body.e1),
           e2: Number(req.body.e2),
@@ -3097,9 +3096,9 @@ app.post('/epo-sil/update-vars/:loginHash', function(req, res) {//REWORKED
         Settings.updateOne({_id: settings._id}, updateData, function(err) {
           if (!err) {
             res.redirect('/epo-sil/aanpassen/' + req.params.loginHash);
-          };
+          }
         });
-      };
+      }
     });
 });
 
@@ -3107,7 +3106,7 @@ app.get('/epo-sil/aanpassen/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
       if(settings.lang=="nl"){
@@ -3140,7 +3139,7 @@ app.get('/epo-sil/aanpassen/:loginHash', function(req, res) {//REWORKED
               "s4": settings.s4
             });
         }
-      };
+      }
     });
 });
 
@@ -3148,7 +3147,7 @@ app.get('/inch/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
         res.render('nl/calc/inch', {
@@ -3156,7 +3155,7 @@ app.get('/inch/:loginHash', function(req, res) {//REWORKED
           'description': "Berekening voor inch & cm omzettingen",
           "loginHash": req.params.loginHash
         });
-      };
+      }
     });
 });
 
@@ -3164,11 +3163,14 @@ app.post('/inch/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
         var inch = req.body.inch;
         var cm = req.body.cm;
+        var cm_;
+        var inch_;
+        var oplossing;
         if (inch !== "" && cm !== "") {
           if(settings.lang=="nl"){
           res.render('nl/calc/inch', {
@@ -3186,10 +3188,10 @@ app.post('/inch/:loginHash', function(req, res) {//REWORKED
           }
         } else {
           if (inch !== "") {
-            var cm = inch / 0.39370;
-            var cm_ = Number(cm).toFixed(2);
-            var inch_ = Number(inch).toFixed(2);
-            var oplossing = inch_ + "\" = " + cm_ + "cm";
+            cm = inch / 0.39370;
+            cm_ = Number(cm).toFixed(2);
+            inch_ = Number(inch).toFixed(2);
+            oplossing = inch_ + "\" = " + cm_ + "cm";
             if(settings.lang=="nl"){
             res.render('nl/calc/inch', {
               'settings': settings,
@@ -3206,10 +3208,10 @@ app.post('/inch/:loginHash', function(req, res) {//REWORKED
             }
           }
           if (cm !== "") {
-            var inch = cm * 0.39370;
-            var cm_ = Number(cm).toFixed(2);
-            var inch_ = Number(inch).toFixed(2);
-            var oplossing = cm_ + "cm = " + inch_ + "\"";
+            inch = cm * 0.39370;
+            cm_ = Number(cm).toFixed(2);
+            inch_ = Number(inch).toFixed(2);
+            oplossing = cm_ + "cm = " + inch_ + "\"";
             if(settings.lang=="nl"){
             res.render('nl/calc/inch', {
               'settings': settings,
@@ -3240,7 +3242,7 @@ app.post('/inch/:loginHash', function(req, res) {//REWORKED
               "loginHash": req.params.loginHash
             });}
           }
-      };
+      }
     });
 });
 
@@ -3248,7 +3250,7 @@ app.get('/pass/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
         res.render(settings.lang+'/pass',{"loginHash":req.params.loginHash,"settings":settings});
     });
@@ -3258,7 +3260,7 @@ app.post('/pass/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
         if(req.body.pass === req.body.passRep){
@@ -3267,31 +3269,32 @@ app.post('/pass/:loginHash', function(req, res) {//REWORKED
         }else{
           res.render(settings.lang+'/pass',{"loginHash":req.params.loginHash,"settings":settings,"error":1});
         }
-      };
+      }
     });
 });
 
 app.use(fileUpload());// TODO: check if this is needed?
-app.use(bodyParser.urlencoded({ extended: true }))// TODO: Check if this is needed?
+app.use(bodyParser.urlencoded({ extended: true }));// TODO: Check if this is needed?
 
 app.post('/upload-logo/:loginHash', function (req, res) {//REWORKED
     callFindPass().then(function(loginHash){
-    if (!(String(req.params.loginHash) === loginHash)) {
+    if (String(req.params.loginHash) !== loginHash) {
       res.redirect('login');
     }});
-    if (Object.keys(req.files).length == 0) { // TODO: THIS CHECK DOESNT WORK
+    if (Object.keys(req.files).length === 0) // TODO: THIS CHECK DOESNT WORK
       return res.status(400).send('No files were uploaded.');
-    let sampleFile = req.files.sampleFile;
+    var sampleFile = req.files.sampleFile;
     sampleFile.mv('public/logo.jpeg', function(err) {
+    if(err){console.log('err: '+err);}
     res.redirect('/edit-profile/'+req.params.loginHash);
   });
-};
+});
 
 app.get('/upload/:loginHash',function(req,res){//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
   Settings.findOne({}, function(err, settings) {
     res.render(settings.lang+'/upload',{
       "loginHash":req.params.loginHash,
@@ -3305,7 +3308,7 @@ app.get('/btw/:loginHash',function(req,res){//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
   Settings.findOne({}, function(err, settings) {
     res.render(settings.lang+'/btw',{
       "loginHash":req.params.loginHash,
@@ -3317,19 +3320,16 @@ app.get('/btw/:loginHash',function(req,res){//REWORKED
 
 app.post('/btw/:loginHash', function (req, res) {//REWORKED
     callFindPass().then(function(loginHash){
-    if (!(String(req.params.loginHash) === loginHash)) {
+    if(String(req.params.loginHash) !== loginHash) {
       res.redirect('login');
     }});
     Settings.find({},function(err,settings){
-      Settings.updateOne({_id: settings._id}, {btw:req.body.btw},function(err,settings2){
-        if(err){
-          console.log(err);
-        }else{
+      Settings.updateOne({_id: settings._id}, {btw:req.body.btw},function(err){
+        if(err){console.log('err: '+err);}
           res.redirect('/settings/'+req.params.loginHash);
-        }
       });
     });
-})
+});
 
 app.set('views', path.join(__dirname, 'views'));
 
@@ -3342,16 +3342,8 @@ app.listen('3000', function() {
   Schema = mongoose.Schema;
 });
 
-async function update(id, voor) {
-  await Factuur.updateOne({
-    _id: id
-  }, {
-    isBetaald: voor
-  });
-}
-
 function isNumeric(num) {
-  return !isNaN(num)
+  return !isNaN(num);
 }
 
 String.prototype.toTime = function() {
@@ -3370,7 +3362,7 @@ String.prototype.toTime = function() {
     seconds = "0" + seconds;
   }
   return hours + 'u ' + minutes + 'm';
-}
+};
 
 function distinct(_array) {
   var array = _array;
