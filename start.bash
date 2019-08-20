@@ -11,20 +11,20 @@ package="start.bash";
 function start_all_quiet(){
 	nohup mongod --quiet &
 	sleep 3
-	nohup node start &
+	nodemon start 
 }
 	
 function start_node(){
-	node . &
+	nodemon . 
 }
 
 function start_node_quiet(){
-	nohup node . &
+	nohup nodemon . 
 }
 function start_all(){
 	mongod &
 	sleep 3
-	node . &
+	nodemon . 
 }
 
 function stop_all(){
@@ -67,28 +67,7 @@ function restart_node(){
 		start_node
 	fi
 }
-
-function start(){
-start_all_c
-while true; do        	
-	read -n1 -r -p "   --Press any key to stop--               "    #when any key is pressed, the script will commence
-	read -p "Do you want to restart the script? (y/n) " yn
-    case $yn in
-        [Yy]* ) 
-		restart
-		;;
-        [Nn]* ) 
-		stop_all
-		exit
-		;;
-        * ) 
-		echo "Please answer yes or no."
-		;;
-    esac
-done
-}
-while :; do
-  case "$1" in
+case "$1" in
    	 -h|--help)
       		echo "$package - script to start and restart database and server";
 		echo " ";
@@ -109,7 +88,7 @@ while :; do
 		esac
 		NODE='true'
 		echo "Starting node only mode"
-		start
+		start_all_c
 		;;	
 	-q|--quiet)
 		case "$2" in
@@ -118,7 +97,7 @@ while :; do
 		esac
 		QUIET='true'
 		echo 'start script'
-		start
+		start_all_c
 		;;
 	-v|--verbose)
 		case "$2" in
@@ -127,12 +106,12 @@ while :; do
 		esac
 		VERBOSE='true'
 		echo 'Starting in verbose mode'
-		start
+		start_all_c
 		;;
 
 	"")
 		echo 'starting in normal mode'
-		start
+		start_all_c
 		;;
 	*)	
 		echo 'invalid argument(s)'
@@ -140,6 +119,4 @@ while :; do
       		break
       		;;
 esac
-done
-
 

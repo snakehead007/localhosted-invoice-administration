@@ -751,24 +751,23 @@ app.post('/edit-bestelling/:id/:loginHash', function(req, res) {//REWORKED & tes
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
   Bestelling.findOne({_id: req.params.id}, function(err, bestelling) {
     var updateBestelling = {
       beschrijving: req.body.beschrijving,
       aantal: req.body.aantal,
       bedrag: req.body.bedrag,
       totaal: req.body.aantal * req.body.bedrag,
-    }
+    };
     Factuur.findOne({_id: bestelling.factuur}, function(err, factuur) {
-      Bestelling.updateOne({_id: req.params.id}, updateBestelling,function(err){
+      Bestelling.updateOne({_id: req.params.id}, updateBestelling);
         var tot = factuur.totaal - (bestelling.aantal * bestelling.bedrag);
         var newFactuur = {totaal: ((tot + (req.body.aantal * req.body.bedrag) - factuur.voorschot))};
         Factuur.updateOne({_id: bestelling.factuur}, newFactuur, function(err) {
           if (!err) {
             res.redirect('/bestellingen/' + bestelling.factuur + "/" + req.params.loginHash);
-          };
+          }
         });
-      });
     });
   });
 });
@@ -777,16 +776,17 @@ app.get('/delete-bestelling/:idb/:loginHash', function(req, res) {//REWORKED & t
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Bestelling.findOne({_id: req.params.idb}, function(err, bestelling) {
       Factuur.findOne({_id: bestelling.factuur}, function(err, factuur) {
         Bestelling.deleteOne({_id: req.params.idb}, function(err) {
           if (!err) {
             var newFactuur = {totaal: factuur.totaal - (bestelling.aantal * bestelling.bedrag)};
-            Factuur.updateOne({_id: factuur._id}, newFactuur, function(err){;
-              res.redirect('/bestellingen/' + factuur._id + "/" + req.params.loginHash);
+            Factuur.updateOne({_id: factuur._id}, newFactuur, function(err){
+                if(!err)
+                  res.redirect('/bestellingen/' + factuur._id + "/" + req.params.loginHash);
             });
-          };
+          }
         });
       });
     });
@@ -796,7 +796,7 @@ app.get('/view-bestelling/:idb/:loginHash', function(req, res) {//REWORKED & tes
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Bestelling.findOne({_id: req.params.idb}, function(err, bestelling) {
       if (!err) {
         Factuur.findOne({_id: bestelling.factuur}, function(err, factuur) {
@@ -818,8 +818,8 @@ app.get('/view-bestelling/:idb/:loginHash', function(req, res) {//REWORKED & tes
                     "settings": settings,
                     "loginHash": req.params.loginHash
                   });
-                };
-              };
+                }
+              }
             });
           }
         });
@@ -831,7 +831,7 @@ app.get('/facturen/:idc/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
   Contact.findOne({_id: req.params.idc}, function(err, contact) {
     if (!err) {
       Factuur.find({contact: req.params.idc}).sort('-factuurNr').exec(function(err, facturen) {
@@ -854,11 +854,11 @@ app.get('/facturen/:idc/:loginHash', function(req, res) {//REWORKED & tested
                   "loginHash": req.params.loginHash
                 });
               }
-            };
+            }
           });
-        };
+        }
       });
-    };
+    }
   });
 });
 
@@ -866,7 +866,7 @@ app.get('/facturen/:idc/t/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Contact.findOne({_id: req.params.idc}, function(err, contact) {
       if (!err) {
         Factuur.find({contact: req.params.idc}).sort('-factuurNr').exec(function(err, facturen) {
@@ -940,7 +940,9 @@ app.get('/add-factuur/:idc/:loginHash', function(req, res) {//REWORKED & tested
           if (!err) {
             Profile.findOne({}, function(err, prof) {
               prof.save(function(err) {
+              if(err){console.log('err: '+err);}
                 Profile.updateOne({nr: prof.nr + 1}, function(err) {
+                    if(err){console.log('err: '+err);}
                     var factuurNr;
                     if (prof.nr.toString().length == 1) {
                       factuurNr = "00" + prof.nr.toString();
@@ -968,9 +970,9 @@ app.get('/add-factuur/:idc/:loginHash', function(req, res) {//REWORKED & tested
                   });
                 });
             });
-          };
+          }
         });
-      };
+      }
     });
   });
 });
@@ -979,7 +981,7 @@ app.get('/delete-factuur/:idc/:idf/:loginHash', function(req, res) {//REWORKED &
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Contact.findOne({_id: req.params.idc}, function(err, contact) {
       Factuur.deleteOne({_id: req.params.idf}, function(err) {
         if (!err) {
@@ -1003,11 +1005,11 @@ app.get('/delete-factuur/:idc/:idf/:loginHash', function(req, res) {//REWORKED &
                       "loginHash": req.params.loginHash
                     });
                   }
-                };
+                }
               });
-            };
+            }
           });
-        };
+        }
       });
     });
 });
@@ -1016,8 +1018,7 @@ app.get('/delete-factuur/:idc/:idf/t/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
-    Contact.findOne({_id: req.params.idc}, function(err, contact) {
+    }});
       Factuur.deleteOne({_id: req.params.idf}, function(err) {
         if (!err) {
           Factuur.find({}, function(err, facturen) {
@@ -1038,20 +1039,19 @@ app.get('/delete-factuur/:idc/:idf/t/:loginHash', function(req, res) {//REWORKED
                       "loginHash": req.params.loginHash
                     });
                   }
-                };
+                }
               });
-            };
+            }
           });
-        };
+        }
       });
-    });
 });
 
 app.get('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Contact.findOne({_id: req.params.idc}, function(err, contact) {
       Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
         if (!err) {
@@ -1075,7 +1075,7 @@ app.get('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {//REWORKED & t
               }
             }
           });
-        };
+        }
       });
     });
 });
@@ -1084,7 +1084,7 @@ app.get('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {//REWORKED &
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Contact.findOne({_id: req.params.idc}, function(err, contact) {
       Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
         if (!err) {
@@ -1108,9 +1108,9 @@ app.get('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {//REWORKED &
                   "loginHash": req.params.loginHash
                 });
               }
-            };
+            }
           });
-        };
+        }
       });
     });
 });
@@ -1119,7 +1119,7 @@ app.get('/updateFactuur/:idf/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
       if (!err) {
         Contact.findOne({_id: factuur.contact}, function(err, contact) {
@@ -1128,7 +1128,8 @@ app.get('/updateFactuur/:idf/:loginHash', function(req, res) {//REWORKED
               var updateFactuur = {
                 contactPersoon: contact.contactPersoon
               };
-              Factuur.updateOne({_id: req.params.idf}, updateFactuur, function(err, updateFactuur) {
+              Factuur.updateOne({_id: req.params.idf}, updateFactuur, function(err) {
+              if(err){console.log('err: '+err);}
                 Factuur.find({}, function(err, facturen) {
                   if(settings.lang=="nl"){
                   res.render('nl/facturen', {
@@ -1143,13 +1144,13 @@ app.get('/updateFactuur/:idf/:loginHash', function(req, res) {//REWORKED
                       "settings": settings,
                       "loginHash": req.params.loginHash
                     });
-                  };
+                  }
                 });
               });
-            };
+            }
           });
         });
-      };
+      }
     });
 });
 
@@ -1157,18 +1158,17 @@ app.post('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {//REWORKED & 
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
-    Settings.findOne({}, function(err, settings) {
+    }});
       Bestelling.find({
         factuur: req.params.idf
       }, function(err, bestellingen) {
-        Factuur.findOne({ _id: req.params.idf}, function(err, factuur) {
-          var totBes = 0
+          var totBes = 0;
           for (var i = 0; i <= bestellingen.length - 1; i++) {
             totBes += bestellingen[i].totaal;
           }
+          var updateFactuur;
           if (req.body.voorschot) {
-            var updateFactuur = {
+            updateFactuur = {
               datum: req.body.datum,
               factuurNr: req.body.factuurNr,
               voorschot: req.body.voorschot,
@@ -1177,7 +1177,7 @@ app.post('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {//REWORKED & 
               totaal: totBes - req.body.voorschot
             };
           } else {
-            var updateFactuur = {
+            updateFactuur = {
               datum: req.body.datum,
               factuurNr: req.body.factuurNr,
               voorschot: req.body.voorschot,
@@ -1189,28 +1189,25 @@ app.post('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {//REWORKED & 
             Factuur.updateOne({_id: req.params.idf}, updateFactuur, function(err) {
               if (!err) {
                 res.redirect('/facturen/' + contact._id + "/" + req.params.loginHash);
-              };
+              }
             });
           });
-        });
       });
-  });
 });
 
 app.post('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
-    Settings.findOne({}, function(err, settings) {
+    }});
     Bestelling.find({factuur: req.params.idf}, function(err, bestellingen) {
-      Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
-        var totBes = 0
+        var totBes = 0;
         for (var i = 0; i <= bestellingen.length - 1; i++) {
           totBes += bestellingen[i].totaal;
         }
+        var updateFactuur;
         if (req.body.voorschot) {
-          var updateFactuur = {
+          updateFactuur = {
             datum: req.body.datum,
             factuurNr: req.body.factuurNr,
             voorschot: req.body.voorschot,
@@ -1219,7 +1216,7 @@ app.post('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {//REWORKED 
             totaal: totBes - req.body.voorschot
           };
         } else {
-          var updateFactuur = {
+          updateFactuur = {
             datum: req.body.datum,
             factuurNr: req.body.factuurNr,
             voorschot: req.body.voorschot,
@@ -1229,22 +1226,20 @@ app.post('/edit-factuur/:idc/:idf/t/:loginHash', function(req, res) {//REWORKED 
         }
 
         Contact.findOne({_id: req.params.idc}, function(err) {
+        if(err){console.log('err: '+err);}
           Factuur.updateOne({_id: req.params.idf}, updateFactuur, function(err) {
-            if (!err) {
+              if(err){console.log('err: '+err);}
               res.redirect('/facturen/' + req.params.loginHash);
-            };
           });
         });
-      });
     });
-  });
 });
-///---->
+
 app.get('/view-factuur/:idf/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
       if (!err) {
         Contact.findOne({_id: factuur.contact}, function(err, contact) {
@@ -1277,7 +1272,7 @@ app.get('/view-factuur/:idf/t/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
       if (!err) {
         Contact.findOne({_id: factuur.contact}, function(err, contact) {
@@ -1312,7 +1307,7 @@ app.get('/createPDF/:idf/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Profile.findOne({}, function(err, profile) {
       Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
         Contact.findOne({_id: factuur.contact}, function(err, contact) {
@@ -1345,8 +1340,7 @@ app.get('/edit-profile/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
-    var legeProfiel;
+    }});
     var date = new Date();
     var _jaar = date.getFullYear();
     var jaar = _jaar.toString();
@@ -1394,8 +1388,8 @@ app.get('/edit-profile/:loginHash', function(req, res) {//REWORKED
                 "settings": settings,
                 "loginHash": req.params.loginHash
               });
-            };
-          };
+            }
+          }
         });
       }
     });
@@ -1405,7 +1399,7 @@ app.post('/edit-profile/:id/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     var updateProfile = {
       firma: req.body.firma,
       naam: req.body.naam,
@@ -1433,7 +1427,7 @@ app.get('/offerte/:idf/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Profile.findOne({}, function(err, profile) {
       Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
         Contact.findOne({_id: factuur.contact}, function(err2, contact) {
@@ -1480,15 +1474,12 @@ app.get('/add-offerte/:idc/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
-    var nroff = 0;
-    var idn;
-    var _n = null;
-    var factuurID;
     Contact.findOne({_id: req.params.idc}, function(err, contact) {
       if (!err) {
         contact.save(function(err) {
+        if(err){console.log('err: '+err);}
           Profile.findOne({}, function(err, profile) {
             if (!err) {
               profile.save(function(err) {
@@ -1500,30 +1491,29 @@ app.get('/add-offerte/:idc/:loginHash', function(req, res) {//REWORKED
                         nr_str = "00" + profile.nroff.toString();
                       } else if (profile.nroff.toString().length == 2) {
                         nr_str = "0" + profile.nroff.toString();
-                      };
-                      const newFactuur = new Factuur({
+                      }
+                      var newFactuur = new Factuur({
                         contact: contact._id,
                         datum: getDatum(settings.lang),
                         offerteNr: String(year + nr_str),
                         contactPersoon: contact.contactPersoon
                       });
                       Contact.updateOne({aantalFacturen: contact.aantalFacturen + 1}, function(err) {
+                          if(err){console.log('err: '+err);}
                           contact.facturen.push(newFactuur._id);
                         });
                       newFactuur.save();
-                      Factuur.find({contact: req.params.idc}, function(err, facturen) {
                         if (!err) {
                           res.redirect('/facturen/' + contact._id + "/" + req.params.loginHash);
-                        };
-                      });
-                    };
+                        }
+                    }
                   });
-                };
+                }
               });
-            };
+            }
           });
         });
-      };
+      }
     });
   });
 });
@@ -1532,7 +1522,7 @@ app.get('/creditnota/:idc/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Profile.findOne({}, function(err, profile) {
       Factuur.findOne({_id: req.params.idc}, function(err, factuur) {
         if (!err){
@@ -1565,12 +1555,12 @@ app.get('/creditnota/:idc/:loginHash', function(req, res) {//REWORKED
                       "imgData":imgData,
                       "btw":settings.btw
                     });
-                  };
+                  }
                 });
               });
             });
           });
-        };
+        }
       });
     });
 });
@@ -1579,7 +1569,7 @@ app.get('/add-creditnota/:idc/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
     Contact.findOne({_id: req.params.idc}, function(err, contact) {
       if (!err) {
@@ -1587,6 +1577,7 @@ app.get('/add-creditnota/:idc/:loginHash', function(req, res) {//REWORKED
           if (!err) {
             Profile.findOne({}, function(err, profile) {
               profile.save(function(err) {
+              if(err){console.log('err: '+err);}
                 Profile.updateOne({nrcred: profile.nrcred + 1}, function(err) {
                   if (!err){
                     var nr_str;
@@ -1595,7 +1586,7 @@ app.get('/add-creditnota/:idc/:loginHash', function(req, res) {//REWORKED
                     } else if (profile.nrcred.toString().length == 2) {
                       nr_str = "0" + profile.nrcred.toString();
                     }
-                    const newFactuur = new Factuur({
+                    var newFactuur = new Factuur({
                       contact: contact._id,
                       datum: getDatum(settings.lang),
                       creditnr: String(year + nr_str),
@@ -1603,21 +1594,18 @@ app.get('/add-creditnota/:idc/:loginHash', function(req, res) {//REWORKED
                       totaal: 0,
                     });
                     Contact.updateOne({aantalFacturen: contact.aantalFacturen + 1}, function(err) {
+                        if(err){console.log('err: '+err);}
                         contact.facturen.push(newFactuur._id);
                     });
                     newFactuur.save();
-                    Factuur.find({contact: req.params.idc}, function(err, facturen) {
-                      if (!err) {
-                        res.redirect('/facturen/' + contact._id + "/" + req.params.loginHash);
-                      };
-                    });
-                  };
+                    res.redirect('/facturen/' + contact._id + "/" + req.params.loginHash);
+                  }
                 });
               });
             });
-          };
+          }
         });
-      };
+      }
     });
   });
 });
@@ -1626,7 +1614,7 @@ app.get('/view-creditnota/:idf/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
 
   Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
     if (!err) {
@@ -1634,25 +1622,25 @@ app.get('/view-creditnota/:idf/:loginHash', function(req, res) {//REWORKED
         Settings.findOne({}, function(err, settings) {
           if (!err){
             if(settings.lang=="nl"){
-            res.render('nl/view/view-ceditnota', {
-              'factuur': factuur,
-              'contact': contact,
-              "description": "Bekijk creditnota van " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
-              "settings": settings,
-              "loginHash":req.params.loginHash
-            });}else{
-            res.render('nl/view/view-ceditnota', {
-              'factuur': factuur,
-              'contact': contact,
-              "description": "View creditnote of " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
-              "settings": settings,
-              "loginHash":req.params.loginHash
-            });
-          };
+                res.render('nl/view/view-ceditnota', {
+                  'factuur': factuur,
+                  'contact': contact,
+                  "description": "Bekijk creditnota van " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
+                  "settings": settings,
+                  "loginHash":req.params.loginHash
+                });}else{
+                res.render('nl/view/view-ceditnota', {
+                  'factuur': factuur,
+                  'contact': contact,
+                  "description": "View creditnote of " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
+                  "settings": settings,
+                  "loginHash":req.params.loginHash
+                });
+              }
           }
         });
       });
-    };
+    }
   });
 });
 
@@ -1660,7 +1648,7 @@ app.get('/view-creditnota/:idf/t/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
   Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
     if (!err) {
       Contact.findOne({_id: factuur.contact}, function(err, contact) {
@@ -1684,10 +1672,10 @@ app.get('/view-creditnota/:idf/t/:loginHash', function(req, res) {//REWORKED
               "loginHash":req.params.loginHash
             });
           }
-        };
+        }
         });
       });
-    };
+    }
   });
 });
 
@@ -1695,14 +1683,15 @@ app.get('/opwaardeer/:idf/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
 
     Settings.findOne({}, function(err, settings) {
-    Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
-      if (!err) {
         Profile.findOne({}, function(err, profile) {
           if (!err) {
-            profile.save(function(err) {Profile.updateOne({nr: profile.nr + 1}, function(err) {
+            profile.save(function(err) {
+                if(err){console.log('err: '+err);}
+                Profile.updateOne({nr: profile.nr + 1}, function(err) {
+                if(err){console.log('err: '+err);}
                 var nr_str;
                 if (profile.nr.toString().length == 1) {
                   nr_str = "00" + profile.nr.toString();
@@ -1714,14 +1703,13 @@ app.get('/opwaardeer/:idf/:loginHash', function(req, res) {//REWORKED
                   factuurNr: String(year + nr_str)
                 };
                 Factuur.update({_id: req.params.idf}, updateFactuur, function(err) {
+                if(err){console.log('err: '+err);}
                   res.redirect('/facturen/' + factuur.contact + "/" + req.params.loginHash);
                 });
               });
             });
-          };
+          }
         });
-      };
-    });
   });
 });
 
@@ -1729,14 +1717,14 @@ app.get('/opwaardeer/:idf/t/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
   Settings.findOne({}, function(err, settings) {
-    Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
-      if (!err) {
         Profile.findOne({}, function(err, profile) {
           if (!err) {
             profile.save(function(err) {
+              if(err){console.log('err: '+err);}
               Profile.updateOne({nr: profile.nr + 1}, function(err) {
+                if(err){console.log('err: '+err);}
                 var nr_str = profile.nr.toString();
                 if (nr_str.toString().length == 1) {
                   nr_str = "00" + profile.nr.toString();
@@ -1748,22 +1736,20 @@ app.get('/opwaardeer/:idf/t/:loginHash', function(req, res) {//REWORKED
                   factuurNr: String(jaar + nr_str)
                 };
                 Factuur.update({_id: req.params.idf}, updateFactuur, function(err) {
+                if(err){console.log('err: '+err);}
                   res.redirect('/facturen/' + req.params.loginHash);
                 });
               });
             });
-          };
+          }
         });
-      };
-    });
-  });
 });
 
 app.get('/delete-creditnota/:idc/:idf/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Contact.findOne({_id: req.params.idc}, function(err, contact) {
       Factuur.deleteOne({_id: req.params.idf}, function(err) {
         if (!err) {
@@ -1785,12 +1771,12 @@ app.get('/delete-creditnota/:idc/:idf/:loginHash', function(req, res) {//REWORKE
                     "settings": settings,
                     "loginHash": req.params.loginHash
                   });
-                };
-              };
+                }
+              }
             });
-            };
+            }
           });
-        };
+        }
       });
     });
 });
@@ -1799,7 +1785,7 @@ app.get('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Contact.findOne({_id: req.params.idc}, function(err, contact) {
       Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
         if (!err) {
@@ -1823,7 +1809,7 @@ app.get('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {//REWORKED
               }
             }
           });
-        };
+        }
       });
     });
 });
@@ -1832,7 +1818,7 @@ app.post('/zoeken/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     var str = req.body.search.toString().toLowerCase();
     var contacten = [];
     var facturen = [];
@@ -1918,7 +1904,7 @@ app.post('/zoeken/:loginHash', function(req, res) {//REWORKED
                         "loginHash": req.params.loginHash
                       });
                     }
-                  };
+                  }
                   });
               });
           });
@@ -1930,11 +1916,9 @@ app.post('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
-    Settings.findOne({}, function(err, settings) {
+    }});
   Bestelling.find({factuur: req.params.idf}, function(err, bestellingen) {
-    Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
-      var totBes = 0
+      var totBes = 0;
       for (var i = 0; i <= bestellingen.length - 1; i++) {
         totBes += bestellingen[i].totaal;
       }
@@ -1942,10 +1926,11 @@ app.post('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {//REWORKED
       if (req.body.voorschot) {
         _t = totBes - req.body.voorschot;
       } else {
-        var _t = totBes
+        _t = totBes;
       }
-      if (req.body.voorschot != "") {
-        var updateFactuur = {
+      var updateFactuur;
+      if (req.body.voorschot !== "") {
+        updateFactuur = {
           datum: req.body.datum,
           factuurNr: req.body.factuurNr,
           creditnr: req.body.creditnr,
@@ -1954,7 +1939,7 @@ app.post('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {//REWORKED
           totaal: _t
         };
       } else {
-        var updateFactuur = {
+        updateFactuur = {
           datum: req.body.datum,
           factuurNr: req.body.factuurNr,
           voorschot: req.body.voorschot,
@@ -1966,28 +1951,21 @@ app.post('/edit-creditnota/:idc/:idf/:loginHash', function(req, res) {//REWORKED
         Factuur.update({_id: req.params.idf}, updateFactuur, function(err) {
           if (!err) {
             res.redirect('/facturen/' + contact._id+ "/"+req.params.loginHash);
-          };
+          }
         });
       });
-    });
   });
-});
 });
 
 app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
-
-    Settings.findOne({}, function(err, settings) {
+    }});
   Bestelling.find({
     factuur: req.params.idf
   }, function(err, bestellingen) {
-    Factuur.findOne({
-      _id: req.params.idf
-    }, function(err, factuur) {
-      var totBes = 0
+      var totBes = 0;
       for (var i = 0; i <= bestellingen.length - 1; i++) {
         totBes += bestellingen[i].totaal;
       }
@@ -1995,10 +1973,11 @@ app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {//REWORKED
       if (req.body.voorschot) {
         _t = totBes - req.body.voorschot;
       } else {
-        var _t = totBes
+        _t = totBes;
       }
-      if (req.body.voorschot != "") {
-        var updateFactuur = {
+      var updateFactuur;
+      if (req.body.voorschot !== "") {
+        updateFactuur = {
           datum: req.body.datum,
           factuurNr: req.body.factuurNr,
           creditnr: req.body.creditnr,
@@ -2007,7 +1986,7 @@ app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {//REWORKED
           totaal: _t
         };
       } else {
-        var updateFactuur = {
+        updateFactuur = {
           datum: req.body.datum,
           factuurNr: req.body.factuurNr,
           creditnr: req.body.creditnr,
@@ -2015,24 +1994,15 @@ app.post('/edit-creditnota/:idc/:idf/t', function(req, res) {//REWORKED
           offerteNr: req.body.offerteNr
         };
       }
-
-      Contact.findOne({_id: req.params.idc}, function(err, contact) {
-        Factuur.update({_id: req.params.idf}, updateFactuur, function(err, factuur) {
-          if (!err) {
-            res.redirect('/facturen/'+req.params.loginHash);
-          };
-        });
-      });
-    });
+    res.redirect('/facturen/'+req.params.loginHash);
   });
-});
 });
 
 app.get('/prijs/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
         Materiaal.find({}, function(err, materialen) {
@@ -2051,18 +2021,17 @@ app.get('/prijs/:loginHash', function(req, res) {//REWORKED
                 "loginHash": req.params.loginHash
               });
             }
-          };
+          }
         });
-      };
+      }
     });
-
 });
 
 app.post('/prijs/:loginHash', function(req, res) {
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     var totaal = (req.body.uren * req.body.werkprijs);
     Materiaal.findOne({
       naam: req.body.o001
@@ -2076,7 +2045,6 @@ app.post('/prijs/:loginHash', function(req, res) {
         Materiaal.findOne({
           naam: req.body.o003
         }, function(err, m003) {
-          ;
           if (m003)
             totaal += req.body.i003 * m003.prijs;
           Materiaal.findOne({
@@ -2314,9 +2282,8 @@ app.post('/prijs/:loginHash', function(req, res) {
                                                                                                       }, function(err, m050) {
                                                                                                         if (m050)
                                                                                                           totaal += req.body.i050 * m050.prijs;
-                                                                                                        Settings.find({}, function(err, settings) {
-                                                                                                          if (!err && settings.length != 0) {
-
+                                                                                                        Settings.findOne({}, function(err, settings) {
+                                                                                                          if (!err) {
                                                                                                             if(settings.lang=="nl"){
                                                                                                             res.render('nl/calc/prijs-totaal', {
                                                                                                               "totaal": totaal.toFixed(2) + "€",
@@ -2390,7 +2357,7 @@ app.post('/prijs/:totaal/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       if (!er) {
         var totaal_ = Number(req.params.totaal.substring(0, req.params.totaal.length - 1));
@@ -2403,7 +2370,7 @@ app.post('/prijs/:totaal/:loginHash', function(req, res) {//REWORKED
           'description': "berekening van marge",
           "loginHash": req.params.loginHash
         });
-      };
+      }
     });
 });
 
@@ -2411,7 +2378,7 @@ app.get('/mat/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
         Materiaal.find({}).sort('naam').exec(function(err, materialen) {
@@ -2430,9 +2397,9 @@ app.get('/mat/:loginHash', function(req, res) {//REWORKED
                 "loginHash": req.params.loginHash
               });
             }
-          };
+          }
         });
-      };
+      }
     });
 });
 
@@ -2440,9 +2407,9 @@ app.get('/edit-mat/:id/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
-      if (!err && settings.length != 0) {
+      if (!err) {
         Materiaal.findOne({_id: req.params.id}, function(err, materiaal) {
           if(settings.lang=="nl"){
           res.render('nl/edit/edit-mat', {
@@ -2457,9 +2424,9 @@ app.get('/edit-mat/:id/:loginHash', function(req, res) {//REWORKED
               'description': "Edit "+materiaal.naam ,
               "loginHash": req.params.loginHash
             });
-          };
+          }
         });
-      };
+      }
     });
 });
 
@@ -2467,12 +2434,13 @@ app.post('/edit-mat/:id/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     var nieuwMat = {
       naam: req.body.naam,
       prijs: req.body.prijs
     };
-    Materiaal.update({_id: req.params.id}, nieuwMat, function(err, materiaal) {
+    Materiaal.update({_id: req.params.id}, nieuwMat, function(err) {
+        if(err){console.log('err: '+err);}
       res.redirect('/mat/' + req.params.loginHash);
     });
 });
@@ -2481,7 +2449,7 @@ app.get('/add-mat/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
       if(settings.lang=="nl"){
@@ -2495,7 +2463,7 @@ app.get('/add-mat/:loginHash', function(req, res) {//REWORKED
             'description': "Add material",
             "loginHash": req.params.loginHash
           });}
-      };
+      }
     });
 });
 
@@ -2503,7 +2471,7 @@ app.post('/add-mat/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     var nieuwe_materiaal = new Materiaal({
       prijs: req.body.prijs,
       naam: req.body.naam
@@ -2516,7 +2484,7 @@ app.get('/delete-mat/:id/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Materiaal.remove({_id: req.params.id});
     res.redirect('/mat/' + req.params.loginHash);
 });
@@ -2525,7 +2493,7 @@ app.get('/settings/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
   Settings.findOne({}, function(err, settings) {
     res.render(settings.lang+'/settings', {
       'settings': settings,
@@ -2539,7 +2507,7 @@ app.get('/change-theme/:th/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       var oppo;
       var nav = (req.params.th==="light") ? "light" : "dark";
@@ -2554,7 +2522,7 @@ app.get('/change-theme/:th/:loginHash', function(req, res) {//REWORKED
           oppo = "secondary";
           break;
         case "secondary":
-          oppo = "secondary"
+          oppo = "secondary";
           break;
         case "info":
           oppo = "outline-info";
@@ -2569,6 +2537,7 @@ app.get('/change-theme/:th/:loginHash', function(req, res) {//REWORKED
         nav: nav,
       };
       Settings.updateOne({_id: settings._id}, updateSettings, function(err) {
+          if(err){console.log('err: '+err);}
           res.redirect('/settings/' + req.params.loginHash);
       });
   });
@@ -2578,16 +2547,17 @@ app.get('/change-lang/:lang/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
         var updateSettings = {
           lang: req.params.lang
-        }
+        };
         Settings.updateOne({_id: settings._id}, updateSettings, function(err) {
+            if(err){console.log('err: '+err);}
             res.redirect('/settings/' + req.params.loginHash);
         });
-      };
+      }
     });
 });
 
@@ -2595,20 +2565,19 @@ app.post('/edit-pdf-text/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
         var updateSettings = {
           factuurtext: req.body.factuurtext,
           creditnotatext:req.body.creditnotatext,
           offertetext:req.body.offertetext
-        }
-        Settings.updateOne({_id: settings._id}, updateSettings, function(err, updatedSettings) {
-          if (!err) {
-            res.redirect('/settings/' + req.params.loginHash);
-          };
+        };
+        Settings.updateOne({_id: settings._id}, updateSettings, function(err) {
+          if(err){console.log('err: '+err);}
+          res.redirect('/settings/' + req.params.loginHash);
         });
-      };
+      }
     });
 });
 
@@ -2620,12 +2589,12 @@ app.post('/percentage/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
         var percent = req.body.percent;
         var bedrag = req.body.bedrag;
-        var error_input = (percent === "" && bedrag == "");
+        var error_input = (percent === "" && bedrag === "");
         var oplossing = bedrag * (percent / 100.0);
         if(settings.lang=="nl"){
         res.render('nl/calc/percentage', {
@@ -2642,8 +2611,8 @@ app.post('/percentage/:loginHash', function(req, res) {//REWORKED
             "error": error_input,
             "loginHash": req.params.loginHash
           });
-        };
-      };
+        }
+      }
     });
 });
 
@@ -2651,7 +2620,7 @@ app.get('/percentage/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
         if(settings.lang=="nl"){
@@ -2666,7 +2635,7 @@ app.get('/percentage/:loginHash', function(req, res) {//REWORKED
             "loginHash": req.params.loginHash
           });
         }
-      };
+      }
     });
 });
 
@@ -2674,7 +2643,7 @@ app.get('/add-project/:idc/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
   Materiaal.find({}, function(err, materialen) {
     Settings.findOne({}, function(err, settings) {
       if (!err) {
@@ -2691,8 +2660,8 @@ app.get('/add-project/:idc/:loginHash', function(req, res) {//REWORKED
             'description': "Add project",
             "loginHash": req.params.loginHash
           });
-        };
-      };
+        }
+      }
     });
   });
 });
@@ -2701,7 +2670,7 @@ app.post('/add-project/:idc/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     var materialen = [];
     var aantallen = [];
     Settings.findOne({}, function(err, settings) {
@@ -2710,7 +2679,7 @@ app.post('/add-project/:idc/:loginHash', function(req, res) {//REWORKED
           if (!contact) {
             res.redirect('add-project/' + req.params.loginHash);
           } else if (contact) {
-            Materiaal.findOne({naam: req.body.o001,function(err, m001) {
+            Materiaal.findOne({naam: req.body.o001},function(err, m001) {
                 if (m001) {
                   materialen.push(m001.naam);
                   aantallen.push(m001.prijs);
@@ -2725,11 +2694,11 @@ app.post('/add-project/:idc/:loginHash', function(req, res) {//REWORKED
                   newProject.save(function(err) {
                     console.log(err);
                   });
-                };
-              }
-            });
-          };
-        });
+                }
+              });
+            }
+          });
+        }
         if(settings.lang=="nl"){
         res.render('nl/add/add-project', {
           'materialen': materialen,
@@ -2743,8 +2712,7 @@ app.post('/add-project/:idc/:loginHash', function(req, res) {//REWORKED
             'description': "Add project",
             "loginHash": req.params.loginHash
           });
-        };
-      };
+        }
     });
 });
 
@@ -2752,16 +2720,16 @@ app.get('/change-betaald/:id/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
     Factuur.findOne({_id: req.params.id}, function(err, factuur) {
       if (!err) {
         Factuur.updateOne({_id: req.params.id}, {isBetaald: !(factuur.isBetaald),datumBetaald: getDatum(settings.lang)}, function(err) {
           if (!err) {
             res.redirect('/facturen/' + factuur.contact + "/" + req.params.loginHash);
-          };
+          }
         });
-      };
+      }
     });
   });
 });
@@ -2770,16 +2738,16 @@ app.get('/change-betaald2/:id/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
     Factuur.findOne({_id: req.params.id}, function(err, factuur) {
       if (!err) {
-        Factuur.updateOne({_id: req.params.id}, {isBetaald: !(factuur.isBetaald),datumBetaald: getDatum(settings.lang)}, function(err, result) {
+        Factuur.updateOne({_id: req.params.id}, {isBetaald: !(factuur.isBetaald),datumBetaald: getDatum(settings.lang)}, function(err) {
           if (!err) {
             res.redirect('/facturen/' + req.params.loginHash);
           }
         });
-      };
+      }
     });
   });
 });
@@ -2788,7 +2756,7 @@ app.get('/berekeningen/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
-    };});
+    }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
       if(settings.lang=="nl"){
