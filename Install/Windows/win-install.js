@@ -28,7 +28,7 @@ var Service = require('node-windows').Service;
 var svc = new Service({
   name:'Local-hosted-administrator',
   description: 'Create and manage your invoices.',
-  script: require('path').join(__dirname,'index.js')
+  script: require('path').join(__dirname,'../../index.js')
 });
 
 // Listen for the "install" event, which indicates the

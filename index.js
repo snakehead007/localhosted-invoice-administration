@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 //Mongoose initializing
-mongoose.connect('mongodb://localhost:27017/test027'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
+mongoose.connect('mongodb://localhost:27017/test028'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
 mongoose.connection.on('open', function() {
   console.log('Mongoose connected!');
 });
@@ -301,7 +301,7 @@ var ProjectSchema = new Schema({
 });
 
 app.get('/', function(req, res) {//REWORKED & tested
-    //Check for first time use 
+    //Check for first time use
     checkSettings().then(function(){
       checkProfile().then(function(){
         res.render('login');
@@ -332,11 +332,14 @@ app.get('/index/:loginHash', function(req, res) {//REWORKED & tested
 
 app.post('/', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if ((enc(String(req.body.loginHash)) !== loginHash)) {
+    console.log("===>>"+loginHash);
+    console.log("===>"+enc(req.body.loginHash));
+  if ((enc(String(req.body.loginHash))) !== loginHash) {
     res.redirect('login');
   }});
     Settings.findOne({}, function(err, settings) {
         if (!err) {
+          console.log(settings);
           res.render(settings.lang+'/index', {
         "description": "",
         "settings": settings,
@@ -667,7 +670,6 @@ app.post('/add-bestelling/:idf/:loginHash', function(req, res) {//REWORKED & tes
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
-      if (!err) {
         var newBestelling = new Bestelling({
           beschrijving: req.body.beschrijving,
           aantal: req.body.aantal,
@@ -684,7 +686,6 @@ app.post('/add-bestelling/:idf/:loginHash', function(req, res) {//REWORKED & tes
           }
         });
         res.redirect('/bestellingen/' + req.params.idf + "/" + req.params.loginHash);
-      }
 });
 
 app.get('/add-bestelling/:idf/:loginHash', function(req, res) {//REWORKED & tested
@@ -3324,7 +3325,7 @@ app.post('/btw/:loginHash', function (req, res) {//REWORKED
     if(String(req.params.loginHash) !== loginHash) {
       res.redirect('login');
     }});
-    Settings.find({},function(err,settings){
+    Settings.findOne({},function(err,settings){
       Settings.updateOne({_id: settings._id}, {btw:req.body.btw},function(err){
         if(err){console.log('err: '+err);}
           res.redirect('/settings/'+req.params.loginHash);
@@ -3416,7 +3417,7 @@ function replaceAll(str,profiel,contact,factuur,language){
 var findPass = () => {
   return new Promise((resolve, reject) => {
     setTimeout(() => reject('Seems like something went wrong'), 500);
-    Settings.find({}, function(err, settings) {
+    Settings.findOne({}, function(err, settings) {
       if(!err){
         resolve(settings.pass);
       }else{
@@ -3428,11 +3429,10 @@ var findPass = () => {
 };
 
 //Async promise handler for getting the pass
-
-async function callFindPass(){
+var callFindPass = async () => {
   var loginHash = await (findPass());
-  return loginHash;
-}
+  return loginHash
+};
 
 var getBase64 = () => {
   return new Promise((resolve,reject) => {
@@ -3451,17 +3451,18 @@ var getBase64 = () => {
         });
     }});
   });
-};
+}
 
 process.on('unhandledRejection', error => {
   console.log('unhandledRejection', error.message);
   console.log(error);
 });
 
-async function callGetBase64() {
-    var imgData = await (getBase64());
-    return imgData;
+var callGetBase64 = async () => {
+  var imgData = await (getBase64());
+  return imgData
 }
+
 var handlerCheckSettings = () => {
   return new Promise((resolve,reject) => {
     Settings.findOne({}, function(err, sett) {
@@ -3480,9 +3481,9 @@ var handlerCheckSettings = () => {
   });
 };
 
-async function checkSettings() {
+var checkSettings = async () => {
   await(handlerCheckSettings());
-}
+};
 
 var handlerCheckProfile = () => {
   return new Promise((resolve,reject) => {
@@ -3503,9 +3504,9 @@ var handlerCheckProfile = () => {
   });
 };
 
-async function checkProfile(){
+var checkProfile = async () => {
   await(handlerCheckProfile());
-}
+};
 
 function enc(s){
   return String(Buffer.from(s).toString('base64'));
