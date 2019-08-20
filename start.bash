@@ -3,6 +3,10 @@
 #This is script is an automated server start for linux, starts the database and node
 #run with sudo to ensure 'killall' command works, you might need sudo also on the 'monogd' command.
 
+#clean start
+killall node
+killall mongod
+
 #Global variables
 QUIET='false'
 VERBOSE='false';
@@ -11,20 +15,20 @@ package="start.bash";
 function start_all_quiet(){
 	nohup mongod --quiet &
 	sleep 3
-	nodemon start 
+	nohup node start &
 }
-	
+
 function start_node(){
-	nodemon . 
+	node . &
 }
 
 function start_node_quiet(){
-	nohup nodemon . 
+	nohup node . &
 }
 function start_all(){
 	mongod &
 	sleep 3
-	nodemon . 
+	node . &
 }
 
 function stop_all(){
@@ -67,7 +71,28 @@ function restart_node(){
 		start_node
 	fi
 }
-case "$1" in
+
+function start(){
+start_all_c
+while true; do
+	read -n1 -r -p "   --Press any key to stop--               "    #when any key is pressed, the script will commence
+	read -p "Do you want to restart the script? (y/n) " yn
+    case $yn in
+        [Yy]* )
+		restart
+		;;
+        [Nn]* )
+		stop_all
+		exit
+		;;
+        * )
+		echo "Please answer yes or no."
+		;;
+    esac
+done
+}
+while :; do
+  case "$1" in
    	 -h|--help)
       		echo "$package - script to start and restart database and server";
 		echo " ";
@@ -84,12 +109,12 @@ case "$1" in
    	-n|--node)
 		case "$2" in
 			-q|--quiet)
-				QUIET='true'	
+				QUIET='true'
 		esac
 		NODE='true'
 		echo "Starting node only mode"
-		start_all_c
-		;;	
+		start
+		;;
 	-q|--quiet)
 		case "$2" in
 			-n|--node)
@@ -97,7 +122,7 @@ case "$1" in
 		esac
 		QUIET='true'
 		echo 'start script'
-		start_all_c
+		start
 		;;
 	-v|--verbose)
 		case "$2" in
@@ -106,17 +131,17 @@ case "$1" in
 		esac
 		VERBOSE='true'
 		echo 'Starting in verbose mode'
-		start_all_c
+		start
 		;;
 
 	"")
 		echo 'starting in normal mode'
-		start_all_c
+		start
 		;;
-	*)	
+	*)
 		echo 'invalid argument(s)'
 		echo "use the '-h' flag for the help message"
       		break
       		;;
 esac
-
+done

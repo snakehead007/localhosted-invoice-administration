@@ -301,7 +301,7 @@ var ProjectSchema = new Schema({
 });
 
 app.get('/', function(req, res) {//REWORKED & tested
-    //Check for first time use
+    //Check for first time use 
     checkSettings().then(function(){
       checkProfile().then(function(){
         res.render('login');
@@ -310,7 +310,7 @@ app.get('/', function(req, res) {//REWORKED & tested
 });
 
 app.get('/login', function(req, res) {//REWORKED & tested
-  res.render('/login');
+  res.render('login');
 });
 
 app.get('/index/:loginHash', function(req, res) {//REWORKED & tested
@@ -1743,6 +1743,7 @@ app.get('/opwaardeer/:idf/t/:loginHash', function(req, res) {//REWORKED
             });
           }
         });
+  });
 });
 
 app.get('/delete-creditnota/:idc/:idf/:loginHash', function(req, res) {//REWORKED
@@ -3427,10 +3428,11 @@ var findPass = () => {
 };
 
 //Async promise handler for getting the pass
-var callFindPass = async () => {
+
+async function callFindPass(){
   var loginHash = await (findPass());
-  return loginHash
-};
+  return loginHash;
+}
 
 var getBase64 = () => {
   return new Promise((resolve,reject) => {
@@ -3449,18 +3451,17 @@ var getBase64 = () => {
         });
     }});
   });
-}
+};
 
 process.on('unhandledRejection', error => {
   console.log('unhandledRejection', error.message);
   console.log(error);
 });
 
-var callGetBase64 = async () => {
-  var imgData = await (getBase64());
-  return imgData
+async function callGetBase64() {
+    var imgData = await (getBase64());
+    return imgData;
 }
-
 var handlerCheckSettings = () => {
   return new Promise((resolve,reject) => {
     Settings.findOne({}, function(err, sett) {
@@ -3479,9 +3480,9 @@ var handlerCheckSettings = () => {
   });
 };
 
-var checkSettings = async () => {
+async function checkSettings() {
   await(handlerCheckSettings());
-};
+}
 
 var handlerCheckProfile = () => {
   return new Promise((resolve,reject) => {
@@ -3502,9 +3503,9 @@ var handlerCheckProfile = () => {
   });
 };
 
-var checkProfile = async () => {
+async function checkProfile(){
   await(handlerCheckProfile());
-};
+}
 
 function enc(s){
   return String(Buffer.from(s).toString('base64'));
