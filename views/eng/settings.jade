@@ -115,29 +115,26 @@ html
                       textarea(input="text",name="offertetext",class="form-control" aria-label="With textarea") #{settings.offertetext}
                     button(type="submit",class="btn btn-#{settings.oppo}") Update pdf footnotes
                     div(class="",id="info",style="display:none")
-                      p To use variables from the program type them like this in the text:
+                      p To use variables from the database, type them like this in the texts above:
                       samp 
                         pre
                           code 
-                              &#91;firma&#93;     : firm name
-                              &#91;naam&#93;      : full naam
-                              &#91;straat&#93;    : street name
-                              &#91;straatnr&#93;  : street N°
-                              &#91;postcode&#93;  : postalcode
-                              &#91;plaats&#93;    : place 
-                              &#91;btw&#93;       : VAT N°
+                              &#91;firm&#93;      : firm name
+                              &#91;name&#93;      : full name
+                              &#91;street&#93;    : street name
+                              &#91;nr&#93;        : street N°
+                              &#91;postal&#93;    : postal code
+                              &#91;place&#93;     : place
+                              &#91;vat&#93;       : VAT N°
                               &#91;iban&#93;      : IBAN
                               &#91;bic&#93;       : BIC
-                              &#91;tele&#93;      : Thelephone N°
+                              &#91;tel&#93;       : Telephone N°
                               &#91;bic&#93;       : E-mail
-                              &#91;contact.rekeningnr&#93;: Mail of the contact of the current document
-                              &#91;factuur.datum&#93;     : Date of creation on this program of the current document
-                              &#91;factuur.factuurnr&#93; : Nu° of the invoice
-                              &#91;factuur.offertenr&#93; : N° of the offer
-                              &#91;factuur.creditnr&#93;  : N° of the creditnote
-                              &#91;factuur.voorschot&#93; : the amount of advance 
-                              &#91;factuur.totaal&#93;    : the total amount
-                              &#91;date&#93;    : Full day of today (dd month yyyy)
-                              &#91;date.d&#93;  : Day of today in numbers (dd)
+                              &#91;contact.bank&#93;: Mail of the contact of the current document
+                              &#91;invoice.date&#93;     : Date of creation on this program of the current document
+                              &#91;invoice.advance&#93;  : the amount of advance
+                              &#91;invoice.total&#93;    : the total amount
+                              &#91;date&#93;     : Full day of today (dd month yyyy)
+                              &#91;date.d&#93;   : Day of today in numbers (dd)
                               &#91;date.m&#93;   : Full month of today (month)
                               &#91;date.y&#93;   : Full year of today (yyyy)

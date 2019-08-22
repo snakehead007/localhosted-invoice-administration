@@ -3393,25 +3393,57 @@ function replaceAll(str,profiel,contact,factuur,language){
     var _maand;
     var res;
     var str = String(str);
+    res = str.replace("[firm]",profiel.firma);
     res = str.replace("[firma]",profiel.firma);
+
     res = res.replace("[mail]",profiel.mail);
+
+    res = res.replace("[name]",profiel.naam);
     res = res.replace("[naam]",profiel.naam);
+
+    res = res.replace("[street]",profiel.straat);
     res = res.replace("[straat]",profiel.straat);
-    res = res.replace("[straatnr]",profiel.straatnr);
-    res = res.replace("[postcode]",profiel.postcode);
+
+    res = res.replace("[nr]",profiel.straatnr);
+
+    res = res.replace("[postal]",profiel.postcode);
+  res = res.replace("[postcode]",profiel.postcode);
+
+    res = res.replace("[place]",profiel.plaats);
     res = res.replace("[plaats]",profiel.plaats);
-    res = res.replace("[btw]",profiel.btwNr);
+
+    res = res.replace("[vat]",profiel.btwNr);
+    res = res.replace("[btw]",profiel.btwNr)
+
     res = res.replace("[iban]",profiel.iban);
+
     res = res.replace("[bic]",profiel.bic);
-    res = res.replace("[tele]",profiel.tele);
+
+    res = res.replace("[tel]",profiel.tele);
+
     res = res.replace("[contact.rekeningnr]",contact.rekeningnr);
+    res = res.replace("[contact.bank]",contact.rekeningnr);
+
     res = res.replace("[factuur.datum]",factuur.datum);
+    res = res.replace("[invoice.date]",factuur.datum);
+
     res = res.replace("[date]",datum);
+    res = res.replace("[datum]",datum);
+
     res = res.replace("[date.y]",jaar);
+    res = res.replace("[datum.j]",jaar);
+
     res = res.replace("[date.m]",_maand);
+  res = res.replace("[datum.m]",_maand);
+
     res = res.replace("[date.d]",date.getDate());
-    res = res.replace("[factuur.voorschot]",factuur.voorschot+" €");
-    res = res.replace("[factuur.totaal]",factuur.totaal+" €");
+    res = res.replace("[datum.d]",date.getDate());
+
+    res = res.replace("[invoice.advance]",factuur.voorschot.toFixed(2)+" €");
+    res = res.replace("[factuur.voorschot]",factuur.voorschot.toFixed(2)+" €");
+
+    res = res.replace("[invoice.total]",factuur.totaal.toFixed(2)+" €");
+    res = res.replace("[factuur.totaal]",factuur.totaal.toFixed(2)+" €");
     console.log(res);
     return res.split('\r\n');
 }
