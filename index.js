@@ -681,11 +681,11 @@ app.post('/add-bestelling/:idf/:loginHash', function(req, res) {//REWORKED & tes
         Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
           if (!err) {
             var totFac = ((((factuur.totaal + factuur.voorschot) + (req.body.aantal * req.body.bedrag)) - factuur.voorschot));
-            var newFactuur = {totaal: totFac};
-            Factuur.update({_id: req.params.idf}, newFactuur);
+            Factuur.updateOne({_id: req.params.idf}, {totaal:totFac},function(){
+              res.redirect('/bestellingen/' + req.params.idf + "/" + req.params.loginHash);
+            });
           }
         });
-        res.redirect('/bestellingen/' + req.params.idf + "/" + req.params.loginHash);
 });
 
 app.get('/add-bestelling/:idf/:loginHash', function(req, res) {//REWORKED & tested
@@ -836,6 +836,7 @@ app.get('/facturen/:idc/:loginHash', function(req, res) {//REWORKED & tested
   Contact.findOne({_id: req.params.idc}, function(err, contact) {
     if (!err) {
       Factuur.find({contact: req.params.idc}).sort('-factuurNr').exec(function(err, facturen) {
+        console.log(facturen[0].totaal);
         if (!err) {
           Settings.findOne({}, function(err, settings) {
             if (!err) {
@@ -1183,7 +1184,8 @@ app.post('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {//REWORKED & 
               factuurNr: req.body.factuurNr,
               voorschot: req.body.voorschot,
               offerteNr: req.body.offerteNr,
-              datumBetaald: req.body.datumBetaald
+              datumBetaald: req.body.datumBetaald,
+              totaal:totBes
             };
           }
           Contact.findOne({_id: req.params.idc}, function(err, contact) {
