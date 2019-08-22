@@ -3,6 +3,10 @@
 #This is script is an automated server start for linux, starts the database and node
 #run with sudo to ensure 'killall' command works, you might need sudo also on the 'monogd' command.
 
+#clean start
+killall node
+killall mongod
+
 #Global variables
 QUIET='false'
 VERBOSE='false';
@@ -13,7 +17,7 @@ function start_all_quiet(){
 	sleep 3
 	nohup node start &
 }
-	
+
 function start_node(){
 	node . &
 }
@@ -70,18 +74,18 @@ function restart_node(){
 
 function start(){
 start_all_c
-while true; do        	
+while true; do
 	read -n1 -r -p "   --Press any key to stop--               "    #when any key is pressed, the script will commence
 	read -p "Do you want to restart the script? (y/n) " yn
     case $yn in
-        [Yy]* ) 
+        [Yy]* )
 		restart
 		;;
-        [Nn]* ) 
+        [Nn]* )
 		stop_all
 		exit
 		;;
-        * ) 
+        * )
 		echo "Please answer yes or no."
 		;;
     esac
@@ -105,12 +109,12 @@ while :; do
    	-n|--node)
 		case "$2" in
 			-q|--quiet)
-				QUIET='true'	
+				QUIET='true'
 		esac
 		NODE='true'
 		echo "Starting node only mode"
 		start
-		;;	
+		;;
 	-q|--quiet)
 		case "$2" in
 			-n|--node)
@@ -134,12 +138,10 @@ while :; do
 		echo 'starting in normal mode'
 		start
 		;;
-	*)	
+	*)
 		echo 'invalid argument(s)'
 		echo "use the '-h' flag for the help message"
       		break
       		;;
 esac
 done
-
-

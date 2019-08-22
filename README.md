@@ -1,31 +1,28 @@
 # simple-invoice-administration
 this program is used for managing and administrating invoices and generating them into .pdf format
 
-v1.8: stable, v2.0 coming soon
+Version 2.0 is out. Its fully production ready.
 
-This project is not ready for use it still needs translations, currently only in Dutch!
+This project is translated in 2 languages, Dutch and English.
 
 This program is created and maintained for [www.mdsart.be/](https://www.mdsart.be/)
 
 about
 --
-You can add contacts, invoices and quotations.
 
-Quotations can be upgraded to an invoice.
-
-Both invoices and quotations are available for download.
-
-The ability to edit your own profile for the invoices and quotations are also available.
-
-For invoices there is a switch, to keep that it has been payed or not.
-
-Other functionalities are:
-  - yearly chart
-  - adding materials (with calculations)
-  - calculations (inch to cm, percentage, ...)
-  - search function
-
-There are 4 themes: Grey, Dark, White, Blue, Red
+Functionalities:
+  - Add contacts, invoices, quotations, offers, materials
+  - A yearly chart (automatically updated);
+  - Downloadable pdfs for Invoices, quotations and offers
+  - Upload your logo to use on the pdf's.
+  - Your profile can be edited
+  - All documents have a switch, to keep that it has been payed or not.
+  - Calculations (inch to cm, precentages, using your materials calculating how much something costs, ...)
+  - A search function
+  - 5 different themes
+  - The whole program is lock under a password, so you can safely host this on a public domain.
+  - changeable text for the pdf's
+  - 2 languages: English and Dutch
 
 ### About (technical)
 All data is kept locally by mongodb.
