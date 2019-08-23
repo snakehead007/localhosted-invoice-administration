@@ -1,251 +1,181 @@
-//- V1.8
 html
   head
     title=title
     link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    link(rel="stylesheet" href="/stylesheet.css")
     script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js")
+    script(src="https://www.chartjs.org/samples/latest/utils.js")
+    script(src="https://unpkg.com/feather-icons")
+    script.
+      $(document).ready(function () {
+        function toonBerekeningen(){$("#berekeningen").toggle();}
+        feather.replace();
+      });
   body
     header
-      nav(class="navbar navbar-expand-md navbar-#{settings.nav} bg-#{settings.thema}")
-        button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
-          span(class="navbar-toggler-icon")
-        div(class="collapse navbar-collapse", id="navbarNav")  
-          ul(class="navbar-nav mr-auto")
-            li(class="nav-item")
-              a(class="nav-link active" , href='/index/#{loginHash}') Home
-            li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile/#{loginHash}') Mijn profiel    
-            li(class="nav-item")
-              a(class="nav-link active", href='/settings/#{loginHash}') Settings
-            li(class="nav-item")
-              a(class="nav-link", href='https://identity.basecone.com/authentication/login')
-                img(width="100", height="24", src="/basecone.png", alt="basecone")
-          span(class="navbar-text")
-            div(class="row")
-              div(class="col-4 mr-auto")
-                button(type="button", class="btn btn-light btn-sm", disabled)
-                  h6=description
-              div(class="col-8")  
-                form(class="form-inline" action="/zoeken/#{loginHash}" method="post")
-                  input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
 
-    main
-      div(class="jumbotron")
-        div(class="row no-gutters")
-          if contact
-            a(role="button", class="btn btn-#{settings.oppo} btn-lg col-4 mr-auto dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Maak
-            div(class="dropdown-menu col-4 mr-auto", aria-labelledby="actionsDropdown")
-              a(href='/add-factuur/'+contact._id+"/#{loginHash}",class="dropdown-item")
-                if settings.thema == "light"
-                  button(type="button",id="knop", class="btn btn-#{settings.oppo} btn-lg btn-block")  Nieuwe Factuur
-                if settings.thema != "light"
-                  button(type="button",id="knop", class="btn btn-#{settings.thema} btn-lg btn-block")  Nieuwe Factuur
-              a(href='/add-offerte/'+contact._id+"/#{loginHash}",class="dropdown-item")
-                if settings.thema == "light"
-                  button(type="button",id="knop", class="btn btn-#{settings.oppo} btn-lg btn-block")  Nieuwe Offerte
-                if settings.thema != "light"
-                  button(type="button",id="knop", class="btn btn-#{settings.thema} btn-lg btn-block")  Nieuwe Offerte
-              a(href='/add-creditnota/'+contact._id+"/#{loginHash}",class="dropdown-item")
-                if settings.thema == "light"
-                  button(type="button",id="knop", class="btn btn-#{settings.oppo} btn-lg btn-block")  Nieuwe Creditnota
-                if settings.thema != "light"
-                  button(type="button",id="knop", class="btn btn-#{settings.thema} btn-lg btn-block")  Nieuwe Creditnota
-              a(href='/add-project/'+contact._id+"/#{loginHash}",class="dropdown-item")
-                if settings.thema == "light"
-                  button(type="button",id="knop", class="btn btn-#{settings.oppo} btn-lg btn-block")  Nieuw Project
-                if settings.thema != "light"
-                  button(type="button",id="knop", class="btn btn-#{settings.thema} btn-lg btn-block")  Nieuw Project
-          div(class="col-2")
-            if contact 
-              if !terug
-                a(href='/contacten/#{loginHash}',class="button")
-                  if settings.thema == "light"
-                    button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
-                  if settings.thema != "light"
-                    button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
-              else
-                a(href='/facturen/#{loginHash}',class="button")
-                  if settings.thema == "light"
-                    button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
-                  if settings.thema != "light"
-                    button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
-            else
-              a(href='/index/#{loginHash}',class="button")
-                if settings.thema == "light"
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") terug
-                if settings.thema != "light"
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") terug
-        hr
-        if settings.thema == "dark" || settings.thema == "danger" || settings.thema == "info"
-          table(class="table table-#{settings.oppo} table-striped")
-            tr
-              th(scope="col") Factuur
-              if !contact
-                th(scope="col") Contact persoon
-              th(scope="col") Datum
-              th
-              th(scope="col") Acties
-                each factuur in facturenLijst
+      nav(class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow")
+        a(class="navbar-brand col-sm-3 col-md-2 mr-0",href="/edit-profile/#{loginHash}")=profile.firma
+        form(class="form", method="post",action="/zoeken/#{loginHash}")
+          input(class="form-control form-control-dark w-100" type="text",name="search", placeholder="zoeken" aria-label="zoeken")
+          button(type="sumbit",style="display:none")
+        ul(class="navbar-nav px-3")
+          li(class="nav-item text-nowrap")
+            a(class="nav-link" href="#") Sign out
+
+      div(class="container-fluid")
+        div(class ="row")
+          nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+            div(class="sidebar-sticky")
+              ul(class="nav flex-column")
+                li(class="nav-item")
+                  a(class="nav-link" href="/index/#{loginHash}")
+                    span(data-feather="home")
+                    span Home
+                li(class="nav-item")
+                  a(class="nav-link" href="/edit-profile/#{loginHash}")
+                    span(data-feather="user")
+                    span Mijn Profiel
+                li(class="nav-item")
+                  a(class="nav-link active" href="/facturen/#{loginHash}")
+                    span(data-feather="file")
+                    span Alle facturen
+                    span(class="sr-only") (current)
+                li(class="nav-item")
+                  a(class="nav-link" href="/contacten/#{loginHash}")
+                    span(data-feather="users")
+                    span Klanten
+                li(class="nav-item")
+                  a(class="nav-link" href="/mat/#{loginHash}")
+                    span(data-feather="package")
+                    span Materialen
+                li(class="nav-item")
+                  a(class="nav-link" href="/berekeningen/#{loginHash}")
+                    span(data-feather="book")
+                    span Berekeningen
+                li(class="nav-item")
+                  a(class="nav-link" href="/settings/#{loginHash}")
+                    span(data-feather="settings")
+                    span Settings
+              form(method="post", action="/")
+                h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+                    button(type="sumbit",class="d-flex align-items-center text-muted", href="")
+                      span(data-feather="filter")
+                      span Filter
+                ul(class="nav flex-column mb-2")
+                  li(class="nav-item")
+                    div(class="form-check")
+                      input( class="form-check-input",type="checkbox",value="",id="checkFacturen")
+                      label(class="form-check-label",for="checkFacturen") Facturen
+                  li(class="nav-item")
+                    div(class="form-check")
+                      input( class="form-check-input",type="checkbox",value="",id="checkCredit")
+                      label(class="form-check-label",for="checkCredit") Creditnota's
+                  li(class="nav-item")
+                    div(class="form-check")
+                      input( class="form-check-input",type="checkbox",value="",id="checkOfferte")
+                      label(class="form-check-label",for="checkOfferte") Offerte's
+                  li(class="nav-item")
+                    div(class="form-check")
+                      input( class="form-check-input",type="checkbox",value="",id="checkOpen")
+                      label(class="form-check-label",for="checkOpen") Openstaand
+                  li(class="nav-item")
+                    div(class="form-check")
+                      input( class="form-check-input",type="checkbox",value="",id="checkBetaald")
+                      label(class="form-check-label",for="checkBetaald") Betaald
+
+
+          main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+            h2(class="pt-3") Alle facturen
+            div(class="table-responsive")
+              table(class="table table-striped table-sm")
+                thead
                   tr
-                    td
-                      if factuur.factuurNr
-                        if contact
-                          a(href='/bestellingen/'+factuur._id+"/#{loginHash}", class="button")
-                            button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
-                        if !contact
-                          a(href='/bestellingen/'+factuur._id+'/t'+"/#{loginHash}", class="button")
-                            button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
-                      if factuur.offerteNr && !factuur.factuurNr
-                        if contact
-                          a(href='/bestellingen/'+factuur._id+"/#{loginHash}", class="button")
-                            button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="Offerte "+factuur.offerteNr
-                        if !contact
-                          a(href='/bestellingen/'+factuur._id+'/t'+"/#{loginHash}", class="button")
-                            button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="Offerte "+factuur.offerteNr
-                      if factuur.creditnr
-                        a(href='/bestellingen/'+factuur._id+"/#{loginHash}", class="button")
-                          button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="Creditnota "+factuur.creditnr
+                    th #
+                    th Klant
+                    th Datum
+                    th Kost
+                    th Acties
+                tbody
+                  each factuur in facturenLijst
+                    tr
+                      td
+                        if factuur.factuurNr
+                          if contact
+                            a(href='/bestellingen/' + factuur._id + "/#{loginHash}", class="button")
+                              button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
+                          if !contact
+                            a(href='/bestellingen/' + factuur._id + '/t/#{loginHash}', class="button")
+                              button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
+                        if factuur.offerteNr && !factuur.factuurNr
+                          if contact
+                            a(href='/bestellingen/' + factuur._id + "/#{loginHash}", class="button")
+                              button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="Offerte " + factuur.offerteNr
+                          if !contact
+                            a(href='/bestellingen/' + factuur._id + '/t' + "/#{loginHash}", class="button")
+                              button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="Offerte " + factuur.offerteNr
+                        if factuur.creditnr && !factuur.offerteNr && !factuur.factuurNr
+                          a(href='/bestellingen/' + factuur._id + "/#{loginHash}", class="button")
+                            button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="Creditnota " + factuur.creditnr
                       if !contact
                         td
                           if factuur.contactPersoon == "Update deze factuur!"
-                            a(href='/updateFactuur/'+factuur._id+"/#{loginHash}", class="button")
+                            a(href='/updateFactuur/' + factuur._id + "/#{loginHash}", class="button")
                               button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Klik hier om deze factuur up te daten")=factuur.contactPersoon
                           else
-                            a(href='/facturen/'+factuur.contact+"/t"+"/#{loginHash}", class="button")
+                            a(href='/facturen/' + factuur.contact + "/t" + "/#{loginHash}", class="button")
                               button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
-                      td
-                        p(class="lead")=factuur.datum
-                      if factuur.factuurNr      
+                      td=factuur.datum
+                      if factuur.factuurNr
                         td
                           if contact
                             script.
                               var id = "#{factuur._id}";
-                              function K#{factuur.factuurNr}(){
-                                window.location="/change-betaald/"+"#{factuur._id}/#{loginHash}";
+                              function K#{factuur.factuurNr}() {
+                                window.location = "/change-betaald/" + "#{factuur._id}/#{loginHash}";
                               }
                           if !contact
                             script.
                               var id = "#{factuur._id}";
-                              function K#{factuur.factuurNr}(){
-                                window.location="/change-betaald2/"+"#{factuur._id}/#{loginHash}";
+                              function K#{factuur.factuurNr}() {
+                                window.location = "/change-betaald2/" + "#{factuur._id}/#{loginHash}";
                               }
                           div(class="custom-control custom-switch")
                             if factuur.isBetaald
-                              input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()" checked)
-                              label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal*1.21).toFixed(2)+"€ ,  Betaald"
+                              input(type="checkbox" class="custom-control-input bg-success" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()" checked)
+                              label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal * 1.21).toFixed(2) + "€ ,  Betaald"
                             if !factuur.isBetaald
-                              input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
-                              label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal*1.21).toFixed(2)+"€ ,  Openstaand"
+                              input(type="checkbox" class="custom-control-input bg-danger" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
+                              label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal * 1.21).toFixed(2) + "€ ,  Openstaand"
                       else
-                        td
+                        td  /
                       td
-                        a(role="button", class="btn btn-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
-                        div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                          if !contact
-                            a(class="dropdown-item",href='/edit-factuur/'+factuur.contact+'/'+factuur._id+'/t'+"/#{loginHash}") aanpassen
-                            a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id+'/t'+"/#{loginHash}") verwijder
-                            a(class="dropdown-item", href='/view-factuur/'+factuur._id+"/t"+"#{loginHash}",class="button"+"/#{loginHash}") bekijk
-                          if contact
-                            a(class="dropdown-item",href='/edit-factuur/'+factuur.contact+'/'+factuur._id+"/#{loginHash}") aanpassen
-                            a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id+"/#{loginHash}") verwijder
-                            a(class="dropdown-item", href='/view-factuur/'+factuur._id+"/#{loginHash}",class="button") bekijk
-                          div(class="dropdown-divider")
-                          if factuur.creditnr
-                            a(class="dropdown-item", href='/creditnota/'+factuur._id+"/#{loginHash}",id="target",target="_blank") download creditnota
-                          if factuur.factuurNr
-                            a(class="dropdown-item", href='/createPDF/'+factuur._id+"/#{loginHash}",id="target",target="_blank") download factuur
-                          if factuur.offerteNr
-                            a(class="dropdown-item", href='/offerte/'+factuur._id+"/#{loginHash}",id="target",target="_blank") download offerte
-                            if !factuur.factuurNr
-                              div(class="dropdown-divider")
-                              if contact
-                                a(class="dropdown-item", href="/opwaardeer/"+factuur._id+"/#{loginHash}",class="button") opwaardeer naar factuur
-                              if !contact
-                                a(class="dropdown-item", href="/opwaardeer/"+factuur._id+"/t/#{loginHash}",class="button") opwaardeer naar factuur
-        else
-          table(class="table table-#{settings.thema} table-striped")
-            tr
-              th(scope="col") Factuur
-              if !contact
-                th(scope="col") Contact persoon
-              th(scope="col") Datum
-              th
-              th(scope="col") Acties
-                each factuur in facturenLijst
-                  tr
-                    td
-                      if factuur.factuurNr
-                        if contact
-                          a(href='/bestellingen/'+factuur._id+"/#{loginHash}", class="button")
-                            button(type="button" class="btn btn-outline-#{settings.oppo}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
-                        if !contact
-                          a(href='/bestellingen/'+factuur._id+'/t/#{loginHash}', class="button")
-                            button(type="button" class="btn btn-outline-#{settings.oppo}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
-                      if factuur.offerteNr && !factuur.factuurNr
-                        if contact
-                          a(href='/bestellingen/'+factuur._id+"/#{loginHash}", class="button")
-                            button(type="button" class="btn btn-outline-#{settings.oppo}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="Offerte "+factuur.offerteNr
-                        if !contact
-                          a(href='/bestellingen/'+factuur._id+'/t'+"/#{loginHash}", class="button")
-                            button(type="button" class="btn btn-outline-#{settings.oppo}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="Offerte "+factuur.offerteNr
-                      if factuur.creditnr && !factuur.offerteNr && !factuur.factuurNr  
-                        a(href='/bestellingen/'+factuur._id+"/#{loginHash}", class="button")
-                          button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="Creditnota "+factuur.creditnr
-                    if !contact
-                      td
-                        if factuur.contactPersoon == "Update deze factuur!"
-                          a(href='/updateFactuur/'+factuur._id+"/#{loginHash}", class="button")
-                            button(type="button" class="btn btn-outline-#{settings.oppo}" data-html="true" data-toggle="tooltip" data-placement="top" title="Klik hier om deze factuur up te daten")=factuur.contactPersoon
-                        else
-                          a(href='/facturen/'+factuur.contact+"/t"+"/#{loginHash}", class="button")
-                            button(type="button" class="btn btn-outline-#{settings.oppo}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
-                    td
-                      p(class="lead")=factuur.datum
-                    if factuur.factuurNr
-                      td
-                        if contact
-                          script.
-                            var id = "#{factuur._id}";
-                            function K#{factuur.factuurNr}(){
-                              window.location="/change-betaald/"+"#{factuur._id}/#{loginHash}";
-                            }
-                        if !contact
-                          script.
-                            var id = "#{factuur._id}";
-                            function K#{factuur.factuurNr}(){
-                              window.location="/change-betaald2/"+"#{factuur._id}/#{loginHash}";
-                            }
-                        div(class="custom-control custom-switch")
-                          if factuur.isBetaald
-                            input(type="checkbox" class="custom-control-input bg-success" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()" checked)
-                            label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal*1.21).toFixed(2)	+"€ ,  Betaald"
-                          if !factuur.isBetaald
-                            input(type="checkbox" class="custom-control-input bg-success" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
-                            label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal*1.21).toFixed(2)+"€ ,  Openstaand"
-                    else
-                    td
-                      a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
-                      div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                        if !contact
-                          a(class="dropdown-item",href='/edit-factuur/'+factuur.contact+'/'+factuur._id+'/t/#{loginHash}') aanpassen
-                          a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id+'/t/#{loginHash}') verwijder
-                          a(class="dropdown-item", href='/view-factuur/'+factuur._id+"/t/#{loginHash}",class="button") bekijk
-                        if contact
-                          a(class="dropdown-item",href='/edit-factuur/'+factuur.contact+'/'+factuur._id+"/#{loginHash}") aanpassen
-                          a(class="dropdown-item", href='/delete-factuur/'+factuur.contact+'/'+factuur._id+"/#{loginHash}") verwijder
-                          a(class="dropdown-item", href='/view-factuur/'+factuur._id+"/#{loginHash}",class="button") bekijk
-                        div(class="dropdown-divider")
-                        if factuur.creditnr
-                          a(class="dropdown-item", href='/creditnota/'+factuur._id+"/#{loginHash}",id="target",target="_blank") download creditnota 
-                        if factuur.factuurNr
-                          a(class="dropdown-item", href='/createPDF/'+factuur._id+"/#{loginHash}",id="target",target="_blank") download factuur
-                        if factuur.offerteNr
-                          a(class="dropdown-item", href='/offerte/'+factuur._id+"/#{loginHash}",id="target",target="_blank") download offerte
-                          if !factuur.factuurNr
-                            div(class="dropdown-divider")
-                            if contact
-                              a(class="dropdown-item", href="/opwaardeer/"+factuur._id+"/#{loginHash}",class="button") opwaardeer naar factuur
+                        div(class="btn-group dropup")
+                          button(role="button", class="btn btn-outline-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                          div(class="dropdown-menu", aria-labelledby="actionsDropdown")
                             if !contact
-                              a(class="dropdown-item", href="/opwaardeer/"+factuur._id+"/t/#{loginHash}",class="button") opwaardeer naar factuur
+                              a(class="dropdown-item",href='/edit-factuur/' + factuur.contact + '/' + factuur._id + '/t/#{loginHash}') aanpassen
+                              a(class="dropdown-item", href='/delete-factuur/' + factuur.contact + '/' + factuur._id + '/t/#{loginHash}') verwijder
+                              a(class="dropdown-item", href='/view-factuur/' + factuur._id + "/t/#{loginHash}",class="button") bekijk
+                            if contact
+                              a(class="dropdown-item",href='/edit-factuur/' + factuur.contact + '/' + factuur._id + "/#{loginHash}") aanpassen
+                              a(class="dropdown-item", href='/delete-factuur/' + factuur.contact + '/' + factuur._id + "/#{loginHash}") verwijder
+                              a(class="dropdown-item", href='/view-factuur/' + factuur._id + "/#{loginHash}",class="button") bekijk
+                            div(class="dropdown-divider")
+                            if factuur.creditnr
+                              a(class="dropdown-item", href='/creditnota/' + factuur._id + "/#{loginHash}",id="target",target="_blank") download creditnota
+                            if factuur.factuurNr
+                              a(class="dropdown-item", href='/createPDF/' + factuur._id + "/#{loginHash}",id="target",target="_blank") download factuur
+                            if factuur.offerteNr
+                              a(class="dropdown-item", href='/offerte/' + factuur._id + "/#{loginHash}",id="target",target="_blank") download offerte
+                              if !factuur.factuurNr
+                                div(class="dropdown-divider")
+                                if contact
+                                  a(class="dropdown-item", href="/opwaardeer/" + factuur._id + "/#{loginHash}",class="button") opwaardeer naar factuur
+                                if !contact
+                                  a(class="dropdown-item", href="/opwaardeer/" + factuur._id + "/t/#{loginHash}",class="button") opwaardeer naar factuur
+

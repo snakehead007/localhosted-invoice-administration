@@ -325,7 +325,7 @@ app.get('/index/:loginHash', function(req, res) {//REWORKED & tested
     res.render('login');
   }
   });
-
+    var fact_open = [];
     Profile.findOne({}, function(err,profile){
         if(!err){
             Settings.findOne({}, function(err, settings) {
@@ -337,14 +337,14 @@ app.get('/index/:loginHash', function(req, res) {//REWORKED & tested
                                 for (var factuur of facturen) {// TODO: 'for of' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
                                     if (factuur.factuurNr) {
                                         if (factuur.datumBetaald) {
-                                            console.log(factuur);
                                             if ((factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i]) || factuur.datumBetaald.includes(month[i]) || factuur.datumBetaald.includes(month_small[i])) && factuur.datumBetaald.includes(year) && factuur.factuurNr && factuur.isBetaald) {
                                                 totaal[i] += factuur.totaal;
-                                                console.log(factuur.totaal);
                                             }
                                         } else if ((factuur.datum.includes(maand[i]) || factuur.datum.includes(maand_klein[i]) || factuur.datum.includes(month[i]) || factuur.datum.includes(month_small[i])) && factuur.datum.includes(year) && factuur.factuurNr && factuur.isBetaald) {
                                             totaal[i] += factuur.totaal;
-                                            console.log(factuur.totaal);
+                                        }
+                                        if ((factuur.datum.includes(maand[i]) || factuur.datum.includes(maand_klein[i]) || factuur.datum.includes(month[i]) || factuur.datum.includes(month_small[i])) && !factuur.isBetaald){
+                                          fact_open.push(factuur);
                                         }
                                     }
                                 }
@@ -357,7 +357,8 @@ app.get('/index/:loginHash', function(req, res) {//REWORKED & tested
                                     "jaar": year,
                                     "loginHash": req.params.loginHash,
                                     "profile": profile,
-                                    "facturenLijst":facturen
+                                    "facturenLijst":facturen,
+                                    "fact_open":fact_open
                                 });
                            // }
                         }
@@ -428,25 +429,29 @@ app.get('/contacten/:loginHash', function(req, res) {//REWORKED & tested
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
-    Contact.find({}, function(err, contacts) {
-      Settings.findOne({}, function(err, settings) {
-        if (!err ) {
-          if(settings.lang=="nl"){
-          res.render('nl/contacten', {
-            'contactenLijst': contacts,
-            'description': "Contactpersonen",
-            "settings": settings,
-            "loginHash": req.params.loginHash
-          });}else{
-            res.render('eng/contacten', {
-              'contactenLijst': contacts,
-              'description': "Contacts",
-              "settings": settings,
-              "loginHash": req.params.loginHash
-          });}
-        }
+      Profile.findOne({},function(err,profile){
+        Contact.find({}, function(err, contacts) {
+          Settings.findOne({}, function(err, settings) {
+            if (!err ) {
+              if(settings.lang=="nl"){
+              res.render('nl/contacten', {
+                'contactenLijst': contacts,
+                'description': "Contactpersonen",
+                "settings": settings,
+                "loginHash": req.params.loginHash,
+                  "profile":profile
+              });}else{
+                res.render('eng/contacten', {
+                  'contactenLijst': contacts,
+                  'description': "Contacts",
+                  "settings": settings,
+                  "loginHash": req.params.loginHash,
+                    "profile":profile
+              });}
+            }
+          });
+        });
       });
-    });
 });
 
 app.get('/delete-contact/:id/:loginHash', function(req, res) {//REWORKED & tested
@@ -866,24 +871,28 @@ app.get('/facturen/:idc/:loginHash', function(req, res) {//REWORKED & tested
         console.log(facturen[0].totaal);
         if (!err) {
           Settings.findOne({}, function(err, settings) {
-            if (!err) {
-              if(settings.lang=="nl"){
-              res.render('nl/facturen', {
-                'contact': contact,
-                'facturenLijst': facturen,
-                'description': "Facturen van " + contact.contactPersoon,
-                "settings": settings,
-                "loginHash": req.params.loginHash
-              });}else{
-                res.render('eng/facturen', {
-                  'contact': contact,
-                  'facturenLijst': facturen,
-                  'description': "Invoices of " + contact.contactPersoon,
-                  "settings": settings,
-                  "loginHash": req.params.loginHash
-                });
-              }
-            }
+              Profile.findOne({},function(err,profile){
+                if (!err) {
+                  if(settings.lang=="nl"){
+                  res.render('nl/facturen', {
+                    'contact': contact,
+                    'facturenLijst': facturen,
+                    'description': "Facturen van " + contact.contactPersoon,
+                    "settings": settings,
+                    "loginHash": req.params.loginHash,
+                      "profile":profile
+                  });}else{
+                    res.render('eng/facturen', {
+                      'contact': contact,
+                      'facturenLijst': facturen,
+                      'description': "Invoices of " + contact.contactPersoon,
+                      "settings": settings,
+                      "loginHash": req.params.loginHash,
+                        "profile":profile
+                    });
+                  }
+                }
+              });
           });
         }
       });
@@ -937,20 +946,24 @@ app.get('/facturen/:loginHash', function(req, res) {//REWORKED & tested
       if (!err) {
         Settings.findOne({}, function(err, settings) {
           if (!err) {
-            if(settings.lang=="nl"){
-            res.render('nl/facturen', {
-              'facturenLijst': facturen,
-              'description': "Alle facturen",
-              "settings": settings,
-              "loginHash": req.params.loginHash
-            });}else{
-              res.render('eng/facturen', {
-                'facturenLijst': facturen,
-                'description': "All invoices",
-                "settings": settings,
-                "loginHash": req.params.loginHash
+              Profile.findOne({},function(err,profile){
+                if(settings.lang=="nl"){
+                res.render('nl/facturen', {
+                  'facturenLijst': facturen,
+                  'description': "Alle facturen",
+                  "settings": settings,
+                  "loginHash": req.params.loginHash,
+                    "profile":profile
+                });}else{
+                  res.render('eng/facturen', {
+                    'facturenLijst': facturen,
+                    'description': "All invoices",
+                    "settings": settings,
+                    "loginHash": req.params.loginHash,
+                      "profile":profile
+                  });
+                }
               });
-            }
           }
         });
       }
@@ -1850,6 +1863,7 @@ app.post('/zoeken/:loginHash', function(req, res) {//REWORKED
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
+  console.log("[I]: "+req.body.search);
     var str = req.body.search.toString().toLowerCase();
     var contacten = [];
     var facturen = [];
@@ -1903,11 +1917,14 @@ app.post('/zoeken/:loginHash', function(req, res) {//REWORKED
                   }
                 }
               //Matterialen
-              for (var mat of mats_){
-                if(String(mat.naam).toLowerCase().include(str)){
-                  materialen.push(mat);
-                }
-              }
+                  if(!mats_.length == 0){
+                      for (var mat of mats_){
+                          var _mat = String(mat.naam).toLowerCase();
+                        if(_mat.includes(str)){
+                          materialen.push(mat);
+                        }
+                      }
+                  }
                 //takes only 1 of each items, if found 2 or more of the same
                 var contacten_d = distinct(contacten);
                 var bestellingen_d = distinct(bestellingen);
