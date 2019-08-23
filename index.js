@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 //Mongoose initializing
-mongoose.connect('mongodb://localhost:27017/test028'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
+mongoose.connect('mongodb://localhost:27017/sample-website'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
 mongoose.connection.on('open', function() {
   console.log('Mongoose connected!');
 });
@@ -309,6 +309,12 @@ app.get('/', function(req, res) {//REWORKED & tested
     });
 });
 
+app.get('/test',function(req,res){
+  Settings.findOne({},function(err,settings){
+    res.render('test',{'settings':settings});
+  });
+});
+
 app.get('/login', function(req, res) {//REWORKED & tested
   res.render('login');
 });
@@ -319,35 +325,56 @@ app.get('/index/:loginHash', function(req, res) {//REWORKED & tested
     res.render('login');
   }
   });
-    Settings.findOne({}, function(err, settings) {
-      if (!err) {
-        res.render(settings.lang+'/index', {
-          "settings": settings,
-          "jaar": year,
-          "loginHash": req.params.loginHash
-        });
-      }
+
+    Profile.findOne({}, function(err,profile){
+        if(!err){
+            Settings.findOne({}, function(err, settings) {
+                if (!err) {
+                    Factuur.find({}, function (err, facturen) {
+                        if (!err) {
+                            var totaal = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            for (var i = 0; i <= 11; i++) {
+                                for (var factuur of facturen) {// TODO: 'for of' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+                                    if (factuur.factuurNr) {
+                                        if (factuur.datumBetaald) {
+                                            console.log(factuur);
+                                            if ((factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i]) || factuur.datumBetaald.includes(month[i]) || factuur.datumBetaald.includes(month_small[i])) && factuur.datumBetaald.includes(year) && factuur.factuurNr && factuur.isBetaald) {
+                                                totaal[i] += factuur.totaal;
+                                                console.log(factuur.totaal);
+                                            }
+                                        } else if ((factuur.datum.includes(maand[i]) || factuur.datum.includes(maand_klein[i]) || factuur.datum.includes(month[i]) || factuur.datum.includes(month_small[i])) && factuur.datum.includes(year) && factuur.factuurNr && factuur.isBetaald) {
+                                            totaal[i] += factuur.totaal;
+                                            console.log(factuur.totaal);
+                                        }
+                                    }
+                                }
+                            }
+                            //if (settings.lang == "nl") {
+                                res.render('nl/index', {
+                                    "totaal": totaal,
+                                    "description": "Grafiek",
+                                    "settings": settings,
+                                    "jaar": year,
+                                    "loginHash": req.params.loginHash,
+                                    "profile": profile,
+                                    "facturenLijst":facturen
+                                });
+                           // }
+                        }
+                    });
+                }
+            });
+        }
     });
 });
 
 app.post('/', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-    console.log("===>>"+loginHash);
-    console.log("===>"+enc(req.body.loginHash));
   if ((enc(String(req.body.loginHash))) !== loginHash) {
+      console.log(dec(loginHash));
     res.redirect('login');
   }});
-    Settings.findOne({}, function(err, settings) {
-        if (!err) {
-          console.log(settings);
-          res.render(settings.lang+'/index', {
-        "description": "",
-        "settings": settings,
-        "jaar": year,
-        "loginHash": enc(req.body.loginHash)
-        });
-      }
-    });
+    res.redirect('index/'+enc(req.body.loginHash));
 });
 
 app.get('/chart/:jaar/:loginHash', function(req, res) {//REWORKED & tested

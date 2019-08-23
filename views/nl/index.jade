@@ -2,116 +2,189 @@ html
   head
     title=title
     link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    link(rel="stylesheet" href="/stylesheet.css")
     script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
     script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js")
+    script(src="https://www.chartjs.org/samples/latest/utils.js")
+    script(src="https://unpkg.com/feather-icons")
     script.
-      function toonBerekeningen(){$("#berekeningen").toggle();}
+      $(document).ready(function () {
+        function toonBerekeningen(){$("#berekeningen").toggle();}
+        feather.replace();
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
+        var color = Chart.helpers.color;
+        var myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: [maand[0], maand[1], maand[2], maand[3], maand[4], maand[5], maand[6], maand[7], maand[8], maand[9], maand[10], maand[11]],
+              datasets: [{
+                  label: 'Exlc. btw €',
+                  data: [#{totaal[0]}, #{totaal[1]}, #{totaal[2]}, #{totaal[3]}, #{totaal[4]}, #{totaal[5]}, #{totaal[6]}, #{totaal[7]}, #{totaal[8]}, #{totaal[9]}, #{totaal[10]}, #{totaal[11]}],
+                  backgroundColor: color(window.chartColors.red).alpha(1).rgbString(),
+                  borderColor: window.chartColors.red,
+                  borderWidth: 1
+              }, {
+                  label: 'Incl. btw €',
+                  data: [#{totaal[0]} * 1.21, #{totaal[1]} * 1.21, #{totaal[2]} * 1.21, #{totaal[3]} * 1.21, #{totaal[4]} * 1.21, #{totaal[5]} * 1.21, #{totaal[6]} * 1.21, #{totaal[7]} * 1.21, #{totaal[8]} * 1.21, #{totaal[9]} * 1.21, #{totaal[10]} * 1.21, #{totaal[11]} * 1.21],
+                  backgroundColor: color(window.chartColors.blue).alpha(1).rgbString(),
+                  borderColor: window.chartColors.blue,
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero: true
+                      }
+                  }]
+              }
+          }
+        });
+      });
   body
     header
-      nav(class="navbar navbar-expand-md navbar-#{settings.nav} bg-#{settings.thema}")
-        button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
-          span(class="navbar-toggler-icon")
-        div(class="collapse navbar-collapse", id="navbarNav")  
-          ul(class="navbar-nav mr-auto")
-            li(class="nav-item")
-              a(class="nav-link active" , href='/index/#{loginHash}') Home
-            li(class="nav-item")
-              a(class="nav-link active", href='/edit-profile/#{loginHash}') Mijn profiel    
-            li(class="nav-item")
-              a(class="nav-link active", href='/settings/#{loginHash}') Settings
-            li(class="nav-item")
-              a(class="nav-link", href='https://identity.basecone.com/authentication/login')
-                img(width="100", height="24", src="/basecone.png", alt="basecone")
-          span(class="navbar-text")
-            div(class="row")
-              div(class="col-lg-1 col-md-0 col-sm-0 col-0 mr-auto")
-                button(type="button", class="btn btn-light btn-sm", disabled)
-                  img(width="40",height="40",src="/logo.jpeg", alt="Invoice Administration")
-              div(class="col-lg-8 col-md-6 col-sm-4 col-4 mr-auto" )  
-                form(class="form-inline" action="/zoeken"+"/"+loginHash, method="post")
-                  input(class="form-control" type="search" placeholder="zoeken" aria-label="Search" name="search")
-    main
-      div(class="jumbotron")
-        div(class="container-fluid")
-          div(class="row")
-            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
-              if settings.thema == "light"
-                a(href='/contacten/#{loginHash}',class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Contacten
-              if settings.thema != "light"
-                a(href='/contacten/#{loginHash}',class="button") 
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Contacten
-              hr
-            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
-              if settings.thema == "light"
-                a(href='/facturen/#{loginHash}',class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Alle facturen
-              if settings.thema != "light"
-                a(href='/facturen/#{loginHash}',class="button") 
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Alle facturen
-              hr
-            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
-              if settings.thema == "light"
-                a(href='/chart/'+jaar+"/#{loginHash}",class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Grafiek
-              if settings.thema != "light"
-                a(href='/chart/'+jaar+"/#{loginHash}",class="button") 
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Grafiek
-              hr
-            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
-              if settings.thema == "light"
-                a(role="button",href='#berekeningen', onclick="toonBerekeningen()",class="btn btn-#{settings.oppo} btn-lg btn-block") Berekeningen
-              if settings.thema != "light"
-                a(role="button",href='#berekeningen', onclick="toonBerekeningen()",class="btn btn-#{settings.thema} btn-lg btn-block") Berekeningen
-              hr    
-            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
-              if settings.thema == "light"
-                a(href='/mat/#{loginHash}',class="button") 
-                  button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Materialen
-              if settings.thema != "light"
-                a(href='/mat'+"/#{loginHash}",class="button") 
-                  button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Materialen
-        div(class="container-fluid",id="berekeningen",style="display:none")
-          hr
-          div(class="row")
-            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
-              if settings.thema == "light"
-                a(href='/epo-sil'+"/"+loginHash,class="button") 
-                  button(type="button",class="btn btn-outline-#{settings.oppo} btn-lg btn-block") Siliconen mal berekenen
-              if settings.thema != "light"
-                a(href='/epo-sil'+"/"+loginHash,class="button") 
-                  button(type="button",class="btn btn-outline-#{settings.thema} btn-lg btn-block") Siliconen mal berekenen
-              hr
-            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
-              if settings.thema == "light"
-                a(href='/lam'+"/"+loginHash,class="button") 
-                  button(type="button",class="btn btn-outline-#{settings.oppo} btn-lg btn-block" disabled) A1 Lamineren berekenen
-              if settings.thema != "light"
-                a(href='/lam'+"/"+loginHash,class="button") 
-                  button(type="button",class="btn btn-outline-#{settings.thema} btn-lg btn-block" disabled) A1 Lamineren Berekenen
-              hr
-            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
-              if settings.thema == "light"
-                a(href='/prijs'+"/"+loginHash,class="button") 
-                  button(type="button",class="btn btn-outline-#{settings.oppo} btn-lg btn-block") Prijs berekeningen
-              if settings.thema != "light"
-                  a(href='/prijs'+"/"+loginHash,class="button") 
-                    button(type="button",class="btn btn-outline-#{settings.thema} btn-lg btn-block") Prijs berekeningen
-              hr
-             div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
-              if settings.thema == "light"
-                a(href='/inch'+"/"+loginHash,class="button") 
-                  button(type="button",class="btn btn-outline-#{settings.oppo} btn-lg btn-block") Inch & cm omzetten
-              if settings.thema != "light"
-                a(href='/inch'+"/"+loginHash,class="button") 
-                  button(type="button",class="btn btn-outline-#{settings.thema} btn-lg btn-block") Inch & cm omzetten
-              hr
-            div(class="col-lg-6 col-12 col-sm-12 col-md-12 mr-auto")
-             if settings.thema == "light"
-               a(href='/percentage'+"/"+loginHash,class="button") 
-                 button(type="button",class="btn btn-outline-#{settings.oppo} btn-lg btn-block" ) Percentage Berkenen
-             if settings.thema != "light"
-               a(href='/percentage'+"/"+loginHash,class="button") 
-                 button(type="button",class="btn btn-outline-#{settings.thema} btn-lg btn-block") Percentage Berkenen
-             hr
+
+      nav(class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow")
+        a(class="navbar-brand col-sm-3 col-md-2 mr-0",href="/edit-profile/#{loginHash}")=profile.firma
+        form(class="form", method="post",action="/zoeken/#{loginHash}")
+            input(class="form-control form-control-dark w-100" type="text" placeholder="zoeken" aria-label="zoeken")
+            button(type="sumbit",style="display:none")
+        ul(class="navbar-nav px-3")
+          li(class="nav-item text-nowrap")
+            a(class="nav-link" href="#") Sign out
+
+      div(class="container-fluid")
+        div(class ="row")
+          nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+            div(class="sidebar-sticky")
+              ul(class="nav flex-column")
+                li(class="nav-item")
+                  a(class="nav-link active" href="/index/#{loginHash}")
+                    span(data-feather="home")
+                    span Home
+                    span(class="sr-only") (current)
+                li(class="nav-item")
+                    a(class="nav-link" href="/edit-profile/#{loginHash}")
+                        span(data-feather="user")
+                        span Mijn Profiel
+                li(class="nav-item")
+                  a(class="nav-link" href="/facturen/#{loginHash}")
+                    span(data-feather="file")
+                    span Alle facturen
+                li(class="nav-item")
+                    a(class="nav-link" href="/contacten/#{loginHash}")
+                        span(data-feather="users")
+                        span Klanten
+                li(class="nav-item")
+                  a(class="nav-link" href="/mat/#{loginHash}")
+                    span(data-feather="package")
+                    span Materialen
+                li(class="nav-item")
+                    a(class="nav-link" href="/berekeningen/#{loginHash}")
+                        span(data-feather="book")
+                        span Berekeningen
+                li(class="nav-item")
+                  a(class="nav-link" href="/settings/#{loginHash}")
+                    span(data-feather="settings")
+                    span Settings
+          main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+              div(class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom")
+                h1(class="h2") Dashboard
+                div(class="btn-toolbar mb-2 mb-md-0")
+                    button(type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle")
+                        span(data-feather="calendar")
+                        span=jaar
+              canvas(class="my-4 w-100" id="myChart" width="900" height="380")
+              h2 Section title
+              div(class="table-responsive")
+                table(class="table table-striped table-sm")
+                    thead
+                        tr
+                            th #
+                            th Klant
+                            th Datum
+                            th Kost
+                            th Acties
+                    tbody
+                        each factuur in facturenLijst
+                            tr
+                                td
+                                    if factuur.factuurNr
+                                        if contact
+                                            a(href='/bestellingen/' + factuur._id + "/#{loginHash}", class="button")
+                                                button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
+                                        if !contact
+                                            a(href='/bestellingen/' + factuur._id + '/t/#{loginHash}', class="button")
+                                                button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")=factuur.factuurNr
+                                    if factuur.offerteNr && !factuur.factuurNr
+                                        if contact
+                                            a(href='/bestellingen/' + factuur._id + "/#{loginHash}", class="button")
+                                                button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="Offerte " + factuur.offerteNr
+                                        if !contact
+                                            a(href='/bestellingen/' + factuur._id + '/t' + "/#{loginHash}", class="button")
+                                                button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="Offerte " + factuur.offerteNr
+                                    if factuur.creditnr && !factuur.offerteNr && !factuur.factuurNr
+                                        a(href='/bestellingen/' + factuur._id + "/#{loginHash}", class="button")
+                                            button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="#{factuur.datum} met voorschot #{factuur.voorschot} €")="Creditnota " + factuur.creditnr
+                                if !contact
+                                    td
+                                        if factuur.contactPersoon == "Update deze factuur!"
+                                            a(href='/updateFactuur/' + factuur._id + "/#{loginHash}", class="button")
+                                                button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Klik hier om deze factuur up te daten")=factuur.contactPersoon
+                                        else
+                                            a(href='/facturen/' + factuur.contact + "/t" + "/#{loginHash}", class="button")
+                                                button(type="button" class="btn btn-outline-#{settings.thema}" data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
+                                td=factuur.datum
+                                if factuur.factuurNr
+                                    td
+                                        if contact
+                                            script.
+                                                var id = "#{factuur._id}";
+                                                function K#{factuur.factuurNr}() {
+                                                    window.location = "/change-betaald/" + "#{factuur._id}/#{loginHash}";
+                                                }
+                                        if !contact
+                                            script.
+                                                var id = "#{factuur._id}";
+                                                function K#{factuur.factuurNr}() {
+                                                    window.location = "/change-betaald2/" + "#{factuur._id}/#{loginHash}";
+                                                }
+                                        div(class="custom-control custom-switch")
+                                            if factuur.isBetaald
+                                                input(type="checkbox" class="custom-control-input bg-success" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()" checked)
+                                                label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal * 1.21).toFixed(2) + "€ ,  Betaald"
+                                            if !factuur.isBetaald
+                                                input(type="checkbox" class="custom-control-input bg-danger" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
+                                                label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal * 1.21).toFixed(2) + "€ ,  Openstaand"
+                                else
+                                    td  /
+                                td
+                                    a(role="button", class="btn btn-outline-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                                    div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                                        if !contact
+                                            a(class="dropdown-item",href='/edit-factuur/' + factuur.contact + '/' + factuur._id + '/t/#{loginHash}') aanpassen
+                                            a(class="dropdown-item", href='/delete-factuur/' + factuur.contact + '/' + factuur._id + '/t/#{loginHash}') verwijder
+                                            a(class="dropdown-item", href='/view-factuur/' + factuur._id + "/t/#{loginHash}",class="button") bekijk
+                                        if contact
+                                            a(class="dropdown-item",href='/edit-factuur/' + factuur.contact + '/' + factuur._id + "/#{loginHash}") aanpassen
+                                            a(class="dropdown-item", href='/delete-factuur/' + factuur.contact + '/' + factuur._id + "/#{loginHash}") verwijder
+                                            a(class="dropdown-item", href='/view-factuur/' + factuur._id + "/#{loginHash}",class="button") bekijk
+                                        div(class="dropdown-divider")
+                                        if factuur.creditnr
+                                            a(class="dropdown-item", href='/creditnota/' + factuur._id + "/#{loginHash}",id="target",target="_blank") download creditnota
+                                        if factuur.factuurNr
+                                            a(class="dropdown-item", href='/createPDF/' + factuur._id + "/#{loginHash}",id="target",target="_blank") download factuur
+                                        if factuur.offerteNr
+                                            a(class="dropdown-item", href='/offerte/' + factuur._id + "/#{loginHash}",id="target",target="_blank") download offerte
+                                            if !factuur.factuurNr
+                                                div(class="dropdown-divider")
+                                                if contact
+                                                    a(class="dropdown-item", href="/opwaardeer/" + factuur._id + "/#{loginHash}",class="button") opwaardeer naar factuur
+                                                if !contact
+                                                    a(class="dropdown-item", href="/opwaardeer/" + factuur._id + "/t/#{loginHash}",class="button") opwaardeer naar factuur
+
