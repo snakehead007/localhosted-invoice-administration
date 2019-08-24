@@ -41,19 +41,31 @@ html
                     span(data-feather="user")
                     span Mijn Profiel
                 li(class="nav-item")
-                  a(class="nav-link active" href="/facturen/"+loginHash)
-                    span(data-feather="file")
-                    span Alle facturen
-                    span(class="sr-only") (current)
+                  if !contact
+                    a(class="nav-link active" href="/facturen/"+loginHash)
+                      span(data-feather="file")
+                      span Alle facturen
+                      span(class="sr-only") (current)
+                  else
+                    a(class="nav-link" href="/facturen/" + loginHash)
+                      span(data-feather="file")
+                      span Alle facturen
                 li(class="nav-item")
-                  a(class="nav-link" href="/contacten/"+loginHash)
-                    span(data-feather="users")
-                    span Klanten
+                  if contact
+                    a(class="nav-link active" href="/contacten/"+loginHash)
+                      span(data-feather="users")
+                      span Klanten
+                      span(data-feather="chevron-right")
+                      span Facturen
+                  else
+                    a(class="nav-link" href="/contacten/" + loginHash)
+                      span(data-feather="users")
+                      span Klanten
                 li(class="nav-item")
                   a(class="nav-link" href="/mat/"+loginHash)
                     span(data-feather="package")
                     span Materialen
-                li(class="nav-item")
+                  li(class="nav-item")
                   a(class="nav-link" href="/berekeningen/"+loginHash)
                     span(data-feather="book")
                     span Berekeningen
@@ -90,13 +102,17 @@ html
 
 
           main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-            h2(class="pt-3") Alle facturen
+            if !contact
+              h2(class="pt-3") Alle facturen
+            else
+              h2(class="pt-3")="Facturen van "+contact.contactPersoon
             div(class="table-responsive")
               table(class="table table-striped table-sm")
                 thead
                   tr
                     th #
-                    th Klant
+                    if !contact
+                      th Klant
                     th Datum
                     th Kost
                     th Acties

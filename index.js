@@ -383,44 +383,48 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {//REWORKED & tested
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
-    Settings.findOne({}, function(err, settings) {
-      if (!err) {
-        Factuur.find({}, function(err, facturen) {
-          if (!err) {
-            var totaal = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            for (var i = 0; i <= 11; i++) {
-              for (var factuur of facturen) {// TODO: 'for of' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
-                if (factuur.factuurNr) {
-                  if (factuur.datumBetaald) {
-                    if (  (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i]) || factuur.datumBetaald.includes(month[i]) || factuur.datumBetaald.includes(month_small[i])) && factuur.datumBetaald.includes(req.params.jaar) && factuur.factuurNr && factuur.isBetaald) {
-                            totaal[i] += factuur.totaal;
-                    }
-                  } else if ( (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i]) || factuur.datumBetaald.includes(month[i]) || factuur.datumBetaald.includes(month_small[i])) && factuur.datum.includes(req.params.jaar) && factuur.factuurNr && factuur.isBetaald){
-                      totaal[i] += factuur.totaal;
-                    }
-                }
-                }
+    Profile.findOne({},function(err,profile){
+      Settings.findOne({}, function(err, settings) {
+        if (!err) {
+          Factuur.find({}, function(err, facturen) {
+            if (!err) {
+              var totaal = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+              for (var i = 0; i <= 11; i++) {
+                for (var factuur of facturen) {// TODO: 'for of' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+                  if (factuur.factuurNr) {
+                    if (factuur.datumBetaald) {
+                      if (  (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i]) || factuur.datumBetaald.includes(month[i]) || factuur.datumBetaald.includes(month_small[i])) && factuur.datumBetaald.includes(req.params.jaar) && factuur.factuurNr && factuur.isBetaald) {
+                              totaal[i] += factuur.totaal;
+                      }
+                    } else if ( (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i]) || factuur.datumBetaald.includes(month[i]) || factuur.datumBetaald.includes(month_small[i])) && factuur.datum.includes(req.params.jaar) && factuur.factuurNr && factuur.isBetaald){
+                        totaal[i] += factuur.totaal;
+                      }
+                  }
+                  }
+              }
+              if(settings.lang=="nl"){
+                res.render('nl/chart', {
+                  "totaal": totaal,
+                  "description": "Grafiek",
+                  "settings": settings,
+                  "jaar": req.params.jaar,
+                  "loginHash": req.params.loginHash,
+                  "profile":profile
+                });
+              }else{
+                res.render('eng/chart', {
+                  "totaal": totaal,
+                  "description": "Graph",
+                  "settings": settings,
+                  "jaar": req.params.jaar,
+                  "loginHash": req.params.loginHash,
+                  "profile":profile
+                });
+              }
             }
-            if(settings.lang=="nl"){
-              res.render('nl/chart', {
-                "totaal": totaal,
-                "description": "Grafiek",
-                "settings": settings,
-                "jaar": req.params.jaar,
-                "loginHash": req.params.loginHash
-              });
-            }else{
-              res.render('eng/chart', {
-                "totaal": totaal,
-                "description": "Graph",
-                "settings": settings,
-                "jaar": req.params.jaar,
-                "loginHash": req.params.loginHash
-              });
-            }
-          }
-        });
-      }
+          });
+        }
+      });
     });
 });
 
@@ -2542,11 +2546,14 @@ app.get('/settings/:loginHash', function(req, res) {//REWORKED
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
-  Settings.findOne({}, function(err, settings) {
-    res.render(settings.lang+'/settings', {
-      'settings': settings,
-      'description': "Settings",
-      'loginHash': req.params.loginHash
+  Profile.findOne({},function(err,profile){
+    Settings.findOne({}, function(err, settings) {
+      res.render(settings.lang+'/settings', {
+        'settings': settings,
+        'description': "Settings",
+        'loginHash': req.params.loginHash,
+        'profile':profile
+      });
     });
   });
 });
