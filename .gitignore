@@ -6,6 +6,7 @@
 GPUCache/
 TODO
 public/logo.*
+.idea/
 
 ### Linux ###
 *~
