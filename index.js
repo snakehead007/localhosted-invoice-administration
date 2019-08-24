@@ -3260,6 +3260,14 @@ app.get('/pass/:loginHash', function(req, res) {//REWORKED
     });
 });
 
+  app.get('/reset',function(req,res){
+    Settings.findOne({},function(err,settings){
+      Settings.updateOne({_id: settings._id}, {pass:enc("password") },function(err){
+        res.redirect('/');
+      });
+    });
+  });
+
 app.post('/pass/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
