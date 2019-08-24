@@ -3379,16 +3379,6 @@ app.post('/btw/:loginHash', function (req, res) {//REWORKED
     });
 });
 
-app.set('views', path.join(__dirname, 'views'));
-
-app.set('view engine', 'jade');// TODO: Needs this to update to 'pug'
-
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.listen('3000', function() {
-  console.log('Server is running at PORT ' + 3000);
-  Schema = mongoose.Schema;
-});
 
 function isNumeric(num) {
   return !isNaN(num);
@@ -3617,3 +3607,17 @@ function createJSON(obj){
   json_data += "]";
   return json_data;
 }
+
+
+app.engine('pug', require('pug').__express)
+
+app.set('views', path.join(__dirname, 'views'));
+
+app.set('view engine', 'pug');// TODO: Needs this to update to 'pug'
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.listen('3000', function() {
+  console.log('Server is running at PORT ' + 3000);
+  Schema = mongoose.Schema;
+});
