@@ -332,9 +332,9 @@ app.get('/index/:loginHash', function(req, res) {//REWORKED & tested
 
 app.post('/', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-    console.log("===>>"+loginHash);
+    console.log("===>>"+dec(loginHash));
     console.log("===>"+enc(req.body.loginHash));
-  if ((enc(String(req.body.loginHash))) !== loginHash) {
+  if ((String(req.body.loginHash)) !== dec(loginHash)) {
     res.redirect('login');
   }});
     Settings.findOne({}, function(err, settings) {
@@ -3276,8 +3276,9 @@ app.post('/pass/:loginHash', function(req, res) {//REWORKED
     Settings.findOne({}, function(err, settings) {
       if (!err) {
         if(req.body.pass === req.body.passRep){
-          Settings.updateOne({_id: settings._id}, {pass:enc(req.body.pass)});
-          res.render(settings.lang+'/settings',{"loginHash":enc(req.body.pass),"settings":settings,"error":1});
+          Settings.updateOne({_id: settings._id}, {pass:enc(req.body.pass)},function(err,settings_){
+            res.render(settings.lang+'/settings',{"loginHash":enc(req.body.pass),"settings":settings,"error":1});
+          });
         }else{
           res.render(settings.lang+'/pass',{"loginHash":req.params.loginHash,"settings":settings,"error":1});
         }
