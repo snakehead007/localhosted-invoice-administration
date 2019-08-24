@@ -19,8 +19,8 @@ html
     header
 
       nav(class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow")
-        a(class="navbar-brand col-sm-3 col-md-2 mr-0",href="/edit-profile/#{loginHash}")=profile.firma
-        form(class="form", method="post",action="/zoeken/#{loginHash}")
+        a(class="navbar-brand col-sm-3 col-md-2 mr-0",href="/edit-profile/"+loginHash)=profile.firma
+        form(class="form", method="post",action="/zoeken/"+loginHash)
           input(class="form-control form-control-dark w-100" type="text",name="search",placeholder="zoeken" aria-label="zoeken")
           button(type="sumbit",style="display:none")
         ul(class="navbar-nav px-3")
@@ -33,32 +33,32 @@ html
             div(class="sidebar-sticky")
               ul(class="nav flex-column")
                 li(class="nav-item")
-                  a(class="nav-link" href="/index/#{loginHash}")
+                  a(class="nav-link" href="/index/"+loginHash)
                     span(data-feather="home")
                     span Home
                 li(class="nav-item")
-                  a(class="nav-link" href="/edit-profile/#{loginHash}")
+                  a(class="nav-link" href="/edit-profile/"+loginHash)
                     span(data-feather="user")
                     span Mijn Profiel
                 li(class="nav-item")
-                  a(class="nav-link" href="/facturen/#{loginHash}")
+                  a(class="nav-link" href="/facturen/"+loginHash)
                     span(data-feather="file")
                     span Alle facturen
                 li(class="nav-item")
-                  a(class="nav-link active" href="/contacten/#{loginHash}")
+                  a(class="nav-link active" href="/contacten/"+loginHash)
                     span(data-feather="users")
                     span Klanten
                     span(class="sr-only") (current)
                 li(class="nav-item")
-                  a(class="nav-link" href="/mat/#{loginHash}")
+                  a(class="nav-link" href="/mat/"+loginHash)
                     span(data-feather="package")
                     span Materialen
                 li(class="nav-item")
-                  a(class="nav-link" href="/berekeningen/#{loginHash}")
+                  a(class="nav-link" href="/berekeningen/"+loginHash)
                     span(data-feather="book")
                     span Berekeningen
                 li(class="nav-item")
-                  a(class="nav-link" href="/settings/#{loginHash}")
+                  a(class="nav-link" href="/settings/"+loginHash)
                     span(data-feather="settings")
                     span Settings
               h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
@@ -81,31 +81,31 @@ html
                   tr
                     td
                       a(href='/facturen/' + contact._id + "/" + loginHash, class="button")
-                        button(type="button" class="btn btn-outline-#{settings.thema}" data-toggle="tooltip" data-placement="top" title="#{contact.firma}\n#{contact.straat} #{contact.straatNr}\n#{contact.postcode} #{contact.plaats}")=contact.contactPersoon
+                        button(type="button" class="btn btn-outline-"+settings.thema, data-toggle="tooltip" data-placement="top" title=contact.firma+"\n"+contact.straat+" "+contact.straatNr+"\n"+contact.postcode+" "+contact.plaats)=contact.contactPersoon
                         if contact.mail
                           if contact.mail2
                             td
-                              a(role="button", class="btn btn-outline-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mail's
+                              a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mail's
                               div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
-                                a(class="dropdown-item", href='mailto:#{contact.mail}')=contact.mail
-                                a(class="dropdown-item", href='mailto:#{contact.mail1}')=contact.mail1
-                                a(class="dropdown-item", href='mailto:#{contact.mail2}')=contact.mail2
+                                a(class="dropdown-item", href='mailto:'+contact.mail)=contact.mail
+                                a(class="dropdown-item", href='mailto:'+contact.mail1)=contact.mail1
+                                a(class="dropdown-item", href='mailto:'+contact.mail2)=contact.mail2
                           else if contact.mail1
                             td
-                              a(role="button", class="btn btn-outline-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mail's
+                              a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mail's
                               div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
-                                a(class="dropdown-item", href='mailto:#{contact.mail}')=contact.mail
-                                a(class="dropdown-item", href='mailto:#{contact.mail1}')=contact.mail1
+                                a(class="dropdown-item", href='mailto:'+contact.mail)=contact.mail
+                                a(class="dropdown-item", href='mailto:'+contact.mail1)=contact.mail1
 
                           if !contact.mail1
                             td
-                              a(href="mailto:#{contact.mail}",class="button")
-                                button(type="button" class="btn btn-outline-#{settings.thema}")=contact.mail
+                              a(href="mailto:"+contact.mail,class="button")
+                                button(type="button" class="btn btn-outline-"+settings.thema)=contact.mail
                         else
                           td
-                            button(type="button" class="btn btn-outline-#{settings.thema}") No e-mail
+                            button(type="button" class="btn btn-outline-"+settings.thema) No e-mail
                     td
-                      a(role="button", class="btn btn-outline-#{settings.thema} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                      a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                       div(class="dropdown-menu", aria-labelledby="actionsDropdown")
                         a(class="dropdown-item", href='/edit-contact/' + contact._id + "/" + loginHash) Edit
                         a(class="dropdown-item", href='/delete-contact/' + contact._id + "/" + loginHash) Delete
