@@ -267,6 +267,12 @@ style.
     margint-bottom: 30px;
   }
 body
+  if error
+    div(class="row no-gutters")
+      div(class="col-3")
+      div(class="col-12")
+        div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Paswoord incorrect
+    div(class="col-4 mr-auto")
   div(class="wrapper fadeInDown container-fluid")
     div(id="formContent")
       div(class="fadeIn first")
