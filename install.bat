@@ -1,24 +1,24 @@
 git stash;
 git pull;
-npm i -g express --save;
-npm i express --save;
-npm i -g jade --save;
-npm i jade --save;
-npm i mongodb -g --save;
-npm i mongodb --save;
-npm i -g mongoose --save;
-npm i mongoose --save;
-npm i -g node-windows --save;
-npm i node-windows --save;
-npm i -g chartjs --save;
-npm i chartjs --save;
-npm i -g express-fileupload --save;
-npm i express-fileupload --save;
-npm i -g image-to-base64 --save;
-npm i image-to-base54 --save;
-npm i -g multer --save;
-npm i multer --save
-npm i pug --save;
-npm audit fix;
-npm link node-windows
-node win-install.js
+npm i -g express --save --verbose;
+npm i express --save --verbose;
+npm i -g jade --save --verbose;
+npm i jade --save -- verbose;
+npm i mongodb -g --save --verbose;
+npm i mongodb --save --verbose ;
+npm i -g mongoose --save --verbose;
+npm i mongoose --save --verbose;
+npm i -g node-windows --save --verbose;
+npm i node-windows --save --verbose;
+npm i -g chartjs --save --verbose;
+npm i chartjs --save --verbose;
+npm i -g express-fileupload --save --verbose;
+npm i express-fileupload --save --;
+npm i -g image-to-base64 --save --verbose;
+npm i image-to-base54 --save --verbose;
+npm i -g multer --save --verbose;
+npm i multer --save --verbose;
+npm i pug --save --verbose;
+npm audit fix --verbose;
+npm link node-windows --verbose;
+node index.js;
