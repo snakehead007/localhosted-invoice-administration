@@ -78,81 +78,84 @@ html
               a(class="dropdown-item" href="/chart/" + String(Number(jaar) + Number(2)) +"/"+ loginHash)=String(Number(jaar) + Number(2))
       canvas(class="my-4 w-100" id="myChart" width="900" height="380")
       h2 Openstaande facturen
-      div(class="table-responsive")
-        table(class="table table-striped table-sm")
-            thead
-                tr
-                    th #
-                    th Klant
-                    th Datum
-                    th Kost
-                    th Acties
-            tbody
-                each factuur in fact_open
+      if fact_open.length == 0
+          div(class="alert alert-info col-lg-12 col-md-12 col-sm-12" role="alert") Geen openstaande facturen gevonden.
+      else
+          div(class="table-responsive")
+            table(class="table table-striped table-sm")
+                thead
                     tr
-                        td
-                            if factuur.factuurNr
-                                if contact
-                                    a(href='/bestellingen/' + factuur._id + "/"+loginHash, class="button")
-                                        button(type="button" class="btn btn-outline-"+settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum+" met voorschot "+factuur.voorschot+" €")=factuur.factuurNr
-                                if !contact
-                                    a(href='/bestellingen/' + factuur._id + '/t'+{loginHash}, class="button")
-                                        button(type="button" class="btn btn-outline-"+settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum+" met voorschot "+factuur.voorschot+" €")=factuur.factuurNr
-                            if factuur.offerteNr && !factuur.factuurNr
-                                if contact
-                                    a(href='/bestellingen/' + factuur._id + "/"+loginHash, class="button")
-                                        button(type="button" class="btn btn-outline-"+settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum+" met voorschot "+factuur.voorschot+" €")="Offerte " + factuur.offerteNr
-                                if !contact
-                                    a(href='/bestellingen/' + factuur._id + '/t' + "/"+loginHash, class="button")
-                                        button(type="button" class="btn btn-outline-"+settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum+" met voorschot "+factuur.voorschot+" €")="Offerte " + factuur.offerteNr
-                            if factuur.creditnr && !factuur.offerteNr && !factuur.factuurNr
-                                a(href='/bestellingen/' + factuur._id + "/"+loginHash, class="button")
-                                    button(type="button" class="btn btn-outline-"+settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum+" met voorschot "+factuur.voorschot+" €")="Creditnota " + factuur.creditnr
-                        if !contact
+                        th #
+                        th Klant
+                        th Datum
+                        th Kost
+                        th Acties
+                tbody
+                    each factuur in fact_open
+                        tr
                             td
-                                if factuur.contactPersoon == "Update deze factuur!"
-                                    a(href='/updateFactuur/' + factuur._id + "/"+loginHash, class="button")
-                                        button(type="button" class="btn btn-outline-"+settings.thema data-html="true" data-toggle="tooltip" data-placement="top" title="Klik hier om deze factuur up te daten")=factuur.contactPersoon
-                                else
-                                    a(href='/facturen/' + factuur.contact + "/t" + "/"+loginHash, class="button")
-                                        button(type="button" class="btn btn-outline-"+settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
-                        td=factuur.datum
-                        if factuur.factuurNr
-                            td
-                                div(class="custom-control custom-switch")
-                                    if factuur.isBetaald
-                                        input(type="checkbox" class="custom-control-input bg-success" id=factuur._id, onclick='changeBetaald(\"'+factuur._id+'\",\"'+contact+'\",\"'+loginHash+'\")', checked)
-                                        label(class="custom-control-label" for=factuur._id)=(factuur.totaal * 1.21).toFixed(2) + "€ ,  Betaald"
-                                    if !factuur.isBetaald
-                                        input(type="checkbox" class="custom-control-input bg-danger" id=factuur._id, onclick='changeBetaald(\"'+factuur._id+'\",\"'+contact+'\",\"'+loginHash+'\")')
-                                        label(class="custom-control-label" for=factuur._id)=(factuur.totaal * 1.21).toFixed(2) + "€ ,  Openstaand"
-                        else
-                            td  /
-                        td
-                            div(class="btn-group dropup")
-                                button(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
-                                div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                                    if !contact
-                                        a(class="dropdown-item",href='/edit-factuur/' + factuur.contact + '/' + factuur._id + '/t'+loginHash) aanpassen
-                                        a(class="dropdown-item", href='/delete-factuur/' + factuur.contact + '/' + factuur._id + '/t/'+loginHash) verwijder
-                                        a(class="dropdown-item button" , href='/view-factuur/' + factuur._id + "/t/"+loginHash) bekijk
+                                if factuur.factuurNr
                                     if contact
-                                        a(class="dropdown-item",href='/edit-factuur/' + factuur.contact + '/' + factuur._id + "/"+loginHash) aanpassen
-                                        a(class="dropdown-item", href='/delete-factuur/' + factuur.contact + '/' + factuur._id + "/"+loginHash) verwijder
-                                        a(class="dropdown-item button", href='/view-factuur/' + factuur._id + "/"+loginHash) bekijk
-                                    div(class="dropdown-divider")
-                                    if factuur.creditnr
-                                        a(class="dropdown-item", href='/creditnota/' + factuur._id + "/"+loginHash,id="target",target="_blank") download creditnota
-                                    if factuur.factuurNr
-                                        a(class="dropdown-item", href='/createPDF/' + factuur._id + "/"+loginHash,id="target",target="_blank") download factuur
-                                    if factuur.offerteNr
-                                        a(class="dropdown-item", href='/offerte/' + factuur._id + "/"+loginHash,id="target",target="_blank") download offerte
-                                        if !factuur.factuurNr
-                                            div(class="dropdown-divider")
-                                            if contact
-                                                a(class="dropdown-item button", href="/opwaardeer/" + factuur._id + "/"+loginHash) opwaardeer naar factuur
-                                            if !contact
-                                                a(class="dropdown-item button", href="/opwaardeer/" + factuur._id + "/t"+loginHash) opwaardeer naar factuur
+                                        a(href='/bestellingen/' + factuur._id + "/"+loginHash, class="button")
+                                            button(type="button" class="btn btn-outline-"+settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum+" met voorschot "+factuur.voorschot+" €")=factuur.factuurNr
+                                    if !contact
+                                        a(href='/bestellingen/' + factuur._id + '/t'+{loginHash}, class="button")
+                                            button(type="button" class="btn btn-outline-"+settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum+" met voorschot "+factuur.voorschot+" €")=factuur.factuurNr
+                                if factuur.offerteNr && !factuur.factuurNr
+                                    if contact
+                                        a(href='/bestellingen/' + factuur._id + "/"+loginHash, class="button")
+                                            button(type="button" class="btn btn-outline-"+settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum+" met voorschot "+factuur.voorschot+" €")="Offerte " + factuur.offerteNr
+                                    if !contact
+                                        a(href='/bestellingen/' + factuur._id + '/t' + "/"+loginHash, class="button")
+                                            button(type="button" class="btn btn-outline-"+settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum+" met voorschot "+factuur.voorschot+" €")="Offerte " + factuur.offerteNr
+                                if factuur.creditnr && !factuur.offerteNr && !factuur.factuurNr
+                                    a(href='/bestellingen/' + factuur._id + "/"+loginHash, class="button")
+                                        button(type="button" class="btn btn-outline-"+settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum+" met voorschot "+factuur.voorschot+" €")="Creditnota " + factuur.creditnr
+                            if !contact
+                                td
+                                    if factuur.contactPersoon == "Update deze factuur!"
+                                        a(href='/updateFactuur/' + factuur._id + "/"+loginHash, class="button")
+                                            button(type="button" class="btn btn-outline-"+settings.thema data-html="true" data-toggle="tooltip" data-placement="top" title="Klik hier om deze factuur up te daten")=factuur.contactPersoon
+                                    else
+                                        a(href='/facturen/' + factuur.contact + "/t" + "/"+loginHash, class="button")
+                                            button(type="button" class="btn btn-outline-"+settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
+                            td=factuur.datum
+                            if factuur.factuurNr
+                                td
+                                    div(class="custom-control custom-switch")
+                                        if factuur.isBetaald
+                                            input(type="checkbox" class="custom-control-input bg-success" id=factuur._id, onclick='changeBetaald(\"'+factuur._id+'\",\"'+contact+'\",\"'+loginHash+'\")', checked)
+                                            label(class="custom-control-label" for=factuur._id)=(factuur.totaal * 1.21).toFixed(2) + "€ ,  Betaald"
+                                        if !factuur.isBetaald
+                                            input(type="checkbox" class="custom-control-input bg-danger" id=factuur._id, onclick='changeBetaald(\"'+factuur._id+'\",\"'+contact+'\",\"'+loginHash+'\")')
+                                            label(class="custom-control-label" for=factuur._id)=(factuur.totaal * 1.21).toFixed(2) + "€ ,  Openstaand"
+                            else
+                                td  /
+                            td
+                                div(class="btn-group dropup")
+                                    button(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                                    div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                                        if !contact
+                                            a(class="dropdown-item",href='/edit-factuur/' + factuur.contact + '/' + factuur._id + '/t'+loginHash) aanpassen
+                                            a(class="dropdown-item", href='/delete-factuur/' + factuur.contact + '/' + factuur._id + '/t/'+loginHash) verwijder
+                                            a(class="dropdown-item button" , href='/view-factuur/' + factuur._id + "/t/"+loginHash) bekijk
+                                        if contact
+                                            a(class="dropdown-item",href='/edit-factuur/' + factuur.contact + '/' + factuur._id + "/"+loginHash) aanpassen
+                                            a(class="dropdown-item", href='/delete-factuur/' + factuur.contact + '/' + factuur._id + "/"+loginHash) verwijder
+                                            a(class="dropdown-item button", href='/view-factuur/' + factuur._id + "/"+loginHash) bekijk
+                                        div(class="dropdown-divider")
+                                        if factuur.creditnr
+                                            a(class="dropdown-item", href='/creditnota/' + factuur._id + "/"+loginHash,id="target",target="_blank") download creditnota
+                                        if factuur.factuurNr
+                                            a(class="dropdown-item", href='/createPDF/' + factuur._id + "/"+loginHash,id="target",target="_blank") download factuur
+                                        if factuur.offerteNr
+                                            a(class="dropdown-item", href='/offerte/' + factuur._id + "/"+loginHash,id="target",target="_blank") download offerte
+                                            if !factuur.factuurNr
+                                                div(class="dropdown-divider")
+                                                if contact
+                                                    a(class="dropdown-item button", href="/opwaardeer/" + factuur._id + "/"+loginHash) opwaardeer naar factuur
+                                                if !contact
+                                                    a(class="dropdown-item button", href="/opwaardeer/" + factuur._id + "/t"+loginHash) opwaardeer naar factuur
 
 script.
     $(document).ready(function () {

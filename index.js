@@ -464,21 +464,16 @@ app.get('/add-contact/:loginHash', function(req, res) {//REWORKED & tested
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
-    Settings.findOne({}, function(err, settings) {
-      if (!err) {
-        if(settings.lang=="nl"){
-        res.render('nl/add/add-contact', {
-          'description': "Contact toevoegen",
-          "settings": settings,
-          "loginHash": req.params.loginHash
-        });}else{
-          res.render('eng/add/add-contact', {
-            'description': "Add contact",
-            "settings": settings,
-            "loginHash": req.params.loginHash
-          });
+    Settings.findOne({},function(err, settings) {
+      Profile.findOne({},function(err,profile) {
+        if (!err) {
+            res.render(settings.lang+'/add/add-contact', {
+              "settings": settings,
+              "loginHash": req.params.loginHash,
+              "profile":profile
+            });
         }
-      }
+      });
     });
 });
 
