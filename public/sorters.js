@@ -3,11 +3,11 @@
  * @param n the number of the collumn, starting with 0 as the first collumn
  * @param kind is the kind of comparing the sorter is going to take
  */
+
+
+
+// TODO: break problems, only breaks the switch, needs to break the whole for loop and redo everything when found something to switch. currenlty not working.
 function sortTable(n,kind="default") {
-    var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
-    var maand_klein = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
-    var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Oktober", "November", "December"];
-    var month_small = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "oktober", "november", "december"];
     //parameter 'n':
     //0 => first row
     //1 => second row
@@ -24,6 +24,7 @@ function sortTable(n,kind="default") {
     dir = "asc";
     /*Make a loop that will continue until
     no switching has been done:*/
+    console.log("!!!"+dir);
     while (switching) {
         //start by saying: no switching is done:
         switching = false;
@@ -42,45 +43,43 @@ function sortTable(n,kind="default") {
             if (dir == "asc") {
                 switch(kind.toLowerCase()){
                     case "date":
-                        var dayY = (y.innerHTML.slice(1,2)===" ")?parseInt(y.innerHTML.slice(0,1)):parseInt(y.innerHTML.slice(0,2));
-                        var dayX = (x.innerHTML.slice(1,2)===" ")?parseInt(x.innerHTML.slice(0,1)):parseInt(x.innerHTML.slice(0,2));
-                        var monthX = (dayX.toString().length===1)?x.innerHTML.slice(2,x.innerHTML.length-5):x.innerHTML.slice(3,x.innerHTML.length-5);
-                        var mX,mY;
-                        var monthY = (dayY.toString().length===1)?y.innerHTML.slice(2,y.innerHTML.length-5):y.innerHTML.slice(3,y.innerHTML.length-5);
-                        for(var j=0; i < (maand_klein.length-1);j++){
-                            if(monthX.toLowerCase()===maand_klein[j]){
-                                mX=j+1;
-                            }
-                            if(monthY.toLowerCase()===maand_klein[j]){
-                                mY=j+1;
-                            }
-                        }
-                        x= new Object({
-                            year:parseInt(x.innerHTML.slice(x.innerHTML.length-4)),
-                            month:mX,
-                            day:dayX
-                        });
-                        y = new Object({
-                            year:parseInt(y.innerHTML.slice(y.innerHTML.length-4)),
-                            month:mY,
-                            day:dayY
-                        });
-                        if(x.year===y.year){
-                            if(x.month===y.month){
-                                if(x.day>y.day){
-                                  shouldSwitch = true;
-                                  break;
+                        xObj = toDateObject(x.innerHTML);
+                        yObj = toDateObject(y.innerHTML);
+                        console.log(xObj);
+                        console.log(yObj);
+                        if(xObj.year===yObj.year){
+                            if(xObj.month===yObj.month){
+                                if(x.day>yObj.day){
+                                    console.log("switching because of day");
+                                    console.log(xObj.day+"   |   "+yObj.day);
+                                    shouldSwitch = true;
+                                    break;
                                 }
-                            }else if(x.month > x.month){
+                            }else if(xObj.month > yObj.month){
+                                console.log("switching because of month");
+                                console.log(xObj.month+"   |   "+yObj.month);
                                 shouldSwitch = true;
                                 break;
                             }
-                        }else if(x.year > y.year){
+                        }else if(xObj.year > yObj.year){
+                            console.log("switching because of year");
+                            console.log(xObj.year+"   |   "+yObj.year);
                             shouldSwitch= true;
                             break;
                         }
-                        break;
                     case "facturen":
+                        //If this includes "offerte" and the next is a normal factuur, then switch
+                        if(x.innerHTML.includes("Offerte")&& (!(y.innerHTML.includes("Offerte")) || !(y.innerHTML.includes("Creditnota"))  )){
+                            shouldSwitch = true;
+                            break;
+                        //if this includes "Creditnota" and the next is a normal factuur, then switch
+                        }else if(x.innerHTML.includes("Creditnota")&& (!(y.innerHTML.includes("Creditnota")) || (y.innerHTML.includes("Offerte")) )){
+                            shouldSwitch = true;
+                            break;
+                        }else if(x.innerHTML.includes("Offerte") && (y.innerHTML.includes("Creditnota"))){
+                            shouldSwitch = true;
+                            break;
+                        }
                         break;
                     case "kost":
                         if(y.innerHTML.includes("openstaand") && x.innerHTML.includes("betaald")){
@@ -94,50 +93,38 @@ function sortTable(n,kind="default") {
                             break;
                         }
                         break;
-                    default:
+                    case "default":
                         if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
                             shouldSwitch= true;
                             break;
                         }
                         break;
                 }
+                break;
             } else if (dir == "desc") {
                 switch(kind.toLowerCase()){
                     case "date":
-                        var dayY = (y.innerHTML.slice(1,2)===" ")?parseInt(y.innerHTML.slice(0,1)):parseInt(y.innerHTML.slice(0,2));
-                        var dayX = (x.innerHTML.slice(1,2)===" ")?parseInt(x.innerHTML.slice(0,1)):parseInt(x.innerHTML.slice(0,2));
-                        var monthX = (dayX.toString().length===1)?x.innerHTML.slice(2,x.innerHTML.length-5):x.innerHTML.slice(3,x.innerHTML.length-5);
-                        var mX,mY;
-                        var monthY = (dayY.toString().length===1)?y.innerHTML.slice(2,y.innerHTML.length-5):y.innerHTML.slice(3,y.innerHTML.length-5);
-                        for(var j=0; i < (maand_klein.length-1);j++){
-                            if(monthX.toLowerCase()===maand_klein[j]){
-                                mX=j+1;
-                            }
-                            if(monthY.toLowerCase()===maand_klein[j]){
-                                mY=j+1;
-                            }
-                        }
-                        x= new Object({
-                            year:parseInt(x.innerHTML.slice(x.innerHTML.length-4)),
-                            month:mX,
-                            day:dayX
-                        });
-                        y = new Object({
-                            year:parseInt(y.innerHTML.slice(y.innerHTML.length-4)),
-                            month:mY,
-                            day:dayY
-                        });
-                        if(x.year===y.year){
-                            if(x.month===y.month){
-                                if(x.day<y.day){
+                        xObj = toDateObject(x.innerHTML);
+                        yObj = toDateObject(y.innerHTML);
+                        console.log(xObj);
+                        console.log(yObj);
+                        if(xObj.year===yObj.year){
+                            if(xObj.month===yObj.month){
+                                if(xObj.day<yObj.day){
+                                    console.log("switching because of day");
+                                    console.log(xObj.day+"   |   "+yObj.day);
                                     shouldSwitch = true;
                                     break;
                                 }
-                            }else if(x.month < x.month){
+                            }else if(xObj.month < yObj.month){
+                                console.log("switching because of month");
+                                console.log(xObj.month+"   |   "+yObj.month);
                                 shouldSwitch = true;
                                 break;
                             }
-                        }else if(x.year < y.year){
+                        }else if(xObj.year < yObj.year){
+                            console.log("switching because of year");
+                            console.log(xObj.year+"   |   "+yObj.year);
                             shouldSwitch= true;
                             break;
                         }
@@ -156,7 +143,7 @@ function sortTable(n,kind="default") {
                             break;
                         }
                         break;
-                    default:
+                    case "default":
                         if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
                             shouldSwitch= true;
                             break;
@@ -165,11 +152,13 @@ function sortTable(n,kind="default") {
                 }
             }
         }
+        console.log(shouldSwitch);
         if (shouldSwitch) {
             /*If a switch has been marked, make the switch
             and mark that a switch has been done:*/
             rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
             switching = true;
+            console.log(switchcount);
             //Each time a switch is done, increase this count by 1:
             switchcount ++;
         } else {
@@ -181,4 +170,28 @@ function sortTable(n,kind="default") {
             }
         }
     }
+}
+
+/**
+ *  This will change a string in format dd month yyyy (example 10 july 1999) into an Object {month,year,day} as numbers.
+ *  This are the languages checks: English > Dutch > ... (rest will be added later)
+ */
+function toDateObject(str) {
+    var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
+    var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Oktober", "November", "December"];
+    var dayX = (str.slice(1,2)===" ")?parseInt(str.slice(0,1)):parseInt(str.slice(0,2));
+    var monthX = (dayX.toString().length===1)?str.slice(2,str.length-5):str.slice(3,str.length-5);
+    var monthNumber;
+    for(var j=0; j < (maand.length-1);j++){
+        if(monthX.toUpperCase()===month[j].toUpperCase()){
+            monthNumber=j+1;
+        } else if(monthX.toUpperCase()===maand[j].toUpperCase()){
+            monthNumber=j+1;
+        }
+    }
+    return (new Object({
+        year:parseInt(str.slice(str.length-4)),
+        month:monthNumber,
+        day:dayX
+    }));
 }

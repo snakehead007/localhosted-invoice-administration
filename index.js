@@ -3287,7 +3287,9 @@ app.get('/pass/:loginHash', function(req, res) {//REWORKED
       res.render('login');
     }});
     Settings.findOne({}, function(err, settings) {
-        res.render(settings.lang+'/pass',{"loginHash":req.params.loginHash,"settings":settings});
+      Profile.findOne({},function(err,profile){
+        res.render(settings.lang+'/pass',{"loginHash":req.params.loginHash,"settings":settings,"profile":profile});
+      });
     });
 });
 
@@ -3297,14 +3299,16 @@ app.post('/pass/:loginHash', function(req, res) {//REWORKED
       res.render('login');
     }});
     Settings.findOne({}, function(err, settings) {
+      Profile.findOne({},function(err,profile){
       if (!err) {
         if(req.body.pass === req.body.passRep){
           Settings.updateOne({_id: settings._id}, {pass:enc(req.body.pass)});
-          res.render(settings.lang+'/settings',{"loginHash":enc(req.body.pass),"settings":settings,"error":1});
+          res.render(settings.lang+'/settings',{"loginHash":enc(req.body.pass),"settings":settings,"error":1,"profile":profile});
         }else{
-          res.render(settings.lang+'/pass',{"loginHash":req.params.loginHash,"settings":settings,"error":1});
+          res.render(settings.lang+'/pass',{"loginHash":req.params.loginHash,"settings":settings,"error":1,"profile":profile});
         }
       }
+      });
     });
 });
 
@@ -3345,10 +3349,13 @@ app.get('/btw/:loginHash',function(req,res){//REWORKED
       res.render('login');
     }});
   Settings.findOne({}, function(err, settings) {
-    res.render(settings.lang+'/btw',{
-      "loginHash":req.params.loginHash,
-      "settings":settings,
-      "description":"Updating..."
+    Profile.findOne({},function(err,profile){
+      res.render(settings.lang+'/btw',{
+        "loginHash":req.params.loginHash,
+        "settings":settings,
+        "description":"Updating...",
+        "profile":profile
+      });
     });
   });
 });
