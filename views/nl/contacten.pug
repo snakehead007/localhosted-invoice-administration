@@ -62,6 +62,13 @@ html
                     span(data-feather="settings")
                     span Settings
               h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+                span Bookmarks
+              ul(class="nav flex-column mb-2")
+                li(class="nav-item")
+                  a(class="nav-link",href='https://identity.basecone.com/authentication/login')
+                    span(data-feather="bookmark")
+                    span Basecone
+              h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
                 span Klanten - opties
               ul(class="nav flex-column mb-2")
                 li(class="nav-item")
@@ -104,7 +111,7 @@ html
                                 button(type="button" class="btn btn-outline-"+settings.thema)=contact.mail
                         else
                           td
-                            button(type="button" class="btn btn-outline-"+settings.thema) No e-mail
+                            button(type="button" class="btn btn-outline-"+settings.thema disabled) No e-mail
                     td
                       a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                       div(class="dropdown-menu", aria-labelledby="actionsDropdown")

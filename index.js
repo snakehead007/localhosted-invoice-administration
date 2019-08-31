@@ -879,6 +879,32 @@ app.get('/facturen/:idc/:loginHash', function(req, res) {//REWORKED & tested
   });
 });
 
+app.get('/add-factuur/:loginHash',function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+  Settings.findOne({},function(err,settings){
+    if(!err){
+      Profile.findOne({},function(err,profile){
+        if(!err){
+          Contact.find({},function(err,contacten) {
+            if(!err){
+              res.render(settings.lang + '/add-file-no-contact', {
+                "profile": profile,
+                "settings": settings,
+                "loginHash": req.params.loginHash,
+                "add": "factuur",
+                "contacten":contacten
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
 app.get('/facturen/:idc/t/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
@@ -889,26 +915,18 @@ app.get('/facturen/:idc/t/:loginHash', function(req, res) {//REWORKED & tested
         Factuur.find({contact: req.params.idc}).sort('-factuurNr').exec(function(err, facturen) {
           if (!err) {
             Settings.findOne({}, function(err, settings) {
-              if (!err) {
-                if(settings.lang=="nl"){
-                res.render('nl/facturen', {
-                  'terug': 1,
-                  'contact': contact,
-                  'facturenLijst': facturen,
-                  'description': "Facturen van " + contact.contactPersoon,
-                  "settings": settings,
-                  "loginHash": req.params.loginHash
-                });}else{
-                  res.render('eng/facturen', {
+              Profile.findOne({},function(err,profile) {
+                if (!err) {
+                  res.render(settings.lang+'/facturen', {
                     'terug': 1,
                     'contact': contact,
                     'facturenLijst': facturen,
-                    'description': "Invoices of " + contact.contactPersoon,
+                    "profile":profile,
                     "settings": settings,
                     "loginHash": req.params.loginHash
                   });
                 }
-              }
+              });
             });
           }
         });

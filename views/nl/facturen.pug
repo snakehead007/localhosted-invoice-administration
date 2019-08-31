@@ -73,32 +73,43 @@ html
                   a(class="nav-link" href="/settings/"+loginHash)
                     span(data-feather="settings")
                     span Settings
-              //form(method="post", action="/")
-                h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
-                    button(type="sumbit",class="d-flex align-items-center text-muted", href="")
-                      span(data-feather="filter")
-                      span Filter
-                ul(class="nav flex-column mb-2")
-                  li(class="nav-item")
-                    div(class="form-check")
-                      input( class="form-check-input",type="checkbox",value="",id="checkFacturen")
-                      label(class="form-check-label",for="checkFacturen") Facturen
-                  li(class="nav-item")
-                    div(class="form-check")
-                      input( class="form-check-input",type="checkbox",value="",id="checkCredit")
-                      label(class="form-check-label",for="checkCredit") Creditnota's
-                  li(class="nav-item")
-                    div(class="form-check")
-                      input( class="form-check-input",type="checkbox",value="",id="checkOfferte")
-                      label(class="form-check-label",for="checkOfferte") Offerte's
-                  li(class="nav-item")
-                    div(class="form-check")
-                      input( class="form-check-input",type="checkbox",value="",id="checkOpen")
-                      label(class="form-check-label",for="checkOpen") Openstaand
-                  li(class="nav-item")
-                    div(class="form-check")
-                      input( class="form-check-input",type="checkbox",value="",id="checkBetaald")
-                      label(class="form-check-label",for="checkBetaald") Betaald
+              h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+                span Bookmarks
+              ul(class="nav flex-column mb-2")
+                li(class="nav-item")
+                  a(class="nav-link",href='https://identity.basecone.com/authentication/login')
+                    span(data-feather="bookmark")
+                    span Basecone
+              h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+                span Facturen - opties
+              ul(class="nav flex-column mb-2")
+                li(class="nav-item")
+                  if contact
+                    a(class="nav-link",href='/add-factuur' + "/"+contact._id+"/"+ loginHash)
+                      span(data-feather="plus-circle")
+                      span Nieuwe factuur
+                  else
+                    a(class="nav-link",href='/add-factuur' +"/"+ loginHash)
+                      span(data-feather="plus-circle")
+                      span Nieuwe factuur
+                li(class="nav-item")
+                  if contact
+                    a(class="nav-link",href='/add-offerte' + "/"+contact._id+"/"+ loginHash)
+                      span(data-feather="plus-circle")
+                      span Nieuwe offerte
+                  else
+                    a(class="nav-link",href='/add-Offerte' + "/" + loginHash)
+                      span(data-feather="plus-circle")
+                      span Nieuwe offerte
+                li(class="nav-item")
+                  if contact
+                    a(class="nav-link",href='/add-creditnota' + "/"+contact._id+"/"+ loginHash)
+                      span(data-feather="plus-circle")
+                      span Nieuwe creditnota
+                  else
+                    a(class="nav-link",href='/add-creditnota' + "/" + loginHash)
+                      span(data-feather="plus-circle")
+                      span Nieuwe creditnota
     main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
       if !contact
         h2(class="pt-3") Alle facturen
