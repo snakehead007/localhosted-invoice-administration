@@ -55,12 +55,12 @@ html
                 $(".optionText").css('background-color', 'rgba(0, 0, 0, 0)');
             };
             function openLang() {
+                $("#pass").slideUp();
                 $("#btw").slideUp();
                 $("#thema").slideUp();
                 $("#lang").slideDown();
                 $("#text").slideUp();
                 $("#info").slideUp();
-                $(".optionPass").slideUp();
                 $(".optionLang").css('background-color', 'rgba(207, 207, 207, .3)');
                 $(".optionThema").css('background-color', 'rgba(0, 0, 0, 0)');
                 $(".optionBtw").css('background-color', 'rgba(0, 0, 0, 0)');
@@ -215,7 +215,7 @@ html
                                                         div(class="input-group-prepend")
                                                             span(class="input-group-text") Offerte tekst
                                                         textarea(input="text",name="offertetext",class="form-control" aria-label="With textarea")=settings.offertetext
-                                                    button(type="submit",class="btn btn-outline-"+settings.oppo) bijwerken
+                                                    button(type="submit",class="btn btn-outline-"+settings.thema) bijwerken
                                                     div(class="",id="info",style="display:none")
                                                         p Voor variabelen van de database te gebruiken, typ ze zoals hieronder in de texten:
                                                         samp

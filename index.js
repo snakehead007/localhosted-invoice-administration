@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 //Mongoose initializing
-mongoose.connect('mongodb://localhost:27017/sample-website'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
+mongoose.connect('mongodb://localhost:27017/testing'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
 mongoose.connection.on('open', function() {
   console.log('Mongoose connected!');
 });
@@ -40,7 +40,7 @@ var SettingsSchema = new Schema({
   //Language of the user, can be "eng" or "nl"
   lang: {
     type: String,
-    default: "eng"
+    default: "nl"
   },
   //Theme of the user, currenlty working with bootstrap built-in themes
   thema: {
@@ -847,7 +847,6 @@ app.get('/facturen/:idc/:loginHash', function(req, res) {//REWORKED & tested
   Contact.findOne({_id: req.params.idc}, function(err, contact) {
     if (!err) {
       Factuur.find({contact: req.params.idc}).sort('-factuurNr').exec(function(err, facturen) {
-        console.log(facturen[0].totaal);
         if (!err) {
           Settings.findOne({}, function(err, settings) {
               Profile.findOne({},function(err,profile){
@@ -3348,10 +3347,13 @@ app.get('/upload/:loginHash',function(req,res){//REWORKED
       res.render('login');
     }});
   Settings.findOne({}, function(err, settings) {
+    Profile.findOne({},function(err,profile){
     res.render(settings.lang+'/upload',{
       "loginHash":req.params.loginHash,
       "settings":settings,
-      "description":"Upload logo"
+      "description":"Upload logo",
+      "profile":profile
+    });
     });
   });
 });

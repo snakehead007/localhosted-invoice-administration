@@ -4,49 +4,46 @@ html
     title download pdf
     script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous")
     script(src="https://unpkg.com/jspdf-autotable@3.1.0/dist/jspdf.plugin.autotable.js")
-  body
+  body(onpageshow='getGobalVars('+imgdData+','+profile+','+contact+','+factuur+','+factuurtext+','+btw+','+bestellingen+')')
     h1 Sluit deze pagina na het downloaden van de pdf
   script.
-    var imgData = "#{imgData}";
-    Pfirma = "#{profile.firma}";
-    Pnaam = "#{profile.naam}";
-    Pstraat = "#{profile.straat}";
-    PstraatNr = "#{profile.straatNr}";
-    Ppostcode = "#{profile.postcode}";
-    Pplaats = "#{profile.plaats}";
-    PbtwNr = "#{profile.btwNr}";
-    Piban = "#{profile.iban}";
-    Pbic = "#{profile.bic}";
-    firma = "#{contact.firma}";
-    contactPersoon = "#{contact.contactPersoon}";
-    straat = "#{contact.straat}";
-    straatNr = "#{contact.straatNr}";
-    postcode = "#{contact.postcode}";
-    plaats = "#{contact.plaats}";
-    btwNr = "#{contact.btwNr}";
-    factuurNr = "#{factuur.factuurNr}";
-    datum = "#{factuur.datum}";
-    var btw = Number(#{btw});
-    factuurtext = [];
-    factuurtext.push("#{factuurtext[0]}");
-    factuurtext.push("#{factuurtext[1]}");
-    factuurtext.push("#{factuurtext[2]}");
-    factuurtext.push("#{factuurtext[3]}");
-    factuurtext.push("#{factuurtext[4]}");
-    factuurtext.push("#{factuurtext[5]}");
-    
+    var imgData, Pfirma,Pnaam,Pstraat,PstraatNr,Ppostcode,Pplaats,PbtwNr,Piban,Pbic,firma,contactPersoon,straat,straatNr,postcode,plaats ,btwNr ,factuurNr ,datum ,btw,factuurtext,profile,factuur,bestellingen;
+    function getGlobalVars(_imgdata,_profile,_contact,_factuur,_factuurtext,btw,_bestellingen){
+      imgData = _imgdata;
+      Pfirma = _profile.firma;
+      Pnaam = _profile.naam;
+      Pstraat = _profile.straat;
+      Ppostcode = _profile.postcode;
+      Plaats = _profile.plaats;
+      PbtwNr = _profile.btwNr;
+      Pbic = _profile.bic;
+      firma = _contact.firma;
+      contactPersoon = _contact.contactPersoon;_bestellingen
+      straat = _contact.straat;
+      straatNr = _contact.straatNr;
+      postcode = _contact.postcode;
+      plaats = _contact.plaats;
+      factuurNr = _factuur.factuurNr;
+      datum = _factuur.datum;
+      btw = Number(btw);
+      factuurtext = _factuurtext;
+      profile = _profile;
+      factuur = _factuur;
+      bestellingen = _bestellingen;
+    }
+
     voorschot = Number(#{factuur.voorschot});
     var doc = new jsPDF();
     doc.setFont(doc.getFontList()[0]);
     doc.setProperties({
-      title: '#{profile.firma} factuur #{factuur.factuurNr}',
-      subject: 'Factuur van #{profile.firma}',
-      author: '#{profile.firma}',
-      keywords: '#{profile.firma} ,factuur ,#{factuur.factuurNr}',
-      creator: '#{profile.firma} FactuurBeheer',
+      title: profile.firma+' factuur '+ factuurNr,
+      subject: 'Factuur van '+factuur.firma,
+      author: profile.firma,
+      keywords: profile.firma ,factuur ,factuurNr,
+      creator: profile.firma+' FactuurBeheer',
     });      /**Beschrijvingen**/
     
-    var unusable_json_data = "#{bestellingen}";
+    var unusable_json_data = bestellingen;
     var current = JSON.parse(unusable_json_data.replace(/(&quot\;)/g,"\""));
     var bestellingen = [];
     var aantal = Number(#{lengte});
