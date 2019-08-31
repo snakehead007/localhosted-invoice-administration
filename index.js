@@ -309,12 +309,6 @@ app.get('/', function(req, res) {//REWORKED & tested
     });
 });
 
-app.get('/test',function(req,res){
-  Settings.findOne({},function(err,settings){
-    res.render('test',{'settings':settings});
-  });
-});
-
 app.get('/login', function(req, res) {//REWORKED & tested
   res.render('login');
 });
@@ -349,8 +343,7 @@ app.get('/index/:loginHash', function(req, res) {//REWORKED & tested
                                     }
                                 }
                             }
-                            //if (settings.lang == "nl") {
-                                res.render('nl/index', {
+                                res.render(settings.lang+'/index', {
                                     "totaal": totaal,
                                     "description": "Grafiek",
                                     "settings": settings,
@@ -360,7 +353,6 @@ app.get('/index/:loginHash', function(req, res) {//REWORKED & tested
                                     "facturenLijst":facturen,
                                     "fact_open":fact_open
                                 });
-                           // }
                         }
                     });
                 }
@@ -402,25 +394,13 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {//REWORKED & tested
                   }
                   }
               }
-              if(settings.lang=="nl"){
-                res.render('nl/chart', {
+                res.render(settings.lang+'/chart', {
                   "totaal": totaal,
-                  "description": "Grafiek",
                   "settings": settings,
                   "jaar": req.params.jaar,
                   "loginHash": req.params.loginHash,
                   "profile":profile
                 });
-              }else{
-                res.render('eng/chart', {
-                  "totaal": totaal,
-                  "description": "Graph",
-                  "settings": settings,
-                  "jaar": req.params.jaar,
-                  "loginHash": req.params.loginHash,
-                  "profile":profile
-                });
-              }
             }
           });
         }
