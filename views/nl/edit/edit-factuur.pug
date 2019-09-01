@@ -93,16 +93,24 @@ body
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           h2(class="pt-3") Materiaal toevoegen
           hr
-          form(action='/edit-bestelling/'+bestelling._id+"/"+loginHash,method='post')
+          form(action='/edit-factuur/'+contact._id+'/'+factuur._id+"/"+loginHash,method='post')
             div(class="form-row")
-              div(class="form-group col-md-10")
-                label(for="title") Beschrijving
-                input(type="text",class="form-control",value=bestelling.beschrijving,name="beschrijving", required)
+              div(class="form-group col-md-3")
+                label(for="title") Datum
+                input(type="text",class="form-control",value=factuur.datum,name="datum")
+              div(class="form-group col-md-3")
+                label(for="title") Betaaldatum
+                input(type="text",class="form-control",value=factuur.datumBetaald,name="datumBetaald")
+              if factuur.factuurNr
+                div(class="form-group col-md-2")
+                  label(for="title") Factuur Nummer
+                  input(type="number",class="form-control",value=factuur.factuurNr,name="factuurNr")
+              if factuur.offerteNr
+                div(class="form-group col-md-2")
+                  label(for="title") Offerte nummer
+                  input(type="number",class="form-control",value=factuur.offerteNr,name="offerteNr")
               div(class="form-group col-md-2")
-                label(for="title") Aantal
-                input(type="number",class="form-control",value=bestelling.aantal,name="aantal", required)
-              div(class="form-group col-md-2")
-                label(for="title") Bedrag voor één
-                input(type="number",class="form-control",value=bestelling.bedrag,name="bedrag",step=".01" required)
+                label(for="title") voorschot
+                input(type="number",class="form-control",value=factuur.voorschot,name="voorschot",step=".01")
             hr
             button(type="submit",class="btn btn-outline-"+settings.thema) bijwerken
