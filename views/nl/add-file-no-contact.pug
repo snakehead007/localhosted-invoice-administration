@@ -72,17 +72,17 @@ body
                             span Facturen - opties
                         ul(class="nav flex-column mb-2")
                             li(class="nav-item")
-                                if contact
-                                    a(class="nav-link active"  ,href='/add-factuur' + "/" + contact._id + "/" + loginHash)
-                                        span(data-feather="plus-circle")
-                                        span Nieuwe factuur
-                                else
+                                if add=="factuur"
                                     a(class="nav-link active",href='/add-factuur' + "/" + loginHash)
                                         span(data-feather="plus-circle")
                                         span Nieuwe factuur
+                                else
+                                    a(class="nav-link",href='/add-factuur' + "/" + loginHash)
+                                        span(data-feather="plus-circle")
+                                        span Nieuwe factuur
                             li(class="nav-item")
-                                if contact
-                                    a(class="nav-link",href='/add-offerte' + "/" + contact._id + "/" + loginHash)
+                                if add=="offerte"
+                                    a(class="nav-link active",href='/add-Offerte' + "/" + loginHash)
                                         span(data-feather="plus-circle")
                                         span Nieuwe offerte
                                 else
@@ -90,8 +90,8 @@ body
                                         span(data-feather="plus-circle")
                                         span Nieuwe offerte
                             li(class="nav-item")
-                                if contact
-                                    a(class="nav-link",href='/add-creditnota' + "/" + contact._id + "/" + loginHash)
+                                if add=="creditnota"
+                                    a(class="nav-link active",href='/add-creditnota' + "/" + loginHash)
                                         span(data-feather="plus-circle")
                                         span Nieuwe creditnota
                                 else
@@ -101,7 +101,7 @@ body
                 main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
                     h2(class="pt-3")="Nieuwe "+add+ " toevoegen"
                     hr
-                    form(action='/add-factuur/'+loginHash,method='post')
+                    form(action='/add-'+add+'/'+loginHash,method='post')
                         div(class="form-row")
                             div(class="form-group col-md-5")
                                 div(class="input-group mb-3")

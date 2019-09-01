@@ -61,9 +61,11 @@ body
                   span(data-feather="file")
                   span Alle facturen
               li(class="nav-item")
-                a(class="nav-link" href="/contacten/"+loginHash)
+                a(class="nav-link active" href="/contacten/"+loginHash)
                   span(data-feather="users")
                   span Klanten
+                  span(data-feather="chevron-right")
+                  span Facturen
               li(class="nav-item")
                 a(class="nav-link" href="/mat/"+loginHash)
                   span(data-feather="package")
@@ -84,14 +86,14 @@ body
                   span(data-feather="bookmark")
                   span Basecone
             h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
-              span Materialen - opties
+              span Facturen - opties
             ul(class="nav flex-column mb-2")
               li(class="nav-item")
-                a(class="nav-link active",href='/add-contact' + "/" + loginHash)
+                a(class="nav-link",href='/add-factuur' + contact._ic+"/" + loginHash)
                   span(data-feather="plus-circle")
-                  span Nieuw Materiaal
+                  span Nieuw factuur
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          h2(class="pt-3") Materiaal toevoegen
+          h2(class="pt-3") Factuur bewerken
           hr
           form(action='/edit-factuur/'+contact._id+'/'+factuur._id+"/"+loginHash,method='post')
             div(class="form-row")
