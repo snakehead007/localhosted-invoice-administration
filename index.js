@@ -904,6 +904,55 @@ app.get('/add-factuur/:loginHash',function(req,res){
   });
 });
 
+app.post('/add-factuur/:loginHash', function(req, res) {//REWORKED & tested
+    callFindPass().then(function(loginHash){
+        if (String(req.params.loginHash) !== loginHash) {
+            res.render('login');
+        }});
+    Settings.findOne({}, function(err, settings) {
+        Contact.findOne({_id: req.body.idc}, function(err, contact) {
+            if (!err) {
+                contact.save(function(err) {
+                    if (!err) {
+                        Profile.findOne({}, function(err, prof) {
+                            prof.save(function(err) {
+                                if(err){console.log('err: '+err);}
+                                Profile.updateOne({nr: prof.nr + 1}, function(err) {
+                                    if(err){console.log('err: '+err);}
+                                    var factuurNr;
+                                    if (prof.nr.toString().length == 1) {
+                                        factuurNr = "00" + prof.nr.toString();
+                                    } else if (prof.nr.toString().length == 2) {
+                                        factuurNr = "0" + prof.nr.toString();
+                                    }
+                                    var newFactuur = new Factuur({
+                                        contact: contact._id,
+                                        datum: getDatum(settings.lang),
+                                        factuurNr: String(year + factuurNr),
+                                        contactPersoon: contact.contactPersoon,
+                                        totaal: 0,
+                                        datumBetaald: getDatum(settings.lang)
+                                    });
+                                    Contact.updateOne({aantalFacturen: contact.aantalFacturen + 1}, function(err) {
+                                        if(!err){
+                                            contact.facturen.push(newFactuur._id);
+                                        }
+                                    });
+                                    newFactuur.save(function(err){
+                                        if(!err){
+                                            res.redirect('/facturen/' + req.params.loginHash);
+                                        }
+                                    });
+                                });
+                            });
+                        });
+                    }
+                });
+            }
+        });
+    });
+});
+
 app.get('/facturen/:idc/t/:loginHash', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
@@ -2427,21 +2476,17 @@ app.get('/mat/:loginHash', function(req, res) {//REWORKED
       if (!err) {
         Materiaal.find({}).sort('naam').exec(function(err, materialen) {
           if (!err) {
-            if(settings.lang=="nl"){
-            res.render('nl/mat', {
-              'materialen': materialen,
-              'settings': settings,
-              'description': "Alle materialen",
-              "loginHash": req.params.loginHash
-            });}else{
-              res.render('eng/mat', {
-                'materialen': materialen,
-                'settings': settings,
-                'description': "All materials",
-                "loginHash": req.params.loginHash
-              });
-            }
-          }
+              Profile.findOne({},function(err,profile){
+                  if(!err) {
+                      res.render(settings.lang + '/mat', {
+                          'materialen': materialen,
+                          'settings': settings,
+                          "loginHash": req.params.loginHash,
+                          "profile":profile
+                          });
+                      }
+                });
+              }
         });
       }
     });
@@ -2496,17 +2541,13 @@ app.get('/add-mat/:loginHash', function(req, res) {//REWORKED
     }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
-      if(settings.lang=="nl"){
+          Profile.findOne({},function(err,profile){if(!err){
         res.render('nl/add/add-mat', {
           'settings': settings,
-          'description': "Materiaal toevoegen",
+            "profile":profile,
           "loginHash": req.params.loginHash
-        });}else{
-          res.render('eng/add/add-mat', {
-            'settings': settings,
-            'description': "Add material",
-            "loginHash": req.params.loginHash
-          });}
+        });
+      }});
       }
     });
 });

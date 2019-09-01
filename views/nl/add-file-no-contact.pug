@@ -101,11 +101,13 @@ body
                 main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
                     h2(class="pt-3")="Nieuwe "+add+ " toevoegen"
                     hr
-                    form(action='/btw/'+loginHash,method='post')
+                    form(action='/add-factuur/'+loginHash,method='post')
                         div(class="form-row")
                             div(class="form-group col-md-5")
                                 div(class="input-group mb-3")
-                                    select(class="custom-select" id="inputGroupSelect03" aria-label="Example select with button addon")
+                                    span
+                                        p(class="lead nextToInput") Voor contact:
+                                    select(class="custom-select" id="inputGroupSelect03"  name="idc" aria-label="Example select with button addon")
                                         each contact in contacten
                                             option(value=contact._id)=contact.contactPersoon
                         hr
