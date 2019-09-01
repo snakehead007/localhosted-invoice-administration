@@ -874,7 +874,7 @@ app.get('/facturen/:idc/:loginHash', function(req, res) {//REWORKED & tested
           });
         }
       });
-    }
+    } 
   });
 });
 
