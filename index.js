@@ -2621,8 +2621,9 @@ app.get('/delete-mat/:id/:loginHash', function(req, res) {//REWORKED
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
-    Materiaal.remove({_id: req.params.id});
+  Materiaal.remove({_id: req.params.id},function(err,mat){
     res.redirect('/mat/' + req.params.loginHash);
+    });
 });
 
 app.get('/settings/:loginHash', function(req, res) {//REWORKED
