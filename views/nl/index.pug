@@ -99,7 +99,7 @@ html
                                         a(href='/bestellingen/' + factuur._id + "/"+loginHash, class="button")
                                             button(type="button" class="btn btn-outline-"+settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum+" met voorschot "+factuur.voorschot+" €")=factuur.factuurNr
                                     if !contact
-                                        a(href='/bestellingen/' + factuur._id + '/t'+{loginHash}, class="button")
+                                        a(href='/bestellingen/' + factuur._id + '/t/'+loginHash, class="button")
                                             button(type="button" class="btn btn-outline-"+settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum+" met voorschot "+factuur.voorschot+" €")=factuur.factuurNr
                                 if factuur.offerteNr && !factuur.factuurNr
                                     if contact
@@ -196,9 +196,5 @@ script.
         });
     }
     function changeBetaald(id, contact, loginHash) {
-        if (contact === "undefined") {
-            window.location = "/change-betaald2/" + id + "/" + loginHash;
-        } else {
-            window.location = "/change-betaald/" + id + "/" + loginHash;
-        }
+            window.location = "/change-betaald3/"+id+"/" +loginHash;
     }

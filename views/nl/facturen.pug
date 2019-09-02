@@ -154,7 +154,7 @@ html
                       a(href='/bestellingen/' + factuur._id + "/" + loginHash, class="button")
                         button(type="button" class="btn btn-outline-" + settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " met voorschot " + factuur.voorschot + " €")=factuur.factuurNr
                     if !contact
-                      a(href='/bestellingen/' + factuur._id + '/t' + {loginHash}, class="button")
+                      a(href='/bestellingen/' + factuur._id + '/t/' + loginHash, class="button")
                         button(type="button" class="btn btn-outline-" + settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " met voorschot " + factuur.voorschot + " €")=factuur.factuurNr
                   if factuur.offerteNr && !factuur.factuurNr
                     if contact

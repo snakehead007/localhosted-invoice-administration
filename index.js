@@ -599,6 +599,7 @@ app.get('/bestellingen/:idf/:loginHash', function(req, res) {//REWORKED & tested
                               'factuur': factuur,
                               'bestellingen': bestellingen,
                               "profile": profile,
+                              "contact":contact,
                               "settings": settings,
                               "loginHash": req.params.loginHash
                           });
@@ -634,6 +635,7 @@ app.get('/bestellingen/:idf/t/:loginHash', function(req, res) {//REWORKED & test
                               'factuur': factuur,
                               'bestellingen': bestellingen,
                               "profile": profile,
+                              "contact":contact,
                               "settings": settings,
                               "loginHash": req.params.loginHash
                           });
@@ -679,6 +681,8 @@ app.get('/add-bestelling/:idf/:loginHash', function(req, res) {//REWORKED & test
     }});
     Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
       if (!err) {
+          Contact.findOne({_id:factuur.contact},function(err,contact){
+              if(!err){
         Settings.findOne({}, function(err, settings) {
           if (!err) {
           Profile.findOne({}, function(err, profile) {
@@ -687,12 +691,15 @@ app.get('/add-bestelling/:idf/:loginHash', function(req, res) {//REWORKED & test
                       'factuur': factuur,
                       "profile":profile,
                       "settings": settings,
-                      "loginHash": req.params.loginHash
+                      "loginHash": req.params.loginHash,
+                      "contact":contact
                   });
               }
             });
           }
         });
+      }
+      });
       }
     });
 });
@@ -777,22 +784,18 @@ app.get('/view-bestelling/:idb/:loginHash', function(req, res) {//REWORKED & tes
           if (!err) {
             Settings.findOne({}, function(err, settings) {
               if (!err) {
-                if(settings.lang=="nl"){
-                res.render('nl/view/view-bestelling', {
-                  'bestelling': bestelling,
-                  "factuur": factuur,
-                  "description": "Bekijk bestelling",
-                  "settings": settings,
-                  "loginHash": req.params.loginHash
-                });}else{
-                  res.render('eng/view/view-bestelling', {
-                    'bestelling': bestelling,
-                    "factuur": factuur,
-                    "description": "View order",
-                    "settings": settings,
-                    "loginHash": req.params.loginHash
-                  });
-                }
+
+                Profile.findOne({}, function(err, profile) {
+                  if (!err) {
+                    res.render(settings.lang + '/view/view-bestelling', {
+                      'bestelling': bestelling,
+                      "factuur": factuur,
+                      "profile": profile,
+                      "settings": settings,
+                      "loginHash": req.params.loginHash
+                    });
+                  }
+                });
               }
             });
           }
@@ -816,7 +819,6 @@ app.get('/facturen/:idc/:loginHash', function(req, res) {//REWORKED & tested
                   res.render(settings.lang+'/facturen', {
                     'contact': contact,
                     'facturenLijst': facturen,
-                    'description': "Facturen van " + contact.contactPersoon,
                     "settings": settings,
                     "loginHash": req.params.loginHash,
                       "profile":profile
@@ -1326,22 +1328,17 @@ app.get('/view-factuur/:idf/:loginHash', function(req, res) {//REWORKED & tested
         Contact.findOne({_id: factuur.contact}, function(err, contact) {
           Settings.findOne({}, function(err, settings) {
             if(!err){
-              if(settings.lang=="nl"){
-              res.render('nl/view/view-factuur', {
-                'factuur': factuur,
-                'contact': contact,
-                "description": "Bekijk factuur van " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
-                "settings": settings,
-                "loginHash": req.params.loginHash
-              });}else{
-                res.render('eng/view/view-factuur', {
-                  'factuur': factuur,
-                  'contact': contact,
-                  "description": "View invoice of " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
-                  "settings": settings,
-                  "loginHash": req.params.loginHash
-                });
-              }
+              Profile.findOne({}, function(err, profile) {
+                if (!err) {
+                  res.render(settings.lang +'/view/view-factuur', {
+                    'factuur': factuur,
+                    'contact': contact,
+                    "profile": profile,
+                    "settings": settings,
+                    "loginHash": req.params.loginHash
+                  });
+                }
+              });
             }
           });
         });
@@ -1359,24 +1356,18 @@ app.get('/view-factuur/:idf/t/:loginHash', function(req, res) {//REWORKED
         Contact.findOne({_id: factuur.contact}, function(err, contact) {
           Settings.findOne({}, function(err, settings) {
             if (!err){
-              if(settings.lang=="nl"){
-              res.render('nl/view/view-factuur', {
-                'terug': 1,
-                'factuur': factuur,
-                'contact': contact,
-                "description": "Bekijk factuur van " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
-                "settings": settings,
-                "loginHash": req.params.loginHash
-              });}else{
-                res.render('eng/view/view-factuur', {
-                  'terug': 1,
-                  'factuur': factuur,
-                  'contact': contact,
-                  "description": "View Invoice of " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
-                  "settings": settings,
-                  "loginHash": req.params.loginHash
+              Profile.findOne({}, function(err, profile) {
+                if (!err) {
+                  res.render(settings.lang + '/view/view-factuur', {
+                    'terug': 1,
+                    'factuur': factuur,
+                    'contact': contact,
+                    "profile":profile,
+                    "settings": settings,
+                    "loginHash": req.params.loginHash
+                  });
+                }
                 });
-              }
             }
           });
         });
@@ -1821,24 +1812,18 @@ app.get('/view-creditnota/:idf/t/:loginHash', function(req, res) {//REWORKED
       Contact.findOne({_id: factuur.contact}, function(err, contact) {
         Settings.findOne({}, function(err, settings) {
           if (!err){
-          if(settings.lang=="nl"){
-          res.render('nl/view/view-factuur', {
-            'terug': 1,
-            'factuur': factuur,
-            'contact': contact,
-            "description": "Bekijk creditnota van " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
-            "settings": settings,
-            "loginHash":req.params.loginHash
-          });}else{
-            res.render('eng/view/view-factuur', {
-              'terug': 1,
-              'factuur': factuur,
-              'contact': contact,
-              "description": "View creditnote of " + contact.contactPersoon + " (" + factuur.factuurNr + ")",
-              "settings": settings,
-              "loginHash":req.params.loginHash
-            });
-          }
+            Profile.findOne({}, function(err, profile) {
+              if (!err) {
+                res.render(settings.lang + '/view/view-factuur', {
+                  'terug': 1,
+                  'factuur': factuur,
+                  'contact': contact,
+                  "profile":profile,
+                  "settings": settings,
+                  "loginHash": req.params.loginHash
+                });
+              }
+          });
         }
         });
       });
@@ -2899,6 +2884,24 @@ app.get('/change-betaald2/:id/:loginHash', function(req, res) {//REWORKED
         Factuur.updateOne({_id: req.params.id}, {isBetaald: !(factuur.isBetaald),datumBetaald: getDatum(settings.lang)}, function(err) {
           if (!err) {
             res.redirect('/facturen/' + req.params.loginHash);
+          }
+        });
+      }
+    });
+  });
+});
+
+app.get('/change-betaald3/:id/:loginHash', function(req, res) {//REWORKED
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+  Settings.findOne({}, function(err, settings) {
+    Factuur.findOne({_id: req.params.id}, function(err, factuur) {
+      if (!err) {
+        Factuur.updateOne({_id: req.params.id}, {isBetaald: !(factuur.isBetaald),datumBetaald: getDatum(settings.lang)}, function(err) {
+          if (!err) {
+            res.redirect('/index/' + req.params.loginHash);
           }
         });
       }
