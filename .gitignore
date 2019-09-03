@@ -7,6 +7,10 @@ GPUCache/
 TODO
 public/logo.*
 .idea/
+node2docfx.json
+docfx.json
+yml/
+out/
 
 ### Linux ###
 *~
