@@ -2917,18 +2917,15 @@ app.get('/berekeningen/:loginHash', function(req, res) {//REWORKED
     }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
-      if(settings.lang=="nl"){
-        res.render('nl/berekeningen', {
-          'settings': settings,
-          'description': "Alle berekeningen",
-          "loginHash": req.params.loginHash
-        });}else{
-          res.render('eng/berekeningen', {
-            'settings': settings,
-            'description': "All calculations",
-            "loginHash": req.params.loginHash
-          });
-        }
+        Profile.findOne({},function(err,profile) {
+          if (!err) {
+            res.render(settings.lang + '/berekeningen', {
+              'settings': settings,
+              "profile": profile,
+              "loginHash": req.params.loginHash
+            });
+          }
+        });
       }
     });
 });
