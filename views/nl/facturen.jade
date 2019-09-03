@@ -134,10 +134,16 @@ html
                           div(class="custom-control custom-switch")
                             if factuur.isBetaald
                               input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()" checked)
-                              label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal*1.21).toFixed(2)+"€ ,  Betaald"
+                              if factuur.totaal
+                                label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal*1.21).toFixed(2)+"€ ,  Betaald"
+                              else
+                                label(class="custom-control-label" for="#{factuur._id}")="err"+ "€ ,  Betaald"
                             if !factuur.isBetaald
                               input(type="checkbox" class="custom-control-input" id="#{factuur._id}" onclick="K#{factuur.factuurNr}()")
-                              label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal*1.21).toFixed(2)+"€ ,  Openstaand"
+                              if factuur.totaal
+                                label(class="custom-control-label" for="#{factuur._id}")=(factuur.totaal*1.21).toFixed(2)+"€ ,  Openstaand"
+                              else
+                                label(class="custom-control-label" for="#{factuur._id}")="err" + "€ ,  Openstaand"
                       else
                         td
                       td
