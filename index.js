@@ -836,7 +836,6 @@ app.get('/facturen/:idc/:loginHash', function(req, res) {//REWORKED & tested
   Contact.findOne({_id: req.params.idc}, function(err, contact) {
     if (!err) {
       Factuur.find({contact: req.params.idc}).sort('-factuurNr').exec(function(err, facturen) {
-        console.log(facturen[0].totaal);
         if (!err) {
           Settings.findOne({}, function(err, settings) {
             if (!err) {
