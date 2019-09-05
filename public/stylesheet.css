@@ -163,3 +163,6 @@ i{
 .text{
  cursor:text;
 }
+.longButton{
+    width:100%
+}

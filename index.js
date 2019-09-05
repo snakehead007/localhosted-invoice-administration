@@ -2036,26 +2036,20 @@ app.post('/zoeken/:loginHash', function(req, res) {//REWORKED
                 var materialen_d = distinct(materialen);
                 Settings.findOne({}, function(err, settings) {
                   if (!err) {
-                    if(settings.lang=="nl"){
-                    res.render('nl/zoeken', {
-                      "description": "Zoeken op \"" + str + "\"",
-                      "settings": settings,
-                      "contacten": contacten_d,
-                      "bestellingen": bestellingen_d,
-                      "facturen": facturen_d,
-                      "materialen":materialen_d,
-                      "loginHash": req.params.loginHash
-                    });}else{
-                      res.render('eng/zoeken', {
-                        "description": "Search for \"" + str + "\"",
-                        "settings": settings,
-                        "contacten": contacten_d,
-                        "bestellingen": bestellingen_d,
-                        "facturen": facturen_d,
-                        "materialen":materialen_d,
-                        "loginHash": req.params.loginHash
-                      });
-                    }
+                    Profile.findOne({}, function (err, profile) {
+                      if (!err) {
+                        res.render(settings.lang + '/zoeken', {
+                          "description": "Zoeken op \"" + str + "\"",
+                          "settings": settings,
+                          "contacten": contacten_d,
+                          "bestellingen": bestellingen_d,
+                          "facturen": facturen_d,
+                          "materialen": materialen_d,
+                          "loginHash": req.params.loginHash,
+                          "profile": profile
+                        });
+                      }
+                    });
                   }
                   });
               });
@@ -2936,35 +2930,25 @@ app.get('/epo-sil/:loginHash', function(req, res) {//REWORKED
       res.render('login');
     }});
     Settings.findOne({}, function(err, settings) {
-      if (!err) {
-      if(settings.lang=="nl"){
-        res.render('nl/calc/epo-sil', {
-          'settings': settings,
-          'description': "Siliconen mal berekenen",
-          "loginHash": req.params.loginHash,
-          "e1": settings.e1,
-          "e2": settings.e2,
-          "e3": settings.e3,
-          "e4": settings.e4,
-          "s1": settings.s1,
-          "s2": settings.s2,
-          "s3": settings.s3,
-          "s4": settings.s4
-        });}else{
-          res.render('eng/calc/epo-sil', {
-            'settings': settings,
-            'description': "Calculate silicon mold",
-            "loginHash": req.params.loginHash,
-            "e1": settings.e1,
-            "e2": settings.e2,
-            "e3": settings.e3,
-            "e4": settings.e4,
-            "s1": settings.s1,
-            "s2": settings.s2,
-            "s3": settings.s3,
-            "s4": settings.s4
-          });
-        }
+      if(!err){
+      Profile.findOne({},function(err,profile){
+        if(!err) {
+            res.render(settings.lang + '/calc/epo-sil', {
+              'settings': settings,
+              'description': "Siliconen mal berekenen",
+              "loginHash": req.params.loginHash,
+              "e1": settings.e1,
+              "e2": settings.e2,
+              "e3": settings.e3,
+              "e4": settings.e4,
+              "s1": settings.s1,
+              "s2": settings.s2,
+              "s3": settings.s3,
+              "s4": settings.s4,
+              "profile":profile
+            });
+          }
+        });
       }
     });
 });
@@ -3004,94 +2988,54 @@ app.post('/epo-sil-oplossing/:loginHash', function(req, res) {//REWORKED
         if (Mt < 0 || Pt < 0) {
           error = 1;
         }
-        if(settings.lang=="nl"){
-        res.render("nl/calc/epo-sil-oplossing", {
-          "description": "Oplossing van berekening",
-          "settings": settings,
-          "L": L,
-          "B": B,
-          "H": H,
-          "W": W,
-          "X": X,
-          "Ds": De,
-          "As": As,
-          "Dos": Dos,
-          "Ds": Ds,
-          "Ms": Ms,
-          "Ae": Ae,
-          "Doe": Doe,
-          "De": De,
-          "Me": String(Me).toTime(),
-          "Ls": L + X,
-          "Bs": B + X,
-          "Hs": H + X,
-          "Le": L + 0.4 + X,
-          "Be": B + 0.4 + X,
-          "He": H + 0.4 + X,
-          "Ms": String(Ms).toTime(),
-          "Pws": Pws,
-          "Ps": Ps,
-          "Pwe": Pwe,
-          "Ptw": Ptw,
-          "Ptm": Ptm,
-          "Pt": Pt,
-          "Mt": String(Mt).toTime(),
-          "Pe": Pe,
-          "loginHash": req.params.loginHash,
-          "e1": settings.e1,
-          "e2": settings.e2,
-          "e3": settings.e3,
-          "e4": settings.e4,
-          "s1": settings.s1,
-          "s2": settings.s2,
-          "s3": settings.s3,
-          "s4": settings.s4,
-          "error": error
-        });}else{
-          res.render("eng/calc/epo-sil-oplossing", {
-            "description": "Results of calculations",
-            "settings": settings,
-            "L": L,
-            "B": B,
-            "H": H,
-            "W": W,
-            "X": X,
-            "Ds": De,
-            "As": As,
-            "Dos": Dos,
-            "Ds": Ds,
-            "Ms": Ms,
-            "Ae": Ae,
-            "Doe": Doe,
-            "De": De,
-            "Me": String(Me).toTime(),
-            "Ls": L + X,
-            "Bs": B + X,
-            "Hs": H + X,
-            "Le": L + 0.4 + X,
-            "Be": B + 0.4 + X,
-            "He": H + 0.4 + X,
-            "Ms": String(Ms).toTime(),
-            "Pws": Pws,
-            "Ps": Ps,
-            "Pwe": Pwe,
-            "Ptw": Ptw,
-            "Ptm": Ptm,
-            "Pt": Pt,
-            "Mt": String(Mt).toTime(),
-            "Pe": Pe,
-            "loginHash": req.params.loginHash,
-            "e1": settings.e1,
-            "e2": settings.e2,
-            "e3": settings.e3,
-            "e4": settings.e4,
-            "s1": settings.s1,
-            "s2": settings.s2,
-            "s3": settings.s3,
-            "s4": settings.s4,
-            "error": error
-          });
-        }
+        Profile.findOne({},function(err,profile) {
+          if (!err) {
+            res.render(settings.lang + "/calc/epo-sil-oplossing", {
+              "description": "Oplossing van berekening",
+              "settings": settings,
+              "L": L,
+              "B": B,
+              "H": H,
+              "W": W,
+              "X": X,
+              "Ds": De,
+              "As": As,
+              "Dos": Dos,
+              "Ds": Ds,
+              "Ms": Ms,
+              "Ae": Ae,
+              "Doe": Doe,
+              "De": De,
+              "Me": String(Me).toTime(),
+              "Ls": L + X,
+              "Bs": B + X,
+              "Hs": H + X,
+              "Le": L + 0.4 + X,
+              "Be": B + 0.4 + X,
+              "He": H + 0.4 + X,
+              "Ms": String(Ms).toTime(),
+              "Pws": Pws,
+              "Ps": Ps,
+              "Pwe": Pwe,
+              "Ptw": Ptw,
+              "Ptm": Ptm,
+              "Pt": Pt,
+              "Mt": String(Mt).toTime(),
+              "Pe": Pe,
+              "loginHash": req.params.loginHash,
+              "e1": settings.e1,
+              "e2": settings.e2,
+              "e3": settings.e3,
+              "e4": settings.e4,
+              "s1": settings.s1,
+              "s2": settings.s2,
+              "s3": settings.s3,
+              "s4": settings.s4,
+              "error": error,
+              "profile":profile
+            });
+          }
+        });
       }
     });
 });
@@ -3135,98 +3079,56 @@ app.post('/epo-sil-marge/:loginHash', function(req, res) {//REWORKED
         if (Mt < 0 || Pt < 0) {
           error = 1;
         }
-        if(settings.lang=="nl"){
-        res.render("nl/calc/epo-sil-oplossing", {
-          "description": "Oplossing van berekening",
-          "settings": settings,
-          "L": L,
-          "B": B,
-          "H": H,
-          "W": W,
-          "X": X,
-          "Ds": De,
-          "As": As,
-          "Dos": Dos,
-          "Ds": Ds,
-          "Ms": Ms,
-          "Ae": Ae,
-          "Doe": Doe,
-          "De": De,
-          "Me": String(Me).toTime(),
-          "Ls": L + X,
-          "Bs": B + X,
-          "Hs": H + X,
-          "Le": L + 0.4 + X,
-          "Be": B + 0.4 + X,
-          "He": H + 0.4 + X,
-          "Ms": String(Ms).toTime(),
-          "Pws": Pws,
-          "Ps": Ps,
-          "Pwe": Pwe,
-          "Ptw": Ptw,
-          "Ptm": Ptm,
-          "Pt": Pt,
-          "Mt": String(Mt).toTime(),
-          "Pe": Pe,
-          "loginHash": req.params.loginHash,
-          "marge": marge,
-          "totmarge": totmarge.toFixed(2) + " €",
-          "e1": settings.e1,
-          "e2": settings.e2,
-          "e3": settings.e3,
-          "e4": settings.e4,
-          "s1": settings.s1,
-          "s2": settings.s2,
-          "s3": settings.s3,
-          "s4": settings.s4,
-          "error": error
-        });}else{
-          res.render("eng/calc/epo-sil-oplossing", {
-            "description": "Results of calculations",
-            "settings": settings,
-            "L": L,
-            "B": B,
-            "H": H,
-            "W": W,
-            "X": X,
-            "Ds": De,
-            "As": As,
-            "Dos": Dos,
-            "Ds": Ds,
-            "Ms": Ms,
-            "Ae": Ae,
-            "Doe": Doe,
-            "De": De,
-            "Me": String(Me).toTime(),
-            "Ls": L + X,
-            "Bs": B + X,
-            "Hs": H + X,
-            "Le": L + 0.4 + X,
-            "Be": B + 0.4 + X,
-            "He": H + 0.4 + X,
-            "Ms": String(Ms).toTime(),
-            "Pws": Pws,
-            "Ps": Ps,
-            "Pwe": Pwe,
-            "Ptw": Ptw,
-            "Ptm": Ptm,
-            "Pt": Pt,
-            "Mt": String(Mt).toTime(),
-            "Pe": Pe,
-            "loginHash": req.params.loginHash,
-            "marge": marge,
-            "totmarge": totmarge.toFixed(2) + " €",
-            "e1": settings.e1,
-            "e2": settings.e2,
-            "e3": settings.e3,
-            "e4": settings.e4,
-            "s1": settings.s1,
-            "s2": settings.s2,
-            "s3": settings.s3,
-            "s4": settings.s4,
-            "error": error
-          });
-        }
+        Profile.findOne({},function(err,profile) {
+          if (!err) {
+            res.render(settings.lang + "/calc/epo-sil-oplossing", {
+              "description": "Oplossing van berekening",
+              "settings": settings,
+              "L": L,
+              "B": B,
+              "H": H,
+              "W": W,
+              "X": X,
+              "Ds": De,
+              "As": As,
+              "Dos": Dos,
+              "Ds": Ds,
+              "Ms": Ms,
+              "Ae": Ae,
+              "Doe": Doe,
+              "De": De,
+              "Me": String(Me).toTime(),
+              "Ls": L + X,
+              "Bs": B + X,
+              "Hs": H + X,
+              "Le": L + 0.4 + X,
+              "Be": B + 0.4 + X,
+              "He": H + 0.4 + X,
+              "Ms": String(Ms).toTime(),
+              "Pws": Pws,
+              "Ps": Ps,
+              "Pwe": Pwe,
+              "Ptw": Ptw,
+              "Ptm": Ptm,
+              "Pt": Pt,
+              "Mt": String(Mt).toTime(),
+              "Pe": Pe,
+              "loginHash": req.params.loginHash,
+              "marge": marge,
+              "totmarge": totmarge.toFixed(2) + " €",
+              "e1": settings.e1,
+              "e2": settings.e2,
+              "e3": settings.e3,
+              "e4": settings.e4,
+              "s1": settings.s1,
+              "s2": settings.s2,
+              "s3": settings.s3,
+              "s4": settings.s4,
+              "error": error,
+              "profile":profile
+            });
+          }
+        });
       }
     });
 });
@@ -3264,24 +3166,11 @@ app.get('/epo-sil/aanpassen/:loginHash', function(req, res) {//REWORKED
     }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
-      if(settings.lang=="nl"){
-        res.render('nl/calc/epo-sil', {
-          'settings': settings,
-          'description': "Siliconen mal berekenen",
-          "loginHash": req.params.loginHash,
-          "aangepast": 1,
-          "e1": settings.e1,
-          "e2": settings.e2,
-          "e3": settings.e3,
-          "e4": settings.e4,
-          "s1": settings.s1,
-          "s2": settings.s2,
-          "s3": settings.s3,
-          "s4": settings.s4
-        });}else{
-            res.render('eng/calc/epo-sil', {
+        Profile.findOne({},function(err,profile) {
+          if (!err) {
+            res.render('nl/calc/epo-sil', {
               'settings': settings,
-              'description': "Calculating silicon mold",
+              'description': "Siliconen mal berekenen",
               "loginHash": req.params.loginHash,
               "aangepast": 1,
               "e1": settings.e1,
@@ -3291,9 +3180,11 @@ app.get('/epo-sil/aanpassen/:loginHash', function(req, res) {//REWORKED
               "s1": settings.s1,
               "s2": settings.s2,
               "s3": settings.s3,
-              "s4": settings.s4
+              "s4": settings.s4,
+              "profile":profile
             });
-        }
+          }
+        });
       }
     });
 });
@@ -3737,7 +3628,7 @@ app.listen('3000', function() {
   console.log('Server is running at PORT ' + 3000);
   Schema = mongoose.Schema;
 });
-
+/*
 app.use(function(req, res) {
   res.staus(404).send('404: Page not Found');
 });
@@ -3746,3 +3637,4 @@ app.use(function(req, res) {
 app.use(function(error, req, res, next) {
   res.status(500).send('500: Internal Server Error');
 });
+*/

@@ -21,7 +21,7 @@ html
         $(".optionPrijs").css('background-color', 'rgba(0, 0, 0, 0)');
         $(".optionInch").css('background-color', 'rgba(0, 0, 0, 0)');
         $(".optionPerc").css('background-color', 'rgba(0, 0, 0, 0)');
-        window.location = "/sil/" + loginHash;
+        window.location = "/epo-sil/" + loginHash;
       };
       function openLam(loginHash) {
         $(".optionLam").css('background-color', 'rgba(207, 207, 207, .3)');
@@ -94,11 +94,11 @@ html
                   a(class="nav-link active" href="/berekeningen/"+loginHash)
                     span(data-feather="book")
                     span Berekeningen
+                    span(class="sr-only") (current)
                 li(class="nav-item")
                   a(class="nav-link" href="/settings/"+loginHash)
                     span(data-feather="settings")
                     span Settings
-                    span(class="sr-only") (current)
               h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
                 span Bookmarks
               ul(class="nav flex-column mb-2")
