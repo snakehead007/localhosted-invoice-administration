@@ -2041,10 +2041,10 @@ app.post('/zoeken/:loginHash', function(req, res) {//REWORKED
                         res.render(settings.lang + '/zoeken', {
                           "description": "Zoeken op \"" + str + "\"",
                           "settings": settings,
-                          "contacten": contacten_d,
-                          "bestellingen": bestellingen_d,
-                          "facturen": facturen_d,
-                          "materialen": materialen_d,
+                          "contacten_d": contacten_d,
+                          "bestellingen_d": bestellingen_d,
+                          "facturen_d": facturen_d,
+                          "materialen_d": materialen_d,
                           "loginHash": req.params.loginHash,
                           "profile": profile
                         });

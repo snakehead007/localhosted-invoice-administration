@@ -57,9 +57,11 @@ body
                   span(data-feather="user")
                   span Mijn Profiel
               li(class="nav-item")
-                a(class="nav-link" href="/facturen/"+loginHash)
+                a(class="nav-link active" href="/facturen/"+loginHash)
                   span(data-feather="file")
                   span Alle facturen
+                  span(data-feather="chevron-right")
+                  span bestellingen
               li(class="nav-item")
                 a(class="nav-link" href="/contacten/"+loginHash)
                   span(data-feather="users")
@@ -84,54 +86,25 @@ body
                   span(data-feather="bookmark")
                   span Basecone
             h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
-              span Materialen - opties
+              span Facturen - opties
             ul(class="nav flex-column mb-2")
               li(class="nav-item")
-                a(class="nav-link active",href='/add-contact' + "/" + loginHash)
+                a(class="nav-link",href='/add-factuur' + contact._ic+"/" + loginHash)
                   span(data-feather="plus-circle")
-                  span Nieuw Materiaal
+                  span Nieuw factuur
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          h2(class="pt-3") Materiaal toevoegen
+          h2(class="pt-3") Factuur bewerken
           hr
-          form(action='/edit-contact/'+contact._id+"/"+loginHash ,method='post')
-            p=msg
+          form(action='/edit-bestelling/'+bestelling._id+"/"+loginHash,method='post')
             div(class="form-row")
-              div(class="form-group col-md-5")
-                label(for="title") Contact persoon *
-                input(type="text",class="form-control",value=contact.contactPersoon,name="contactPersoon" required)
+              div(class="form-group col-md-10")
+                label(for="title") Beschrijving
+                input(type="text",class="form-control",value=bestelling.beschrijving,name="beschrijving", required)
               div(class="form-group col-md-2")
-              div(class="form-group col-md-5")
-                label(for="title") Firma
-                input(type="text",class="form-control",value=contact.firma,name="firma")
-              div(class="form-group col-md-3")
-                label(for="title") Straatnaam *
-                input(type="text",class="form-control",value=contact.straat,name="straat" required)
+                label(for="title") Aantal
+                input(type="number",class="form-control",value=bestelling.aantal,name="aantal", required)
               div(class="form-group col-md-2")
-                label(for="title") Straat Nr
-                input(type="text",class="form-control",value=contact.straatNr,name="straatNr")
-              div(class="col-md-2")
-              div(class="form-group col-md-3")
-                label(for="title") E-mail
-                input(type="text",class="form-control",value=contact.mail,name="mail",placeholder="voorbeel@email.be")
-              div(class="form-group col-md-2")
-                label(for="title") BTW-nummer
-                input(type="text",class="form-control",value=contact.btwNr,name="btwNr")
-              div(class="form-group col-md-2")
-                label(for="title") Rekeningnr
-                input(type="text",class="form-control",value=contact.rekeningnr,name="rekeningnr")
-              div(class="form-group col-md-1")
-                label(for="title") Postcode
-                input(type="number",class="form-control",value=contact.postcode,name="postcode")
-              div(class="form-group col-md-2")
-                label(for="title") Plaatsnaam *
-                input(type="text",class="form-control",value=contact.plaats,name="plaats" required)
-              div(class="col-md-2")
-              div(id="mail1" class="form-group col-md-3" )
-                label(for="title") E-mail 2
-                input(type="text", class="form-control",value="contact.mail1,name="mail1", placeholder="voorbeeld@email.be")
-              div(class="col-md-7")
-              div(id="mail2" class="form-group col-md-3")
-                label(for="title") E-mail 3
-                input(type="text", class="form-control",value=contact.mail2,name="mail2", placeholder="voorbeeld@email.be")
+                label(for="title") Bedrag voor één
+                input(type="number",class="form-control",value=bestelling.bedrag,name="bedrag",step=".01" required)
             hr
             button(type="submit",class="btn btn-outline-"+settings.thema) bijwerken

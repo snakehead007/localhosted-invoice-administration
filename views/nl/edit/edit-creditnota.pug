@@ -57,9 +57,11 @@ body
                   span(data-feather="user")
                   span Mijn Profiel
               li(class="nav-item")
-                a(class="nav-link" href="/facturen/"+loginHash)
+                a(class="nav-link active" href="/facturen/"+loginHash)
                   span(data-feather="file")
                   span Alle facturen
+                  span(data-feather="chevron-right")
+                  span creditnota
               li(class="nav-item")
                 a(class="nav-link" href="/contacten/"+loginHash)
                   span(data-feather="users")
@@ -84,25 +86,30 @@ body
                   span(data-feather="bookmark")
                   span Basecone
             h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
-              span Materialen - opties
+              span Facturen - opties
             ul(class="nav flex-column mb-2")
               li(class="nav-item")
-                a(class="nav-link active",href='/add-contact' + "/" + loginHash)
+                a(class="nav-link",href='/add-factuur' + contact._ic+"/" + loginHash)
                   span(data-feather="plus-circle")
-                  span Nieuw Materiaal
+                  span Nieuw factuur
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          h2(class="pt-3") Materiaal toevoegen
+          h2(class="pt-3") creditnota bewerken
           hr
-          form(action='/edit-bestelling/'+bestelling._id+"/"+loginHash,method='post')
+          form(action='/edit-creditnota/'+contact._id+'/'+factuur._id,method='post')
             div(class="form-row")
-              div(class="form-group col-md-10")
-                label(for="title") Beschrijving
-                input(type="text",class="form-control",value=bestelling.beschrijving,name="beschrijving", required)
+              div(class="form-group col-md-3")
+                label(for="title") Datum
+                input(type="text",class="form-control",value=factuur.datum,name="datum")
+              if factuur.factuurNr
+                div(class="form-group col-md-2")
+                  label(for="title") Factuur Nummer
+                  input(type="number",class="form-control",value=factuur.factuurNr,name="factuurNr")
+              if factuur.creditnr
+                div(class="form-group col-md-2")
+                  label(for="title") Creditnota nummer
+                  input(type="number",class="form-control",value=factuur.offerteNr,name="creditnr")
               div(class="form-group col-md-2")
-                label(for="title") Aantal
-                input(type="number",class="form-control",value=bestelling.aantal,name="aantal", required)
-              div(class="form-group col-md-2")
-                label(for="title") Bedrag voor één
-                input(type="number",class="form-control",value=bestelling.bedrag,name="bedrag",step=".01" required)
+                label(for="title") voorschot
+                input(type="number",class="form-control",value=factuur.voorschot,name="voorschot",step=".01")
             hr
             button(type="submit",class="btn btn-outline-"+settings.thema) bijwerken
