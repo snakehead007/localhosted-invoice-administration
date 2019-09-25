@@ -2153,20 +2153,16 @@ app.get('/prijs/:loginHash', function(req, res) {//REWORKED
       if (!err) {
         Materiaal.find({}, function(err, materialen) {
           if (!err) {
-            if(settings.lang=="nl"){
-            res.render('nl/calc/prijs', {
-              'settings': settings,
-              'description': "Berekening voor Prijs",
-              'materialen': materialen,
-              "loginHash": req.params.loginHash
-            });}else{
-              res.render('eng/calc/prijs', {
-                'settings': settings,
-                'description': "Calculating price",
-                'materialen': materialen,
-                "loginHash": req.params.loginHash
-              });
-            }
+            Profile.findOne({},function(err,profile){
+              if(!err){
+                res.render(settings.lang+'/calc/prijs', {
+                  'settings': settings,
+                  'profile': profile,
+                  'materialen': materialen,
+                  "loginHash": req.params.loginHash
+                });
+              }
+            });
           }
         });
       }
@@ -3515,7 +3511,7 @@ var getBase64 = () => {
     fs.access(path, fs.F_OK, (err) => {
       if (err) {
         //BASE64 image if no logo is uploaded
-        resolve("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACWCAYAAABkW7XSAAAAxUlEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOA1v9QAATX68/0AAAAASUVORK5CYII=");
+        resolve("data:image/png;base64,iVBORw0KGgoAAAANSUhsEUgAAASwAAACWCAYAAABkW7XSAAAAxUlEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOA1v9QAATX68/0AAAAASUVORK5CYII=");
         return;
       }else{
       imageToBase64(path).then((response) => {
