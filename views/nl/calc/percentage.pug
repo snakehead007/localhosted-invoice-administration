@@ -17,6 +17,7 @@ html
       $(document).ready(function () {
         feather.replace();
       });
+      function vars(){$("#vars_id").toggle();}
 body
   header
     nav(class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow")
@@ -54,11 +55,14 @@ body
                   span(data-feather="package")
                   span Materialen
               li(class="nav-item")
-                a(class="nav-link" href="/berekeningen/"+loginHash)
+                a(class="nav-link active" href="/berekeningen/"+loginHash)
                   span(data-feather="book")
                   span Berekeningen
+                  span(data-feather="chevron-right")
+                  span(class="sr-only") (current)
+                  span Siliconen mal
               li(class="nav-item")
-                a(class="nav-link " href="/settings/"+loginHash)
+                a(class="nav-link" href="/settings/"+loginHash)
                   span(data-feather="settings")
                   span Settings
             h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
@@ -69,16 +73,26 @@ body
                   span(data-feather="bookmark")
                   span Basecone
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          h2(class="pt-3")="Nieuw logo upload"
+          h2(class="pt-3") Percentage berekenen
           hr
-          form(ref='uploadForm',id='uploadForm' ,action='/upload-logo/'+loginHash,method='post',encType="multipart/form-data")
-              div(class="input-group form-group col-md-5 mr-auto")
-                div(class="custom-file")
-                  input(type="file",name="sampleFile", class="custom-file-input form-control",id="inputGroupFile04", aria-describedby="inputGroupFileAddon04")
-                  label(class="custom-file-label", for="inputGroupFile04") Choose file
-                div(class="input-group-append")
-                  button(class="btn btn-outline-"+settings.thema+" form-control", type="submit", id="inputGroupFileAddon04") Upload
-          pre
-            code
-              p jpg, gif and png files only
-              p If you need transparancy, use a .png file
+          div(class="row")
+            div(class="col-lg-2 col-md-1 col-lg-0")
+            if error == 1
+              div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Vul allebei de velden in
+          form(action='/percentage'+"/"+loginHash,method='post')
+            div(class="form-row")
+              div(class="col-lg-2 col-md-1 col-sm-0")
+              div(class="form-group col-lg-3 col-md-4 col-sm-12")
+                label(for="title") Bedrag
+                input(type="number",class="form-control",name="bedrag",step=".01")
+              div(class="col-lg-2 col-md-2 col-sm-12")
+              div(class="form-group col-lg-3  col-md-4 col-sm-12")
+                label(for="title") Percentage
+                input(type="number",class="form-control",name="percent",step=".01")
+              div(class="col-lg-2 col-md-1 col-sm-0")
+              button(type="submit",class="btn btn-"+settings.oppo) Berekenen
+          hr
+          div(class="row")
+            div(class="col-lg-5 col-md-4 col-lg-0")
+            div(class="col-lg-3 col-md-2 col-sm-10")  
+              h3=oplossing

@@ -1506,7 +1506,7 @@ app.get('/offerte/:idf/:loginHash', function(req, res) {//REWORKED
                   'contact': contact,
                   'bestellingen': createJSON(bestellingen),
                   "factuur": factuur,
-                  'lengte': lengte,
+                  'lengte': bestellingen.length,
                   "settings": settings,
                   "loginHash": req.params.loginHash,
                   "offertetext":replaceAll(settings.offertetext,profile,contact,factuur,settings.lang),
@@ -1518,7 +1518,7 @@ app.get('/offerte/:idf/:loginHash', function(req, res) {//REWORKED
                     'contact': contact,
                     'bestellingen': json_data,
                     "factuur": factuur,
-                    'lengte': lengte,
+                    'lengte': bestellingen.length,
                     "settings": settings,
                     "loginHash": req.params.loginHash,
                     "offertetext":replaceAll(settings.offertetext,profile,contact,factuur,settings.lang),
@@ -3192,10 +3192,14 @@ app.get('/inch/:loginHash', function(req, res) {//REWORKED
     }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
-        res.render('nl/calc/inch', {
-          'settings': settings,
-          'description': "Berekening voor inch & cm omzettingen",
-          "loginHash": req.params.loginHash
+        Profile.findOne({},function(err,profile){
+          if(!err){
+            res.render(settings.lang+'/calc/inch', {
+              'settings': settings,
+              "loginHash": req.params.loginHash,
+              "profile":profile
+            });
+          }
         });
       }
     });
@@ -3206,86 +3210,65 @@ app.post('/inch/:loginHash', function(req, res) {//REWORKED
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
-    Settings.findOne({}, function(err, settings) {
-      if (!err) {
-        var inch = req.body.inch;
-        var cm = req.body.cm;
-        var cm_;
-        var inch_;
-        var oplossing;
-        if (inch !== "" && cm !== "") {
-          if(settings.lang=="nl"){
-          res.render('nl/calc/inch', {
-            'settings': settings,
-            'description': "Berekening voor inch & cm omzettingen",
-            "error": 1,
-            "loginHash": req.params.loginHash
-          });}else{
-            res.render('eng/calc/inch', {
-              'settings': settings,
-              'description': "Calculations for inch & cm",
-              "error": 1,
-              "loginHash": req.params.loginHash
-            });
-          }
-        } else {
-          if (inch !== "") {
-            cm = inch / 0.39370;
-            cm_ = Number(cm).toFixed(2);
-            inch_ = Number(inch).toFixed(2);
-            oplossing = inch_ + "\" = " + cm_ + "cm";
-            if(settings.lang=="nl"){
-            res.render('nl/calc/inch', {
-              'settings': settings,
-              'description': "Berekening voor inch & cm omzettingen",
-              "oplossing": oplossing,
-              "loginHash": req.params.loginHash
-            });}else{
-              res.render('nl/calc/inch', {
+    Profile.findOne({},function(err,profile){
+      if(!err){
+        Settings.findOne({}, function(err, settings) {
+          if (!err) {
+            var inch = req.body.inch;
+            var cm = req.body.cm;
+            var cm_;
+            var inch_;
+            var oplossing;
+            if (inch !== "" && cm !== "") {
+              res.render(settings.lang+'/calc/inch', {
                 'settings': settings,
-                'description': "Calculations for inch & cm",
-                "oplossing": oplossing,
-                "loginHash": req.params.loginHash
+                'description': "Berekening voor inch & cm omzettingen",
+                "error": 1,
+                "loginHash": req.params.loginHash,
+                "profile":profile
               });
-            }
+            } else {
+              if (inch !== "") {
+                cm = inch / 0.39370;
+                cm_ = Number(cm).toFixed(2);
+                inch_ = Number(inch).toFixed(2);
+                oplossing = inch_ + "\" = " + cm_ + "cm";
+                res.render(settings.lang+'/calc/inch', {
+                  'settings': settings,
+                  'description': "Berekening voor inch & cm omzettingen",
+                  "oplossing": oplossing,
+                  "loginHash": req.params.loginHash,
+                  "profile":profile
+                });
+              }
+              if (cm !== "") {
+                inch = cm * 0.39370;
+                cm_ = Number(cm).toFixed(2);
+                inch_ = Number(inch).toFixed(2);
+                oplossing = cm_ + "cm = " + inch_ + "\"";
+                res.render(settings.lang+'/calc/inch', {
+                  'settings': settings,
+                  'description': "Berekening voor inch & cm omzettingen",
+                  "oplossing": oplossing,
+                  "loginHash": req.params.loginHash,
+                  "profile":profile
+                });
+              }
+              if(settings.lang=="nl"){
+                console.log("error niets ingevuld");
+                res.render(settings.lang+'/calc/inch', {
+                  'settings': settings,
+                  'description': "Berekening voor inch & cm omzettingen",
+                  "error": 2,
+                  "loginHash": req.params.loginHash,
+                  "profile":profile
+                });
+              }
           }
-          if (cm !== "") {
-            inch = cm * 0.39370;
-            cm_ = Number(cm).toFixed(2);
-            inch_ = Number(inch).toFixed(2);
-            oplossing = cm_ + "cm = " + inch_ + "\"";
-            if(settings.lang=="nl"){
-            res.render('nl/calc/inch', {
-              'settings': settings,
-              'description': "Berekening voor inch & cm omzettingen",
-              "oplossing": oplossing,
-              "loginHash": req.params.loginHash
-            });}else{
-              res.render('nl/calc/inch', {
-                'settings': settings,
-                'description': "Calculations for inch & cm",
-                "oplossing": oplossing,
-                "loginHash": req.params.loginHash
-              });
-            }
-          }
-          if(settings.lang=="nl"){
-          console.log("error niets ingevuld");
-          res.render('nl/calc/inch', {
-            'settings': settings,
-            'description': "Berekening voor inch & cm omzettingen",
-            "error": 2,
-            "loginHash": req.params.loginHash
-          });}else{
-            res.render('eng/calc/inch', {
-              'settings': settings,
-              'description': "Calculations for inch & cm",
-              "error": 2,
-              "loginHash": req.params.loginHash
-            });}
-          }
-      }
-    });
+        }
+      });
+    }
+  });
 });
 
 app.get('/pass/:loginHash', function(req, res) {//REWORKED
