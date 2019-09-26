@@ -520,7 +520,6 @@ app.get('/edit-contact/:id/:loginHash', function(req, res) {//REWORKED & tested
         }
       });
     });
-
 });
 
 app.post('/edit-contact/:id/:loginHash', function(req, res) {//REWORKED & tested
@@ -1146,25 +1145,27 @@ app.get('/edit-factuur/:idc/:idf/:loginHash', function(req, res) {//REWORKED & t
       res.render('login');
     }});
     Contact.findOne({_id: req.params.idc}, function(err, contact) {
-      Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
-        if (!err) {
-          Settings.findOne({}, function(err, settings) {
-            if (!err) {
-                Profile.findOne({}, function(err, profile) {
-                    if (!err) {
-                        res.render(settings.lang + '/edit/edit-factuur', {
-                            'factuur': factuur,
-                            'contact': contact,
-                            "profile": profile,
-                            "settings": settings,
-                            "loginHash": req.params.loginHash
-                        });
-                    }
-                });
-            }
-          });
-        }
-      });
+      if(!err){
+        Factuur.findOne({_id: req.params.idf}, function(err, factuur) {
+          if (!err) {
+            Settings.findOne({}, function(err, settings) {
+              if (!err) {
+                  Profile.findOne({}, function(err, profile) {
+                      if (!err) {
+                          res.render(settings.lang + '/edit/edit-factuur', {
+                              'factuur': factuur,
+                              'contact': contact,
+                              "profile": profile,
+                              "settings": settings,
+                              "loginHash": req.params.loginHash
+                          });
+                      }
+                  });
+              }
+            });
+          }
+        });
+      }
     });
 });
 
@@ -2550,12 +2551,16 @@ app.get('/edit-mat/:id/:loginHash', function(req, res) {//REWORKED
     Settings.findOne({}, function(err, settings) {
       if (!err) {
         Materiaal.findOne({_id: req.params.id}, function(err, materiaal) {
-          res.render('nl/edit/edit-mat', {
-            'settings': settings,
-            'materiaal': materiaal,
-            'description': materiaal.naam + " aanpassen",
-            "loginHash": req.params.loginHash
-          });
+          Profile.findOne({}, function(err, profile) {
+              if (!err) {
+                res.render(settings.lang+'/edit/edit-mat', {
+                  'settings': settings,
+                  'materiaal': materiaal,
+                  "profile":profile,
+                  "loginHash": req.params.loginHash
+                });
+              }
+            });
         });
       }
     });
