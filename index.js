@@ -1649,7 +1649,7 @@ app.get('/creditnota/:idc/:loginHash', function(req, res) {//REWORKED
                     'contact': contact,
                     'bestellingen':  createJSON(bestellingen),
                     "factuur": factuur,
-                    'lengte': lengte,
+                    'lengte': bestellingen.length,
                     "settings": settings,
                     "loginHash": req.params.loginHash,
                     "creditnotatext":replaceAll(settings.creditnotatext,profile,contact,factuur,settings.lang),
@@ -2426,20 +2426,17 @@ app.post('/prijs/:loginHash', function(req, res) {
                                                                                                           totaal += req.body.i050 * m050.prijs;
                                                                                                         Settings.findOne({}, function(err, settings) {
                                                                                                           if (!err) {
-                                                                                                            if(settings.lang=="nl"){
-                                                                                                            res.render('nl/calc/prijs-totaal', {
+                                                                                                            Profile.findOne({},function(err,profile){
+                                                                                                              if(!err){
+                                                                                                            res.render(settings.lang+'/calc/prijs-totaal', {
                                                                                                               "totaal": totaal.toFixed(2) + "€",
                                                                                                               "description": "Berekenen van prijs",
                                                                                                               "settings": settings,
+                                                                                                              "profile":profile,
                                                                                                               "loginHash": req.params.loginHash
-                                                                                                            });}else{
-                                                                                                              res.render('eng/calc/prijs-totaal', {
-                                                                                                                "totaal": totaal.toFixed(2) + "€",
-                                                                                                                "description": "Calculating price",
-                                                                                                                "settings": settings,
-                                                                                                                "loginHash": req.params.loginHash
-                                                                                                              });
+                                                                                                            });
                                                                                                             }
+                                                                                                          });
                                                                                                           }
                                                                                                         });
                                                                                                       });
@@ -2501,16 +2498,20 @@ app.post('/prijs/:totaal/:loginHash', function(req, res) {//REWORKED
       res.render('login');
     }});
     Settings.findOne({}, function(err, settings) {
-      if (!er) {
-        var totaal_ = Number(req.params.totaal.substring(0, req.params.totaal.length - 1));
-        var totaal = req.params.totaal;
-        var marge = req.body.marge;
-        res.render("nl/calc/prijs-totaal", {
-          "totmarge": String(((totaal_ * marge / 100.0) + totaal_).toFixed(2)) + "€",
-          "totaal": totaal,
-          "settings": settings,
-          'description': "berekening van marge",
-          "loginHash": req.params.loginHash
+      if (!err) {
+        Profile.findOne({},function(err,profile){
+          if(!err){
+            var totaal_ = Number(req.params.totaal.substring(0, req.params.totaal.length - 1));
+            var totaal = req.params.totaal;
+            var marge = req.body.marge;
+            res.render("nl/calc/prijs-totaal", {
+              "totmarge": String(((totaal_ * marge / 100.0) + totaal_).toFixed(2)) + "€",
+              "totaal": totaal,
+              "settings": settings,
+              "profile":profile,
+              "loginHash": req.params.loginHash
+            });
+          }
         });
       }
     });
@@ -2722,26 +2723,21 @@ app.post('/percentage/:loginHash', function(req, res) {//REWORKED
     }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
+        Profile.findOne({},function(err,profile){
+          if(!err){
         var percent = req.body.percent;
         var bedrag = req.body.bedrag;
         var error_input = (percent === "" && bedrag === "");
         var oplossing = bedrag * (percent / 100.0);
-        if(settings.lang=="nl"){
-        res.render('nl/calc/percentage', {
+        res.render(settings.lang+'/calc/percentage', {
           'settings': settings,
-          'description': "Berekening voor percentage",
           "oplossing": oplossing,
           "error": error_input,
+          "profile":profile,
           "loginHash": req.params.loginHash
-        });}else{
-          res.render('eng/calc/percentage', {
-            'settings': settings,
-            'description': "Percentage calculating",
-            "oplossing": oplossing,
-            "error": error_input,
-            "loginHash": req.params.loginHash
-          });
-        }
+        });
+      }
+      });
       }
     });
 });
@@ -2753,18 +2749,16 @@ app.get('/percentage/:loginHash', function(req, res) {//REWORKED
     }});
     Settings.findOne({}, function(err, settings) {
       if (!err) {
-        if(settings.lang=="nl"){
-        res.render('nl/calc/percentage', {
-          'settings': settings,
-          'description': "Berekening voor percentage",
-          "loginHash": req.params.loginHash
-        });}else{
-          res.render('eng/calc/percentage', {
-            'settings': settings,
-            'description': "Percentage calculating",
-            "loginHash": req.params.loginHash
-          });
-        }
+        Profile.findOne({},function(err,profile){
+          if(!err){
+            res.render(settings.lang+'/calc/percentage', {
+              'settings': settings,
+              'description': "Berekening voor percentage",
+              "loginHash": req.params.loginHash,
+              "profile":profile
+            });
+          }
+        });
       }
     });
 });
