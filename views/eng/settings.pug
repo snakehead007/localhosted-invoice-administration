@@ -102,15 +102,15 @@ html
                                 li(class="nav-item")
                                     a(class="nav-link" href="/edit-profile/"+loginHash)
                                         span(data-feather="user")
-                                        span Mijn Profiel
+                                        span My profile
                                 li(class="nav-item")
                                     a(class="nav-link" href="/facturen/"+loginHash)
                                         span(data-feather="file")
-                                        span Alle facturen
+                                        span All invoices
                                 li(class="nav-item")
                                     a(class="nav-link" href="/contacten/"+loginHash)
                                         span(data-feather="users")
-                                        span Klanten
+                                        span Clients
                                 li(class="nav-item")
                                     a(class="nav-link" href="/mat/"+loginHash)
                                         span(data-feather="package")
@@ -118,7 +118,7 @@ html
                                 li(class="nav-item")
                                     a(class="nav-link" href="/berekeningen/"+loginHash)
                                         span(data-feather="book")
-                                        span Berekeningen
+                                        span Calculations
                                 li(class="nav-item")
                                     a(class="nav-link active" href="/settings/"+loginHash)
                                         span(data-feather="settings")
@@ -140,16 +140,16 @@ html
                                 tbody
                                     tr(onclick="openPass()",class="settingsOption optionPass")
                                         td
-                                            p(class="lead") Verander passwoord
+                                            p(class="lead") Change password
                                             div(id="pass",style="display:none;")
                                                 a(href='/pass' + "/" + loginHash,class="button")
-                                                    button(type="button" class="btn btn-outline-"+settings.thema) Verander passwoord
+                                                    button(type="button" class="btn btn-outline-"+settings.thema) Change password
                                     tr(onclick="openBTW()",class="settingsOption optionBtw")
                                         td
-                                            p(class="lead") Verander BTW waarden
+                                            p(class="lead") Change VAT
                                             div(id="btw",style="display:none;")
                                                 p Btw staat op: #{settings.btw}%
-                                                a(href='/btw' + "/" + loginHash,class="button",class="btn btn-outline-"+settings.thema) Verander BTW waarden
+                                                a(href='/btw' + "/" + loginHash,class="button",class="btn btn-outline-"+settings.thema) Change VAT
                                     tr(onclick="openThema()",class="settingsOption optionThema")
                                         td
                                             p(class="lead")
@@ -189,9 +189,9 @@ html
                                                 div(class="btn-group mb-3" role="group" aria-label="Basic example")
                                                     a(href="/change-lang/nl/" + loginHash,class="button")
                                                         if settings.lang == "nl"
-                                                            button(type="button" class="btn btn-outline-"+settings.thema) Nederlands
+                                                            button(type="button" class="btn btn-outline-"+settings.thema) Dutch
                                                         else
-                                                            button(type="button" class="btn btn-"+settings.thema) Nederlands
+                                                            button(type="button" class="btn btn-"+settings.thema) Dutch
                                                     a(href="/change-lang/eng/" + loginHash,class="button")
                                                         if settings.lang == "eng"
                                                             button(type="button" class="btn btn-outline-"+settings.thema) English
@@ -199,24 +199,25 @@ html
                                                             button(type="button" class="btn btn-"+settings.thema) English
                                     tr(onclick="openText()",class="settingsOption optionText")
                                         td
-                                            p(class="lead") Text aanpassingen
+                                            p(class="lead") Text footnotes
                                             div(id="text",style="display:none;")
                                                 form(action='/edit-pdf-text/'+loginHash,method='post')
                                                     button(type="button" class="mb-1 headExtend btn-sm btn btn-outline-"+settings.thema, onclick="info()") info
                                                     div(class="input-group mb-3")
                                                         div(class="input-group-prepend")
-                                                            span(class="input-group-text") Factuur tekst
+                                                            span(class="input-group-text") Invoice text
                                                         textarea(input="text",name="factuurtext",class="form-control" aria-label="With textarea")=settings.factuurtext
                                                     div(class="input-group mb-3")
                                                         div(class="input-group-prepend")
-                                                            span(class="input-group-text") Creditnota tekst
+                                                            span(class="input-group-text") Creditnote text
                                                         textarea(input="text",name="creditnotatext",class="form-control" aria-label="With textarea")=settings.creditnotatext
                                                     div(class="input-group mb-3")
                                                         div(class="input-group-prepend")
-                                                            span(class="input-group-text") Offerte tekst
+                                                            span(class="input-group-text") Offer text
                                                         textarea(input="text",name="offertetext",class="form-control" aria-label="With textarea")=settings.offertetext
-                                                    button(type="submit",class="btn btn-outline-"+settings.thema) bijwerken
+                                                    button(type="submit",class="btn btn-outline-"+settings.thema) make changes
                                                     div(class="",id="info",style="display:none")
+                                                        p In order to use variables of the database, type them like below;
                                                         p Voor variabelen van de database te gebruiken, typ ze zoals hieronder in de texten:
                                                         samp(class="text")
                                                             pre

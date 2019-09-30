@@ -1096,11 +1096,14 @@ app.get('/delete-factuur/:idc/:idf/t/:loginHash', function(req, res) {//REWORKED
             if (!err) {
               Settings.findOne({}, function(err, settings) {
                 if (!err) {
+                  Profile.findOne({},function(err,profile){
                   res.render(settings.lang+'/facturen', {
                     'facturenLijst': facturen,
                     'settings': settings,
+                    "profile":profile,
                     "loginHash": req.params.loginHash
                   });
+                });
                 }
               });
             }
