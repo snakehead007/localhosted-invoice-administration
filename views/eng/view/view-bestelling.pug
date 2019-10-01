@@ -1,0 +1,94 @@
+//- V1.8
+html
+  head
+    title=title
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    link(rel="stylesheet" href="/stylesheet.css")
+    scrip(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/core.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js")
+    script(src="https://www.chartjs.org/samples/latest/utils.js")
+    script(src="https://unpkg.com/feather-icons")
+    script.
+      function info(){$("#info").toggle();};
+      $(document).ready(function () {
+        feather.replace();
+      });
+body
+  header
+    nav(class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow")
+      a(class="navbar-brand col-sm-3 col-md-2 mr-0",href="/edit-profile/"+loginHash)=profile.firma
+      form(class="form", method="post",action="/zoeken/"+loginHash)
+        input(class="form-control form-control-dark w-100" type="text",name="search",placeholder="zoeken" aria-label="zoeken")
+        button(type="sumbit",style="display:none")
+      ul(class="navbar-nav px-3")
+        li(class="nav-item text-nowrap")
+          a(class="nav-link" href="#") Sign out
+
+    div(class="container-fluid")
+      div(class ="row")
+        nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+          div(class="sidebar-sticky")
+            ul(class="nav flex-column")
+              li(class="nav-item")
+                a(class="nav-link" href="/index/"+loginHash)
+                  span(data-feather="home")
+                  span Home
+              li(class="nav-item")
+                a(class="nav-link" href="/edit-profile/"+loginHash)
+                  span(data-feather="user")
+                  span Mijn Profiel
+              li(class="nav-item")
+                a(class="nav-link active" href="/facturen/"+loginHash)
+                  span(data-feather="file")
+                  span Alle facturen
+                  span(data-feather="chevron-right")
+                  span(class="sr-only") (current)
+                  span bestelling
+              li(class="nav-item")
+                a(class="nav-link" href="/contacten/"+loginHash)
+                  span(data-feather="users")
+                  span Klanten
+              li(class="nav-item")
+                a(class="nav-link" href="/mat/"+loginHash)
+                  span(data-feather="package")
+                  span Materialen
+              li(class="nav-item")
+                a(class="nav-link" href="/berekeningen/"+loginHash)
+                  span(data-feather="book")
+                  span Berekeningen
+              li(class="nav-item")
+                a(class="nav-link" href="/settings/"+loginHash)
+                  span(data-feather="settings")
+                  span Settings
+            h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+              span Bookmarks
+            ul(class="nav flex-column mb-2")
+              li(class="nav-item")
+                a(class="nav-link",href='https://identity.basecone.com/authentication/login')
+                  span(data-feather="bookmark")
+                  span Basecone
+        main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+          h2(class="pt-3") Factuur bekijken
+          hr
+          table(class="table table-striped")
+            tbody
+              tr
+                th(scope="row") beschrijving
+                td
+                  h4=bestelling.beschrijving
+              tr
+                th(scope="row") aantal
+                td
+                  h4=bestelling.aantal
+              tr
+                th(scope="row") bedrag
+                td
+                  h4=bestelling.bedrag+" €"
+              tr
+                th(scope="row") totaal
+                td
+                  h4=(bestelling.aantal*bestelling.bedrag)+" €"

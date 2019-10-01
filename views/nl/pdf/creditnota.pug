@@ -1,0 +1,192 @@
+//- V1.8
+html 
+  head
+    title download pdf
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous")
+    script(src="https://unpkg.com/jspdf-autotable@3.1.0/dist/jspdf.plugin.autotable.js")
+    script.
+      var imgData = "#{imgData}";
+      c = [0,0];
+      Pfirma = "#{profile.firma}";
+      Pnaam = "#{profile.naam}";
+      Pstraat = "#{profile.straat}";
+      PstraatNr = "#{profile.straatNr}";
+      Ppostcode = "#{profile.postcode}";
+      Pplaats = "#{profile.plaats}";
+      PbtwNr = "#{profile.btwNr}";
+      Piban = "#{profile.iban}";
+      Pbic = "#{profile.bic}";
+      firma = "#{contact.firma}";
+      contactPersoon = "#{contact.contactPersoon}";
+      straat = "#{contact.straat}";
+      straatNr = "#{contact.straatNr}";
+      postcode = "#{contact.postcode}";
+      plaats = "#{contact.plaats}";
+      btwNr = "#{contact.btwNr}";
+      datum = "#{factuur.datum}";
+      var btw = Number(#{btw});
+      voorschot = Number(#{factuur.voorschot});
+      creditnotatext = [];
+      creditnotatext.push("#{creditnotatext[0]}");
+      creditnotatext.push("#{creditnotatext[1]}");
+      creditnotatext.push("#{creditnotatext[2]}");
+      creditnotatext.push("#{creditnotatext[3]}");
+      creditnotatext.push("#{creditnotatext[4]}");
+      creditnotatext.push("#{creditnotatext[5]}");
+      var doc = new jsPDF();
+      doc.setFont(doc.getFontList()[0]);
+      doc.setProperties({
+        title: '#{profile.firma} creditnota ',
+        subject: 'Creditnota van #{profile.firma}',
+        author: '#{profile.firma}',
+        keywords: '#{profile.firma} ,creditnota ',
+        creator: '#{profile.firma} FactuurBeheer',
+      });
+      /**HEADER**/
+      doc.addImage(imgData, 'JPEG', 15, 5, 50, 50);
+      doc.setFontType("bold");
+      doc.setFontSize(36);
+      doc.setTextColor(170, 170, 170);
+      doc.text(140,35,"Creditnota");
+      /**bedrijfgegevens**/
+      doc.setTextColor(0,0,0);
+      doc.setFontSize(12);
+      doc.setFontType("courier");
+      c = [20,60];
+      doc.text(c[0],c[1],Pnaam);
+      doc.setFontType("bold");
+      c[1] += 10;
+      doc.text(c[0],c[1],"Bedrijfgegevens");
+      doc.setFontType("courier");
+      c[1] += 5;
+      doc.text(c[0],c[1],Pnaam);
+      c[1] += 5;
+      doc.text(c[0],c[1],Pstraat + " " + PstraatNr);
+      c[1] += 5;
+      doc.text(c[0],c[1],"BTW nr: "+ PbtwNr);
+      doc.setFontType("bold");
+      c[1] += 10;
+      doc.text(c[0],c[1],"Bankgegevens");
+      doc.setFontType("courier");
+      c[1] += 5;
+      doc.text(c[0],c[1],"IBAN: "+Piban);
+      c[1] += 5;
+      doc.text(c[0],c[1],"BIC: "+Pbic);
+      /**factuur info**/
+      doc.setFontType("bold");
+      c = [120,70];
+      doc.text(c[0],c[1],"Datum:");
+      c[1] +=5;
+      doc.setFontType("courier");
+      c[0] += 30;
+      c[1] -= 5;
+      doc.text(c[0],c[1],datum);
+      /**factuur gegevens**/
+      c = [120,80];
+      doc.setFontType("bold");
+      doc.text(c[0],c[1],"Creditnota gegevens");
+      c[1] +=5;
+      doc.setFontType("courier");
+      if(firma){
+        doc.text(c[0],c[1],firma);
+        c[1] +=5;
+      }
+      doc.text(c[0],c[1],contactPersoon);
+      c[1] +=5;
+      doc.text(c[0],c[1],straat+" "+straatNr);
+      c[1] +=5;
+      if(plaats){
+        if(postcode){
+          doc.text(c[0],c[1],postcode+" "+plaats);
+        }else{
+          doc.text(c[0],c[1],plaats);
+        }
+        c[1] +=5;
+      }
+      if(btwNr){
+        doc.text(c[0],c[1],"BTW nr: "+btwNr);
+
+      }
+      /**Beschrijvingen**/
+      var unusable_json_data = "#{bestellingen}";
+      var current = JSON.parse(unusable_json_data.replace(/(&quot\;)/g,"\""));
+      var bestellingen = [];
+      var aantal = Number(#{lengte});
+      var totaalEx = 0;
+      var _btw;
+      var totaalInc;
+      for(var i = 0; i <=aantal-1;i++){
+        bestellingen.push([current[i].beschrijving,current[i].aantal,current[i].bedrag,current[i].totaal]);
+      }
+      for(var i = 0; i <=bestellingen.length-1; i++){
+        console.log(bestellingen[i][3]);
+        totaalEx +=bestellingen[i][3];
+      }
+      var bestellingenPrint = [];
+      for(var i = 0; i <=aantal-1;i++){
+        bestellingenPrint.push([current[i].beschrijving,current[i].aantal,current[i].bedrag.toFixed(2)+" €",current[i].totaal.toFixed(2)+" €"]);
+      }
+      doc.autoTable({
+        theme: 'grid',
+        columnStyles: {
+          0:{fillColor:[255,255,255]},
+          1:{fillColor:[255,255,255],halign:'right'},
+          2:{fillColor:[255,255,255],halign:'right'},
+          3:{fillColor:[255,255,255],halign:'right'}
+          },
+        styles: {fillColor: [140, 140, 140]},
+        startY: 110,
+        head: [['Beschrijving', 'Aantal', 'Bedrag','Totaal']],
+        body: bestellingenPrint
+        });
+      _btw = Math.round((totaalEx-voorschot)*btw)/100;
+      totaalExSub  = totaalEx - voorschot;
+      totaalInc = totaalExSub+_btw;
+      if(voorschot==0){
+        doc.autoTable({
+          theme: 'plain',
+          startX: 200,
+          columnStyles: {
+            0:{fillColor:[255,255,255]},
+            1:{fillColor:[255,255,255]},
+            2:{fillColor:[255,255,255],halign:'right'},
+            3:{fillColor:[180,180,180],halign:'right'}},
+          styles: {fillColor: [140, 140, 140]},
+          body: [
+          [[""],["                               "],["subtotaal"],[totaalEx.toFixed(2)+" €"]],
+          [[""],["                               "],["btw "+btw+"%"],[_btw.toFixed(2)+" €"]],
+          [[""],["                               "],["totaal"],[totaalInc.toFixed(2)+" €"]]
+          ]
+        })
+      }else{
+        doc.autoTable({
+          theme: 'plain',
+          startX: 200,
+          columnStyles: {
+            0:{fillColor:[255,255,255]},
+            1:{fillColor:[255,255,255]},
+            2:{fillColor:[255,255,255],halign:'right'},
+            3:{fillColor:[140,140,140],halign:'right'}},
+          styles: {fillColor: [140, 140, 140]},
+          body: [
+          [[""],["                               "],["subtotaal"],[totaalEx.toFixed(2)+" €"]],
+          [[""],["                               "],["voorschot"],["-"+voorschot.toFixed(2)+" €"]],
+          [[""],["                               "],["subtotaal"],[totaalExSub.toFixed(2)+" €"]],
+          [[""],["                               "],["btw "+btw+"%"],[_btw.toFixed(2)+" €"]],
+          [[""],["                               "],["totaal"],[totaalInc.toFixed(2)+" €"]]
+          ]
+        })
+      }
+      /**Footer & Disclaimer**/
+      doc.setFontType("courier");
+      doc.setFontSize(10);
+      doc.text(20,265,creditnotatext[0]);
+      doc.text(20,270,creditnotatext[1]);
+      doc.text(20,275,creditnotatext[2]);
+      doc.text(20,280,creditnotatext[3]);
+      doc.setFontType("bold");
+      doc.text(80,285,"Wij danken u voor uw vertrouwen.");
+      /**EINDE OFFERTE GENERATIE**/
+      doc.save('creditnota.pdf');
+  body
+    h1 Sluit deze pagina na het downloaden van de pdf

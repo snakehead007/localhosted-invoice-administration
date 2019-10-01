@@ -1,0 +1,134 @@
+html
+  head
+    title=title
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    link(rel="stylesheet" href="/stylesheet.css")
+    scrip(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/core.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js")
+    script(src="https://www.chartjs.org/samples/latest/utils.js")
+    script(src="https://unpkg.com/feather-icons")
+    script.
+      $(document).ready(function () {
+        feather.replace();
+      });
+      function openSil(loginHash) {
+        $(".optionSil").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionLam").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPrijs").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionInch").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPerc").css('background-color', 'rgba(0, 0, 0, 0)');
+        window.location = "/epo-sil/" + loginHash;
+      };
+      function openLam(loginHash) {
+        $(".optionLam").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionPrijs").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionInch").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionSil").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPerc").css('background-color', 'rgba(0, 0, 0, 0)');
+      };
+      function openPrijs(loginHash) {
+        $(".optionPrijs").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionLam").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionInch").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionSil").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPerc").css('background-color', 'rgba(0, 0, 0, 0)');
+        window.location = "/prijs/" + loginHash;
+      };
+      function openInch(loginHash) {
+        $(".optionInch").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionLam").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPrijs").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionSil").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPerc").css('background-color', 'rgba(0, 0, 0, 0)');
+        window.location = "/inch/" + loginHash;
+      };
+      function openPerc(loginHash) {
+        $(".optionPerc").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionLam").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPrijs").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionSil").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionInch").css('background-color', 'rgba(0, 0, 0, 0)');
+        window.location = "/percentage/" + loginHash;
+      };
+  body
+    header
+      nav(class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow")
+        a(class="navbar-brand col-sm-3 col-md-2 mr-0",href="/edit-profile/"+loginHash)=profile.firma
+        form(class="form", method="post",action="/zoeken/"+loginHash)
+          input(class="form-control form-control-dark w-100" type="text",name="search",placeholder="zoeken" aria-label="zoeken")
+          button(type="sumbit",style="display:none")
+        ul(class="navbar-nav px-3")
+          li(class="nav-item text-nowrap")
+            a(class="nav-link" href="#") Sign out
+
+      div(class="container-fluid")
+        div(class ="row")
+          nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+            div(class="sidebar-sticky")
+              ul(class="nav flex-column")
+                li(class="nav-item")
+                  a(class="nav-link" href="/index/"+loginHash)
+                    span(data-feather="home")
+                    span Home
+                li(class="nav-item")
+                  a(class="nav-link" href="/edit-profile/"+loginHash)
+                    span(data-feather="user")
+                    span My profile
+                li(class="nav-item")
+                  a(class="nav-link" href="/facturen/"+loginHash)
+                    span(data-feather="file")
+                    span All invoices
+                li(class="nav-item")
+                  a(class="nav-link" href="/contacten/"+loginHash)
+                    span(data-feather="users")
+                    span Clients
+                li(class="nav-item")
+                  a(class="nav-link" href="/mat/"+loginHash)
+                    span(data-feather="package")
+                    span Stock
+                li(class="nav-item")
+                  a(class="nav-link active" href="/berekeningen/"+loginHash)
+                    span(data-feather="book")
+                    span Calculations
+                    span(class="sr-only") (current)
+                li(class="nav-item")
+                  a(class="nav-link" href="/settings/"+loginHash)
+                    span(data-feather="settings")
+                    span Settings
+              h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+                span Bookmarks
+              ul(class="nav flex-column mb-2")
+                li(class="nav-item")
+                  a(class="nav-link",href='https://identity.basecone.com/authentication/login')
+                    span(data-feather="bookmark")
+                    span Basecone
+          main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+            h2(class="pt-3") Calculations
+            div(class="table-responsive")
+              table(class="table")
+                tbody
+                  tr(onclick="openSil(\""+loginHash+"\")",class="settingsOption optionSil")
+                    td
+                      p(class="lead") Silicon mold calculating
+                      div(id="sil",style="display:none;")
+                  tr(onclick="openLam(\""+loginHash+"\")",class="settingsOption optionLam")
+                    td
+                      p(class="lead") A1 laminating calculating
+                        span(class="badge badge-pill badge-warning") in progress
+                      div(id="lam",style="display:none;")
+                  tr(onclick="openPrijs(\""+loginHash+"\")",class="settingsOption optionPrijs")
+                    td
+                      p(class="lead") Price calculating
+                      div(id="prijs",style="display:none;")
+                  tr(onclick="openInch(\""+loginHash+"\")",class="settingsOption optionInch")
+                    td
+                      p(class="lead") Inch & cm calculating
+                      div(id="inch",style="display:none;")
+                  tr(onclick="openPerc(\""+loginHash+"\")",class="settingsOption optionPerc")
+                    td
+                      p(class="lead") Percentage calculating
+                      div(id="perc",style="display:none;")
