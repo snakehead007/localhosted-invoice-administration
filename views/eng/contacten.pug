@@ -40,23 +40,23 @@ html
                 li(class="nav-item")
                   a(class="nav-link" href="/edit-profile/#{loginHash}")
                     span(data-feather="user")
-                    span Mijn Profiel
+                    span My profile
                 li(class="nav-item")
                   a(class="nav-link" href="/facturen/#{loginHash}")
                     span(data-feather="file")
-                    span Alle facturen
+                    span All invoices
                 li(class="nav-item")
                   a(class="nav-link" href="/contacten/#{loginHash}")
                     span(data-feather="users")
-                    span Klanten
+                    span Clients
                 li(class="nav-item")
                   a(class="nav-link" href="/mat/#{loginHash}")
                     span(data-feather="package")
-                    span Materialen
+                    span Stock
                 li(class="nav-item")
                   a(class="nav-link" href="/berekeningen/#{loginHash}")
                     span(data-feather="book")
-                    span Berekeningen
+                    span Calculations
                 li(class="nav-item")
                   a(class="nav-link" href="/settings/#{loginHash}")
                     span(data-feather="settings")
@@ -79,7 +79,7 @@ html
             div(class="table-responsive")
               table(class="table table-#{settings.thema} table-striped")
                 tr
-                  th(scope="col") Contact
+                  th(scope="col") Client
                   th(scope="col") E-mail
                   th(scope="col") Action
 
@@ -91,14 +91,14 @@ html
                         if contact.mail
                           if contact.mail2
                             td
-                              a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mail's
+                              a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mails
                               div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
                                 a(class="dropdown-item", href='mailto:#{contact.mail}')=contact.mail
                                 a(class="dropdown-item", href='mailto:#{contact.mail1}')=contact.mail1
                                 a(class="dropdown-item", href='mailto:#{contact.mail2}')=contact.mail2
                           else if contact.mail1
                             td
-                              a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mail's
+                              a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mails
                               div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
                                 a(class="dropdown-item", href='mailto:#{contact.mail}')=contact.mail
                                 a(class="dropdown-item", href='mailto:#{contact.mail1}')=contact.mail1
@@ -111,7 +111,7 @@ html
                           td
                             button(type="button" class="btn btn-outline-#{settings.oppo}") No e-mail
                     td
-                      a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                      a(role="button", class="btn btn-#{settings.oppo} btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions
                       div(class="dropdown-menu", aria-labelledby="actionsDropdown")
                         a(class="dropdown-item", href='/edit-contact/' + contact._id + "/" + loginHash) Edit
                         a(class="dropdown-item", href='/delete-contact/' + contact._id + "/" + loginHash) Delete

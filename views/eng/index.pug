@@ -47,7 +47,7 @@ html
                 li(class="nav-item")
                   a(class="nav-link" href="/mat/"+loginHash)
                     span(data-feather="package")
-                    span Materials
+                    span Stock
                 li(class="nav-item")
                     a(class="nav-link" href="/berekeningen/"+loginHash)
                         span(data-feather="book")
@@ -157,44 +157,44 @@ html
                                                 if !contact
                                                     a(class="dropdown-item button", href="/opwaardeer/" + factuur._id + "/t"+loginHash) upgrade to invoice
 
-      script.
-          $(document).ready(function () {
-              feather.replace();
-          });
-          function drawChart(totaal) {
-              console.log(totaal);
-              var ctx = document.getElementById('myChart').getContext('2d');
-              var maand = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Oktober", "November", "December"];
-              var color = Chart.helpers.color;
-              var myChart = new Chart(ctx, {
-                  type: 'bar',
-                  data: {
-                      labels: [maand[0], maand[1], maand[2], maand[3], maand[4], maand[5], maand[6], maand[7], maand[8], maand[9], maand[10], maand[11]],
-                      datasets: [{
-                          label: 'Exlc. vat €',
-                          data: [totaal[0], totaal[1], totaal[2], totaal[3], totaal[4], totaal[5], totaal[6], totaal[7], totaal[8], totaal[9], totaal[10], totaal[11]],
-                          backgroundColor: color(window.chartColors.red).alpha(1).rgbString(),
-                          borderColor: window.chartColors.red,
-                          borderWidth: 1
-                      }, {
-                          label: 'Incl. vat €',
-                          data: [totaal[0] * 1.21, totaal[1] * 1.21, totaal[2] * 1.21, totaal[3] * 1.21, totaal[4] * 1.21, totaal[5] * 1.21, totaal[6] * 1.21, totaal[7] * 1.21, totaal[8] * 1.21, totaal[9] * 1.21, totaal[10] * 1.21, totaal[11] * 1.21],
-                          backgroundColor: color(window.chartColors.blue).alpha(1).rgbString(),
-                          borderColor: window.chartColors.blue,
-                          borderWidth: 1
+  script.
+      $(document).ready(function () {
+          feather.replace();
+      });
+      function drawChart(totaal) {
+          console.log(totaal);
+          var ctx = document.getElementById('myChart').getContext('2d');
+          var maand = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Oktober", "November", "December"];
+          var color = Chart.helpers.color;
+          var myChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                  labels: [maand[0], maand[1], maand[2], maand[3], maand[4], maand[5], maand[6], maand[7], maand[8], maand[9], maand[10], maand[11]],
+                  datasets: [{
+                      label: 'Exlc. vat €',
+                      data: [totaal[0], totaal[1], totaal[2], totaal[3], totaal[4], totaal[5], totaal[6], totaal[7], totaal[8], totaal[9], totaal[10], totaal[11]],
+                      backgroundColor: color(window.chartColors.red).alpha(1).rgbString(),
+                      borderColor: window.chartColors.red,
+                      borderWidth: 1
+                  }, {
+                      label: 'Incl. vat €',
+                      data: [totaal[0] * 1.21, totaal[1] * 1.21, totaal[2] * 1.21, totaal[3] * 1.21, totaal[4] * 1.21, totaal[5] * 1.21, totaal[6] * 1.21, totaal[7] * 1.21, totaal[8] * 1.21, totaal[9] * 1.21, totaal[10] * 1.21, totaal[11] * 1.21],
+                      backgroundColor: color(window.chartColors.blue).alpha(1).rgbString(),
+                      borderColor: window.chartColors.blue,
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  scales: {
+                      yAxes: [{
+                          ticks: {
+                              beginAtZero: true
+                          }
                       }]
-                  },
-                  options: {
-                      scales: {
-                          yAxes: [{
-                              ticks: {
-                                  beginAtZero: true
-                              }
-                          }]
-                      }
                   }
-              });
-          }
-          function changeBetaald(id, contact, loginHash) {
-                  window.location = "/change-betaald3/"+id+"/" +loginHash;
-          }
+              }
+          });
+      }
+      function changeBetaald(id, contact, loginHash) {
+              window.location = "/change-betaald3/"+id+"/" +loginHash;
+      }

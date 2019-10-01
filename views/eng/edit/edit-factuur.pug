@@ -13,7 +13,22 @@ html
     script(src="https://www.chartjs.org/samples/latest/utils.js")
     script(src="https://unpkg.com/feather-icons")
     script.
-      function info(){$("#info").toggle();};
+      function show_mail1(){
+        $('#mail1').show();
+        $('#col3_1').hide();
+        $('#extra_mail1').hide();
+        $('#extra_mail2').show();
+        $('#col10').show();
+      }
+      function show_mail2(){
+        $('#mail2').show();
+        $('#col10').hide();
+        $('#col7').show();
+        $('#extra_mail2').hide();
+      }
+      function info() {
+        $("#info").toggle();
+      };
       $(document).ready(function () {
         feather.replace();
       });
@@ -46,11 +61,13 @@ body
                   span(data-feather="file")
                   span All invoices
               li(class="nav-item")
-                a(class="nav-link" href="/contacten/"+loginHash)
+                a(class="nav-link active" href="/contacten/"+loginHash)
                   span(data-feather="users")
-                  span Clients
+                  span clients
+                  span(data-feather="chevron-right")
+                  span Invoices
               li(class="nav-item")
-                a(class="nav-link active" href="/mat/"+loginHash)
+                a(class="nav-link" href="/mat/"+loginHash)
                   span(data-feather="package")
                   span Stock
               li(class="nav-item")
@@ -58,7 +75,7 @@ body
                   span(data-feather="book")
                   span Calculations
               li(class="nav-item")
-                a(class="nav-link" href="/settings/"+loginHash)
+                a(class="nav-link " href="/settings/"+loginHash)
                   span(data-feather="settings")
                   span Settings
             h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
@@ -69,27 +86,33 @@ body
                   span(data-feather="bookmark")
                   span Basecone
             h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
-              span Materialen - options
+              span Invoices - options
             ul(class="nav flex-column mb-2")
               li(class="nav-item")
-                a(class="nav-link",href='/add-mat' + "/" + loginHash)
+                a(class="nav-link",href='/add-factuur' + contact._ic+"/" + loginHash)
                   span(data-feather="plus-circle")
-                  span New material
+                  span New invoice
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          h2(class="pt-3") Materialen
+          h2(class="pt-3") Edit invoice
           hr
-          table(class="table table-striped")
-            tr
-              th(scope="col") Name
-              th(scope="col") Price
-              th(scope="col") Actions
-
-            each materiaal in materialen
-              tr
-                td=materiaal.naam
-                td=materiaal.prijs.toFixed(2)+"€ /kg"
-                td
-                  a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions
-                  div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                    a(class="dropdown-item", href='/edit-mat/'+materiaal._id+"/"+loginHash) Edit
-                    a(class="dropdown-item", href='/delete-mat/'+materiaal._id+"/"+loginHash) Delete
+          form(action='/edit-factuur/'+contact._id+'/'+factuur._id+"/"+loginHash,method='post')
+            div(class="form-row")
+              div(class="form-group col-md-3")
+                label(for="title") Date
+                input(type="text",class="form-control",value=factuur.datum,name="datum")
+              div(class="form-group col-md-3")
+                label(for="title") Paydate
+                input(type="text",class="form-control",value=factuur.datumBetaald,name="datumBetaald")
+              if factuur.factuurNr
+                div(class="form-group col-md-2")
+                  label(for="title") Invoice N°
+                  input(type="number",class="form-control",value=factuur.factuurNr,name="factuurNr")
+              if factuur.offerteNr
+                div(class="form-group col-md-2")
+                  label(for="title") Offer N°
+                  input(type="number",class="form-control",value=factuur.offerteNr,name="offerteNr")
+              div(class="form-group col-md-2")
+                label(for="title") Advance
+                input(type="number",class="form-control",value=factuur.voorschot,name="voorschot",step=".01")
+            hr
+            button(type="submit",class="btn btn-outline-"+settings.thema) Make changes

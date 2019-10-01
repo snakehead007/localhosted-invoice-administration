@@ -841,13 +841,25 @@ app.get('/add-factuur/:loginHash',function(req,res){
         if(!err){
           Contact.find({},function(err,contacten) {
             if(!err){
+              if(settings.lang=="nl"){
               res.render(settings.lang + '/add-file-no-contact', {
                 "profile": profile,
                 "settings": settings,
                 "loginHash": req.params.loginHash,
                 "add": "factuur",
+                "addlink": "factuur",
                 "contacten":contacten
               });
+              }else if(settings.lang="eng"){
+                res.render(settings.lang + '/add-file-no-contact', {
+                  "profile": profile,
+                  "settings": settings,
+                  "loginHash": req.params.loginHash,
+                  "add": "invoice",
+                  "addlink": "factuur",
+                  "contacten":contacten
+                });
+              }
             }
           });
         }
@@ -867,13 +879,25 @@ app.get('/add-offerte/:loginHash',function(req,res){
         if(!err){
           Contact.find({},function(err,contacten) {
             if(!err){
+              if(settings.lang=="nl"){
               res.render(settings.lang + '/add-file-no-contact', {
                 "profile": profile,
                 "settings": settings,
                 "loginHash": req.params.loginHash,
                 "add": "offerte",
+                "addlink": "offerte",
                 "contacten":contacten
               });
+              }else if(settings.lang="eng"){
+                res.render(settings.lang + '/add-file-no-contact', {
+                  "profile": profile,
+                  "settings": settings,
+                  "loginHash": req.params.loginHash,
+                  "add": "offer",
+                  "addlink": "offerte",
+                  "contacten":contacten
+                });
+              }
             }
           });
         }
@@ -893,13 +917,25 @@ app.get('/add-creditnota/:loginHash',function(req,res){
         if(!err){
           Contact.find({},function(err,contacten) {
             if(!err){
+              if(settings.lang=="nl"){
               res.render(settings.lang + '/add-file-no-contact', {
                 "profile": profile,
                 "settings": settings,
                 "loginHash": req.params.loginHash,
                 "add": "creditnota",
+                "addlink": "creditnota",
                 "contacten":contacten
               });
+              }else if(settings.lang="eng"){
+                res.render(settings.lang + '/add-file-no-contact', {
+                  "profile": profile,
+                  "settings": settings,
+                  "loginHash": req.params.loginHash,
+                  "add": "creditnote",
+                  "addlink": "creditnota",
+                  "contacten":contacten
+                });
+              }
             }
           });
         }
