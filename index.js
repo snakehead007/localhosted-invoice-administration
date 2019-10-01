@@ -156,6 +156,12 @@ var ProfileSchema = new Schema({
   },
   mail: {
     type: String
+  },
+  Bookmarks: [{
+    type:String
+  }],
+  BookmarksText : {
+    type:String
   }
 });
 var Profile = mongoose.model('Profile', ProfileSchema);
@@ -405,6 +411,23 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {//REWORKED & tested
           });
         }
       });
+    });
+});
+
+app.post('/edit-bookmarks/:loginHash',function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    Profile.findOne({},function(err,profile){
+      if(!err){
+        Settings.findOne({},function(err,settings){
+          if(!err){
+            bookmarks here
+            res.redirect('/');
+          }
+        });
+      }
     });
 });
 

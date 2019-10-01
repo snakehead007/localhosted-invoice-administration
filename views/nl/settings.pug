@@ -15,6 +15,9 @@ html
             function info() {
                 $("#info").toggle();
             };
+            function infoBook() {
+                $("#infoBook").toggle();
+            };
             function openPass() {
                 $("#btw").slideUp();
                 $("#thema").slideUp();
@@ -22,8 +25,10 @@ html
                 $("#text").slideUp();
                 $("#pass").slideDown();
                 $("#info").slideUp();
+                $("#book").slideUp();
                 $(".optionPass").css('background-color', 'rgba(207, 207, 207, .3)');
                 $(".optionThema").css('background-color', 'rgba(0, 0, 0, 0)');
+                $(".optionBook").css('background-color', 'rgba(0, 0, 0, 0)');
                 $(".optionBtw").css('background-color', 'rgba(0, 0, 0, 0)');
                 $(".optionLang").css('background-color', 'rgba(0, 0, 0, 0)');
                 $(".optionText").css('background-color', 'rgba(0, 0, 0, 0)');
@@ -35,9 +40,11 @@ html
                 $("#text").slideUp();
                 $("#pass").slideUp();
                 $("#info").slideUp();
+                $("#book").slideUp();
                 $(".optionBtw").css('background-color', 'rgba(207, 207, 207, .3)');
                 $(".optionThema").css('background-color', 'rgba(0, 0, 0, 0)');
                 $(".optionPass").css('background-color', 'rgba(0, 0, 0, 0)');
+                $(".optionBook").css('background-color', 'rgba(0, 0, 0, 0)');
                 $(".optionLang").css('background-color', 'rgba(0, 0, 0, 0)');
                 $(".optionText").css('background-color', 'rgba(0, 0, 0, 0)');
             };
@@ -48,8 +55,10 @@ html
                 $("#text").slideUp();
                 $("#pass").slideUp();
                 $("#info").slideUp();
+                $("#book").slideUp();
                 $(".optionThema").css('background-color', 'rgba(207, 207, 207, .3)');
                 $(".optionPass").css('background-color', 'rgba(0, 0, 0, 0)');
+                $(".optionBook").css('background-color', 'rgba(0, 0, 0, 0)');
                 $(".optionBtw").css('background-color', 'rgba(0, 0, 0, 0)');
                 $(".optionLang").css('background-color', 'rgba(0, 0, 0, 0)');
                 $(".optionText").css('background-color', 'rgba(0, 0, 0, 0)');
@@ -61,9 +70,11 @@ html
                 $("#lang").slideDown();
                 $("#text").slideUp();
                 $("#info").slideUp();
+                $("#book").slideUp();
                 $(".optionLang").css('background-color', 'rgba(207, 207, 207, .3)');
                 $(".optionThema").css('background-color', 'rgba(0, 0, 0, 0)');
                 $(".optionBtw").css('background-color', 'rgba(0, 0, 0, 0)');
+                $(".optionBook").css('background-color', 'rgba(0, 0, 0, 0)');
                 $(".optionPass").css('background-color', 'rgba(0, 0, 0, 0)');
                 $(".optionText").css('background-color', 'rgba(0, 0, 0, 0)');
             };
@@ -73,10 +84,28 @@ html
                 $("#lang").slideUp();
                 $("#text").slideDown();
                 $("#pass").slideUp();
+                $("#book").slideUp();
                 $(".optionText").css('background-color', 'rgba(207, 207, 207, .3)');
                 $(".optionPass").css('background-color', 'rgba(0, 0, 0, 0)');
                 $(".optionBtw").css('background-color', 'rgba(0, 0, 0, 0)');
                 $(".optionLang").css('background-color', 'rgba(0, 0, 0, 0)');
+                $(".optionBook").css('background-color', 'rgba(0, 0, 0, 0)');
+                $(".optionThema").css('background-color', 'rgba(0, 0, 0, 0)');
+            };
+            
+            function openBook() {
+                $("#btw").slideUp();
+                $("#thema").slideUp();
+                $("#lang").slideUp();
+                $("#text").slideUp();
+                $("#pass").slideUp();
+                $("#book").slideDown();
+                $(".optionBook").css('background-color', 'rgba(207, 207, 207, .3)');
+                $(".optionText").css('background-color', 'rgba(0, 0, 0, 0)');
+                $(".optionPass").css('background-color', 'rgba(0, 0, 0, 0)');
+                $(".optionBtw").css('background-color', 'rgba(0, 0, 0, 0)');
+                $(".optionLang").css('background-color', 'rgba(0, 0, 0, 0)');
+                $(".optionBook").css('background-color', 'rgba(0, 0, 0, 0)');
                 $(".optionThema").css('background-color', 'rgba(0, 0, 0, 0)');
             };
     body
@@ -242,51 +271,27 @@ html
                                                                 code &#91;datum.d&#93;  : Dag van vandaag in getal (dd)
                                                                 code &#91;datum.m&#93;  : Volledige maand van vandaag (maand)
                                                                 code &#91;datum.j&#93;  : Volledig jaar van vandaag (yyyy)
-
-
-
+                                                                
+                                    tr(onclick="openBook()",class="settingsOption optionBook")
+                                        td
+                                            p(class="lead") Bookmarks
+                                            div(id="book",style="display:none;")
+                                              form(action='/edit-bookmarks/'+loginHash,method='post')
+                                                  button(type="button" class="mb-1 headExtend btn-sm btn btn-outline-"+settings.thema, onclick="infoBook()") info
+                                                  div(class="input-group mb-3")
+                                                      div(class="input-group-prepend")
+                                                          span(class="input-group-text") Bookmarks
+                                                      textarea(input="text",name="factuurtext",class="form-control",placeholder="Klik op info, voor meer informatie" aria-label="With textarea")=settings.bookmarksText
+                                                  button(type="submit",class="btn btn-outline-"+settings.thema) bijwerken
+                                                  div(class="",id="infoBook",style="display:none")
+                                                      p Schrijf de bookmarks zoals hieronder:
+                                                      samp(class="text")
+                                                          pre
+                                                              code "TITEL : LINK", bvb:
+                                                              code facebook : http://myprofile.facebook.com/
+                                                              code my blog : mypersonalblog.blogger.com
+                                                            
     script.
             $(document).ready(function () {
                 feather.replace();
             });
-            function drawChart(totaal) {
-                console.log(totaal);
-                var ctx = document.getElementById('myChart').getContext('2d');
-                var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
-                var color = Chart.helpers.color;
-                var myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: [maand[0], maand[1], maand[2], maand[3], maand[4], maand[5], maand[6], maand[7], maand[8], maand[9], maand[10], maand[11]],
-                        datasets: [{
-                            label: 'Exlc. btw €',
-                            data: [totaal[0], totaal[1], totaal[2], totaal[3], totaal[4], totaal[5], totaal[6], totaal[7], totaal[8], totaal[9], totaal[10], totaal[11]],
-                            backgroundColor: color(window.chartColors.red).alpha(1).rgbString(),
-                            borderColor: window.chartColors.red,
-                            borderWidth: 1
-                        }, {
-                            label: 'Incl. btw €',
-                            data: [totaal[0] * 1.21, totaal[1] * 1.21, totaal[2] * 1.21, totaal[3] * 1.21, totaal[4] * 1.21, totaal[5] * 1.21, totaal[6] * 1.21, totaal[7] * 1.21, totaal[8] * 1.21, totaal[9] * 1.21, totaal[10] * 1.21, totaal[11] * 1.21],
-                            backgroundColor: color(window.chartColors.blue).alpha(1).rgbString(),
-                            borderColor: window.chartColors.blue,
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    }
-                });
-            }
-            function changeBetaald(id, contact, loginHash) {
-                if (contact === "undefined") {
-                    window.location = "/change-betaald2/" + id + "/" + loginHash;
-                } else {
-                    window.location = "/change-betaald/" + id + "/" + loginHash;
-                }
-            }
