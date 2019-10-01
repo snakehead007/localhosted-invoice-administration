@@ -40,26 +40,26 @@ body
               li(class="nav-item")
                 a(class="nav-link" href="/edit-profile/"+loginHash)
                   span(data-feather="user")
-                  span Mijn Profiel
+                  span My profile
               li(class="nav-item")
                 a(class="nav-link active" href="/facturen/"+loginHash)
                   span(data-feather="file")
-                  span Alle facturen
+                  span All invoices
                   span(data-feather="chevron-right")
                   span(class="sr-only") (current)
-                  span bestelling
+                  span Order
               li(class="nav-item")
                 a(class="nav-link" href="/contacten/"+loginHash)
                   span(data-feather="users")
-                  span Klanten
+                  span Clients
               li(class="nav-item")
                 a(class="nav-link" href="/mat/"+loginHash)
                   span(data-feather="package")
-                  span Materialen
+                  span Stock
               li(class="nav-item")
                 a(class="nav-link" href="/berekeningen/"+loginHash)
                   span(data-feather="book")
-                  span Berekeningen
+                  span Calculations
               li(class="nav-item")
                 a(class="nav-link" href="/settings/"+loginHash)
                   span(data-feather="settings")
@@ -72,23 +72,23 @@ body
                   span(data-feather="bookmark")
                   span Basecone
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          h2(class="pt-3") Factuur bekijken
+          h2(class="pt-3") View Order
           hr
           table(class="table table-striped")
             tbody
               tr
-                th(scope="row") beschrijving
+                th(scope="row") Description
                 td
                   h4=bestelling.beschrijving
               tr
-                th(scope="row") aantal
+                th(scope="row") Amount
                 td
                   h4=bestelling.aantal
               tr
-                th(scope="row") bedrag
+                th(scope="row") Price
                 td
                   h4=bestelling.bedrag+" €"
               tr
-                th(scope="row") totaal
+                th(scope="row") Total
                 td
                   h4=(bestelling.aantal*bestelling.bedrag)+" €"
