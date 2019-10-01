@@ -421,7 +421,7 @@ app.get('/contacten/:loginHash', function(req, res) {//REWORKED & tested
                 'contactenLijst': contacts,
                 "settings": settings,
                 "loginHash": req.params.loginHash,
-                  "profile":profile
+                "profile":profile
               });
             }
           });
