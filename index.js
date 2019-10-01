@@ -362,9 +362,10 @@ app.get('/index/:loginHash', function(req, res) {//REWORKED & tested
 
 app.post('/', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-  if ((enc(String(req.body.loginHash))) !== loginHash) {
-      console.log(dec(loginHash));
-    res.redirect('login');
+    console.log("===>>"+dec(loginHash));
+    console.log("===>"+enc(req.body.loginHash));
+  if ((String(req.body.loginHash)) !== dec(loginHash)) {
+    res.render('login',{error:1});
   }});
     res.redirect('index/'+enc(req.body.loginHash));
 });
@@ -3211,6 +3212,14 @@ app.get('/pass/:loginHash', function(req, res) {//REWORKED
       });
     });
 });
+
+  app.get('/reset',function(req,res){
+    Settings.findOne({},function(err,settings){
+      Settings.updateOne({_id: settings._id}, {pass:enc("password") },function(err){
+        res.redirect('/');
+      });
+    });
+  });
 
 app.post('/pass/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
