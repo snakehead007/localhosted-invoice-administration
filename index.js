@@ -3586,7 +3586,7 @@ app.listen('3000', function() {
   console.log('Server is running at PORT ' + 3000);
   Schema = mongoose.Schema;
 });
-/*
+
 app.use(function(req, res) {
   res.staus(404).send('404: Page not Found');
 });
@@ -3595,4 +3595,3 @@ app.use(function(req, res) {
 app.use(function(error, req, res, next) {
   res.status(500).send('500: Internal Server Error');
 });
-*/
