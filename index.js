@@ -157,10 +157,11 @@ var ProfileSchema = new Schema({
   mail: {
     type: String
   },
-  Bookmarks: [{
-    type:String
-  }],
-  BookmarksText : {
+  bookmarks: [
+    [String,
+    String]
+  ],
+  bookmarksText : {
     type:String
   }
 });
@@ -423,8 +424,22 @@ app.post('/edit-bookmarks/:loginHash',function(req,res){
       if(!err){
         Settings.findOne({},function(err,settings){
           if(!err){
-            bookmarks here
-            res.redirect('/');
+              var bookmarks = [];
+              var bookmarks_temp = req.body.bookmarks.split('\r\n');
+              for (var i = 0; i < bookmarks_temp.length; i++) {
+                var _bm = bookmarks_temp[i].split(':');
+                _bm[1]=_bm[1].replace(" ","");
+                bookmarks.push(_bm);
+              }
+              var updateProfile = {
+                "bookmarksText" : req.body.bookmarks,
+                "bookmarks":bookmarks
+              };
+
+              Profile.updateOne({_id: profile._id}, updateProfile, function(err) {
+                if(err){console.log('err: '+err);}
+                res.redirect('/settings/' + req.params.loginHash);
+              });
           }
         });
       }
@@ -2606,6 +2621,7 @@ app.get('/settings/:loginHash', function(req, res) {//REWORKED
     }});
   Profile.findOne({},function(err,profile){
     Settings.findOne({}, function(err, settings) {
+      console.log(profile);
       res.render(settings.lang+'/settings', {
         'settings': settings,
         'description': "Settings",

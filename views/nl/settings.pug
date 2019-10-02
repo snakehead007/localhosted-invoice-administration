@@ -155,11 +155,12 @@ html
                                         span(class="sr-only") (current)
                             h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
                                 span Bookmarks
-                            ul(class="nav flex-column mb-2")
+                            each bookmark in profile.bookmarks
+                              ul(class="nav flex-column")
                                 li(class="nav-item")
-                                    a(class="nav-link",href='https://identity.basecone.com/authentication/login')
+                                    a(class="nav-link",href="https://"+bookmark[1]);
                                         span(data-feather="bookmark")
-                                        span Basecone
+                                        span=bookmark[0]
                     main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
                         h2(class="pt-3") Settings
                         if error == 1
@@ -281,14 +282,14 @@ html
                                                   div(class="input-group mb-3")
                                                       div(class="input-group-prepend")
                                                           span(class="input-group-text") Bookmarks
-                                                      textarea(input="text",name="factuurtext",class="form-control",placeholder="Klik op info, voor meer informatie" aria-label="With textarea")=settings.bookmarksText
+                                                      textarea(input="text",name="bookmarks",class="form-control",placeholder="Klik op info, voor meer informatie" aria-label="With textarea")=profile.bookmarksText
                                                   button(type="submit",class="btn btn-outline-"+settings.thema) bijwerken
                                                   div(class="",id="infoBook",style="display:none")
-                                                      p Schrijf de bookmarks zoals hieronder:
+                                                      p Schrijf de bookmarks zoals hieronder (zonder http://):
                                                       samp(class="text")
                                                           pre
-                                                              code "TITEL : LINK", bvb:
-                                                              code facebook : http://myprofile.facebook.com/
+                                                              code my favorite site : www.favorite.be
+                                                              code facebook : myprofile.facebook.com/
                                                               code my blog : mypersonalblog.blogger.com
                                                             
     script.

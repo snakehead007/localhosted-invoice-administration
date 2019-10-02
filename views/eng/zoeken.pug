@@ -70,11 +70,12 @@ body
                   span Settings
             h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
               span Bookmarks
-            ul(class="nav flex-column mb-2")
-              li(class="nav-item")
-                a(class="nav-link",href='https://identity.basecone.com/authentication/login')
-                  span(data-feather="bookmark")
-                  span Basecone
+            each bookmark in profile.bookmarks
+              ul(class="nav flex-column")
+                li(class="nav-item")
+                    a(class="nav-link",href="https://"+bookmark[1])
+                        span(data-feather="bookmark")
+                        span=bookmark[0]
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           h2(class="pt-3") Zoeken
           hr
