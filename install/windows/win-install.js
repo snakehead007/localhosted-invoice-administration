@@ -16,7 +16,7 @@ npm i -g express-fileupload --save;
 
 npm i -g image-to-base64 --save;
 
-  npm link node-windows;
+npm link node-windows;
 
 var Service = require('node-windows').Service;
 
