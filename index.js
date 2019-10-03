@@ -28,6 +28,7 @@ mongoose.connection.on('open', function() {
 });
 
 //Global variables initializing
+var handlingTurnedOn = true; //with this variable you can put on 400 and 500 error handling
 var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
 var maand_klein = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
 var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Oktober", "November", "December"];
@@ -2621,7 +2622,6 @@ app.get('/settings/:loginHash', function(req, res) {//REWORKED
     }});
   Profile.findOne({},function(err,profile){
     Settings.findOne({}, function(err, settings) {
-      console.log(profile);
       res.render(settings.lang+'/settings', {
         'settings': settings,
         'description': "Settings",
@@ -3587,11 +3587,14 @@ app.listen('3000', function() {
   Schema = mongoose.Schema;
 });
 
-app.use(function(req, res) {
-  res.staus(404).send('404: Page not Found');
-});
+if(handlingTurnedOn){
+  app.use(function(req, res) {
+    res.staus(404).send('404: Page not Found');
+  });
 
-// Handle 500
-app.use(function(error, req, res, next) {
-  res.status(500).send('500: Internal Server Error');
-});
+
+  // Handle 500
+  app.use(function(error, req, res, next) {
+    res.status(500).send('500: Internal Server Error');
+  });
+}
