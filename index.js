@@ -28,7 +28,7 @@ mongoose.connection.on('open', function() {
 });
 
 //Global variables initializing
-var handlingTurnedOn = true; //with this variable you can put on 400 and 500 error handling
+var handlingTurnedOn = false; //with this variable you can put on 400 and 500 error handling
 var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
 var maand_klein = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
 var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Oktober", "November", "December"];
@@ -2014,7 +2014,7 @@ app.post('/zoeken/:loginHash', function(req, res) {//REWORKED
                     contacten.push(contact);
                   }
                 }
-              //Matterialen
+              //Materialen
                   if(!mats_.length == 0){
                       for (var mat of mats_){
                           var _mat = String(mat.naam).toLowerCase();

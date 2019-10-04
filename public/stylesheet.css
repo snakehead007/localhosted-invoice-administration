@@ -170,3 +170,16 @@ i{
 .badge{
   margin-left:5%;
 }
+table tbody tr td a{
+  text-decoration: none;
+  color:black;
+  margin: auto;
+}
+.table{
+  margin:0;
+  padding:0;
+  margin
+}
+.table td, .table th {
+  vertical-align: middle !important;
+}
