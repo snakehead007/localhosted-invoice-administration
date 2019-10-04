@@ -61,8 +61,9 @@ html
                   a(class="nav-link" href="/settings/"+loginHash)
                     span(data-feather="settings")
                     span Settings
-              h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
-                span Bookmarks
+              if profile.bookmarks.length !==0
+                h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+                  span Bookmarks
               each bookmark in profile.bookmarks
                 ul(class="nav flex-column")
                   li(class="nav-item")
@@ -86,34 +87,34 @@ html
                     th(scope="col") E-mail
                     th(scope="col") Action
                 tbody
-                each contact in contactenLijst
-                  tr
-                    td
-                      a(href='/facturen/' + contact._id + "/" + loginHash)=contact.contactPersoon
-                        if contact.mail
-                          if contact.mail2
-                            td
-                              a(class="dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mail's
-                              div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
-                                a(class="dropdown-item", href='mailto:'+contact.mail)=contact.mail
-                                a(class="dropdown-item", href='mailto:'+contact.mail1)=contact.mail1
-                                a(class="dropdown-item", href='mailto:'+contact.mail2)=contact.mail2
-                          else if contact.mail1
-                            td
-                              a(class="dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mail's
-                              div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
-                                a(class="dropdown-item", href='mailto:'+contact.mail)=contact.mail
-                                a(class="dropdown-item", href='mailto:'+contact.mail1)=contact.mail1
+                  each contact in contactenLijst
+                    tr
+                      td
+                        a(href='/facturen/' + contact._id + "/" + loginHash)=contact.contactPersoon
+                          if contact.mail
+                            if contact.mail2
+                              td
+                                a(class="dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mail's
+                                div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
+                                  a(class="dropdown-item", href='mailto:'+contact.mail)=contact.mail
+                                  a(class="dropdown-item", href='mailto:'+contact.mail1)=contact.mail1
+                                  a(class="dropdown-item", href='mailto:'+contact.mail2)=contact.mail2
+                            else if contact.mail1
+                              td
+                                a(class="dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mail's
+                                div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
+                                  a(class="dropdown-item", href='mailto:'+contact.mail)=contact.mail
+                                  a(class="dropdown-item", href='mailto:'+contact.mail1)=contact.mail1
 
-                          if !contact.mail1
+                            if !contact.mail1
+                              td
+                                a(href="mailto:"+contact.mail)=contact.mail
+                          else
                             td
-                              a(href="mailto:"+contact.mail)=contact.mail
-                        else
-                          td
-                            button(type="button" class="btn btn-outline-"+settings.thema disabled) geen e-mail
-                    td
-                      a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
-                      div(class="dropdown-menu", aria-labelledby="actionsDropdown")                      
-                        a(class="dropdown-item", href='/view-contact/' + contact._id + "/" + loginHash) Bekijken
-                        a(class="dropdown-item", href='/edit-contact/' + contact._id + "/" + loginHash) Aanpassen
-                        a(class="dropdown-item", href='/delete-contact/' + contact._id + "/" + loginHash) Verwijderen
+                              button(type="button" class="btn btn-outline-"+settings.thema disabled) geen e-mail
+                      td
+                        a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                        div(class="dropdown-menu", aria-labelledby="actionsDropdown")                      
+                          a(class="dropdown-item", href='/view-contact/' + contact._id + "/" + loginHash) Bekijken
+                          a(class="dropdown-item", href='/edit-contact/' + contact._id + "/" + loginHash) Aanpassen
+                          a(class="dropdown-item", href='/delete-contact/' + contact._id + "/" + loginHash) Verwijderen

@@ -65,6 +65,10 @@ body
                   span(data-feather="users")
                   span Klanten
               li(class="nav-item")
+                  a(class="nav-link" href="/projecten/"+loginHash)
+                      span(data-feather="book")
+                      span Projecten
+              li(class="nav-item")
                 a(class="nav-link" href="/mat/"+loginHash)
                   span(data-feather="package")
                   span Materialen
@@ -76,9 +80,8 @@ body
                 a(class="nav-link " href="/settings/"+loginHash)
                   span(data-feather="settings")
                   span Settings
-            if profile.bookmarks.length !==0
-              h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
-                span Bookmarks
+            h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+              span Bookmarks
             each bookmark in profile.bookmarks
               ul(class="nav flex-column")
                 li(class="nav-item")
@@ -86,22 +89,39 @@ body
                         span(data-feather="bookmark")
                         span=bookmark[0]
             h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
-              span Materialen - opties
+              span Projecten - opties
             ul(class="nav flex-column mb-2")
               li(class="nav-item")
-                a(class="nav-link active",href='/add-mat' + "/" + loginHash)
+                a(class="nav-link active",href='/add-project' + "/" + loginHash)
                   span(data-feather="plus-circle")
-                  span Nieuw Materiaal
+                  span Nieuw project
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          h2(class="pt-3") Materiaal toevoegen
+          h2(class="pt-3") Nieuw project aanmaken
           hr
-          form(action='/add-mat'+"/"+loginHash,method='post')
+          form(action='/add-project'+"/"+loginHash,method='post')
             div(class="form-row")
               div(class="form-group col-md-10")
-                label(for="naam") Naam
-                input(type="text",class="form-control",name="naam", required)
+                label(for="naam") Klant
+                select(class="custom-select" id="inputGroupSelect03"  name="contact")
+                    each contact in contacten
+                        option(value=contact._id)=contact.contactPersoon
               div(class="form-group col-md-2")
-                label(for="prijs") Prijs
-                input(type="number",class="form-control",name="prijs",step=".01" required)
+                label(for="title") Projectnaam
+                input(type="text",class="form-control",name="naam")
+              div(class="form-group col-md-2")
+                label(for="title") BudgetMin
+                input(type="text",class="form-control",name="budgetMin")
+              div(class="form-group col-md-2")
+                label(for="title") BudgetMax
+                input(type="text",class="form-control",name="bsudgetMax")
+              div(class="form-group col-md-2")
+                label(for="title") DataBegin
+                input(type="text",class="form-control",name="dataBegin")
+              div(class="form-group col-md-2")
+                label(for="title") DataEnd
+                input(type="text",class="form-control",name="dataEnd")
+              div(class="form-group col-md-2")
+                label(for="title") description
+                input(type="text",class="form-control",name="description")
             hr
             button(type="submit",class="btn btn-outline-"+settings.thema) toevoegen
