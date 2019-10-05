@@ -1,11 +1,12 @@
-echo "update simple-invoice-admisinstration"
-
-net stop simple-invoice-admisinstration
-
+echo off
+cls
+echo update invoice-administration
+net stop invoice-administration
 git stash
-
 git pull
-
-net stop simple-invoice-admisinstration
-
-echo "update finished"
+net stop invoice-administration
+echo update finished
+echo starting invoice-administration
+net start invoice-administration
+echo if you get an error, please run this script as administration
+pause

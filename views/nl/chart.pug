@@ -57,14 +57,15 @@ html
                                     a(class="nav-link" href="/settings/"+loginHash)
                                         span(data-feather="settings")
                                         span Settings
-                            h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+                            if profile.bookmarks.length !==0
+                              h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
                                 span Bookmarks
-                              each bookmark in profile.bookmarks
-                                ul(class="nav flex-column")
-                                  li(class="nav-item")
-                                      a(class="nav-link",href="https://"+bookmark[1])
-                                          span(data-feather="bookmark")
-                                          span=bookmark[0]
+                            each bookmark in profile.bookmarks
+                              ul(class="nav flex-column")
+                                li(class="nav-item")
+                                    a(class="nav-link",href="https://"+bookmark[1])
+                                        span(data-feather="bookmark")
+                                        span=bookmark[0]
                     main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
                         div(class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom")
                             h1(class="h2")="Grafiek voor " + jaar

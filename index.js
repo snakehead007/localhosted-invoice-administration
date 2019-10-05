@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 //Mongoose initializing
-mongoose.connect('mongodb://localhost:27017/sample-website'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
+mongoose.connect('mongodb://localhost:27017/test0020'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
 mongoose.connection.on('open', function() {
   console.log('Mongoose connected!');
 });
@@ -296,17 +296,39 @@ var ProjectSchema = new Schema({
   werkprijs: {
     type: Number
   },
-  aantallen: [{
-    type: Number
-  }],
-  materialen: [{
-    type: String
-  }],
+  materialen: [
+    [
+      Schema.Types.ObjectId, /*Mat used*/
+      Number /*Amount of mat used*/
+    ]
+  ],
   contact: {
     type: Schema.Types.ObjectId,
     ref: 'Contact'
+  },
+  budget:{
+    min:Number,
+    max:Number
+  },
+  data:{
+    start:String,
+    end:String
+  },
+  description:{
+    type:String
+  },
+  activities:[
+    [
+      String, /*Type*/
+      String, /*Text*/
+      String, /*Date*/
+    ]
+  ],
+  contactNaam:{
+    type:String
   }
 });
+var Project = mongoose.model('Project', ProjectSchema);
 
 app.get('/', function(req, res) {//REWORKED & tested
     //Check for first time use
@@ -427,16 +449,23 @@ app.post('/edit-bookmarks/:loginHash',function(req,res){
           if(!err){
               var bookmarks = [];
               var bookmarks_temp = req.body.bookmarks.split('\r\n');
-              for (var i = 0; i < bookmarks_temp.length; i++) {
-                var _bm = bookmarks_temp[i].split(':');
-                _bm[1]=_bm[1].replace(" ","");
-                bookmarks.push(_bm);
-              }
-              var updateProfile = {
-                "bookmarksText" : req.body.bookmarks,
-                "bookmarks":bookmarks
-              };
+              if(bookmarks_temp !=="" && bookmarks_temp.includes(":")){
+                for (var i = 0; i < bookmarks_temp.length; i++) {
+                  var _bm = bookmarks_temp[i].split(':');
+                  _bm[1]=_bm[1].replace(" ","");
+                  bookmarks.push(_bm);
+                }
+                var updateProfile = {
+                  "bookmarksText" : req.body.bookmarks,
+                  "bookmarks":bookmarks
+                };
+              }else{
 
+                var updateProfile = {
+                  "bookmarksText" : req.body.bookmarks,
+                  "bookmarks":[]
+                };
+              }
               Profile.updateOne({_id: profile._id}, updateProfile, function(err) {
                 if(err){console.log('err: '+err);}
                 res.redirect('/settings/' + req.params.loginHash);
@@ -2761,7 +2790,7 @@ app.get('/percentage/:loginHash', function(req, res) {//REWORKED
     });
 });
 
-app.get('/add-project/:idc/:loginHash', function(req, res) {//REWORKED
+app.get('/add-project/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
@@ -2769,12 +2798,15 @@ app.get('/add-project/:idc/:loginHash', function(req, res) {//REWORKED
   Materiaal.find({}, function(err, materialen) {
     Settings.findOne({}, function(err, settings) {
       if (!err) {
-        Profile.findOne({},function(err,proile){
-          res.render(settings.lang+'/add/add-project', {
-            'materialen': materialen,
-            'settings': settings,
-            'profile':profile,
-            "loginHash": req.params.loginHash
+        Profile.findOne({},function(err,profile){
+          Contact.find({},function(err,contacten){
+            res.render(settings.lang+'/add/add-project', {
+              'materialen': materialen,
+              'settings': settings,
+              'profile':profile,
+              "contacten":contacten,
+              "loginHash": req.params.loginHash
+            });
           });
         });
       }
@@ -2782,7 +2814,7 @@ app.get('/add-project/:idc/:loginHash', function(req, res) {//REWORKED
   });
 });
 
-app.post('/add-project/:idc/:loginHash', function(req, res) {//REWORKED
+app.post('/add-project/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
@@ -2791,38 +2823,60 @@ app.post('/add-project/:idc/:loginHash', function(req, res) {//REWORKED
     var aantallen = [];
     Settings.findOne({}, function(err, settings) {
       if (!err) {
-        Contact.findOne({}, function(err, contact) {
+        Contact.findOne({_id:req.body.contact}, function(err, contact) {
           if (!contact) {
             res.redirect('add-project/' + req.params.loginHash);
           } else if (contact) {
-            Materiaal.findOne({naam: req.body.o001},function(err, m001) {
-                if (m001) {
-                  materialen.push(m001.naam);
-                  aantallen.push(m001.prijs);
-                  var newProject = new Project({
-                    naam: req.body.naam,
-                    werkuren: req.body.werkuren,
-                    werkprijs: req.body.werprijs,
-                    materialen: materialen,
-                    aantallen: aantallen,
-                    contact: contact._id
-                  });
-                  newProject.save(function(err) {
-                    console.log(err);
-                  });
-                }
-              });
+                var budMin =req.body.budgetMin;
+                var budMax = req.body.budgetMax;
+                var budget = new Object({
+                  budMin,
+                  budMax
+                });
+                var dataStart = req.body.dataStart;
+                var dataEnd = req.body.dataEnd;
+                var data = new Object({
+                  dataStart,
+                  dataEnd
+                });
+                var newProject = new Project({
+                  naam: req.body.naam,
+                  werkprijs: req.body.werprijs,
+                  contact: contact._id,
+                  budget: budget,
+                  data: data,
+                  description:req.body.description,
+                  contactNaam : contact.contactPersoon
+                });
+                newProject.save(function(err) {
+                  console.log(newProject);
+                });
             }
           });
         }
         Profile.findOne({},function(err,profile){
-          res.render(settings.lang+'/add/add-project', {
-            'materialen': materialen,
-            'settings': settings,
-            "profile":profile,
-            "loginHash": req.params.loginHash
-          });
+          res.redirect('/projecten/'+req.params.loginHash);
         });
+    });
+});
+
+app.get('/projecten/:loginHash', function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    Settings.findOne({},function(err,settings){
+        Profile.findOne({},function(err,profile){
+          Project.find({},function(err,projecten){
+            console.log(projecten);
+            res.render(settings.lang+'/project',{
+              'settings': settings,
+              'profile':profile,
+              "projecten":projecten,
+              'loginHash': req.params.loginHash
+            });
+          });
+      });
     });
 });
 

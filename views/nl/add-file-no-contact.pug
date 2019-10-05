@@ -61,7 +61,8 @@ body
                                 a(class="nav-link " href="/settings/"+loginHash)
                                     span(data-feather="settings")
                                     span Settings
-                        h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+                        if profile.bookmarks.length !==0
+                          h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
                             span Bookmarks
                         each bookmark in profile.bookmarks
                           ul(class="nav flex-column")
@@ -108,7 +109,7 @@ body
                                 div(class="input-group mb-3")
                                     span
                                         p(class="lead nextToInput") Voor contact:
-                                    select(class="custom-select" id="inputGroupSelect03"  name="idc" aria-label="Example select with button addon")
+                                    select(class="custom-select" id="inputGroupSelect03"  name="idc")
                                         each contact in contacten
                                             option(value=contact._id)=contact.contactPersoon
                         hr
