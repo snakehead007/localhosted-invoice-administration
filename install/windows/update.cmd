@@ -1,4 +1,5 @@
 echo off
+cls
 echo update invoice-administration
 net stop invoice-administration
 git stash
