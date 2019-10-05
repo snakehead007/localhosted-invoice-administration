@@ -11,7 +11,7 @@ node2docfx.json
 docfx.json
 yml/
 out/
-
+daemon/
 ### Linux ###
 *~
 
