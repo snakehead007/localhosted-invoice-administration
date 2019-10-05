@@ -1,3 +1,5 @@
+echo off
+cls
 echo "Starting installation"
 git stash
 git pull
