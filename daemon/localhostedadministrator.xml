@@ -1,0 +1,25 @@
+<service>
+	<id>localhostedadministrator.exe</id>
+	<name>Local-hosted-administrator</name>
+	<description>Create and manage your invoices.</description>
+	<executable>C:\Users\Karel\Downloads\invoice-administration\install\windows\node-v10.16.3-win-x64\node.exe</executable>
+	<logmode>rotate</logmode>
+	<argument>--harmony</argument>
+	<argument>C:\Users\Karel\Downloads\invoice-administration\install\windows\node-v10.16.3-win-x64\node_modules\node-windows\lib\wrapper.js</argument>
+	<argument>--file</argument>
+	<argument>C:\Users\Karel\Downloads\invoice-administration\index.js</argument>
+	<argument>--log</argument>
+	<argument>Local-hosted-administrator wrapper</argument>
+	<argument>--grow</argument>
+	<argument>0.25</argument>
+	<argument>--wait</argument>
+	<argument>1</argument>
+	<argument>--maxrestarts</argument>
+	<argument>3</argument>
+	<argument>--abortonerror</argument>
+	<argument>n</argument>
+	<argument>--stopparentfirst</argument>
+	<argument>undefined</argument>
+	<stoptimeout>30sec</stoptimeout>
+	<workingdirectory>C:\Users\Karel\Downloads\invoice-administration\install\windows</workingdirectory>
+</service>
