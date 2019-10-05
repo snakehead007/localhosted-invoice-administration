@@ -1,3 +1,4 @@
+echo off
 echo update invoice-administration
 net stop invoice-administration
 git stash
@@ -7,3 +8,4 @@ echo update finished
 echo starting invoice-administration
 net start invoice-administration
 echo if you get an error, please run this script as administration
+pause

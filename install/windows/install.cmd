@@ -35,3 +35,4 @@ call node-v10.16.3-win-x64\npm.cmd audit fix
 echo [NPM]: updating
 call node-v10.16.3-win-x64\node.exe node win-install.js
 echo Installation is complete, you can close the program
+pause
