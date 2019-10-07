@@ -88,4 +88,23 @@ body
               p(class="card-text")
               blockquote(class="blockquote mb-0")                  
                 footer(class="blockquote-footer")=project.description
-                
+          hr
+          div(class="card" style="width: 18rem;")
+            div(class="card-body")
+              h5(class="card-title") Financieel
+            ul(class="list-group list-group-flush")
+              if !project.werkprijs              
+                li(class="list-group-item") Werktarief 0 €/uur
+                  a(href="#", class="edit-link-project")
+                    span(data-feather="edit-3")
+              else
+                li(class="list-group-item")="Werktarief "+project.werkprijs+" €/uur"
+              li(class="list-group-item")
+                h6 Budget
+                p=project.budget.min+" - "+project.budget.max
+              li(class="list-group-item") 
+                h6 Data
+                p=project.data.start+" - "+project.data.end
+            div(class="card-body")
+              a(href="#" class="card-link") Card link
+              a(href="#" class="card-link") Another link
