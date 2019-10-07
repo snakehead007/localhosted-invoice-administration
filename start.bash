@@ -26,7 +26,7 @@ function start_node_quiet(){
 	nohup node . &
 }
 function start_all(){
-	mongod &
+	mongod --bind_ip 127.0.0.1 &
 	sleep 3
 	node . &
 }

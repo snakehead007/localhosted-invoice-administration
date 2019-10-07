@@ -12,7 +12,7 @@ var imageToBase64 = require('image-to-base64');
 
 //Express initializing
 var app = express();
-app.locals.title = 'Simple-invoice-administrator';
+app.locals.title = 'invoice-administration';
 app.locals.email = 'snakehead007@pm.me';
 
 //Bodyparser initializing
@@ -392,8 +392,6 @@ app.get('/index/:loginHash', function(req, res) {//REWORKED & tested
 
 app.post('/', function(req, res) {//REWORKED & tested
   callFindPass().then(function(loginHash){
-    console.log("===>>"+dec(loginHash));
-    console.log("===>"+enc(req.body.loginHash));
   if ((String(req.body.loginHash)) !== dec(loginHash)) {
     res.render('login',{error:1});
   }});
@@ -2873,6 +2871,26 @@ app.get('/projecten/:loginHash', function(req,res){
               'settings': settings,
               'profile':profile,
               "projecten":projecten,
+              'loginHash': req.params.loginHash
+            });
+          });
+      });
+    });
+});
+
+app.get('/view-project/:idp/:loginHash', function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    Settings.findOne({},function(err,settings){
+        Profile.findOne({},function(err,profile){
+          Project.find({_id:req.params.idp},function(err,project){
+            console.log(project+"------");
+            res.render(settings.lang+'/view/view-project',{
+              'settings':settings,
+              'profile':profile,
+              "project":project,
               'loginHash': req.params.loginHash
             });
           });

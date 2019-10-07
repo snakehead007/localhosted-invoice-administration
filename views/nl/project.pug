@@ -93,7 +93,7 @@ body
                 each project in projecten
                     tr
                       td
-                        a(href="#")=project.naam
+                        a(href="/view-project/"+project._id+"/"+loginHash)=project.naam
                       td
                         a(href='/facturen/' + project.contact + "/" + loginHash)=project.contactNaam
                       

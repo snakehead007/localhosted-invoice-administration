@@ -176,9 +176,7 @@ table tbody tr td a{
   margin: auto;
 }
 .table{
-  margin:0;
-  padding:0;
-  margin
+  margin-bottom: 50px;
 }
 .table td, .table th {
   vertical-align: middle !important;
