@@ -78,7 +78,14 @@ body
                         span(data-feather="bookmark")
                         span=bookmark[0]
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          div(class="jumbotron jumbotron-fluid")
-            div(class="container")
-              h1(class="display-4")="Project: "+project.naamr
-              p(class="lead")="Voor klant: "+project.contactNaam
+          hr
+          div(class="card")
+            h5(class="card-header h2")=project.naam
+            div(class="card-body")
+              h5(class="card-title")              
+                span="Klant: "
+                  a(href="/facturen"+"/"+project.contact+"/"+"/"+loginHash)=project.contactNaam
+              p(class="card-text")
+              blockquote(class="blockquote mb-0")                  
+                footer(class="blockquote-footer")=project.description
+                
