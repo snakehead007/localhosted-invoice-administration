@@ -182,10 +182,6 @@ table tbody tr td a{
   vertical-align: middle !important;
 }
 
-.selectNextToButton{
-  float:right;
-}
-
 .edit-link-project{
   float:right;
 }
@@ -193,12 +189,4 @@ table tbody tr td a{
 .edit-link-project button{
   margin-left: 25px;
   margin-top:10px;
-}
-
-.cardProjectEdit{
-  float:left;
-}
-h5.editable-select{
-  display: inline;
-  float:left;
 }

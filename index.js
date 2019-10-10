@@ -2906,6 +2906,8 @@ app.get('/view-project/:idp/:loginHash', function(req,res){
     });
 });
 
+//This get request is used for changing the name, contact and description of a project (done in 'view-project')
+//Body can contain ('naam','idc','description')
 app.post('/project-change-contact/:idp/:loginHash',function(req,res){
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
@@ -2914,7 +2916,30 @@ app.post('/project-change-contact/:idp/:loginHash',function(req,res){
     Settings.findOne({},function(err,settings){
       Contact.findOne({_id:req.body.idc},function(err,contact){
         Profile.findOne({},function(err,profile){
-          Project.update({_id:req.params.idp},{contact:contact._id,contactNaam:contact.contactPersoon},function(err){
+          Project.update({_id:req.params.idp},{
+              contact:contact._id,
+              contactNaam:contact.contactPersoon,
+              naam:req.body.naam,
+              description:req.body.description
+            },function(err){
+            res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+          });
+        });
+      });
+    });
+});
+
+app.post('/project-change-financial/:idp/:loginHash',function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    Settings.findOne({},function(err,settings){
+      Contact.findOne({_id:req.body.idc},function(err,contact){
+        Profile.findOne({},function(err,profile){
+          Project.update({_id:req.params.idp},{
+              werktarief:req.body.werktarief
+            },function(err){
             res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
           });
         });

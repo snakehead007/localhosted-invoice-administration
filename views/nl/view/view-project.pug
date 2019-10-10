@@ -21,7 +21,10 @@ html
         $("#changeContactForm").toggle();
         $("#projectCard").toggle();
       };
-      
+      function changeFinancial(){
+        $("#financialCard").toggle();
+        $("#financialCardEdit").toggle();
+      };
 body
   header
     nav(class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow")
@@ -92,32 +95,34 @@ body
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           hr
           div(class="card")
+            //MAIN CARD --editable
             div(id="changeContactForm" class="selectNextToButton",style="display:none;")
-              h5(class="card-header h2")
-                input(type="text",name="name",value=project.naam,placeholder=project.naam)
-                div(class="edit-link-project")
-                  a(href="#",onclick="changeContact()" )
-                    span(data-feather="edit-3")
-                  button(role="button", class="btn btn-outline-" + settings.thema + " btn-sm") Make changes
-              div(class="card-body")
-                div(class="container-fluid")
-                  div(class="row")
-                    div(class="col-1")
-                      h5(class="card-title editable-select")
-                        span(style="float:left;",class="cardProjectEdit")="Klant: "
-                    div(class="col-6")
-                      form(action='/project-change-contact/'+project._id+'/'+loginHash,method='post')
-                        div(class="input-group")
-                          select(class="custom-select selectNextToButton" id="inputGroupSelect03"  name="idc")
-                              each contact in contacten
-                                if contact._id.toString() !== project.contact.toString()
-                                  option(value=contact._id)=contact.contactPersoon
-                                else
-                                  option(value=contact._id, selected)=contact.contactPersoon
-                p(class="card-text")
-                blockquote(class="blockquote mb-0")
-                  footer(class="blockquote-footer")
-                    input(type="text",name="description",placeholder=project.description,value=project.description)
+              form(action='/project-change-contact/'+project._id+'/'+loginHash,method='post')
+                h5(class="card-header h2")
+                  input(type="text",name="naam",value=project.naam,placeholder=project.naam)
+                  div(class="edit-link-project")
+                    a(href="#",onclick="changeContact()" )
+                      span(data-feather="edit-3")
+                    button(role="submit", class="btn btn-outline-" + settings.thema + " btn-sm") Make changes
+                div(class="card-body")
+                  div(class="container-fluid")
+                    div(class="row")
+                      div(class="col-1")
+                        h5(class="card-title editable-select")
+                          span(style="float:left;",class="cardProjectEdit")="Klant: "
+                      div(class="col-6")
+                          div(class="input-group")
+                            select(class="custom-select selectNextToButton" id="inputGroupSelect03"  name="idc")
+                                each contact in contacten
+                                  if contact._id.toString() !== project.contact.toString()
+                                    option(value=contact._id)=contact.contactPersoon
+                                  else
+                                    option(value=contact._id, selected)=contact.contactPersoon
+                  p(class="card-text")
+                  blockquote(class="blockquote mb-0")
+                    footer(class="blockquote-footer")
+                      input(type="text",name="description",placeholder=project.description,value=project.description)
+            //MAIN CARD --normal
             div(id="projectCard",class="cardWithEditFeather")
               h5(class="card-header h2")=project.naam
                 a(href="#",onclick="changeContact()" ,class="edit-link-project")
@@ -130,14 +135,15 @@ body
                   blockquote(class="blockquote mb-0")
                     footer(class="blockquote-footer")=project.description
           hr
-          div(class="card" style="width: 18rem;")
-            div(class="card-body")
+          //FINANCIAL CARD --normal
+          div(class="card",id="financialCard", style="width: 18rem;")
+            div(class="card-body cardWithEditFeather")
               h5(class="card-title") Financieel
+                a(href="#",onclick="changeFinancial()",class="edit-link-project")
+                  span(data-feather="edit-2")
             ul(class="list-group list-group-flush")
               if !project.werkprijs
                 li(class="list-group-item") Werktarief 0 €/uur
-                  a(href="#", class="edit-link-project")
-                    span(data-feather="edit-3")
               else
                 li(class="list-group-item")="Werktarief "+project.werkprijs+" €/uur"
               li(class="list-group-item")
@@ -146,4 +152,23 @@ body
               li(class="list-group-item") 
                 h6 Data
                 p=project.data.start+" - "+project.data.end
-              
+          //FINANCIAL CARD --editable
+          
+          div(class="card",id="financialCardEdit" ,style="width: 18rem;display:none;")
+            form(action='/project-change-financial/'+project._id+'/'+loginHash,method='post')
+              div(class="card-body cardWithEditFeather")
+                h5(class="card-title") Financieel
+                    a(href="#",onclick="changeFinancial()" ,class="edit-link-project")
+                      span(data-feather="edit-3")
+                    button(role="submit",style="float:right;", class="btn btn-outline-" + settings.thema + " btn-sm") Make changes
+                ul(class="list-group list-group-flush")
+                  li(class="list-group-item")
+                    label(for="werkprijs") Werktarief:
+                    input(type="text",name="werktarief",placeholder=project.werkprijs,value=project.werkprijs)
+                  li(class="list-group-item")
+                    h6 Budget
+                    p=project.budget.min+"€ - "+project.budget.max+"€"
+                  li(class="list-group-item") 
+                    h6 Data
+                    p=project.data.start+" - "+project.data.end
+                  
