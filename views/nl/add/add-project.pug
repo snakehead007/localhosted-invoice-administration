@@ -2,6 +2,7 @@
 html
   head
     title=title
+    link(rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css")
     link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
     link(rel="stylesheet" href="/stylesheet.css")
     scrip(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/core.js")
@@ -12,7 +13,13 @@ html
     script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js")
     script(src="https://www.chartjs.org/samples/latest/utils.js")
     script(src="https://unpkg.com/feather-icons")
+    script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js")
     script.
+      $( function() {
+        $( "#datepicker" ).datepicker({
+          showOptions: { direction: "up" }
+        }):
+      });
       function show_mail1(){
         $('#mail1').show();
         $('#col3_1').hide();
@@ -113,10 +120,10 @@ body
                 input(type="text",class="form-control",name="budgetMin")
               div(class="form-group col-md-2")
                 label(for="title") BudgetMax
-                input(type="text",class="form-control",name="bsudgetMax")
+                input(type="text",class="form-control",name="budgetMax")
               div(class="form-group col-md-2")
-                label(for="title") DataBegin
-                input(type="text",class="form-control",name="dataBegin")
+                label(for="title") Databegin
+                input(type="text",class="form-control",name="dataStart",id="datepicker")
               div(class="form-group col-md-2")
                 label(for="title") DataEnd
                 input(type="text",class="form-control",name="dataEnd")
