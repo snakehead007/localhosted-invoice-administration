@@ -36,7 +36,6 @@ function stop_all(){
 	killall node
 }
 
-
 function stop_node(){
 	killall node
 }

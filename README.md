@@ -1,7 +1,8 @@
-# simple-invoice-administration
-this program is used for managing and administrating invoices and generating them into .pdf format
+# Invoice-administration
 
-Version 2.0 is out. Its fully production ready.
+This program is mainly used for managing and administrating invoices and generating them into .pdf format
+
+Version 2.0 is out. Its fully production ready, we are still improving and adding things on a daily basis.
 
 This project is translated in 2 languages, Dutch and English.
 

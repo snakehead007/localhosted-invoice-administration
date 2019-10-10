@@ -181,3 +181,7 @@ table tbody tr td a{
 .table td, .table th {
   vertical-align: middle !important;
 }
+
+.edit-link-project {
+  float:right;
+}
