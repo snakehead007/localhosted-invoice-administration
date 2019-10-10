@@ -2825,30 +2825,36 @@ app.post('/add-project/:loginHash', function(req, res) {//REWORKED
           if (!contact) {
             res.redirect('add-project/' + req.params.loginHash);
           } else if (contact) {
-                var budMin =req.body.budgetMin;
-                var budMax = req.body.budgetMax;
-                var budget = new Object({
-                  budMin,
-                  budMax
-                });
-                var dataStart = req.body.dataStart;
-                var dataEnd = req.body.dataEnd;
-                var data = new Object({
-                  dataStart,
-                  dataEnd
-                });
-                var newProject = new Project({
-                  naam: req.body.naam,
-                  werkprijs: req.body.werprijs,
-                  contact: contact._id,
-                  budget: budget,
-                  data: data,
-                  description:req.body.description,
-                  contactNaam : contact.contactPersoon
-                });
-                newProject.save(function(err) {
-                  console.log(newProject);
-                });
+              var budMin =req.body.budgetMin;
+              var budMax = req.body.budgetMax;
+              var budget = new Object({
+                budMin,
+                budMax
+              });
+              var dataStart = req.body.dataStart;
+              var dataEnd = req.body.dataEnd;
+              var data = new Object({
+                dataStart,
+                dataEnd
+              });
+              var newProject = new Project({
+                naam: req.body.naam,
+                werkprijs: req.body.werprijs,
+                contact: contact._id,
+                budget: {
+                        min: req.body.budgetMin,
+                        max: req.body.budgetMax
+                       },
+                data: {
+                        start: req.body.dataStart,
+                        end: req.body.dataEnd
+                       },
+                description:req.body.description,
+                contactNaam : contact.contactPersoon
+              });
+              newProject.save(function(err) {
+                console.log(newProject);
+              });
             }
           });
         }
