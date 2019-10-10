@@ -77,6 +77,13 @@ body
                     a(class="nav-link",href="https://"+bookmark[1])
                         span(data-feather="bookmark")
                         span=bookmark[0]
+            h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+              span Projecten - opties
+            ul(class="nav flex-column mb-2")
+              li(class="nav-item")
+                a(class="nav-link",href='/add-project' + "/" + loginHash)
+                  span(data-feather="plus-circle")
+                  span Nieuw project
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           hr
           div(class="card")
@@ -101,7 +108,7 @@ body
                 li(class="list-group-item")="Werktarief "+project.werkprijs+" €/uur"
               li(class="list-group-item")
                 h6 Budget
-                p=project.budget.min+" - "+project.budget.max
+                p=project.budget.min+"€ - "+project.budget.max+"€"
               li(class="list-group-item") 
                 h6 Data
                 p=project.data.start+" - "+project.data.end

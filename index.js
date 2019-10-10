@@ -2841,8 +2841,14 @@ app.post('/add-project/:loginHash', function(req, res) {//REWORKED
                   naam: req.body.naam,
                   werkprijs: req.body.werprijs,
                   contact: contact._id,
-                  budget: budget,
-                  data: data,
+                  budget: {
+                          min: req.body.budgetMin,
+                          max: req.body.budgetMax
+                         },
+                  data: {
+                          start: req.body.dataStart,
+                          end: req.body.dataEnd
+                         },
                   description:req.body.description,
                   contactNaam : contact.contactPersoon
                 });
