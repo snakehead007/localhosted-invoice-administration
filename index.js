@@ -2891,7 +2891,7 @@ app.get('/view-project/:idp/:loginHash', function(req,res){
     }});
     Settings.findOne({},function(err,settings){
         Profile.findOne({},function(err,profile){
-          Project.find({_id:req.params.idp},function(err,project){
+          Project.findOne({_id:req.params.idp},function(err,project){
             console.log(project+"------");
             res.render(settings.lang+'/view/view-project',{
               'settings':settings,
