@@ -77,8 +77,41 @@ body
                     a(class="nav-link",href="https://"+bookmark[1])
                         span(data-feather="bookmark")
                         span=bookmark[0]
+            h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+              span Projecten - opties
+            ul(class="nav flex-column mb-2")
+              li(class="nav-item")
+                a(class="nav-link",href='/add-project' + "/" + loginHash)
+                  span(data-feather="plus-circle")
+                  span Nieuw project
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          div(class="jumbotron jumbotron-fluid")
-            div(class="container")
-              h1(class="display-4")="Project: "+project.naamr
-              p(class="lead")="Voor klant: "+project.contactNaam
+          hr
+          div(class="card")
+            h5(class="card-header h2")=project.naam
+            div(class="card-body")
+              h5(class="card-title")              
+                span="Klant: "
+                  a(href="/facturen"+"/"+project.contact+"/"+"/"+loginHash)=project.contactNaam
+              p(class="card-text")
+              blockquote(class="blockquote mb-0")                  
+                footer(class="blockquote-footer")=project.description
+          hr
+          div(class="card" style="width: 18rem;")
+            div(class="card-body")
+              h5(class="card-title") Financieel
+            ul(class="list-group list-group-flush")
+              if !project.werkprijs              
+                li(class="list-group-item") Werktarief 0 €/uur
+                  a(href="#", class="edit-link-project")
+                    span(data-feather="edit-3")
+              else
+                li(class="list-group-item")="Werktarief "+project.werkprijs+" €/uur"
+              li(class="list-group-item")
+                h6 Budget
+                p=project.budget.min+"€ - "+project.budget.max+"€"
+              li(class="list-group-item") 
+                h6 Data
+                p=project.data.start+" - "+project.data.end
+            div(class="card-body")
+              a(href="#" class="card-link") Card link
+              a(href="#" class="card-link") Another link
