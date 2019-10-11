@@ -283,6 +283,10 @@ var MateriaalSchema = new Schema({
   prijs: {
     type: Number,
     default: 0
+  },
+  amount: {
+    type:Number,
+    default:0
   }
 });
 var Materiaal = mongoose.model('Materiaal', MateriaalSchema);
@@ -2626,7 +2630,8 @@ app.post('/add-mat/:loginHash', function(req, res) {//REWORKED
     }});
     var nieuwe_materiaal = new Materiaal({
       prijs: req.body.prijs,
-      naam: req.body.naam
+      naam: req.body.naam,
+      amount: req.body.amount
     });
     nieuwe_materiaal.save();
     res.redirect('/mat/' + req.params.loginHash);
