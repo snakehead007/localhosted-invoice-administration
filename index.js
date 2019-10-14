@@ -3048,7 +3048,6 @@ app.post('/pu-oplossing/:loginHash', function(req, res) {//REWORKED
               "UCS":UCS,
               "M2":Number(M2)
             };
-            console.log(PU);
             res.render(settings.lang + '/calc/pu-oplossing', {
               'settings': settings,
               "loginHash": req.params.loginHash,
