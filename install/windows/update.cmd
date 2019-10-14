@@ -4,7 +4,6 @@ color A
 echo -------------------------------------
 echo [IMPORTANT]: PLEASE RUN THIS AS ADMINISTRATOR
 echo -------------------------------------
-echo >
 pause
 color F
 cls
