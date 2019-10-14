@@ -2978,6 +2978,88 @@ app.get('/berekeningen/:loginHash', function(req, res) {//REWORKED
     });
 });
 
+app.get('/pu/:loginHash', function(req, res) {//REWORKED
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    Settings.findOne({}, function(err, settings) {
+      if(!err){
+      Profile.findOne({},function(err,profile){
+        if(!err) {
+            res.render(settings.lang + '/calc/pu', {
+              'settings': settings,
+              "loginHash": req.params.loginHash,
+              "profile":profile
+            });
+          }
+        });
+      }
+    });
+});
+
+app.post('/pu-oplossing/:loginHash', function(req, res) {//REWORKED
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    Settings.findOne({}, function(err, settings) {
+      if(!err){
+      Profile.findOne({},function(err,profile){
+        if(!err) {
+            //Variables for the calculations
+            var M2 = Math.pow(req.body.M3,(2/3));
+            var K = req.body.K;
+            var UP = [ 0.5 , 0.7 , 1 ];
+            var UCS = [ 3.0 , 3.5 , 4.0 ];
+            var A = req.body.A;
+            //UP calculations
+            var C = A * ( M2 * UP[K] );
+            var D1 = C *5 /*€/kg*/;
+            //UP-G calculations
+            var B = M2 * 0.75;
+            var D2 = B * 9.5 /*€/kg*/;
+            //UCS calculations
+            var E = M2 * A;
+            var D3 = E * UCS[K];
+            //total calculations
+            Dtot = D1 + D2 + D3;
+            /*
+            Give with header:
+              C (kg)
+              B (kg)
+              E (m²)
+              D1 (€)
+              D2 (€)
+              D3 (€)
+              Dtot (€)
+            */
+            var PU = {
+              "C":C,
+              "B":B,
+              "E":E,
+              "D":[Dtot,D1,D2,D3],
+              "A":A,
+              "B":B,
+              "C":C,
+              "E":E,
+              "K":K,
+              "UP":UP,
+              "UCS":UCS,
+              "M2":M2
+            };
+            res.render(settings.lang + '/calc/pu-oplossing', {
+              'settings': settings,
+              "loginHash": req.params.loginHash,
+              "profile":profile,
+              "PU":PU
+            });
+          }
+        });
+      }
+    });
+});
+
 app.get('/epo-sil/:loginHash', function(req, res) {//REWORKED
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
