@@ -3010,11 +3010,11 @@ app.post('/pu-oplossing/:loginHash', function(req, res) {//REWORKED
             //Variables for the calculations
             var M2 = Math.pow(req.body.M3,(2/3));
             var K = req.body.K;
-            var UP = [ 0.5 , 0.7 , 1 ];
+            var PU_ = [ 0.5 , 0.7 , 1 ];
             var UCS = [ 3.0 , 3.5 , 4.0 ];
             var A = req.body.A;
             //UP calculations
-            var C = A * ( M2 * UP[K] );
+            var C = A * ( M2 * PU_[K] );
             var D1 = C *5 /*€/kg*/;
             //UP-G calculations
             var B = M2 * 0.75;
@@ -3035,19 +3035,20 @@ app.post('/pu-oplossing/:loginHash', function(req, res) {//REWORKED
               Dtot (€)
             */
             var PU = {
-              "C":C,
-              "B":B,
-              "E":E,
-              "D":[Dtot,D1,D2,D3],
-              "A":A,
-              "B":B,
-              "C":C,
-              "E":E,
-              "K":K,
-              "UP":UP,
+              "C":Number(C),
+              "B":Number(B),
+              "E":Number(E),
+              "D":[Number(Dtot),Number(D1),Number(D2),Number(D3)],
+              "A":Number(A),
+              "B":Number(B),
+              "C":Number(C),
+              "E":Number(E),
+              "K":Number(K),
+              "PU":PU_,
               "UCS":UCS,
-              "M2":M2
+              "M2":Number(M2)
             };
+            console.log(PU);
             res.render(settings.lang + '/calc/pu-oplossing', {
               'settings': settings,
               "loginHash": req.params.loginHash,
