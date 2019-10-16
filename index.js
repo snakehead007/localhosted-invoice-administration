@@ -3450,6 +3450,7 @@ app.post('/upload-logo/:loginHash', function (req, res) {//REWORKED
     if (Object.keys(req.files).length === 0) // TODO: THIS CHECK DOESNT WORK
       return res.status(400).send('No files were uploaded.');
     var sampleFile = req.files.sampleFile;
+    console.log(sampleFile);
     sampleFile.mv('public/logo.jpeg', function(err) {
     if(err){console.log('err: '+err);}
     res.redirect('/edit-profile/'+req.params.loginHash);
@@ -3738,7 +3739,7 @@ app.engine('pug', require('pug').__express)
 
 app.set('views', path.join(__dirname, 'views'));
 
-app.set('view engine', 'pug');// TODO: Needs this to update to 'pug'
+app.set('view engine', 'pug');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
