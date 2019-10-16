@@ -3,6 +3,7 @@ cls
 color a
 echo Please make sure that this is run as administration!
 pause
+color F
 cls
 echo Starting installation
 call node-v10.16.3-win-x64\nodevars.bat
@@ -38,9 +39,10 @@ echo [NPM]: fixing vulnerabilities
 call node-v10.16.3-win-x64\npm.cmd audit fix
 echo [NPM]: DONE!
 echo [MONGODB]: making files ready
-mkdir c:\data\db
+mkdir C:\data\db
+mkdir C:\data\log\
 echo [MONGODB]: installing mongod
-sc.exe create invoice-database-test06 binPath= "%CD%\mongodb-win32-x86_64-2012plus-4.2.0\bin\mongod.exe --bind_ip localhost" start="auto"
+sc.exe create test002 binPath= "\"%CD%\mongodb-win32-x86_64-2012plus-4.2.0\bin\mongod.exe\" --service --config=\"%CD%\mongodb-win32-x86_64-2012plus-4.2.0\bin\mongod.cfg\"" start= auto
 cls
 color A
 echo -------------------------------------

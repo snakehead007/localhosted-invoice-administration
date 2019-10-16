@@ -12,7 +12,7 @@ docfx.json
 yml/
 out/
 daemon/
-/node_modules/
+node_modules/
 ### Linux ###
 *~
 
