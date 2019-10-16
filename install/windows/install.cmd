@@ -42,13 +42,15 @@ echo [MONGODB]: making files ready
 mkdir C:\data\db
 mkdir C:\data\log\
 echo [MONGODB]: installing mongod
-sc.exe create test002 binPath= "\"%CD%\mongodb-win32-x86_64-2012plus-4.2.0\bin\mongod.exe\" --service --config=\"%CD%\mongodb-win32-x86_64-2012plus-4.2.0\bin\mongod.cfg\"" start= auto
+sc.exe create test009 binPath= "\"%CD%\mongodb-win32-x86_64-2012plus-4.2.0\bin\mongod.exe\" --service --dbpath=\"c:\data\db\"" start= auto
+net start test009
 cls
 color A
 echo -------------------------------------
 echo [IMPORTANT]: PLEASE SAY "YES" TO ALL!
 echo -------------------------------------
 call node-v10.16.3-win-x64\node.exe win-install.js
+net start invoice-administration
 color F
 cls
 echo Installation is complete, you can close the program
