@@ -25,6 +25,10 @@ html
         $("#financialCard").toggle();
         $("#financialCardEdit").toggle();
       };
+      function changeDescription(){
+        $("#descriptionCard").toggle();
+        $("#descriptionCardEdit").toggle();
+      }
 body
   header
     nav(class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow")
@@ -35,7 +39,6 @@ body
       ul(class="navbar-nav px-3")
         li(class="nav-item text-nowrap")
           a(class="nav-link" href="#") Sign out
-
     div(class="container-fluid")
       div(class ="row")
         nav(class="col-md-2 d-none d-md-block bg-light sidebar")
@@ -94,19 +97,20 @@ body
                   span Nieuw project
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           div(class="container-fluid")
+            hr
             div(class="row")
-              div(class="col")
-                hr
+              div(class="col-6")
                 div(class="card")
                   //MAIN CARD --editable
                   div(id="changeContactForm" class="selectNextToButton",style="display:none;")
-                    form(action='/project-change-contact/'+project._id+'/'+loginHash,method='post')
+                    form(action='/project-edit/'+project._id+'/'+loginHash,method='post')
                       h5(class="card-header h2")
                         input(type="text",name="naam",value=project.naam,placeholder=project.naam)
                         div(class="edit-link-project")
                           a(href="#",onclick="changeContact()" )
                             span(data-feather="edit-3")
-                          button(role="submit", class="btn btn-outline-" + settings.thema + " btn-sm") Make changes
+                          button(type="submit",class="edit-link-project submit-feather thisButtonIsALink")
+                            span(data-feather="upload-cloud")
                       div(class="card-body")
                         div(class="container-fluid")
                           div(class="row")
@@ -121,10 +125,6 @@ body
                                           option(value=contact._id)=contact.contactPersoon
                                         else
                                           option(value=contact._id, selected)=contact.contactPersoon
-                        p(class="card-text")
-                        blockquote(class="blockquote mb-0")
-                          footer(class="blockquote-footer")
-                            input(type="text",name="description",placeholder=project.description,value=project.description)
                   //MAIN CARD --normal
                   div(id="projectCard",class="cardWithEditFeather")
                     h5(class="card-header h2")=project.naam
@@ -134,37 +134,58 @@ body
                         h5(class="card-title")
                           span="Klant: "
                             a(href="/facturen"+"/"+project.contact+"/"+loginHash)=project.contactNaam
-                        p(class="card-text")
-                        blockquote(class="blockquote mb-0")
-                          footer(class="blockquote-footer")=project.description
-                hr
+                            
+              div(class="col-6")
+                //DESCRIPTION CARD --normal
+                div(class="card",id="descriptionCard")
+                  div(class="cardWithEditFeather")
+                    div(class="card-header") Beschrijving
+                      a(href="#",onclick="changeDescription()",class="edit-link-project")
+                        span(data-feather="edit-2")
+                    div(class="card-body")
+                      span(class="cardDescription textarea")=project.description
+                //DESCRIPTION CARD --editable
+                div(class="card",id="descriptionCardEdit",style="display:none;")
+                  div(class="cardWithEditFeather")
+                    form(action='/project-edit/'+project._id+'/'+loginHash,method='post')
+                      div(class="card-header") Beschrijving
+                        a(href="#",onclick="changeDescription()",class="edit-link-project")
+                          span(data-feather="edit-3")
+                        button(type="submit",class="edit-link-project submit-feather thisButtonIsALink")
+                          span(data-feather="upload-cloud")
+                        a(href="#",onclick="changeBeschrijving",class="edit-link-project")
+                      div(class="card-body")
+                        div(class="form-group")
+                            textarea(class="form-control" id="descriptionOfCard" rows="3",name="description",placeholder=project.description)=project.description
+            hr
             div(class="row")
-              div(class="col")
+              div(class="col-2")
                 //FINANCIAL CARD --normal
                 div(class="card",id="financialCard", style="")
+                  div(class="card-header") Financieel
+                    a(href="#",onclick="changeFinancial()",class="edit-link-project")
+                      span(data-feather="edit-2")                      
                   div(class="card-body cardWithEditFeather")
-                    h5(class="card-title") Financieel
-                      a(href="#",onclick="changeFinancial()",class="edit-link-project")
-                        span(data-feather="edit-2")
-                  ul(class="list-group list-group-flush")
-                    if !project.werkprijs
-                      li(class="list-group-item") Werktarief 0 €/uur
-                    else
-                      li(class="list-group-item")="Werktarief "+project.werkprijs+" €/uur"
-                    li(class="list-group-item")
-                      h6 Budget
-                      p=project.budget.min+"€ - "+project.budget.max+"€"
-                    li(class="list-group-item") 
-                      h6 Data
-                      p=project.data.start+" - "+project.data.end
+                    ul(class="list-group list-group-flush")
+                      if !project.werkprijs
+                        li(class="list-group-item") Werktarief 0 €/uur
+                      else
+                        li(class="list-group-item")="Werktarief "+project.werkprijs+" €/uur"
+                      li(class="list-group-item")
+                        h6 Budget
+                        p=project.budget.min+"€ - "+project.budget.max+"€"
+                      li(class="list-group-item") 
+                        h6 Data
+                        p=project.data.start+" - "+project.data.end
                 //FINANCIAL CARD --editable
                 div(class="card",id="financialCardEdit" ,style="display:none;")
                   form(action='/project-change-financial/'+project._id+'/'+loginHash,method='post')
+                    div(class="card-header") Financieel
+                        a(href="#",onclick="changeFinancial()" ,class="edit-link-project")
+                          span(data-feather="edit-3")
+                        button(type="submit",class="edit-link-project submit-feather thisButtonIsALink")
+                          span(data-feather="upload-cloud")
                     div(class="card-body cardWithEditFeather")
-                      h5(class="card-title") Financieel
-                          a(href="#",onclick="changeFinancial()" ,class="edit-link-project")
-                            span(data-feather="edit-3")
-                          button(role="submit",style="float:right;", class="btn btn-outline-" + settings.thema + " btn-sm") Make changes
                       ul(class="list-group list-group-flush")
                         li(class="list-group-item")
                           label(for="werkprijs") Werktarief:

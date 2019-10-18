@@ -186,7 +186,20 @@ table tbody tr td a{
   float:right;
 }
 
-.edit-link-project button{
-  margin-left: 25px;
-  margin-top:10px;
+.thisButtonIsALink{
+    background:none!important;
+    border:none;
+    padding:0!important;
+    color: #007bff;
+}
+.thisButtonIsALink:hover,
+.edit-link-project:hover{
+  color:inherit;
+}
+
+.submit-feather{
+  margin-right:7px;
+}
+.textarea{
+  white-space: pre;
 }

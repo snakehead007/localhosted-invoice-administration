@@ -330,6 +330,13 @@ var ProjectSchema = new Schema({
   ],
   contactNaam:{
     type:String
+  },
+  lastDownloadedInvoice:{/*When downloading an invoice this changes to current date*/
+    type:String
+  },
+  margin:{
+    type:Number,
+    default:10
   }
 });
 var Project = mongoose.model('Project', ProjectSchema);
@@ -2897,6 +2904,9 @@ app.get('/view-project/:idp/:loginHash', function(req,res){
     Settings.findOne({},function(err,settings){
         Profile.findOne({},function(err,profile){
           Project.findOne({_id:req.params.idp},function(err,project){
+
+            console.log(getCurrentTime());
+            console.log(project);
             Contact.find({},function(err,contacten){
               res.render(settings.lang+'/view/view-project',{
                 'settings':settings,
@@ -2913,22 +2923,33 @@ app.get('/view-project/:idp/:loginHash', function(req,res){
 
 //This get request is used for changing the name, contact and description of a project (done in 'view-project')
 //Body can contain ('naam','idc','description')
-app.post('/project-change-contact/:idp/:loginHash',function(req,res){
+app.post('/project-edit/:idp/:loginHash',function(req,res){
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
+    console.log(getCurrentTime());
+    console.log("Updating Project")
+    var update;
     Settings.findOne({},function(err,settings){
-      Contact.findOne({_id:req.body.idc},function(err,contact){
-        Profile.findOne({},function(err,profile){
-          Project.update({_id:req.params.idp},{
-              contact:contact._id,
-              contactNaam:contact.contactPersoon,
-              naam:req.body.naam,
-              description:req.body.description
-            },function(err){
-            res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+      Profile.findOne({},function(err,profile){
+        console.log(req.body);
+        if(typeof contact!=="undefined"){
+          Contact.findOne({_id:req.body.idc},function(err,contact){
+            update = {
+                contact:contact._id,
+                contactNaam:contact.contactPersoon,
+                naam:req.body.naam,
+                description:req.body.description
+              };
           });
+        }else{
+          update = {
+            description:req.body.description
+          }
+        }
+        Project.update({_id:req.params.idp},update,function(err){
+          res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
         });
       });
     });
@@ -3699,6 +3720,11 @@ function createJSON(obj){
   return json_data;
 }
 
+function getCurrentTime(){
+  let d = new Date()
+  let str = d.getHours()+":"+d.getMinutes()+":"+d.getMinutes();
+  return str;
+}
 
 app.engine('pug', require('pug').__express)
 
