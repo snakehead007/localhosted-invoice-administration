@@ -2994,7 +2994,7 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
             console.log(newActivity);
             console.log(profile.activities);
             let currentActvities = profile.activities;
-            currentActvities.push(newActivity);
+            currentActvities.unshift(newActivity);
             console.log(currentActvities);
             Project.updateOne({_id:req.params.idp},
               {
@@ -3012,39 +3012,72 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
 });
 
 //subcontractor adding
-app.post('/project-add-sub/:idp/:loginHash', function(req,res){
+app.post('/project-add-sub/:idp/:loginHash',function(req,res){
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
-    console.log("adding hours");
+    let price = req.body.price;
+    let transactie = req.body.transactie;
+    let firmaNaam = req.body.firmaNaam;
     Settings.findOne({},function(err,settings){
       Contact.findOne({_id:req.body.idc},function(err,contact){
         Profile.findOne({},function(err,profile){
-          Project.update({_id:req.params.idp},{
-              werktarief:req.body.werktarief
-            },function(err){
+          Project.findOne({_id:req.params.idp},function(err,profile){
+            let newActivity = {
+              id:2,/*ID for adding working hours*/
+              text:"Onderaanneming \""+firmaNaam+"\" toegevoegd ( "+price+"€ )\r\n"+transactie,
+              date:new Date()
+            };
+            let currentActvities = profile.activities;
+            currentActvities.unshift(newActivity);
+            console.log(currentActvities);
+            Project.updateOne({_id:req.params.idp},
+              {
+                activities:currentActvities,
+              },function(err){
               console.log(err);
-            res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+              res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+            });
           });
         });
       });
     });
 });
 
-app.post('/project-add-materials/:idp/:loginHash', function(req,res){
+
+app.post('/project-add-mat/:idp/:loginHash',function(req,res){
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
+    let hoeveelheid = req.body.hoeveelheid;
+    let beschrijving = req.body.beschrijvingInput;
     Settings.findOne({},function(err,settings){
       Contact.findOne({_id:req.body.idc},function(err,contact){
         Profile.findOne({},function(err,profile){
-          Project.update({_id:req.params.idp},{
-              werktarief:req.body.werktarief
-            },function(err){
-              console.log(err);
-            res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+          Project.findOne({_id:req.params.idp},function(err,profile){
+            Materiaal.findOne({_id:req.body.materiaal},function(err,materiaal){
+              console.log(materiaal);
+              console.log(req.body.materiaal)
+              let newActivity = {
+                id:1,/*ID for adding working hours*/
+                text:"Materiaal toegevoegd:\n"+materiaal.naam+" ( "+materiaal.prijs+"+€/kg)\n"
+                     +hoeveelheid+"kg/l gebruikt ("+(Number(materiaal.prijs)*Number(hoeveelheid))+"€ totaal)\n"
+                     +beschrijving,
+                date: new Date()
+              };
+              let currentActvities = profile.activities;
+              currentActvities.unshift(newActivity);
+              console.log(currentActvities);
+              Project.updateOne({_id:req.params.idp},
+                {
+                  activities:currentActvities,
+                },function(err){
+                console.log(err);
+                res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+              });
+            });
           });
         });
       });

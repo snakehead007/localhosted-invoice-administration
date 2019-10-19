@@ -244,8 +244,9 @@ body
                             label.col-sm-2.col-form-label(for='naamFirmaTransactie') naam Firma
                             .col-sm-10
                               input.form-control(type='text' id='naamFirmaTransactie' name='firmaNaam')
-
-                      //ADD CARD --working getHours
+                          .form-group.row
+                            button.btn(type='sumbit') Add
+                      //ADD CARD --working hours
                       li(class="list-group-item",id="fieldWerkuren",style="display:none;")
                         form(action='/project-add-hours/'+project._id+'/'+loginHash method='post')
                           .form-group.row
@@ -253,10 +254,10 @@ body
                             .col-sm-8
                               input.form-control(type='text' name='werkuren' id='werkurenInput')
                             .col-2
-                              button.btn.form-(type='sumbit') Add
+                              button.btn(type='sumbit') Add
                       //ADD CARD -- Materials
-                      li(class="list-group-item",id="fieldMaterialen",style="display:none;")
-                        form(action='/project-add-materials'+project._id+'/'+loginHash method='post')
+                      li(class="list-group-item",id="fiebeschrijvingldMaterialen",style="display:none;")
+                        form(action='/project-add-mat/'+project._id+'/'+loginHash method='post')
                           .form-group.row
                             label.col-sm-2.col-form-label(for='hoeveelheidInput') Hoeveelheid gebruikt (kg/l)
                             .col-sm-10
@@ -272,19 +273,86 @@ body
                                   option(selected)
                                   each materiaal in materialen
                                     option(value=materiaal._id)=materiaal.naam
+                          .form-group.row
+                            button.btn(type='sumbit') Add
             .row
-              .col-2
-              .col-10
+              .col-6
+                canvas(id="chart")
+              .col-6
                 .card
                   div.card-header Activities
                   .card-body
                     ul.list-group
                       each activity in project.activities
                         li.list-group-item
-                          .col-2
-                            p=activity.id
-                          .col-7
-                            p=activity.text
-                          .col-3        
-                            p=activity.date           
-  
+                          .row
+                            .col-1
+                              if activity.id==0
+                                span(data-feather="alert-circle")
+                              if activity.id==1
+                                span(data-feather="package")
+                              if activity.id==2
+                                span(data-feather="file-plus")
+                              if activity.id==3
+                                span(data-feather="clock")
+                              if activity.id==4
+                                span(data-feather="download")
+                              if activity.id==5
+                                span(data-feather="edit-3")
+                              if activity.id==6
+                                span(data-feather="edit-3")
+                              if activity.id==7
+                                span(data-feather="edit-3")
+                              if activity.id==8
+                                span(data-feather="calendar")
+                              if activity.id==9
+                                span(data-feather="dollar-sign")
+                            .col-8.pre
+                              p=activity.text
+                            .col-3      
+                              p=activity.date
+  script.
+    var config = {
+      type: 'line',
+      data: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+          label: 'My First dataset',
+          backgroundColor: window.chartColors.red,
+          borderColor: window.chartColors.red,
+          data: [10, 30, 39, 20, 25, 34, -10],
+          fill: false,
+        }, {
+          label: 'My Second dataset',
+          fill: false,
+          backgroundColor: window.chartColors.blue,
+          borderColor: window.chartColors.blue,
+          data: [18, 33, 22, 19, 11, 39, 30],
+        }]
+      },
+      options: {
+        responsive: true,
+        title: {
+          display: true,
+          text: 'Grid Line Settings'
+        },
+        scales: {
+          yAxes: [{
+            gridLines: {
+              drawBorder: false,
+              color: ['pink', 'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple']
+            },
+            ticks: {
+              min: 0,
+              max: 100,
+              stepSize: 10
+            }
+          }]
+        }
+      }
+    };
+
+    window.onload = function() {
+      var ctx = document.getElementById('chart').getContext('2d');
+      window.myLine = new Chart(ctx, config);
+    };

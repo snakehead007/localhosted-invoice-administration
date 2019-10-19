@@ -203,7 +203,7 @@ table tbody tr td a{
 .submit-feather{
   margin-right:7px;
 }
-.textarea{
+.textarea,.pre{
   white-space: pre;
 }
 .ui-datepicker-title{
