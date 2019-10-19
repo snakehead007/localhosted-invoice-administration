@@ -2904,16 +2904,18 @@ app.get('/view-project/:idp/:loginHash', function(req,res){
     Settings.findOne({},function(err,settings){
         Profile.findOne({},function(err,profile){
           Project.findOne({_id:req.params.idp},function(err,project){
-
-            console.log(getCurrentTime());
-            console.log(project);
-            Contact.find({},function(err,contacten){
-              res.render(settings.lang+'/view/view-project',{
-                'settings':settings,
-                'profile':profile,
-                "project":project,
-                "contacten":contacten,
-                'loginHash': req.params.loginHash
+            Materiaal.find({},function(err,materialen){
+              console.log(getCurrentTime());
+              console.log(project);
+              Contact.find({},function(err,contacten){
+                res.render(settings.lang+'/view/view-project',{
+                  'settings':settings,
+                  'profile':profile,
+                  "project":project,
+                  "contacten":contacten,
+                  "materialen":materialen,
+                  'loginHash': req.params.loginHash
+                });
               });
             });
           });

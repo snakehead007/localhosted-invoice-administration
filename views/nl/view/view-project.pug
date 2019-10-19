@@ -231,11 +231,47 @@ body
                     ul(class="list-group")
                       //ADD CARD --onderaanneming
                       li(class="list-group-item",id="fielOnderaanneming",style="display:none;")
-                        label(for="")
+                        form
+                          .form-group.row
+                            label.col-sm-2.col-form-label(for='price') Prijs van de factuur
+                            .col-sm-10
+                              input.form-control(type='text' name='price' id='price')
+                          .form-group.row
+                            label.col-sm-2.col-form-label(for='textareaTransactie') Geleverde Transactie
+                            .col-sm-10
+                              textarea.form-control(type='text' id='textareaTransactie' name='transactie')
+                          .form-group.row
+                            label.col-sm-2.col-form-label(for='naamFirmaTransactie') naam Firma
+                            .col-sm-10
+                              input.form-control(type='text' id='naamFirmaTransactie' name='firmaNaam')
+
                       //ADD CARD --working getHours
                       li(class="list-group-item",id="fieldWerkuren",style="display:none;")
-                        form()
+                        form
+                          .form-group.row
+                            label.col-sm-2.col-form-label(for='werkurenInput') Aantal Uren Gewerkt
+                            .col-sm-10
+                              input.form-control(type='text' name='werkuren' id='werkurenInput')
+                          .form-group.row
+                            label.col-sm-2.col-form-label(for='beschrijvingInput') Beschrijving
+                            .col-sm-10
+                              textarea.form-control(type='text' id='beschrijving' name='beschrijvingInput')
                       //ADD CARD -- Materials
                       li(class="list-group-item",id="fieldMaterialen",style="display:none;")
-                        p materialen toevoegen
+                        form
+                          .form-group.row
+                            label.col-sm-2.col-form-label(for='hoeveelheidInput') Hoeveelheid gebruikt (kg/l)
+                            .col-sm-10
+                              input.form-control(type='text' name='hoeveelheid' id='hoeveelheidInput')
+                          .form-group.row
+                            label.col-sm-2.col-form-label(for='beschrijvingInput') Beschrijving
+                            .col-sm-10
+                              textarea.form-control(type='text' id='beschrijving' name='beschrijvingInput')
+                          .form-group.row
+                            label.col-sm-2.col-form-label(for='materialeninput') Materiaal
+                            div.col-sm-10
+                                select.form-control.custom-select.select.NextToButton(id="materialeninput"  name="materiaal")
+                                  option(selected)
+                                  each materiaal in materialen
+                                    option(value=materiaal._id)=materiaal.naam
   
