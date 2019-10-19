@@ -2943,6 +2943,13 @@ app.get('/view-project/:idp/:loginHash', function(req,res){
 
 //This get request is used for changing the name, contact and description of a project (done in 'view-project')
 //Body can contain ('naam','idc','description')
+/*
+ID 4 : Invoice Downloading
+ID 5 : Edit Project: name
+ID 6 : Edit project: client
+ID 7 : Edit project: Description
+ID 8 : Edit date(s)
+ID 9 : Edit budget(s)*/
 app.post('/project-edit/:idp/:loginHash',function(req,res){
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
@@ -2951,26 +2958,50 @@ app.post('/project-edit/:idp/:loginHash',function(req,res){
     console.log(getCurrentTime());
     console.log("Updating Project")
     var update;
+    let newActivity;
     Settings.findOne({},function(err,settings){
       Profile.findOne({},function(err,profile){
-        console.log(req.body);
-        if(typeof contact!=="undefined"){
-          Contact.findOne({_id:req.body.idc},function(err,contact){
+        Project.findOne({_id:req.params.idp},function(err,project){
+          let currentActvities = project.activities;
+          console.log(req.body);
+          if(typeof contact!=="undefined"){
+            Contact.findOne({_id:req.body.idc},function(err,contact){
+              update = {
+                  contact:contact._id,
+                  contactNaam:contact.contactPersoon,
+                  naam:req.body.naam,
+                  description:req.body.description
+                };
+                if(req.body.naam){
+                  newActivity = {
+                    id:5,/*ID for adding working hours*/
+                    text:"Project naam aangepast naar "+req.body.naam+"\n"+
+                         "Project klant veranderd naar "+req.contactPersoon,
+                    date:new Date()
+                  };
+                }else{
+                  newActivity = {
+                    id:5,/*ID for adding working hours*/
+                    text:"Project klant veranderd naar "+req.contactPersoon,
+                    date:new Date()
+                  };
+                }
+            });
+          }else{
             update = {
-                contact:contact._id,
-                contactNaam:contact.contactPersoon,
-                naam:req.body.naam,
-                description:req.body.description
-              };
-          });
-        }else{
-          update = {
-            description:req.body.description
+              description:req.body.description
+            };
+            newActivity = {
+              id:5,/*ID for adding working hours*/
+              text:"Project naam aangepast naar "+req.body.naam+"\n",
+              date:new Date()
+            };
           }
-        }
-        Project.update({_id:req.params.idp},update,function(err){
-          console.log(err);
-          res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+          Project.update({_id:req.params.idp},update,function(err){
+            console.log(err);
+            currentActvities.unshift(newActivity);
+            res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+          });
         });
       });
     });
@@ -2985,7 +3016,7 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
     Settings.findOne({},function(err,settings){
       Contact.findOne({_id:req.body.idc},function(err,contact){
         Profile.findOne({},function(err,profile){
-          Project.findOne({_id:req.params.idp},function(err,profile){
+          Project.findOne({_id:req.params.idp},function(err,project){
             let newActivity = {
               id:3,/*ID for adding working hours*/
               text:"Added "+String(workHours)+" hours of work",
@@ -2993,7 +3024,7 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
             };
             console.log(newActivity);
             console.log(profile.activities);
-            let currentActvities = profile.activities;
+            let currentActvities = project.activities;
             currentActvities.unshift(newActivity);
             console.log(currentActvities);
             Project.updateOne({_id:req.params.idp},
@@ -3023,7 +3054,7 @@ app.post('/project-add-sub/:idp/:loginHash',function(req,res){
     Settings.findOne({},function(err,settings){
       Contact.findOne({_id:req.body.idc},function(err,contact){
         Profile.findOne({},function(err,profile){
-          Project.findOne({_id:req.params.idp},function(err,profile){
+          Project.findOne({_id:req.params.idp},function(err,project){
             let newActivity = {
               id:2,/*ID for adding working hours*/
               text:"Onderaanneming \""+firmaNaam+"\" toegevoegd ( "+price+"€ )\r\n"+transactie,
@@ -3051,23 +3082,23 @@ app.post('/project-add-mat/:idp/:loginHash',function(req,res){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
-    let hoeveelheid = req.body.hoeveelheid;
+    let hoeveelheid = req.body.hoeveelheid;qqss
     let beschrijving = req.body.beschrijvingInput;
     Settings.findOne({},function(err,settings){
       Contact.findOne({_id:req.body.idc},function(err,contact){
         Profile.findOne({},function(err,profile){
-          Project.findOne({_id:req.params.idp},function(err,profile){
+          Project.findOne({_id:req.params.idp},function(err,project){
             Materiaal.findOne({_id:req.body.materiaal},function(err,materiaal){
               console.log(materiaal);
               console.log(req.body.materiaal)
               let newActivity = {
                 id:1,/*ID for adding working hours*/
-                text:"Materiaal toegevoegd:\n"+materiaal.naam+" ( "+materiaal.prijs+"+€/kg)\n"
+                text:"Materiaal toegevoegd:\n"+materiaal.naam+" ( "+materiaal.prijs+"€/kg)\n"
                      +hoeveelheid+"kg/l gebruikt ("+(Number(materiaal.prijs)*Number(hoeveelheid))+"€ totaal)\n"
                      +beschrijving,
                 date: new Date()
               };
-              let currentActvities = profile.activities;
+              let currentActvities = project.activities;
               currentActvities.unshift(newActivity);
               console.log(currentActvities);
               Project.updateOne({_id:req.params.idp},

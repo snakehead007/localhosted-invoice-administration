@@ -179,7 +179,7 @@ body
                             textarea(class="form-control" id="descriptionOfCard" rows="3",name="description",placeholder=project.description)=project.description
             hr
             div(class="row")
-              div(class="col-2")
+              div(class="col")
                 //FINANCIAL CARD --normal
                 div(class="card",id="financialCard", style="")
                   div(class="card-header") Financieel
@@ -217,7 +217,7 @@ body
                           h6 Data
                           p=project.data.start+" - "+project.data.end
                         
-              div(class="col-10")
+              div(class="col")
                 //ADD CARD --normal
                 div(class="card")
                   div(class="card-header") Toevoegen
@@ -233,15 +233,15 @@ body
                       li(class="list-group-item",id="fielOnderaanneming",style="display:none;")
                         form(action='/project-add-sub/'+project._id+'/'+loginHash method='post')
                           .form-group.row
-                            label.col-sm-2.col-form-label(for='price') Prijs van de factuur
+                            label.col-4.col-form-label(for='price') Prijs van de factuur
                             .col-sm-10
                               input.form-control(type='text' name='price' id='price')
                           .form-group.row
-                            label.col-sm-2.col-form-label(for='textareaTransactie') Geleverde Transactie
+                            label.col-4.col-form-label(for='textareaTransactie') Geleverde Transactie
                             .col-sm-10
                               textarea.form-control(type='text' id='textareaTransactie' name='transactie')
                           .form-group.row
-                            label.col-sm-2.col-form-label(for='naamFirmaTransactie') naam Firma
+                            label.col-4.col-form-label(for='naamFirmaTransactie') naam Firma
                             .col-sm-10
                               input.form-control(type='text' id='naamFirmaTransactie' name='firmaNaam')
                           .form-group.row
@@ -250,24 +250,24 @@ body
                       li(class="list-group-item",id="fieldWerkuren",style="display:none;")
                         form(action='/project-add-hours/'+project._id+'/'+loginHash method='post')
                           .form-group.row
-                            label.col-sm-2.col-form-label(for='werkurenInput') Aantal Uren Gewerkt
+                            label.col-4.col-form-label(for='werkurenInput') Aantal Uren Gewerkt
                             .col-sm-8
                               input.form-control(type='text' name='werkuren' id='werkurenInput')
                             .col-2
                               button.btn(type='sumbit') Add
                       //ADD CARD -- Materials
-                      li(class="list-group-item",id="fiebeschrijvingldMaterialen",style="display:none;")
+                      li(class="list-group-item",id="fieldMaterialen",style="display:none;")
                         form(action='/project-add-mat/'+project._id+'/'+loginHash method='post')
                           .form-group.row
-                            label.col-sm-2.col-form-label(for='hoeveelheidInput') Hoeveelheid gebruikt (kg/l)
+                            label.col-4.col-form-label(for='hoeveelheidInput') Hoeveelheid gebruikt (kg/l)
                             .col-sm-10
                               input.form-control(type='text' name='hoeveelheid' id='hoeveelheidInput')
                           .form-group.row
-                            label.col-sm-2.col-form-label(for='beschrijvingInput') Beschrijving
+                            label.col-4.col-form-label(for='beschrijvingInput') Beschrijving
                             .col-sm-10
                               textarea.form-control(type='text' id='beschrijving' name='beschrijvingInput')
                           .form-group.row
-                            label.col-sm-2.col-form-label(for='materialeninput') Materiaal
+                            label.col-4.col-form-label(for='materialeninput') Materiaal
                             div.col-sm-10
                                 select.form-control.custom-select.select.NextToButton(id="materialeninput"  name="materiaal")
                                   option(selected)
@@ -275,10 +275,11 @@ body
                                     option(value=materiaal._id)=materiaal.naam
                           .form-group.row
                             button.btn(type='sumbit') Add
+            hr
             .row
-              .col-6
+              .col
                 canvas(id="chart")
-              .col-6
+              .col
                 .card
                   div.card-header Activities
                   .card-body
