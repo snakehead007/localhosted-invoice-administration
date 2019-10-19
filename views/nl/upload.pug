@@ -74,9 +74,8 @@ body
           h2(class="pt-3")="Nieuw logo upload"
           hr
           form(ref='uploadForm',id='uploadForm' ,action='/upload-logo/'+loginHash,method='post',encType="multipart/form-data")
-              div(class="input-group form-group col-md-5 mr-auto")
-                div(class="custom-file")
-                  input(type="file",name="sampleFile", class="custom-file-input form-control",id="inputGroupFile04", aria-describedby="inputGroupFileAddon04")
-                  label(class="custom-file-label", for="inputGroupFile04") Choose file
-                div(class="input-group-append")
-                  button(class="btn btn-outline-"+settings.thema+" form-control", type="submit", id="inputGroupFileAddon04") Upload
+            div(class="input-group form-group col-md-5 mr-auto")
+              label(for="inputGroupFile04") Choose file for logo
+              input(type="file",name="sampleFile",class="form-control-file" id="inputGroupFile04")
+            div(class="input-group-append col-2")
+              button(class="btn-sm btn-outline-"+settings.thema+" form-control", type="submit", id="inputGroupFileAddon04") Upload

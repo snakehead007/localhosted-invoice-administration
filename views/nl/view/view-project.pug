@@ -29,6 +29,26 @@ html
         $("#descriptionCard").toggle();
         $("#descriptionCardEdit").toggle();
       }
+      function selectOnderaanneming(){
+        $("#fielOnderaanneming").show();
+        $("#fieldWerkuren").hide();
+        $("#fieldMaterialen").hide()
+      }
+      function selectWerkuren(){
+        $("#fieldWerkuren").show();
+        $("#fielOnderaanneming").hide();
+        $("#fieldMaterialen").hide();
+      }
+      function selectMaterialen(){
+        $("#fieldMaterialen").show();
+        $("#fielOnderaanneming").hide();
+        $("#fieldWerkuren").hide();
+      }
+      function hideFields(){
+        $("#fieldMaterialen").hide();
+        $("#fielOnderaanneming").hide();
+        $("#fieldWerkuren").hide();
+      }
 body
   header
     nav(class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow")
@@ -110,7 +130,7 @@ body
                           a(href="#",onclick="changeContact()" )
                             span(data-feather="edit-3")
                           button(type="submit",class="edit-link-project submit-feather thisButtonIsALink")
-                            span(data-feather="upload-cloud")
+                            span(data-feather="upload")
                       div(class="card-body")
                         div(class="container-fluid")
                           div(class="row")
@@ -152,7 +172,7 @@ body
                         a(href="#",onclick="changeDescription()",class="edit-link-project")
                           span(data-feather="edit-3")
                         button(type="submit",class="edit-link-project submit-feather thisButtonIsALink")
-                          span(data-feather="upload-cloud")
+                          span(data-feather="upload")
                         a(href="#",onclick="changeBeschrijving",class="edit-link-project")
                       div(class="card-body")
                         div(class="form-group")
@@ -184,7 +204,7 @@ body
                         a(href="#",onclick="changeFinancial()" ,class="edit-link-project")
                           span(data-feather="edit-3")
                         button(type="submit",class="edit-link-project submit-feather thisButtonIsALink")
-                          span(data-feather="upload-cloud")
+                          span(data-feather="upload")
                     div(class="card-body cardWithEditFeather")
                       ul(class="list-group list-group-flush")
                         li(class="list-group-item")
@@ -196,6 +216,26 @@ body
                         li(class="list-group-item")
                           h6 Data
                           p=project.data.start+" - "+project.data.end
-              div(class="col")
-                
+                        
+              div(class="col-10")
+                //ADD CARD --normal
+                div(class="card")
+                  div(class="card-header") Toevoegen
+                      div(class="input-group")
+                        select(class="custom-select selectNextToButton" id="inputGroupSelect03"  name="idc")
+                          option(onclick="selectOnderaanneming()") onderaanneming
+                          option(onclick="selectWerkuren()") werkuren
+                          option(onclick="selectMaterialen()") Materialen
+                          option(onclick="hideFields()",selected)
+                  div(class="card-body")
+                    ul(class="list-group")
+                      //ADD CARD --onderaanneming
+                      li(class="list-group-item",id="fielOnderaanneming",style="display:none;")
+                        label(for="")
+                      //ADD CARD --working getHours
+                      li(class="list-group-item",id="fieldWerkuren",style="display:none;")
+                        form()
+                      //ADD CARD -- Materials
+                      li(class="list-group-item",id="fieldMaterialen",style="display:none;")
+                        p materialen toevoegen
   
