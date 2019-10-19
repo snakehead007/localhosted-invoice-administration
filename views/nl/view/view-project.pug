@@ -229,9 +229,9 @@ body
                           option(onclick="hideFields()",selected)
                   div(class="card-body")
                     ul(class="list-group")
-                      //ADD CARD --onderaanneming
+                      //ADD CARD --subcontractor
                       li(class="list-group-item",id="fielOnderaanneming",style="display:none;")
-                        form(action='/project-add-work/'+project._id+'/'+loginHash method='post')
+                        form(action='/project-add-sub/'+project._id+'/'+loginHash method='post')
                           .form-group.row
                             label.col-sm-2.col-form-label(for='price') Prijs van de factuur
                             .col-sm-10

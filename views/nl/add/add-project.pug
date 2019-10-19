@@ -17,10 +17,12 @@ html
     script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js")  
     script.
         $( function() {
-          $( ".datepicker" ).datepicker();
-          $( ".datepicker" ).datepicker( "option", "dateFormat", "d MM y" );
-          $( ".datepicker" ).datepicker( "option", "showAnim", "fold" );
-          $( ".datepicker" ).datepicker("option", "dayNames",{dayNames: #{dayNames}});
+          $( ".datepicker" ).datepicker({
+            dateFormat: "d MM y"
+            });
+          //$( ".datepicker" ).datepicker( "option", "dateFormat", "d MM y" );
+          //$( ".datepicker" ).datepicker( "option", "showAnim", "fold" );
+          //$( ".datepicker" ).datepicker("option", "dayNames"( [#{dayNames}]);
           //$( ".datepicker" ).datepicker( "option", "showOptions", { direction: "up" } );
         } );
 

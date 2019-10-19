@@ -3011,7 +3011,8 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
     });
 });
 
-app.post('/project-add-work/:idp/:loginHash', function(req,res){
+//subcontractor adding
+app.post('/project-add-sub/:idp/:loginHash', function(req,res){
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
