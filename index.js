@@ -315,24 +315,35 @@ var ProjectSchema = new Schema({
     max:Number
   },
   data:{
-    start:String,
-    end:String
+    type:Date,
+    type:Date
   },
   description:{
     type:String
   },
   activities:[
     [
-      String, /*Type*/
+      Number, /*Type ID
+      ID 0 : Alerts, warnings
+      ID 1 : Adding Materials
+      ID 2 : Adding onderaanneming
+      ID 3 : Adding Werkuren
+      ID 4 : Invoice Downloading
+      ID 5 : Edit Project: name
+      ID 6 : Edit project: client
+      ID 7 : Edit project: Description
+      ID 8 : Edit date(s)
+      ID 9 : Edit budget(s)
+      */
       String, /*Text*/
-      String, /*Date*/
+      Date, /*Date*/
     ]
   ],
   contactNaam:{
     type:String
   },
   lastDownloadedInvoice:{/*When downloading an invoice this changes to current date*/
-    type:String
+    type:Date
   },
   margin:{
     type:Number,
@@ -2810,11 +2821,18 @@ app.get('/add-project/:loginHash', function(req, res) {//REWORKED
       if (!err) {
         Profile.findOne({},function(err,profile){
           Contact.find({},function(err,contacten){
+            var dates;
+            if(settings.lang="nl"){
+              dates=maand_klein;
+            }else if(settings.lang="eng"){
+              dates=month_small;
+            }
             res.render(settings.lang+'/add/add-project', {
               'materialen': materialen,
               'settings': settings,
               'profile':profile,
               "contacten":contacten,
+              "dayNames":dates,
               "loginHash": req.params.loginHash
             });
           });
@@ -2858,8 +2876,8 @@ app.post('/add-project/:loginHash', function(req, res) {//REWORKED
                         max: req.body.budgetMax
                        },
                 data: {
-                        start: req.body.dataStart,
-                        end: req.body.dataEnd
+                        start: Date(req.body.dataStart),
+                        end: Date(req.body.dataEnd)
                        },
                 description:req.body.description,
                 contactNaam : contact.contactPersoon
@@ -2952,6 +2970,73 @@ app.post('/project-edit/:idp/:loginHash',function(req,res){
         }
         Project.update({_id:req.params.idp},update,function(err){
           res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+        });
+      });
+    });
+});
+
+app.post('/project-add-work',function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    let workHours = req.body.werkuren;
+    Settings.findOne({},function(err,settings){
+      Contact.findOne({_id:req.body.idc},function(err,contact){
+        Profile.findOne({},function(err,profile){
+          Project.findOne({_id:req.params.idp},function(err,profile){
+            let newActivity = [
+              3,/*ID for adding work*/
+              "Added "+workHours+" hours of work",
+              new Date()
+            ];
+            let currentActvities = profile.activities;
+            currentActvities.unshift(newActivity);
+            Project.updateOne({_id:req.params.idp},
+              {
+                activities:currentActvities,
+                werkuren:req.body.werkuren
+              }
+            ,function(err){
+              res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+            });
+          });
+        });
+      });
+    });
+});
+
+app.post('/project-add-hours/:idp/:loginHash', function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    Settings.findOne({},function(err,settings){
+      Contact.findOne({_id:req.body.idc},function(err,contact){
+        Profile.findOne({},function(err,profile){
+          Project.update({_id:req.params.idp},{
+              werktarief:req.body.werktarief
+            },function(err){
+            res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+          });
+        });
+      });
+    });
+});
+
+app.post('/project-add-materials/:idp/:loginHash', function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    Settings.findOne({},function(err,settings){
+      Contact.findOne({_id:req.body.idc},function(err,contact){
+        Profile.findOne({},function(err,profile){
+          Project.update({_id:req.params.idp},{
+              werktarief:req.body.werktarief
+            },function(err){
+            res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+          });
         });
       });
     });
