@@ -250,9 +250,10 @@ body
                         form(action='/project-add-hours/'+project._id+'/'+loginHash method='post')
                           .form-group.row
                             label.col-sm-2.col-form-label(for='werkurenInput') Aantal Uren Gewerkt
-                            .col-sm-10
+                            .col-sm-8
                               input.form-control(type='text' name='werkuren' id='werkurenInput')
-                          button.btn(type='sumbit') Add
+                            .col-2
+                              button.btn.form-(type='sumbit') Add
                       //ADD CARD -- Materials
                       li(class="list-group-item",id="fieldMaterialen",style="display:none;")
                         form(action='/project-add-materials'+project._id+'/'+loginHash method='post')
@@ -281,9 +282,9 @@ body
                       each activity in project.activities
                         li.list-group-item
                           .col-2
-                            p=activity[0]
+                            p=activity.id
                           .col-7
-                            p=activity[1]
+                            p=activity.text
                           .col-3        
-                            p=activity[2]              
+                            p=activity.date           
   
