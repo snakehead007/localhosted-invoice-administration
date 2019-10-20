@@ -3,6 +3,7 @@ html
   head
     title=title
     link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    link(rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css")
     link(rel="stylesheet" href="/stylesheet.css")
     scrip(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/core.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js")
@@ -12,7 +13,17 @@ html
     script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js")
     script(src="https://www.chartjs.org/samples/latest/utils.js")
     script(src="https://unpkg.com/feather-icons")
+    script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js")  
     script.
+      $( function() {
+        $( ".calendar" ).datepicker({
+          dateFormat: "d MM y"
+          });
+        //$( ".datepicker" ).datepicker( "option", "dateFormat", "d MM y" );
+        //$( ".datepicker" ).datepicker( "option", "showAnim", "fold" );
+        //$( ".datepicker" ).datepicker("option", "dayNames"( [#{dayNames}]);
+        //$( ".datepicker" ).datepicker( "option", "showOptions", { direction: "up" } );
+      } );
       function info(){$("#info").toggle();};
       $(document).ready(function () {
         feather.replace();
@@ -167,7 +178,7 @@ body
                 //DESCRIPTION CARD --editable
                 div(class="card",id="descriptionCardEdit",style="display:none;")
                   div(class="cardWithEditFeather")
-                    form(action='/project-edit/'+project._id+'/'+loginHash,method='post')
+                    form(action='/project-edit-description/'+project._id+'/'+loginHash,method='post')
                       div(class="card-header") Beschrijving
                         a(href="#",onclick="changeDescription()",class="edit-link-project")
                           span(data-feather="edit-3")
@@ -208,19 +219,25 @@ body
                     div(class="card-body cardWithEditFeather")
                       ul(class="list-group list-group-flush")
                         li(class="list-group-item")
-                          
-                          label(for="werkprijs") Werktarief:
-                          .row
-                            input(type="text",name="werktarief",placeholder=project.werkprijs,value=project.werkprijs)
+                          .form-group.row
+                            .col
+                              label(for="werkprijs") Werktarief:
+                            .col
+                              input(type="text",name="werktarief",placeholder=project.werkprijs,value=project.werkprijs)
                         li(class="list-group-item")
                           h6 Budget
                           .form-group.row
-                            input(type="text",name="budgetMin",placeholder=project.budget.min,value=project.budget.min)
-                          .form-group.row
-                            input(type="text",name="budgetMax",placeholder=project.budget.max,value=project.budget.max)
+                            .col
+                              input(type="text",name="budgetMin",placeholder=project.budget.min,value=project.budget.min)
+                            .col.mr-auto
+                              input(type="text",name="budgetMax",placeholder=project.budget.max,value=project.budget.max)
                         li(class="list-group-item")
                           h6 Data
-                          p=project.data.start+" - "+project.data.end
+                          .form-group.row
+                            .col
+                              input.calendar(type="text",name="dataStart",placeholder=project.data.start,value=project.data.start)
+                            .col.mr-auto
+                              input.calendar(type="text",name="dataEnd",placeholder=project.data.end,value=project.data.end)
                         
               div(class="col")
                 //ADD CARD --normal

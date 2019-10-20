@@ -2958,46 +2958,72 @@ app.post('/project-edit/:idp/:loginHash',function(req,res){
     console.log(getCurrentTime());
     console.log("Updating Project")
     var update;
-    let newActivity;
     Settings.findOne({},function(err,settings){
       Profile.findOne({},function(err,profile){
         Project.findOne({_id:req.params.idp},function(err,project){
           let currentActvities = project.activities;
-          console.log(req.body);
-            Contact.findOne({_id:req.body.idc},function(err,contact){
-              update = {
-                  contact:contact._id,
-                  contactNaam:contact.contactPersoon,
-                  naam:req.body.naam,
-                  description:req.body.description
-                };
-                if(req.body.naam!==project.naam  && req.body.idc !== project.contact){
-                  newActivity = {
-                    id:5,/*ID for adding working hours*/
-                    text:"Project naam aangepast naar "+req.body.naam+"\n"+
-                         "Project klant veranderd naar "+req.contactPersoon,
-                    date:new Date()
-                  };
-                }else if(req.body.naam !==project.naam){
-                  newActivity = {
-                    id:5,/*ID for adding working hours*/
-                    text:"Project naam aangepast naar "+req.body.naam+"\n",
-                    date:new Date()
-                  };
-                }else if(req.body.idc !== project.contact){
-                    newActivity = {
-                      id:5,/*ID for adding working hours*/
-                      text:"Project klant veranderd naar "+req.contactPersoon,
-                      date:new Date()
-                    };
-                }
-            });
-          console.log(newActivity);
-          Project.update({_id:req.params.idp},update,function(err){
-            console.log(err);
-            currentActvities.unshift(newActivity);
-            res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+          Contact.findOne({_id:req.body.idc},function(err,contact){
+              let _text = "";
+              if(req.body.naam !=project.naam){
+                  _text += "Project naam aangepast naar \""+req.body.naam+"\"\n";
+              }
+              if(req.body.idc != project.contact){
+                _text += "Project klant veranderd naar \""+contact.contactPersoon+"\n";
+              }
+              currentActvities.unshift({
+                id:5,/*ID for adding working hours*/
+                text:_text,
+                date:new Date()
+              });
+            update = {
+                contact:contact._id,
+                contactNaam:contact.contactPersoon,
+                naam:req.body.naam,
+                activities:currentActvities
+              };
+            if((req.body.naam ==project.naam && req.body.idc == project.contact) || (req.body.naam=="")){
+              Project.update({_id:req.params.idp},update,function(err){
+                res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+              });
+            }else{
+              res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+            }
           });
+        });
+      });
+    });
+});
+
+app.post('/project-edit-description/:idp/:loginHash',function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    var update;
+    Settings.findOne({},function(err,settings){
+      Profile.findOne({},function(err,profile){
+        Project.findOne({_id:req.params.idp},function(err,project){
+          let currentActvities = project.activities;
+            let _text = "";
+            if(req.body.description != project.description){
+              _text += "Project beschrijving is nu:\n"+req.body.description+"\n";
+              currentActvities.unshift({
+                id:5,/*ID for adding working hours*/
+                text:_text,
+                date:new Date()
+              });
+              update = {
+                description:req.body.description,
+                activities:currentActvities
+              };
+            }
+          if(req.body.description == project.description || req.body.description==""){
+            Project.update({_id:req.params.idp},update,function(err){
+              res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+            });
+          }else{
+            res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+          }
         });
       });
     });
