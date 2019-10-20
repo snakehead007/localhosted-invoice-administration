@@ -3050,7 +3050,7 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
             Project.updateOne({_id:req.params.idp},
               {
                 activities:currentActvities,
-                werkuren:req.body.werkuren
+                werkuren:Number(project.werkuren)+Number(req.body.werkuren)
               }
             ,function(err){
               console.log(err);
@@ -3080,9 +3080,8 @@ app.post('/project-add-sub/:idp/:loginHash',function(req,res){
               text:"Onderaanneming \""+firmaNaam+"\" toegevoegd ( "+price+"€ )\r\n"+transactie,
               date:formatDate(new Date(),settings.lang)
             };
-            let currentActvities = profile.activities;
+            let currentActvities = project.activities;
             currentActvities.unshift(newActivity);
-            console.log(currentActvities);
             Project.updateOne({_id:req.params.idp},
               {
                 activities:currentActvities,
@@ -3158,10 +3157,40 @@ app.post('/project-change-financial/:idp/:loginHash',function(req,res){
     Settings.findOne({},function(err,settings){
       Contact.findOne({_id:req.body.idc},function(err,contact){
         Profile.findOne({},function(err,profile){
-          Project.update({_id:req.params.idp},{
-              werktarief:req.body.werktarief
-            },function(err){
-            res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+          Project.findOne({_id:req.params.idp},function(err,project){
+            let text = "";
+            if((req.body.werktarief!==project.werkprijs)){
+              text+="Werktarief aangepast naar "+req.body.werktarief+"€/uur \n";
+            }
+            if(  (req.body.budgetMin!==project.budget.min) || (req.body.budgetMax!==project.budget.max)){
+              text+="Budget aangepast naar "+req.body.budgetMin+"€ - "+req.body.budgetMax+"€\n";
+            }
+            if( (req.body.dataStart!==project.data.start) || (req.body.dataEnd!==project.data.end)){
+              text+="Data aangepast naar "+req.body.dataStart+" - "+req.body.dataEnd+"\n";
+            }
+            let newActivity = {
+              id:8,/*9:budget,8:dates*/
+              text:text,
+              date:formatDate(new Date(),settings.lang)
+            };
+            let currentActvities = project.activities;
+            currentActvities.unshift(newActivity);
+            Project.updateOne({_id:req.params.idp},
+              {
+                werkprijs:req.body.werktarief,
+                budget: {
+                        min: Number(req.body.budgetMin),
+                        max: Number(req.body.budgetMax)
+                       },
+                data: {
+                        start: String(req.body.dataStart),
+                        end: String(req.body.dataEnd)
+                      },
+                activities:currentActvities
+              },function(err){
+                console.log(err)
+              res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+            });
           });
         });
       });
