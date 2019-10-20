@@ -166,7 +166,7 @@ body
                     div(class="card-body")
                       .row
                         .col-2
-                          span.card-title klant:
+                          h6.card-title klant:
                         .col.mr-auto
                           a(href="/facturen"+"/"+project.contact+"/"+loginHash)=project.contactNaam
                             
@@ -268,61 +268,64 @@ body
               div(class="col")
                 //ADD CARD --normal
                 div(class="card")
-                  div(class="card-header") Toevoegen
-                      div(class="input-group")
-                        select(class="custom-select selectNextToButton" id="inputGroupSelect03"  name="idc")
-                          option(onclick="selectOnderaanneming()") onderaanneming
-                          option(onclick="selectWerkuren()") werkuren
-                          option(onclick="selectMaterialen()") Materialen
-                          option(onclick="hideFields()",selected)
-                  div(class="card-body")
-                    ul(class="list-group")
-                      //ADD CARD --subcontractor
-                      li(class="list-group-item",id="fielOnderaanneming",style="display:none;")
-                        form(action='/project-add-sub/'+project._id+'/'+loginHash method='post')
-                          .form-group.row
-                            label.col-4.col-form-label(for='price') Prijs van de factuur
-                            .col-sm-10
-                              input.form-control(type='text' name='price' id='price')
-                          .form-group.row
-                            label.col-4.col-form-label(for='textareaTransactie') Geleverde Transactie
-                            .col-sm-10
-                              textarea.form-control(type='text' id='textareaTransactie' name='transactie')
-                          .form-group.row
-                            label.col-4.col-form-label(for='naamFirmaTransactie') naam Firma
-                            .col-sm-10
-                              input.form-control(type='text' id='naamFirmaTransactie' name='firmaNaam')
-                          .form-group.row
+                  div(class="card-header") 
+                    .row 
+                      .col-4
+                        | Toevoegen
+                      .col-8
+                        div(class="input-group")
+                            select(class="custom-select selectNextToButton" id="inputGroupSelect03"  name="idc")
+                              option(onclick="selectOnderaanneming()") onderaanneming
+                              option(onclick="selectWerkuren()") werkuren
+                              option(onclick="selectMaterialen()") Materialen
+                              option(onclick="hideFields()",selected)
+                  ul(class="list-group list-group-flush")
+                    //ADD CARD --subcontractor
+                    li(class="list-group-item",id="fielOnderaanneming",style="display:none;")
+                      form(action='/project-add-sub/'+project._id+'/'+loginHash method='post')
+                        .form-group.row
+                          label.col-4.col-form-label(for='price') Prijs van de factuur
+                          .col-sm-10
+                            input.form-control(type='text' name='price' id='price')
+                        .form-group.row
+                          label.col-4.col-form-label(for='textareaTransactie') Geleverde Transactie
+                          .col-sm-10
+                            textarea.form-control(type='text' id='textareaTransactie' name='transactie')
+                        .form-group.row
+                          label.col-4.col-form-label(for='naamFirmaTransactie') naam Firma
+                          .col-sm-10
+                            input.form-control(type='text' id='naamFirmaTransactie' name='firmaNaam')
+                        .form-group.row
+                          button.btn(type='sumbit') Add
+                    //ADD CARD --working hours
+                    li(class="list-group-item",id="fieldWerkuren",style="display:none;")
+                      form(action='/project-add-hours/'+project._id+'/'+loginHash method='post')
+                        .form-group.row
+                          label.col-4.col-form-label(for='werkurenInput') Aantal Uren Gewerkt
+                          .col-sm-8
+                            input.form-control(type='text' name='werkuren' id='werkurenInput')
+                          .col-2
                             button.btn(type='sumbit') Add
-                      //ADD CARD --working hours
-                      li(class="list-group-item",id="fieldWerkuren",style="display:none;")
-                        form(action='/project-add-hours/'+project._id+'/'+loginHash method='post')
-                          .form-group.row
-                            label.col-4.col-form-label(for='werkurenInput') Aantal Uren Gewerkt
-                            .col-sm-8
-                              input.form-control(type='text' name='werkuren' id='werkurenInput')
-                            .col-2
-                              button.btn(type='sumbit') Add
-                      //ADD CARD -- Materials
-                      li(class="list-group-item",id="fieldMaterialen",style="display:none;")
-                        form(action='/project-add-mat/'+project._id+'/'+loginHash method='post')
-                          .form-group.row
-                            label.col-4.col-form-label(for='hoeveelheidInput') Hoeveelheid gebruikt (kg/l)
-                            .col-sm-10
-                              input.form-control(type='text' name='hoeveelheid' id='hoeveelheidInput')
-                          .form-group.row
-                            label.col-4.col-form-label(for='beschrijvingInput') Beschrijving
-                            .col-sm-10
-                              textarea.form-control(type='text' id='beschrijving' name='beschrijvingInput')
-                          .form-group.row
-                            label.col-4.col-form-label(for='materialeninput') Materiaal
-                            div.col-sm-10
-                                select.form-control.custom-select.select.NextToButton(id="materialeninput"  name="materiaal")
-                                  option(selected)
-                                  each materiaal in materialen
-                                    option(value=materiaal._id)=materiaal.naam
-                          .form-group.row
-                            button.btn(type='sumbit') Add
+                    //ADD CARD -- Materials
+                    li(class="list-group-item",id="fieldMaterialen",style="display:none;")
+                      form(action='/project-add-mat/'+project._id+'/'+loginHash method='post')
+                        .form-group.row
+                          label.col-4.col-form-label(for='hoeveelheidInput') Hoeveelheid gebruikt (kg/l)
+                          .col-sm-10
+                            input.form-control(type='text' name='hoeveelheid' id='hoeveelheidInput')
+                        .form-group.row
+                          label.col-4.col-form-label(for='beschrijvingInput') Beschrijving
+                          .col-sm-10
+                            textarea.form-control(type='text' id='beschrijving' name='beschrijvingInput')
+                        .form-group.row
+                          label.col-4.col-form-label(for='materialeninput') Materiaal
+                          div.col-sm-10
+                              select.form-control.custom-select.select.NextToButton(id="materialeninput"  name="materiaal")
+                                option(selected)
+                                each materiaal in materialen
+                                  option(value=materiaal._id)=materiaal.naam
+                        .form-group.row
+                          button.btn(type='sumbit') Add
             hr
             .row
               .col
@@ -334,8 +337,7 @@ body
               .col
                 .card
                   div.card-header Activities
-                  .card-body
-                    ul.list-group
+                  ul.list-group.list-group-flish
                       each activity in project.activities
                         li.list-group-item
                           .row
@@ -363,7 +365,7 @@ body
                             .col-8.pre
                               p=activity.text
                             .col-3      
-                              p=activity.date
+                              p.pre=activity.date
   script.
     var config = {
       type: 'line',

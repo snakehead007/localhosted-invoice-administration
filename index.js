@@ -337,7 +337,7 @@ var ProjectSchema = new Schema({
       ID 9 : Edit budget(s)
       */
       text:String, /*Text*/
-      date:Date /*Date*/
+      date:String /*Date*/
     }
   ],
   contactNaam:{
@@ -2923,7 +2923,6 @@ app.get('/view-project/:idp/:loginHash', function(req,res){
         Profile.findOne({},function(err,profile){
           Project.findOne({_id:req.params.idp},function(err,project){
             Materiaal.find({},function(err,materialen){
-              console.log(getCurrentTime());
               console.log(project);
               Contact.find({},function(err,contacten){
                 res.render(settings.lang+'/view/view-project',{
@@ -2955,7 +2954,6 @@ app.post('/project-edit/:idp/:loginHash',function(req,res){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
-    console.log(getCurrentTime());
     console.log("Updating Project")
     var update;
     Settings.findOne({},function(err,settings){
@@ -2973,7 +2971,7 @@ app.post('/project-edit/:idp/:loginHash',function(req,res){
               currentActvities.unshift({
                 id:5,/*ID for adding working hours*/
                 text:_text,
-                date:new Date()
+                date:formatDate(new Date(),settings.lang)
               });
             update = {
                 contact:contact._id,
@@ -2981,7 +2979,7 @@ app.post('/project-edit/:idp/:loginHash',function(req,res){
                 naam:req.body.naam,
                 activities:currentActvities
               };
-            if((req.body.naam ==project.naam && req.body.idc == project.contact) || (req.body.naam=="")){
+            if(((req.body.naam !==project.naam) || (req.body.naam==="")) && req.body.idc !== project.contact ){
               Project.update({_id:req.params.idp},update,function(err){
                 res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
               });
@@ -3010,14 +3008,14 @@ app.post('/project-edit-description/:idp/:loginHash',function(req,res){
               currentActvities.unshift({
                 id:5,/*ID for adding working hours*/
                 text:_text,
-                date:new Date()
+                date:formatDate(new Date(),settings.lang)
               });
               update = {
                 description:req.body.description,
                 activities:currentActvities
               };
             }
-          if(req.body.description == project.description || req.body.description==""){
+          if((req.body.description !== project.description) || req.body.description===""){
             Project.update({_id:req.params.idp},update,function(err){
               res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
             });
@@ -3042,7 +3040,7 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
             let newActivity = {
               id:3,/*ID for adding working hours*/
               text:"Added "+String(workHours)+" hours of work",
-              date:new Date()
+              date:formatDate(new Date(),settings.lang)
             };
             console.log(newActivity);
             console.log(profile.activities);
@@ -3080,7 +3078,7 @@ app.post('/project-add-sub/:idp/:loginHash',function(req,res){
             let newActivity = {
               id:2,/*ID for adding working hours*/
               text:"Onderaanneming \""+firmaNaam+"\" toegevoegd ( "+price+"€ )\r\n"+transactie,
-              date:new Date()
+              date:formatDate(new Date(),settings.lang)
             };
             let currentActvities = profile.activities;
             currentActvities.unshift(newActivity);
@@ -3104,7 +3102,7 @@ app.post('/project-add-mat/:idp/:loginHash',function(req,res){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
-    let hoeveelheid = req.body.hoeveelheid;qqss
+    let hoeveelheid = req.body.hoeveelheid;
     let beschrijving = req.body.beschrijvingInput;
     Settings.findOne({},function(err,settings){
       Contact.findOne({_id:req.body.idc},function(err,contact){
@@ -3118,7 +3116,7 @@ app.post('/project-add-mat/:idp/:loginHash',function(req,res){
                 text:"Materiaal toegevoegd:\n"+materiaal.naam+" ( "+materiaal.prijs+"€/kg)\n"
                      +hoeveelheid+"kg/l gebruikt ("+(Number(materiaal.prijs)*Number(hoeveelheid))+"€ totaal)\n"
                      +beschrijving,
-                date: new Date()
+                date:formatDate(new Date(),settings.lang)
               };
               let currentActvities = project.activities;
               currentActvities.unshift(newActivity);
@@ -3917,10 +3915,33 @@ function createJSON(obj){
   return json_data;
 }
 
-function getCurrentTime(){
-  let d = new Date()
-  let str = d.getHours()+":"+d.getMinutes()+":"+d.getMinutes();
+function getCurrentTime(d){
+  let str ="";
+  if(d.getHours().toString().length==1){
+    str+="0"+d.getHours();
+  }else{
+    str+=d.getHours();
+  }
+  if(d.getMinutes.toString().length==1){
+    str+=":0"+d.getMinutes();
+  }else{
+    str+=":"+d.getMinutes();
+  }
   return str;
+}
+
+function formatDate(date,lang) {
+  var monthNames;
+  if(lang==="nl"){
+    monthNames = maand_klein;
+  }else if(lang==="eng"){
+    monthNames = month_small;
+  }
+  var day = date.getDate();
+  var monthIndex = date.getMonth();
+  var year = date.getFullYear();
+
+  return day + ' ' + monthNames[monthIndex] + ' ' + year+"\n"+getCurrentTime(date);
 }
 
 app.engine('pug', require('pug').__express)
