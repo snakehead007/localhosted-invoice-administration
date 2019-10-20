@@ -300,12 +300,14 @@ var ProjectSchema = new Schema({
   werkprijs: {
     type: Number
   },
-  materialen: [
-    [
-      Schema.Types.ObjectId, /*Mat used*/
-      Number, /*Amount of mat used*/
-      Date
-    ]
+  materials: [
+    {
+      mat:Schema.Types.ObjectId, /*Mat used*/
+      name:String,
+      cost:Number,
+      amount:Number, /*Amount of mat used*/
+      date:String
+    }
   ],
   contact: {
     type: Schema.Types.ObjectId,
@@ -349,6 +351,10 @@ var ProjectSchema = new Schema({
   margin:{
     type:Number,
     default:10
+  },
+  total:{
+    type:Number,
+    default:0
   }
 });
 var Project = mongoose.model('Project', ProjectSchema);
@@ -3050,7 +3056,8 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
             Project.updateOne({_id:req.params.idp},
               {
                 activities:currentActvities,
-                werkuren:Number(project.werkuren)+Number(req.body.werkuren)
+                werkuren:Number(project.werkuren)+Number(req.body.werkuren),
+                total:project.total+(Number(req.body.werkuren)*Number(project.werkprijs))
               }
             ,function(err){
               console.log(err);
@@ -3085,6 +3092,7 @@ app.post('/project-add-sub/:idp/:loginHash',function(req,res){
             Project.updateOne({_id:req.params.idp},
               {
                 activities:currentActvities,
+                total:project.total+Number(price)
               },function(err){
               console.log(err);
               res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
@@ -3104,6 +3112,7 @@ app.post('/project-add-mat/:idp/:loginHash',function(req,res){
     let hoeveelheid = req.body.hoeveelheid;
     let beschrijving = req.body.beschrijvingInput;
     Settings.findOne({},function(err,settings){
+      let date = formatDate(new Date(),settings.lang);
       Contact.findOne({_id:req.body.idc},function(err,contact){
         Profile.findOne({},function(err,profile){
           Project.findOne({_id:req.params.idp},function(err,project){
@@ -3115,14 +3124,25 @@ app.post('/project-add-mat/:idp/:loginHash',function(req,res){
                 text:"Materiaal toegevoegd:\n"+materiaal.naam+" ( "+materiaal.prijs+"€/kg)\n"
                      +hoeveelheid+"kg/l gebruikt ("+(Number(materiaal.prijs)*Number(hoeveelheid))+"€ totaal)\n"
                      +beschrijving,
-                date:formatDate(new Date(),settings.lang)
+                date:date
               };
+              let newMaterial = {
+                mat: materiaal._id,
+                name: materiaal.naam,
+                cost: materiaal.prijs,
+                amount:Number(hoeveelheid),
+                date:date
+              }
+              let currentMaterials = project.materials;
+              currentMaterials.unshift(newMaterial);
               let currentActvities = project.activities;
               currentActvities.unshift(newActivity);
               console.log(currentActvities);
               Project.updateOne({_id:req.params.idp},
                 {
                   activities:currentActvities,
+                  materials:currentMaterials,
+                  total:project.total+(Number(hoeveelheid)*Number(materiaal.prijs))
                 },function(err){
                 console.log(err);
                 res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);

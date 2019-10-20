@@ -206,10 +206,17 @@ table tbody tr td a{
 .ui-datepicker-title{
 
 }
-.row.cards{
+.cardholder{
   margin-bottom: 6px;
   margin-top: 5px;
 }
 .fillInTheBlanks{
   min-height: 100%;
+}
+
+.smooth-transition{
+    -webkit-transition: 1s ease-in-out;
+    -moz-transition: 1s ease-in-out;
+    -o-transition: 1s ease-in-out;
+    transition: 1s ease-in-out;
 }

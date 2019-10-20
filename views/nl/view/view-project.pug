@@ -13,8 +13,10 @@ html
     script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js")
     script(src="https://www.chartjs.org/samples/latest/utils.js")
     script(src="https://unpkg.com/feather-icons")
-    script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js")  
+    script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js")
     script.
+      var angle_mat = 0;
+      var angle_activ = 0;
       $( function() {
         $( ".calendar" ).datepicker({
           dateFormat: "d MM y"
@@ -41,24 +43,34 @@ html
         $("#descriptionCardEdit").toggle();
       }
       function selectOnderaanneming(){
-        $("#fielOnderaanneming").show();
-        $("#fieldWerkuren").hide();
-        $("#fieldMaterialen").hide()
+        $("#fielOnderaanneming").show("slow");
+        $("#fieldWerkuren").hide("fast");
+        $("#fieldMaterialen").hide("fast")
       }
       function selectWerkuren(){
-        $("#fieldWerkuren").show();
-        $("#fielOnderaanneming").hide();
-        $("#fieldMaterialen").hide();
+        $("#fieldWerkuren").show("slow");
+        $("#fielOnderaanneming").hide("fast");
+        $("#fieldMaterialen").hide("fast");
       }
       function selectMaterialen(){
-        $("#fieldMaterialen").show();
-        $("#fielOnderaanneming").hide();
-        $("#fieldWerkuren").hide();
+        $("#fieldMaterialen").show("slow");
+        $("#fielOnderaanneming").hide("fast");
+        $("#fieldWerkuren").hide("fast");
       }
       function hideFields(){
-        $("#fieldMaterialen").hide();
-        $("#fielOnderaanneming").hide();
-        $("#fieldWerkuren").hide();
+        $("#fieldMaterialen").hide("fast");
+        $("#fielOnderaanneming").hide("fast");
+        $("#fieldWerkuren").hide("fast");
+      }
+      function toggleActivities(){
+        $("#ActivitiesStuff").toggle("slow");
+        angle_activ += 180;
+        $('#arrowActiv').css('transform','rotate(' + angle_activ + 'deg)');
+      }
+      function toggleMaterials(){
+        $("#materialsStuff").toggle("slow");
+        angle_mat += 180;
+        $('#arrowMat').css('transform','rotate(' + angle_mat + 'deg)');
       }
 body
   header
@@ -128,247 +140,286 @@ body
                   span Nieuw project
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           .container-fluid
-            .row.cards
-              .col-6.col#Main
-                div.fillInTheBlanks(class="card")
-                  //MAIN CARD --editable
-                  div(id="changeContactForm" class="selectNextToButton",style="display:none;")
-                    .cardWithEditFeather
-                    form(action='/project-edit/'+project._id+'/'+loginHash,method='post')
-                      .card-header
-                        .row
-                          .col-2
-                            label Projectnaam: 
-                          .col-7
-                            input(style="width:100%;",type="text",name="naam",value=project.naam,placeholder=project.naam)
-                          .col-3  
-                            a.edit-link-project(href="#",onclick="changeContact()" )  
-                              span(data-feather="edit-3")
-                            button.edit-link-project.submit-feather.thisButtonIsALink(type="submit")
-                              span(data-feather="save")
-                      .card-body
-                        .form-group.row
-                            .col-2.col-form-label
-                              label.card-title.editable-select(for="selectClient") Klant:
-                            .col.mr-auto
-                                select.form-control.custom-select.selectNextToButton#selectClient(name="idc")
-                                  each contact in contacten
-                                    if contact._id.toString() !== project.contact.toString()
-                                      option(value=contact._id)=contact.contactPersoon
-                                    else
-                                      option(value=contact._id, selected)=contact.contactPersoon
-                  //MAIN CARD --normal
-                  div(id="projectCard",class="cardWithEditFeather")
-                    h5(class="card-header h2")=project.naam
-                      a(href="#",onclick="changeContact()" ,class="edit-link-project")
-                        span(data-feather="edit-2")
-                    div(class="card-body")
-                      .row
-                        .col-2
-                          h6.card-title klant:
-                        .col.mr-auto
-                          a(href="/facturen"+"/"+project.contact+"/"+loginHash)=project.contactNaam      
-              .col-6.col#Description
-                //DESCRIPTION CARD --normal
-                div.fillInTheBlanks(class="card",id="descriptionCard")
-                  div(class="cardWithEditFeather")
-                    div(class="card-header") Beschrijving
-                      a(href="#",onclick="changeDescription()",class="edit-link-project")
-                        span(data-feather="edit-2")
-                    div(class="card-body")
-                      span(class="cardDescription textarea")=project.description
-                //DESCRIPTION CARD --editable
-                div(class="card",id="descriptionCardEdit",style="display:none;")
-                  div(class="cardWithEditFeather")
-                    form(action='/project-edit-description/'+project._id+'/'+loginHash,method='post')
-                      div(class="card-header") Beschrijving
-                        a(href="#",onclick="changeDescription()",class="edit-link-project")
-                          span(data-feather="edit-3")
-                        button(type="submit",class="edit-link-project submit-feather thisButtonIsALink")
-                          span(data-feather="save")
-                        a(href="#",onclick="changeBeschrijving",class="edit-link-project")
-                      div(class="card-body")
-                        div(class="form-group")
-                            textarea(class="form-control" id="descriptionOfCard" rows="3",name="description",placeholder=project.description)=project.description
-            .row.cards
-              .col-4.mr-auto#Finanial
-                //FINANCIAL CARD --normal
-                div.fillInTheBlanks(class="card",id="financialCard", style="")
-                  div(class="card-header") Financieel
-                    a(href="#",onclick="changeFinancial()",class="edit-link-project")
-                      span(data-feather="edit-2")                      
-                  div(class="cardWithEditFeather")
-                    ul(class="list-group list-group-flush")
-                      if !project.werkprijs
-                        li(class="list-group-item") 
-                          .row
-                            .col-3
-                              h6 Werktarief
-                            .col.mr-auto
-                              span 0 €/uur
-                      else
-                        li(class="list-group-item")
-                          .row
-                            .col-3
-                              h6 Werktarief
-                            .col.mr-auto
-                              spann=project.werkprijs+" €/uur"
-                      li(class="list-group-item")
-                        .row
-                          .col-3
-                            h6 Budget
-                          .col
-                            span=project.budget.min+"€ - "+project.budget.max+"€"
-                      li(class="list-group-item")
-                        .row
-                          .col-3 
-                            h6 Data
-                          .col
-                            span=project.data.start+" - "+project.data.end
-                      li(class="list-group-item")
-                        .row
-                          .col-3 
-                            h6 Werkuren totaal
-                          .col
-                            span=project.werkuren+" uur"
-                //FINANCIAL CARD --editable
-                div(class="card",id="financialCardEdit" ,style="display:none;")
-                  form(action='/project-change-financial/'+project._id+'/'+loginHash,method='post')
-                    div(class="card-header") Financieel
-                        a(href="#",onclick="changeFinancial()" ,class="edit-link-project")
-                          span(data-feather="edit-3")
-                        button(type="submit",class="edit-link-project submit-feather thisButtonIsALink")
-                          span(data-feather="save")
-                    div(class="cardWithEditFeather")
-                      ul(class="list-group list-group-flush")
-                        li(class="list-group-item")
-                          .form-group.row
-                            .col-auto
-                              h6 Werktarief (€/uur)
-                            .col-auto.mr-auto
-                              input(type="text",name="werktarief",placeholder=project.werkprijs,value=project.werkprijs)
-                        li(class="list-group-item")
-                          .form-group.row
-                            .col-auto
-                              h6 Budget (€)
+            .row
+              .col-6
+                .container-fluid
+                  .row
+                    .col-12.col.cardholder#Main
+                      div.fillInTheBlanks(class="card")
+                        //MAIN CARD --editable
+                        div(id="changeContactForm" class="selectNextToButton",style="display:none;")
+                          .cardWithEditFeather
+                          form(action='/project-edit/'+project._id+'/'+loginHash,method='post')
+                            .card-header
+                              .row
+                                .col-2
+                                  label Projectnaam: 
+                                .col-7
+                                  input(style="width:100%;",type="text",name="naam",value=project.naam,placeholder=project.naam)
+                                .col-3  
+                                  a.edit-link-project(href="#",onclick="changeContact()" )  
+                                    span(data-feather="edit-3")
+                                  button.edit-link-project.submit-feather.thisButtonIsALink(type="submit")
+                                    span(data-feather="save")
+                            .card-body
+                              .form-group.row
+                                  .col-2.col-form-label
+                                    label.card-title.editable-select(for="selectClient") Klant:
+                                  .col.mr-auto
+                                      select.form-control.custom-select.selectNextToButton#selectClient(name="idc")
+                                        each contact in contacten
+                                          if contact._id.toString() !== project.contact.toString()
+                                            option(value=contact._id)=contact.contactPersoon
+                                          else
+                                            option(value=contact._id, selected)=contact.contactPersoon
+                        //MAIN CARD --normal
+                        div(id="projectCard",class="cardWithEditFeather")
+                          h5(class="card-header h2")=project.naam
+                            a(href="#",onclick="changeContact()" ,class="edit-link-project")
+                              span(data-feather="edit-2")
+                          div(class="card-body")
                             .row
+                              .col-2
+                                h6.card-title klant:
+                              .col.mr-auto
+                                a(href="/facturen"+"/"+project.contact+"/"+loginHash)=project.contactNaam      
+                    .col-12.mr-auto.cardholder#Financial
+                      //FINANCIAL CARD --normal
+                      div.fillInTheBlanks(class="card",id="financialCard", style="")
+                        div(class="card-header") Financieel
+                          a(href="#",onclick="changeFinancial()",class="edit-link-project")
+                            span(data-feather="edit-2")                      
+                        div(class="cardWithEditFeather")
+                          ul(class="list-group list-group-flush")
+                            if !project.werkprijs
+                              li(class="list-group-item") 
+                                .row
+                                  .col-3
+                                    h6 Werktarief
+                                  .col.mr-auto
+                                    span 0 €/uur
+                            else
+                              li(class="list-group-item")
+                                .row
+                                  .col-3
+                                    h6 Werktarief
+                                  .col.mr-auto
+                                    spann=project.werkprijs+" €/uur"
+                            li(class="list-group-item")
+                              .row
+                                .col-3
+                                  h6 Budget
+                                .col
+                                  span=project.budget.min+"€ - "+project.budget.max+"€"
+                            li(class="list-group-item")
+                              .row
+                                .col-3 
+                                  h6 Data
+                                .col
+                                  span=project.data.start+" - "+project.data.end
+                            li(class="list-group-item")
+                              .row
+                                .col-3 
+                                  h6 Werkuren totaal
+                                .col
+                                  span=project.werkuren+" uur"
+                            li(class="list-group-item")
+                              .form-group.row
+                                .col-3
+                                  h6 totaalprijs
                                 .col-auto
-                                  input(type="text",name="budgetMin",placeholder=project.budget.min,value=project.budget.min)
-                                .col-auto
-                                  | -
-                                .col-auto.mr-auto
-                                  input(type="text",name="budgetMax",placeholder=project.budget.max,value=project.budget.max)
-                        li(class="list-group-item")
-                          .form-group.row
-                            .col-auto
-                              h6 Data
-                            .row
-                                .col-auto
-                                  input.calendar(type="text",name="dataStart",placeholder=project.data.start,value=project.data.start)
-                                .col-auto
-                                  | -
-                                .col-auto.mr-auto
-                                  input.calendar(type="text",name="dataEnd",placeholder=project.data.end,value=project.data.end)
-              .col-8.mr-auto#ADD
-                //ADD CARD --normal
-                div(class="card")
-                  div(class="card-header") 
-                    .row 
-                      .col-4
-                        | Toevoegen
-                      .col-8
-                        div(class="input-group")
-                            select(class="custom-select selectNextToButton" id="inputGroupSelect03"  name="idc")
-                              option(onclick="selectOnderaanneming()") onderaanneming
-                              option(onclick="selectWerkuren()") werkuren
-                              option(onclick="selectMaterialen()") Materialen
-                              option(onclick="hideFields()",selected)
-                  ul(class="list-group list-group-flush")
-                    //ADD CARD --subcontractor
-                    li(class="list-group-item",id="fielOnderaanneming",style="display:none;")
-                      form(action='/project-add-sub/'+project._id+'/'+loginHash method='post')
-                        .form-group.row
-                          label.col-4.col-form-label(for='price') Prijs van de factuur
-                          .col-sm-10
-                            input.form-control(type='text' name='price' id='price')
-                        .form-group.row
-                          label.col-4.col-form-label(for='textareaTransactie') Geleverde Transactie
-                          .col-sm-10
-                            textarea.form-control(type='text' id='textareaTransactie' name='transactie')
-                        .form-group.row
-                          label.col-4.col-form-label(for='naamFirmaTransactie') naam Firma
-                          .col-sm-10
-                            input.form-control(type='text' id='naamFirmaTransactie' name='firmaNaam')
-                        .form-group.row
-                          button.btn(type='sumbit') Add
-                    //ADD CARD --working hours
-                    li(class="list-group-item",id="fieldWerkuren",style="display:none;")
-                      form(action='/project-add-hours/'+project._id+'/'+loginHash method='post')
-                        .form-group.row
-                          label.col-4.col-form-label(for='werkurenInput') Aantal Uren Gewerkt
-                          .col-sm-8
-                            input.form-control(type='text' name='werkuren' id='werkurenInput')
-                          .col-2
-                            button.btn(type='sumbit') Add
-                    //ADD CARD -- Materials
-                    li(class="list-group-item",id="fieldMaterialen",style="display:none;")
-                      form(action='/project-add-mat/'+project._id+'/'+loginHash method='post')
-                        .form-group.row
-                          label.col-4.col-form-label(for='hoeveelheidInput') Hoeveelheid gebruikt (kg/l)
-                          .col-sm-10
-                            input.form-control(type='text' name='hoeveelheid' id='hoeveelheidInput')
-                        .form-group.row
-                          label.col-4.col-form-label(for='beschrijvingInput') Beschrijving
-                          .col-sm-10
-                            textarea.form-control(type='text' id='beschrijving' name='beschrijvingInput')
-                        .form-group.row
-                          label.col-4.col-form-label(for='materialeninput') Materiaal
-                          div.col-sm-10
-                              select.form-control.custom-select.select.NextToButton(id="materialeninput"  name="materiaal")
-                                option(selected)
-                                each materiaal in materialen
-                                  option(value=materiaal._id)=materiaal.naam
-                        .form-group.row
-                          button.btn(type='sumbit') Add
-            .row.cards
-              .col-6.mr-auto#Chart
-                .card
-                  .card-header
-                    | Grafiek
-                  .card-body
-                    canvas(id="chart")
-              .col-6.mr-auto#Activities
-                .card
-                  div.card-header Activities
-                  ul.list-group.list-group-flish
-                      each activity in project.activities
-                        li.list-group-item
-                          .row
-                            .col-1
-                              if activity.id==0
-                                span(data-feather="alert-circle")
-                              if activity.id==1
-                                span(data-feather="package")
-                              if activity.id==2
-                                span(data-feather="file-plus")
-                              if activity.id==3
-                                span(data-feather="clock")
-                              if activity.id==4
-                                span(data-feather="download")
-                              if activity.id==5
+                                  span=project.total+"€"
+                      //FINANCIAL CARD --editable
+                      div(class="card",id="financialCardEdit" ,style="display:none;")
+                        form(action='/project-change-financial/'+project._id+'/'+loginHash,method='post')
+                          div(class="card-header") Financieel
+                              a(href="#",onclick="changeFinancial()" ,class="edit-link-project")
                                 span(data-feather="edit-3")
-                              if activity.id==6
+                              button(type="submit",class="edit-link-project submit-feather thisButtonIsALink")
+                                span(data-feather="save")
+                          div(class="cardWithEditFeather")
+                            ul(class="list-group list-group-flush")
+                              li(class="list-group-item")
+                                .form-group.row
+                                  .col-auto
+                                    h6 Werktarief (€/uur)
+                                  .col-auto.mr-auto
+                                    input(type="text",name="werktarief",placeholder=project.werkprijs,value=project.werkprijs)
+                              li(class="list-group-item")
+                                .form-group.row
+                                  .col-auto
+                                    h6 Budget (€)
+                                  .row
+                                      .col-auto
+                                        input(type="text",name="budgetMin",placeholder=project.budget.min,value=project.budget.min)
+                                      .col-auto
+                                        | -
+                                      .col-auto.mr-auto
+                                        input(type="text",name="budgetMax",placeholder=project.budget.max,value=project.budget.max)
+                              li(class="list-group-item")
+                                .form-group.row
+                                  .col-auto
+                                    h6 Data
+                                  .row
+                                      .col-auto
+                                        input.calendar(type="text",name="dataStart",placeholder=project.data.start,value=project.data.start)
+                                      .col-auto
+                                        | -
+                                      .col-auto.mr-auto
+                                        input.calendar(type="text",name="dataEnd",placeholder=project.data.end,value=project.data.end)
+                              li(class="list-group-item")
+                                .row
+                                  .col-3 
+                                    h6 Werkuren totaal
+                                  .col
+                                    span=project.werkuren+" uur"
+                              li(class="list-group-item")
+                                .form-group.row
+                                  .col-3
+                                    h6 totaalprijs
+                                  .col-auto
+                                    span=project.total+"€"
+                    .col-12.mr-auto.cardholder#Chart
+                      .card
+                        .card-header
+                          | Grafiek
+                        .card-body
+                          canvas(id="chart")  
+              .col-6.mr-auto
+                .container-fluid
+                  .row
+                    .col-12.col.cardholder#Description
+                      //DESCRIPTION CARD --normal
+                      div.fillInTheBlanks(class="card",id="descriptionCard")
+                        div(class="cardWithEditFeather")
+                          div(class="card-header") Beschrijving
+                            a(href="#",onclick="changeDescription()",class="edit-link-project")
+                              span(data-feather="edit-2")
+                          div(class="card-body")
+                            span(class="cardDescription textarea")=project.description
+                      //DESCRIPTION CARD --editable
+                      div(class="card",id="descriptionCardEdit",style="display:none;")
+                        div(class="cardWithEditFeather")
+                          form(action='/project-edit-description/'+project._id+'/'+loginHash,method='post')
+                            div(class="card-header") Beschrijving
+                              a(href="#",onclick="changeDescription()",class="edit-link-project")
                                 span(data-feather="edit-3")
-                              if activity.id==7
-                                span(data-feather="edit-3")
-                              if activity.id==8
-                                span(data-feather="briefcase")
-                              if activity.id==9
-                                span(data-feather="dollar-sign")
-                            .col-8.pre
-                              p=activity.text
-                            .col-3      
-                              p.pre=activity.date
+                              button(type="submit",class="edit-link-project submit-feather thisButtonIsALink")
+                                span(data-feather="save")
+                              a(href="#",onclick="changeBeschrijving",class="edit-link-project")
+                            div(class="card-body")
+                              div(class="form-group")
+                                  textarea(class="form-control" id="descriptionOfCard" rows="3",name="description",placeholder=project.description)=project.description
+                    .col-12.mr-auto.cardholder#ADD
+                      //ADD CARD --normal
+                      div(class="card")
+                        div(class="card-header") 
+                          .row 
+                            .col-4
+                              | Toevoegen
+                            .col-8
+                              div(class="input-group")
+                                  select(class="custom-select selectNextToButton" id="inputGroupSelect03"  name="idc")
+                                    option(onclick="selectOnderaanneming()") onderaanneming
+                                    option(onclick="selectWerkuren()") werkuren
+                                    option(onclick="selectMaterialen()") Materialen
+                                    option(onclick="hideFields()",selected)
+                        ul(class="list-group list-group-flush")
+                          //ADD CARD --subcontractor
+                          li(class="list-group-item",id="fielOnderaanneming",style="display:none;")
+                            form(action='/project-add-sub/'+project._id+'/'+loginHash method='post')
+                              .form-group.row
+                                label.col-4.col-form-label(for='price') Prijs van de factuur
+                                .col-sm-10
+                                  input.form-control(type='text' name='price' id='price')
+                              .form-group.row
+                                label.col-4.col-form-label(for='textareaTransactie') Geleverde Transactie
+                                .col-sm-10
+                                  textarea.form-control(type='text' id='textareaTransactie' name='transactie')
+                              .form-group.row
+                                label.col-4.col-form-label(for='naamFirmaTransactie') naam Firma
+                                .col-sm-10
+                                  input.form-control(type='text' id='naamFirmaTransactie' name='firmaNaam')
+                              .form-group.row
+                                button.btn(type='sumbit') Add
+                          //ADD CARD --working hours
+                          li(class="list-group-item",id="fieldWerkuren",style="display:none;")
+                            form(action='/project-add-hours/'+project._id+'/'+loginHash method='post')
+                              .form-group.row
+                                label.col-4.col-form-label(for='werkurenInput') Aantal Uren Gewerkt
+                                .col-sm-8
+                                  input.form-control(type='text' name='werkuren' id='werkurenInput')
+                                .col-2
+                                  button.btn(type='sumbit') Add
+                          //ADD CARD -- Materials
+                          li(class="list-group-item",id="fieldMaterialen",style="display:none;")
+                            form(action='/project-add-mat/'+project._id+'/'+loginHash method='post')
+                              .form-group.row
+                                label.col-4.col-form-label(for='hoeveelheidInput') Hoeveelheid gebruikt (kg/l)
+                                .col-sm-10
+                                  input.form-control(type='text' name='hoeveelheid' id='hoeveelheidInput')
+                              .form-group.row
+                                label.col-4.col-form-label(for='beschrijvingInput') Beschrijving
+                                .col-sm-10
+                                  textarea.form-control(type='text' id='beschrijving' name='beschrijvingInput')
+                              .form-group.row
+                                label.col-4.col-form-label(for='materialeninput') Materiaal
+                                div.col-sm-10
+                                    select.form-control.custom-select.select.NextToButton(id="materialeninput"  name="materiaal")
+                                      option(selected)
+                                      each materiaal in materialen
+                                        option(value=materiaal._id)=materiaal.naam
+                              .form-group.row
+                                button.btn(type='sumbit') Add
+                    .col-12.mr-auto.cardholder#Materialen
+                        .card
+                          div.card-header(onclick="toggleMaterials()") Materialen
+                            a(href="#" ,class="edit-link-project")
+                              span.smooth-transition#arrowMat(data-feather="chevron-down")
+                          ul.list-group.list-group-flush#materialsStuff(style="display:none;")
+                              each materiaal in project.materials
+                                li.list-group-item
+                                  .row
+                                    .col-3
+                                      p=materiaal.amount+" kg / l"
+                                    .col-5.pre
+                                      p=materiaal.name+" ("+materiaal.cost+" € per kg/l)"
+                                    .col
+                                      p.pre=materiaal.date
+                    .col-12.mr-auto.cardholder#Activities
+                      .card
+                        div.card-header(onclick="toggleActivities()") Activities
+                          a(href="#" ,class="edit-link-project")
+                            span#arrowActiv(data-feather="chevron-down")
+                        ul.list-group.list-group-flush#ActivitiesStuff(style="display:none;")
+                            each activity in project.activities
+                              li.list-group-item
+                                .row
+                                  .col-1
+                                    if activity.id==0
+                                      span(data-feather="alert-circle")
+                                    if activity.id==1
+                                      span(data-feather="package")
+                                    if activity.id==2
+                                      span(data-feather="file-plus")
+                                    if activity.id==3
+                                      span(data-feather="clock")
+                                    if activity.id==4
+                                      span(data-feather="download")
+                                    if activity.id==5
+                                      span(data-feather="edit-3")
+                                    if activity.id==6
+                                      span(data-feather="edit-3")
+                                    if activity.id==7
+                                      span(data-feather="edit-3")
+                                    if activity.id==8
+                                      span(data-feather="briefcase")
+                                    if activity.id==9
+                                      span(data-feather="dollar-sign")
+                                  .col-8.pre
+                                    p=activity.text
+                                  .col-3      
+                                    p.pre=activity.date
   script.
     var config = {
       type: 'line',
