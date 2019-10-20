@@ -2964,7 +2964,6 @@ app.post('/project-edit/:idp/:loginHash',function(req,res){
         Project.findOne({_id:req.params.idp},function(err,project){
           let currentActvities = project.activities;
           console.log(req.body);
-          if(typeof contact!=="undefined"){
             Contact.findOne({_id:req.body.idc},function(err,contact){
               update = {
                   contact:contact._id,
@@ -2972,31 +2971,28 @@ app.post('/project-edit/:idp/:loginHash',function(req,res){
                   naam:req.body.naam,
                   description:req.body.description
                 };
-                if(req.body.naam){
+                if(req.body.naam!==project.naam  && req.body.idc !== project.contact){
                   newActivity = {
                     id:5,/*ID for adding working hours*/
                     text:"Project naam aangepast naar "+req.body.naam+"\n"+
                          "Project klant veranderd naar "+req.contactPersoon,
                     date:new Date()
                   };
-                }else{
+                }else if(req.body.naam !==project.naam){
                   newActivity = {
                     id:5,/*ID for adding working hours*/
-                    text:"Project klant veranderd naar "+req.contactPersoon,
+                    text:"Project naam aangepast naar "+req.body.naam+"\n",
                     date:new Date()
                   };
+                }else if(req.body.idc !== project.contact){
+                    newActivity = {
+                      id:5,/*ID for adding working hours*/
+                      text:"Project klant veranderd naar "+req.contactPersoon,
+                      date:new Date()
+                    };
                 }
             });
-          }else{
-            update = {
-              description:req.body.description
-            };
-            newActivity = {
-              id:5,/*ID for adding working hours*/
-              text:"Project naam aangepast naar "+req.body.naam+"\n",
-              date:new Date()
-            };
-          }
+          console.log(newActivity);
           Project.update({_id:req.params.idp},update,function(err){
             console.log(err);
             currentActvities.unshift(newActivity);
@@ -3109,6 +3105,27 @@ app.post('/project-add-mat/:idp/:loginHash',function(req,res){
                 res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
               });
             });
+          });
+        });
+      });
+    });
+});
+
+app.get('/delete-project/:idp/:loginHash',function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    Settings.findOne({},function(err,settings){
+      Contact.findOne({_id:req.body.idc},function(err,contact){
+        Profile.findOne({},function(err,profile){
+          Project.deleteOne({
+            _id: req.params.idp
+          },function(err){
+            if(err){
+              console.log(err);
+            }
+            res.redirect('/projecten/'+req.params.loginHash);
           });
         });
       });
