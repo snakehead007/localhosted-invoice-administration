@@ -134,37 +134,41 @@ body
                 div(class="card")
                   //MAIN CARD --editable
                   div(id="changeContactForm" class="selectNextToButton",style="display:none;")
+                    .cardWithEditFeather
                     form(action='/project-edit/'+project._id+'/'+loginHash,method='post')
-                      h5(class="card-header h2")
-                        input(type="text",name="naam",value=project.naam,placeholder=project.naam)
-                        div(class="edit-link-project")
-                          a(href="#",onclick="changeContact()" )
-                            span(data-feather="edit-3")
-                          button(type="submit",class="edit-link-project thisButtonIsALink")
-                            span(data-feather="upload")
-                      div(class="card-body")
-                        div(class="container-fluid")
-                          div(class="row")
-                            div(class="col-1")
-                              h5(class="card-title editable-select")
-                                span(style="float:left;",class="cardProjectEdit")="Klant: "
-                            div(class="col-6")
-                                div(class="input-group")
-                                  select(class="custom-select selectNextToButton" id="inputGroupSelect03"  name="idc")
-                                      each contact in contacten
-                                        if contact._id.toString() !== project.contact.toString()
-                                          option(value=contact._id)=contact.contactPersoon
-                                        else
-                                          option(value=contact._id, selected)=contact.contactPersoon
+                      .card-header
+                        .row
+                          .col-2
+                            label Projectnaam: 
+                          .col-7
+                            input(style="width:100%;",type="text",name="naam",value=project.naam,placeholder=project.naam)
+                          .col-3  
+                            a.edit-link-project(href="#",onclick="changeContact()" )  
+                              span(data-feather="edit-3")
+                            button.edit-link-project.submit-feather.thisButtonIsALink(type="submit")
+                              span(data-feather="save")
+                      .card-body
+                        .form-group.row
+                            .col-2.col-form-label
+                              label.card-title.editable-select(for="selectClient") Klant:
+                            .col.mr-auto
+                                select.form-control.custom-select.selectNextToButton#selectClient(name="idc")
+                                  each contact in contacten
+                                    if contact._id.toString() !== project.contact.toString()
+                                      option(value=contact._id)=contact.contactPersoon
+                                    else
+                                      option(value=contact._id, selected)=contact.contactPersoon
                   //MAIN CARD --normal
                   div(id="projectCard",class="cardWithEditFeather")
                     h5(class="card-header h2")=project.naam
                       a(href="#",onclick="changeContact()" ,class="edit-link-project")
                         span(data-feather="edit-2")
                     div(class="card-body")
-                        h5(class="card-title")
-                          span="Klant: "
-                            a(href="/facturen"+"/"+project.contact+"/"+loginHash)=project.contactNaam
+                      .row
+                        .col-2
+                          span.card-title klant:
+                        .col.mr-auto
+                          a(href="/facturen"+"/"+project.contact+"/"+loginHash)=project.contactNaam
                             
               div(class="col-6")
                 //DESCRIPTION CARD --normal
@@ -183,7 +187,7 @@ body
                         a(href="#",onclick="changeDescription()",class="edit-link-project")
                           span(data-feather="edit-3")
                         button(type="submit",class="edit-link-project submit-feather thisButtonIsALink")
-                          span(data-feather="upload")
+                          span(data-feather="save")
                         a(href="#",onclick="changeBeschrijving",class="edit-link-project")
                       div(class="card-body")
                         div(class="form-group")
@@ -196,18 +200,34 @@ body
                   div(class="card-header") Financieel
                     a(href="#",onclick="changeFinancial()",class="edit-link-project")
                       span(data-feather="edit-2")                      
-                  div(class="card-body cardWithEditFeather")
-                    ul(class="list-group list-group-flush")
+                  div(class="cardWithEditFeather")
+                    ul(class="list-group list-group-flu")
                       if !project.werkprijs
-                        li(class="list-group-item") Werktarief 0 €/uur
+                        li(class="list-group-item") 
+                          .row
+                            .col
+                              h6 Werktarief :
+                            .col.mr-auto
+                              span 0 €/uur
                       else
-                        li(class="list-group-item")="Werktarief "+project.werkprijs+" €/uur"
+                        li(class="list-group-item")
+                          .row
+                            .col
+                              h6 Werktarief :
+                            .col.mr-auto
+                              spann=project.werkprijs+" €/uur"
                       li(class="list-group-item")
-                        h6 Budget
-                        p=project.budget.min+"€ - "+project.budget.max+"€"
-                      li(class="list-group-item") 
-                        h6 Data
-                        p=project.data.start+" - "+project.data.end
+                        .row
+                          .col
+                            h6 Budget
+                          .col
+                            span=project.budget.min+"€ - "+project.budget.max+"€"
+                      li(class="list-group-item")
+                        .row
+                          .col 
+                            h6 Data
+                          .col
+                            span=project.data.start+" - "+project.data.end
                 //FINANCIAL CARD --editable
                 div(class="card",id="financialCardEdit" ,style="display:none;")
                   form(action='/project-change-financial/'+project._id+'/'+loginHash,method='post')
@@ -215,29 +235,35 @@ body
                         a(href="#",onclick="changeFinancial()" ,class="edit-link-project")
                           span(data-feather="edit-3")
                         button(type="submit",class="edit-link-project submit-feather thisButtonIsALink")
-                          span(data-feather="upload")
-                    div(class="card-body cardWithEditFeather")
+                          span(data-feather="save")
+                    div(class="cardWithEditFeather")
                       ul(class="list-group list-group-flush")
                         li(class="list-group-item")
                           .form-group.row
-                            .col
-                              label(for="werkprijs") Werktarief:
-                            .col
+                            .col-5
+                              h6 Werktarief : 
+                            .col.mr-auto
                               input(type="text",name="werktarief",placeholder=project.werkprijs,value=project.werkprijs)
                         li(class="list-group-item")
-                          h6 Budget
                           .form-group.row
+                            .col-5
+                              h6 Budget
                             .col
-                              input(type="text",name="budgetMin",placeholder=project.budget.min,value=project.budget.min)
-                            .col.mr-auto
-                              input(type="text",name="budgetMax",placeholder=project.budget.max,value=project.budget.max)
+                              .row
+                                .col-6
+                                  input(type="text",name="budgetMin",placeholder=project.budget.min,value=project.budget.min)
+                                .col-6
+                                  input(type="text",name="budgetMax",placeholder=project.budget.max,value=project.budget.max)
                         li(class="list-group-item")
-                          h6 Data
                           .form-group.row
+                            .col-5
+                              h6 Data
                             .col
-                              input.calendar(type="text",name="dataStart",placeholder=project.data.start,value=project.data.start)
-                            .col.mr-auto
-                              input.calendar(type="text",name="dataEnd",placeholder=project.data.end,value=project.data.end)
+                              .row
+                                .col-6
+                                  input.calendar(type="text",name="dataStart",placeholder=project.data.start,value=project.data.start)
+                                .col-6
+                                  input.calendar(type="text",name="dataEnd",placeholder=project.data.end,value=project.data.end)
                         
               div(class="col")
                 //ADD CARD --normal
@@ -300,7 +326,11 @@ body
             hr
             .row
               .col
-                canvas(id="chart")
+                .card
+                  .card-header
+                    | Grafiek
+                  .card-body
+                    canvas(id="chart")
               .col
                 .card
                   div.card-header Activities
