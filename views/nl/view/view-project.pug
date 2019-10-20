@@ -208,11 +208,16 @@ body
                     div(class="card-body cardWithEditFeather")
                       ul(class="list-group list-group-flush")
                         li(class="list-group-item")
+                          
                           label(for="werkprijs") Werktarief:
-                          input(type="text",name="werktarief",placeholder=project.werkprijs,value=project.werkprijs)
+                          .row
+                            input(type="text",name="werktarief",placeholder=project.werkprijs,value=project.werkprijs)
                         li(class="list-group-item")
                           h6 Budget
-                          p=project.budget.min+"€ - "+project.budget.max+"€"
+                          .form-group.row
+                            input(type="text",name="budgetMin",placeholder=project.budget.min,value=project.budget.min)
+                          .form-group.row
+                            input(type="text",name="budgetMax",placeholder=project.budget.max,value=project.budget.max)
                         li(class="list-group-item")
                           h6 Data
                           p=project.data.start+" - "+project.data.end
