@@ -295,10 +295,12 @@ var ProjectSchema = new Schema({
     type: String
   },
   werkuren: {
-    type: Number
+    type: Number,
+    default:0
   },
   werkprijs: {
-    type: Number
+    type: Number,
+    default:0
   },
   materials: [
     {
