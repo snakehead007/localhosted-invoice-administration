@@ -2,9 +2,6 @@ body {
     font-size: .875rem;
 }
 
-*{
-  z-index: 0;
-}
 .feather {
     width: 16px;
     height: 16px;

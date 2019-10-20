@@ -3116,20 +3116,14 @@ app.get('/delete-project/:idp/:loginHash',function(req,res){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
-    Settings.findOne({},function(err,settings){
-      Contact.findOne({_id:req.body.idc},function(err,contact){
-        Profile.findOne({},function(err,profile){
-          Project.deleteOne({
-            _id: req.params.idp
-          },function(err){
-            if(err){
-              console.log(err);
-            }
-            res.redirect('/projecten/'+req.params.loginHash);
-          });
-        });
-      });
-    });
+  Project.deleteOne({
+    _id: req.params.idp
+  },function(err){
+    if(err){
+      console.log(err);
+    }
+    res.redirect('/projecten/'+req.params.loginHash);
+  });
 });
 
 app.post('/project-change-financial/:idp/:loginHash',function(req,res){
