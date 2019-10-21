@@ -565,6 +565,20 @@ body
                             .col-3      
                               p.pre=activity.date
   script.
+    x=9;
+    function getRangeDates(start,end){
+      let s = new Date(Date.parse(start));
+      let e = new Date(Date.parse(end));
+      let n = new Date(s);
+      let days = 1;
+      let dayRanges = [];
+      while(n.toString()!==e.toString()){
+        dayRanges.push(n.toDateString().substring(4,n.toDateString().length-5));
+      	n.setDate(s.getDate()+days);
+        days++;
+      }
+      return dayRanges;  
+    }
     var labels;
     if("#{settings.lang}"==="nl"){
       labels = maand_klein;
@@ -574,7 +588,7 @@ body
     var config = {
       type: 'line',
       data: {
-        labels: labels,
+        labels: getRangeDates("#{project.data.start}","#{project.data.end}"),
         dataset: {
           label: 'set',
           backgroundColor: window.chartColors.red,
@@ -595,7 +609,29 @@ body
               drawBorder: false,
               color: ['red','','orange']
             },
+          xAxes: [{
+            type: 'time',
+            time:{
+              unit:'day',
+              unitStepSize:1,
+              min:Date.parse('#{project.data.start}'),
+              max:Date.parse('#{project.data.end}'),
+              distribution: 'series',
+              displayFormats: {
+                 'millisecond': 'MMM DD',
+                 'second': 'MMM DD',
+                 'minute': 'MMM DD',
+                 'hour': 'MMM DD',
+                 'day': 'MMM DD',
+                 'week': 'MMM DD',
+                 'month': 'MMM DD',
+                 'quarter': 'MMM DD',
+                 'year': 'MMM DD'
+                    }
+            }
+          }],
             ticks: {
+              sources: 'data',
               min: 0,
               max: Number(#{project.budget.max}),
               stepSize: ((Number(#{project.budget.max})-Number(#{project.budget.min}))/2)
