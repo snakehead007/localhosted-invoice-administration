@@ -360,9 +360,7 @@ var ProjectSchema = new Schema({
   },
   chart:
     [
-      {
-      data:Number
-      }
+      Number
     ]
 });
 var Project = mongoose.model('Project', ProjectSchema);
@@ -3057,24 +3055,22 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
               text:"Added "+String(workHours)+" hours of work",
               date:formatDate(new Date(),settings.lang)
             };
-            let newChartData = {
-              data:(Number(project.werkuren)*Number(req.body.werkuren))
-            };
             console.log(newActivity);
             console.log(profile.activities);
             let currentActvities = project.activities;
             currentActvities.unshift(newActivity);
             let currentChartData = project.chart;
-            newChart = currentChartData.push(newChartData);
+            console.log(currentChartData);
+            currentChartData.push((Number(project.werkuren)*Number(req.body.werkuren)));
+            console.log(newChart);
             Project.updateOne({_id:req.params.idp},
               {
                 activities:currentActvities,
                 werkuren:Number(project.werkuren)+Number(req.body.werkuren),
                 total:project.total+(Number(req.body.werkuren)*Number(project.werkprijs)),
-                chart:newChart
+                chart:currentChartData
               }
             ,function(err){
-              console.log(err);
               res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
             });
           });

@@ -585,20 +585,18 @@ body
     }else if("#{settings.lang}" === "eng"){
       labels = month_small;
     }
-    let chartData = [];
-    chartData = #{project.chart};
-    console.log(chartData);
-    var config = {
-      type: 'line',
-      data: {
-        labels: getRangeDates("#{project.data.start}","#{project.data.end}"),
-        dataset: {
-          label: 'set',
+    let chartData = [#{project.chart}];
+    var conf2ig = {
+      "type": 'line',
+      "data": {
+        "labels": getRangeDates("#{project.data.start}","#{project.data.end}"),
+        "dataset": [{
+          "label": 'set',
           backgroundColor: window.chartColors.red,
           borderColor: window.chartColors.red,
-          data: chartData,  
-          fill: false,
-        },
+          "data": [#{project.chart}],
+          fill: false
+        }],
       },
       options: {
         responsive: true,
@@ -607,42 +605,45 @@ body
           text: 'Totaalprijs'
         },
         scales: {
-          yAxes: [{
-            gridLines: {
-              drawBorder: false,
-              color: ['red','','orange']
-            },
           xAxes: [{
-            type: 'time',
-            time:{
-              unit:'day',
-              unitStepSize:1,
-              min:Date.parse('#{project.data.start}'),
-              max:Date.parse('#{project.data.end}'),
-              distribution: 'series',
-              displayFormats: {
-                 'millisecond': 'MMM DD',
-                 'second': 'MMM DD',
-                 'minute': 'MMM DD',
-                 'hour': 'MMM DD',
-                 'day': 'MMM DD',
-                 'week': 'MMM DD',
-                 'month': 'MMM DD',
-                 'quarter': 'MMM DD',
-                 'year': 'MMM DD'
-                    }
-            }
-          }],
-            ticks: {
-              sources: 'data',
-              min: 0,
-              max: Number(#{project.budget.max}),
-              stepSize: ((Number(#{project.budget.max})-Number(#{project.budget.min}))/2)
-            }
-          }]
+                   display: true,
+                   scaleLabel: {
+                           display: true,
+                           labelString: 'Month'
+                   }
+           }],
+           yAxes: [{
+                   display: true,
+                   gridLines: {
+                     drawBorder: false,
+                     color: ['red','','orange']
+                   },
+                   scaleLabel: {
+                           display: true,
+                           labelString: 'Value'
+                   },ticks: {
+                     min: 0,
+                     max: Number(#{project.budget.max}),
+                     stepSize: ((Number(#{project.budget.max})-Number(#{project.budget.min}))/2)
+                   }
+                               }]
         }
       }
     };
+    let config={
+    	"type": "line",
+    	"data": {
+    		"labels": ["January", "February", "March", "April", "May", "June", "July"],
+    		"datasets": [{
+    			"label": "My First Dataset",
+    			"data": [#{project.chart}],
+    			"fill": false,
+    			"borderColor": "rgb(75, 192, 192)",
+    			"lineTension": 0.1
+    		}]
+    	},
+    	"options": {}
+    }
 
     window.onload = function() {
       var ctx = document.getElementById('drawChart').getContext('2d');
