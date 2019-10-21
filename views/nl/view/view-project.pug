@@ -585,6 +585,9 @@ body
     }else if("#{settings.lang}" === "eng"){
       labels = month_small;
     }
+    let chartData = [];
+    chartData = #{project.chart};
+    console.log(chartData);
     var config = {
       type: 'line',
       data: {
@@ -593,7 +596,7 @@ body
           label: 'set',
           backgroundColor: window.chartColors.red,
           borderColor: window.chartColors.red,
-          data: #{project.chart},
+          data: chartData,  
           fill: false,
         },
       },

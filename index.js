@@ -358,9 +358,12 @@ var ProjectSchema = new Schema({
     type:Number,
     default:0
   },
-  chart:[ //This is only used for the chart in view-project
-    [Number]
-  ]
+  chart:
+    [
+      {
+      data:Number
+      }
+    ]
 });
 var Project = mongoose.model('Project', ProjectSchema);
 
@@ -3054,11 +3057,15 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
               text:"Added "+String(workHours)+" hours of work",
               date:formatDate(new Date(),settings.lang)
             };
+            let newChartData = {
+              data:(Number(project.werkuren)*Number(req.body.werkuren))
+            };
             console.log(newActivity);
             console.log(profile.activities);
             let currentActvities = project.activities;
             currentActvities.unshift(newActivity);
-            newChart = project.chart.push(Number(project.werkuren)+Number(req.body.werkuren));
+            let currentChartData = project.chart;
+            newChart = currentChartData.push(newChartData);
             Project.updateOne({_id:req.params.idp},
               {
                 activities:currentActvities,
@@ -3097,7 +3104,8 @@ app.post('/project-add-sub/:idp/:loginHash',function(req,res){
             };
             let currentActvities = project.activities;
             currentActvities.unshift(newActivity);
-            newchart = project.chart.push(Number(project.werkuren)+Number(req.body.werkuren));
+            let currentChartData = project.chart;
+            newChart = currentChartData.push(Number(project.werkuren)*Number(req.body.werkuren));
             Project.updateOne({_id:req.params.idp},
               {
                 activities:currentActvities,
