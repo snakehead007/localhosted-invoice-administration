@@ -357,7 +357,10 @@ var ProjectSchema = new Schema({
   total:{
     type:Number,
     default:0
-  }
+  },
+  chart:[ //This is only used for the chart in view-project
+    [Number]
+  ]
 });
 var Project = mongoose.model('Project', ProjectSchema);
 
@@ -3041,6 +3044,7 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
       res.render('login');
     }});
     let workHours = req.body.werkuren;
+    let newChart;
     Settings.findOne({},function(err,settings){
       Contact.findOne({_id:req.body.idc},function(err,contact){
         Profile.findOne({},function(err,profile){
@@ -3054,12 +3058,13 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
             console.log(profile.activities);
             let currentActvities = project.activities;
             currentActvities.unshift(newActivity);
-            console.log(currentActvities);
+            newChart = project.chart.push(Number(project.werkuren)+Number(req.body.werkuren));
             Project.updateOne({_id:req.params.idp},
               {
                 activities:currentActvities,
                 werkuren:Number(project.werkuren)+Number(req.body.werkuren),
-                total:project.total+(Number(req.body.werkuren)*Number(project.werkprijs))
+                total:project.total+(Number(req.body.werkuren)*Number(project.werkprijs)),
+                chart:newChart
               }
             ,function(err){
               console.log(err);
@@ -3080,6 +3085,7 @@ app.post('/project-add-sub/:idp/:loginHash',function(req,res){
     let price = req.body.price;
     let transactie = req.body.transactie;
     let firmaNaam = req.body.firmaNaam;
+    let newChart;
     Settings.findOne({},function(err,settings){
       Contact.findOne({_id:req.body.idc},function(err,contact){
         Profile.findOne({},function(err,profile){
@@ -3091,10 +3097,12 @@ app.post('/project-add-sub/:idp/:loginHash',function(req,res){
             };
             let currentActvities = project.activities;
             currentActvities.unshift(newActivity);
+            newchart = project.chart.push(Number(project.werkuren)+Number(req.body.werkuren));
             Project.updateOne({_id:req.params.idp},
               {
                 activities:currentActvities,
-                total:project.total+Number(price)
+                total:project.total+Number(price),
+                chart:newchart
               },function(err){
               console.log(err);
               res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
