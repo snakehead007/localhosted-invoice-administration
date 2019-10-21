@@ -3973,7 +3973,7 @@ function getCurrentTime(d){
   }else{
     str+=d.getHours();
   }
-  if(d.getMinutes.toString().length==1){
+  if(d.getMinutes().toString().length==1){
     str+=":0"+d.getMinutes();
   }else{
     str+=":"+d.getMinutes();
