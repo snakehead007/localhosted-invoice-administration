@@ -283,6 +283,10 @@ var MateriaalSchema = new Schema({
   prijs: {
     type: Number,
     default: 0
+  },
+  amount: {
+    type:Number,
+    default:0
   }
 });
 var Materiaal = mongoose.model('Materiaal', MateriaalSchema);
@@ -291,16 +295,21 @@ var ProjectSchema = new Schema({
     type: String
   },
   werkuren: {
-    type: Number
+    type: Number,
+    default:0
   },
   werkprijs: {
-    type: Number
+    type: Number,
+    default:0
   },
-  materialen: [
-    [
-      Schema.Types.ObjectId, /*Mat used*/
-      Number /*Amount of mat used*/
-    ]
+  materials: [
+    {
+      mat:Schema.Types.ObjectId, /*Mat used*/
+      name:String,
+      cost:Number,
+      amount:Number, /*Amount of mat used*/
+      date:String
+    }
   ],
   contact: {
     type: Schema.Types.ObjectId,
@@ -318,15 +327,41 @@ var ProjectSchema = new Schema({
     type:String
   },
   activities:[
-    [
-      String, /*Type*/
-      String, /*Text*/
-      String, /*Date*/
-    ]
+    {
+      id:Number, /*Type ID
+      ID 0 : Alerts, warnings
+      ID 1 : Adding Materials
+      ID 2 : Adding onderaanneming
+      ID 3 : Adding Werkuren
+      ID 4 : Invoice Downloading
+      ID 5 : Edit Project: name
+      ID 6 : Edit project: client
+      ID 7 : Edit project: Description
+      ID 8 : Edit date(s)
+      ID 9 : Edit budget(s)
+      */
+      text:String, /*Text*/
+      date:String /*Date*/
+    }
   ],
   contactNaam:{
     type:String
-  }
+  },
+  lastDownloadedInvoice:{/*When downloading an invoice this changes to current date*/
+    type:Date
+  },
+  margin:{
+    type:Number,
+    default:10
+  },
+  total:{
+    type:Number,
+    default:0
+  },
+  chart:
+    [
+      Number
+    ]
 });
 var Project = mongoose.model('Project', ProjectSchema);
 
@@ -2626,7 +2661,8 @@ app.post('/add-mat/:loginHash', function(req, res) {//REWORKED
     }});
     var nieuwe_materiaal = new Materiaal({
       prijs: req.body.prijs,
-      naam: req.body.naam
+      naam: req.body.naam,
+      amount: req.body.amount
     });
     nieuwe_materiaal.save();
     res.redirect('/mat/' + req.params.loginHash);
@@ -2798,11 +2834,18 @@ app.get('/add-project/:loginHash', function(req, res) {//REWORKED
       if (!err) {
         Profile.findOne({},function(err,profile){
           Contact.find({},function(err,contacten){
+            var dates;
+            if(settings.lang="nl"){
+              dates=maand_klein;
+            }else if(settings.lang="eng"){
+              dates=month_small;
+            }
             res.render(settings.lang+'/add/add-project', {
               'materialen': materialen,
               'settings': settings,
               'profile':profile,
               "contacten":contacten,
+              "dayNames":dates,
               "loginHash": req.params.loginHash
             });
           });
@@ -2825,42 +2868,42 @@ app.post('/add-project/:loginHash', function(req, res) {//REWORKED
           if (!contact) {
             res.redirect('add-project/' + req.params.loginHash);
           } else if (contact) {
-                var budMin =req.body.budgetMin;
-                var budMax = req.body.budgetMax;
-                var budget = new Object({
-                  budMin,
-                  budMax
-                });
-                var dataStart = req.body.dataStart;
-                var dataEnd = req.body.dataEnd;
-                var data = new Object({
-                  dataStart,
-                  dataEnd
-                });
-                var newProject = new Project({
-                  naam: req.body.naam,
-                  werkprijs: req.body.werprijs,
-                  contact: contact._id,
-                  budget: {
-                          min: req.body.budgetMin,
-                          max: req.body.budgetMax
-                         },
-                  data: {
-                          start: req.body.dataStart,
-                          end: req.body.dataEnd
-                         },
-                  description:req.body.description,
-                  contactNaam : contact.contactPersoon
-                });
-                newProject.save(function(err) {
-                  console.log(newProject);
-                });
+              var budMin =req.body.budgetMin;
+              var budMax = req.body.budgetMax;
+              var budget = new Object({
+                budMin,
+                budMax
+              });
+              var dataStart = req.body.dataStart;
+              var dataEnd = req.body.dataEnd;
+              var data = new Object({
+                dataStart,
+                dataEnd
+              });
+              var newProject = new Project({
+                naam: req.body.naam,
+                werkprijs: req.body.werprijs,
+                contact: contact._id,
+                budget: {
+                        min: Number(req.body.budgetMin),
+                        max: Number(req.body.budgetMax)
+                       },
+                data: {
+                        start: String(req.body.dataStart),
+                        end: String(req.body.dataEnd)
+                       },
+                description:req.body.description,
+                contactNaam : contact.contactPersoon
+              });
+              newProject.save(function(err) {
+                console.log(err);
+                console.log(newProject);
+              });
+
             }
           });
         }
-        Profile.findOne({},function(err,profile){
           res.redirect('/projecten/'+req.params.loginHash);
-        });
     });
 });
 
@@ -2892,14 +2935,311 @@ app.get('/view-project/:idp/:loginHash', function(req,res){
     Settings.findOne({},function(err,settings){
         Profile.findOne({},function(err,profile){
           Project.findOne({_id:req.params.idp},function(err,project){
-            console.log(project+"------");
-            res.render(settings.lang+'/view/view-project',{
-              'settings':settings,
-              'profile':profile,
-              "project":project,
-              'loginHash': req.params.loginHash
+            Materiaal.find({},function(err,materialen){
+              console.log(project);
+              Contact.find({},function(err,contacten){
+                res.render(settings.lang+'/view/view-project',{
+                  'settings':settings,
+                  'profile':profile,
+                  "project":project,
+                  "contacten":contacten,
+                  "materialen":materialen,
+                  'loginHash': req.params.loginHash
+                });
+              });
             });
           });
+      });
+    });
+});
+
+//This get request is used for changing the name, contact and description of a project (done in 'view-project')
+//Body can contain ('naam','idc','description')
+/*
+ID 4 : Invoice Downloading
+ID 5 : Edit Project: name
+ID 6 : Edit project: client
+ID 7 : Edit project: Description
+ID 8 : Edit date(s)
+ID 9 : Edit budget(s)*/
+app.post('/project-edit/:idp/:loginHash',function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    console.log("Updating Project")
+    var update;
+    Settings.findOne({},function(err,settings){
+      Profile.findOne({},function(err,profile){
+        Project.findOne({_id:req.params.idp},function(err,project){
+          let currentActvities = project.activities;
+          Contact.findOne({_id:req.body.idc},function(err,contact){
+              let _text = "";
+              if(req.body.naam !=project.naam){
+                  _text += "Project naam aangepast naar \""+req.body.naam+"\"\n";
+              }
+              if(req.body.idc != project.contact){
+                _text += "Project klant veranderd naar \""+contact.contactPersoon+"\n";
+              }
+              currentActvities.unshift({
+                id:5,/*ID for adding working hours*/
+                text:_text,
+                date:formatDate(new Date(),settings.lang)
+              });
+            update = {
+                contact:contact._id,
+                contactNaam:contact.contactPersoon,
+                naam:req.body.naam,
+                activities:currentActvities
+              };
+            if(((req.body.naam !==project.naam) || (req.body.naam==="")) && req.body.idc !== project.contact ){
+              Project.update({_id:req.params.idp},update,function(err){
+                res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+              });
+            }else{
+              res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+            }
+          });
+        });
+      });
+    });
+});
+
+app.post('/project-edit-description/:idp/:loginHash',function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    var update;
+    Settings.findOne({},function(err,settings){
+      Profile.findOne({},function(err,profile){
+        Project.findOne({_id:req.params.idp},function(err,project){
+          let currentActvities = project.activities;
+            let _text = "";
+            if(req.body.description != project.description){
+              _text += "Project beschrijving is nu:\n"+req.body.description+"\n";
+              currentActvities.unshift({
+                id:5,/*ID for adding working hours*/
+                text:_text,
+                date:formatDate(new Date(),settings.lang)
+              });
+              update = {
+                description:req.body.description,
+                activities:currentActvities
+              };
+            }
+          if((req.body.description !== project.description) || req.body.description===""){
+            Project.update({_id:req.params.idp},update,function(err){
+              res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+            });
+          }else{
+            res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+          }
+        });
+      });
+    });
+});
+
+app.post('/project-add-hours/:idp/:loginHash',function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    let workHours = req.body.werkuren;
+    let newChart;
+    Settings.findOne({},function(err,settings){
+      Contact.findOne({_id:req.body.idc},function(err,contact){
+        Profile.findOne({},function(err,profile){
+          Project.findOne({_id:req.params.idp},function(err,project){
+            let newActivity = {
+              id:3,/*ID for adding working hours*/
+              text:"Added "+String(workHours)+" hours of work",
+              date:formatDate(new Date(),settings.lang)
+            };
+            let currentActvities = project.activities;
+            currentActvities.unshift(newActivity);
+            let currentChartData = project.chart;
+            let days = getRangeDates(project.data.start,project.data.end);
+            let today = new Date();
+            console.log(days);
+            for (var i = 0; i < days.length; i++) {
+              console.log(days[i]);
+              console.log(Date.parse(days[i]).valueOf());
+              console.log(today.valueOf());
+              if(sameDay(Date.parse(days[i]),today)){
+                console.log("--check")
+                if(currentChartData.length == i+1){
+                  currentChartData[i] += currentChartData[i] + (Number(project.werkuren)*Number(req.body.werkuren));
+                }else{
+                  currentChartData.push((Number(project.werkuren)*Number(req.body.werkuren)));
+                }
+                console.log(currentChartData);
+              }
+            }
+            Project.updateOne({_id:req.params.idp},
+              {
+                activities:currentActvities,
+                werkuren:Number(project.werkuren)+Number(req.body.werkuren),
+                total:project.total+(Number(req.body.werkuren)*Number(project.werkprijs)),
+                chart:currentChartData
+              }
+            ,function(err){
+              res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+            });
+          });
+        });
+      });
+    });
+});
+
+//subcontractor adding
+app.post('/project-add-sub/:idp/:loginHash',function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    let price = req.body.price;
+    let transactie = req.body.transactie;
+    let firmaNaam = req.body.firmaNaam;
+    let newChart;
+    Settings.findOne({},function(err,settings){
+      Contact.findOne({_id:req.body.idc},function(err,contact){
+        Profile.findOne({},function(err,profile){
+          Project.findOne({_id:req.params.idp},function(err,project){
+            let newActivity = {
+              id:2,/*ID for adding working hours*/
+              text:"Onderaanneming \""+firmaNaam+"\" toegevoegd ( "+price+"€ )\r\n"+transactie,
+              date:formatDate(new Date(),settings.lang)
+            };
+            let currentActvities = project.activities;
+            currentActvities.unshift(newActivity);
+            let currentChartData = project.chart;
+            newChart = currentChartData.push(Number(project.werkuren)*Number(req.body.werkuren));
+            Project.updateOne({_id:req.params.idp},
+              {
+                activities:currentActvities,
+                total:project.total+Number(price),
+                chart:newchart
+              },function(err){
+              console.log(err);
+              res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+            });
+          });
+        });
+      });
+    });
+});
+
+
+app.post('/project-add-mat/:idp/:loginHash',function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    let hoeveelheid = req.body.hoeveelheid;
+    let beschrijving = req.body.beschrijvingInput;
+    Settings.findOne({},function(err,settings){
+      let date = formatDate(new Date(),settings.lang);
+      Contact.findOne({_id:req.body.idc},function(err,contact){
+        Profile.findOne({},function(err,profile){
+          Project.findOne({_id:req.params.idp},function(err,project){
+            Materiaal.findOne({_id:req.body.materiaal},function(err,materiaal){
+              console.log(materiaal);
+              console.log(req.body.materiaal)
+              let newActivity = {
+                id:1,/*ID for adding working hours*/
+                text:"Materiaal toegevoegd:\n"+materiaal.naam+" ( "+materiaal.prijs+"€/kg)\n"
+                     +hoeveelheid+"kg/l gebruikt ("+(Number(materiaal.prijs)*Number(hoeveelheid))+"€ totaal)\n"
+                     +beschrijving,
+                date:date
+              };
+              let newMaterial = {
+                mat: materiaal._id,
+                name: materiaal.naam,
+                cost: materiaal.prijs,
+                amount:Number(hoeveelheid),
+                date:date
+              }
+              let currentMaterials = project.materials;
+              currentMaterials.unshift(newMaterial);
+              let currentActvities = project.activities;
+              currentActvities.unshift(newActivity);
+              console.log(currentActvities);
+              Project.updateOne({_id:req.params.idp},
+                {
+                  activities:currentActvities,
+                  materials:currentMaterials,
+                  total:project.total+(Number(hoeveelheid)*Number(materiaal.prijs))
+                },function(err){
+                console.log(err);
+                res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+              });
+            });
+          });
+        });
+      });
+    });
+});
+
+app.get('/delete-project/:idp/:loginHash',function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+  Project.deleteOne({
+    _id: req.params.idp
+  },function(err){
+    if(err){
+      console.log(err);
+    }
+    res.redirect('/projecten/'+req.params.loginHash);
+  });
+});
+
+app.post('/project-change-financial/:idp/:loginHash',function(req,res){
+  callFindPass().then(function(loginHash){
+    if (String(req.params.loginHash) !== loginHash) {
+      res.render('login');
+    }});
+    Settings.findOne({},function(err,settings){
+      Contact.findOne({_id:req.body.idc},function(err,contact){
+        Profile.findOne({},function(err,profile){
+          Project.findOne({_id:req.params.idp},function(err,project){
+            let text = "";
+            if((req.body.werktarief!==project.werkprijs)){
+              text+="Werktarief aangepast naar "+req.body.werktarief+"€/uur \n";
+            }
+            if(  (req.body.budgetMin!==project.budget.min) || (req.body.budgetMax!==project.budget.max)){
+              text+="Budget aangepast naar "+req.body.budgetMin+"€ - "+req.body.budgetMax+"€\n";
+            }
+            if( (req.body.dataStart!==project.data.start) || (req.body.dataEnd!==project.data.end)){
+              text+="Data aangepast naar "+req.body.dataStart+" - "+req.body.dataEnd+"\n";
+            }
+            let newActivity = {
+              id:8,/*9:budget,8:dates*/
+              text:text,
+              date:formatDate(new Date(),settings.lang)
+            };
+            let currentActvities = project.activities;
+            currentActvities.unshift(newActivity);
+            Project.updateOne({_id:req.params.idp},
+              {
+                werkprijs:req.body.werktarief,
+                budget: {
+                        min: Number(req.body.budgetMin),
+                        max: Number(req.body.budgetMax)
+                       },
+                data: {
+                        start: String(req.body.dataStart),
+                        end: String(req.body.dataEnd)
+                      },
+                activities:currentActvities
+              },function(err){
+                console.log(err)
+              res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
+            });
+          });
+        });
       });
     });
 });
@@ -3734,6 +4074,54 @@ function createJSON(obj){
   return json_data;
 }
 
+function getCurrentTime(d){
+  let str ="";
+  if(d.getHours().toString().length==1){
+    str+="0"+d.getHours();
+  }else{
+    str+=d.getHours();
+  }
+  if(d.getMinutes().toString().length==1){
+    str+=":0"+d.getMinutes();
+  }else{
+    str+=":"+d.getMinutes();
+  }
+  return str;
+}
+
+function formatDate(date,lang) {
+  var monthNames;
+  if(lang==="nl"){
+    monthNames = maand_klein;
+  }else if(lang==="eng"){
+    monthNames = month_small;
+  }
+  var day = date.getDate();
+  var monthIndex = date.getMonth();
+  var year = date.getFullYear();
+
+  return day + ' ' + monthNames[monthIndex] + ' ' + year+"\n"+getCurrentTime(date);
+}
+function getRangeDates(start,end){
+  let s = new Date(Date.parse(start));
+  let e = new Date(Date.parse(end));
+  let n = new Date(s);
+  let days = 1;
+  let dayRanges = [];
+  while(n.toString()!==e.toString()){
+    dayRanges.push(n.toDateString().substring(4,n.toDateString().length-5));
+    n.setDate(s.getDate()+days);
+    days++;
+  }
+  return dayRanges;
+}
+
+function sameDay(d1_, d2_) {
+  d1 = new Date(d1_);
+  d2 = new Date(d2_);
+  return     d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate();
+}
 
 app.engine('pug', require('pug').__express)
 

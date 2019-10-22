@@ -17,6 +17,14 @@ html
       $(document).ready(function () {
         feather.replace();
       });
+      function addMateriaal(){
+        $("#addMat").toggle();
+        $("#removeMat").hide();
+      }
+      function removeMateriaal(){
+        $("#removeMat").toggle();
+        $("#addMat").hide();
+      }
 body
   header
     nav(class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow")
@@ -86,12 +94,28 @@ body
                 tr
                   th(scope="col") Naam
                   th(scope="col") Prijs
+                  th(scope="col") Amount
                   th(scope="col") Acties
               tbody
                 each materiaal in materialen
                   tr
                     td=materiaal.naam
                     td=materiaal.prijs.toFixed(2)+"€ /kg"
+                    td
+                      div(class="dropdown")
+                        button(class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+                          span=materiaal.amount
+                        div(class="dropdown-menu" aria-labelledby="dropdownMenu2")
+                          a(class="dropdown-item",onclick="addMateriaal()",href="#") +
+                          a(class="dropdown-item",onclick="removeMateriaal()",href="#") -
+                          form(id="addMat",class="dropdown-item form-group",action="/add-materiaal-amount",method="post",style="display:none;")
+                            span Voeg toe
+                            input(class="input-group",type="number" name="quantity" min="0" max="1000" step="1" value="1")
+                            input(class="input-group",type="submit")
+                          form(id="removeMat",class="dropdown-item form-group",action="/remove-materiaal-amount",method="post",style="display:none;")
+                            span Verwijder
+                            input(class="input-group",type="number" name="quantity" min="0" max="1000" step="1" value="1")
+                            input(class="input-group",type="submit")
                     td
                       a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                       div(class="dropdown-menu", aria-labelledby="actionsDropdown")

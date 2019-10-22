@@ -89,6 +89,7 @@ body
                 tr
                   th(scope="col") ProjectNaam
                   th(scope="col") Voor klant
+                  th(scope="col") Verwijder
               tbody
                 each project in projecten
                     tr
@@ -96,4 +97,6 @@ body
                         a(href="/view-project/"+project._id+"/"+loginHash)=project.naam
                       td
                         a(href='/facturen/' + project.contact + "/" + loginHash)=project.contactNaam
-                      
+                      td
+                        a(href='/delete-project/'+project._id+'/'+loginHash)
+                          span(data-feather="trash")

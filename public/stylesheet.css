@@ -182,6 +182,41 @@ table tbody tr td a{
   vertical-align: middle !important;
 }
 
-.edit-link-project {
+.edit-link-project{
   float:right;
+}
+
+.thisButtonIsALink{
+    background:none!important;
+    border:none;
+    padding:0!important;
+    color: #007bff;
+}
+.thisButtonIsALink:hover,
+.edit-link-project:hover{
+  color:inherit;
+}
+
+.submit-feather{
+  margin-right:7px;
+}
+.textarea,.pre{
+  white-space: pre;
+}
+.ui-datepicker-title{
+
+}
+.cardholder{
+  margin-bottom: 6px;
+  margin-top: 5px;
+}
+.fillInTheBlanks{
+  min-height: 100%;
+}
+
+.smooth-transition{
+    -webkit-transition: 1s ease-in-out;
+    -moz-transition: 1s ease-in-out;
+    -o-transition: 1s ease-in-out;
+    transition: 1s ease-in-out;
 }

@@ -97,11 +97,14 @@ body
           hr
           form(action='/add-mat'+"/"+loginHash,method='post')
             div(class="form-row")
-              div(class="form-group col-md-10")
+              div(class="form-group col-md-8")
                 label(for="naam") Naam
                 input(type="text",class="form-control",name="naam", required)
               div(class="form-group col-md-2")
                 label(for="prijs") Prijs
                 input(type="number",class="form-control",name="prijs",step=".01" required)
+              div(class="form-group col-md-2")
+                label(for="prijs") Amount
+                input(type="number",class="form-control",name="amount",step=".01",value="0" required)
             hr
             button(type="submit",class="btn btn-outline-"+settings.thema) toevoegen

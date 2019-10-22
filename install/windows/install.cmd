@@ -1,6 +1,11 @@
 echo off
 cls
-echo Starting installation:
+color a
+echo Please make sure that this is run as administration!
+pause
+color F
+cls
+echo Starting installation
 call node-v10.16.3-win-x64\nodevars.bat
 echo [NPM]: installing express
 call node-v10.16.3-win-x64\npm.cmd install -g express --save -s -q
@@ -32,7 +37,21 @@ call node-v10.16.3-win-x64\npm.cmd link node-windows -s -q
 echo [NODE]: installing invoice-administration
 echo [NPM]: fixing vulnerabilities
 call node-v10.16.3-win-x64\npm.cmd audit fix
-echo [NPM]: updating
-call node-v10.16.3-win-x64\node.exe node win-install.js
+echo [NPM]: DONE!
+echo [MONGODB]: making files ready
+mkdir C:\data\db
+mkdir C:\data\log\
+echo [MONGODB]: installing mongod
+sc.exe create test009 binPath= "\"%CD%\mongodb-win32-x86_64-2012plus-4.2.0\bin\mongod.exe\" --service --dbpath=\"c:\data\db\"" start= auto
+net start test009
+cls
+color A
+echo -------------------------------------
+echo [IMPORTANT]: PLEASE SAY "YES" TO ALL!
+echo -------------------------------------
+call node-v10.16.3-win-x64\node.exe win-install.js
+net start invoice-administration
+color F
+cls
 echo Installation is complete, you can close the program
 pause
