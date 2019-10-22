@@ -3140,12 +3140,28 @@ app.post('/project-add-sub/:idp/:loginHash',function(req,res){
             let currentActvities = project.activities;
             currentActvities.unshift(newActivity);
             let currentChartData = project.chart;
-            newChart = currentChartData.push(Number(project.werkuren)*Number(req.body.werkuren));
+            let days = getRangeDates(project.data.start,project.data.end);
+            let today = new Date();
+            console.log(days);
+            for (var i = 0; i < days.length; i++) {
+              console.log(days[i]);
+              console.log(Date.parse(days[i]).valueOf());
+              console.log(today.valueOf());
+              if(sameDay(Date.parse(days[i]),today)){
+                console.log("--check")
+                if(currentChartData.length == i+1){
+                  currentChartData[i] += currentChartData[i] + (Number(project.werkuren)*Number(req.body.werkuren));
+                }else{
+                  currentChartData.push((Number(project.werkuren)*Number(req.body.werkuren)));
+                }
+                console.log(currentChartData);
+              }
+            }
             Project.updateOne({_id:req.params.idp},
               {
                 activities:currentActvities,
                 total:project.total+Number(price),
-                chart:newchart
+                chart:currentChartData
               },function(err){
                 if(err){console.log("err:"+err)};
               res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
@@ -3196,11 +3212,29 @@ app.post('/project-add-mat/:idp/:loginHash',function(req,res){
               let currentActvities = project.activities;
               currentActvities.unshift(newActivity);
               console.log(currentActvities);
+              let days = getRangeDates(project.data.start,project.data.end);
+              let today = new Date();
+              console.log(days);
+              for (var i = 0; i < days.length; i++) {
+                console.log(days[i]);
+                console.log(Date.parse(days[i]).valueOf());
+                console.log(today.valueOf());
+                if(sameDay(Date.parse(days[i]),today)){
+                  console.log("--check")
+                  if(currentChartData.length == i+1){
+                    currentChartData[i] += currentChartData[i] + (Number(project.werkuren)*Number(req.body.werkuren));
+                  }else{
+                    currentChartData.push((Number(project.werkuren)*Number(req.body.werkuren)));
+                  }
+                  console.log(currentChartData);
+                }
+              }
               Project.updateOne({_id:req.params.idp},
                 {
                   activities:currentActvities,
                   materials:currentMaterials,
-                  total:project.total+(Number(hoeveelheid)*Number(materiaal.prijs))
+                  total:project.total+(Number(hoeveelheid)*Number(materiaal.prijs)),
+                  chart:currentChartData
                 },function(err){
                   if(err){console.log("err:"+err)};
                 res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
