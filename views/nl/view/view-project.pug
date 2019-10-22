@@ -50,6 +50,22 @@ html
         $(".descriptionCard").toggle();
         $(".descriptionCardEdit").toggle();
       }
+      function valueChanged(value){
+        switch(value){
+          case '1':
+            selectOnderaanneming()
+            break;
+          case '2':
+            selectWerkuren();
+            break;
+          case '3':
+            selectMaterialen();
+            break;
+          case '4':
+            hideFields();
+            break;
+        }
+      }
       function selectOnderaanneming(){
         $(".fielOnderaanneming").show("slow");
         $(".fieldWerkuren").hide("fast");
@@ -79,6 +95,9 @@ html
         $("#materialsStuff").toggle("slow");
         angle_mat += 180;
         //$('.arrowMat').css('transform','rotate(' + angle_mat + 'deg)');
+      }
+      function check(deez){
+        console.log(deez);
       }
       
 body
@@ -329,11 +348,11 @@ body
                             | Toevoegen
                           .col-8
                             div(class="input-group")
-                                select(class="custom-select selectNextToButton" id="inputGroupSelect03"  name="idc")
-                                  option(onclick="selectOnderaanneming()") onderaanneming
-                                  option(onclick="selectWerkuren()") werkuren
-                                  option(onclick="selectMaterialen()") Materialen
-                                  option(onclick="hideFields()",selected)
+                                select(class="custom-select selectNextToButton" id="inputGroupSelect03",onchange="valueChanged(this.value); this.selectedindex = -1")
+                                  option(onclick="selectOnderaanneming()",value="1") onderaanneming
+                                  option(onclick="selectWerkuren()",value="2") werkuren
+                                  option(onclick="selectMaterialen()",value="3") Materialen
+                                  option(onclick="hideFields()",value="4", selected)
                       ul(class="list-group list-group-flush")
                         //ADD CARD --subcontractor
                         li.fielOnderaanneming(class="list-group-item",style="display:none;")
@@ -423,11 +442,11 @@ body
                               | Toevoegen
                             .col-8
                               div(class="input-group")
-                                  select(class="custom-select selectNextToButton" id="inputGroupSelect03"  name="idc")
-                                    option(onclick="selectOnderaanneming()") onderaanneming
-                                    option(onclick="selectWerkuren()") werkuren
-                                    option(onclick="selectMaterialen()") Materialen
-                                    option(onclick="hideFields()",selected)
+                                  select(class="custom-select selectNextToButton" id="inputGroupSelect03",onchange="valueChanged(this.value); this.selectedindex = -1")
+                                    option(onclick="selectOnderaanneming()",value="1") onderaanneming
+                                    option(onclick="selectWerkuren()",value="2") werkuren
+                                    option(onclick="selectMaterialen()",value="3") Materialen
+                                    option(onclick="hideFields()",value="4", selected)
                         ul(class="list-group list-group-flush")
                           //ADD CARD --subcontractor
                           li.fielOnderaanneming(class="list-group-item",style="display:none;")
