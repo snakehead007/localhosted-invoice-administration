@@ -3060,13 +3060,19 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
             let currentChartData = project.chart;
             let days = getRangeDates(project.data.start,project.data.end);
             let today = new Date();
+            console.log(days);
             for (var i = 0; i < days.length; i++) {
-              if(today === Date(Date.parse(days[i]))){
+              console.log(days[i]);
+              console.log(Date.parse(days[i]).valueOf());
+              console.log(today.valueOf());
+              if(sameDay(Date.parse(days[i]),today)){
+                console.log("--check")
                 if(currentChartData.length == i+1){
                   currentChartData[i] += currentChartData[i] + (Number(project.werkuren)*Number(req.body.werkuren));
                 }else{
                   currentChartData.push((Number(project.werkuren)*Number(req.body.werkuren)));
                 }
+                console.log(currentChartData);
               }
             }
             Project.updateOne({_id:req.params.idp},
@@ -4025,6 +4031,14 @@ function getRangeDates(start,end){
   }
   return dayRanges;
 }
+
+function sameDay(d1_, d2_) {
+  d1 = new Date(d1_);
+  d2 = new Date(d2_);
+  return     d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate();
+}
+
 app.engine('pug', require('pug').__express)
 
 app.set('views', path.join(__dirname, 'views'));
