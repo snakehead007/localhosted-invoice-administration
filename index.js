@@ -300,7 +300,7 @@ var ProjectSchema = new Schema({
   },
   werkprijs: {
     type: Number,
-    default:0
+    default:60
   },
   materials: [
     {
@@ -2913,8 +2913,11 @@ app.get('/projecten/:loginHash', function(req,res){
       res.render('login');
     }});
     Settings.findOne({},function(err,settings){
+      if(err){console.log("err:"+err)};
         Profile.findOne({},function(err,profile){
+          if(err){console.log("err:"+err)};
           Project.find({},function(err,projecten){
+            if(err){console.log("err:"+err)};
             console.log(projecten);
             res.render(settings.lang+'/project',{
               'settings': settings,
@@ -2933,11 +2936,16 @@ app.get('/view-project/:idp/:loginHash', function(req,res){
       res.render('login');
     }});
     Settings.findOne({},function(err,settings){
+      if(err){console.log("err:"+err)};
         Profile.findOne({},function(err,profile){
+          if(err){console.log("err:"+err)};
           Project.findOne({_id:req.params.idp},function(err,project){
+            if(err){console.log("err:"+err)};
             Materiaal.find({},function(err,materialen){
+              if(err){console.log("err:"+err)};
               console.log(project);
               Contact.find({},function(err,contacten){
+                if(err){console.log("err:"+err)};
                 res.render(settings.lang+'/view/view-project',{
                   'settings':settings,
                   'profile':profile,
@@ -2970,10 +2978,14 @@ app.post('/project-edit/:idp/:loginHash',function(req,res){
     console.log("Updating Project")
     var update;
     Settings.findOne({},function(err,settings){
+      if(err){console.log("err:"+err)};
       Profile.findOne({},function(err,profile){
+        if(err){console.log("err:"+err)};
         Project.findOne({_id:req.params.idp},function(err,project){
+          if(err){console.log("err:"+err)};
           let currentActvities = project.activities;
           Contact.findOne({_id:req.body.idc},function(err,contact){
+            if(err){console.log("err:"+err)};
               let _text = "";
               if(req.body.naam !=project.naam){
                   _text += "Project naam aangepast naar \""+req.body.naam+"\"\n";
@@ -2994,6 +3006,7 @@ app.post('/project-edit/:idp/:loginHash',function(req,res){
               };
             if(((req.body.naam !==project.naam) || (req.body.naam==="")) && req.body.idc !== project.contact ){
               Project.update({_id:req.params.idp},update,function(err){
+                if(err){console.log("err:"+err)};
                 res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
               });
             }else{
@@ -3012,8 +3025,11 @@ app.post('/project-edit-description/:idp/:loginHash',function(req,res){
     }});
     var update;
     Settings.findOne({},function(err,settings){
+      if(err){console.log("err:"+err)};
       Profile.findOne({},function(err,profile){
+        if(err){console.log("err:"+err)};
         Project.findOne({_id:req.params.idp},function(err,project){
+          if(err){console.log("err:"+err)};
           let currentActvities = project.activities;
             let _text = "";
             if(req.body.description != project.description){
@@ -3030,6 +3046,7 @@ app.post('/project-edit-description/:idp/:loginHash',function(req,res){
             }
           if((req.body.description !== project.description) || req.body.description===""){
             Project.update({_id:req.params.idp},update,function(err){
+              if(err){console.log("err:"+err)};
               res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
             });
           }else{
@@ -3048,9 +3065,13 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
     let workHours = req.body.werkuren;
     let newChart;
     Settings.findOne({},function(err,settings){
+      if(err){console.log("err:"+err)};
       Contact.findOne({_id:req.body.idc},function(err,contact){
+        if(err){console.log("err:"+err)};
         Profile.findOne({},function(err,profile){
+          if(err){console.log("err:"+err)};
           Project.findOne({_id:req.params.idp},function(err,project){
+            if(err){console.log("err:"+err)};
             let newActivity = {
               id:3,/*ID for adding working hours*/
               text:"Added "+String(workHours)+" hours of work",
@@ -3084,6 +3105,7 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
                 chart:currentChartData
               }
             ,function(err){
+              if(err){console.log("err:"+err)};
               res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
             });
           });
@@ -3103,9 +3125,13 @@ app.post('/project-add-sub/:idp/:loginHash',function(req,res){
     let firmaNaam = req.body.firmaNaam;
     let newChart;
     Settings.findOne({},function(err,settings){
+      if(err){console.log("err:"+err)};
       Contact.findOne({_id:req.body.idc},function(err,contact){
+        if(err){console.log("err:"+err)};
         Profile.findOne({},function(err,profile){
+          if(err){console.log("err:"+err)};
           Project.findOne({_id:req.params.idp},function(err,project){
+            if(err){console.log("err:"+err)};
             let newActivity = {
               id:2,/*ID for adding working hours*/
               text:"Onderaanneming \""+firmaNaam+"\" toegevoegd ( "+price+"€ )\r\n"+transactie,
@@ -3121,7 +3147,7 @@ app.post('/project-add-sub/:idp/:loginHash',function(req,res){
                 total:project.total+Number(price),
                 chart:newchart
               },function(err){
-              console.log(err);
+                if(err){console.log("err:"+err)};
               res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
             });
           });
@@ -3139,11 +3165,16 @@ app.post('/project-add-mat/:idp/:loginHash',function(req,res){
     let hoeveelheid = req.body.hoeveelheid;
     let beschrijving = req.body.beschrijvingInput;
     Settings.findOne({},function(err,settings){
+      if(err){console.log("err:"+err)};
       let date = formatDate(new Date(),settings.lang);
       Contact.findOne({_id:req.body.idc},function(err,contact){
+        if(err){console.log("err:"+err)};
         Profile.findOne({},function(err,profile){
+          if(err){console.log("err:"+err)};
           Project.findOne({_id:req.params.idp},function(err,project){
+            if(err){console.log("err:"+err)};
             Materiaal.findOne({_id:req.body.materiaal},function(err,materiaal){
+              if(err){console.log("err:"+err)};
               console.log(materiaal);
               console.log(req.body.materiaal)
               let newActivity = {
@@ -3171,7 +3202,7 @@ app.post('/project-add-mat/:idp/:loginHash',function(req,res){
                   materials:currentMaterials,
                   total:project.total+(Number(hoeveelheid)*Number(materiaal.prijs))
                 },function(err){
-                console.log(err);
+                  if(err){console.log("err:"+err)};
                 res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
               });
             });
@@ -3189,9 +3220,7 @@ app.get('/delete-project/:idp/:loginHash',function(req,res){
   Project.deleteOne({
     _id: req.params.idp
   },function(err){
-    if(err){
-      console.log(err);
-    }
+    if(err){console.log("err:"+err)};
     res.redirect('/projecten/'+req.params.loginHash);
   });
 });
@@ -3202,9 +3231,13 @@ app.post('/project-change-financial/:idp/:loginHash',function(req,res){
       res.render('login');
     }});
     Settings.findOne({},function(err,settings){
+      if(err){console.log("err:"+err)};
       Contact.findOne({_id:req.body.idc},function(err,contact){
+        if(err){console.log("err:"+err)};
         Profile.findOne({},function(err,profile){
+          if(err){console.log("err:"+err)};
           Project.findOne({_id:req.params.idp},function(err,project){
+            if(err){console.log("err:"+err)};
             let text = "";
             if((req.body.werktarief!==project.werkprijs)){
               text+="Werktarief aangepast naar "+req.body.werktarief+"€/uur \n";
@@ -3235,7 +3268,7 @@ app.post('/project-change-financial/:idp/:loginHash',function(req,res){
                       },
                 activities:currentActvities
               },function(err){
-                console.log(err)
+                if(err){console.log("err:"+err)};
               res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
             });
           });
