@@ -584,19 +584,40 @@ body
     var month_small = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "oktober", "november", "december"];
     var year = new Date().getFullYear().toString();
     var angle_mat = 0;
+    
     function getRangeDates(start,end){
       let s = new Date(Date.parse(start));
       let e = new Date(Date.parse(end));
       let n = new Date(s);
-      let days = 1;
+      let day = s.getDate();
+      let month = s.getMonth();
       let dayRanges = [];
-      while(n.toString()!==e.toString()){
+      let isRunning = true;
+      let TIMEOUT_COUNT = 0;
+      while(isRunning){
         dayRanges.push(n.toDateString().substring(4,n.toDateString().length-5));
-      	n.setDate(s.getDate()+days);
-        days++;
+        if (n.getFullYear()==e.getFullYear() && n.getMonth() == e.getMonth() && n.getDate() == e.getDate()) {
+          isRunning = false;
+        }else{ 
+          day++;
+          n.setDate(day);
+          console.log("CHANGE OF MONTHS "+month+" / "+ n.getMonth());
+          if(n.getMonth() != month){
+            console.log("day "+day);
+            month = n.getMonth();
+            day = 1;
+          }
+        TIMEOUT_COUNT++;
+        }
+        if(TIMEOUT_COUNT === 1000){
+            console.error("Error: timeout, project time exceeded 1000 days");
+            isRunning = false;
+          }
       }
-      return dayRanges;  
+      return dayRanges;
     }
+
+    
     var labels;
     if("#{settings.lang}"==="nl"){
       labels = maand_klein;

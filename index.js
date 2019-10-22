@@ -3056,7 +3056,6 @@ app.post('/project-edit-description/:idp/:loginHash',function(req,res){
       });
     });
 });
-
 app.post('/project-add-hours/:idp/:loginHash',function(req,res){
   callFindPass().then(function(loginHash){
     if (String(req.params.loginHash) !== loginHash) {
@@ -3088,7 +3087,7 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
               if(sameDay(Date.parse(days[i]),today)){
                 console.log("--check")
                 if(currentChartData.length == i+1){
-                  currentChartData[i] += currentChartData[i] + (Number(project.werkprijs)*Number(req.body.werkuren));
+                  currentChartData[i] = currentChartData[i] + (Number(project.werkprijs)*Number(req.body.werkuren));
                 }else{
                   while(currentChartData.length != i){
                     currentChartData.push(0);
@@ -3151,7 +3150,7 @@ app.post('/project-add-sub/:idp/:loginHash',function(req,res){
               if(sameDay(Date.parse(days[i]),today)){
                 console.log("--check");
                 if(currentChartData.length == i+1){
-                  currentChartData[i] += currentChartData[i] + Number(req.body.price);
+                  currentChartData[i] = currentChartData[i] + Number(req.body.price);
                 }else{
                   while(currentChartData.length != i){
                     currentChartData.push(0);
@@ -3228,7 +3227,7 @@ app.post('/project-add-mat/:idp/:loginHash',function(req,res){
                 if(sameDay(Date.parse(days[i]),today)){
                   console.log("--check")
                   if(currentChartData.length == i+1){
-                    currentChartData[i] += currentChartData[i] + (Number(materiaal.prijs)*Number(hoeveelheid));
+                    currentChartData[i] = currentChartData[i] + (Number(materiaal.prijs)*Number(hoeveelheid));
                   }else{
                     while(currentChartData.length != i){
                       currentChartData.push(0);
@@ -4182,21 +4181,44 @@ function getRangeDates(start,end){
   let s = new Date(Date.parse(start));
   let e = new Date(Date.parse(end));
   let n = new Date(s);
-  let days = 1;
+  let day = s.getDate();
+  let month = s.getMonth();
   let dayRanges = [];
-  while(n.toString()!==e.toString()){
+  let isRunning = true;
+  let TIMEOUT_COUNT = 0;
+  while(isRunning){
     dayRanges.push(n.toDateString().substring(4,n.toDateString().length-5));
-    n.setDate(s.getDate()+days);
-    days++;
+    if (n.getFullYear()==e.getFullYear() && n.getMonth() == e.getMonth() && n.getDate() == e.getDate()) {
+      isRunning = false;
+    }else{
+      day++;
+      n.setDate(day);
+      console.log("CHANGE OF MONTHS "+month+" / "+ n.getMonth());
+      if(n.getMonth() != month){
+        console.log("day "+day);
+        month = n.getMonth();
+        day = 1;
+      }
+    TIMEOUT_COUNT++;
+    }
+    if(TIMEOUT_COUNT === 1000){
+        console.error("Error: timeout, project time exceeded 1000 days");
+        isRunning = false;
+      }
   }
   return dayRanges;
 }
+
 
 function sameDay(d1_, d2_) {
   d1 = new Date(d1_);
   d2 = new Date(d2_);
   return     d1.getMonth() === d2.getMonth() &&
     d1.getDate() === d2.getDate();
+}
+
+function daysInMonth (month, year) {
+    return new Date(year, month, 0).getDate();
 }
 
 app.engine('pug', require('pug').__express)
