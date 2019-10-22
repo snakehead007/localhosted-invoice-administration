@@ -1,0 +1,168 @@
+//- V1.8
+html
+  head
+    title=title
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    link(rel="stylesheet" href="/stylesheet.css")
+    scrip(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/core.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js")
+    script(src="https://www.chartjs.org/samples/latest/utils.js")
+    script(src="https://unpkg.com/feather-icons")
+    script.
+      function info(){$("#info").toggle();};
+      $(document).ready(function () {
+        feather.replace();
+        $("#berekeningen").toggle();
+      });
+      function toggle() {
+        $("#berekeningen").toggle();
+      }
+      function aanpassen() {
+        $("#aanpas").toggle();
+      }
+body
+  header
+    nav(class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow")
+      a(class="navbar-brand col-sm-3 col-md-2 mr-0",href="/edit-profile/"+loginHash)=profile.firma
+      form(class="form", method="post",action="/zoeken/"+loginHash)
+        input(class="form-control form-control-dark w-100" type="text",name="search",placeholder="zoeken" aria-label="zoeken")
+        button(type="sumbit",style="display:none")
+      ul(class="navbar-nav px-3")
+        li(class="nav-item text-nowrap")
+          a(class="nav-link" href="#") Sign out
+
+    div(class="container-fluid")
+      div(class ="row")
+        nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+          div(class="sidebar-sticky")
+            ul(class="nav flex-column")
+              li(class="nav-item")
+                a(class="nav-link" href="/index/"+loginHash)
+                  span(data-feather="home")
+                  span Home
+              li(class="nav-item")
+                a(class="nav-link" href="/edit-profile/"+loginHash)
+                  span(data-feather="user")
+                  span Mijn Profiel
+              li(class="nav-item")
+                a(class="nav-link" href="/facturen/"+loginHash)
+                  span(data-feather="file")
+                  span Alle facturen
+              li(class="nav-item")
+                a(class="nav-link" href="/contacten/"+loginHash)
+                  span(data-feather="users")
+                  span Klanten
+              li(class="nav-item")
+                a(class="nav-link" href="/mat/"+loginHash)
+                  span(data-feather="package")
+                  span Materialen
+              li(class="nav-item")
+                a(class="nav-link active" href="/berekeningen/" + loginHash)
+                  span(data-feather="book")
+                  span Berekeningen
+                  span(data-feather="chevron-right")
+                  span(class="sr-only") (current)
+                  span Siliconen mal
+              li(class="nav-item")
+                a(class="nav-link" href="/settings/" + loginHash)
+                  span(data-feather="settings")
+                  span Settings
+            if profile.bookmarks.length !==0
+              h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+                span Bookmarks
+            each bookmark in profile.bookmarks
+              ul(class="nav flex-column")
+                li(class="nav-item")
+                    a(class="nav-link",href="https://"+bookmark[1])
+                        span(data-feather="bookmark")
+                        span=bookmark[0]
+        main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+          h2(class="pt-3") PU-lamineren oplossing
+          div(class="headExtend" )
+            div(class="Button" )
+              button(type="button" class="btn btn-sm btn-outline-secondary",onclick="toggle()")
+                span(data-feather="list")
+                span=" Toggle calcaulations"
+          hr
+          div(id="berekeningen", style="display:none;")
+            div(class="row")
+              div(class="col-2")
+                h4
+                  span(class="badge badge-secondary") Berekening PU
+              div(class="col-2")
+              div(class="col-2")
+                h4
+                  span(class="badge badge-secondary") Berekening UP-G
+              div(class="col-2")
+              div(class="col-2")
+                h4
+                  span(class="badge badge-secondary") Berekening UCS
+              div(class="col-4")
+                p(class="lead")=PU.A.toFixed(2)+" * ( "+PU.M2.toFixed(2)+" * "+PU.PU[PU.K]+" ) = "+PU.C.toFixed(2)
+              div(class="col-4")
+                p(class="lead")=PU.M2.toFixed(2)+" * 0,75 = "+PU.B.toFixed(2)
+              div(class="col-4")
+                p(class="lead")=PU.A.toFixed(2)+" * "+PU.M2.toFixed(2)+" = "+PU.E.toFixed(2)
+              div(class="col-4")
+                p(class="lead")=PU.C.toFixed(2)+" * 5 €/kg = "+PU.D[1].toFixed(2)+"  €"
+              div(class="col-4")
+                p(class="lead")=PU.B.toFixed(2)+" * 9,50 €/kg = "+PU.D[2].toFixed(2)+" €"
+              div(class="col-4")
+                p(class="lead")=PU.E.toFixed(2)+" * "+PU.UCS[PU.K].toFixed(2)+" €/kg = "+PU.D[3].toFixed(2)+" €"
+            hr
+          div(class="row")
+            div(class="col-lg-2 col-md-1 col-lg-0")
+            if error == 1
+              div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Error! Berekening is negatief. Check de ingegeven en interne data.
+          div(class="row")
+            div(class="col")
+              table(class="table table-striped")
+                tbody
+                  tr
+                    th(scope="row")
+                      h4 PU
+                    td
+                      h4=PU.C.toFixed(3)+" kg"
+                  tr
+                    th(scope="row")
+                      h4 Prijs
+                    td
+                      h4=PU.D[1].toFixed(2)+" €"
+            div(class="col-4")
+             table(class="table table-striped")
+                tr
+                  th(scope="row")
+                    h4 UP-G
+                  td
+                    h4=PU.B.toFixed(3)+" kg"
+                tr
+                  th(scope="row")
+                    h4 Prijs
+                  td
+                    h4=PU.D[2].toFixed(2)+" €"
+            div(class="col-4")
+             table(class="table table-striped")
+                tr
+                  th(scope="row")
+                    h4 UCS
+                  td
+                    h4=PU.E.toFixed(3)+" M³"
+                tr
+                  th(scope="row")
+                    h4 Prijs Materiaal Epoxie
+                  td
+                    h4=PU.D[3].toFixed(2)+" €"
+          hr
+          div(class="row")
+            div(class="col-3")
+            div(class="col-6")
+              table(class="table table-striped")
+                tr
+                  th(scope="row")
+                    h4 Totaalprijs 
+                  td
+                    h4=PU.D[0].toFixed(2)+" €"

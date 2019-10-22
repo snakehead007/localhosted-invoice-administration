@@ -21,6 +21,7 @@ html
         $(".optionPrijs").css('background-color', 'rgba(0, 0, 0, 0)');
         $(".optionInch").css('background-color', 'rgba(0, 0, 0, 0)');
         $(".optionPerc").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPU").css('background-color', 'rgba(0, 0, 0, 0)');
         window.location = "/epo-sil/" + loginHash;
       };
       function openLam(loginHash) {
@@ -29,6 +30,7 @@ html
         $(".optionInch").css('background-color', 'rgba(0, 0, 0, 0)');
         $(".optionSil").css('background-color', 'rgba(0, 0, 0, 0)');
         $(".optionPerc").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPU").css('background-color', 'rgba(0, 0, 0, 0)');
       };
       function openPrijs(loginHash) {
         $(".optionPrijs").css('background-color', 'rgba(207, 207, 207, .3)');
@@ -36,6 +38,7 @@ html
         $(".optionInch").css('background-color', 'rgba(0, 0, 0, 0)');
         $(".optionSil").css('background-color', 'rgba(0, 0, 0, 0)');
         $(".optionPerc").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPU").css('background-color', 'rgba(0, 0, 0, 0)');
         window.location = "/prijs/" + loginHash;
       };
       function openInch(loginHash) {
@@ -44,6 +47,7 @@ html
         $(".optionPrijs").css('background-color', 'rgba(0, 0, 0, 0)');
         $(".optionSil").css('background-color', 'rgba(0, 0, 0, 0)');
         $(".optionPerc").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPU").css('background-color', 'rgba(0, 0, 0, 0)');
         window.location = "/inch/" + loginHash;
       };
       function openPerc(loginHash) {
@@ -52,7 +56,17 @@ html
         $(".optionPrijs").css('background-color', 'rgba(0, 0, 0, 0)');
         $(".optionSil").css('background-color', 'rgba(0, 0, 0, 0)');
         $(".optionInch").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPU").css('background-color', 'rgba(0, 0, 0, 0)');
         window.location = "/percentage/" + loginHash;
+      };
+      function openPU(loginHash) {
+        $(".optionPU").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionPerc").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionLam").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPrijs").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionSil").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionInch").css('background-color', 'rgba(0, 0, 0, 0)');
+        window.location = "/pu/" + loginHash;
       };
   body
     header
@@ -134,3 +148,7 @@ html
                     td
                       p(class="lead") Percentage Berkenen
                       div(id="perc",style="display:none;")
+                  tr(onclick="openPU(\""+loginHash+"\")",class="settingsOption optionPU")
+                    td
+                      p(class="lead") PU-lamineren
+                      div(id="PU",style="display:none;")
