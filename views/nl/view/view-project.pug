@@ -15,12 +15,6 @@ html
     script(src="https://unpkg.com/feather-icons")
     script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js")
     script.
-      var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
-      var maand_klein = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
-      var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Oktober", "November", "December"];
-      var month_small = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "oktober", "november", "december"];
-      var year = new Date().getFullYear().toString();
-      var angle_mat = 0;
       var angle_activ = 0;
       function toggleChartSize() {
         $("#smallChart").toggle("fast");
@@ -79,12 +73,12 @@ html
       function toggleActivities(){
         $(".activitiesStuff").toggle("slow");
         angle_activ += 180;
-        $('.arrowActiv').css('transform','rotate(' s+ angle_activ + 'deg)');
+        //$('.arrowActiv').css('transform','rotate(' s+ angle_activ + 'deg)');
       }
       function toggleMaterials(){
         $("#materialsStuff").toggle("slow");
         angle_mat += 180;
-        $('.arrowMat').css('transform','rotate(' + angle_mat + 'deg)');
+        //$('.arrowMat').css('transform','rotate(' + angle_mat + 'deg)');
       }
       
 body
@@ -565,6 +559,12 @@ body
                             .col-3      
                               p.pre=activity.date
   script.
+    var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
+    var maand_klein = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
+    var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Oktober", "November", "December"];
+    var month_small = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "oktober", "november", "december"];
+    var year = new Date().getFullYear().toString();
+    var angle_mat = 0;
     function getRangeDates(start,end){
       let s = new Date(Date.parse(start));
       let e = new Date(Date.parse(end));
