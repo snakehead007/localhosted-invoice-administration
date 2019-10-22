@@ -79,7 +79,7 @@ html
       function toggleActivities(){
         $(".activitiesStuff").toggle("slow");
         angle_activ += 180;
-        $('.arrowActiv').css('transform','rotate(' + angle_activ + 'deg)');
+        $('.arrowActiv').css('transform','rotate(' s+ angle_activ + 'deg)');
       }
       function toggleMaterials(){
         $("#materialsStuff").toggle("slow");
@@ -294,12 +294,12 @@ body
                                     h6 totaalprijs
                                   .col-auto
                                     span=project.total+"€"
-                    .col-12.mr-auto.cardholder.smooth-transition#smallChart
+                    .col-12.mr-auto.cardholder#smallChart
                       .card
                         .card-header(onclick="toggleChartSize()")
                           | Grafiek
                           a(href="#smallChart" ,class="edit-link-project")
-                            span.smooth-transition(data-feather="maximize-2")
+                            span(data-feather="maximize-2")
                         .card-body
                           canvas#drawChart
               .col-6#bigView(style="display:none;")
@@ -387,7 +387,7 @@ body
                                       option(value=materiaal._id)=materiaal.naam
                             .form-group.row
                               button.btn(type='sumbit') Add
-              .col-12.cardholder.smooth-transition#bigChart(style="display:none;")
+              .col-12.cardholder#bigChart(style="display:none;")
                 .card
                   .card-header(onclick="toggleChartSize()")
                     | Grafiek
@@ -485,7 +485,7 @@ body
                         .card
                           div.card-header(onclick="toggleMaterials()") Materialen
                             a(href="#" ,class="edit-link-project")
-                              span.smooth-transition.arrowMat(data-feather="chevron-down")
+                              span.arrowMat(data-feather="chevron-down")
                           ul.list-group.list-group-flush#materialsStuff(style="display:none;")
                               each materiaal in project.materials
                                 li.list-group-item
@@ -500,7 +500,7 @@ body
                       .card
                         div.card-header(onclick="toggleActivities()") Activities
                           a(href="#" ,class="edit-link-project")
-                            span.smooth-transition.arrowActiv(data-feather="chevron-down")
+                            span.arrowActiv(data-feather="chevron-down")
                         ul.list-group.list-group-flush.activitiesStuff(style="display:none;")
                             each activity in project.activities
                               li.list-group-item
@@ -534,7 +534,7 @@ body
                 .card
                   div.card-header(onclick="toggleActivities()") Activities
                     a(href="#" ,class="edit-link-project")
-                      span.smooth-transition.arrowActiv(data-feather="chevron-down")
+                      span.arrowActiv(data-feather="chevron-down")
                   ul.list-group.list-group-flush.activitiesStuff(style="display:none;")
                       each activity in project.activities
                         li.list-group-item
