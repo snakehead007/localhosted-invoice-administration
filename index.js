@@ -3085,14 +3085,15 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
             console.log(days);
             for (var i = 0; i < days.length; i++) {
               console.log(days[i]);
-              console.log(Date.parse(days[i]).valueOf());
-              console.log(today.valueOf());
               if(sameDay(Date.parse(days[i]),today)){
                 console.log("--check")
                 if(currentChartData.length == i+1){
-                  currentChartData[i] += currentChartData[i] + (Number(project.werkuren)*Number(req.body.werkuren));
+                  currentChartData[i] += currentChartData[i] + (Number(project.werkprijs)*Number(req.body.werkuren));
                 }else{
-                  currentChartData.push((Number(project.werkuren)*Number(req.body.werkuren)));
+                  while(currentChartData.length != i){
+                    currentChartData.push(0);
+                  }
+                  currentChartData.push((Number(project.werkprijs)*Number(req.body.werkuren)));
                 }
                 console.log(currentChartData);
               }
@@ -3148,11 +3149,14 @@ app.post('/project-add-sub/:idp/:loginHash',function(req,res){
               console.log(Date.parse(days[i]).valueOf());
               console.log(today.valueOf());
               if(sameDay(Date.parse(days[i]),today)){
-                console.log("--check")
+                console.log("--check");
                 if(currentChartData.length == i+1){
-                  currentChartData[i] += currentChartData[i] + (Number(project.werkuren)*Number(req.body.werkuren));
+                  currentChartData[i] += currentChartData[i] + Number(req.body.price);
                 }else{
-                  currentChartData.push((Number(project.werkuren)*Number(req.body.werkuren)));
+                  while(currentChartData.length != i){
+                    currentChartData.push(0);
+                  }
+                  currentChartData.push(Number(req.body.price));
                 }
                 console.log(currentChartData);
               }
@@ -3180,6 +3184,7 @@ app.post('/project-add-mat/:idp/:loginHash',function(req,res){
     }});
     let hoeveelheid = req.body.hoeveelheid;
     let beschrijving = req.body.beschrijvingInput;
+    let prijs = req.body.prijs;
     Settings.findOne({},function(err,settings){
       if(err){console.log("err:"+err)};
       let date = formatDate(new Date(),settings.lang);
@@ -3212,6 +3217,7 @@ app.post('/project-add-mat/:idp/:loginHash',function(req,res){
               let currentActvities = project.activities;
               currentActvities.unshift(newActivity);
               console.log(currentActvities);
+              let currentChartData = project.chart;
               let days = getRangeDates(project.data.start,project.data.end);
               let today = new Date();
               console.log(days);
@@ -3222,9 +3228,12 @@ app.post('/project-add-mat/:idp/:loginHash',function(req,res){
                 if(sameDay(Date.parse(days[i]),today)){
                   console.log("--check")
                   if(currentChartData.length == i+1){
-                    currentChartData[i] += currentChartData[i] + (Number(project.werkuren)*Number(req.body.werkuren));
+                    currentChartData[i] += currentChartData[i] + (Number(materiaal.prijs)*Number(hoeveelheid));
                   }else{
-                    currentChartData.push((Number(project.werkuren)*Number(req.body.werkuren)));
+                    while(currentChartData.length != i){
+                      currentChartData.push(0);
+                    }
+                    currentChartData.push((Number(materiaal.prijs)*Number(hoeveelheid)));
                   }
                   console.log(currentChartData);
                 }
