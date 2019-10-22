@@ -3055,14 +3055,20 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
               text:"Added "+String(workHours)+" hours of work",
               date:formatDate(new Date(),settings.lang)
             };
-            console.log(newActivity);
-            console.log(profile.activities);
             let currentActvities = project.activities;
             currentActvities.unshift(newActivity);
             let currentChartData = project.chart;
-            console.log(currentChartData);
-            currentChartData.push((Number(project.werkuren)*Number(req.body.werkuren)));
-            console.log(newChart);
+            let days = getRangeDates(project.data.start,project.data.end);
+            let today = new Date();
+            for (var i = 0; i < days.length; i++) {
+              if(today === Date(Date.parse(days[i]))){
+                if(currentChartData.length == i+1){
+                  currentChartData[i] += currentChartData[i] + (Number(project.werkuren)*Number(req.body.werkuren));
+                }else{
+                  currentChartData.push((Number(project.werkuren)*Number(req.body.werkuren)));
+                }
+              }
+            }
             Project.updateOne({_id:req.params.idp},
               {
                 activities:currentActvities,
@@ -4006,7 +4012,19 @@ function formatDate(date,lang) {
 
   return day + ' ' + monthNames[monthIndex] + ' ' + year+"\n"+getCurrentTime(date);
 }
-
+function getRangeDates(start,end){
+  let s = new Date(Date.parse(start));
+  let e = new Date(Date.parse(end));
+  let n = new Date(s);
+  let days = 1;
+  let dayRanges = [];
+  while(n.toString()!==e.toString()){
+    dayRanges.push(n.toDateString().substring(4,n.toDateString().length-5));
+    n.setDate(s.getDate()+days);
+    days++;
+  }
+  return dayRanges;
+}
 app.engine('pug', require('pug').__express)
 
 app.set('views', path.join(__dirname, 'views'));

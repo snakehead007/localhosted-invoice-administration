@@ -565,7 +565,6 @@ body
                             .col-3      
                               p.pre=activity.date
   script.
-    x=9;
     function getRangeDates(start,end){
       let s = new Date(Date.parse(start));
       let e = new Date(Date.parse(end));
@@ -586,63 +585,32 @@ body
       labels = month_small;
     }
     let chartData = [#{project.chart}];
-    var conf2ig = {
-      "type": 'line',
-      "data": {
-        "labels": getRangeDates("#{project.data.start}","#{project.data.end}"),
-        "dataset": [{
-          "label": 'set',
-          backgroundColor: window.chartColors.red,
-          borderColor: window.chartColors.red,
-          "data": [#{project.chart}],
-          fill: false
-        }],
-      },
-      options: {
-        responsive: true,
-        title: {
-          display: true,
-          text: 'Totaalprijs'
-        },
-        scales: {
-          xAxes: [{
-                   display: true,
-                   scaleLabel: {
-                           display: true,
-                           labelString: 'Month'
-                   }
-           }],
-           yAxes: [{
-                   display: true,
-                   gridLines: {
-                     drawBorder: false,
-                     color: ['red','','orange']
-                   },
-                   scaleLabel: {
-                           display: true,
-                           labelString: 'Value'
-                   },ticks: {
-                     min: 0,
-                     max: Number(#{project.budget.max}),
-                     stepSize: ((Number(#{project.budget.max})-Number(#{project.budget.min}))/2)
-                   }
-                               }]
-        }
-      }
-    };
     let config={
     	"type": "line",
     	"data": {
-    		"labels": ["January", "February", "March", "April", "May", "June", "July"],
+    		"labels": getRangeDates("#{project.data.start}","#{project.data.end}"),
     		"datasets": [{
-    			"label": "My First Dataset",
+    			"label": "Prijs totaal - per dag",
     			"data": [#{project.chart}],
     			"fill": false,
     			"borderColor": "rgb(75, 192, 192)",
     			"lineTension": 0.1
     		}]
     	},
-    	"options": {}
+    	"options": {
+        "scales":{
+          "yAxes":[{
+            "gridLines":{
+              "color":['red'  ]
+            },
+            "ticks":{
+              "min":0,
+              "max": Number(#{project.budget.max}),
+              "stepSize": ((Number(#{project.budget.max})-Number(#{project.budget.min}))/2)
+            }
+            }]
+        }
+      }
     }
 
     window.onload = function() {
