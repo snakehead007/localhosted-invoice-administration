@@ -3226,6 +3226,7 @@ app.post('/project-add-mat/:idp/:loginHash',function(req,res){
               let days = getRangeDates(project.data.start,project.data.end);
               let today = new Date();
               console.log(days);
+
               if(currentChartData.length > days.length ){
                 currentChartData = currentChartData.slice(0,days.length);
               }
@@ -3306,6 +3307,15 @@ app.post('/project-change-financial/:idp/:loginHash',function(req,res){
             };
             let currentActvities = project.activities;
             currentActvities.unshift(newActivity);
+            let days = getRangeDates(project.data.start,project.data.end);
+            console.log("=days=>"+days);
+            let currentChartData = project.chart;
+            console.log("=chartData=>"+currentChartData);
+            if(currentChartData.length < days.length+1 ){
+              console.log("slicing "+days.length);
+              currentChartData = currentChartData.slice(0,days.length+1);
+              console.log("=currentChartData=>"+currentChartData.slice(0,days.length+1));
+            }
             Project.updateOne({_id:req.params.idp},
               {
                 werkprijs:req.body.werktarief,
@@ -3317,6 +3327,7 @@ app.post('/project-change-financial/:idp/:loginHash',function(req,res){
                         start: String(req.body.dataStart),
                         end: String(req.body.dataEnd)
                       },
+                chart: currentChartData,
                 activities:currentActvities
               },function(err){
                 if(err){console.log("err:"+err)};
