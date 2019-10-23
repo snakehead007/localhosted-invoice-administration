@@ -504,11 +504,13 @@ body
                                 li.list-group-item
                                   .row
                                     .col-3
-                                      p=materiaal.amount+" kg / l"
-                                    .col-5.pre
-                                      p=materiaal.name+" ("+materiaal.cost+" € per kg/l)"
-                                    .col
-                                      p.pre=materiaal.date
+                                      p=materiaal.amount+" kg of l"
+                                    .col-4.pre
+                                      p=materiaal.name
+                                    .col-2
+                                      p="tot: "+materiaal.amount*materiaal.cost+"€"
+                                    .col-3
+                                      p.pre=materiaal.date.slice(0,materiaal.date.length-6)
                     .col-12.mr-auto.cardholder#ActivitiesSmall
                       .card
                         div.card-header(onclick="toggleActivities()") Activities

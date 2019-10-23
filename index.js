@@ -3004,7 +3004,7 @@ app.post('/project-edit/:idp/:loginHash',function(req,res){
                 naam:req.body.naam,
                 activities:currentActvities
               };
-            if(((req.body.naam !==project.naam) || (req.body.naam==="")) && req.body.idc !== project.contact ){
+            if(((req.body.naam !==project.naam) || (req.body.naam==="")) || req.body.idc !== project.contact ){
               Project.update({_id:req.params.idp},update,function(err){
                 if(err){console.log("err:"+err)};
                 res.redirect('/view-project/'+req.params.idp+"/"+req.params.loginHash);
