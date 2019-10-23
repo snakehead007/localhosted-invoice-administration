@@ -3,6 +3,7 @@
   "version": "1.8.0",
   "description": "this program is used for managing and administrating invoices and generating them into .pdf format",
   "main": "index.js",
+  "start": "node index.js",
   "dependencies": {
     "azure-batch": "^8.0.0",
     "body-parser": "^1.19.0",
@@ -21,15 +22,14 @@
     "image-to-base64": "^2.0.1",
     "jade": "^1.11.0",
     "lodash": "^4.17.15",
-    "mongodb": "^3.3.2",
+    "mongodb": "^3.3.3",
     "mongodb-core": "^3.2.7",
-    "mongoose": "^5.7.5",
+    "mongoose": "^5.7.6",
     "mquery": "^3.2.2",
     "multer": "^1.4.2",
     "node-base64-image": "^1.0.6",
-    "node-windows": "^0.1.14",
     "node2docfx": "^1.0.45",
-    "npm": "^6.11.3",
+    "npm": "^6.12.0",
     "pug": "^2.0.4",
     "qs": "^6.9.0",
     "raw-body": "^2.4.1",
@@ -40,7 +40,8 @@
     "jsdoc": "^3.6.3"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "npm i -g express --save --verbose && npm i express --save --verbose && npm i -g jade --save --verbose && npm i jade --save -- verbose && npm i mongodb -g --save --verbose && npm i mongodb --save --verbose && npm i -g mongoose --save --verbose && npm i mongoose --save --verbose && npm i -g chartjs --save --verbose && npm i chartjs --save --verbose && npm i -g express-fileupload --save --verbose && npm i express-fileupload --save --verbose && npm i -g image-to-base64 --save --verbose && npm i image-to-base64 --save --verbose && npm i -g multer --save --verbose && npm i multer --save --verbose && npm i pug --save --verbose && npm audit fix --verbose"
   },
   "repository": {
     "type": "git",
