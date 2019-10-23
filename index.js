@@ -3082,6 +3082,9 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
             let days = getRangeDates(project.data.start,project.data.end);
             let today = new Date();
             console.log(days);
+            if(currentChartData.length > days.length ){
+              currentChartData = currentChartData.slice(0,days.length);
+            }
             for (var i = 0; i < days.length; i++) {
               console.log(days[i]);
               if(sameDay(Date.parse(days[i]),today)){
@@ -3143,6 +3146,9 @@ app.post('/project-add-sub/:idp/:loginHash',function(req,res){
             let days = getRangeDates(project.data.start,project.data.end);
             let today = new Date();
             console.log(days);
+            if(currentChartData.length > days.length ){
+              currentChartData = currentChartData.slice(0,days.length);
+            }
             for (var i = 0; i < days.length; i++) {
               console.log(days[i]);
               console.log(Date.parse(days[i]).valueOf());
@@ -3220,6 +3226,9 @@ app.post('/project-add-mat/:idp/:loginHash',function(req,res){
               let days = getRangeDates(project.data.start,project.data.end);
               let today = new Date();
               console.log(days);
+              if(currentChartData.length > days.length ){
+                currentChartData = currentChartData.slice(0,days.length);
+              }
               for (var i = 0; i < days.length; i++) {
                 console.log(days[i]);
                 console.log(Date.parse(days[i]).valueOf());
