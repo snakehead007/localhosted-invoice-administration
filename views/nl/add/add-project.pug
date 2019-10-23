@@ -112,28 +112,28 @@ body
           hr
           form(action='/add-project'+"/"+loginHash,method='post')
             div(class="form-row")
-              div(class="form-group col-md-10")
+              div(class="form-group col-lg-4 col-sm-12 col-md-4")
                 label(for="naam") Klant
                 select(class="custom-select" id="inputGroupSelect03"  name="contact")
                     each contact in contacten
                         option(value=contact._id)=contact.contactPersoon
-              div(class="form-group col-md-2")
-                label(for="title") Projectnaam
+              div(class="form-group col-lg-8 col-md-8 col-sm-12")
+                label(for="title") Project naam
                 input(type="text",class="form-control",name="naam")
-              div(class="form-group col-md-2")
-                label(for="title") BudgetMin
-                input(type="text",class="form-control",name="budgetMin")
-              div(class="form-group col-md-2")
-                label(for="title") BudgetMax
-                input(type="text",class="form-control",name="budgetMax")
-              div(class="form-group col-md-2")
-                label(for="title") Databegin
+              div(class="form-group col-lg-2 col-md-4 col-sm-12")
+                label(for="title") Budget (min.)
+                input(type="number",class="form-control",name="budgetMin")
+              div(class="form-group col-lg-2 col-md-4 col-sm-12")
+                label(for="title") Budget (max.)
+                input(type="number",class="form-control",name="budgetMax")
+              div(class="form-group col-lg-4 col-md-12 col-sm-12")
+                label(for="title") Beschrijving
+                textarea(type="text",class="form-control",name="description")
+              div(class="form-group col-lg-2 col-md-4 col-sm-12")
+                label(for="title") Start datum
                 input.datepicker(type="text",class="form-control",name="dataStart")
-              div(class="form-group col-md-2")
-                label(for="title") DataEnd
+              div(class="form-group col-lg-2 col-md-2 col-sm-12")
+                label(for="title") Eind datum
                 input.datepicker(type="text",class="form-control",name="dataEnd")
-              div(class="form-group col-md-2")
-                label(for="title") description
-                input(type="text",class="form-control",name="description")
             hr
             button(type="submit",class="btn btn-outline-"+settings.thema) toevoegen
