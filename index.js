@@ -3073,7 +3073,7 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
             if(err){console.log("err:"+err)};
             let newActivity = {
               id:3,/*ID for adding working hours*/
-              text:"Added "+String(workHours)+" hours of work",
+              text:"Added "+String(workHours.toFixed(2))+" hours of work",
               date:formatDate(new Date(),settings.lang)
             };
             let currentActvities = project.activities;
@@ -3090,7 +3090,7 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
               if(sameDay(Date.parse(days[i]),today)){
                 console.log("--check")
                 if(currentChartData.length == i+1){
-                  currentChartData[i] = currentChartData[i] + (Number(project.werkprijs)*Number(req.body.werkuren));
+                  currentChartData[i] = project.total + currentChartData[i] + (Number(project.werkprijs)*Number(req.body.werkuren));
                 }else{
                   while(currentChartData.length != i){
                     currentChartData.push(0);
@@ -3156,7 +3156,7 @@ app.post('/project-add-sub/:idp/:loginHash',function(req,res){
               if(sameDay(Date.parse(days[i]),today)){
                 console.log("--check");
                 if(currentChartData.length == i+1){
-                  currentChartData[i] = currentChartData[i] + Number(req.body.price);
+                  currentChartData[i] = project.total + currentChartData[i] + Number(req.body.price);
                 }else{
                   while(currentChartData.length != i){
                     currentChartData.push(0);
@@ -3237,7 +3237,7 @@ app.post('/project-add-mat/:idp/:loginHash',function(req,res){
                 if(sameDay(Date.parse(days[i]),today)){
                   console.log("--check")
                   if(currentChartData.length == i+1){
-                    currentChartData[i] = currentChartData[i] + (Number(materiaal.prijs)*Number(hoeveelheid));
+                    currentChartData[i] = project.total + currentChartData[i] + (Number(materiaal.prijs)*Number(hoeveelheid));
                   }else{
                     while(currentChartData.length != i){
                       currentChartData.push(0);
