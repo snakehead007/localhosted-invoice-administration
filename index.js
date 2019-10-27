@@ -3061,7 +3061,7 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
-    let workHours = req.body.werkuren;
+    let workHours = hoursMinutesToHoursFloat(req.body.werkmin,req.body.werkuren);
     let newChart;
     Settings.findOne({},function(err,settings){
       if(err){console.log("err:"+err)};
@@ -4182,6 +4182,11 @@ function getCurrentTime(d){
     str+=":"+d.getMinutes();
   }
   return str;
+}
+
+
+function hoursMinutesToHoursFloat(h,m){
+  return Number(h)+(Number(m)/60.0);
 }
 
 function formatDate(date,lang) {

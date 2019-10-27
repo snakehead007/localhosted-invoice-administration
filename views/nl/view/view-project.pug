@@ -376,8 +376,10 @@ body
                           form(action='/project-add-hours/'+project._id+'/'+loginHash method='post')
                             .form-group.row
                               label.col-4.col-form-label(for='werkurenInput') Aantal Uren Gewerkt
-                              .col-sm-8
-                                input.form-control(type='text' name='werkuren' id='werkurenInput')
+                              .col-sm-4
+                                input.form-control(type='text' name='werkuren' id='werkurenInput' placeholder="hours")
+                              .col-sm-4
+                                input.form-control(type='text' name='werkmin' id='werkurenInput' placeholder="minutes")
                               .col-2
                                 button.btn(type='sumbit') Add
                         //ADD CARD -- Materials
@@ -470,8 +472,10 @@ body
                             form(action='/project-add-hours/'+project._id+'/'+loginHash method='post')
                               .form-group.row
                                 label.col-4.col-form-label(for='werkurenInput') Aantal Uren Gewerkt
-                                .col-sm-8
-                                  input.form-control(type='text' name='werkuren' id='werkurenInput')
+                                .col-sm-4
+                                  input.form-control(type='text' name='werkuren' id='werkurenInput' placeholder="hours")
+                                .col-sm-4
+                                  input.form-control(type='text' name='werkmin' id='werkurenInput' placeholder="minutes")
                                 .col-2
                                   button.btn(type='sumbit') Add
                           //ADD CARD -- Materials
