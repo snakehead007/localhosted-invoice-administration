@@ -250,7 +250,7 @@ body
                                 .col-3 
                                   h6 Werkuren totaal
                                 .col
-                                  span=project.werkuren+" uur"
+                                  span=werkuren
                             li(class="list-group-item")
                               .form-group.row
                                 .col-3
@@ -664,3 +664,25 @@ body
       window.myLine = new Chart(ctx, config);
       window.myLine = new Chart(ctx2, config);
     };
+
+    function hoursFloatToHoursMinutes(time) {
+      let hours = Math.trunc(time);
+      let minutes = Math.trunc((time % 1.0) * 100);
+      let sHours = "";
+      let sMinutes = "";
+      if (hours.toString().length === 1) {
+        sHours = "0" + hours + "u";
+      } else if (hours.toString().length === 0) {
+        sHours = "00u";
+      } else if (hours.toString().length > 1) {
+        shours = hours + "u";
+      }
+      if (minutes.toString().length === 1) {
+        sMinutes = "0" + minutes + "m";
+      } else if (minutes.toString().length === 0) {
+        sMinutes = "00m";
+      } else if (minutes.toString().length === 2) {
+        sMinutes = minutes + "m";
+      }
+      return sHours + sMinutes;
+    }

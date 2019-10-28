@@ -2952,6 +2952,7 @@ app.get('/view-project/:idp/:loginHash', function(req,res){
                   "project":project,
                   "contacten":contacten,
                   "materialen":materialen,
+                  "werkuren":hoursFloatToHoursMinutes(Number(project.werkuren)),
                   'loginHash': req.params.loginHash
                 });
               });
@@ -3077,7 +3078,7 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
             if(err){console.log("err:"+err)};
             let newActivity = {
               id:3,/*ID for adding working hours*/
-              text:"Added "+String(workHours.toFixed(2))+" hours of work",
+              text:"Added "+hourMinToString(werkuren,werkmin)+" hours of work",
               date:formatDate(new Date(),settings.lang)
             };
             let currentActvities = project.activities;
@@ -4205,6 +4206,50 @@ function getCurrentTime(time){
 
 function hoursMinutesToHoursFloat(m,h){
   return Number(h)+(Number(m)/60.0);
+}
+
+function hoursFloatToHoursMinutes(time){
+  let hours = Math.trunc(time);
+  let minutes = Math.trunc((time%1.0)*100);
+  let sHours = "";
+  let sMinutes = "";
+  if(hours.toString().length ===1){
+      sHours = "0"+hours+"u";
+  }else if(hours.toString().length === 0){
+    sHours = "00u";
+  }else if(hours.toString().length > 1){
+    sHours = hours+"u";
+  }
+  if(minutes.toString().length ===1){
+      sMinutes = "0"+minutes+"m";
+  }else if(minutes.toString().length === 0){
+    sMinutes = "00m";
+  }else if(minutes.toString().length === 2){
+    sMinutes = minutes+"m";
+  }
+  return sHours+sMinutes;
+}
+
+function hourMinToString(h,m){
+  let hours = Math.trunc(h);
+  let minutes = Math.trunc(m);
+  let sHours = "";
+  let sMinutes = "";
+  if(hours.toString().length ===1){
+    sHours = "0"+hours+"u";
+  }else if(hours.toString().length === 0){
+    sHours = "00u";
+  }else if(hours.toString().length > 1){
+    sHours = hours+"u";
+  }
+  if(minutes.toString().length ===1){
+    sMinutes = "0"+minutes+"m";
+  }else if(minutes.toString().length === 0){
+    sMinutes = "00m";
+  }else if(minutes.toString().length === 2){
+    sMinutes = minutes+"m";
+  }
+  return sHours+sMinutes;
 }
 
 function formatDate(date,lang) {
