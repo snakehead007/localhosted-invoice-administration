@@ -4185,7 +4185,7 @@ function getCurrentTime(d){
 }
 
 
-function hoursMinutesToHoursFloat(h,m){
+function hoursMinutesToHoursFloat(m,h){
   return Number(h)+(Number(m)/60.0);
 }
 
