@@ -3061,7 +3061,15 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
     if (String(req.params.loginHash) !== loginHash) {
       res.render('login');
     }});
-    let workHours = hoursMinutesToHoursFloat(req.body.werkmin,req.body.werkuren);
+    let werkmin = 0;
+    let werkuren = 0;
+    if(!req.body.werkmin){
+      werkmin=req.body.werkmin;
+    }
+    if(!req.body.werkuren){
+      werkuren = req.body.werkuren;
+    }
+    let workHours = hoursMinutesToHoursFloat(werkmin,werkuren);
     let newChart;
     Settings.findOne({},function(err,settings){
       if(err){console.log("err:"+err)};
@@ -4183,7 +4191,21 @@ function getCurrentTime(d){
   }
   return str;
 }
-
+function getCurrentTime(time){
+  let str ="";
+  var d=time
+  if(d.getHours().toString().length==1){
+    str+="0"+d.getHours();
+  }else{
+    str+=d.getHours();
+  }
+  if(d.getMinutes().toString().length==1){
+    str+=":0"+d.getMinutes();
+  }else{
+    str+=":"+d.getMinutes();
+  }
+  return str;
+}
 
 function hoursMinutesToHoursFloat(m,h){
   return Number(h)+(Number(m)/60.0);
