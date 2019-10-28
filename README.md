@@ -2,7 +2,8 @@
 
 This program is mainly used for managing and administrating invoices and generating them into .pdf format
 
-Version 2.0 is out. Its fully production ready, we are still improving and adding things on a daily basis.
+Version 2.0(beta) is out. We are still improving and adding things on a daily basis.
+This is not a finished product, but you can still contribute and test it out.
 
 This project is translated in 2 languages, Dutch and English.
 
@@ -59,3 +60,9 @@ Screenshots
 ![Invoices and others of 1 contact](screenshots/6.png)
 
 ![the chart](screenshots/7.png)
+
+Future plans
+-
+* Currently on the work of a total rework, making everything future proof and security first.
+* In the future the view engine, Pug, will be replace by React or Angular.
+* When this project comes out of beta, you'll be able to rent a hosted server for a monlty fee.
