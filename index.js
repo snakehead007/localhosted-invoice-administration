@@ -3063,12 +3063,8 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
     }});
     let werkmin = 0;
     let werkuren = 0;
-    if(!req.body.werkmin){
       werkmin=req.body.werkmin;
-    }
-    if(!req.body.werkuren){
       werkuren = req.body.werkuren;
-    }
     let workHours = hoursMinutesToHoursFloat(werkmin,werkuren);
     let newChart;
     Settings.findOne({},function(err,settings){
