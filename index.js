@@ -3109,7 +3109,7 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
               {
                 activities:currentActvities,
                 werkuren:Number(project.werkuren)+Number(req.body.werkuren),
-                total:project.total+(Number(req.body.werkuren)*Number(project.werkprijs)),
+                total:project.total+(Number(werkuren+(werkmin/60))*Number(project.werkprijs)),
                 chart:currentChartData
               }
             ,function(err){
