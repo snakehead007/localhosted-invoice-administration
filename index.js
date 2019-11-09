@@ -3086,7 +3086,8 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
             let currentChartData = project.chart;
             let days = getRangeDates(project.data.start,project.data.end);
             let today = new Date();
-            console.log(days);
+            let workinghourscurrent = workHours*project.werkprijs;
+            console.log("workinghoursCurrent: "+workinghourscurrent);
             if(currentChartData.length > days.length ){
               currentChartData = currentChartData.slice(0,days.length);
             }
@@ -3094,22 +3095,27 @@ app.post('/project-add-hours/:idp/:loginHash',function(req,res){
               console.log(days[i]);
               if(sameDay(Date.parse(days[i]),today)){
                 console.log("--check")
-                if(currentChartData.length == i+1){
-                  currentChartData[i] = project.total + currentChartData[i] + (Number(project.werkprijs)*Number(req.body.werkuren));
+                if(currentChartData.length === i+1){
+                  currentChartData[i] = project.total + currentChartData[i] + (workinghourscurrent);
                 }else{
                   while(currentChartData.length != i){
                     currentChartData.push(0);
                   }
-                  currentChartData.push((Number(project.werkprijs)*Number(req.body.werkuren)));
+                  currentChartData.push(workinghourscurrent);
                 }
                 console.log(currentChartData);
               }
             }
+            console.log("workinghours: "+workHours);
+            console.log("totaal toegevoegd: "+workinghourscurrent);
+            let newTotal = project.total + workinghourscurrent;
+            console.log(newTotal);
+            console.log(currentChartData);
             Project.updateOne({_id:req.params.idp},
               {
                 activities:currentActvities,
                 werkuren:Number(project.werkuren)+Number(req.body.werkuren),
-                total:project.total+(Number(werkuren+(werkmin/60))*Number(project.werkprijs)),
+                total:newTotal,
                 chart:currentChartData
               }
             ,function(err){
