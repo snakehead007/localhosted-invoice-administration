@@ -9,5 +9,3 @@ Or contact me with any kind of other question regarding this repository
 ##### State of current code:
 
 All functions and files are created with their Dutch name.
-The views engine currenlty is 'jade', which is an outdated version of 'pug'
-All files are written in jade, having no issue. but needs a rewrite to pug files.

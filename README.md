@@ -9,6 +9,8 @@ This project is translated in 2 languages, Dutch and English.
 
 This program is created and maintained for [www.mdsart.be/](https://www.mdsart.be/)
 
+--> install using `sudo docker-compose up --build`
+
 about
 --
 

@@ -1,12 +1,14 @@
-From node:10
+From node:12
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY package*.json /usr/src/app/
 
 RUN npm install
 
-COPY . .
+COPY . /usr/src/app
 EXPOSE 3000
 
-CMD [ "node", "index.js" ]
+ENV MONGO_HOST=mongo
+
+CMD [ "npm", "start" ]

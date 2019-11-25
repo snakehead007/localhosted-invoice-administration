@@ -13,6 +13,8 @@ yml/
 out/
 daemon/
 node_modules/
+build/*
+data/*
 ### Linux ###
 *~
 
