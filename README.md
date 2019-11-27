@@ -31,8 +31,9 @@ Functionalities:
  - local:
   `docker-compose up --build`
  - synology/hub.docker:
-  start container (mongo)[https://hub.docker.com/_/mongo] first.
-  start container (invoice-administration)[https://hub.docker.com/repository/docker/snakehead007/invoice-administration] second, with link to mongo container as 'mongo'.
+ 
+  start container [mongo](https://hub.docker.com/_/mongo) first.
+  start container [invoice-administration](https://hub.docker.com/repository/docker/snakehead007/invoice-administration) second, with link to mongo container as 'mongo'.
 
 ### About (technical)
 All data is kept locally by mongodb.
