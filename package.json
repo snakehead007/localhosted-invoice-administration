@@ -2,7 +2,8 @@
   "name": "simple-invoice-administration",
   "version": "1.8.0",
   "description": "this program is used for managing and administrating invoices and generating them into .pdf format",
-  "main": "index.js",
+  "main": "/src/app.js",
+  "type": "module",
   "dependencies": {
     "azure-batch": "^8.0.0",
     "body-parser": "^1.19.0",
