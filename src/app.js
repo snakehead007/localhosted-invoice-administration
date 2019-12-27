@@ -8,12 +8,12 @@ import 'express-fileupload';
 import 'image-to-base64';
 
 import {load} from './loaders/loader.js';
-
+import routers from './routes/index.js';
 async function startServer() {
     const app = express();
 
     await load(app);
-    app.use("/","routes");
+    app.use("/",routers(app));
     app.listen('3000', err ,() => {
         if(err){
             console.log("Err: "+err);

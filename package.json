@@ -40,7 +40,7 @@
     "jsdoc": "^3.6.3"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node --experimental-module src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -1,5 +1,6 @@
 import express from 'express';
 import  bodyParser from 'body-parser';
+import path from 'path';
 import pug from 'pug'
 
 export default ( app ) => {
@@ -20,10 +21,7 @@ export default ( app ) => {
     }catch(ex){
         console.log("error:  "+ex.message+"\n"+ex);
     }
-
-    app.set('views', path.join(__dirname, '/views'));
+    app.set('views', path.join(path.resolve(), 'views'));
     app.set('view engine', 'pug');
-    app.use(express.static(path.join(__dirname, '/public')));
+    app.use(express.static(path.join(path.resolve(), 'public')));
 };
-
-
