@@ -8,18 +8,12 @@ import 'express-fileupload';
 import 'image-to-base64';
 
 import {load} from './loaders/loader.js';
-import routers from './routes/index.js';
+import {router} from './routes/index.js';
 async function startServer() {
     const app = express();
-
     await load(app);
-    app.use("/",routers(app));
-    app.listen('3000', err ,() => {
-        if(err){
-            console.log("Err: "+err);
-            process.exit(1);
-            return;
-        }
+    app.use("/",router);
+    app.listen('3000',() => {
         console.log('Server is running at PORT ' + 3000);
     });
 }

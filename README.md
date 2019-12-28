@@ -1,5 +1,10 @@
 # Invoice-administration
 
+#### develop notes:
+    running with --experimental-modules flag.
+    to run `node --experimental-modules src/app.js
+#### notes
+
 This program is mainly used for managing and administrating invoices and generating them into .pdf format
 
 Version 2.0(beta) is out. We are still improving and adding things on a daily basis.

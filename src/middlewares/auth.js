@@ -1,5 +1,5 @@
-const jwt = require("jsonwebtoken");
-const config = require("config");
+import jwt from "jsonwebtoken";
+import config from "config";
 
 export default function auth(req, res, next){
     const token = req.header("x-auth-token");
@@ -13,5 +13,3 @@ export default function auth(req, res, next){
         res.status(400).send("Invalid token");
     }
 };
-
-modules.exports.auth = auth;

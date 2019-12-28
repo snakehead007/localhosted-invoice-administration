@@ -11,12 +11,12 @@ export default ( app ) => {
         app.use(bodyParser.urlencoded({
             extended: true
         }));
-        app.use((req, res) => {
+        /*app.use((req, res) => {
             res.status(404).send('404: Page not Found');
         });
         app.use((error, req, res, next) => {
             res.status(500).send('500: Internal Server Error');
-        });
+        });*/
         app.engine('pug', pug.__express);
     }catch(ex){
         console.log("error:  "+ex.message+"\n"+ex);
