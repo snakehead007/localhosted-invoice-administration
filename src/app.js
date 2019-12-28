@@ -1,21 +1,19 @@
-import 'path';
-import express from 'express';
-import 'body-parser';
-import 'mongoose';
-import 'multer';
-import 'fs';
-import 'express-fileupload';
-import 'image-to-base64';
+const path = require('path');
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const multer = require('multer');
+const fs = require('fs');
+const expressFileupload = require('express-fileupload');
+const imageToBase64 = require('image-to-base64');
 
-import {load} from './loaders/loader.js';
-import {router} from './routes/index.js';
+const {load} = require('./loaders/loader.js');
+const routes = require('./routes/index.js');
+const dotenv = require('./loaders/dotenv.js');
+
 async function startServer() {
     const app = express();
     await load(app);
-    app.use("/",router);
-    app.listen('3000',() => {
-        console.log('Server is running at PORT ' + 3000);
-    });
+    app.use('/',routes);
 }
-
 startServer();

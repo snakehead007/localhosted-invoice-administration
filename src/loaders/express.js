@@ -1,9 +1,10 @@
-import express from 'express';
-import  bodyParser from 'body-parser';
-import path from 'path';
-import pug from 'pug'
+const express = require( 'express');
+const  bodyParser = require('body-parser');
+const path = require('path');
+const pug = require('pug');
+const dotenv = require('./dotenv.js');
 
-export default ( app ) => {
+module.exports.default =  function( app ){
     try {
         app.locals.title = 'invoice-administration';
         app.locals.email = 'snakehead007@pm.me';
@@ -11,12 +12,6 @@ export default ( app ) => {
         app.use(bodyParser.urlencoded({
             extended: true
         }));
-        /*app.use((req, res) => {
-            res.status(404).send('404: Page not Found');
-        });
-        app.use((error, req, res, next) => {
-            res.status(500).send('500: Internal Server Error');
-        });*/
         app.engine('pug', pug.__express);
     }catch(ex){
         console.log("error:  "+ex.message+"\n"+ex);
@@ -24,4 +19,7 @@ export default ( app ) => {
     app.set('views', path.join(path.resolve(), 'views'));
     app.set('view engine', 'pug');
     app.use(express.static(path.join(path.resolve(), 'public')));
+    app.listen(dotenv.PORT,() => {
+        console.log('Server is running at PORT ' + dotenv.PORT);
+    });
 };

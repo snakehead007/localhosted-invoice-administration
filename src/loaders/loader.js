@@ -1,7 +1,10 @@
-import mongooseLoader from './mongoose.js';
-import expressLoader from './express.js';
+const mongooseLoader = require('./mongoose.js');
+const expressLoader = require('./express.js');
+const dotenvLoader = require('./dotenv.js');
 
-export async function load( expressApp ) {
-    const mongooseConnection = await mongooseLoader();
-    await expressLoader( expressApp );
+async function load( expressApp ) {
+    await dotenvLoader.default(expressApp);
+    await mongooseLoader.default();
+    await expressLoader.default( expressApp );
 }
+module.exports.load = load;

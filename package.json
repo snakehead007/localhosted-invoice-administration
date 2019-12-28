@@ -3,7 +3,6 @@
   "version": "1.8.0",
   "description": "this program is used for managing and administrating invoices and generating them into .pdf format",
   "main": "/src/app.js",
-  "type": "module",
   "dependencies": {
     "azure-batch": "^8.0.0",
     "body-parser": "^1.19.0",
@@ -14,7 +13,9 @@
     "config": "^3.2.4",
     "constantinople": "^3.1.2",
     "content-disposition": "^0.5.3",
+    "cors": "^2.8.5",
     "debug": "^4.1.1",
+    "dotenv": "^8.2.0",
     "engine.io-client": "^3.4.0",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.6",
@@ -39,6 +40,7 @@
     "ws": "^7.2.0"
   },
   "devDependencies": {
+    "@types/express": "^4.17.2",
     "jsdoc": "^3.6.3"
   },
   "scripts": {
