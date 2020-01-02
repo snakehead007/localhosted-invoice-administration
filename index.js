@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 //Mongoose initializing
-mongoose.connect('mongodb://mongo:27017/sample-website'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
+mongoose.connect('mongodb://localhost:27017/sample-website'); //This is still on 'sample-website'. After automatisating all Data import and export, then will be changed
 mongoose.connection.on('open', function() {
   console.log('Mongoose connected!');
 });
@@ -34,6 +34,7 @@ var maand_klein = ["januari", "februari", "maart", "april", "mei", "juni", "juli
 var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Oktober", "November", "December"];
 var month_small = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "oktober", "november", "december"];
 var year = new Date().getFullYear().toString();
+console.log(year);
 
 //Schema initializing
 Schema = mongoose.Schema;
@@ -1130,7 +1131,10 @@ app.get('/facturen/:loginHash', function(req, res) {//REWORKED & tested
       res.render('login');
     }});
     Factuur.find({}).sort('-factuurNr').exec(function(err, facturen) {
+
       if (!err) {
+
+        console.log(facturen);
         Settings.findOne({}, function(err, settings) {
           if (!err) {
               Profile.findOne({},function(err,profile){
