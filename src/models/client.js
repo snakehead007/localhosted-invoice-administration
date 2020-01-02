@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+const mongoose = require("mongoose");
 
 const Client = new mongoose.Schema({
     firm: String,
@@ -27,4 +27,4 @@ const Client = new mongoose.Schema({
     }]
 });
 
-export default mongoose.Model('Client',Client);
+module.exports.default = mongoose.model('Client',Client);

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const Profile = new mongoose.Schema({
     firm: String,
@@ -28,4 +28,4 @@ const Profile = new mongoose.Schema({
     bookmarksText: String,
 })
 
-export default mongoose.model('Profile', Profile);
+module.exports.default =  mongoose.model('Profile', Profile);

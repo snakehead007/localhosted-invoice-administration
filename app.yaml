@@ -1,0 +1,5 @@
+runtime: "nodejs10"
+
+env_variables:
+    DB_URI: "mongodb://127.0.0.1:27017/sample-website"
+supremePotato_jwtPrivateKey: "p4sta.w1th-b0logn3s3-s@uce"

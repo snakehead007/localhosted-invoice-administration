@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 const Database = new mongoose.Schema({
     users: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
     }]
 })
-export default mongoose.model('Database',Database);
+module.exports.default = mongoose.model('Database',Database);

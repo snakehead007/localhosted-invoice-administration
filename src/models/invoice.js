@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const Invoice = new mongoose.Schema({
     date: Date,
@@ -24,4 +24,4 @@ const Invoice = new mongoose.Schema({
     }],
 });
 
-export default mongoose.model('Invoice', Invoice);
+module.exports.default = mongoose.model('Invoice', Invoice);

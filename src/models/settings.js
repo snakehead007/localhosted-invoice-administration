@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const Settings = new mongoose.Schema({
     lang: {
@@ -65,4 +65,4 @@ const Settings = new mongoose.Schema({
     }
 });
 
-export default mongoose.model('Settings', Settings);
+module.exports.default = mongoose.model('Settings', Settings);
