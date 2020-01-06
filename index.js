@@ -452,7 +452,7 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {//REWORKED & tested
                       if (  (factuur.datumBetaald.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i]) || factuur.datumBetaald.includes(month[i]) || factuur.datumBetaald.includes(month_small[i])) && factuur.datumBetaald.includes(req.params.jaar) && factuur.factuurNr && factuur.isBetaald) {
                               totaal[i] += factuur.totaal;
                       }
-                    } else if ( (factuur.0.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i]) || factuur.datumBetaald.includes(month[i]) || factuur.datumBetaald.includes(month_small[i])) && factuur.datum.includes(req.params.jaar) && factuur.factuurNr && factuur.isBetaald){
+                    } else if ( (factuur.includes(maand[i]) || factuur.datumBetaald.includes(maand_klein[i]) || factuur.datumBetaald.includes(month[i]) || factuur.datumBetaald.includes(month_small[i])) && factuur.datum.includes(req.params.jaar) && factuur.factuurNr && factuur.isBetaald){
                         totaal[i] += factuur.totaal;
                       }
                   }
