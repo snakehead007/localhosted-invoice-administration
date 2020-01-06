@@ -12,7 +12,7 @@ require('../middlewares/passport')(passport);
     app.locals.email = 'snakehead007@pm.me';
 
     app.engine('pug', pug.__express);
-    app.set('views', path.join(path.resolve(), 'views'));
+    app.set('views', path.join(path.resolve(), '../views'));
     app.set('view engine', 'pug');
 
     console.log("[info]:    Engine  and view loaded");

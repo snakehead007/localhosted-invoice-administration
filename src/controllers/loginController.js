@@ -9,5 +9,6 @@ exports.login_post =  function postLogin(req,res){
 };
 
 exports.create_user_get = function getCreateNewUser(req,res){
+    console.log("create user view");
   res.render("createUser");
 };
