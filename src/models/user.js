@@ -50,7 +50,6 @@ const User = new mongoose.Schema({
     }
 );
 
-module.exports.default = mongoose.model('User', User);
-module.exports = User;
-
+const user = mongoose.model('User', User);
+module.exports = user;
 
