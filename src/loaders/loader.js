@@ -1,15 +1,14 @@
+const passport = require('passport');
 const mongooseLoader = require('./mongoose.js');
 const expressLoader = require('./express.js');
-const dotenvLoader = require('./dotenv.js');
-const passport = require("passport");
+const passportLoader = require('../middlewares/passport.js');
 
 async function load( expressApp ) {
     console.log("[info]: Starting load");
-    await dotenvLoader.default(expressApp);
-    console.log("[info]: dotevn file loaded");
+    await passportLoader(passport);
     await mongooseLoader.default();
     console.log("[info]: mongoose loaded");
-    await expressLoader.default( expressApp , passport);
+    await expressLoader.default( expressApp );
     console.log("[info]: express loaded");
 }
 module.exports.load = load;

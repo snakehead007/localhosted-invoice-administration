@@ -3,7 +3,7 @@ const loginRouter = require("./loginRouter.js");
 const router = express.Router();
 
 //Controllers
-router.use("/login",loginRouter);
+router.use("/login",() => {console.log("test")},loginRouter);
 //Routers
 /*
 router.all("/view");

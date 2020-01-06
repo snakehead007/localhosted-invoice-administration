@@ -1,24 +1,40 @@
+const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcryptjs');
 
-'use strict';
+// Load User model
+const User = require('../models/user.js');
 
-/*
- * Module dependencies.
- */
+module.exports = async function(passport) {
+    passport.use(
+        new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
+            // Match user
+            User.findOne({
+                email: email
+            }).then(user => {
+                if (!user) {
+                    return done(null, false, { message: 'That email is not registered' });
+                }
 
-const mongoose = require('mongoose');
-const local = require('./passport/local');
+                // Match password
+                bcrypt.compare(password, user.password, (err, isMatch) => {
+                    if (err) throw err;
+                    if (isMatch) {
+                        return done(null, user);
+                    } else {
+                        return done(null, false, { message: 'Password incorrect' });
+                    }
+                });
+            });
+        })
+    );
 
-const User = mongoose.model('User');
+    passport.serializeUser(function(user, done) {
+        done(null, user.id);
+    });
 
-/**
- * Expose
- */
-
-module.exports = function(passport) {
-    // serialize and deserialize sessions
-    passport.serializeUser((user, done) => done(null, user.id));
-    passport.deserializeUser((id, done) => User.findOne({ _id: id }, done));
-
-    // use these strategies
-    passport.use(local);
+    passport.deserializeUser(function(id, done) {
+        User.findById(id, function(err, user) {
+            done(err, user);
+        });
+    });
 };

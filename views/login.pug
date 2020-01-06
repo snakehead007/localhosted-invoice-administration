@@ -121,7 +121,7 @@ style.
     transform: scale(0.95);
   }
 
-  input[type=text] {
+  input[type=text],input[type=password] {
     background-color: #f6f6f6;
     border: none;
     color: #0d0d0d;
@@ -142,14 +142,11 @@ style.
     border-radius: 5px 5px 5px 5px;
   }
 
-  input[type=text]:focus {
+  input[type=text]:focus,input[type=password]:focus {
     background-color: #fff;
     border-bottom: 2px solid #f80600;
   }
 
-  input[type=text]:placeholder {
-    color: #cccccc;
-  }
 
 
 
@@ -271,14 +268,15 @@ body
     div(class="row no-gutters")
       div(class="col-3")
       div(class="col-12")
-        div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Paswoord incorrect
+        div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Paswoord or e-mail incorrect
     div(class="col-4 mr-auto")
   div(class="wrapper fadeInDown container-fluid")
     div(id="formContent")
       div(class="fadeIn first")
         img(src="/logo.jpeg" id="icon" alt=" ")
       form(method="post", action='/')
-        input(type="password" id="pass" class="fadeIn third" name="loginHash" placeholder="" autofocus)
+        input(type="text" id="mail" class="fadeIn third" name="loginHash" placeholder="e-mail"  autofocus)
+        input(type="password" id="pass" class="fadeIn third" name="loginHash" placeholder="password" autofocus)
         hr
         input(type="submit" class="fadeIn fourth" value="Log In")
       div(id="formFooter")

@@ -7,3 +7,7 @@ exports.login_post =  function postLogin(req,res){
     console.log("post login");
     res.send("login post");
 };
+
+exports.create_user_get = function getCreateNewUser(req,res){
+  res.render("createUser");
+};
