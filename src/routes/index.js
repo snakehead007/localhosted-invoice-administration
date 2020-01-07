@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const loginRouter = require("./loginRouter.js");
+const dashboardRouter = require('./dashboardRouter');
 
 
 //Controllers
 router.use("/login",loginRouter);
+router.use("/dashboard",dashboardRouter);
 //Routers
 /*
 router.all("/view");

@@ -5,6 +5,10 @@ const User = new mongoose.Schema({
             type: String,
             required: [true, 'Please enter a full name']
         },
+        googleId:{
+            type:String,
+            unique:true
+        },
         email: {
             type: String,
             lowercase: true,
@@ -14,20 +18,9 @@ const User = new mongoose.Schema({
             minlength: 5,
             maxlength: 255,
         },
-        password: {
-            minLength: 5,
-            maxLenght: 255,
-            required: true,
-            type:String
-        },
-        salt: { type: String, default: '' },
         role: {
             type: String,
             default: 'user',
-        },
-        isVerificated: {
-            type: Boolean,
-            default: false
         },
         creationDate: {
             type: Date,
@@ -47,9 +40,29 @@ const User = new mongoose.Schema({
         profile: {
             type: mongoose.Schema.Types.ObjectId, ref: 'Profile'
         },
+        tokens: [{
+            type: Object
+        }]
     }
 );
 
+
+
 const user = mongoose.model('User', User);
+
+exports.getUserfromGoogleId = async (gId) => {
+    user.findOne({googleId:gId},function(err,User){
+        if(err) throw new Error(err);
+        return User;
+    });
+};
+
+exports.getUserIdfromGoogleId = async(gId) => {
+    user.findOne({googleId:gId},function(err,User){
+        if(err) throw new Error(err);
+        return User._id;
+    })
+};
+
 module.exports = user;
 

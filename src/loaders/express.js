@@ -3,8 +3,6 @@ const  bodyParser = require('body-parser');
 const path = require('path');
 const pug = require('pug');
 const session = require('express-session');
-const passport = require('passport');
-require('../middlewares/passport')(passport);
     module.exports.default =  function( app ){
 
     console.log("[info]: Start loading express functionalities");
@@ -32,11 +30,6 @@ require('../middlewares/passport')(passport);
         })
     );
     console.log("[info]:    Cookies and sessions set up");
-
-    app.use(passport.initialize());
-    app.use(passport.session());
-
-    console.log("[info]:    passport methods set up");
 
     app.listen(process.env.PORT,() => {
         console.log('Server is running at PORT ' + process.env.PORT);

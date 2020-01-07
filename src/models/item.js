@@ -12,4 +12,5 @@ const Item = new mongoose.Schema({
     }
 });
 
-module.exports.default = mongoose.model('Item', Item);
+const item = mongoose.model('Item', Item);
+module.exports = Item;

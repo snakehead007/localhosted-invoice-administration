@@ -26,6 +26,8 @@ const Profile = new mongoose.Schema({
     mail: [String],
     bookmarks: [[String,String]],
     bookmarksText: String,
-})
+});
 
-module.exports.default =  mongoose.model('Profile', Profile);
+const profile =  mongoose.model('Profile', Profile);
+
+module.exports = Profile;

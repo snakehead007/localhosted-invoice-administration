@@ -274,12 +274,13 @@ body
     div(id="formContent")
       div(class="fadeIn first")
         img(src="/logo.jpeg" id="icon" alt=" ")
-      form(method="post", action='/')
-        input(type="text" id="mail" class="fadeIn third" name="loginHash" placeholder="e-mail"  autofocus)
-        input(type="password" id="pass" class="fadeIn third" name="loginHash" placeholder="password" autofocus)
+      form(method="post", action='/login')
+        input(type="text" id="email" class="fadeIn third" name="email" placeholder="e-mail"  autofocus)
+        input(type="password" id="password" class="fadeIn third" name="password" placeholder="password" autofocus)
         hr
         input(type="submit" class="fadeIn fourth" value="Log In")
       div(id="formFooter")
+        a(href="/login/register") register with google
         button(type="button" class="btn btn-sm btn-outline-secondary " data-toggle="modal" data-target="#myModal") Forgot password?
 div(class="modal" id="myModal" tabindex="-1" role="dialog")
   div(class="modal-dialog modal-dialog-centered" role="document")

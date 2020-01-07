@@ -65,4 +65,5 @@ const Settings = new mongoose.Schema({
     }
 });
 
-module.exports.default = mongoose.model('Settings', Settings);
+const settings = mongoose.model('Settings', Settings);
+module.exports = Settings;
