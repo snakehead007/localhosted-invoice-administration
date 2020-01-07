@@ -1,5 +1,5 @@
 const  {google}= require('googleapis');
-
+const googleAuth = require('google-auto-auth');
 /*******************/
 /** CONFIGURATION **/
 /*******************/
@@ -38,7 +38,7 @@ exports.getConnectionUrl = (auth) => {
 };
 
 exports.getGooglePlusApi = (auth)=> {
-    return google.plus({ version: 'v1', auth });
+    return google.plus({ version: 'v2', auth });
 };
 
 /**********/
@@ -58,19 +58,20 @@ exports.urlGoogle = () => {
  * Part 2: Take the "code" parameter which Google gives us once when the user logs in, then get the user's email and id.
  */
 
-
 exports.getGoogleAccountFromCode = async (code) =>{
-    const data = await auth.getToken(code);
-    const tokens = data.tokens;
-    const auth = this.createConnection();
-    auth.setCredentials(tokens);
-    const plus = this.getGooglePlusApi(auth);
-    const me = await plus.people.get({ userId: 'me' });
-    const userGoogleId = me.data.id;
-    const userGoogleEmail = me.data.emails && me.data.emails.length && me.data.emails[0].value;
+    const oAuth2Client = this.createConnection();
+    const { tokens } = await oAuth2Client.getToken(code);
+    oAuth2Client.setCredentials(tokens);
+    const oauth2 = google.oauth2("v2");
+    const {
+        data: { email, id: google_id }
+    } = await oauth2.userinfo.v2.me.get({
+        auth: oAuth2Client
+    });
+    console.log("[info]: new login with email: "+email);
     return {
-        googleId: userGoogleId,
-        email: userGoogleEmail,
-        tokens: tokens,
+        googleId: google_id,
+        email: email,
+        tokens:tokens
     };
 };

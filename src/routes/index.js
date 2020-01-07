@@ -2,11 +2,12 @@ const express = require("express");
 const router = express.Router();
 const loginRouter = require("./loginRouter.js");
 const dashboardRouter = require('./dashboardRouter');
-
+const logoutRouter = require('./logoutRouter');
 
 //Controllers
-router.use("/login",loginRouter);
+router.use("/",loginRouter);
 router.use("/dashboard",dashboardRouter);
+router.use('/logout',logoutRouter);
 //Routers
 /*
 router.all("/view");
@@ -23,7 +24,6 @@ router.all("/search");
 router.all("/vat");
 router.all("/settings");
 */
-
 
 //ERROR handling
 router.use((req, res) => {

@@ -9,8 +9,11 @@ const Item = new mongoose.Schema({
     amount: {
         type: Number,
         default: 0
+    },
+    fromUser:{
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
     }
 });
 
 const item = mongoose.model('Item', Item);
-module.exports = Item;
+module.exports = item;

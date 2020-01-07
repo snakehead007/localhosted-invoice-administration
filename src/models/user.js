@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const User = new mongoose.Schema({
         name: {
             type: String,
-            required: [true, 'Please enter a full name']
         },
         googleId:{
             type:String,
@@ -50,14 +49,14 @@ const User = new mongoose.Schema({
 
 const user = mongoose.model('User', User);
 
-exports.getUserfromGoogleId = async (gId) => {
+exports.getUserFromGoogleId = async (gId) => {
     user.findOne({googleId:gId},function(err,User){
         if(err) throw new Error(err);
         return User;
     });
 };
 
-exports.getUserIdfromGoogleId = async(gId) => {
+exports.getUserIdFromGoogleId = async(gId) => {
     user.findOne({googleId:gId},function(err,User){
         if(err) throw new Error(err);
         return User._id;

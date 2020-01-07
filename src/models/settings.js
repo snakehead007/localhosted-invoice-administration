@@ -62,8 +62,11 @@ const Settings = new mongoose.Schema({
     vatPercentage: {
         type: Number,
         default: 21
+    },
+    fromUser:{
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
     }
 });
 
 const settings = mongoose.model('Settings', Settings);
-module.exports = Settings;
+module.exports = settings;

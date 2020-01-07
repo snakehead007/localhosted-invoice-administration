@@ -22,7 +22,10 @@ const Invoice = new mongoose.Schema({
     orders: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'Order'
     }],
+    fromUser:{
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    }
 });
 
 const invoice = mongoose.model('Invoice', Invoice);
-module.exports = Invoice;
+module.exports = invoice;

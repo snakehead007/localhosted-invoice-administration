@@ -16,8 +16,14 @@ const Order = new mongoose.Schema({
     total: {
         type: Number,
         default: 0
+    },
+    fromUser:{
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    },
+    fromInvoice:{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Invoice'
     }
-})
+});
 
 const order =  mongoose.model('Order', Order);
-module.exports = Order;
+module.exports = order;

@@ -10,8 +10,8 @@ const Database = new mongoose.Schema({
 const database = mongoose.model('Database',Database);
 
 exports.addUserIdToDatabase = (userId) => {
-    Database.push(userId);
-    Database.save();
+    database.push(userId);
+    database.save();
 };
 
-module.exports = Database;
+module.exports = database;

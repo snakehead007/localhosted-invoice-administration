@@ -26,8 +26,11 @@ const Profile = new mongoose.Schema({
     mail: [String],
     bookmarks: [[String,String]],
     bookmarksText: String,
+    fromUser:{
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    }
 });
 
 const profile =  mongoose.model('Profile', Profile);
 
-module.exports = Profile;
+module.exports = profile;
