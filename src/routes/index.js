@@ -12,8 +12,9 @@ const projectRouter = require('./projectRouter');
 const stockRouter = require('./stockRouter');
 const settingsRouter = require('./settingsRouter');
 const calcRouter = require('./calcRouter');
+const editRouter = require('');
 //Controllers
-router.use("/",stillSignedInCheck,loginRouter); //index page
+router.use("/",loginRouter); //index page
 router.use("/dashboard",stillSignedInCheck,dashboardRouter);
 router.use('/logout',logoutRouter);
 router.use('/redirect',redirectRouter); //only used when logged in and redirected by google
@@ -24,6 +25,7 @@ router.use('/project',stillSignedInCheck,projectRouter);
 router.use('/stock',stillSignedInCheck,stockRouter);
 router.use('/settings',stillSignedInCheck,settingsRouter);
 router.use('/calc',stillSignedInCheck,calcRouter);
+router.use('/edit',stillSignedInCheck,editRouter);
 //Routers
 
 /*

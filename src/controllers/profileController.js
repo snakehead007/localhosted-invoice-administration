@@ -47,3 +47,31 @@ exports.view_profile_get = (req,res) => {
         }
     });
 };
+
+exports.edit_profile_get = (req,res) => {
+    res.redirect('/view/profile');
+};
+
+exports.edit_profile_post = (req,res) => {
+    var updateProfile = new Profile({
+        firm: req.body.firma,
+        name: req.body.naam,
+        street: req.body.straat,
+        streetNr: req.body.straatNr,
+        postal: req.body.postcode,
+        place: req.body.plaats,
+        vat: req.body.btwNr,
+        iban: req.body.iban,
+        bic: req.body.bic,
+        invoiceNrCurrent: Number(req.body.nr.toString().substring(req.body.nr.toString().length - 3)),
+        offerNrCurrent: Number(req.body.nroff.toString().substring(req.body.nroff.toString().length - 3)),
+        creditNrCurrent: Number(req.body.nrcred.toString().substring(req.body.nrcred.toString().length - 3)),
+        tel: req.body.tele,
+        email: [req.body.mail]
+    });
+    Profile.update({_id: req.params.id}, updateProfile, function(err) {
+        if (!err) {
+            res.redirect('/dashboard');
+        }
+    });
+}
