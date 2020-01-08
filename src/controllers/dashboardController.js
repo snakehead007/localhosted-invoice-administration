@@ -1,13 +1,12 @@
-const User = require('../models/user.js');
-const google = require('../middlewares/google');
-const Database = require('../models/database');
 const Profile = require('../models/profile');
 const Settings = require('../models/settings');
 const Invoice = require('../models/invoice');
 const {month, month_small,year} = require('../utils/date');
 
 exports.main_get =  async function getLogin(req,res){
-    req.session._id = await checkSignIn(await google.getGoogleAccountFromCode(req.query.code));
+    if(!req.session._id){
+        res.redirect('/');
+    }
     let fact_open = [];
     Profile.findOne({fromUser:req.session._id}, function(err,profile){
         if(!err){
@@ -32,7 +31,7 @@ exports.main_get =  async function getLogin(req,res){
                                     }
                                 }
                             }
-                            res.render(settings.lang+'/index', {
+                            res.render('index', {
                                 "totaal": total,
                                 "settings": settings,
                                 "jaar": year,
@@ -48,37 +47,3 @@ exports.main_get =  async function getLogin(req,res){
     });
 };
 
-async function checkSignIn({googleId,email,tokens}){
-    const currentUser = await User.findOne({googleId:googleId},function(err,User){
-        if(err) throw new Error(err);
-        return User;
-    });
-    if(!currentUser){//new user, add user to database
-        //create user
-        const newUser = new User({
-            googleId: googleId,
-            email:email,
-            tokens:tokens
-        });
-        await newUser.save();
-        //find new user.__id, add ID to database
-        const currentUserId = await User.findOne({googleId:googleId},function(err,User){
-            if(err) throw new Error(err);
-            return User._id;
-        });
-        const newSettings = new Settings({
-            fromUser:currentUserId
-        });
-        await newSettings.save();
-        const newProfile = new Profile({
-            fromUser:currentUserId
-        });
-        await newProfile.save();
-        const settingsId = await Settings.findOne({fromUser:currentUserId});
-        const profileId = await Profile.findOne({fromUser:currentUserId});
-        await User.update({_id:currentUserId},{settings:settingsId,profile:profileId});
-        return currentUserId;
-    }else{//user already added
-        return currentUser._id;
-    }
-}

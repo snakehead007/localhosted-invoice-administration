@@ -22,6 +22,9 @@ const Invoice = new mongoose.Schema({
     orders: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'Order'
     }],
+    fromClient:{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Client'
+    },
     fromUser:{
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
     }

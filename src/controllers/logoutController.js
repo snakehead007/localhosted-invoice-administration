@@ -5,6 +5,6 @@ exports.logout_get = (req,res) => {
         if(err) {
             return console.log(err);
         }
-        res.redirect('/login');
+        res.redirect('/');
     });
 };

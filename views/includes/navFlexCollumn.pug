@@ -1,0 +1,55 @@
+ul(class="nav flex-column")
+    li(class="nav-item")
+        a(class="nav-link" href="/index/")
+            span(data-feather="home")
+            span Home
+    li(class="nav-item")
+        a(class="nav-link" href="/edit-profile/")
+            span(data-feather="user")
+            span Mijn Profiel
+    li(class="nav-item")
+        if !client
+            a(class="nav-link active" href="/facturen/")
+                span(data-feather="file")
+                span Alle facturen
+                span(class="sr-only") (current)
+        else
+            a(class="nav-link" href="/facturen/" )
+                span(data-feather="file")
+                span Alle facturen
+    li(class="nav-item")
+        if client
+            a(class="nav-link active" href="/contacten/")
+                span(data-feather="users")
+                span Klanten
+                span(data-feather="chevron-right")
+                span Facturen
+        else
+            a(class="nav-link" href="/contacten/" + loginHash)
+                span(data-feather="users")
+                span Klanten
+    li(class="nav-item")
+        a(class="nav-link" href="/projecten/")
+            span(data-feather="book")
+            span Projecten
+    li(class="nav-item")
+        a(class="nav-link" href="/mat/")
+            span(data-feather="package")
+            span Materialen
+        li(class="nav-item")
+        a(class="nav-link" href="/berekeningen/")
+            span(data-feather="book")
+            span Berekeningen
+    li(class="nav-item")
+        a(class="nav-link" href="/settings/")
+            span(data-feather="settings")
+            span Settings
+    if profile.bookmarks.length !==0
+        h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+            span Bookmarks
+    each bookmark in profile.bookmarks
+        ul(class="nav flex-column")
+            li(class="nav-item")
+                a(class="nav-link",href="https://"+bookmark[1])
+                    span(data-feather="bookmark")
+                    span=bookmark[0]

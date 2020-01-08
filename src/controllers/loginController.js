@@ -1,4 +1,3 @@
-const session = require('express-session');
 const google = require('../middlewares/google');
 exports.login_get =  function getLogin(req,res){
     let sess = req.session;
@@ -15,6 +14,5 @@ exports.create_user_get = function getCreateNewUser(req,res){
 
 exports.logout_get = function getLogout(req,res){
     req.logout();
-    req.flash('success_msg', 'You are logged out');
     res.redirect('/login');
 };

@@ -1,0 +1,167 @@
+html
+  head
+    include includes/htmlHead
+    script(src = "/sorters.js")
+    script.
+      $(document).ready(function () {
+        function toonBerekeningen() {
+          $("#berekeningen").toggle();
+        }
+
+        feather.replace();
+      });
+  body
+    header
+      include includes/topBar
+      div(class="container-fluid")
+        div(class ="row")
+          nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+            div(class="sidebar-sticky")
+              include includes/navFlexCollumn
+              h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+                span Facturen - opties
+              ul(class="nav flex-column mb-2")
+                li(class="nav-item")
+                  if client
+                    a(class="nav-link",href='/add-factuur' + "/"+client._id+"/")
+                      span(data-feather="plus-circle")
+                      span Nieuwe factuur
+                        i (voor deze klant)
+                  else
+                    a(class="nav-link",href='/add-factuur' +"/"+ loginHash)
+                      span(data-feather="plus-circle")
+                      span Nieuwe factuur
+                li(class="nav-item")
+                  if client
+                    a(class="nav-link",href='/add-offerte' + "/"+client._id+"/")
+                      span(data-feather="plus-circle")
+                      span Nieuwe offerte
+                        i (voor deze klant)
+                  else
+                    a(class="nav-link",href='/add-Offerte' + "/" )
+                      span(data-feather="plus-circle")
+                      span Nieuwe offerte
+                li(class="nav-item")
+                  if client
+                    a(class="nav-link",href='/add-creditnota' + "/"+client._id+"/")
+                      span(data-feather="plus-circle")
+                      span Nieuwe creditnota
+                        i (voor deze klant)
+                  else
+                    a(class="nav-link",href='/add-creditnota' + "/" )
+                      span(data-feather="plus-circle")
+                      span Nieuwe creditnota
+    main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+      if !client
+        h2(class="pt-3") Alle facturen
+      else
+        h2(class="pt-3")="Facturen van "+client.clientName
+      div(class="headExtend")
+        div(class="btn-group dropleft mb-2 mb-md-0")
+          button(type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle", data-toggle="dropdown",aria-haspopup="true",aria-expanded="false")
+            span(data-feather="bar-chart")
+            span sort
+          div(class="dropdown-menu")
+            a(class="dropdown-item" onclick="sortTable(0)") #
+            if !contact
+              a(class="dropdown-item" onclick="sortTable(1)") Klant
+            if contact
+              a(class="dropdown-item" onclick="sortTable(1,\"date\")") Datum
+            if !contact
+              a(class="dropdown-item" onclick="sortTable(2,\"date\")") Datum
+            if contact
+              a(class="dropdown-item" onclick="sortTable(2,\"kost\")") Kost
+            if !contact
+              a(class="dropdown-item" onclick="sortTable(3,\"kost\")") Kost
+      div(class="table-responsive bigger")
+        table(class="table table-striped table-sm ",id="hoofdTabel")
+          thead(class="thead-dark")
+            tr
+              th Nummer
+              if !contact
+                th Klant
+              th Datum
+              th Kost
+              th Statuus
+              th Acties
+          tbody
+            each invoice in invoices
+              tr
+                td
+                  if invoice.invoiceNr
+                    if client
+                      a(href='/bestellingen/' + invoice._id )=invoice.invoiceNr
+                    if !client
+                      a(href='/bestellingen/' + invoice._id + '/t/' )=invoice.invoiceNr
+                  if invoice.offerNr && !invoice.invoiceNr
+                    if client
+                      a(href='/bestellingen/' + invoice._id)="Offerte " + invoice.offerNr
+                    if !client
+                      a(href='/bestellingen/' + invoice._id + '/t' )="Offerte " + invoice.offerNr
+                  if invoice.creditNr && !invoice.offerNr && !invoice.invoiceNr
+                    a(href='/bestellingen/' + invoice._id )="Creditnota " + invoice.creditNr
+                if !client
+                  td
+                    if invoice.clientName === "Update deze factuur!"
+                      a(href='/updateFactuur/' + factuur._id + "/" + invoice)=invoice.clientName
+                    else
+                      a(href='/facturen/' + invoice.client + "/t")=invoice.clientName
+                td=invoice.date
+                if invoicie.invoiceNr
+                  td
+                      if invoice.isPaid
+                        span=(invoice.total * 1.21).toFixed(2) + "€"
+                      if !invoice.isPaid
+                        span=(invoice.total * 1.21).toFixed(2) + "€"
+                else
+                  td
+                if invoice.invoiceNr
+                  td
+                    div(class="custom-control custom-switch")
+                      if invoice.isPaid
+                        input(type="checkbox" class="custom-control-input bg-success" id=invoice._id, onclick='changeBetaald(\"' + invoice._id + '\",\"' + invoice._id + '\",\"' + invoice._id + '\")', checked)
+                        label(class="custom-control-label" for=invoice._id)=" Betaald"
+                      if !invoice.isPaid
+                        input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id, onclick='changeBetaald(\"' + invoice._id + '\",\"' + invoice._id + '\",\"' + invoice._id + '\")')
+                        label(class="custom-control-label" for=invoice._id)=" Openstaand"
+                else 
+                  td
+                td
+                  div(class="btn-group front")
+                    button(role="button", class="btn btn-outline-" + settings.thema + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                    div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                      if !client
+                        a(class="dropdown-item button" , href='/view-factuur/' + invoice._id + "/t/" ) bekijk
+                      if client
+                        a(class="dropdown-item button", href='/view-factuur/' + invoice._id ) bekijk
+                      div(class="dropdown-divider")
+                      if invoice.creditNr
+                        a(class="dropdown-item", href='/creditnota/' + invoice._id ,id="target",target="_blank") download creditnota
+                      if invoice.invoiceNr
+                        a(class="dropdown-item", href='/createPDF/' + invoice._id ,id="target",target="_blank") download factuur
+                      if invoice.offerNr
+                        a(class="dropdown-item", href='/offerte/' + invoice._id ,id="target",target="_blank") download offerte
+                        if !invoice.invoiceNr
+                          if client
+                            a(class="dropdown-item button", href="/opwaardeer/" + invoice._id ) opwaardeer naar factuur
+                          if !client
+                            a(class="dropdown-item button", href="/opwaardeer/" + invoice._id + "/t") opwaardeer naar factuur
+                      if !client
+                        div(class="dropdown-divider")
+                        a(class="dropdown-item",href='/edit-factuur/' + invoice.fromClient + '/' + invoice._id + '/t/') aanpassen
+                        a(class="dropdown-item", href='/delete-factuur/' + invoice.fromClient + '/' + invoice._id + '/t/') verwijder
+                      if client
+                        div(class="dropdown-divider")                      
+                        a(class="dropdown-item",href='/edit-factuur/' + invoice.fromClient + '/' + invoice._id + "/") aanpassen
+                        a(class="dropdown-item", href='/delete-factuur/' + invoice.fromClient + '/' + invoice._id + "/") verwijder
+          script.
+            $(document).ready(function () {
+              feather.replace();
+            });
+            function changeBetaald(id, contact, loginHash) {
+                if (contact === "undefined") {
+                  window.location = "/change-betaald2/" + id + "/" + loginHash;
+                } else {
+                  window.location = "/change-betaald/" + id + "/" + loginHash;
+                }
+            }

@@ -1,0 +1,153 @@
+html
+  head
+    include includes/htmlHead
+  body(onpageshow='drawChart(['+totaal+'])')
+    header
+      include includes/topBar
+      div(class="container-fluid")
+        div(class ="row")
+          nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+            div(class="sidebar-sticky")
+              include includes/navFlexCollumn
+    main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+      div(class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom")
+        h1(class="h2") Dashboard
+        div(class="btn-group dropleft mb-2 mb-md-0")
+            button(type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle", data-toggle="dropdown",aria-haspopup="true",aria-expanded="false")
+                span(data-feather="calendar")
+                span=jaar
+            div(class="dropdown-menu")
+              a(class="dropdown-item" href="/chart/"+String(jaar-2)+"/")=jaar-2
+              a(class="dropdown-item" href="/chart/" + String(jaar - 1) +"/")=jaar - 1
+              a(class="dropdown-item active" href="/chart/" + jaar +"/" )=jaar
+              a(class="dropdown-item" href="/chart/" + String(Number(jaar) + Number(1)) +"/")=String(Number(jaar) + Number(1))
+              a(class="dropdown-item" href="/chart/" + String(Number(jaar) + Number(2)) +"/")=String(Number(jaar) + Number(2))
+      canvas(class="my-4 w-100" id="myChart" width="900" height="380")
+      h2 Openstaande facturen
+      if fact_open.length == 0
+          div(class="alert alert-info col-lg-12 col-md-12 col-sm-12" role="alert") Geen openstaande facturen gevonden.
+      else
+          div(class="table-responsive bigger")
+            table(class="table table-striped table-sm")
+              thead(class="thead-dark")
+                tr
+                  th Nummer
+                  if !contact
+                    th Klant
+                  th Datum
+                  th Kost
+                  th Statuut
+                  th Acties
+              tbody
+                each factuur in fact_open
+                  tr
+                    td
+                      if factuur.factuurNr
+                        if contact
+                          a(href='/bestellingen/' + factuur._id + "/" )=factuur.factuurNr
+                        if !contact
+                          a(href='/bestellingen/' + factuur._id + '/t/' )=factuur.factuurNr
+                      if factuur.offerteNr && !factuur.factuurNr
+                        if contact
+                          a(href='/bestellingen/' + factuur._id + "/" )="Offerte " + factuur.offerteNr
+                        if !contact
+                          a(href='/bestellingen/' + factuur._id + '/t' + "/" )="Offerte " + factuur.offerteNr
+                      if factuur.creditnr && !factuur.offerteNr && !factuur.factuurNr
+                        a(href='/bestellingen/' + factuur._id + "/" )="Creditnota " + factuur.creditnr
+                    if !contact
+                      td
+                        if factuur.contactPersoon == "Update deze factuur!"
+                          a(href='/updateFactuur/' + factuur._id + "/" )=factuur.contactPersoon
+                        else
+                          a(href='/facturen/' + factuur.contact + "/t" + "/" )=factuur.contactPersoon
+                    td=factuur.datum
+                    if factuur.factuurNr
+                      td
+                          if factuur.isBetaald
+                            span=(factuur.totaal * 1.21).toFixed(2) + "€"
+                          if !factuur.isBetaald
+                            span=(factuur.totaal * 1.21).toFixed(2) + "€"
+                    else
+                      td
+                    if factuur.factuurNr
+                      td
+                        div(class="custom-control custom-switch")
+                          if factuur.isBetaald
+                            input(type="checkbox" class="custom-control-input bg-success" id=factuur._id, onclick='changeBetaald(\"' + factuur._id + '\",\"' + contact + '\",\"'  + '\")', checked)
+                            label(class="custom-control-label" for=factuur._id)=" Betaald"
+                          if !factuur.isBetaald
+                            input(type="checkbox" class="custom-control-input bg-danger" id=factuur._id, onclick='changeBetaald(\"' + factuur._id + '\",\"' + contact + '\",\"'  + '\")')
+                            label(class="custom-control-label" for=factuur._id)=" Openstaand"
+                    else 
+                      td
+                    td
+                      div(class="btn-group front")
+                        button(role="button", class="btn btn-outline-" + settings.thema + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                        div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                          if !contact                      
+                            a(class="dropdown-item button" , href='/view-factuur/' + factuur._id + "/t/" ) bekijk
+                          if contact                      
+                            a(class="dropdown-item button", href='/view-factuur/' + factuur._id + "/" ) bekijk
+                          div(class="dropdown-divider")
+                          if factuur.creditnr
+                            a(class="dropdown-item", href='/creditnota/' + factuur._id + "/" ,id="target",target="_blank") download creditnota
+                          if factuur.factuurNr
+                            a(class="dropdown-item", href='/createPDF/' + factuur._id + "/" ,id="target",target="_blank") download factuur
+                          if factuur.offerteNr
+                            a(class="dropdown-item", href='/offerte/' + factuur._id + "/" ,id="target",target="_blank") download offerte
+                            if !factuur.factuurNr
+                              if contact
+                                a(class="dropdown-item button", href="/opwaardeer/" + factuur._id + "/" ) opwaardeer naar factuur
+                              if !contact
+                                a(class="dropdown-item button", href="/opwaardeer/" + factuur._id + "/t/" ) opwaardeer naar factuur
+                          if !contact                                      
+                            div(class="dropdown-divider")
+                            a(class="dropdown-item",href='/edit-factuur/' + factuur.contact + '/' + factuur._id + '/t/' ) aanpassen
+                            a(class="dropdown-item", href='/delete-factuur/' + factuur.contact + '/' + factuur._id + '/t/' ) verwijder
+                          if contact
+                            div(class="dropdown-divider")                      
+                            a(class="dropdown-item",href='/edit-factuur/' + factuur.contact + '/' + factuur._id + "/" ) aanpassen
+                            a(class="dropdown-item", href='/delete-factuur/' + factuur.contact + '/' + factuur._id + "/" ) verwijder                        
+
+
+script.
+    $(document).ready(function () {
+        feather.replace();
+    });
+    function drawChart(totaal) {
+        console.log(totaal);
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
+        var color = Chart.helpers.color;
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [maand[0], maand[1], maand[2], maand[3], maand[4], maand[5], maand[6], maand[7], maand[8], maand[9], maand[10], maand[11]],
+                datasets: [{
+                    label: 'Exlc. btw €',
+                    data: [totaal[0], totaal[1], totaal[2], totaal[3], totaal[4], totaal[5], totaal[6], totaal[7], totaal[8], totaal[9], totaal[10], totaal[11]],
+                    backgroundColor: color(window.chartColors.red).alpha(1).rgbString(),
+                    borderColor: window.chartColors.red,
+                    borderWidth: 1
+                }, {
+                    label: 'Incl. btw €',
+                    data: [totaal[0] * 1.21, totaal[1] * 1.21, totaal[2] * 1.21, totaal[3] * 1.21, totaal[4] * 1.21, totaal[5] * 1.21, totaal[6] * 1.21, totaal[7] * 1.21, totaal[8] * 1.21, totaal[9] * 1.21, totaal[10] * 1.21, totaal[11] * 1.21],
+                    backgroundColor: color(window.chartColors.blue).alpha(1).rgbString(),
+                    borderColor: window.chartColors.blue,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+    function changeBetaald(id, contact) {
+            window.location = "/change-betaald3/"+id+"/" ;
+    }

@@ -3,26 +3,32 @@ const router = express.Router();
 const loginRouter = require("./loginRouter.js");
 const dashboardRouter = require('./dashboardRouter');
 const logoutRouter = require('./logoutRouter');
-
+const redirectRouter = require('./redirectRouter');
+const {stillSignedInCheck} = require('../middlewares/checkers');
+const viewRouter = require('./viewRouter');
+const invoiceRouter = require('./invoiceRouter');
 //Controllers
-router.use("/",loginRouter);
-router.use("/dashboard",dashboardRouter);
+router.use("/",loginRouter); //index page
+router.use("/dashboard",stillSignedInCheck,dashboardRouter);
 router.use('/logout',logoutRouter);
+router.use('/redirect',redirectRouter); //only used when logged in and redirected by google
+router.use('/view',stillSignedInCheck,viewRouter);
+router.use('/invoice',stillSignedInCheck,invoiceRouter);
 //Routers
 /*
-router.all("/view");
-router.all("/add");
-router.all("/calc");
-router.all("/pdf");
-router.all("/edit");
-router.all("/contact");
-router.all("/invoice");
-router.all("/stock");
-router.all("/chart");
-router.all("/upload");
-router.all("/search");
-router.all("/vat");
-router.all("/settings");
+router.use("/view");
+router.use("/add");
+router.use("/calc");
+router.use("/pdf");
+router.use("/edit");
+router.use("/contact");
+router.use("/invoice");
+router.use("/stock");
+router.use("/chart");
+router.use("/upload");
+router.use("/search");
+router.use("/vat");
+router.use("/settings");
 */
 
 //ERROR handling
