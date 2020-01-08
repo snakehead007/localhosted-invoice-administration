@@ -1,0 +1,97 @@
+script.
+    function info() {
+        $("#info").toggle();
+    };
+    function infoBook() {
+        $("#infoBook").toggle();
+    };
+    function openPass() {
+        $("#btw").slideUp();
+        $("#thema").slideUp();
+        $("#lang").slideUp();
+        $("#text").slideUp();
+        $("#pass").slideDown();
+        $("#info").slideUp();
+        $("#book").slideUp();
+        $(".optionPass").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionThema").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionBook").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionBtw").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionLang").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionText").css('background-color', 'rgba(0, 0, 0, 0)');
+    };
+    function openBTW() {
+        $("#btw").slideDown();
+        $("#thema").slideUp();
+        $("#lang").slideUp();
+        $("#text").slideUp();
+        $("#pass").slideUp();
+        $("#info").slideUp();
+        $("#book").slideUp();
+        $(".optionBtw").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionThema").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPass").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionBook").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionLang").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionText").css('background-color', 'rgba(0, 0, 0, 0)');
+    };
+    function openThema() {
+        $("#btw").slideUp();
+        $("#thema").slideDown();
+        $("#lang").slideUp();
+        $("#text").slideUp();
+        $("#pass").slideUp();
+        $("#info").slideUp();
+        $("#book").slideUp();
+        $(".optionThema").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionPass").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionBook").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionBtw").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionLang").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionText").css('background-color', 'rgba(0, 0, 0, 0)');
+    };
+    function openLang() {
+        $("#pass").slideUp();
+        $("#btw").slideUp();
+        $("#thema").slideUp();
+        $("#lang").slideDown();
+        $("#text").slideUp();
+        $("#info").slideUp();
+        $("#book").slideUp();
+        $(".optionLang").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionThema").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionBtw").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionBook").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPass").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionText").css('background-color', 'rgba(0, 0, 0, 0)');
+    };
+    function openText() {
+        $("#btw").slideUp();
+        $("#thema").slideUp();
+        $("#lang").slideUp();
+        $("#text").slideDown();
+        $("#pass").slideUp();
+        $("#book").slideUp();
+        $(".optionText").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionPass").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionBtw").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionLang").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionBook").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionThema").css('background-color', 'rgba(0, 0, 0, 0)');
+    };
+
+    function openBook() {
+        $("#btw").slideUp();
+        $("#thema").slideUp();
+        $("#lang").slideUp();
+        $("#text").slideUp();
+        $("#pass").slideUp();
+        $("#book").slideDown();
+        $(".optionBook").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionText").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPass").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionBtw").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionLang").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionBook").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionThema").css('background-color', 'rgba(0, 0, 0, 0)');
+    };

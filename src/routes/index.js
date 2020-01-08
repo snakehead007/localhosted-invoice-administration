@@ -4,17 +4,28 @@ const loginRouter = require("./loginRouter.js");
 const dashboardRouter = require('./dashboardRouter');
 const logoutRouter = require('./logoutRouter');
 const redirectRouter = require('./redirectRouter');
-const {stillSignedInCheck} = require('../middlewares/checkers');
+const {stillSignedInCheck, alreadySignedInCheck} = require('../middlewares/checkers');
 const viewRouter = require('./viewRouter');
 const invoiceRouter = require('./invoiceRouter');
+const contactRouter = require('./contactRouter');
+const projectRouter = require('./projectRouter');
+const stockRouter = require('./stockRouter');
+const settingsRouter = require('./settingsRouter');
+const calcRouter = require('./calcRouter');
 //Controllers
-router.use("/",loginRouter); //index page
+router.use("/",stillSignedInCheck,loginRouter); //index page
 router.use("/dashboard",stillSignedInCheck,dashboardRouter);
 router.use('/logout',logoutRouter);
 router.use('/redirect',redirectRouter); //only used when logged in and redirected by google
 router.use('/view',stillSignedInCheck,viewRouter);
 router.use('/invoice',stillSignedInCheck,invoiceRouter);
+router.use('/contact',stillSignedInCheck,contactRouter);
+router.use('/project',stillSignedInCheck,projectRouter);
+router.use('/stock',stillSignedInCheck,stockRouter);
+router.use('/settings',stillSignedInCheck,settingsRouter);
+router.use('/calc',stillSignedInCheck,calcRouter);
 //Routers
+
 /*
 router.use("/view");
 router.use("/add");

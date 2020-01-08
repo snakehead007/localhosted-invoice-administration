@@ -1,0 +1,44 @@
+html
+  head
+    include includes/htmlHead
+    include includes/calcMenuScript
+  body
+    header
+      include includes/topBar
+
+      div(class="container-fluid")
+        div(class ="row")
+          nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+            div(class="sidebar-sticky")
+              include includes/navFlexCollumn
+              include includes/bookmarks
+          main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+            h2(class="pt-3") Berekeningen
+            div(class="table-responsive")
+              table(class="table")
+                tbody
+                  tr(onclick="openSil(\""+loginHash+"\")",class="settingsOption optionSil")
+                    td
+                      p(class="lead") Siliconen mal berekenen
+                      div(id="sil",style="display:none;")
+                  tr(onclick="openLam(\""+loginHash+"\")",class="settingsOption optionLam")
+                    td
+                      p(class="lead") A1 Lamineren berekenen
+                        span(class="badge badge-pill badge-warning") in progress
+                      div(id="lam",style="display:none;")
+                  tr(onclick="openPrijs(\""+loginHash+"\")",class="settingsOption optionPrijs")
+                    td
+                      p(class="lead") Prijs berekeningen
+                      div(id="prijs",style="display:none;")
+                  tr(onclick="openInch(\""+loginHash+"\")",class="settingsOption optionInch")
+                    td
+                      p(class="lead") Inch & cm omzetten
+                      div(id="inch",style="display:none;")
+                  tr(onclick="openPerc(\""+loginHash+"\")",class="settingsOption optionPerc")
+                    td
+                      p(class="lead") Percentage Berkenen
+                      div(id="perc",style="display:none;")
+                  tr(onclick="openPU(\""+loginHash+"\")",class="settingsOption optionPU")
+                    td
+                      p(class="lead") PU-lamineren
+                      div(id="PU",style="display:none;")

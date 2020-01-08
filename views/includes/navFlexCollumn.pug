@@ -1,47 +1,47 @@
 ul(class="nav flex-column")
     li(class="nav-item")
-        a(class="nav-link" href="/index/")
+        a(class="nav-link" href="/dashboard")
             span(data-feather="home")
             span Home
     li(class="nav-item")
-        a(class="nav-link" href="/edit-profile/")
+        a(class="nav-link" href="/view/profile")
             span(data-feather="user")
             span Mijn Profiel
     li(class="nav-item")
         if !client
-            a(class="nav-link active" href="/facturen/")
+            a(class="nav-link active" href="/invoice/all")
                 span(data-feather="file")
                 span Alle facturen
                 span(class="sr-only") (current)
         else
-            a(class="nav-link" href="/facturen/" )
+            a(class="nav-link" href="/invoice/alll" )
                 span(data-feather="file")
                 span Alle facturen
     li(class="nav-item")
         if client
-            a(class="nav-link active" href="/contacten/")
+            a(class="nav-link active" href="/contact/all")
                 span(data-feather="users")
                 span Klanten
                 span(data-feather="chevron-right")
                 span Facturen
         else
-            a(class="nav-link" href="/contacten/" + loginHash)
+            a(class="nav-link" href="/contact/all")
                 span(data-feather="users")
                 span Klanten
     li(class="nav-item")
-        a(class="nav-link" href="/projecten/")
+        a(class="nav-link" href="/project/all")
             span(data-feather="book")
             span Projecten
     li(class="nav-item")
-        a(class="nav-link" href="/mat/")
+        a(class="nav-link" href="/stock/all")
             span(data-feather="package")
             span Materialen
         li(class="nav-item")
-        a(class="nav-link" href="/berekeningen/")
+        a(class="nav-link" href="/calc/all")
             span(data-feather="book")
             span Berekeningen
     li(class="nav-item")
-        a(class="nav-link" href="/settings/")
+        a(class="nav-link" href="/settings")
             span(data-feather="settings")
             span Settings
     if profile.bookmarks.length !==0

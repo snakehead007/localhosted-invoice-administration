@@ -23,7 +23,7 @@ const Profile = new mongoose.Schema({
         default: 1,
     },
     tel: String,
-    mail: [String],
+    email: [String],
     bookmarks: [[String,String]],
     bookmarksText: String,
     fromUser:{
