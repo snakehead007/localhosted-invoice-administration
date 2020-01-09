@@ -15,13 +15,7 @@ html
             div(class="sidebar-sticky")
               include includes/navFlexCollumn
               include includes/bookmarks
-              h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
-                span Klanten - opties
-              ul(class="nav flex-column mb-2")
-                li(class="nav-item")
-                  a(class="nav-link",href='/add-contact'+"/"+loginHash)
-                    span(data-feather="plus-circle")
-                    span Nieuwe klant
+              include includes/clientOptionMenu
           main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
             h2(class="pt-3") Alle Klanten
             div(class="table-responsive bigger")
@@ -35,7 +29,7 @@ html
                   each client in clients
                     tr
                       td
-                        a(href='/facturen/' + client._id + "/" + loginHash)=client.clientName
+                        a(href='/invoice/all/' + client._id)=client.clientName
                           if client.email1
                             if client.mail2
                               td

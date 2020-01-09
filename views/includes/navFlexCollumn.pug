@@ -33,16 +33,16 @@ ul(class="nav flex-column")
                 span(data-feather="file")
                 span Alle facturen
     li(class="nav-item")
-        if currentUrl === 'clients'
-            a(class="nav-link active" href="/contact/all")
+        if currentUrl === 'clientAll'
+            a(class="nav-link active" href="/client/all")
                 span(data-feather="users")
                 span Klanten
-                if client
+                if client || currentUrl === "invoicesClient"
                     span(data-feather="chevron-right")
                     span Facturen
                 span(class="sr-only") (current)
         else
-            a(class="nav-link" href="/contact/all")
+            a(class="nav-link" href="/client/all")
                 span(data-feather="users")
                 span Klanten
     li(class="nav-item")

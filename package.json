@@ -1,8 +1,8 @@
 {
-  "name": "simple-invoice-administration",
-  "version": "1.8.0",
+  "name": "invoice-admin",
+  "version": "1.9.3",
   "description": "this program is used for managing and administrating invoices and generating them into .pdf format",
-  "main": "/src/app.js",
+  "main": "src/app.js",
   "dependencies": {
     "azure-batch": "^8.0.0",
     "bcryptjs": "^2.4.3",
@@ -48,6 +48,7 @@
     "multer": "^1.4.2",
     "node-base64-image": "^1.0.6",
     "node2docfx": "^1.0.45",
+    "nodemon": "^2.0.2",
     "open": "^7.0.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
@@ -70,7 +71,8 @@
   },
   "scripts": {
     "start": "node --experimental-module src/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "develop": "nodemon DEBUG=express:* node src/app.js"
   },
   "repository": {
     "type": "git",

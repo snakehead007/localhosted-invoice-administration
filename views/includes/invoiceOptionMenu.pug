@@ -1,0 +1,45 @@
+h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+    span Facturen - opties
+ul(class="nav flex-column mb-2")
+    li(class="nav-item")
+        if add=="invoice"
+            a(class="nav-link active",href='/invoice/new/invoice')
+                span(data-feather="plus-circle")
+                span Nieuwe factuur
+        if client
+            a(class="nav-link",href='/invoice/new/invoice/'+client._id)
+                span(data-feather="plus-circle")
+                span Nieuwe factuur
+                    i (voor deze klant)
+        else
+            a(class="nav-link",href='/invoice/new/invoice')
+                span(data-feather="plus-circle")
+                span Nieuwe factuur
+    li(class="nav-item")
+        if add=="offer"
+            a(class="nav-link active",href='/invoice/new/offer')
+                span(data-feather="plus-circle")
+                span Nieuwe offerte
+        if client
+            a(class="nav-link", href = '/invoice/new/offer/' + client._id)
+                span(data-feather="plus-circle")
+                span Nieuwe offerte
+                    i (voor deze klant)
+        else
+            a(class="nav-link",href='/invoice/new/offer')
+                span(data-feather="plus-circle")
+                span Nieuwe offerte
+    li(class="nav-item")
+        if add=="credit"
+            a(class="nav-link active",href='/invoice/new/credit')
+                span(data-feather="plus-circle")
+                span Nieuwe creditnota
+        if client
+            a(class = "nav-link", href = '/invoice/new/credit/' + client._id )
+                span(data-feather="plus-circle")
+                span Nieuwe creditnota
+                    i (voor deze klant)
+        else
+            a(class="nav-link",href='/invoice/new/credit')
+                span(data-feather="plus-circle")
+                span Nieuwe creditnota

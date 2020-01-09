@@ -1,6 +1,8 @@
 const Invoice = require('../models/invoice');
 const Settings = require('../models/settings');
+const Client = require('../models/client');
 const Profile = require('../models/profile');
+const {year} = require('../utils/date');
 exports.invoice_all_get = (req,res) => {
     Invoice.find({fromUser:req.session._id}, function(err, invoices) {
         if(err) console.log("[ERROR]: "+err);
@@ -26,12 +28,50 @@ exports.invoice_new_choose_get = (req,res) => {
             if(err) console.log("[ERROR]: "+err);
             Client.find({},function(err,clients){
                 if(err) console.log("ERROR]: "+err);
-                req.render('add-file-no-contact',{
+                res.render('add-file-no-contact',{
                    'profile':profile,
                    'settings':settings,
-                   'add':'factuur',
-                   'addlink':'invoice',
-                   'contacten':clients
+                   'add':"invoice",
+                   'addlink':"invoice",
+                   'clients':clients
+                });
+            });
+        })
+    });
+};
+
+exports.offer_new_choose_get = (req,res) => {
+    Settings.findOne({fromUser:req.session._id},function(err,settings){
+        if(err) console.log("[ERROR]: "+err);
+        Profile.findOne({fromUser:req.session._id},function(err,profile){
+            if(err) console.log("[ERROR]: "+err);
+            Client.find({},function(err,clients){
+                if(err) console.log("ERROR]: "+err);
+                res.render('add-file-no-contact',{
+                    'profile':profile,
+                    'settings':settings,
+                    'add':"offer",
+                    'addlink':"offer",
+                    'clients':clients
+                });
+            });
+        })
+    });
+};
+
+exports.credit_new_choose_get = (req,res) => {
+    Settings.findOne({fromUser:req.session._id},function(err,settings){
+        if(err) console.log("[ERROR]: "+err);
+        Profile.findOne({fromUser:req.session._id},function(err,profile){
+            if(err) console.log("[ERROR]: "+err);
+            Client.find({},function(err,clients){
+                if(err) console.log("ERROR]: "+err);
+                res.render('add-file-no-contact',{
+                    'profile':profile,
+                    'settings':settings,
+                    'add':"credit",
+                    'addlink':"credit",
+                    'clients':clients
                 });
             });
         })
@@ -41,29 +81,30 @@ exports.invoice_new_choose_get = (req,res) => {
 exports.invoice_new_get = (req,res) => {
     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
         if(err) console.log("[ERROR]: "+err);
-        client.findOne({fromUser:req.session._id,_id: req.params.idc}, function(err, client) {
+        Client.findOne({fromUser:req.session._id,_id: req.params.idc}, function(err, client) {
             if(err) console.log("[ERROR]: "+err);
-                contact.save(function(err) {
+                client.save(function(err) {
                     if(err) console.log("[ERROR]: "+err);
-                        Profile.findOne({}, function(err, profile) {
+                        Profile.findOne({fromUser:req.session._id}, function(err, profile) {
                             if(err) console.log("[ERROR]: "+err);
                             profile.save(function(err) {
                                 if(err) console.log("[ERROR]: "+err);
-                                Profile.updateOne({fromUser:req.session._id,nr: profile.nr + 1}, function(err) {
+                                Profile.updateOne({fromUser:req.session._id,nr: profile.invoiceNrCurrent + 1}, function(err) {
                                     if(err) console.log("[ERROR]: "+err);
                                     let invoiceNr;
                                     if (profile.invoiceNrCurrent.toString().length === 1) {
-                                        invoiceNr = "00" + profile.nr.toString();
+                                        invoiceNr = "00" + profile.invoiceNrCurrent.toString();
                                     } else if (profile.invoiceNrCurrent.toString().length === 2) {
                                         invoiceNr = "0" + profile.invoiceNrCurrent.toString();
                                     }
-                                    var newInvoice = new Invoice({
-                                        client: client._id,
-                                        date: getDatum(settings.lang),
+                                    let newInvoice = new Invoice({
+                                        fromClient: client._id,
+                                        date: "20201010",
                                         invoiceNrCurrent: String(new Date().getFullYear() + invoiceNr),
-                                        clientName: contact.contactPersoon,
+                                        clientName: client.clientName,
                                         total: 0,
-                                        datePaid: Date.now()
+                                        datePaid: "20201001",
+                                        fromUser:req.session._id
                                     });
                                     Client.updateOne({fromUser:req.session._id,}, function(err) {
                                         if(err) console.log("[ERROR]: "+err);
@@ -82,5 +123,119 @@ exports.invoice_new_get = (req,res) => {
                         });
                 });
         });
+    });
+};
+
+exports.credit_new_get = (req,res) => {
+    Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+        if(err) console.log("[ERROR]: "+err);
+        client.findOne({fromUser:req.session._id,_id: req.body.idc}, function(err, client) {
+            if(err) console.log("[ERROR]: "+err);
+                client.save(function(err) {
+                    if(err) console.log("[ERROR]: "+err);
+                        Profile.findOne({fromUser:req.session._id}, function(err, profile) {
+                            profile.save(function(err) {
+                                if(err) console.log("[ERROR]: "+err);
+                                Profile.updateOne({fromUser:req.session._id,creditNrCurrent: profile.creditNrCurrent + 1}, function(err) {
+                                    if(err) console.log("[ERROR]: "+err);
+                                    if (!err){
+                                        let nr_str;
+                                        if (profile.creditNrCurrent.toString().length === 1) {
+                                            nr_str = "00" + profile.creditNrCurrent.toString();
+                                        } else if (profile.creditNrCurrent.toString().length === 2) {
+                                            nr_str = "0" + profile.creditNrCurrent.toString();
+                                        }
+                                        let newInvoice = new Invoice({
+                                            fromClient: contact._id,
+                                            date: "20200101",
+                                            creditNr: String(year + nr_str),
+                                            clientName: contact.contactPersoon,
+                                            total: 0,
+                                            fromUser:req.session._id
+                                        });
+                                        Client.updateOne({fromUser:req.session._id}, function(err) {
+                                            if(err) console.log("[ERROR]: "+err);
+                                            client.invoices.push(newInvoice._id);
+                                        });
+                                        newInvoice.save();
+                                        res.redirect('/invoices/all');
+                                    }
+                                });
+                            });
+                        });
+                });
+        });
+    });
+};
+
+exports.offer_new_get = (req,res) => {
+    Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+        if(err) console.log("[ERROR]: "+err);
+        Client.findOne({fromUser:req.session._id,_id: req.params.idc}, function(err, client) {
+            if(err) console.log("[ERROR]: "+err);
+                client.save(function(err) {
+                    if(err) console.log("[ERROR]: "+err);
+                    Profile.findOne({fromUser:req.session._id}, function(err, profile) {
+                        if(err) console.log("[ERROR]: "+err);
+                        if (!err) {
+                            profile.save(function(err) {
+                                if(err) console.log("[ERROR]: "+err);
+                                if (!err) {
+                                    Profile.updateOne({fromUser:req.session._id,nroff: profile.offerNrCurrent + 1}, function(err) {
+                                        if(err) console.log("[ERROR]: "+err);
+                                        if (!err) {
+                                            let nr_str;
+                                            if (profile.offerNrCurrent.toString().length == 1) {
+                                                nr_str = "00" + profile.offerNrCurrent.toString();
+                                            } else if (profile.offerNrCurrent.toString().length == 2) {
+                                                nr_str = "0" + profile.offerNrCurrent.toString();
+                                            }
+                                            let newInvoice = new Invoice({
+                                                fromClient: client._id,
+                                                date: "20201010",
+                                                offerNr: String(year + nr_str),
+                                                clientName: client.clientName,
+                                                fromUser:req.session._id
+                                            });
+                                            Client.updateOne({fromUser:req.session._id}, function(err) {
+                                                if(err) console.log("[ERROR]: "+err);
+                                                client.invoices.push(newInvoice._id);
+                                            });
+                                            newInvoice.save();
+                                            if (!err) {
+                                                res.redirect('/invoice/all');
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+        });
+    });
+};
+
+exports.invoice_all_client = (req,res) => {
+    Client.findOne({fromUser:req.session._id,_id: req.params.idc}, function(err, client) {
+        if(err) console.log("[ERROR]: "+err);
+            Invoice.find({fromUser:req.session._id,fromClient: req.params.idc}).sort('-invoiceNr').exec(function(err, invoices) {
+                if(err) console.log("[ERROR]: "+err);
+                    Settings.findOne({}, function(err, settings) {
+                        if(err) console.log("[ERROR]: "+err);
+                        Profile.findOne({},function(err,profile){
+                            if(err) console.log("[ERROR]: "+err);
+                            if (!err) {
+                                res.render('invoices', {
+                                    'client': client,
+                                    'invoices': invoices,
+                                    "settings": settings,
+                                    "profile":profile,
+                                    "currentUrl": "invoicesClient"
+                                });
+                            }
+                        });
+                    });
+            });
     });
 };

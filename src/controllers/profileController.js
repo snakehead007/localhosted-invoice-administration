@@ -5,7 +5,7 @@ exports.view_profile_get = (req,res) => {
     let date = new Date();
     let _jaar = date.getFullYear();
     let jaar = _jaar.toString();
-    Profile.findOne({}, function(err, profile) {
+    Profile.findOne({fromUser:req.session._id}, function(err, profile) {
         if (!err) {
             var _nr = profile.invoiceNrCurrent;
             var nr_str = _nr.toString();
@@ -28,9 +28,9 @@ exports.view_profile_get = (req,res) => {
             } else if (nrcred_str.toString().length == 2) {
                 nrcred_str = "0" + _ncred.toString();
             }
-            Settings.findOne({}, function(err, settings) {
+            Settings.findOne({fromUser:req.session._id}, function(err, settings) {
                 if (!err) {
-                    Profile.findOne({}, function(err, profile) {
+                    Profile.findOne({fromUser:req.session._id}, function(err, profile) {
                         if (!err) {
                             res.render('edit/edit-profile', {
                                 'currentUrl':"edit-profile",
@@ -42,9 +42,9 @@ exports.view_profile_get = (req,res) => {
                             });
                         }
                     });
-                }
+                };
             });
-        }
+        };
     });
 };
 
@@ -67,7 +67,8 @@ exports.edit_profile_post = (req,res) => {
         offerNrCurrent: Number(req.body.offerNrCurrent.toString().substring(req.body.offerNrCurrent.toString().length - 3)),
         creditNrCurrent: Number(req.body.creditNrCurrent.toString().substring(req.body.creditNrCurrent.toString().length - 3)),
         tel: req.body.tel,
-        email: [req.body.email]
+        email: [req.body.email],
+        fromUser:req.session._id
     };
     Profile.update({fromUser:req.session._id,_id: req.params.idp}, updateProfile, function(err) {
         if (!err) {

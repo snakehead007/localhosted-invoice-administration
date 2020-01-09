@@ -1,0 +1,12 @@
+h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+    span Klanten - opties
+ul(class="nav flex-column mb-2")
+    li(class="nav-item")
+        if currentUrl === "clientNew"
+            a(class="nav-link active",href='/client/new')
+                span(data-feather="plus-circle")
+                span Nieuwe klant
+        else
+            a(class="nav-link",href='/client/new')
+                span(data-feather="plus-circle")
+                span Nieuwe klant

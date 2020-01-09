@@ -27,6 +27,10 @@ const Client = new mongoose.Schema({
     }],
     fromUser:{
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    },
+    lang:{
+        type:String,
+        default:"eng"
     }
 });
 

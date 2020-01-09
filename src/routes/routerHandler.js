@@ -7,7 +7,7 @@ const redirectRouter = require('./redirectRouter');
 const {stillSignedInCheck, alreadySignedInCheck} = require('../middlewares/checkers');
 const viewRouter = require('./viewRouter');
 const invoiceRouter = require('./invoiceRouter');
-const contactRouter = require('./contactRouter');
+const clientRouter = require('./clientRouter');
 const projectRouter = require('./projectRouter');
 const stockRouter = require('./stockRouter');
 const settingsRouter = require('./settingsRouter');
@@ -20,14 +20,13 @@ router.use('/logout',logoutRouter);
 router.use('/redirect',redirectRouter); //only used when logged in and redirected by google
 router.use('/view',stillSignedInCheck,viewRouter);
 router.use('/invoice',stillSignedInCheck,invoiceRouter);
-router.use('/contact',stillSignedInCheck,contactRouter);
+router.use('/client',stillSignedInCheck,clientRouter);
 router.use('/project',stillSignedInCheck,projectRouter);
 router.use('/stock',stillSignedInCheck,stockRouter);
 router.use('/settings',stillSignedInCheck,settingsRouter);
 router.use('/calc',stillSignedInCheck,calcRouter);
 router.use('/edit',stillSignedInCheck,editRouter);
 //Routers
-
 /*
 router.use("/view");
 router.use("/add");
