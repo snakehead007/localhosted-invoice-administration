@@ -1,29 +1,46 @@
 ul(class="nav flex-column")
     li(class="nav-item")
-        a(class="nav-link" href="/dashboard")
-            span(data-feather="home")
-            span Home
+        if currentUrl === "dashboard" || currentUrl === "chart"
+            a(class="nav-link active" href="/dashboard")
+                span(data-feather="home")
+                span Home
+                if currentUrl === "chart"
+                    span(data-feather="chevron-right")
+                    span chart
+                span(class="sr-only") (current)
+        else
+            a(class="nav-link" href="/dashboard")
+                span(data-feather="home")
+                span Home
     li(class="nav-item")
-        a(class="nav-link" href="/view/profile")
-            span(data-feather="user")
-            span Mijn Profiel
+        if currentUrl === "edit-profile"
+            a(class="nav-link active" href="/view/profile")
+                span(data-feather="user")
+                span Mijn Profiel
+                span(class="sr-only") (current)
+        else
+            a(class="nav-link" href="/view/profile")
+                span(data-feather="user")
+                span Mijn Profiel
     li(class="nav-item")
-        if !client
+        if currentUrl === "invoices"
             a(class="nav-link active" href="/invoice/all")
                 span(data-feather="file")
                 span Alle facturen
                 span(class="sr-only") (current)
         else
-            a(class="nav-link" href="/invoice/alll" )
+            a(class="nav-link" href="/invoice/all" )
                 span(data-feather="file")
                 span Alle facturen
     li(class="nav-item")
-        if client
+        if currentUrl === 'clients'
             a(class="nav-link active" href="/contact/all")
                 span(data-feather="users")
                 span Klanten
-                span(data-feather="chevron-right")
-                span Facturen
+                if client
+                    span(data-feather="chevron-right")
+                    span Facturen
+                span(class="sr-only") (current)
         else
             a(class="nav-link" href="/contact/all")
                 span(data-feather="users")
@@ -33,17 +50,35 @@ ul(class="nav flex-column")
             span(data-feather="book")
             span Projecten
     li(class="nav-item")
-        a(class="nav-link" href="/stock/all")
-            span(data-feather="package")
-            span Materialen
-        li(class="nav-item")
-        a(class="nav-link" href="/calc/all")
-            span(data-feather="book")
-            span Berekeningen
+        if currentUrl === 'stock'
+            a(class="nav-link active" href="/stock/all")
+                span(data-feather="package")
+                span Materialen
+                span(class="sr-only") (current)
+        else
+            a(class="nav-link" href="/stock/all")
+                span(data-feather="package")
+                span Materialen
     li(class="nav-item")
-        a(class="nav-link" href="/settings")
-            span(data-feather="settings")
-            span Settings
+        if currentUrl === 'calc'
+            a(class="nav-link active" href="/calc/all")
+                span(data-feather="book")
+                span Berekeningen
+                span(class="sr-only") (current)
+        else
+            a(class="nav-link" href="/calc/all")
+                span(data-feather="book")
+                span Berekeningen
+    li(class="nav-item")
+        if currentUrl === 'settings'
+            a(class="nav-link active" href="/settings")
+                span(data-feather="settings")
+                span Settings
+                span(class="sr-only") (current)
+        else
+            a(class="nav-link" href="/settings")
+                span(data-feather="settings")
+                span Settings
     if profile.bookmarks.length !==0
         h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
             span Bookmarks

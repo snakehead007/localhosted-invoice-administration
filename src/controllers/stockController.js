@@ -10,6 +10,7 @@ exports.stock_all_get = (req,res) => {
                     Profile.findOne({fromUser:req.session._id},function(err,profile){
                         if(!err) {
                             res.render('stock', {
+                                'currentUrl':'stock',
                                 'stock': stock,
                                 'settings': settings,
                                 "profile":profile

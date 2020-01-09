@@ -1,7 +1,7 @@
 html
   head
     include includes/htmlHead
-  body(onpageshow='drawChart(['+totaal+'])')
+  body(onpageshow='drawChart(['+total+'])')
     header
       include includes/topBar
       div(class="container-fluid")
@@ -16,13 +16,13 @@ html
         div(class="btn-group dropleft mb-2 mb-md-0")
             button(type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle", data-toggle="dropdown",aria-haspopup="true",aria-expanded="false")
                 span(data-feather="calendar")
-                span=jaar
+                span=year
             div(class="dropdown-menu")
-              a(class="dropdown-item" href="/chart/"+String(jaar-2)+"/")=jaar-2
-              a(class="dropdown-item" href="/chart/" + String(jaar - 1) +"/")=jaar - 1
-              a(class="dropdown-item active" href="/chart/" + jaar +"/" )=jaar
-              a(class="dropdown-item" href="/chart/" + String(Number(jaar) + Number(1)) +"/")=String(Number(jaar) + Number(1))
-              a(class="dropdown-item" href="/chart/" + String(Number(jaar) + Number(2)) +"/")=String(Number(jaar) + Number(2))
+              a(class="dropdown-item" href="/dashboard/chart/"+String(year-2))=year-2
+              a(class="dropdown-item" href="/dashboard/chart/" + String(year - 1) )=year - 1
+              a(class="dropdown-item active" href="/dashboard/chart/" + year )=year
+              a(class="dropdown-item" href="/dashboard/chart/" + String(Number(year) + Number(1)))=String(Number(year) + Number(1))
+              a(class="dropdown-item" href="/dashboard/chart/" + String(Number(year) + Number(2)))=String(Number(year) + Number(2))
       canvas(class="my-4 w-100" id="myChart" width="900" height="380")
       h2 Openstaande facturen
       if fact_open.length == 0

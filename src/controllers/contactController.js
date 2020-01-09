@@ -8,6 +8,7 @@ exports.contact_all_get = (req,res) => {
             Settings.findOne({fromUser:req.session._id}, function(err, settings) {
                 if (!err ) {
                     res.render('clients', {
+                        'currentUrl':'clients',
                         'clients': clients,
                         "settings": settings,
                         "profile":profile

@@ -1,10 +1,9 @@
 const google = require('../middlewares/google');
 exports.login_get =  function getLogin(req,res){
     let sess = req.session;
-    if(sess.email){
+    if(sess._id){
         return res.redirect('/dashboard');
     }
-    console.log("control for logging in running...");
     res.render('login');
 };
 

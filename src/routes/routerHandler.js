@@ -12,7 +12,7 @@ const projectRouter = require('./projectRouter');
 const stockRouter = require('./stockRouter');
 const settingsRouter = require('./settingsRouter');
 const calcRouter = require('./calcRouter');
-const editRouter = require('');
+const editRouter = require('./editRouter');
 //Controllers
 router.use("/",loginRouter); //index page
 router.use("/dashboard",stillSignedInCheck,dashboardRouter);
@@ -43,7 +43,7 @@ router.use("/search");
 router.use("/vat");
 router.use("/settings");
 */
-
+/*
 //ERROR handling
 router.use((req, res) => {
     res.status(404).send('404: Page not Found');
@@ -53,5 +53,5 @@ router.use((error, req, res, next) => {
     res.status(500).send('500: Internal Server Error');
     next();
 });
-
+*/
 module.exports = router;

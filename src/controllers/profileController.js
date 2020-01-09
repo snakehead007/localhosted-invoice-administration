@@ -33,11 +33,11 @@ exports.view_profile_get = (req,res) => {
                     Profile.findOne({}, function(err, profile) {
                         if (!err) {
                             res.render('edit/edit-profile', {
+                                'currentUrl':"edit-profile",
                                 'profile': profile,
-                                'nroff': Number(jaar + nroff_str),
-                                'nr': Number(jaar + nr_str),
-                                'nrcred': Number(jaar + nrcred_str),
-                                "profile":profile,
+                                'offerNrCurrent': Number(jaar + nroff_str),
+                                'invoiceNrCurrent': Number(jaar + nr_str),
+                                'creditNrCurrent': Number(jaar + nrcred_str),
                                 "settings": settings
                             });
                         }
@@ -53,25 +53,25 @@ exports.edit_profile_get = (req,res) => {
 };
 
 exports.edit_profile_post = (req,res) => {
-    var updateProfile = new Profile({
-        firm: req.body.firma,
-        name: req.body.naam,
-        street: req.body.straat,
-        streetNr: req.body.straatNr,
-        postal: req.body.postcode,
-        place: req.body.plaats,
-        vat: req.body.btwNr,
+    var updateProfile = {
+        firm: req.body.firm,
+        name: req.body.name,
+        street: req.body.street,
+        streetNr: req.body.streetNr,
+        postal: req.body.postal,
+        place: req.body.place,
+        vat: req.body.vat,
         iban: req.body.iban,
         bic: req.body.bic,
-        invoiceNrCurrent: Number(req.body.nr.toString().substring(req.body.nr.toString().length - 3)),
-        offerNrCurrent: Number(req.body.nroff.toString().substring(req.body.nroff.toString().length - 3)),
-        creditNrCurrent: Number(req.body.nrcred.toString().substring(req.body.nrcred.toString().length - 3)),
-        tel: req.body.tele,
-        email: [req.body.mail]
-    });
-    Profile.update({_id: req.params.id}, updateProfile, function(err) {
+        invoiceNrCurrent: Number(req.body.invoiceNrCurrent.toString().substring(req.body.invoiceNrCurrent.toString().length - 3)),
+        offerNrCurrent: Number(req.body.offerNrCurrent.toString().substring(req.body.offerNrCurrent.toString().length - 3)),
+        creditNrCurrent: Number(req.body.creditNrCurrent.toString().substring(req.body.creditNrCurrent.toString().length - 3)),
+        tel: req.body.tel,
+        email: [req.body.email]
+    };
+    Profile.update({fromUser:req.session._id,_id: req.params.idp}, updateProfile, function(err) {
         if (!err) {
-            res.redirect('/dashboard');
+            res.redirect('/view/profile');
         }
     });
 }

@@ -20,53 +20,53 @@ body
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           h2(class="pt-3") Mijn profiel - aanpassen
           hr
-          form(action='/edit-profile/'+profile._id+'/'+loginHash,method='post')
+          form(action='/edit/profile/'+profile._id,method='post')
             div(class="form-row")
               div(class="form-group col-md-6")
                 label(for="title") Persoonsnaam
-                input(type="text",class="form-control",value=profile.name,name="naam",placeholder="Jan Janssens")
+                input(type="text",class="form-control",value=profile.name,name="name",placeholder="Jan Janssens")
               div(class="form-group col-md-6")
                 label(for="title") Firma naam
-                input(type="text",class="form-control",value=profile.firm,name="firma",placeholder="firma en co.")
+                input(type="text",class="form-control",value=profile.firm,name="firm",placeholder="firma en co.")
               div(class="form-group col-md-3")
                 label(for="title") Straatnaam
-                input(type="text",class="form-control",value=profile.street,name="straat",placeholder="grotestraat")
+                input(type="text",class="form-control",value=profile.street,name="street",placeholder="grotestraat")
               div(class="form-group col-md-2")
                 label(for="title") Straat Nr
-                input(type="text",class="form-control",value=profile.streetNr,name="straatNr",placeholder="12")
+                input(type="text",class="form-control",value=profile.streetNr,name="streetNr",placeholder="12")
               div(class="col-md-1")
               div(class="form-group col-md-2")
                 label(for="title") BTW-nummer
-                input(type="text",class="form-control",value=profile.vat,name="btwNr",placeholder="BE 0000.000.000")
+                input(type="text",class="form-control",value=profile.vat,name="vat",placeholder="BE 0000.000.000")
               div(class="form-group col-md-2")
                 label(for="title") IBAN-nr
                 input(type="text",class="form-control",value=profile.iban,name="iban",placeholder="BE77 7777 7777 7777")
               div(class="form-group col-md-2")
                 label(for="title") Postcode
-                input(type="number",class="form-control",value=profile.postal,name="postcode",placeholder="1234")
+                input(type="number",class="form-control",value=profile.postal,name="poctal",placeholder="1234")
               div(class="form-group col-md-3")
                 label(for="title") Plaatsnaam
-                input(type="text",class="form-control",value=profile.place,name="plaats",placeholder="Gent")
+                input(type="text",class="form-control",value=profile.place,name="place",placeholder="Gent")
               div(class="form-group col-md-2")
                 label(for="title") Telefoon nummer
-                input(type="text",class="form-control",value=profile.tel,name="tele",placeholder="0487654321")
+                input(type="text",class="form-control",value=profile.tel,name="tel",placeholder="0487654321")
               div(class="col-md-7")
               div(class="form-group col-md-2 mr-auto")
                 label(for="title") Factuur nr:
-                input(type="text",class="form-control",value=nr,name="nr")
+                input(type="text",class="form-control",value=invoiceNrCurrent,name="invoiceNrCurrent")
               div(class="form-group col-md-2 mr-auto")
                 label(for="title") Offerte nr:
-                input(typ='text',class='form-control',value=nroff,name="nroff")
+                input(typ='text',class='form-control',value=offerNrCurrent,name="offerNrCurrent")
               div(class="form-group col-md-2 mr-auto")
                 label(for="title") Creditnr:
-                input(typ='text',class='form-control',value=nrcred,name="nrcred")
+                input(typ='text',class='form-control',value=creditNrCurrent,name="creditNrCurrent")
               div(class="form-group col-md-2 mr-auto")
                 label(for="title") BIC-nr
                 input(type="text",class="form-control",value=profile.bic,name="bic",placeholder="KREDBEBB")
               div(class="col-md-2")
               div(class="form-group col-md-5")
                 label(for="title") E-mail
-                input(type="text",class="form-control",value=profile.email,name="mail",placeholder="voorbeel@email.be")
+                input(type="text",class="form-control",value=profile.email[0],name="email",placeholder="voorbeeld@email.be")
             button(type="submit",class="btn btn-outline-"+settings.thema) profiel bijwerken
             hr(class="mb-3")
 

@@ -1,7 +1,7 @@
 const path = require('path');
 const express = require('express');
 const {load} = require('./loaders/loader.js');
-const routes = require('./routes/index.js');
+const routes = require('./routes/routerHandler');
 const dotenv = require('dotenv');
 
 const models = path.join(path.resolve(), './models');
