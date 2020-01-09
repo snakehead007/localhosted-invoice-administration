@@ -2,6 +2,7 @@ const Invoice = require('../models/invoice');
 const Settings = require('../models/settings');
 const Client = require('../models/client');
 const Profile = require('../models/profile');
+const Order = require('../models/order');
 const {year} = require('../utils/date');
 exports.invoice_all_get = (req,res) => {
     Invoice.find({fromUser:req.session._id}, function(err, invoices) {
@@ -237,5 +238,64 @@ exports.invoice_all_client = (req,res) => {
                         });
                     });
             });
+    });
+};
+
+exports.edit_invoice_get = (req,res) => {
+    Invoice.findOne({fromUser:req.session._id,_id:req.params.idi},function(err,invoice){
+        if(err) console.log("[ERROR]: "+err);
+        Client.findOne({fromUser:req.session._id,_id:invoice.fromClient},function(err,client){
+            if(err) console.log("[ERROR]: "+err);
+            Settings.findOne({fromUser:req.session._id},function(err,settings){
+                if(err) console.log("[ERROR]: "+err);
+                Profile.findOne({fromUser:req.session._id},function(err,profile){
+                    if(err) console.log("[ERROR]: "+err);
+                    res.render('edit/edit-invoice',{
+                    'invoice':invoice,
+                    'client':client,
+                    'settings':settings,
+                    'profile':profile
+                    });
+                });
+            });
+        });
+    });
+
+};
+
+exports.edit_invoice_post = (req,res) => {
+    Order.find({fromUser:req.session._id,fromInvoice: req.params.idi}, function(err, orders) {
+        if(err) console.log("[ERROR]: "+err);
+        let totOrders = 0;
+        for (let i = 0; i <= orders.length - 1; i++) {
+            totOrders += orders[i].total;
+        }
+        let updateInvoice;
+        if (req.body.advance) {
+            updateInvoice = {
+                date: req.body.date,
+                invoiceNr: req.body.invoiceNr,
+                advance: req.body.advance,
+                offerNr: req.body.offer,
+                datePaid: req.body.datePaid,
+                total: totOrders - req.body.total
+            };
+        } else {
+            updateInvoice = {
+                date: req.body.date,
+                invoice: req.body.invoice,
+                advance: req.body.advance,
+                offerNr: req.body.offerNr,
+                datePaid: req.body.datePaid,
+                total:totOrders
+            };
+        }
+        Client.findOne({fromUser:req.session._id,_id:orders[0].fromClient}, function(err, contact) {
+            Invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, updateInvoice, function(err) {
+                if (!err) {
+                    res.redirect('/invoice/' + contact._id);
+                }
+            });
+        });
     });
 };

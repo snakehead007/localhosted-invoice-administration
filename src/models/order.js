@@ -22,6 +22,9 @@ const Order = new mongoose.Schema({
     },
     fromInvoice:{
         type: mongoose.Schema.Types.ObjectId, ref: 'Invoice'
+    },
+    fromClient:{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Client'
     }
 });
 

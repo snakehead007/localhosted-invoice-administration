@@ -1,0 +1,72 @@
+//- V1.8
+html
+  head
+    include ../includes/htmlHead
+    script.
+      function show_mail1(){
+        $('#mail1').show();
+        $('#col3_1').hide();
+        $('#extra_mail1').hide();
+        $('#extra_mail2').show();
+        $('#col10').show();
+      }
+      function show_mail2(){
+        $('#mail2').show();
+        $('#col10').hide();
+        $('#col7').show();
+        $('#extra_mail2').hide();
+      }
+      function info() {
+        $("#info").toggle();
+      };
+      $(document).ready(function () {
+        feather.replace();
+      });
+body
+  header
+    include ../includes/topBar
+
+    div(class="container-fluid")
+      div(class ="row")
+        nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+          div(class="sidebar-sticky")
+            include ../includes/navFlexCollumn
+            include ../includes/bookmarks
+            include ../includes/invoiceOptionMenu
+        main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+          h2(class="pt-3") Klant bewerken
+          hr
+          form(action='/edit/client/'+client._id ,method='post')
+            p=msg
+            div(class="form-row")
+              div(class="form-group col-md-5")
+                label(for="title") client persoon *
+                input(type="text",class="form-control",value=client.clientName,name="clientName" required)
+              div(class="form-group col-md-2")
+              div(class="form-group col-md-5")
+                label(for="title") Firma
+                input(type="text",class="form-control",value=client.firm,name="firm")
+              div(class="form-group col-md-3")
+                label(for="title") Straatnaam *
+                input(type="text",class="form-control",value=client.street,name="street" required)
+              div(class="form-group col-md-2")
+                label(for="title") Straat Nr
+                input(type="text",class="form-control",value=client.streetNr,name="streetNr")
+              div(class="col-md-2")
+              div(class="form-group col-md-3")
+                label(for="title") E-mail
+                input(type="text",class="form-control",value=client.email,name="email",placeholder="voorbeel@email.be")
+              div(class="form-group col-md-2")
+                label(for="title") BTW-nummer
+                input(type="text",class="form-control",value=client.vat,name="vat")
+              div(class="form-group col-md-2")
+                label(for="title") Rekeningnr
+                input(type="text",class="form-control",value=client.bankNr,name="bankNr")
+              div(class="form-group col-md-1")
+                label(for="title") Postcode
+                input(type="number",class="form-control",value=client.postal,name="postal")
+              div(class="form-group col-md-2")
+                label(for="title") Plaatsnaam *
+                input(type="text",class="form-control",value=client.place,name="place" required)
+            hr
+            button(type="submit",class="btn btn-outline-"+settings.thema) bijwerken
