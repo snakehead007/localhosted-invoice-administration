@@ -57,10 +57,7 @@ html
                         a(href='/bestellingen/' + factuur._id + "/" )="Creditnota " + factuur.creditnr
                     if !contact
                       td
-                        if factuur.contactPersoon == "Update deze factuur!"
-                          a(href='/updateFactuur/' + factuur._id + "/" )=factuur.contactPersoon
-                        else
-                          a(href='/facturen/' + factuur.contact + "/t" + "/" )=factuur.contactPersoon
+                        a(href='/facturen/' + factuur.contact + "/t" + "/" )=factuur.contactPersoon
                     td=factuur.datum
                     if factuur.factuurNr
                       td

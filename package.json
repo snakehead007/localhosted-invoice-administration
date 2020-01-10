@@ -37,6 +37,7 @@
     "googleapis": "^46.0.0",
     "helmet": "^3.21.2",
     "http": "0.0.0",
+    "i18n": "^0.8.4",
     "iconv-lite": "^0.4.24",
     "image-to-base64": "^2.0.1",
     "jsonwebtoken": "^8.5.1",

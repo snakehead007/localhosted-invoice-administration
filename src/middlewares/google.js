@@ -18,6 +18,7 @@ exports.startUp = () =>{
         'https://www.googleapis.com/auth/plus.me',
         'https://www.googleapis.com/auth/userinfo.email',
     ];
+    console.log("[Info]: Google config set up");
 };
 
 /*************/

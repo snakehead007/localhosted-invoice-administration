@@ -70,11 +70,15 @@ ul(class="nav flex-column")
                 span(data-feather="book")
                 span Berekeningen
     li(class="nav-item")
-        if currentUrl === 'settings'
+        if currentUrl === 'settings' || currentUrl === "password"
             a(class="nav-link active" href="/settings")
                 span(data-feather="settings")
                 span Settings
                 span(class="sr-only") (current)
+                if currentUrl === "password"
+                    span(data-feather="chevron-right")
+                    span Password
+                    span(class="sr-only") (current)
         else
             a(class="nav-link" href="/settings")
                 span(data-feather="settings")

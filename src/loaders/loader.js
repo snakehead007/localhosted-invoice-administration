@@ -3,11 +3,11 @@ const expressLoader = require('./express.js');
 const google = require('../middlewares/google.js');
 
 async function load( expressApp ) {
-    console.log("[info]: Starting load");
+    console.log("[Info]: Starting loaders");
     google.startUp();
     await mongooseLoader.default();
-    console.log("[info]: mongoose loaded");
+    console.log("[Info]: Mongoose loaded");
     await expressLoader.default( expressApp );
-    console.log("[info]: express loaded");
+    console.log("[Info]: Express loaded");
 }
 module.exports.load = load;

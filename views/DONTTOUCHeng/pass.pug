@@ -1,17 +1,7 @@
 //- V1.8
 html
   head
-    title=title
-    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
-    link(rel="stylesheet" href="/stylesheet.css")
-    scrip(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/core.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
-    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js")
-    script(src="https://www.chartjs.org/samples/latest/utils.js")
-    script(src="https://unpkg.com/feather-icons")
+    include ../includes/
     script.
      function info(){$("#info").toggle();};
      $(document).ready(function () {
