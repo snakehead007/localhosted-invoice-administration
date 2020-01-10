@@ -57,27 +57,18 @@ html
               tr
                 td
                   if invoice.invoiceNr
-                    if client
-                      a(href='/orders/' + invoice._id )=invoice.invoiceNr
-                    if !client
-                      a(href='/orders/' + invoice._id + '/t/' )=invoice.invoiceNr
+                      a(href='/order/all/' + invoice._id )=invoice.invoiceNr
                   if invoice.offerNr && !invoice.invoiceNr
-                    if client
-                      a(href='/orders/' + invoice._id)="Offerte " + invoice.offerNr
-                    if !client
-                      a(href='/orders/' + invoice._id + '/t' )="Offerte " + invoice.offerNr
+                      a(href='/order/all/' + invoice._id)="Offerte " + invoice.offerNr
                   if invoice.creditNr && !invoice.offerNr && !invoice.invoiceNr
-                    a(href='/orders/' + invoice._id )="Creditnota " + invoice.creditNr
+                    a(href='/order/all/' + invoice._id )="Creditnota " + invoice.creditNr
                 if !client
                   td
                     a(href='/invoice/all/' + invoice.fromClient)=invoice.clientName
                 td=invoice.date
                 if invoice.invoiceNr
                   td
-                      if invoice.isPaid
-                        span=(invoice.total * 1.21).toFixed(2) + "€"
-                      if !invoice.isPaid
-                        span=(invoice.total * 1.21).toFixed(2) + "€"
+                    span=(invoice.total * 1.21).toFixed(2) + "€"
                 else
                   td
                 if invoice.invoiceNr

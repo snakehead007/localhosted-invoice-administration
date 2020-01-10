@@ -19,7 +19,7 @@ exports.upload_logo_post = (req,res) => {
     let sampleFile = req.files.sampleFile;
     console.log(sampleFile);
     sampleFile.mv('public/logo.jpeg', function(err) {
-        if(err) console.log("[ERROR]: "+err);
+        if(err) console.trace();
         res.redirect('/view/profile/');
     });
 };

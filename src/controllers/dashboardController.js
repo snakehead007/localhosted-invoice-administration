@@ -19,13 +19,13 @@ exports.main_get =  async function getLogin(req,res){
                                 for (let invoice of invoices) {// TODO: 'for of' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
                                     if (invoice.invoiceNr) {
                                         if (invoice.datePaid) {
-                                            if ((invoice.datePaid.includes(month[i]) || invoice.datePaid.includes(month_small[i]) || invoice.datePaid.includes(month[i]) || invoice.datePaid.includes(month_small[i])) && invoice.datePaid.includes(year) && invoice.datePaid && invoice.isPaid) {
+                                            if ((String(invoice.datePaid).includes(month[i]) || String(invoice.datePaid).includes(month_small[i]) || String(invoice.datePaid).includes(month[i]) || String(invoice.datePaid).includes(month_small[i])) && invoice.datePaid.includes(year) && invoice.datePaid && invoice.isPaid) {
                                                 total[i] += invoice.total;
                                             }
                                         } else if ((invoice.date.includes(month[i]) || invoice.date.includes(month_small[i]) || invoice.date.includes(month[i]) || invoice.date.includes(month_small[i])) && invoice.date.includes(year) && invoice.invoiceNr && invoice.isPaid) {
                                             total[i] += invoice.total;
                                         }
-                                        if ((invoice.date.includes(month[i]) || invoice.date.includes(month_small[i]) || invoice.date.includes(month[i]) || invoice.date.includes(month_small[i])) && !invoice.isPaid){
+                                        if ((String(invoice.date).includes(month[i]) || String(invoice.date).includes(month_small[i]) || String(invoice.date).includes(month[i]) || String(invoice.date).includes(month_small[i])) && !invoice.isPaid){
                                             fact_open.push(invoice);
                                         }
                                     }

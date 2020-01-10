@@ -6,11 +6,11 @@ const Order = require('../models/order');
 const {year} = require('../utils/date');
 exports.invoice_all_get = (req,res) => {
     Invoice.find({fromUser:req.session._id}, function(err, invoices) {
-        if(err) console.log("[ERROR]: "+err);
+        if(err) console.trace();
             Settings.findOne({fromUser:req.session._id}, function(err, settings) {
-                if(err) console.log("[ERROR]: "+err);
+                if(err) console.trace();
                     Profile.findOne({fromUser:req.session._id}, function(err, profile) {
-                        if(err) console.log("[ERROR]: "+err);
+                        if(err) console.trace();
                             res.render('invoices', {
                                 "currentUrl":"invoices",
                                 'invoices': invoices,
@@ -24,9 +24,9 @@ exports.invoice_all_get = (req,res) => {
 
 exports.invoice_new_choose_get = (req,res) => {
     Settings.findOne({fromUser:req.session._id},function(err,settings){
-        if(err) console.log("[ERROR]: "+err);
+        if(err) console.trace();
         Profile.findOne({fromUser:req.session._id},function(err,profile){
-            if(err) console.log("[ERROR]: "+err);
+            if(err) console.trace();
             Client.find({},function(err,clients){
                 if(err) console.log("ERROR]: "+err);
                 res.render('add-file-no-contact',{
@@ -43,9 +43,9 @@ exports.invoice_new_choose_get = (req,res) => {
 
 exports.offer_new_choose_get = (req,res) => {
     Settings.findOne({fromUser:req.session._id},function(err,settings){
-        if(err) console.log("[ERROR]: "+err);
+        if(err) console.trace();
         Profile.findOne({fromUser:req.session._id},function(err,profile){
-            if(err) console.log("[ERROR]: "+err);
+            if(err) console.trace();
             Client.find({},function(err,clients){
                 if(err) console.log("ERROR]: "+err);
                 res.render('add-file-no-contact',{
@@ -62,15 +62,15 @@ exports.offer_new_choose_get = (req,res) => {
 
 exports.credit_new_choose_get = (req,res) => {
     Settings.findOne({fromUser:req.session._id},function(err,settings){
-        if(err) console.log("[ERROR]: "+err);
+        if(err) console.trace();
         Profile.findOne({fromUser:req.session._id},function(err,profile){
-            if(err) console.log("[ERROR]: "+err);
+            if(err) console.trace();
             Client.find({},function(err,clients){
                 if(err) console.log("ERROR]: "+err);
                 res.render('add-file-no-contact',{
                     'profile':profile,
                     'settings':settings,
-                    'add':"credit",
+                    'add':"creditnote",
                     'addlink':"credit",
                     'clients':clients
                 });
@@ -80,18 +80,19 @@ exports.credit_new_choose_get = (req,res) => {
 };
 
 exports.invoice_new_get = (req,res) => {
+    const idc = (req.body.idc)?req.body.idc:req.params.idc;
     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
-        if(err) console.log("[ERROR]: "+err);
-        Client.findOne({fromUser:req.session._id,_id: req.params.idc}, function(err, client) {
-            if(err) console.log("[ERROR]: "+err);
+        if(err) console.trace();
+        Client.findOne({fromUser:req.session._id,_id: idc}, function(err, client) {
+            if(err) console.trace();
                 client.save(function(err) {
-                    if(err) console.log("[ERROR]: "+err);
+                    if(err) console.trace();
                         Profile.findOne({fromUser:req.session._id}, function(err, profile) {
-                            if(err) console.log("[ERROR]: "+err);
+                            if(err) console.trace();
                             profile.save(function(err) {
-                                if(err) console.log("[ERROR]: "+err);
+                                if(err) console.trace();
                                 Profile.updateOne({fromUser:req.session._id,nr: profile.invoiceNrCurrent + 1}, function(err) {
-                                    if(err) console.log("[ERROR]: "+err);
+                                    if(err) console.trace();
                                     let invoiceNr;
                                     if (profile.invoiceNrCurrent.toString().length === 1) {
                                         invoiceNr = "00" + profile.invoiceNrCurrent.toString();
@@ -101,20 +102,20 @@ exports.invoice_new_get = (req,res) => {
                                     let newInvoice = new Invoice({
                                         fromClient: client._id,
                                         date: "20201010",
-                                        invoiceNrCurrent: String(new Date().getFullYear() + invoiceNr),
+                                        invoiceNr: String(new Date().getFullYear() + invoiceNr),
                                         clientName: client.clientName,
                                         total: 0,
                                         datePaid: "20201001",
                                         fromUser:req.session._id
                                     });
                                     Client.updateOne({fromUser:req.session._id,}, function(err) {
-                                        if(err) console.log("[ERROR]: "+err);
+                                        if(err) console.trace();
                                         if(!err){
                                             client.invoices.push(newInvoice._id);
                                         }
                                     });
                                     newInvoice.save(function(err){
-                                        if(err) console.log("[ERROR]: "+err);
+                                        if(err) console.trace();
                                         if(!err){
                                             res.redirect('/invoice/all');
                                         }
@@ -128,17 +129,18 @@ exports.invoice_new_get = (req,res) => {
 };
 
 exports.credit_new_get = (req,res) => {
+    const idc = (req.body.idc)?req.body.idc:req.params.idc;
     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
-        if(err) console.log("[ERROR]: "+err);
-        client.findOne({fromUser:req.session._id,_id: req.body.idc}, function(err, client) {
-            if(err) console.log("[ERROR]: "+err);
+        if(err) console.trace();
+        client.findOne({fromUser:req.session._id,_id: idc}, function(err, client) {
+            if(err) console.trace();
                 client.save(function(err) {
-                    if(err) console.log("[ERROR]: "+err);
+                    if(err) console.trace();
                         Profile.findOne({fromUser:req.session._id}, function(err, profile) {
                             profile.save(function(err) {
-                                if(err) console.log("[ERROR]: "+err);
+                                if(err) console.trace();
                                 Profile.updateOne({fromUser:req.session._id,creditNrCurrent: profile.creditNrCurrent + 1}, function(err) {
-                                    if(err) console.log("[ERROR]: "+err);
+                                    if(err) console.trace();
                                     if (!err){
                                         let nr_str;
                                         if (profile.creditNrCurrent.toString().length === 1) {
@@ -155,7 +157,7 @@ exports.credit_new_get = (req,res) => {
                                             fromUser:req.session._id
                                         });
                                         Client.updateOne({fromUser:req.session._id}, function(err) {
-                                            if(err) console.log("[ERROR]: "+err);
+                                            if(err) console.trace();
                                             client.invoices.push(newInvoice._id);
                                         });
                                         newInvoice.save();
@@ -170,20 +172,21 @@ exports.credit_new_get = (req,res) => {
 };
 
 exports.offer_new_get = (req,res) => {
+    const idc = (req.body.idc)?req.body.idc:req.params.idc;
     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
-        if(err) console.log("[ERROR]: "+err);
-        Client.findOne({fromUser:req.session._id,_id: req.params.idc}, function(err, client) {
-            if(err) console.log("[ERROR]: "+err);
+        if(err) console.trace();
+        Client.findOne({fromUser:req.session._id,_id: idc}, function(err, client) {
+            if(err) console.trace();
                 client.save(function(err) {
-                    if(err) console.log("[ERROR]: "+err);
+                    if(err) console.trace();
                     Profile.findOne({fromUser:req.session._id}, function(err, profile) {
-                        if(err) console.log("[ERROR]: "+err);
+                        if(err) console.trace();
                         if (!err) {
                             profile.save(function(err) {
-                                if(err) console.log("[ERROR]: "+err);
+                                if(err) console.trace();
                                 if (!err) {
                                     Profile.updateOne({fromUser:req.session._id,nroff: profile.offerNrCurrent + 1}, function(err) {
-                                        if(err) console.log("[ERROR]: "+err);
+                                        if(err) console.trace();
                                         if (!err) {
                                             let nr_str;
                                             if (profile.offerNrCurrent.toString().length == 1) {
@@ -199,7 +202,7 @@ exports.offer_new_get = (req,res) => {
                                                 fromUser:req.session._id
                                             });
                                             Client.updateOne({fromUser:req.session._id}, function(err) {
-                                                if(err) console.log("[ERROR]: "+err);
+                                                if(err) console.trace();
                                                 client.invoices.push(newInvoice._id);
                                             });
                                             newInvoice.save();
@@ -219,13 +222,13 @@ exports.offer_new_get = (req,res) => {
 
 exports.invoice_all_client = (req,res) => {
     Client.findOne({fromUser:req.session._id,_id: req.params.idc}, function(err, client) {
-        if(err) console.log("[ERROR]: "+err);
+        if(err) console.trace();
             Invoice.find({fromUser:req.session._id,fromClient: req.params.idc}).sort('-invoiceNr').exec(function(err, invoices) {
-                if(err) console.log("[ERROR]: "+err);
+                if(err) console.trace();
                     Settings.findOne({}, function(err, settings) {
-                        if(err) console.log("[ERROR]: "+err);
+                        if(err) console.trace();
                         Profile.findOne({},function(err,profile){
-                            if(err) console.log("[ERROR]: "+err);
+                            if(err) console.trace();
                             if (!err) {
                                 res.render('invoices', {
                                     'client': client,
@@ -243,13 +246,13 @@ exports.invoice_all_client = (req,res) => {
 
 exports.edit_invoice_get = (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id:req.params.idi},function(err,invoice){
-        if(err) console.log("[ERROR]: "+err);
+        if(err) console.trace();
         Client.findOne({fromUser:req.session._id,_id:invoice.fromClient},function(err,client){
-            if(err) console.log("[ERROR]: "+err);
+            if(err) console.trace();
             Settings.findOne({fromUser:req.session._id},function(err,settings){
-                if(err) console.log("[ERROR]: "+err);
+                if(err) console.trace();
                 Profile.findOne({fromUser:req.session._id},function(err,profile){
-                    if(err) console.log("[ERROR]: "+err);
+                    if(err) console.trace();
                     res.render('edit/edit-invoice',{
                     'invoice':invoice,
                     'client':client,
@@ -265,7 +268,7 @@ exports.edit_invoice_get = (req,res) => {
 
 exports.edit_invoice_post = (req,res) => {
     Order.find({fromUser:req.session._id,fromInvoice: req.params.idi}, function(err, orders) {
-        if(err) console.log("[ERROR]: "+err);
+        if(err) console.trace();
         let totOrders = 0;
         for (let i = 0; i <= orders.length - 1; i++) {
             totOrders += orders[i].total;

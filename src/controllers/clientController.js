@@ -4,11 +4,11 @@ const Settings = require('../models/settings');
 
 exports.client_all_get = (req,res) => {
     Profile.findOne({fromUser:req.session._id},function(err,profile){
-        if(err) console.log("[ERROR]: "+err);
+        if(err) console.trace();
         Client.find({fromUser:req.session._id}, function(err, clients) {
-            if(err) console.log("[ERROR]: "+err);
+            if(err) console.trace();
             Settings.findOne({fromUser:req.session._id}, function(err, settings) {
-                if(err) console.log("[ERROR]: "+err);
+                if(err) console.trace();
                 if (!err ) {
                     res.render('clients', {
                         'clients': clients,
@@ -24,9 +24,9 @@ exports.client_all_get = (req,res) => {
 
 exports.client_new_get = (req,res) => {
     Settings.findOne({},function(err, settings) {
-        if(err) console.log("[ERROR]: "+err);
+        if(err) console.trace();
         Profile.findOne({},function(err,profile) {
-            if(err) console.log("[ERROR]: "+err);
+            if(err) console.trace();
             if (!err) {
                 res.render('new/new-client', {
                     "settings": settings,

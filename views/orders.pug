@@ -19,12 +19,12 @@ body
             include includes/bookmarks
             include includes/orderOptionMenu
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          if factuur.factuurNr
-            h2(class="pt-3")="Factuur " + factuur.factuurNr+" ("+contact.contactPersoon+")"
-          if factuur.offerteNr && !factuur.factuurNr
-            h2(class="pt-3")="Offerte " + factuur.offerteNr+" ("+contact.contactPersoon+")"
-          if factuur.creditnr && !factuur.offerteNr && !factuur.factuurNr
-            h2(class="pt-3")="Creditnota " + factuur.creditnr+" ("+contact.contactPersoon+")"
+          if invoice.invoiceNr
+            h2(class="pt-3")="Factuur " + invoice.invoiceNr+" ("+client.clientName+")"
+          if invoice.offerNr && !invoice.invoiceNr
+            h2(class="pt-3")="Offerte " + invoice.offerNr+" ("+client.clientName+")"
+          if invoice.creditNr && !invoice.offerNr && !invoice.invoiceNr
+            h2(class="pt-3")="Creditnota " + invoice.creditNr+" ("+client.clientName+")"
           hr
           table(class="table table-striped")
             tr
@@ -33,15 +33,15 @@ body
               th(scope="col") Bedrag
               th(scope="col") Totaal
               th(scope="col") Acties
-            each bestelling in bestellingen
+            each order in orders
               tr
-                td=bestelling.beschrijving
-                td=bestelling.aantal
-                td=bestelling.bedrag+" €"
-                td=bestelling.totaal+" €"
+                td=order.description
+                td=order.amount
+                td=order.price+" €"
+                td=order.total+" €"
                 td
                   a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                   div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                    a(class="dropdown-item", href='/edit-bestelling/'+bestelling._id+"/"+loginHash) aanpassen
-                    a(class="dropdown-item", href='/delete-bestelling/'+bestelling._id+"/"+loginHash) verwijder
-                    a(class="dropdown-item", href='/view-bestelling/'+bestelling._id+"/"+loginHash) bekijk
+                    a(class="dropdown-item", href='/edit-bestelling/'+order._id) aanpassen
+                    a(class="dropdown-item", href='/delete-bestelling/'+order._id) verwijder
+                    a(class="dropdown-item", href='/view-bestelling/'+order._id) bekijk

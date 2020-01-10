@@ -9,11 +9,13 @@ async function start(){
     if(!process.env.PORT) throw new Error(".env file not found, or wrong path");
     console.log("[Info]: Dotenv config done");
     await load(app);
-    app.listen(process.env.PORT,() => {
-        console.log('[Info]: Server is running at PORT ' + process.env.PORT);
-    });
     console.log("[Info]: Routes loaded");
+    app.use(function (req,res,next) {
+        console.log("[%s request]: %s%s  from %s", req.method, process.env.LOCAL_URL,req.url,((req.session._id)?req.session._id:"unknown"));
+        next();
+    });
+
+    app.use('/',routes);
 }
 start();
 
-app.use('/',routes);

@@ -7,6 +7,6 @@ module.exports.load= async function load( app ) {
     google.startUp();
     mongooseLoader.default();
     console.log("[Info]: Mongoose loaded");
-    expressLoader.default(app);
+    await expressLoader.default(app);
     console.log("[Info]: Express loaded");
 };

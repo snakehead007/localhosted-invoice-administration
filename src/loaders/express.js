@@ -25,7 +25,7 @@ module.exports.default = function( app){
     });
     app.use(i18n.init);
     console.log("[Info]: . . . . Locales set up");
-    app.use(fileUpload);
+    app.use(fileUpload());
     app.use(express.static(path.join(path.resolve(), 'public')));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({
@@ -41,4 +41,7 @@ module.exports.default = function( app){
         })
     );
     console.log("[Info]: . . . . Sessions set up");
+    app.listen(process.env.PORT,() => {
+        console.log('[Info]: Server is running at PORT ' + process.env.PORT);
+    });
 };
