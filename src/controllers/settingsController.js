@@ -24,9 +24,22 @@ exports.settings_change_lang_get = (req,res) => {
         i18n.setLocale(res, req.params.lang);
         req.setLocale(req.params.lang);
         res.locals.language = req.params.lang;
-        console.log(res.locale);
-        console.log(res.locals.language);
-        console.log(req.locale);
         res.redirect('/settings');
+    });
+};
+
+exports.change_text_post = (req,res) => {
+    Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+        if (!err) {
+            let updateSettings = {
+                invoiceText: String(req.body.invoiceText),
+                creditText: String(req.body.creditText),
+                offerText: String(req.body.offerText)
+            };
+            Settings.updateOne({fromUser:req.session._id,_id: settings._id}, updateSettings, function(err) {
+                if(err){console.log('err: '+err);}
+                res.redirect('/settings');
+            });
+        }
     });
 };

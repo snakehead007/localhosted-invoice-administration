@@ -7,48 +7,48 @@ html
     script.
       var imgData = "#{imgData}";
       c = [0,0];
-      Pfirma = "#{profile.firma}";
-      Pnaam = "#{profile.naam}";
-      Pstraat = "#{profile.straat}";
-      PstraatNr = "#{profile.straatNr}";
-      Ppostcode = "#{profile.postcode}";
-      Pplaats = "#{profile.plaats}";
-      PbtwNr = "#{profile.btwNr}";
+      Pfirma = "#{profile.firm}";
+      Pnaam = "#{profile.name}";
+      Pstraat = "#{profile.street}";
+      PstraatNr = "#{profile.streetNr}";
+      Ppostcode = "#{profile.postal}";
+      Pplaats = "#{profile.place}";
+      PbtwNr = "#{profile.vat}";
       Piban = "#{profile.iban}";
       Pbic = "#{profile.bic}";
-      firma = "#{contact.firma}";
-      factuurNr = "#{factuur.factuurNr}";
-      contactPersoon = "#{contact.contactPersoon}";
-      straat = "#{contact.straat}";
-      straatNr = "#{contact.straatNr}";
-      postcode = "#{contact.postcode}";
-      plaats = "#{contact.plaats}";
-      btwNr = "#{contact.btwNr}";
-      datum = "#{factuur.datum}";
-      var btw = Number(#{btw});
-      voorschot = Number(#{factuur.voorschot});
-      factuurtext = [];
-      factuurtext.push("#{factuurtext[0]}");
-      factuurtext.push("#{factuurtext[1]}");
-      factuurtext.push("#{factuurtext[2]}");
-      factuurtext.push("#{factuurtext[3]}");
-      factuurtext.push("#{factuurtext[4]}");
-      factuurtext.push("#{factuurtext[5]}");
+      firma = "#{client.firm}";
+      factuurNr = "#{invoice.invoiceNr}";
+      contactPersoon = "#{client.clientName}";
+      straat = "#{client.street}";
+      straatNr = "#{client.streetNr}";
+      postcode = "#{client.postal}";
+      plaats = "#{client.place}";
+      btwNr = "#{client.vat}";
+      datum = "#{invoice.date}";
+      var btw = Number(#{vat});
+      voorschot = Number(#{invoice.advance});
+      invoiceText = [];
+      invoiceText.push("#{invoiceText[0]}");
+      invoiceText.push("#{invoiceText[1]}");
+      invoiceText.push("#{invoiceText[2]}");
+      invoiceText.push("#{invoiceText[3]}");
+      invoiceText.push("#{invoiceText[4]}");
+      invoiceText.push("#{invoiceText[5]}");
       var doc = new jsPDF();
       doc.setFont(doc.getFontList()[0]);
       doc.setProperties({
-        title: '#{profile.firma} factuur #{factuur.factuurNr}',
-        subject: 'Factuur van #{profile.firma}',
-        author: '#{profile.firma}',
-        keywords: '#{profile.firma} ,factuur ,#{factuur.factuurNr}',
-        creator: '#{profile.firma} FactuurBeheer',
+        title: '#{profile.firm} factuur #{invoice.invoiceNr}',
+        subject: 'Factuur van #{profile.firm}',
+        author: '#{profile.firm}',
+        keywords: '#{profile.firm} ,factuur ,#{invoice.invoiceNr}',
+        creator: '#{profile.firm} FactuurBeheer',
       });
       /**HEADER**/
       doc.addImage(imgData, 'JPEG', 15, 5, 50, 50);
       doc.setFontType("bold");
       doc.setFontSize(36);
       doc.setTextColor(170, 170, 170);
-      doc.text(140,35,"Factuur");
+      doc.text(140,35,__("Invoice"));
       /**bedrijfgegevens**/
       doc.setTextColor(0,0,0);
       doc.setFontSize(12);

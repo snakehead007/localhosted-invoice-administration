@@ -156,5 +156,19 @@
 	"Settings": "Settings",
 	"settings": "settings",
 	"Home": "Home",
-	"Exlc. btw": "Exlc. btw"
+	"Exlc. vat": "Exlc. vat",
+	"New order": "New order",
+	"New orders": "New orders",
+	"Options": "Options",
+	"options": "options",
+	"This document": "This document",
+	"New client": "New client",
+	"new client": "new client",
+	"New invoice": "new invoice",
+	"For this client": "For this client",
+	"New offer": "New offer",
+	"New creditnote": "New creditnote",
+	"Sign out": "Sign out",
+	"Exlc. btw": "Exlc. btw",
+	"search": "search"
 }

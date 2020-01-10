@@ -55,10 +55,6 @@ const Settings = new mongoose.Schema({
         type: String,
         default: ""
     },
-    pass: {
-        type:String,
-        default:"cGFzc3dvcmQ="
-    },
     vatPercentage: {
         type: Number,
         default: 21

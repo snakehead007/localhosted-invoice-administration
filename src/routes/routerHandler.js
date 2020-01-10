@@ -15,6 +15,7 @@ const calcRouter = require('./calcRouter');
 const editRouter = require('./editRouter');
 const uploadRouter = require('./uploadRouter');
 const orderRouter = require('./orderRouter');
+const downloadRouter = require('./downloadRouter');
 //Controllers
 router.use("/",loginRouter); //index page
 router.use("/dashboard",stillSignedInCheck,dashboardRouter);
@@ -30,6 +31,7 @@ router.use('/settings',stillSignedInCheck,settingsRouter);
 router.use('/calc',stillSignedInCheck,calcRouter);
 router.use('/edit',stillSignedInCheck,editRouter);
 router.use('/upload',stillSignedInCheck,uploadRouter);
+router.use('/download',downloadRouter);
 //Routers
 /*
 router.use("/add");

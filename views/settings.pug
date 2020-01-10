@@ -81,20 +81,20 @@ html
                                         td
                                             p(class="lead") Text aanpassingen
                                             div(id="text",style="display:none;")
-                                                form(action='/edit-pdf-text/'+loginHash,method='post')
+                                                form(action='/settings/change/text',method='post')
                                                     button(type="button" class="mb-1 headExtend btn-sm btn btn-outline-"+settings.thema, onclick="info()") info
                                                     div(class="input-group mb-3")
                                                         div(class="input-group-prepend")
                                                             span(class="input-group-text") Factuur tekst
-                                                        textarea(input="text",name="factuurtext",class="form-control" aria-label="With textarea")=settings.factuurtext
+                                                        textarea(input="text",name="invoiceText",class="form-control" aria-label="With textarea")=settings.invoiceText
                                                     div(class="input-group mb-3")
                                                         div(class="input-group-prepend")
                                                             span(class="input-group-text") Creditnota tekst
-                                                        textarea(input="text",name="creditnotatext",class="form-control" aria-label="With textarea")=settings.creditnotatext
+                                                        textarea(input="text",name="invoiceText",class="form-control" aria-label="With textarea")=settings.creditText
                                                     div(class="input-group mb-3")
                                                         div(class="input-group-prepend")
                                                             span(class="input-group-text") Offerte tekst
-                                                        textarea(input="text",name="offertetext",class="form-control" aria-label="With textarea")=settings.offertetext
+                                                        textarea(input="text",name="offerText",class="form-control" aria-label="With textarea")=settings.offerText
                                                     button(type="submit",class="btn btn-outline-"+settings.thema) bijwerken
                                                     div(class="",id="info",style="display:none")
                                                         p Voor variabelen van de database te gebruiken, typ ze zoals hieronder in de texten:
