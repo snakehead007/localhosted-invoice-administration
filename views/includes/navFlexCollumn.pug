@@ -3,89 +3,89 @@ ul(class="nav flex-column")
         if currentUrl === "dashboard" || currentUrl === "chart"
             a(class="nav-link active" href="/dashboard")
                 span(data-feather="home")
-                span Home
+                span #{__('Home')}
                 if currentUrl === "chart"
                     span(data-feather="chevron-right")
-                    span chart
+                    span #{__('Chart')}
                 span(class="sr-only") (current)
         else
             a(class="nav-link" href="/dashboard")
                 span(data-feather="home")
-                span Home
+                span #{__('Home')}
     li(class="nav-item")
         if currentUrl === "edit-profile"
             a(class="nav-link active" href="/view/profile")
                 span(data-feather="user")
-                span Mijn Profiel
+                span #{__('My profile')}
                 span(class="sr-only") (current)
         else
             a(class="nav-link" href="/view/profile")
                 span(data-feather="user")
-                span Mijn Profiel
+                span #{__('My profile')}
     li(class="nav-item")
         if currentUrl === "invoices"
             a(class="nav-link active" href="/invoice/all")
                 span(data-feather="file")
-                span Alle facturen
+                span #{__('All invoices')}
                 span(class="sr-only") (current)
         else
             a(class="nav-link" href="/invoice/all" )
                 span(data-feather="file")
-                span Alle facturen
+                span #{__('All invoices')}
     li(class="nav-item")
         if currentUrl === 'clientAll'
             a(class="nav-link active" href="/client/all")
                 span(data-feather="users")
-                span Klanten
+                span #{__('Clients')}
                 if client || currentUrl === "invoicesClient"
                     span(data-feather="chevron-right")
-                    span Facturen
+                    span #{__('invoices')}
                 span(class="sr-only") (current)
         else
             a(class="nav-link" href="/client/all")
                 span(data-feather="users")
-                span Klanten
+                span #{__('Clients')}
     li(class="nav-item")
         a(class="nav-link" href="#disabled")
             span(data-feather="book")
-            span Projecten
+            span #{__('Projects')}
     li(class="nav-item")
         if currentUrl === 'stock'
             a(class="nav-link active" href="/stock/all")
                 span(data-feather="package")
-                span Materialen
+                span #{__('Stock')}
                 span(class="sr-only") (current)
         else
             a(class="nav-link" href="/stock/all")
                 span(data-feather="package")
-                span Materialen
+                span #{__('Stock')}
     li(class="nav-item")
         if currentUrl === 'calc'
             a(class="nav-link active" href="/calc/all")
                 span(data-feather="book")
-                span Berekeningen
+                span #{__('Calculations')}
                 span(class="sr-only") (current)
         else
             a(class="nav-link" href="/calc/all")
                 span(data-feather="book")
-                span Berekeningen
+                span #{__('Calculations')}
     li(class="nav-item")
         if currentUrl === 'settings' || currentUrl === "password"
             a(class="nav-link active" href="/settings")
                 span(data-feather="settings")
-                span Settings
+                span #{__('Settings')}
                 span(class="sr-only") (current)
                 if currentUrl === "password"
                     span(data-feather="chevron-right")
-                    span Password
+                    span #{__('Password')}
                     span(class="sr-only") (current)
         else
             a(class="nav-link" href="/settings")
                 span(data-feather="settings")
-                span Settings
+                span #{__('Settings')}
     if profile.bookmarks.length !==0
         h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
-            span Bookmarks
+            span #{__('Bookmarks')}
     each bookmark in profile.bookmarks
         ul(class="nav flex-column")
             li(class="nav-item")

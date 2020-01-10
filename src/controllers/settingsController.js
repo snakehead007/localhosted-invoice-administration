@@ -19,12 +19,13 @@ exports.settings_all_get = (req,res) =>{
 exports.settings_change_lang_get = (req,res) => {
     Settings.updateOne({fromUser:req.session._id},{lang:req.params.lang},function(err){
         if(err) console.trace();
-        req.session.locale = req.params.lang;
         req.locale = req.params.lang;
         i18n.setLocale(req, req.params.lang);
-        i18n.setLocale(res, );
-        i18n.setLocale(res.locals, req.params.lang);
-        console.log(req.session.locale);
+        i18n.setLocale(res, req.params.lang);
+        req.setLocale(req.params.lang);
+        res.locals.language = req.params.lang;
+        console.log(res.locale);
+        console.log(res.locals.language);
         console.log(req.locale);
         res.redirect('/settings');
     });

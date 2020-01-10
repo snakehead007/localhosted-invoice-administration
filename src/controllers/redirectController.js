@@ -6,11 +6,11 @@ exports.googleLogin = async (req,res,next) => {
     req.session._id = _id;
     Settings.findOne({fromUser:_id},function(err,settings){
         if(err) console.trace();
-        req.session.locale = settings.lang;
-        req.locale = req.params.lang;
+        req.locale = settings.lang;
         i18n.setLocale(req, settings.lang);
         i18n.setLocale(res, settings.lang);
-        i18n.setLocale(res.locals, settings.lang);
+        req.setLocale(settings.lang);
+        res.locals.language = settings.lang;
         next();
     });
 };

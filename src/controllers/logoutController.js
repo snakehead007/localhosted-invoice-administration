@@ -1,4 +1,4 @@
-const express = require('express');
+
 
 exports.logout_get = (req,res) => {
     req.session.destroy((err) => {

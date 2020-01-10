@@ -2,37 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="656143ea-e51f-4106-b7a7-01a1e67b863d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/SettingsSchema.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-Bold-webfont.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-Bold-webfont.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-Bold-webfont.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-BoldItalic-webfont.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-BoldItalic-webfont.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-BoldItalic-webfont.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-Italic-webfont.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-Italic-webfont.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-Italic-webfont.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-Light-webfont.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-Light-webfont.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-Light-webfont.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-LightItalic-webfont.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-LightItalic-webfont.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-LightItalic-webfont.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-Regular-webfont.eot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-Regular-webfont.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/fonts/OpenSans-Regular-webfont.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/index.js.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/scripts/linenumber.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/scripts/prettify/Apache-License-2.0.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/scripts/prettify/lang-css.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/scripts/prettify/prettify.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/styles/jsdoc-default.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/styles/prettify-jsdoc.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/styles/prettify-tomorrow.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dump.rdb" beforeDir="false" afterPath="$PROJECT_DIR$/dump.rdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locales/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/locales/en.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locales/nl.json" beforeDir="false" afterPath="$PROJECT_DIR$/locales/nl.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/dashboardController.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/dashboardController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/logoutController.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/logoutController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/redirectController.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/redirectController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/settingsController.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/settingsController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/loaders/express.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/loaders/express.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middlewares/checkers.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/checkers.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/includes/navFlexCollumn.pug" beforeDir="false" afterPath="$PROJECT_DIR$/views/includes/navFlexCollumn.pug" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/index.pug" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.pug" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -58,137 +41,26 @@
   <component name="FavoritesManager">
     <favorites_list name="mdsArt" />
   </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="668">
-              <caret line="851" column="44" lean-forward="true" selection-start-line="851" selection-start-column="44" selection-end-line="851" selection-end-column="44" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/nl/facturen.jade">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="542">
-              <caret line="130" column="41" selection-start-line="130" selection-start-column="41" selection-end-line="130" selection-end-column="41" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
-  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
+        <option value="Pug File" />
       </list>
     </option>
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>('/facturen</find>
-      <find>('/facturen/:</find>
-      <find>('/uplo</find>
-      <find>bijwer</find>
-      <find>'/mat</find>
-      <find>('/add-m</find>
-      <find>add-fact</find>
-      <find>('/edit</find>
-      <find>add-fa</find>
-      <find>add-cre</find>
-      <find>credi</find>
-      <find>save</find>
-      <find>add-of</find>
-      <find>add-</find>
-      <find>no-</find>
-      <find>'/bestellingen</find>
-      <find>('/add-b</find>
-      <find>change</find>
-      <find>('/view</find>
-      <find>('/view-f</find>
-      <find>respo</find>
-      <find>('/delete-mat</find>
-      <find>('/berek</find>
-      <find>('/ep</find>
-      <find>('/per</find>
-      <find>('/inc</find>
-      <find>('/prijs</find>
-      <find>('/l</find>
-      <find>totaal</find>
-      <find>get('/fact</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>alert</replace>
-    </replaceStrings>
-    <dirStrings>
-      <dir>$PROJECT_DIR$/Install/Windows</dir>
-    </dirStrings>
-  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/controllers/profileController.js" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/index.js" root0="SKIP_INSPECTION" />
-  </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/views/nl/pdf/offerte.jade" />
-        <option value="$PROJECT_DIR$/views/nl/pdf/pdf.jade" />
-        <option value="$PROJECT_DIR$/views/eng/settings.jade" />
-        <option value="$PROJECT_DIR$/views/nl/settings.jade" />
-        <option value="$PROJECT_DIR$/views/eng/pdf/pdf.jade" />
-        <option value="$PROJECT_DIR$/views/test.jade" />
-        <option value="$PROJECT_DIR$/views/eng/contacten.jade" />
-        <option value="$PROJECT_DIR$/views/nl/index.jade" />
-        <option value="$PROJECT_DIR$/views/nl/contacten.jade" />
-        <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/views/nl/chart.jade" />
-        <option value="$PROJECT_DIR$/win-install.js" />
-        <option value="$PROJECT_DIR$/start.bat" />
-        <option value="$PROJECT_DIR$/views/login.jade" />
-        <option value="$PROJECT_DIR$/install.bat" />
-        <option value="$PROJECT_DIR$/Install/Windows/install-npm.bash" />
-        <option value="$PROJECT_DIR$/public/sorters.js" />
-        <option value="$PROJECT_DIR$/views/nl/pass.jade" />
-        <option value="$PROJECT_DIR$/views/nl/btw.jade" />
-        <option value="$PROJECT_DIR$/views/nl/chart.pug" />
-        <option value="$PROJECT_DIR$/views/nl/btw.pug" />
-        <option value="$PROJECT_DIR$/views/nl/pass.pug" />
-        <option value="$PROJECT_DIR$/views/nl/add/add-contact.jade" />
-        <option value="$PROJECT_DIR$/views/nl/upload.pug" />
-        <option value="$PROJECT_DIR$/views/nl/add/add-contact.pug" />
-        <option value="$PROJECT_DIR$/views/nl/pdf/pdf.pug" />
-        <option value="$PROJECT_DIR$/views/nl/add/add-mat.pug" />
-        <option value="$PROJECT_DIR$/views/nl/edit/edit-profile.pug" />
-        <option value="$PROJECT_DIR$/views/nl/edit/edit-creditnota.jade" />
-        <option value="$PROJECT_DIR$/views/nl/edit/edit-mat.jade" />
-        <option value="$PROJECT_DIR$/views/nl/edit/edit-contact.jade" />
-        <option value="$PROJECT_DIR$/views/nl/edit/edit-bestelling.jade" />
-        <option value="$PROJECT_DIR$/views/nl/edit/edit-factuur.pug" />
-        <option value="$PROJECT_DIR$/views/nl/add-file-no-contact.pug" />
-        <option value="$PROJECT_DIR$/views/nl/bestellingen.pug" />
-        <option value="$PROJECT_DIR$/views/nl/index.pug" />
-        <option value="$PROJECT_DIR$/views/nl/view/view-bestelling.jade" />
-        <option value="$PROJECT_DIR$/views/nl/view/view-bestelling.pug" />
-        <option value="$PROJECT_DIR$/views/nl/view/view-creditnota.pug" />
-        <option value="$PROJECT_DIR$/views/nl/view/view-factuur.pug" />
-        <option value="$PROJECT_DIR$/views/nl/view/view-contact.pug" />
-        <option value="$PROJECT_DIR$/views/nl/add/add-bestelling.pug" />
-        <option value="$PROJECT_DIR$/views/nl/mat.pug" />
-        <option value="$PROJECT_DIR$/views/nl/contacten.pug" />
-        <option value="$PROJECT_DIR$/views/nl/facturen.pug" />
-        <option value="$PROJECT_DIR$/public/stylesheet.css" />
-        <option value="$PROJECT_DIR$/views/nl/settings.pug" />
-        <option value="$PROJECT_DIR$/views/nl/berekeningen.jade" />
-        <option value="$PROJECT_DIR$/views/nl/berekeningen.pug" />
-        <option value="$PROJECT_DIR$/views/nl/facturen.jade" />
-        <option value="$PROJECT_DIR$/index.js" />
-      </list>
-    </option>
+    <setting file="file://$PROJECT_DIR$/views/invoices.pug" root0="SKIP_INSPECTION" />
   </component>
   <component name="MavenProjectNavigator">
     <treeState>
@@ -196,87 +68,46 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="892" />
-    <option name="y" value="132" />
-    <option name="width" value="1024" />
-    <option name="height" value="828" />
+  <component name="ProjectId" id="1VTeroQjzWwY67x3OiHq5wwDbDF" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
   </component>
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="PackagesPane" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="mdsArt" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mdsArt" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mdsArt" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mdsArt" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mdsArt" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mdsArt" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mdsArt" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mdsArt" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="nl" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mdsArt" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mdsArt" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="nl" type="462c0819:PsiDirectoryNode" />
-              <item name="add" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mdsArt" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mdsArt" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="nl" type="462c0819:PsiDirectoryNode" />
-              <item name="calc" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-    </panes>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Global Libraries" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.17174515" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Other File Types" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/controllers" />
+      <recent name="$PROJECT_DIR$/views" />
+      <recent name="$PROJECT_DIR$/src/routes" />
+      <recent name="$PROJECT_DIR$/src/routes/login" />
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration default="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
@@ -373,6 +204,33 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="develop" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="develop" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.develop" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
   </component>
   <component name="StructureViewFactory">
     <option name="ACTIVE_ACTIONS" value=",HIDE_INHERITED_FROM_OBJECT,SHOW_FIELDS,SHOW_CLASSES,ALPHA_COMPARATOR" />
@@ -409,11 +267,32 @@
       <workItem from="1567449347920" duration="2120000" />
       <workItem from="1567453419485" duration="6931000" />
       <workItem from="1567500612678" duration="649000" />
+      <workItem from="1577281720381" duration="3505000" />
+      <workItem from="1577383795947" duration="6317000" />
+      <workItem from="1577494008193" duration="61000" />
+      <workItem from="1577494091573" duration="1730000" />
+      <workItem from="1577514864194" duration="7230000" />
+      <workItem from="1577553325372" duration="4022000" />
+      <workItem from="1577564683470" duration="7792000" />
+      <workItem from="1577967966246" duration="2669000" />
+      <workItem from="1578138389217" duration="5573000" />
+      <workItem from="1578299994438" duration="2045000" />
+      <workItem from="1578302268645" duration="730000" />
+      <workItem from="1578303193170" duration="14098000" />
+      <workItem from="1578333534788" duration="19968000" />
+      <workItem from="1578434015004" duration="6677000" />
+      <workItem from="1578440997106" duration="7275000" />
+      <workItem from="1578485701300" duration="5753000" />
+      <workItem from="1578498032954" duration="11429000" />
+      <workItem from="1578577916401" duration="11653000" />
+      <workItem from="1578598435795" duration="3431000" />
+      <workItem from="1578602326761" duration="20603000" />
+      <workItem from="1578626198055" duration="1392000" />
+      <workItem from="1578627686087" duration="1046000" />
+      <workItem from="1578642352131" duration="765000" />
+      <workItem from="1578643236920" duration="14496000" />
     </task>
     <servers />
-  </component>
-  <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="104026000" />
   </component>
   <component name="TodoView" selected-index="2">
     <todo-panel id="selected-file">
@@ -424,362 +303,113 @@
       <is-autoscroll-to-source value="true" />
     </todo-panel>
   </component>
-  <component name="ToolWindowManager">
-    <frame x="0" y="0" width="2048" height="1104" extended-state="6" />
-    <editor active="true" />
-    <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.42176166" visible="true" weight="0.13758723" />
-      <window_info id="Image Layers" order="1" />
-      <window_info id="Designer" order="2" />
-      <window_info id="UI Designer" order="3" />
-      <window_info id="Capture Tool" order="4" />
-      <window_info id="Favorites" order="5" sideWeight="0.5015544" side_tool="true" weight="0.2547358" />
-      <window_info id="Structure" order="6" sideWeight="0.42279792" side_tool="true" weight="0.15054835" />
-      <window_info x="494" y="474" width="794" height="195" id="Terminal" order="7" sideWeight="0.57823837" weight="0.28115654" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32952183" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Docker" order="6" show_stripe_button="false" />
-      <window_info anchor="bottom" id="TODO" order="7" weight="0.32953367" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32952183" />
-      <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="11" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="Theme Preview" order="4" />
-      <window_info anchor="right" id="Maven" order="5" weight="0.32951146" />
-      <window_info anchor="right" id="Capture Analysis" order="6" />
-      <window_info anchor="right" id="Palette&#9;" order="7" />
-      <window_info anchor="right" id="Database" order="8" weight="0.32951146" />
-    </layout>
-  </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/views/eng/pdf/creditnota.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-328">
-          <caret line="157" column="31" selection-start-line="157" selection-start-column="31" selection-end-line="157" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/eng/pdf/pdf.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="158" column="23" lean-forward="true" selection-start-line="158" selection-start-column="23" selection-end-line="158" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/pdf/creditnota.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="569">
-          <caret line="157" column="31" selection-start-line="157" selection-start-column="31" selection-end-line="157" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/pdf/offerte.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="573">
-          <caret line="147" column="31" selection-start-line="147" selection-start-column="31" selection-end-line="147" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/test.jade" />
-    <entry file="file://$PROJECT_DIR$/views/eng/facturen.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1443" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/eng/contacten.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="489">
-          <caret line="57" column="45" lean-forward="true" selection-end-line="117" selection-end-column="108" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="20" column="8" lean-forward="true" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/eng/settings.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="7" column="88" lean-forward="true" selection-start-line="7" selection-start-column="88" selection-end-line="9" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/eng/zoeken.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Install/Windows/install-npm.bash" />
-    <entry file="file://$PROJECT_DIR$/start.bat" />
-    <entry file="file://$PROJECT_DIR$/views/login.jade" />
-    <entry file="file://$PROJECT_DIR$/views/nl/index.jade" />
-    <entry file="file://$PROJECT_DIR$/win-install.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/install.bat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="4" column="5" selection-start-line="4" selection-end-line="4" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/start.bash">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="10" column="9" selection-start-line="10" selection-start-column="9" selection-end-line="16" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/zoeken.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="6" selection-start-column="6" selection-end-line="288" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/calc/inch.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="6" selection-start-column="6" selection-end-line="44" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/chart.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-931">
-          <caret line="34" column="50" lean-forward="true" selection-start-line="34" selection-start-column="50" selection-end-line="34" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/pass.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="74" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/upload.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1817">
-          <caret line="79" column="50" selection-start-line="79" selection-start-column="50" selection-end-line="79" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/pdf/pdf.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="529">
-          <caret line="23" column="35" selection-start-line="23" selection-start-column="35" selection-end-line="23" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/main.js" />
-    <entry file="file://$PROJECT_DIR$/views/nl/add/add-contact.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="94" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/add/add-project.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1209" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/edit/edit-contact.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2185">
-          <caret line="95" column="56" selection-start-line="95" selection-start-column="56" selection-end-line="95" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/edit/edit-bestelling.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2415">
-          <caret line="105" column="69" selection-start-line="105" selection-start-column="69" selection-end-line="105" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/edit/edit-creditnota.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2438">
-          <caret line="106" column="54" selection-start-line="106" selection-start-column="54" selection-end-line="106" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/edit/edit-profile.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1633">
-          <caret line="71" column="51" selection-start-line="71" selection-start-column="51" selection-end-line="71" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/edit/edit-factuur.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1449">
-          <caret line="63" column="40" selection-start-line="63" selection-start-column="40" selection-end-line="63" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/edit/edit-mat.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2392">
-          <caret line="104" column="57" selection-start-line="104" selection-start-column="57" selection-end-line="104" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/sorters.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3979">
-          <caret line="173" selection-start-line="173" selection-end-line="173" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/add-file-no-contact.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2070">
-          <caret line="90" column="55" selection-start-line="90" selection-start-column="55" selection-end-line="90" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/add/add-mat.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="19" column="18" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/btw.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="75" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/view/view-bestelling.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="48" selection-start-line="48" selection-end-line="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/view/view-creditnota.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="57" column="30" lean-forward="true" selection-start-line="57" selection-start-column="30" selection-end-line="57" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/view/view-factuur.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="46" column="36" lean-forward="true" selection-start-line="46" selection-start-column="36" selection-end-line="47" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/view/view-contact.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="49" column="44" lean-forward="true" selection-start-line="49" selection-start-column="44" selection-end-line="49" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/mat.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2139">
-          <caret line="93" column="101" selection-start-line="93" selection-start-column="101" selection-end-line="93" selection-end-column="101" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/facturen.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3151">
-          <caret line="137" column="40" selection-start-line="137" selection-start-column="40" selection-end-line="137" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/stylesheet.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3749">
-          <caret line="163" column="13" selection-start-line="163" selection-start-column="13" selection-end-line="163" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/settings.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3243">
-          <caret line="141" column="42" selection-start-line="141" selection-start-column="42" selection-end-line="143" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/add/add-bestelling.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2415">
-          <caret line="105" column="72" selection-start-line="105" selection-start-column="72" selection-end-line="105" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/bestellingen.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2369">
-          <caret line="103" column="42" selection-start-line="103" selection-start-column="42" selection-end-line="103" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/contacten.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1817">
-          <caret line="79" column="47" selection-start-line="79" selection-start-column="47" selection-end-line="79" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/index.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3726">
-          <caret line="162" column="7" selection-start-line="160" selection-start-column="4" selection-end-line="162" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/berekeningen.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="605">
-          <caret line="93" column="42" selection-start-line="93" selection-start-column="42" selection-end-line="93" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/nl/facturen.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="542">
-          <caret line="130" column="41" selection-start-line="130" selection-start-column="41" selection-end-line="130" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="668">
-          <caret line="851" column="44" lean-forward="true" selection-start-line="851" selection-start-column="44" selection-end-line="851" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="423" y="176" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578612517698">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state x="423" y="176" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1035@0.0.1920.1035" timestamp="1578612517698" />
+    <state x="682" y="310" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1578438906125">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state x="682" y="310" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1035@0.0.1920.1035" timestamp="1578438906125" />
+    <state width="536" height="848" key="GridCell.Tab.0.bottom" timestamp="1578621871645">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state width="536" height="848" key="GridCell.Tab.0.bottom/0.0.1920.1035@0.0.1920.1035" timestamp="1578621871645" />
+    <state width="536" height="848" key="GridCell.Tab.0.center" timestamp="1578621871644">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state width="536" height="848" key="GridCell.Tab.0.center/0.0.1920.1035@0.0.1920.1035" timestamp="1578621871644" />
+    <state width="536" height="848" key="GridCell.Tab.0.left" timestamp="1578621871643">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state width="536" height="848" key="GridCell.Tab.0.left/0.0.1920.1035@0.0.1920.1035" timestamp="1578621871643" />
+    <state width="536" height="848" key="GridCell.Tab.0.right" timestamp="1578621871644">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state width="536" height="848" key="GridCell.Tab.0.right/0.0.1920.1035@0.0.1920.1035" timestamp="1578621871644" />
+    <state width="1874" height="119" key="GridCell.Tab.1.bottom" timestamp="1578612569064">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state width="1874" height="119" key="GridCell.Tab.1.bottom/0.0.1920.1035@0.0.1920.1035" timestamp="1578612569064" />
+    <state width="1874" height="119" key="GridCell.Tab.1.center" timestamp="1578612569063">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state width="1874" height="119" key="GridCell.Tab.1.center/0.0.1920.1035@0.0.1920.1035" timestamp="1578612569063" />
+    <state width="1874" height="119" key="GridCell.Tab.1.left" timestamp="1578612569063">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state width="1874" height="119" key="GridCell.Tab.1.left/0.0.1920.1035@0.0.1920.1035" timestamp="1578612569063" />
+    <state width="1874" height="119" key="GridCell.Tab.1.right" timestamp="1578612569063">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state width="1874" height="119" key="GridCell.Tab.1.right/0.0.1920.1035@0.0.1920.1035" timestamp="1578612569063" />
+    <state width="1874" height="119" key="GridCell.Tab.2.bottom" timestamp="1578612569064">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state width="1874" height="119" key="GridCell.Tab.2.bottom/0.0.1920.1035@0.0.1920.1035" timestamp="1578612569064" />
+    <state width="1874" height="119" key="GridCell.Tab.2.center" timestamp="1578612569064">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state width="1874" height="119" key="GridCell.Tab.2.center/0.0.1920.1035@0.0.1920.1035" timestamp="1578612569064" />
+    <state width="1874" height="119" key="GridCell.Tab.2.left" timestamp="1578612569064">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state width="1874" height="119" key="GridCell.Tab.2.left/0.0.1920.1035@0.0.1920.1035" timestamp="1578612569064" />
+    <state width="1874" height="119" key="GridCell.Tab.2.right" timestamp="1578612569064">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state width="1874" height="119" key="GridCell.Tab.2.right/0.0.1920.1035@0.0.1920.1035" timestamp="1578612569064" />
+    <state width="1874" height="119" key="GridCell.Tab.3.bottom" timestamp="1578612569065">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state width="1874" height="119" key="GridCell.Tab.3.bottom/0.0.1920.1035@0.0.1920.1035" timestamp="1578612569065" />
+    <state width="1874" height="119" key="GridCell.Tab.3.center" timestamp="1578612569065">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state width="1874" height="119" key="GridCell.Tab.3.center/0.0.1920.1035@0.0.1920.1035" timestamp="1578612569065" />
+    <state width="1874" height="119" key="GridCell.Tab.3.left" timestamp="1578612569065">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state width="1874" height="119" key="GridCell.Tab.3.left/0.0.1920.1035@0.0.1920.1035" timestamp="1578612569065" />
+    <state width="1874" height="119" key="GridCell.Tab.3.right" timestamp="1578612569065">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state width="1874" height="119" key="GridCell.Tab.3.right/0.0.1920.1035@0.0.1920.1035" timestamp="1578612569065" />
+    <state x="456" y="152" key="SettingsEditor" timestamp="1578648843669">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state x="456" y="152" key="SettingsEditor/0.0.1920.1035@0.0.1920.1035" timestamp="1578648843669" />
+    <state x="740" y="198" width="431" height="631" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1578302990605">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state x="740" y="198" width="431" height="631" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1035@0.0.1920.1035" timestamp="1578302990605" />
+    <state x="627" y="96" width="810" height="840" key="find.popup" timestamp="1578657438595">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state x="627" y="96" width="810" height="840" key="find.popup/0.0.1920.1035@0.0.1920.1035" timestamp="1578657438595" />
+    <state x="721" y="148" width="470" height="732" key="git4idea.branch.GitSmartOperationDialog" timestamp="1578138859787">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state x="721" y="148" width="470" height="732" key="git4idea.branch.GitSmartOperationDialog/0.0.1920.1035@0.0.1920.1035" timestamp="1578138859787" />
+    <state x="1088" y="238" width="700" height="530" key="recent.locations.popup" timestamp="1577314177951">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state x="1088" y="238" width="700" height="530" key="recent.locations.popup/0.0.1920.1035@0.0.1920.1035" timestamp="1577314177951" />
+    <state x="623" y="236" width="672" height="677" key="run.anything.popup" timestamp="1578658289449">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state x="623" y="236" width="672" height="677" key="run.anything.popup/0.0.1920.1035@0.0.1920.1035" timestamp="1578658289449" />
+    <state x="1103" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1578617327387">
+      <screen x="0" y="0" width="1920" height="1035" />
+    </state>
+    <state x="1103" y="227" width="672" height="678" key="search.everywhere.popup/0.0.1920.1035@0.0.1920.1035" timestamp="1578617327387" />
   </component>
   <component name="masterDetails">
     <states>

@@ -8,6 +8,7 @@ const redisStore = require('connect-redis')(session);
 const client  = redis.createClient();
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
+
 const i18n = require("i18n");
 module.exports.default = function(app){
     app.locals.title = 'invoice-administration';
@@ -21,7 +22,7 @@ module.exports.default = function(app){
         locales:['en', 'nl'],
         defaultLocale: 'nl',
         directory: path.join(path.resolve(),'locales'),
-        cookie:'cookie'
+        cookie:'session'
     });
     app.use(function(req,res,next){
         i18n.init(req,res,next);
@@ -42,6 +43,7 @@ module.exports.default = function(app){
     console.log("[Info]: . . . . Express settings set up");
     app.use(
         session({
+            name:'session',
             secret: process.env.SESSION_SECRET,
             store: new redisStore({ host: 'localhost', port: 6379, client: client,ttl : 260}),
             saveUninitialized: false,

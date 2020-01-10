@@ -31,9 +31,6 @@ exports.main_get =  async function getLogin(req,res){
                                     }
                                 }
                             }
-
-                            console.log(req.session.locale);
-                            console.log(req.locale);
                             res.render('index', {
                                 'currentUrl':"dashboard",
                                 "total": total,

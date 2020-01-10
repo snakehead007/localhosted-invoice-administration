@@ -24,88 +24,74 @@ html
               a(class="dropdown-item" href="/dashboard/chart/" + String(Number(year) + Number(1)))=String(Number(year) + Number(1))
               a(class="dropdown-item" href="/dashboard/chart/" + String(Number(year) + Number(2)))=String(Number(year) + Number(2))
       canvas(class="my-4 w-100" id="myChart" width="900" height="380")
-      h2 Openstaande facturen
+      h2 #{__('Unpaid invoices')}
       if fact_open.length == 0
-          div(class="alert alert-info col-lg-12 col-md-12 col-sm-12" role="alert") Geen openstaande facturen gevonden.
+          div(class="alert alert-info col-lg-12 col-md-12 col-sm-12" role="alert") #{__('No unpaid invoices found.')}
       else
           div(class="table-responsive bigger")
             table(class="table table-striped table-sm")
               thead(class="thead-dark")
                 tr
-                  th Nummer
-                  if !contact
-                    th Klant
-                  th Datum
-                  th Kost
-                  th Statuut
-                  th Acties
+                  th #{__('Number')}
+                  if !client
+                    th #{__('Client')}
+                  th #{__('Date')}
+                  th #{__('Price')}
+                  th #{__('Status')}
+                  th #{__('Actions')}
               tbody
-                each factuur in fact_open
+                each invoice in fact_open
                   tr
                     td
-                      if factuur.factuurNr
-                        if contact
-                          a(href='/bestellingen/' + factuur._id + "/" )=factuur.factuurNr
-                        if !contact
-                          a(href='/bestellingen/' + factuur._id + '/t/' )=factuur.factuurNr
-                      if factuur.offerteNr && !factuur.factuurNr
-                        if contact
-                          a(href='/bestellingen/' + factuur._id + "/" )="Offerte " + factuur.offerteNr
-                        if !contact
-                          a(href='/bestellingen/' + factuur._id + '/t' + "/" )="Offerte " + factuur.offerteNr
-                      if factuur.creditnr && !factuur.offerteNr && !factuur.factuurNr
-                        a(href='/bestellingen/' + factuur._id + "/" )="Creditnota " + factuur.creditnr
-                    if !contact
+                      if invoice.invoiceNr
+                        if client
+                          a(href='/order/all/' + invoice._id + "/" )=invoice.invoiceNr
+                      if invoice.offerteNr && !invoice.invoiceNr
+                        if client
+                          a(href='/order/all/' + invoice._id + "/" )="#{__('Invoice')} " + invoice.offerteNr
+                      if invoice.creditNr && !invoice.offerteNr && !invoice.invoiceNr
+                        a(href='/order/all/' + invoice._id + "/" )="#{__('Creditnote')} " + invoice.creditnr
+                    if !client
                       td
-                        a(href='/facturen/' + factuur.contact + "/t" + "/" )=factuur.contactPersoon
-                    td=factuur.datum
-                    if factuur.factuurNr
+                        a(href='/invoice/'  )=invoice.clientName
+                    td=invoice.date
+                    if invoice.invoiceNr
                       td
-                          if factuur.isBetaald
-                            span=(factuur.totaal * 1.21).toFixed(2) + "€"
-                          if !factuur.isBetaald
-                            span=(factuur.totaal * 1.21).toFixed(2) + "€"
+                          if invoice.isPaid
+                            span=(invoice.total * 1.21).toFixed(2) + "€"
+                          if !invoice.isPaid
+                            span=(invoice.total * 1.21).toFixed(2) + "€"
                     else
                       td
-                    if factuur.factuurNr
+                    if invoice.invoiceNr
                       td
                         div(class="custom-control custom-switch")
-                          if factuur.isBetaald
-                            input(type="checkbox" class="custom-control-input bg-success" id=factuur._id, onclick='changeBetaald(\"' + factuur._id + '\",\"' + contact + '\",\"'  + '\")', checked)
-                            label(class="custom-control-label" for=factuur._id)=" Betaald"
-                          if !factuur.isBetaald
-                            input(type="checkbox" class="custom-control-input bg-danger" id=factuur._id, onclick='changeBetaald(\"' + factuur._id + '\",\"' + contact + '\",\"'  + '\")')
-                            label(class="custom-control-label" for=factuur._id)=" Openstaand"
-                    else 
+                          if invoice.isPaid
+                            input(type="checkbox" class="custom-control-input bg-success" id=invoice._id, onclick='changeBetaald(\"' + invoice._id + '\",\"' + client + '\",\"'  + '\")', checked)
+                            label(class="custom-control-label" for=invoice._id)=" #{__('Paid')}"
+                          if !invoice.isPaid
+                            input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id, onclick='changeBetaald(\"' + invoice._id + '\",\"' + client + '\",\"'  + '\")')
+                            label(class="custom-control-label" for=invoice._id)=" #{__('Unpaid')}"
+                    else
                       td
                     td
                       div(class="btn-group front")
-                        button(role="button", class="btn btn-outline-" + settings.thema + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                        button(role="button", class="btn btn-outline-" + settings.thema + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") #{__('Actions')}
                         div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                          if !contact                      
-                            a(class="dropdown-item button" , href='/view-factuur/' + factuur._id + "/t/" ) bekijk
-                          if contact                      
-                            a(class="dropdown-item button", href='/view-factuur/' + factuur._id + "/" ) bekijk
+                          a(class="dropdown-item button", href='/view/invoice/' + invoice._id ) #{__('View')}
                           div(class="dropdown-divider")
-                          if factuur.creditnr
-                            a(class="dropdown-item", href='/creditnota/' + factuur._id + "/" ,id="target",target="_blank") download creditnota
-                          if factuur.factuurNr
-                            a(class="dropdown-item", href='/createPDF/' + factuur._id + "/" ,id="target",target="_blank") download factuur
-                          if factuur.offerteNr
-                            a(class="dropdown-item", href='/offerte/' + factuur._id + "/" ,id="target",target="_blank") download offerte
-                            if !factuur.factuurNr
-                              if contact
-                                a(class="dropdown-item button", href="/opwaardeer/" + factuur._id + "/" ) opwaardeer naar factuur
-                              if !contact
-                                a(class="dropdown-item button", href="/opwaardeer/" + factuur._id + "/t/" ) opwaardeer naar factuur
-                          if !contact                                      
+                          if invoice.creditNr
+                            a(class="dropdown-item", href='/download/creditnote/' + invoice._id ,id="target",target="_blank") #{__('Download creditnote')}
+                          if invoice.invoiceNr
+                            a(class="dropdown-item", href='/download/invoice/' + invoice._id ,id="target",target="_blank") #{__('Download invoice')}
+                          if invoice.offerteNr
+                            a(class="dropdown-item", href='/download/offer/' + invoice._id,id="target",target="_blank") #{__('Download offer')}
+                            if !invoice.invoiceNr
+                              if client
+                                a(class="dropdown-item button", href="/opwaardeer/" + invoice._id + "/" ) #{__('Upgrade to invoice')}
                             div(class="dropdown-divider")
-                            a(class="dropdown-item",href='/edit-factuur/' + factuur.contact + '/' + factuur._id + '/t/' ) aanpassen
-                            a(class="dropdown-item", href='/delete-factuur/' + factuur.contact + '/' + factuur._id + '/t/' ) verwijder
-                          if contact
-                            div(class="dropdown-divider")                      
-                            a(class="dropdown-item",href='/edit-factuur/' + factuur.contact + '/' + factuur._id + "/" ) aanpassen
-                            a(class="dropdown-item", href='/delete-factuur/' + factuur.contact + '/' + factuur._id + "/" ) verwijder                        
+                                a(class="dropdown-item",href='/edit-invoice/' + invoice.client + '/' + invoice._id + "/" ) #{__('Edit')}
+                                a(class="dropdown-item", href='/delete-invoice/' + invoice.client + '/' + invoice._id + "/" ) #{__('Delete')}
 
 
 script.
@@ -115,20 +101,20 @@ script.
     function drawChart(totaal) {
         console.log(totaal);
         var ctx = document.getElementById('myChart').getContext('2d');
-        var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
+        var maand = ["#{__('January')}", "#{__('February')}", "#{__('March')}", "#{__('April')}", "#{__('May')}", "#{__('June')}", "#{__('July')}", "#{__('August')}", "#{__('September')}", "#{__('October')}", "#{__('November')}", "#{__('December')}"];
         var color = Chart.helpers.color;
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: [maand[0], maand[1], maand[2], maand[3], maand[4], maand[5], maand[6], maand[7], maand[8], maand[9], maand[10], maand[11]],
                 datasets: [{
-                    label: 'Exlc. btw €',
+                    label: "#{__('Exlc. btw')} €",
                     data: [totaal[0], totaal[1], totaal[2], totaal[3], totaal[4], totaal[5], totaal[6], totaal[7], totaal[8], totaal[9], totaal[10], totaal[11]],
                     backgroundColor: color(window.chartColors.red).alpha(1).rgbString(),
                     borderColor: window.chartColors.red,
                     borderWidth: 1
                 }, {
-                    label: 'Incl. btw €',
+                    label: " #{__('Incl. vat')} €",
                     data: [totaal[0] * 1.21, totaal[1] * 1.21, totaal[2] * 1.21, totaal[3] * 1.21, totaal[4] * 1.21, totaal[5] * 1.21, totaal[6] * 1.21, totaal[7] * 1.21, totaal[8] * 1.21, totaal[9] * 1.21, totaal[10] * 1.21, totaal[11] * 1.21],
                     backgroundColor: color(window.chartColors.blue).alpha(1).rgbString(),
                     borderColor: window.chartColors.blue,
@@ -146,6 +132,6 @@ script.
             }
         });
     }
-    function changeBetaald(id, contact) {
+    function changeBetaald(id, client) {
             window.location = "/change-betaald3/"+id+"/" ;
     }
