@@ -7,13 +7,10 @@ const redis = require('redis');
 const redisStore = require('connect-redis')(session);
 const client  = redis.createClient();
 const fileUpload = require('express-fileupload');
-const timeout = require('connect-timeout');
-const initialize = require('express-init');
 const cookieParser = require('cookie-parser');
 const i18n = require("i18n");
 
-module.exports.default =  function( app ){
-
+module.exports.default = function( app){
     app.locals.title = 'invoice-administration';
     app.locals.email = 'snakehead007@pm.me';
     app.engine('pug', pug.__express);
@@ -24,7 +21,7 @@ module.exports.default =  function( app ){
     i18n.configure({
         locales:['en', 'nl'],
         defaultLocale: 'nl',
-        directory: path.join(path.resolve(),'/locales')
+        directory: path.join(path.resolve(),'locales')
     });
     app.use(i18n.init);
     console.log("[Info]: . . . . Locales set up");
@@ -35,14 +32,6 @@ module.exports.default =  function( app ){
         extended: true
     }));
     console.log("[Info]: . . . . Express settings set up");
-
-    app.use(timeout('5s'));
-    app.use(haltOnTimedout);
-    function haltOnTimedout(req, res, next){
-        if (!req.timedout) next();
-    }
-    console.log("[Info]: . . . . Timeout settings set up");
-
     app.use(
         session({
             secret: process.env.SESSION_SECRET,
@@ -52,11 +41,4 @@ module.exports.default =  function( app ){
         })
     );
     console.log("[Info]: . . . . Sessions set up");
-    initialize(app, function(err) {
-        if (err)
-            throw new Error("[Error]: "+err);
-        app.listen(process.env.PORT,() => {
-            console.log('[Info]: Server is running at PORT ' + process.env.PORT);
-        });
-    });
 };

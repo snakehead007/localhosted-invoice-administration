@@ -1,9 +1,8 @@
 const google = require('../middlewares/google');
 exports.login_get =  function getLogin(req,res,err){
     if(err) console.log("[ERROR]: "+err);
-    console.log("test");
-    let sess = req.session;
-    if(sess._id){
+    req.session;
+    if(req.session&&req.session._id){
         return res.redirect('/dashboard');
     }
     res.render('login');
