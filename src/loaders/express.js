@@ -9,8 +9,7 @@ const client  = redis.createClient();
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
 const i18n = require("i18n");
-
-module.exports.default = function( app){
+module.exports.default = function(app){
     app.locals.title = 'invoice-administration';
     app.locals.email = 'snakehead007@pm.me';
     app.engine('pug', pug.__express);
@@ -21,9 +20,18 @@ module.exports.default = function( app){
     i18n.configure({
         locales:['en', 'nl'],
         defaultLocale: 'nl',
-        directory: path.join(path.resolve(),'locales')
+        directory: path.join(path.resolve(),'locales'),
+        cookie:'cookie'
     });
-    app.use(i18n.init);
+    app.use(function(req,res,next){
+        i18n.init(req,res,next);
+    });
+    app.use(function(req, res, next) {
+        res.locals.__ = res.__ = function() {
+            return i18n.__.apply(req, arguments);
+        };
+        next();
+    });
     console.log("[Info]: . . . . Locales set up");
     app.use(fileUpload());
     app.use(express.static(path.join(path.resolve(), 'public')));

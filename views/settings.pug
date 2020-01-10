@@ -67,12 +67,12 @@ html
                                             p(class="lead") Language
                                             div(id="lang",style="display:none;")
                                                 div(class="btn-group mb-3" role="group" aria-label="Basic example")
-                                                    a(href="/change-lang/nl/" + loginHash,class="button")
+                                                    a(href="/settings/change/lang/nl",class="button")
                                                         if settings.lang == "nl"
                                                             button(type="button" class="btn btn-outline-"+settings.thema) Nederlands
                                                         else
                                                             button(type="button" class="btn btn-"+settings.thema) Nederlands
-                                                    a(href="/change-lang/eng/" + loginHash,class="button")
+                                                    a(href="/settings/change/lang/en",class="button")
                                                         if settings.lang == "eng"
                                                             button(type="button" class="btn btn-outline-"+settings.thema) English
                                                         else
@@ -143,6 +143,6 @@ html
                                                               code my blog : mypersonalblog.blogger.com
                                                             
     script.
-            $(document).ready(function () {
-                feather.replace();
-            });
+        $(document).ready(function () {
+            feather.replace();
+        });

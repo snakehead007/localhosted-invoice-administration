@@ -14,7 +14,6 @@ async function start(){
         console.log("[%s request]: %s%s  from %s", req.method, process.env.LOCAL_URL,req.url,((req.session._id)?req.session._id:"unknown"));
         next();
     });
-
     app.use('/',routes);
 }
 start();
