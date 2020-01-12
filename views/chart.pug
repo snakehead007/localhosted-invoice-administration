@@ -14,7 +14,7 @@ html
                             include includes/bookmarks
                     main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
                         div(class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom")
-                            h1(class="h2")="Grafiek voor " + year
+                            h1(class="h2") #{__('Chart for')} #{" "+year}
                             div(class="btn-group dropleft mb-2 mb-md-0")
                                 button(type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle", data-toggle="dropdown",aria-haspopup="true",aria-expanded="false")
                                     span(data-feather="calendar")
@@ -34,7 +34,7 @@ html
             function drawChart(totaal) {
                 console.log(totaal);
                 var ctx = document.getElementById('myChart').getContext('2d');
-                var maand = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
+                var maand = ["#{__('January')}", "#{__('February')}", "#{__('March')}", "#{__('April')}", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
                 var color = Chart.helpers.color;
                 var myChart = new Chart(ctx, {
                     type: 'bar',

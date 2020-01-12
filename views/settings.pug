@@ -3,7 +3,6 @@ html
         include includes/htmlHead
         include includes/settingsMenuScript
     body
-        header
             include includes/topBar
             div(class="container-fluid")
                 div(class ="row")
@@ -85,15 +84,15 @@ html
                                                     button(type="button" class="mb-1 headExtend btn-sm btn btn-outline-"+settings.thema, onclick="info()") info
                                                     div(class="input-group mb-3")
                                                         div(class="input-group-prepend")
-                                                            span(class="input-group-text") Factuur tekst
+                                                            span(class="input-group-text") #{__('Invoice footer')}
                                                         textarea(input="text",name="invoiceText",class="form-control" aria-label="With textarea")=settings.invoiceText
                                                     div(class="input-group mb-3")
                                                         div(class="input-group-prepend")
-                                                            span(class="input-group-text") Creditnota tekst
+                                                            span(class="input-group-text") #{__('Credit footer')}
                                                         textarea(input="text",name="invoiceText",class="form-control" aria-label="With textarea")=settings.creditText
                                                     div(class="input-group mb-3")
                                                         div(class="input-group-prepend")
-                                                            span(class="input-group-text") Offerte tekst
+                                                            span(class="input-group-text") #{__('c')}
                                                         textarea(input="text",name="offerText",class="form-control" aria-label="With textarea")=settings.offerText
                                                     button(type="submit",class="btn btn-outline-"+settings.thema) bijwerken
                                                     div(class="",id="info",style="display:none")
@@ -122,7 +121,7 @@ html
                                                                 code &#91;datum.d&#93;  : Dag van vandaag in getal (dd)
                                                                 code &#91;datum.m&#93;  : Volledige maand van vandaag (maand)
                                                                 code &#91;datum.j&#93;  : Volledig jaar van vandaag (yyyy)
-                                                                
+
                                     tr(onclick="openBook()",class="settingsOption optionBook")
                                         td
                                             p(class="lead") Bookmarks
@@ -141,7 +140,7 @@ html
                                                               code my favorite site : www.favorite.be
                                                               code facebook : myprofile.facebook.com/
                                                               code my blog : mypersonalblog.blogger.com
-                                                            
+
     script.
         $(document).ready(function () {
             feather.replace();

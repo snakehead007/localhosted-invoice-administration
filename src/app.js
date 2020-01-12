@@ -5,6 +5,7 @@ const routes = require('./routes/routerHandler');
 const app = express();
 
 async function start(){
+    console.log('--------  Invoice-administration  -------');
     dotenv.config(); //when starting up node inside the src folder, use => .config({ path: '../.env' }
     if(!process.env.PORT) throw new Error(".env file not found, or wrong path");
     console.log("[Info]: Dotenv config done");

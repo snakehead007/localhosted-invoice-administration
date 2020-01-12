@@ -1,14 +1,25 @@
-const Profile = require('../models/profile');
 const Settings = require('../models/settings');
+const Profile = require('../models/profile');
 const Invoice = require('../models/invoice');
 const {month, month_small,year} = require('../utils/date');
-
+const User = require('../models/user');
 exports.main_get =  async function getLogin(req,res){
     if(!req.session._id){
         res.redirect('/');
     }
     let fact_open = [];
-    Profile.findOne({fromUser:req.session._id}, function(err,profile){
+    Profile.findOne({fromUser:req.session._id}, async function(err,profile){
+        if(profile===null){
+            console.log("[Error]: Profile not found from user");
+            const newProfile = new Profile({
+                fromUser:req.session._id
+            });
+            await newProfile.save();
+            profile = await Profile.findOne({fromUser:req.session._id});
+            await User.updateOne({_id:req.session._id},{profile:profile._Id});
+            console.log("[Error]: New profile successfully created for user");
+        }
+        if(err) console.trace(err);
         if(!err){
             Settings.findOne({fromUser:req.session._id}, function(err, settings) {
                 if (!err) {

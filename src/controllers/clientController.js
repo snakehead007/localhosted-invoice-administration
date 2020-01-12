@@ -62,3 +62,24 @@ exports.client_new_post = (req,res) => {
         res.redirect('/client/all');
     }
 };
+
+exports.view_client_get = (req,res) => {
+    Client.findOne({fromUser:req.session._id,_id: req.params.idc}, function(err, client) {
+        if (!err) {
+            Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+                if (!err) {
+                    Profile.findOne({fromUser:req.session._id}, function(err, profile) {
+                        if (!err) {
+                            res.render(settings.lang+
+                                '/view/view-client', {
+                                'client': client,
+                                "profile": profile,
+                                "settings": settings
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+};

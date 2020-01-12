@@ -169,6 +169,14 @@
 	"New offer": "New offer",
 	"New creditnote": "New creditnote",
 	"Sign out": "Sign out",
-	"Exlc. btw": "Exlc. btw",
-	"search": "search"
+	"Exlc. vat": "Exlc. vat",
+	"search": "search",
+	"sort": "sort",
+	"Action": "Action",
+	"Invoice footer": "Invoice footer",
+	"Credit footer": "Credit footer",
+	"no e-mail": "no e-mail",
+	"Invoice Nr": "Invoice Nr",
+	"Offer Nr": "Offer Nr",
+	"Credit Nr": "Credit Nr",
 }

@@ -27,8 +27,11 @@ const User = new mongoose.Schema({
         },
         lastUpdated: {
             type: Date,
-            default: Date.now,
-            index: true
+            default: Date.now
+        },
+        lastLogin:{
+            type:Date,
+            default:Date.now
         },
         settings: {
             type: mongoose.Schema.Types.ObjectId, ref: 'Settings'

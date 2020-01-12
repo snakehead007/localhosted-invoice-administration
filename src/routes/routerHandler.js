@@ -16,6 +16,7 @@ const editRouter = require('./editRouter');
 const uploadRouter = require('./uploadRouter');
 const orderRouter = require('./orderRouter');
 const downloadRouter = require('./downloadRouter');
+const deleteRouter = require('./deleteRouter');
 //Controllers
 router.use("/",loginRouter); //index page
 router.use("/dashboard",stillSignedInCheck,dashboardRouter);
@@ -32,11 +33,9 @@ router.use('/calc',stillSignedInCheck,calcRouter);
 router.use('/edit',stillSignedInCheck,editRouter);
 router.use('/upload',stillSignedInCheck,uploadRouter);
 router.use('/download',downloadRouter);
+router.use('/delete',stillSignedInCheck,deleteRouter);
 //Routers
 /*
-router.use("/add");
-router.use("/calc");
-router.use("/pdf");
 router.use("/upload");
 router.use("/search");
 */
@@ -49,6 +48,11 @@ router.use((error, req, res, next) => {
     console.log(error);
     res.status(500).send('500: Internal Server Error');
     next();
+});
+
+//database names cannot contain the character '.' MongoError
+router.get('/favicon.ico', function(req, res) {
+    res.sendStatus(204);
 });
 
 module.exports = router;

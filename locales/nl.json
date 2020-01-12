@@ -169,5 +169,20 @@
 	"New offer": "Nieuwe offerte",
 	"New creditnote": "Nieuwe creditnota",
 	"Sign out": "Uitloggen",
-	"search": "zoeken"
+	"Exlc. vat": "Exlc. btw",
+	"search": "zoeken",
+	"Action": "Acties",
+	"no e-mail": "geen e-mail",
+	"View invoice of": "Bekijk factuur van",
+	"View credit of": "Bekijk creditnota van",
+	"sort": "sorteer",
+	"Invoice footer": "Invoice voeter",
+	"Credit footer": "Credit voeter",
+	"Invoice Nr": "Factuur Nr",
+	"Offer Nr": "Offerte Nr",
+	"Credit Nr": "Krediet Nr",
+	"View order": "View order",
+	"c": "c",
+	"Add item": "Add item",
+	"Chart for": "Chart for"
 }

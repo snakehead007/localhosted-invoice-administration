@@ -11,94 +11,93 @@ html
         feather.replace();
       });
   body
-    header
-      include includes/topBar
-      div(class="container-fluid")
-        div(class ="row")
-          nav(class="col-md-2 d-none d-md-block bg-light sidebar")
-            div(class="sidebar-sticky")
-              include includes/navFlexCollumn
-              include includes/invoiceOptionMenu
-    main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-      if !client
-        h2(class="pt-3") Alle facturen
-      else
-        h2(class="pt-3")="Facturen van "+client.clientName
-      div(class="headExtend")
-        div(class="btn-group dropleft mb-2 mb-md-0")
-          button(type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle", data-toggle="dropdown",aria-haspopup="true",aria-expanded="false")
-            span(data-feather="bar-chart")
-            span sort
-          div(class="dropdown-menu")
-            a(class="dropdown-item" onclick="sortTable(0)") #
-            if !contact
-              a(class="dropdown-item" onclick="sortTable(1)") Klant
-            if contact
-              a(class="dropdown-item" onclick="sortTable(1,\"date\")") Datum
-            if !contact
-              a(class="dropdown-item" onclick="sortTable(2,\"date\")") Datum
-            if contact
-              a(class="dropdown-item" onclick="sortTable(2,\"kost\")") Kost
-            if !contact
-              a(class="dropdown-item" onclick="sortTable(3,\"kost\")") Kost
-      div(class="table-responsive bigger")
-        table(class="table table-striped table-sm ",id="hoofdTabel")
-          thead(class="thead-dark")
-            tr
-              th Nummer
-              if !contact
-                th Klant
-              th Datum
-              th Kost
-              th Statuus
-              th Acties
-          tbody
-            each invoice in invoices
-              tr
-                td
-                  if invoice.invoiceNr
-                      a(href='/order/all/' + invoice._id )=invoice.invoiceNr
-                  if invoice.offerNr && !invoice.invoiceNr
-                      a(href='/order/all/' + invoice._id)="Offerte " + invoice.offerNr
-                  if invoice.creditNr && !invoice.offerNr && !invoice.invoiceNr
-                    a(href='/order/all/' + invoice._id )="Creditnota " + invoice.creditNr
-                if !client
-                  td
-                    a(href='/invoice/all/' + invoice.fromClient)=invoice.clientName
-                td=invoice.date
-                if invoice.invoiceNr
-                  td
-                    span=(invoice.total * 1.21).toFixed(2) + "€"
-                else
-                  td
-                if invoice.invoiceNr
-                  td
-                    div(class="custom-control custom-switch")
-                      if invoice.isPaid
-                        input(type="checkbox" class="custom-control-input bg-success" id=invoice._id, onclick='changeBetaald(\"' + invoice._id + '\",\"' + invoice._id + '\",\"' + invoice._id + '\")', checked)
-                        label(class="custom-control-label" for=invoice._id)=" Betaald"
-                      if !invoice.isPaid
-                        input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id, onclick='changeBetaald(\"' + invoice._id + '\",\"' + invoice._id + '\",\"' + invoice._id + '\")')
-                        label(class="custom-control-label" for=invoice._id)=" Openstaand"
-                else 
-                  td
-                td
-                  div(class="btn-group front")
-                    button(role="button", class="btn btn-outline-" + settings.thema + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
-                    div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                      a(class="dropdown-item button", href='/view/invoice/' + invoice._id ) bekijk
-                      div(class="dropdown-divider")
-                      if invoice.creditNr
-                        a(class="dropdown-item", href='/download/credit/' + invoice._id ,id="target",target="_blank") download creditnota
+    include includes/topBar
+    div(class="container-fluid")
+      div(class ="row")
+        nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+          div(class="sidebar-sticky")
+            include includes/navFlexCollumn
+            include includes/invoiceOptionMenu
+        main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+          if !client
+            h2(class="pt-3") #{__('All invoices')}
+          else
+            h2(class="pt-3") #{__('All invoices of')} #{client.clientName}
+          div(class="headExtend")
+            div(class="btn-group dropleft mb-2 mb-md-0")
+              button(type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle", data-toggle="dropdown",aria-haspopup="true",aria-expanded="false")
+                span(data-feather="bar-chart")
+                span #{__('sort')}
+              div(class="dropdown-menu")
+                a(class="dropdown-item" onclick="sortTable(0)") #
+                if !contact
+                  a(class="dropdown-item" onclick="sortTable(1)") #{__('Client')}
+                if contact
+                  a(class="dropdown-item" onclick="sortTable(1,\"date\")") #{__('Date')}
+                if !contact
+                  a(class="dropdown-item" onclick="sortTable(2,\"date\")") #{__('Date')}
+                if contact
+                  a(class="dropdown-item" onclick="sortTable(2,\"kost\")") #{__('Price')}
+                if !contact
+                  a(class="dropdown-item" onclick="sortTable(3,\"kost\")") #{__('Price')}
+          div(class="table-responsive bigger")
+            table(class="table table-striped table-sm ",id="hoofdTabel")
+              thead(class="thead-dark")
+                tr
+                  th #{__('Number')}
+                  if !contact
+                    th #{__('Client')}
+                  th #{__('Date')}
+                  th #{__('Price')}
+                  th #{__('Status')}
+                  th #{__('Action')}
+              tbody
+                each invoice in invoices
+                  tr
+                    td
                       if invoice.invoiceNr
-                        a(class="dropdown-item", href='/download/invoice/' + invoice._id ,id="target",target="_blank") download factuur
-                      if invoice.offerNr
-                        a(class="dropdown-item", href='/download/offer/' + invoice._id ,id="target",target="_blank") download offerte
-                        if !invoice.invoiceNr
-                          a(class="dropdown-item button", href="/invoice/upgrade/" + invoice._id ) opwaardeer naar factuur
-                      div(class="dropdown-divider")
-                        a(class="dropdown-item",href='/edit/invoice/'+invoice._id) aanpassen
-                        a(class="dropdown-item", href='/delete/invoice/' + invoice._id) verwijder
+                          a(href='/order/all/' + invoice._id )=invoice.invoiceNr
+                      if invoice.offerNr && !invoice.invoiceNr
+                          a(href='/order/all/' + invoice._id) #{__('Offer')}  #{" "+invoice.offerNr}
+                      if invoice.creditNr && !invoice.offerNr && !invoice.invoiceNr
+                        a(href='/order/all/' + invoice._id ) #{__('Creditnote')} #{" "+invoice.creditNr}
+                    if !client
+                      td
+                        a(href='/invoice/all/' + invoice.fromClient)=invoice.clientName
+                    td=invoice.date
+                    if invoice.invoiceNr
+                      td
+                        span=(invoice.total * 1.21).toFixed(2) + "€"
+                    else
+                      td
+                    if invoice.invoiceNr
+                      td
+                        div(class="custom-control custom-switch")
+                          if invoice.isPaid
+                            input(type="checkbox" class="custom-control-input bg-success" id=invoice._id, onclick='changeBetaald(\"' + invoice._id + '\",\"' + invoice._id + '\",\"' + invoice._id + '\")', checked)
+                            label(class="custom-control-label" for=invoice._id) #{__('Paid')}
+                          if !invoice.isPaid
+                            input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id, onclick='changeBetaald(\"' + invoice._id + '\",\"' + invoice._id + '\",\"' + invoice._id + '\")')
+                            label(class="custom-control-label" for=invoice._id) #{__('Unpaid')}
+                    else
+                      td
+                    td
+                      div(class="btn-group front")
+                        button(role="button", class="btn btn-outline-" + settings.thema + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") #{__('Actions')}
+                        div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                          a(class="dropdown-item button", href='/view/invoice/' + invoice._id ) #{__('View')}
+                          div(class="dropdown-divider")
+                          if invoice.creditNr
+                            a(class="dropdown-item", href='/download/credit/' + invoice._id ,id="target",target="_blank") #{__('Download invoice')}
+                          if invoice.invoiceNr
+                            a(class="dropdown-item", href='/download/invoice/' + invoice._id ,id="target",target="_blank") #{__('Download invoice')}
+                          if invoice.offerNr
+                            a(class="dropdown-item", href='/download/offer/' + invoice._id ,id="target",target="_blank") #{__('Download offer')}
+                            if !invoice.invoiceNr
+                              a(class="dropdown-item button", href="/invoice/upgrade/" + invoice._id ) #{__('Upgrade to invoice')}
+                          div(class="dropdown-divider")
+                            a(class="dropdown-item",href='/edit/invoice/'+invoice._id) #{__('Edit')}
+                            a(class="dropdown-item", href='/delete/invoice/' + invoice._id) #{__('Delete')}
           script.
             $(document).ready(function () {
               feather.replace();

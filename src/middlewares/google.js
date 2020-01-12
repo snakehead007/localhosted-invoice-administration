@@ -106,9 +106,9 @@ exports.checkSignIn = async function checkSignIn({googleId,email,tokens}){
             fromUser:currentUserId
         });
         await newProfile.save();
-        const settingsId = await Settings.findOne({fromUser:currentUserId});
-        const profileId = await Profile.findOne({fromUser:currentUserId});
-        await User.update({_id:currentUserId},{settings:settingsId,profile:profileId});
+        const settings = await Settings.findOne({fromUser:currentUserId});
+        const profile = await Profile.findOne({fromUser:currentUserId});
+        await User.updateOne({_id:currentUserId},{settings:settings._id,profile:profile._id});
         return currentUserId;
     }else{//user already added
         return currentUser._id;

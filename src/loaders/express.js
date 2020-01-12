@@ -4,8 +4,6 @@ const path = require('path');
 const pug = require('pug');
 const session = require('express-session');
 const redis = require('redis');
-const redisStore = require('connect-redis')(session);
-const client  = redis.createClient();
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
 
@@ -43,9 +41,8 @@ module.exports.default = function(app){
     console.log("[Info]: . . . . Express settings set up");
     app.use(
         session({
-            name:'session',
+            name: 'session',
             secret: process.env.SESSION_SECRET,
-            store: new redisStore({ host: 'localhost', port: 6379, client: client,ttl : 260}),
             saveUninitialized: false,
             resave: false
         })

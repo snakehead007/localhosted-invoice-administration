@@ -15,7 +15,7 @@ style.
     height: 100vh;
   }
   a {
-    color: #f80600;
+    color: #1f6497;
     display: inline-block;
     text-decoration: none;
     font-weight: 400;
@@ -65,14 +65,14 @@ style.
     color: #cccccc;
   }
   h2.active {
-    color: #f80600;
+    color: #1f6497;
     border-bottom: 2px solid #5fbae9;
   }
   /* FORM TYPOGRAPHY*/
   input[type=button],
   input[type=submit],
   input[type=reset] {
-    background-color: #f80600;
+    background-color: #1f6497;
     border: none;
     color: white;
     padding: 15px 80px;
@@ -81,8 +81,8 @@ style.
     display: inline-block;
     text-transform: uppercase;
     font-size: 13px;
-    -webkit-box-shadow: 0 10px 30px 0 rgba(248, 6, 0, 0.4);
-    box-shadow: 0 10px 30px 0 rgba(248, 6, 0, 0.4);
+    -webkit-box-shadow: 0 10px 30px 0 rgba(19, 69, 107, 0.4);
+    box-shadow: 0 10px 30px 0 rgba(19, 69, 107, 0.4);
     -webkit-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
     margin: 5px 20px 40px 20px;
@@ -95,7 +95,7 @@ style.
   input[type=button]:hover,
   input[type=submit]:hover,
   input[type=reset]:hover {
-    background-color: #ff3e03;
+    background-color: #80a8d3;
   }
   input[type=button]:active,
   input[type=submit]:active,
@@ -211,22 +211,4 @@ style.
     .fadeIn.first
       img#icon(src='/logo.jpeg' alt=' ')
     form(method='get' action='/register')
-      hr
       input.fadeIn.fourth(type='submit' value='login with google')
-    button.btn.btn-sm.btn-outline-secondary(type='button' data-toggle='modal' data-target='#myModal') Forgot password?
-#myModal.modal(tabindex='-1' role='dialog')
-  .modal-dialog.modal-dialog-centered(role='document')
-    .modal-content
-      .modal-header
-        h6.modal-title Forgot password?
-        button.close(type='button' data-dismiss='modal' aria-label='Close')
-          span(aria-hidden='true') &times;
-      .modal-body
-        form
-          .form-group
-            label.col-form-label(for='recipient-name') Your email:
-            input#recipient-name.form-control(type='text')
-      .modal-footer
-        button.btn.btn-secondary(type='button' data-dismiss='modal') Close
-        button.btn.btn-primary(type='button' disabled='true') request password reset
-

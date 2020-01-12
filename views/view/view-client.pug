@@ -1,0 +1,56 @@
+//- V1.8
+html
+  head
+    include ../includes/htmlHead
+    script.
+      function info(){$("#info").toggle();};
+      $(document).ready(function () {
+        feather.replace();
+      });
+body
+  header
+    include ../includes/topBar
+
+    div(class="container-fluid")
+      div(class ="row")
+        nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+          div(class="sidebar-sticky")
+            include ../includes/navFlexCollumn
+            include ../includes/bookmarks
+        main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+          h2(class="pt-3") #{__('View client information')}
+          hr
+          table(class="table  table-striped")
+            tbody
+              tr
+                th(scope="row") #{__('Firm')}
+                td
+                  h4=client.firm
+              tr
+                th(scope="row") #{__('Client name')}
+                td
+                  h4=client.clientName
+              tr
+                th(scope="row") #{__('Street')}
+                td
+                  h4=client.street
+              tr
+                th(scope="row") #{__('Street Nr')}
+                td
+                  h4=client.streetNr
+              tr
+                th(scope="row") #{__('Postal')}
+                td
+                  h4=client.postal
+              tr
+                th(scope="row") #{__('Place')}
+                td
+                  h4=client.place
+              tr
+                th(scope="row") #{__('Vat nr')}
+                td
+                  h4=client.vat
+              tr
+                th(scope="row") #{__('Bank nr')}
+                td
+                  h4=client.bankNr

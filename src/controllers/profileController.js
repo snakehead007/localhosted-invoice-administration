@@ -70,7 +70,7 @@ exports.edit_profile_post = (req,res) => {
         email: [req.body.email],
         fromUser:req.session._id
     };
-    Profile.update({fromUser:req.session._id,_id: req.params.idp}, updateProfile, function(err) {
+    Profile.updateOne({fromUser:req.session._id,_id: req.params.idp}, updateProfile, function(err) {
         if (!err) {
             res.redirect('/view/profile');
         }

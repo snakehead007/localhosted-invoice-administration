@@ -57,7 +57,7 @@ exports.new_order_get = (req,res) => {
 };
 
 exports.new_order_post = (req,res) => {
-    Invoice.findOne({fromUser:req.session._id,_id:req.params.idi},function(err,invoice){
+    Invoice.findOne({fromUser:req.session._id,_id:req.params.idi},async function(err,invoice){
     let newOrder = new Order({
         description: req.body.description,
         amount: req.body.amount,
@@ -70,9 +70,8 @@ exports.new_order_post = (req,res) => {
     });
     newOrder.save();
     let totInvoice = ((((invoice.total + invoice.advance) + (req.body.amount * req.body.price)) - invoice.advance));
-    invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, {total:totInvoice},function(){
-        res.redirect('/order/all/' + req.params.idi);
-    });
+    await invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, {total:totInvoice});
+    res.redirect('/order/all/' + req.params.idi);
     });
 };
 
@@ -102,6 +101,31 @@ exports.all_order_get = (req,res) => {
                                 });
                             }
                         });
+                    });
+                }
+            });
+        }
+    });
+};
+
+exports.view_order_get = (req,res) => {
+    Order.findOne({fromUser:req.session._id,_id: req.params.ido}, function(err, order) {
+        if (!err) {
+            Invoice.findOne({fromUser:req.session._id,_id: order.factuur}, function(err, invoice) {
+                if (!err) {
+                    Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+                        if (!err) {
+                            Profile.findOne({fromUser:req.session._id}, function(err, profile) {
+                                if (!err) {
+                                    res.render('view/view-order', {
+                                        'order': order,
+                                        "invoice": invoice,
+                                        "profile": profile,
+                                        "settings": settings,
+                                    });
+                                }
+                            });
+                        }
                     });
                 }
             });

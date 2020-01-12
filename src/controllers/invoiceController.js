@@ -4,6 +4,8 @@ const Client = require('../models/client');
 const Profile = require('../models/profile');
 const Order = require('../models/order');
 const {year} = require('../utils/date');
+const i18n = require('i18n');
+
 exports.invoice_all_get = (req,res) => {
     Invoice.find({fromUser:req.session._id}, function(err, invoices) {
         if(err) console.trace();
@@ -132,7 +134,7 @@ exports.credit_new_get = (req,res) => {
     const idc = (req.body.idc)?req.body.idc:req.params.idc;
     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
         if(err) console.trace();
-        client.findOne({fromUser:req.session._id,_id: idc}, function(err, client) {
+        Client.findOne({fromUser:req.session._id,_id: idc}, function(err, client) {
             if(err) console.trace();
                 client.save(function(err) {
                     if(err) console.trace();
@@ -149,10 +151,10 @@ exports.credit_new_get = (req,res) => {
                                             nr_str = "0" + profile.creditNrCurrent.toString();
                                         }
                                         let newInvoice = new Invoice({
-                                            fromClient: contact._id,
+                                            fromClient: client._id,
                                             date: "20200101",
                                             creditNr: String(year + nr_str),
-                                            clientName: contact.contactPersoon,
+                                            clientName: client.contactPersoon,
                                             total: 0,
                                             fromUser:req.session._id
                                         });
@@ -161,7 +163,7 @@ exports.credit_new_get = (req,res) => {
                                             client.invoices.push(newInvoice._id);
                                         });
                                         newInvoice.save();
-                                        res.redirect('/invoices/all');
+                                        res.redirect('/invoice/all');
                                     }
                                 });
                             });
@@ -257,7 +259,8 @@ exports.edit_invoice_get = (req,res) => {
                     'invoice':invoice,
                     'client':client,
                     'settings':settings,
-                    'profile':profile
+                    'profile':profile,
+                    'currentUrl':"invoiceEdit"
                     });
                 });
             });
@@ -300,5 +303,34 @@ exports.edit_invoice_post = (req,res) => {
                 }
             });
         });
+    });
+};
+
+
+exports.view_invoice_get = (req,res) => {
+    Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {
+        if(err) console.trace(err);
+        if (!err) {
+            Client.findOne({fromUser:req.session._id,_id: invoice.fromClient}, function(err, client) {
+                if(err) console.trace(err);
+                Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+                    if(err) console.trace(err);
+                    if (!err){
+                        Profile.findOne({fromUser:req.session._id},function(err,profile){
+                        if(err) console.trace(err);
+                            let description = (invoice.creditNr)? "View credit of":"View invoice of";
+                            res.render('view/view-invoice', {
+                                'invoice': invoice,
+                                'client': client,
+                                "description": i18n.__(description) + " " + client.clientName + " (" + invoice.invoiceNr + ")",
+                                "settings": settings,
+                                "currentUrl": "creditView",
+                                "profile":profile
+                            })
+                        });
+                    }
+                });
+            });
+        }
     });
 };
