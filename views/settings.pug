@@ -67,12 +67,12 @@ html
                                             div(id="lang",style="display:none;")
                                                 div(class="btn-group mb-3" role="group" aria-label="Basic example")
                                                     a(href="/settings/change/lang/nl",class="button")
-                                                        if settings.lang == "nl"
+                                                        if settings.locale == "nl"
                                                             button(type="button" class="btn btn-outline-"+settings.thema) Nederlands
                                                         else
                                                             button(type="button" class="btn btn-"+settings.thema) Nederlands
                                                     a(href="/settings/change/lang/en",class="button")
-                                                        if settings.lang == "eng"
+                                                        if settings.locale == "eng"
                                                             button(type="button" class="btn btn-outline-"+settings.thema) English
                                                         else
                                                             button(type="button" class="btn btn-"+settings.thema) English

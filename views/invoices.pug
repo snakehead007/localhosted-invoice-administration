@@ -45,7 +45,7 @@ html
               thead(class="thead-dark")
                 tr
                   th #{__('Number')}
-                  if !contact
+                  if !client
                     th #{__('Client')}
                   th #{__('Date')}
                   th #{__('Price')}
@@ -64,20 +64,21 @@ html
                     if !client
                       td
                         a(href='/invoice/all/' + invoice.fromClient)=invoice.clientName
-                    td=invoice.date
+                    td=new Date(invoice.date).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' })
                     if invoice.invoiceNr
                       td
                         span=(invoice.total * 1.21).toFixed(2) + "€"
+                        p=invoice.total
                     else
                       td
                     if invoice.invoiceNr
                       td
                         div(class="custom-control custom-switch")
                           if invoice.isPaid
-                            input(type="checkbox" class="custom-control-input bg-success" id=invoice._id, onclick='changeBetaald(\"' + invoice._id + '\",\"' + invoice._id + '\",\"' + invoice._id + '\")', checked)
+                            input(type="checkbox" class="custom-control-input bg-success" id=invoice._id, onclick='setStatus(\"' + invoice._id + '\")', checked)
                             label(class="custom-control-label" for=invoice._id) #{__('Paid')}
                           if !invoice.isPaid
-                            input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id, onclick='changeBetaald(\"' + invoice._id + '\",\"' + invoice._id + '\",\"' + invoice._id + '\")')
+                            input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id, onclick='setStatus(\"' + invoice._id + '\")')
                             label(class="custom-control-label" for=invoice._id) #{__('Unpaid')}
                     else
                       td
@@ -101,10 +102,6 @@ html
             $(document).ready(function () {
               feather.replace();
             });
-            function changeBetaald(id, contact, loginHash) {
-                if (contact === "undefined") {
-                  window.location = "/change-betaald2/" + id + "/" + loginHash;
-                } else {
-                  window.location = "/change-betaald/" + id + "/" + loginHash;
-                }
+            function setStatus(id) {
+                window.location = "/edit/invoice/paid/" + id ;
             }

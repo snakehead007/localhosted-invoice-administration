@@ -115,4 +115,4 @@ exports.checkSignIn = async function checkSignIn(req,{googleId,email,tokens}){
         req.session.email = email;
         return currentUser._id;
     }
-}
+};

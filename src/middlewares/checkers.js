@@ -8,11 +8,11 @@ exports.stillSignedInCheck = (req,res,next) => {
     }
     Settings.findOne({fromUser:req.session._id},function(err,settings){
         if(err) console.trace();
-        req.locale = settings.lang;
-        i18n.setLocale(req, settings.lang);
-        i18n.setLocale(res, settings.lang);
-        req.setLocale(settings.lang);
-        res.locals.language = settings.lang;
+        req.locale = settings.locale;
+        i18n.setLocale(req, settings.locale);
+        i18n.setLocale(res, settings.locale);
+        req.setLocale(settings.locale);
+        res.locals.language = settings.locale;
         next();
     });
 } ;

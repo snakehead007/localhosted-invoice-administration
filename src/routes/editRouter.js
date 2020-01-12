@@ -11,5 +11,6 @@ router.get('/invoice/:idi',invoiceController.edit_invoice_get);
 router.post('/invoice/:idi',invoiceController.edit_invoice_post);
 router.get('/order/:ido',orderController.edit_order_get);
 router.get('/item/:idi',itemController.edit_item_get);
+router.get('/invoice/paid/:idi',invoiceController.invoice_paid_set);
 
 module.exports = router;

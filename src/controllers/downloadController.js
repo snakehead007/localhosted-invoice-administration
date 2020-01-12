@@ -19,7 +19,7 @@ exports.download_invoice_get = (req,res) => {
                                     "invoice": invoice,
                                     'length': orders.length,
                                     "settings": settings,
-                                    //"invoiceText": replaceAll(settings.invoice,profile,contact,factuur,settings.lang),
+                                    //"invoiceText": replaceAll(settings.invoice,profile,contact,factuur,settings.:ocale),
                                     "imgData":imgData,
                                     "vat":settings.vatPercentage
                                 });

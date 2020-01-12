@@ -17,8 +17,8 @@ module.exports.default = function(app){
     console.log("[Info]: . . . . Engine and view loaded");
     app.use(cookieParser());
     i18n.configure({
-        locales:['en', 'nl'],
-        defaultLocale: 'nl',
+        locales:['en-GB', 'nl-BE'],
+        defaultLocale: 'nl-BE',
         directory: path.join(path.resolve(),'locales'),
         cookie:'session'
     });

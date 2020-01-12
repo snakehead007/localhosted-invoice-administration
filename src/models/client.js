@@ -30,7 +30,15 @@ const Client = new mongoose.Schema({
     },
     lang:{
         type:String,
-        default:"eng"
+        default:"en-GB"
+    },
+    creationDate:{
+        type:Date,
+        default:Date.now()
+    },
+    lastUpdated:{
+        type:Date,
+        default:Date.now()
     }
 });
 

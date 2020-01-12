@@ -57,7 +57,7 @@ exports.new_order_get = (req,res) => {
 };
 
 exports.new_order_post = async (req,res) => {
-    Invoice.findOne({fromUser:req.session._id,_id:req.params.idi},async function(err,invoice){
+    Invoice.findOne({fromUser:req.session._id,_id:req.params.idi}, async function(err,invoice){
     let newOrder = new Order({
         description: req.body.description,
         amount: req.body.amount,
@@ -70,8 +70,10 @@ exports.new_order_post = async (req,res) => {
     });
     await newOrder.save();
     let totInvoice = ((((invoice.total + invoice.advance) + (req.body.amount * req.body.price)) - invoice.advance));
-    await invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, {total:totInvoice});
-    res.redirect('/order/all/' + req.params.idi);
+    invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, {total:totInvoice,lastUpdated:Date.now()},function(err){
+        if(err) console.trace(err);
+        res.redirect('/order/all/' + req.params.idi);
+    });
     });
 };
 

@@ -27,6 +27,14 @@ const Invoice = new mongoose.Schema({
     },
     fromUser:{
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    },
+    creationDate:{
+        type:Date,
+        default:Date.now()
+    },
+    lastUpdated:{
+        type:Date,
+        default:Date.now()
     }
 });
 

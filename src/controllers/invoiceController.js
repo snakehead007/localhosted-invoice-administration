@@ -110,11 +110,10 @@ exports.invoice_new_get = (req,res) => {
                                 }
                                 let newInvoice = new Invoice({
                                     fromClient: client._id,
-                                    date: "20201010",
+                                    date: Date.now(),
                                     invoiceNr: String(new Date().getFullYear() + invoiceNr),
                                     clientName: client.clientName,
                                     total: 0,
-                                    datePaid: "20201001",
                                     fromUser: req.session._id
                                 });
                                 await Client.updateOne({fromUser: req.session._id,}, function (err) {
@@ -167,7 +166,7 @@ exports.credit_new_get = (req,res) => {
                                     }
                                     let newInvoice = new Invoice({
                                         fromClient: client._id,
-                                        date: "20200101",
+                                        date: Date.now(),
                                         creditNr: String(year + nr_str),
                                         clientName: client.contactPersoon,
                                         total: 0,
@@ -221,7 +220,7 @@ exports.offer_new_get = (req,res) => {
                                             }
                                             let newInvoice = new Invoice({
                                                 fromClient: client._id,
-                                                date: "20201010",
+                                                date: Date.now(),
                                                 offerNr: String(year + nr_str),
                                                 clientName: client.clientName,
                                                 fromUser: req.session._id
@@ -303,20 +302,22 @@ exports.edit_invoice_post = (req,res) => {
         let updateInvoice;
         if (req.body.advance) {
             updateInvoice = {
-                date: req.body.date,
+                date: Date.parse(req.body.date),
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
                 offerNr: req.body.offer,
                 datePaid: req.body.datePaid,
+                lastUpdated:Date.now(),
                 total: totOrders - req.body.total
             };
         } else {
             updateInvoice = {
-                date: req.body.date,
+                date: Date.parse(req.body.date),
                 invoice: req.body.invoice,
                 advance: req.body.advance,
                 offerNr: req.body.offerNr,
                 datePaid: req.body.datePaid,
+                lastUpdated:Date.now(),
                 total:totOrders
             };
         }
@@ -359,3 +360,14 @@ exports.view_invoice_get = (req,res) => {
     });
 };
 
+exports.invoice_paid_set = (req,res) => {
+        Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {
+            if (!err) {
+                Invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, {isPaid: !(invoice.isPaid),datePaid: Date.now(),lastUpdated:Date.now()}, function(err) {
+                    if (!err) {
+                        res.redirect('back');
+                    }
+                });
+            }
+        });
+};

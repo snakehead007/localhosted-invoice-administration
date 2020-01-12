@@ -408,7 +408,7 @@ app.get('/index/:loginHash', function(req, res) {//REWORKED & tested
                                     }
                                 }
                             }
-                                res.render(settings.lang+'/index', {
+                                res.render(settings.locale+'/index', {
                                     "totaal": totaal,
                                     "settings": settings,
                                     "jaar": year,
@@ -457,7 +457,7 @@ app.get('/chart/:jaar/:loginHash', function(req, res) {//REWORKED & tested
                   }
                   }
               }
-                res.render(settings.lang+'/chart', {
+                res.render(settings.locale+'/chart', {
                   "totaal": totaal,
                   "settings": settings,
                   "jaar": req.params.jaar,

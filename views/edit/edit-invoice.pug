@@ -22,6 +22,10 @@ html
       $(document).ready(function () {
         feather.replace();
       });
+      $(function () {
+        $("#datepicker").datepicker();
+        $("#datepicker2").datepicker();
+      });
 body
   header
     include ../includes/topBar
@@ -40,10 +44,10 @@ body
             div(class="form-row")
               div(class="form-group col-md-3")
                 label(for="title") Datum
-                input(type="text",class="form-control",value=invoice.date,name="datum")
+                input#datepicker(type="text",class="form-control",value=new Date(invoice.date).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' }),name="datum")
               div(class="form-group col-md-3")
                 label(for="title") Betaaldatum
-                input(type="text",class="form-control",value=invoice.datePaid,name="datumBetaald")
+                input#datepicker2(type="text",class="form-control",value=invoice.datePaid,name="datumBetaald")
               if invoice.invoiceNr
                 div(class="form-group col-md-2")
                   label(for="title") Factuur Nummer

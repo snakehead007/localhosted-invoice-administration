@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const Settings = new mongoose.Schema({
-    lang: {
+    locale: {
         type: String,
-        default: "nl"
+        default: "nl-BE"
     },
     thema: {
         type:String,
