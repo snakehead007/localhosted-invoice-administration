@@ -70,8 +70,7 @@ exports.view_client_get = (req,res) => {
                 if (!err) {
                     Profile.findOne({fromUser:req.session._id}, function(err, profile) {
                         if (!err) {
-                            res.render(settings.lang+
-                                '/view/view-client', {
+                            res.render('view/view-client', {
                                 'client': client,
                                 "profile": profile,
                                 "settings": settings

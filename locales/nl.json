@@ -181,8 +181,16 @@
 	"Invoice Nr": "Factuur Nr",
 	"Offer Nr": "Offerte Nr",
 	"Credit Nr": "Krediet Nr",
-	"View order": "View order",
-	"c": "c",
-	"Add item": "Add item",
-	"Chart for": "Chart for"
+	"View order": "Bekijk bestelling",
+	"Add item": "Voeg materiaal toe",
+	"Chart for": "Grafiek voor",
+	"View client information": "View client information",
+	"Firm": "Firm",
+	"Client name": "Client name",
+	"Street": "Street",
+	"Street Nr": "Street Nr",
+	"Postal": "Postal",
+	"Place": "Place",
+	"Vat nr": "Vat nr",
+	"Bank nr": "Bank nr"
 }

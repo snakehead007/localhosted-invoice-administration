@@ -86,46 +86,54 @@ exports.invoice_new_get = (req,res) => {
     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
         if(err) console.trace();
         Client.findOne({fromUser:req.session._id,_id: idc}, function(err, client) {
-            if(err) console.trace();
-                client.save(function(err) {
-                    if(err) console.trace();
-                        Profile.findOne({fromUser:req.session._id}, function(err, profile) {
-                            if(err) console.trace();
-                            profile.save(function(err) {
-                                if(err) console.trace();
-                                Profile.updateOne({fromUser:req.session._id,nr: profile.invoiceNrCurrent + 1}, function(err) {
-                                    if(err) console.trace();
-                                    let invoiceNr;
-                                    if (profile.invoiceNrCurrent.toString().length === 1) {
-                                        invoiceNr = "00" + profile.invoiceNrCurrent.toString();
-                                    } else if (profile.invoiceNrCurrent.toString().length === 2) {
-                                        invoiceNr = "0" + profile.invoiceNrCurrent.toString();
+            if (client===null){
+                console.log("[Error]: Cannot make invoice without a client");
+                res.redirect('/invoice/new/invoice');
+            }else {
+                if (err) console.trace();
+                client.save(function (err) {
+                    if (err) console.trace();
+                    Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+                        if (err) console.trace();
+                        profile.save(function (err) {
+                            if (err) console.trace();
+                            Profile.updateOne({
+                                fromUser: req.session._id,
+                                nr: profile.invoiceNrCurrent + 1
+                            }, async function (err) {
+                                if (err) console.trace();
+                                let invoiceNr;
+                                if (profile.invoiceNrCurrent.toString().length === 1) {
+                                    invoiceNr = "00" + profile.invoiceNrCurrent.toString();
+                                } else if (profile.invoiceNrCurrent.toString().length === 2) {
+                                    invoiceNr = "0" + profile.invoiceNrCurrent.toString();
+                                }
+                                let newInvoice = new Invoice({
+                                    fromClient: client._id,
+                                    date: "20201010",
+                                    invoiceNr: String(new Date().getFullYear() + invoiceNr),
+                                    clientName: client.clientName,
+                                    total: 0,
+                                    datePaid: "20201001",
+                                    fromUser: req.session._id
+                                });
+                                await Client.updateOne({fromUser: req.session._id,}, function (err) {
+                                    if (err) console.trace();
+                                    if (!err) {
+                                        client.invoices.push(newInvoice._id);
                                     }
-                                    let newInvoice = new Invoice({
-                                        fromClient: client._id,
-                                        date: "20201010",
-                                        invoiceNr: String(new Date().getFullYear() + invoiceNr),
-                                        clientName: client.clientName,
-                                        total: 0,
-                                        datePaid: "20201001",
-                                        fromUser:req.session._id
-                                    });
-                                    Client.updateOne({fromUser:req.session._id,}, function(err) {
-                                        if(err) console.trace();
-                                        if(!err){
-                                            client.invoices.push(newInvoice._id);
-                                        }
-                                    });
-                                    newInvoice.save(function(err){
-                                        if(err) console.trace();
-                                        if(!err){
-                                            res.redirect('/invoice/all');
-                                        }
-                                    });
+                                });
+                                await newInvoice.save(function (err) {
+                                    if (err) console.trace();
+                                    if (!err) {
+                                        res.redirect('/invoice/all');
+                                    }
                                 });
                             });
                         });
+                    });
                 });
+            }
         });
     });
 };
@@ -135,40 +143,48 @@ exports.credit_new_get = (req,res) => {
     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
         if(err) console.trace();
         Client.findOne({fromUser:req.session._id,_id: idc}, function(err, client) {
-            if(err) console.trace();
-                client.save(function(err) {
-                    if(err) console.trace();
-                        Profile.findOne({fromUser:req.session._id}, function(err, profile) {
-                            profile.save(function(err) {
-                                if(err) console.trace();
-                                Profile.updateOne({fromUser:req.session._id,creditNrCurrent: profile.creditNrCurrent + 1}, function(err) {
-                                    if(err) console.trace();
-                                    if (!err){
-                                        let nr_str;
-                                        if (profile.creditNrCurrent.toString().length === 1) {
-                                            nr_str = "00" + profile.creditNrCurrent.toString();
-                                        } else if (profile.creditNrCurrent.toString().length === 2) {
-                                            nr_str = "0" + profile.creditNrCurrent.toString();
-                                        }
-                                        let newInvoice = new Invoice({
-                                            fromClient: client._id,
-                                            date: "20200101",
-                                            creditNr: String(year + nr_str),
-                                            clientName: client.contactPersoon,
-                                            total: 0,
-                                            fromUser:req.session._id
-                                        });
-                                        Client.updateOne({fromUser:req.session._id}, function(err) {
-                                            if(err) console.trace();
-                                            client.invoices.push(newInvoice._id);
-                                        });
-                                        newInvoice.save();
-                                        res.redirect('/invoice/all');
+            if (client===null){
+                console.log("[Error]: Cannot make invoice without a client");
+                res.redirect('/invoice/new/credit');
+            }else {
+                if (err) console.trace();
+                client.save(function (err) {
+                    if (err) console.trace();
+                    Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+                        profile.save(function (err) {
+                            if (err) console.trace();
+                            Profile.updateOne({
+                                fromUser: req.session._id,
+                                creditNrCurrent: profile.creditNrCurrent + 1
+                            }, async function (err) {
+                                if (err) console.trace();
+                                if (!err) {
+                                    let nr_str;
+                                    if (profile.creditNrCurrent.toString().length === 1) {
+                                        nr_str = "00" + profile.creditNrCurrent.toString();
+                                    } else if (profile.creditNrCurrent.toString().length === 2) {
+                                        nr_str = "0" + profile.creditNrCurrent.toString();
                                     }
-                                });
+                                    let newInvoice = new Invoice({
+                                        fromClient: client._id,
+                                        date: "20200101",
+                                        creditNr: String(year + nr_str),
+                                        clientName: client.contactPersoon,
+                                        total: 0,
+                                        fromUser: req.session._id
+                                    });
+                                    await Client.updateOne({fromUser: req.session._id}, function (err) {
+                                        if (err) console.trace();
+                                        client.invoices.push(newInvoice._id);
+                                    });
+                                    await newInvoice.save();
+                                    res.redirect('/invoice/all');
+                                }
                             });
                         });
+                    });
                 });
+            }
         });
     });
 };
@@ -178,17 +194,24 @@ exports.offer_new_get = (req,res) => {
     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
         if(err) console.trace();
         Client.findOne({fromUser:req.session._id,_id: idc}, function(err, client) {
-            if(err) console.trace();
-                client.save(function(err) {
-                    if(err) console.trace();
-                    Profile.findOne({fromUser:req.session._id}, function(err, profile) {
-                        if(err) console.trace();
+            if (client===null){
+                console.log("[Error]: Cannot make invoice without a client");
+                res.redirect('/invoice/new/offer');
+            }else {
+                if (err) console.trace();
+                client.save(function (err) {
+                    if (err) console.trace();
+                    Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+                        if (err) console.trace();
                         if (!err) {
-                            profile.save(function(err) {
-                                if(err) console.trace();
+                            profile.save(function (err) {
+                                if (err) console.trace();
                                 if (!err) {
-                                    Profile.updateOne({fromUser:req.session._id,nroff: profile.offerNrCurrent + 1}, function(err) {
-                                        if(err) console.trace();
+                                    Profile.updateOne({
+                                        fromUser: req.session._id,
+                                        nroff: profile.offerNrCurrent + 1
+                                    }, async function (err) {
+                                        if (err) console.trace();
                                         if (!err) {
                                             let nr_str;
                                             if (profile.offerNrCurrent.toString().length == 1) {
@@ -201,13 +224,13 @@ exports.offer_new_get = (req,res) => {
                                                 date: "20201010",
                                                 offerNr: String(year + nr_str),
                                                 clientName: client.clientName,
-                                                fromUser:req.session._id
+                                                fromUser: req.session._id
                                             });
-                                            Client.updateOne({fromUser:req.session._id}, function(err) {
-                                                if(err) console.trace();
+                                            await Client.updateOne({fromUser: req.session._id}, function (err) {
+                                                if (err) console.trace();
                                                 client.invoices.push(newInvoice._id);
                                             });
-                                            newInvoice.save();
+                                            await newInvoice.save();
                                             if (!err) {
                                                 res.redirect('/invoice/all');
                                             }
@@ -218,6 +241,7 @@ exports.offer_new_get = (req,res) => {
                         }
                     });
                 });
+            }
         });
     });
 };
@@ -237,7 +261,7 @@ exports.invoice_all_client = (req,res) => {
                                     'invoices': invoices,
                                     "settings": settings,
                                     "profile":profile,
-                                    "currentUrl": "invoicesClient"
+                                    "currentUrl": "invoiceClient"
                                 });
                             }
                         });
@@ -334,3 +358,4 @@ exports.view_invoice_get = (req,res) => {
         }
     });
 };
+

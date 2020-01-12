@@ -80,7 +80,7 @@ exports.getGoogleAccountFromCode = async (code) =>{
     };
 };
 
-exports.checkSignIn = async function checkSignIn({googleId,email,tokens}){
+exports.checkSignIn = async function checkSignIn(req,{googleId,email,tokens}){
     const currentUser = await User.findOne({googleId:googleId},function(err,User){
         if(err) throw new Error(err);
         return User;
@@ -109,8 +109,10 @@ exports.checkSignIn = async function checkSignIn({googleId,email,tokens}){
         const settings = await Settings.findOne({fromUser:currentUserId});
         const profile = await Profile.findOne({fromUser:currentUserId});
         await User.updateOne({_id:currentUserId},{settings:settings._id,profile:profile._id});
+        req.session.email = email;
         return currentUserId;
     }else{//user already added
+        req.session.email = email;
         return currentUser._id;
     }
 }

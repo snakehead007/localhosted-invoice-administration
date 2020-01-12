@@ -5,7 +5,7 @@ const Settings = new mongoose.Schema({
         type: String,
         default: "nl"
     },
-    theme: {
+    thema: {
         type:String,
         default: "secondary"
     },

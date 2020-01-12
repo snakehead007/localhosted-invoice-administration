@@ -15,10 +15,10 @@ ul(class="nav flex-column")
                 span(data-feather="file")
                 span #{__('All invoices')}
     li(class="nav-item")
-            a(class=(currentUrl==="clientAll")?"nav-link active":"nav-link" href="/client/all")
+            a(class=(currentUrl==="clientAll"||currentUrl==="invoiceClient")?"nav-link active":"nav-link" href="/client/all")
                 span(data-feather="users")
                 span #{__('Clients')}
-                if client || currentUrl === "invoicesClient"
+                if client || currentUrl === "invoiceClient"
                     span(data-feather="chevron-right")
                     span #{__('invoices')}
     li(class="nav-item")
@@ -26,19 +26,14 @@ ul(class="nav flex-column")
             span(data-feather="book")
             span #{__('Projects')}
     li(class="nav-item")
-            a(class=(currentUrl==="stock")?"nav-link active":"nav-link" href="/stock/all")
+            a(class=(currentUrl==="stock")?"nav-link active":"nav-link" href="#disabled")
                 span(data-feather="package")
                 span #{__('Stock')}
     li(class="nav-item")
-        if currentUrl === 'calc'
-            a(class=(currentUrl==="calc")?"nav-link active":"nav-link" href="/calc/all")
+            a(class=(currentUrl==="calc")?"nav-link active":"nav-link" href="#disabled")
                 span(data-feather="book")
                 span #{__('Calculations')}
     li(class="nav-item")
-        if currentUrl === 'settings' || currentUrl === "password"
             a(class=(currentUrl === 'settings' || currentUrl === "password")?"nav-link active":"nav-link" href="/settings")
                 span(data-feather="settings")
                 span #{__('Settings')}
-                if currentUrl === "password"
-                    span(data-feather="chevron-right")
-                    span #{__('Password')}
