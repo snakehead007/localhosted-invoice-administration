@@ -12,7 +12,7 @@ This program is created and maintained for [www.mdsart.be/](https://www.mdsart.b
 testers needed
 --
 
-Currenlty this project is on a testing fase, currenlty hosted on [factuur.karel.be](factuur.karel.be), if you want to test this project for flaws, language or user experience contact me, I will whitelist you so you can login.
+Currenlty this project is on a testing fase, currenlty hosted on [factuur.karel.be](http://factuur.karel.be), if you want to test this project for flaws, language or user experience contact me, I will whitelist you so you can login.
 
 about
 --
