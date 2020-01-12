@@ -9,6 +9,11 @@ This project is translated in 2 languages, Dutch and English.
 
 This program is created and maintained for [www.mdsart.be/](https://www.mdsart.be/)
 
+testers needed
+--
+
+Currenlty this project is on a testing fase, currenlty hosted on [factuur.karel.be](factuur.karel.be), if you want to test this project for flaws, language or user experience contact me, I will whitelist you so you can login.
+
 about
 --
 
