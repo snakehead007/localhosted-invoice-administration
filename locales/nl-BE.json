@@ -193,5 +193,21 @@
 	"Place": "Place",
 	"Vat nr": "Vat nr",
 	"Bank nr": "Bank nr",
-	"Offer footer": "Offer footer"
+	"Offer footer": "Offer footer",
+	"Invoice": "Invoice",
+	"invoice of": "invoice of",
+	"invoice administration": "invoice administration",
+	"Company info": "Company info",
+	"vat nr": "vat nr",
+	"Banking info": "Banking info",
+	"Invoice nr": "Invoice nr",
+	"Invoice info": "Invoice info",
+	"Order": "Order",
+	"subtotal": "subtotal",
+	"advance": "advance",
+	"We thank you for your trust.": "We thank you for your trust.",
+	"Close this page after downloading the pdf.": "Close this page after downloading the pdf.",
+	"offer of": "offer of",
+	"Offer nr": "Offer nr",
+	"Offer info": "Offer info"
 }

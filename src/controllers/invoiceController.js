@@ -165,7 +165,7 @@ exports.credit_new_get = (req,res) => {
                                         nr_str = "0" + profile.creditNrCurrent.toString();
                                     }
                                     let newInvoice = new Invoice({
-                                        fromClient: client._id,
+                                        fromClient: req.params.idc,
                                         date: Date.now(),
                                         creditNr: String(year + nr_str),
                                         clientName: client.contactPersoon,
@@ -208,7 +208,7 @@ exports.offer_new_get = (req,res) => {
                                 if (!err) {
                                     Profile.updateOne({
                                         fromUser: req.session._id,
-                                        nroff: profile.offerNrCurrent + 1
+                                        offerNrCurrent: profile.offerNrCurrent + 1
                                     }, async function (err) {
                                         if (err) console.trace();
                                         if (!err) {
@@ -219,7 +219,7 @@ exports.offer_new_get = (req,res) => {
                                                 nr_str = "0" + profile.offerNrCurrent.toString();
                                             }
                                             let newInvoice = new Invoice({
-                                                fromClient: client._id,
+                                                fromClient: req.params.idc,
                                                 date: Date.now(),
                                                 offerNr: String(year + nr_str),
                                                 clientName: client.clientName,
