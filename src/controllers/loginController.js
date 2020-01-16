@@ -15,10 +15,10 @@ exports.login_get =  function getLogin(req,res){
 exports.create_user_get = async function getCreateNewUser(req,res){
     if(process.env.DEVELOP==="true" && process.env.DEVELOP_WITH_GOOGLE==="false"){
         const googleId = Math.floor((Math.random() * 99999999999999999999999999999999999) + 10000000000000000000000000000000000);
-        const email = "test@development.this";
+        const email = Math.floor((Math.random() * 99999999999999999999999999999999999) + 10000000000000000000000000000000000);;
         const newUser = new User({
             googleId: googleId,
-            email: "test@development.this",
+            email: email,
             tokens:{}
         });
         /// TODO , refactor duplicate lines

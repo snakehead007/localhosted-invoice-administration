@@ -3,8 +3,13 @@ module.exports.default = async () => {
     let db_uri;
     if(process.env.DEVELOP==="true"){
         db_uri=process.env.DB_URI_DEVELOP;
-        const db = String(Math.floor((Math.random() * 1000000000) + 99999999999));
-        db_uri+="/"+db;
+        let db;
+        if(process.env.DEVELOP_NO_RANDOM_DB==="false") {
+            db= String(Math.floor((Math.random() * 1000000000) + 99999999999));
+        }else if(process.env.DEVELOP_NO_RANDOM_DB==="false"){
+            db = process.env.DB_DEVELOP_NAME;
+        }
+        db_uri += "/" + db;
     }else{
         db_uri=process.env.DB_URI;
     }
