@@ -17,6 +17,8 @@ build/*
 data/*
 .env
 src/dump.rdb
+public/images/*
+public/images
 ### Linux ###
 *~
 
