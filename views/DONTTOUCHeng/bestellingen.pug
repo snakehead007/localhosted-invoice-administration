@@ -57,7 +57,7 @@ body
                 td=order.price+" €"
                 td=order.total+" €"
                 td
-                  a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions
+                  a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions
                   div(class="dropdown-menu", aria-labelledby="actionsDropdown")
                     a(class="dropdown-item", href='/edit-order/'+order._id+"/"+loginHash) Edti
                     a(class="dropdown-item", href='/delete-order/'+order._id+"/"+loginHash) Delete

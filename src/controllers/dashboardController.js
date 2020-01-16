@@ -33,7 +33,7 @@ exports.main_get =  async function getLogin(req,res){
                                             if ((String(invoice.datePaid).includes(month[i]) || String(invoice.datePaid).includes(month_small[i]) || String(invoice.datePaid).includes(month[i]) || String(invoice.datePaid).includes(month_small[i])) && invoice.datePaid.includes(year) && invoice.datePaid && invoice.isPaid) {
                                                 total[i] += invoice.total;
                                             }
-                                        } else if ((invoice.date.includes(month[i]) || invoice.date.includes(month_small[i]) || invoice.date.includes(month[i]) || invoice.date.includes(month_small[i])) && invoice.date.includes(year) && invoice.invoiceNr && invoice.isPaid) {
+                                        } else if ((String(invoice.date).includes(month[i]) || String(invoice.date).includes(month_small[i]) || String(invoice.date).includes(month[i]) || String(invoice.date).includes(month_small[i])) && iString(invoice.date).includes(year) && invoice.invoiceNr && invoice.isPaid) {
                                             total[i] += invoice.total;
                                         }
                                         if ((String(invoice.date).includes(month[i]) || String(invoice.date).includes(month_small[i]) || String(invoice.date).includes(month[i]) || String(invoice.date).includes(month_small[i])) && !invoice.isPaid){

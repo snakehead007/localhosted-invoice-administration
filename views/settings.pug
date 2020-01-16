@@ -17,71 +17,43 @@ html
                         div(class="table-responsive")
                             table(class="table")
                                 tbody
-                                    tr(onclick="openPass()",class="settingsOption optionPass")
-                                        td
-                                            p(class="lead") Verander passwoord
-                                            div(id="pass",style="display:none;")
-                                                a(href='/pass' + "/" + loginHash,class="button")
-                                                    button(type="button" class="btn btn-outline-"+settings.thema) Verander passwoord
                                     tr(onclick="openBTW()",class="settingsOption optionBtw")
                                         td
-                                            p(class="lead") Verander BTW waarden
+                                            p(class="lead") #{__('Change VAT value')}
+                                                span(class="badge badge-pill badge-warning") #{__('in progress')}
                                             div(id="btw",style="display:none;")
-                                                p Btw staat op: #{settings.btw}%
-                                                a(href='/btw' + "/" + loginHash,class="button",class="btn btn-outline-"+settings.thema) Verander BTW waarden
-                                    tr(onclick="openThema()",class="settingsOption optionThema")
+                                                p Btw staat op: #{settings.vat}%
+                                                a(href='/btw' + "/" + loginHash,class="button",class="btn btn-outline-"+settings.theme) #{__('change VAT value')}
+                                    tr(onclick="openTheme()",class="settingsOption optionTheme")
                                         td
                                             p(class="lead")
-                                                span Thema
-                                            div(id="thema",style="display:none;")
+                                                span #{__('Theme')}
+                                            div(id="theme",style="display:none;")
                                                 div(class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups")
                                                     div(class="btn-group mr-4" role="group" aria-label="First group")
-                                                        a(href='/change-theme/secondary' + "/" + loginHash,class="button")
-                                                            if settings.thema == "secondary"
-                                                                button(type="button" class="btn btn-outline-secondary") grey
-                                                            else
-                                                                button(type="button" class="btn btn-secondary") grey
-                                                        a(href='/change-theme/dark' + "/" + loginHash,class="button")
-                                                            if settings.thema == "dark"
-                                                                button(type="button" class="btn btn-outline-dark") dark
-                                                            else
-                                                                button(type="button" class="btn btn-dark") dark
-                                                        a(href='/change-theme/light' + "/" + loginHash,class="button")
-                                                            if settings.thema == "light"
-                                                                button(type="button" class="btn btn-outline-light") white
-                                                            else
-                                                                button(type="button" class="btn btn-light") white
-                                                        a(href='/change-theme/info' + "/" + loginHash,class="button")
-                                                            if settings.thema == "info"
-                                                                button(type="button" class="btn btn-outline-info") blue
-                                                            else
-                                                                button(type="button" class="btn btn-info") blue
-                                                        a(href='/change-theme/danger' + "/" + loginHash,class="button")
-                                                            if settings.thema == "danger"
-                                                                button(type="button" class="btn btn-outline-danger") red
-                                                            else
-                                                                button(type="button" class="btn btn-danger") red
+                                                        a(href='/settings/change/theme/secondary',class="button")
+                                                            button(type="button" class="btn btn-"+((settings.theme==="secondary")?"outline-":"")+"secondary") #{__('grey')}
+                                                        a(href='/settings/change/theme/dark',class="button")
+                                                            button(type="button" class="btn btn-"+((settings.theme==="dark")?"outline-":"")+"dark") #{__('dark')}
+                                                        a(href='/settings/change/theme/info',class="button")
+                                                            button(type="button" class="btn btn-"+((settings.theme==="info")?"outline-":"")+"info") #{__('blue')}
+                                                        a(href='/settings/change/theme/danger',class="button")
+                                                            button(type="button" class="btn btn-"+((settings.theme==="danger")?"outline-":"")+"danger") #{__('red')}
                                     tr(onclick="openLang()",class="settingsOption optionLang")
                                         td
-                                            p(class="lead") Language
+                                            p(class="lead") #{__('Language')}
                                             div(id="lang",style="display:none;")
                                                 div(class="btn-group mb-3" role="group" aria-label="Basic example")
-                                                    a(href="/settings/change/lang/nl",class="button")
-                                                        if settings.locale == "nl"
-                                                            button(type="button" class="btn btn-outline-"+settings.thema) Nederlands
-                                                        else
-                                                            button(type="button" class="btn btn-"+settings.thema) Nederlands
-                                                    a(href="/settings/change/lang/en",class="button")
-                                                        if settings.locale == "eng"
-                                                            button(type="button" class="btn btn-outline-"+settings.thema) English
-                                                        else
-                                                            button(type="button" class="btn btn-"+settings.thema) English
+                                                    a(href="/settings/change/lang/nl-BE",class="button")
+                                                        button(type="button" class="btn btn-"+((settings.locale==="nl-BE")?"outline-":"")+settings.theme) #{__('Dutch')}
+                                                    a(href="/settings/change/lang/en-GB",class="button")
+                                                        button(type="button" class="btn btn-"+((settings.locale==="en-GB")?"outline-":"")+settings.theme) #{__('English')}
                                     tr(onclick="openText()",class="settingsOption optionText")
                                         td
-                                            p(class="lead") Text aanpassingen
+                                            p(class="lead") #{__('PDF footnotes')}
                                             div(id="text",style="display:none;")
                                                 form(action='/settings/change/text',method='post')
-                                                    button(type="button" class="mb-1 headExtend btn-sm btn btn-outline-"+settings.thema, onclick="info()") info
+                                                    button(type="button" class="mb-1 headExtend btn-sm btn btn-outline-"+settings.theme, onclick="info()") #{__('info')}
                                                     div(class="input-group mb-3")
                                                         div(class="input-group-prepend")
                                                             span(class="input-group-text") #{__('Invoice footer')}
@@ -94,9 +66,9 @@ html
                                                         div(class="input-group-prepend")
                                                             span(class="input-group-text") #{__('Offer footer')}
                                                         textarea(input="text",name="offerText",class="form-control" aria-label="With textarea")=settings.offerText
-                                                    button(type="submit",class="btn btn-outline-"+settings.thema) bijwerken
+                                                    button(type="submit",class="btn btn-outline-"+settings.theme) bijwerken
                                                     div(class="",id="info",style="display:none")
-                                                        p Voor variabelen van de database te gebruiken, typ ze zoals hieronder in de texten:
+                                                        p #{__('In order to use variables of the database, type them like below')}:
                                                         samp(class="text")
                                                             pre
                                                                 code &#91;firma&#93;     : firma naam
@@ -124,17 +96,18 @@ html
 
                                     tr(onclick="openBook()",class="settingsOption optionBook")
                                         td
-                                            p(class="lead") Bookmarks
+                                            p(class="lead") #{__('Bookmarks')}
+                                                span(class="badge badge-pill badge-warning") #{__('in progress')}
                                             div(id="book",style="display:none;")
                                               form(action='/edit-bookmarks/'+loginHash,method='post')
-                                                  button(type="button" class="mb-1 headExtend btn-sm btn btn-outline-"+settings.thema, onclick="infoBook()") info
+                                                  button(type="button" class="mb-1 headExtend btn-sm btn btn-outline-"+settings.theme, onclick="infoBook()") #{__('info')}
                                                   div(class="input-group mb-3")
                                                       div(class="input-group-prepend")
-                                                          span(class="input-group-text") Bookmarks
-                                                      textarea(input="text",name="bookmarks",class="form-control",placeholder="Klik op info, voor meer informatie" aria-label="With textarea")=profile.bookmarksText
-                                                  button(type="submit",class="btn btn-outline-"+settings.thema) bijwerken
+                                                          span(class="input-group-text") #{__('Bookmarks')}
+                                                      textarea(input="text",name="bookmarks",class="form-control",placeholder="#{__('Click on info, for more info')}" aria-label="With textarea")=profile.bookmarksText
+                                                  button(type="submit",class="btn btn-outline-"+settings.theme) #{__('Update')}
                                                   div(class="",id="infoBook",style="display:none")
-                                                      p Schrijf de bookmarks zoals hieronder (zonder http://):
+                                                      p #{__('write de bookmarks as the example below')} (#{__('without')} http://):
                                                       samp(class="text")
                                                           pre
                                                               code my favorite site : www.favorite.be

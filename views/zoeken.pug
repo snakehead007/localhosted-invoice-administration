@@ -118,9 +118,9 @@ body
                               a(href="mailto:"+contact.mail)=contact.mail
                         else
                           td
-                            button(type="button" class="btn btn-outline-"+settings.thema disabled) geen e-mail
+                            button(type="button" class="btn btn-outline-"+settings.theme disabled) geen e-mail
                     td
-                      a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                      a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                       div(class="dropdown-menu", aria-labelledby="actionsDropdown")                      
                         a(class="dropdown-item", href='/view-contact/' + contact._id + "/" + loginHash) Bekijken
                         a(class="dropdown-item", href='/edit-contact/' + contact._id + "/" + loginHash) Aanpassen
@@ -184,7 +184,7 @@ body
                         td
                       td
                         div(class="btn-group front")
-                          button(role="button", class="btn btn-outline-" + settings.thema + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                          button(role="button", class="btn btn-outline-" + settings.theme + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                           div(class="dropdown-menu", aria-labelledby="actionsDropdown")
                             if !contact                      
                               a(class="dropdown-item button" , href='/view-factuur/' + factuur._id + "/t/" + loginHash) bekijk
@@ -230,7 +230,7 @@ body
                       td=bestelling.bedrag
                       td=bestelling.totaal
                       td
-                        a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                        a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                         div(class="dropdown-menu", aria-labelledby="actionsDropdown")
                           a(class="dropdown-item", href='/edit-bestelling/'+bestelling._id+"/"+loginHash) aanpassen
                           //a(class="dropdown-item", href='/delete-bestelling/'+bestelling._id) verwijder
@@ -251,7 +251,7 @@ body
                       td=materiaal.naam
                       td=materiaal.prijs.toFixed(2)+"€ /kg"
                       td
-                        a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                        a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                         div(class="dropdown-menu", aria-labelledby="actionsDropdown")
                           a(class="dropdown-item", href='/edit-mat/'+materiaal._id+"/"+loginHash) aanpassen
                           a(class="dropdown-item", href='/delete-mat/'+materiaal._id+"/"+loginHash) verwijder  

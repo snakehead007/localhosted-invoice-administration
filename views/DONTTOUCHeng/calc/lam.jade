@@ -10,7 +10,7 @@ html
       console.log("Verander action form link !!!");
   body
     header
-      nav(class="navbar navbar-expand-md navbar-#{settings.nav} bg-#{settings.thema}")
+      nav(class="navbar navbar-expand-md navbar-#{settings.nav} bg-#{settings.theme}")
         button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
           span(class="navbar-toggler-icon")
         div(class="collapse navbar-collapse", id="navbarNav")  
@@ -38,10 +38,10 @@ html
           div(class="col-9 mr-auto")
           div(class="col-2")
             a(href='/index'+"/"+loginHash,class="button")
-              if settings.thema == "light"
+              if settings.theme == "light"
                 button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
-              if settings.thema != "light"
-                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back
+              if settings.theme != "light"
+                button(type="button",class="btn btn-#{settings.theme} btn-lg btn-block") Back
         h2 Berekenen van Lamineren
         hr
         div(class="alert alert-danger col-lg-7 col-md-12 col-sm-12" role="alert") Deze berekening werkt nog niet!

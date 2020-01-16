@@ -227,7 +227,7 @@ body
               div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") Niets ingevuld!
               div(class="col-lg-2 col-md-1 col-sm-0")
           div(class="col-lg-2 col-md-1 col-sm-0")
-          button(type="button",onclick="aanpassen()",class="btn btn-outline-"+settings.thema+" btn-md") Gegevens aanpassen
+          button(type="button",onclick="aanpassen()",class="btn btn-outline-"+settings.theme+" btn-md") Gegevens aanpassen
           form(action='/epo-sil-marge/'+loginHash,method='post')
             div(class="form-row")
               div(id="aanpas" class="col-12",style="display:none")
@@ -255,7 +255,7 @@ body
                 label(for="title") % marge
                 input(type="number",class="form-control",name="marge",step=".01",placeholder="aantal %")
               div(class="col-lg-2 col-md-1 col-sm-0")
-              button(type="submit",class="btn btn-outline-"+settings.thema) bereken marge
+              button(type="submit",class="btn btn-outline-"+settings.theme) bereken marge
 
           hr
           div(class="row")

@@ -17,8 +17,8 @@ exports.settings_all_get = (req,res) =>{
 };
 
 exports.settings_change_lang_get = (req,res) => {
-    Settings.updateOne({fromUser:req.session._id},{lang:req.params.lang},function(err){
-        if(err) console.trace();
+    Settings.updateOne({fromUser:req.session._id},{locale:req.params.lang},function(err){
+        if(err) console.trace(err);
         req.locale = req.params.lang;
         i18n.setLocale(req, req.params.lang);
         i18n.setLocale(res, req.params.lang);
@@ -26,6 +26,14 @@ exports.settings_change_lang_get = (req,res) => {
         res.locals.language = req.params.lang;
         res.redirect('/settings');
     });
+};
+
+exports.settings_change_theme_get = (req,res) => {
+  Settings.updateOne({fromUser:req.session._id},{theme:req.params.theme},function(err){
+      if(err) console.trace(err);
+      res.redirect('/settings');
+  });
+
 };
 
 exports.change_text_post = (req,res) => {
@@ -37,7 +45,7 @@ exports.change_text_post = (req,res) => {
                 offerText: String(req.body.offerText)
             };
             Settings.updateOne({fromUser:req.session._id,_id: settings._id}, updateSettings, function(err) {
-                if(err){console.log('err: '+err);}
+                if(err){console.trace(err);}
                 res.redirect('/settings');
             });
         }

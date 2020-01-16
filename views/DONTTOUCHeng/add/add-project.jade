@@ -58,7 +58,7 @@ html
       function s049(){$("#d050").toggle();}
   body
     header
-      nav(class="navbar navbar-expand-md navbar-#{settings.nav} bg-#{settings.thema}")
+      nav(class="navbar navbar-expand-md navbar-#{settings.nav} bg-#{settings.theme}")
         button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
           span(class="navbar-toggler-icon")
         div(class="collapse navbar-collapse", id="navbarNav")  
@@ -86,10 +86,10 @@ html
           div(class="col-9 mr-auto")
           div(class="col-2")
             a(href='/contacten'+"/"+loginHash,class="button")
-              if settings.thema == "light"
+              if settings.theme == "light"
                 button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
-              if settings.thema != "light"
-                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back
+              if settings.theme != "light"
+                button(type="button",class="btn btn-#{settings.theme} btn-lg btn-block") Back
         h2 New Project
         hr
         div(class="row")

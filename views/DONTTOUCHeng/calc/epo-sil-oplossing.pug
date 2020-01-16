@@ -222,7 +222,7 @@ body
               div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert") No values where entered
               div(class="col-lg-2 col-md-1 col-sm-0")
           div(class="col-lg-2 col-md-1 col-sm-0")
-          button(type="button",onclick="aanpassen()",class="btn btn-outline-"+settings.thema+" btn-md") Change data
+          button(type="button",onclick="aanpassen()",class="btn btn-outline-"+settings.theme+" btn-md") Change data
           form(action='/epo-sil-marge/'+loginHash,method='post')
             div(class="form-row")
               div(id="aanpas" class="col-12",style="display:none")
@@ -250,7 +250,7 @@ body
                 label(for="title") % margin
                 input(type="number",class="form-control",name="marge",step=".01",placeholder="aantal %")
               div(class="col-lg-2 col-md-1 col-sm-0")
-              button(type="submit",class="btn btn-outline-"+settings.thema) Calculate margin
+              button(type="submit",class="btn btn-outline-"+settings.theme) Calculate margin
 
           hr
           div(class="row")

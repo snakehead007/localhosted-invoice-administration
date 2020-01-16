@@ -153,28 +153,28 @@ html
                   if factuur.factuurNr
                     if contact
                       a(href='/bestellingen/' + factuur._id + "/" + loginHash, class="button")
-                        button(type="button" class="btn btn-outline-" + settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " met voorschot " + factuur.voorschot + " €")=factuur.factuurNr
+                        button(type="button" class="btn btn-outline-" + settings.theme, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " met voorschot " + factuur.voorschot + " €")=factuur.factuurNr
                     if !contact
                       a(href='/bestellingen/' + factuur._id + '/t/' + loginHash, class="button")
-                        button(type="button" class="btn btn-outline-" + settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " met voorschot " + factuur.voorschot + " €")=factuur.factuurNr
+                        button(type="button" class="btn btn-outline-" + settings.theme, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " met voorschot " + factuur.voorschot + " €")=factuur.factuurNr
                   if factuur.offerteNr && !factuur.factuurNr
                     if contact
                       a(href='/bestellingen/' + factuur._id + "/" + loginHash, class="button")
-                        button(type="button" class="btn btn-outline-" + settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " met voorschot " + factuur.voorschot + " €")="Offer " + factuur.offerteNr
+                        button(type="button" class="btn btn-outline-" + settings.theme, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " met voorschot " + factuur.voorschot + " €")="Offer " + factuur.offerteNr
                     if !contact
                       a(href='/bestellingen/' + factuur._id + '/t' + "/" + loginHash, class="button")
-                        button(type="button" class="btn btn-outline-" + settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " met voorschot " + factuur.voorschot + " €")="Offer " + factuur.offerteNr
+                        button(type="button" class="btn btn-outline-" + settings.theme, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " met voorschot " + factuur.voorschot + " €")="Offer " + factuur.offerteNr
                   if factuur.creditnr && !factuur.offerteNr && !factuur.factuurNr
                     a(href='/bestellingen/' + factuur._id + "/" + loginHash, class="button")
-                      button(type="button" class="btn btn-outline-" + settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " met voorschot " + factuur.voorschot + " €")="Creditnote " + factuur.creditnr
+                      button(type="button" class="btn btn-outline-" + settings.theme, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " met voorschot " + factuur.voorschot + " €")="Creditnote " + factuur.creditnr
                 if !contact
                   td
                     if factuur.contactPersoon == "Update deze factuur!"
                       a(href='/updateFactuur/' + factuur._id + "/" + loginHash, class="button")
-                        button(type="button" class="btn btn-outline-" + settings.thema data-html="true" data-toggle="tooltip" data-placement="top" title="Klik hier om deze factuur up te daten")=factuur.contactPersoon
+                        button(type="button" class="btn btn-outline-" + settings.theme data-html="true" data-toggle="tooltip" data-placement="top" title="Klik hier om deze factuur up te daten")=factuur.contactPersoon
                     else
                       a(href='/facturen/' + factuur.contact + "/t" + "/" + loginHash, class="button")
-                        button(type="button" class="btn btn-outline-" + settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
+                        button(type="button" class="btn btn-outline-" + settings.theme, data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
                 td=factuur.datum
                 if factuur.factuurNr
                   td
@@ -189,7 +189,7 @@ html
                   td  /
                 td
                   div(class="btn-group front")
-                    button(role="button", class="btn btn-outline-" + settings.thema + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions
+                    button(role="button", class="btn btn-outline-" + settings.theme + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions
                     div(class="dropdown-menu", aria-labelledby="actionsDropdown")
                       if !contact
                         a(class="dropdown-item",href='/edit-factuur/' + factuur.contact + '/' + factuur._id + '/t/' + loginHash) Edit

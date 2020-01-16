@@ -98,8 +98,8 @@ body
                 label(for="title") Working rate (€/uur)
                 input(type="number",class="form-control",name="W",step=".01", required)
             hr
-            button(type="submit",class="btn btn-outline-"+settings.thema) Calculate
-          button(type="button",onclick="vars()",class="btn btn-outline-"+settings.thema+" btn-md") Change internal variables
+            button(type="submit",class="btn btn-outline-"+settings.theme) Calculate
+          button(type="button",onclick="vars()",class="btn btn-outline-"+settings.theme+" btn-md") Change internal variables
           form(action='/epo-sil/update-vars/'+loginHash,method='post')
             div(class="form-row pt-3")
               div(id="vars_id" class="col-12",style="display:none")
@@ -127,4 +127,4 @@ body
                 div(class="col-lg-8 col-md-6 col-sm-4")
                   label(for="s4") Ps = (____ * Ds)
                   input(type="string",class="form-control",value=s4,name="s4",placeholder="s4", required)
-                button(type="string",class="btn btn-outline-"+settings.thema+" btn-md") Change
+                button(type="string",class="btn btn-outline-"+settings.theme+" btn-md") Change

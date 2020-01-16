@@ -92,21 +92,21 @@ body
                   tr
                     td
                       a(href='/facturen/'+contact._id+"/"+loginHash, class="button")
-                        button(type="button" class="btn btn-outline-"+settings.thema data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=contact.contactPersoon
+                        button(type="button" class="btn btn-outline-"+settings.theme data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=contact.contactPersoon
                     td=contact.firma
                     td=contact.straat
                     td=contact.btwNr
                     if contact.mail
                       if contact.mail2
                         td
-                          a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mails
+                          a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mails
                           div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
                             a(class="dropdown-item", href='mailto:'+contact.mail)=contact.mail
                             a(class="dropdown-item", href='mailto:'+contact.mail1)=contact.mail1
                             a(class="dropdown-item", href='mailto:'+contact.mail2)=contact.mail2
                       else if contact.mail1
                         td
-                          a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mails
+                          a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mails
                           div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
                             a(class="dropdown-item", href='mailto:'+contact.mail)=contact.mail
                             a(class="dropdown-item", href='mailto:'+contact.mail1)=contact.mail1
@@ -114,10 +114,10 @@ body
                       if !contact.mail1
                         td
                           a(href="mailto:"+contact.mail,class="button")
-                            button(type="button" class="btn btn-outline-"+settings.thema)=contact.mail
+                            button(type="button" class="btn btn-outline-"+settings.theme)=contact.mail
                     else
                       td
-                        button(type="button" class="btn btn-outline-"+settings.thema) No e-mail
+                        button(type="button" class="btn btn-outline-"+settings.theme) No e-mail
           if facturen_d.length != 0
             table(class="table table-striped")
               thead
@@ -135,28 +135,28 @@ body
                       if factuur.factuurNr
                         if contact
                           a(href='/bestellingen/' + factuur._id + "/" + loginHash, class="button")
-                            button(type="button" class="btn btn-outline-" + settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " with " + factuur.voorschot + " € in Advance")=factuur.factuurNr
+                            button(type="button" class="btn btn-outline-" + settings.theme, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " with " + factuur.voorschot + " € in Advance")=factuur.factuurNr
                         if !contact
                           a(href='/bestellingen/' + factuur._id + '/t/' + loginHash, class="button")
-                            button(type="button" class="btn btn-outline-" + settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " with " + factuur.voorschot + " € in Advance)=factuur.factuurNr
+                            button(type="button" class="btn btn-outline-" + settings.theme, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " with " + factuur.voorschot + " € in Advance)=factuur.factuurNr
                       if factuur.offerteNr && !factuur.factuurNr
                         if contact
                           a(href='/bestellingen/' + factuur._id + "/" + loginHash, class="button")
-                            button(type="button" class="btn btn-outline-" + settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " with " + factuur.voorschot + " € in Advance")="Offerte " + factuur.offerteNr
+                            button(type="button" class="btn btn-outline-" + settings.theme, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " with " + factuur.voorschot + " € in Advance")="Offerte " + factuur.offerteNr
                         if !contact
                           a(href='/bestellingen/' + factuur._id + '/t' + "/" + loginHash, class="button")
-                            button(type="button" class="btn btn-outline-" + settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum +" with " + factuur.voorschot + " € in Advance)="Offerte " + factuur.offerteNr
+                            button(type="button" class="btn btn-outline-" + settings.theme, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum +" with " + factuur.voorschot + " € in Advance)="Offerte " + factuur.offerteNr
                       if factuur.creditnr && !factuur.offerteNr && !factuur.factuurNr
                         a(href='/bestellingen/' + factuur._id + "/" + loginHash, class="button")
-                          button(type="button" class="btn btn-outline-" + settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " with " + factuur.voorschot + " € in Advance)="Creditnota " + factuur.creditnr
+                          button(type="button" class="btn btn-outline-" + settings.theme, data-html="true" data-toggle="tooltip" data-placement="top" title=factuur.datum + " with " + factuur.voorschot + " € in Advance)="Creditnota " + factuur.creditnr
                     if !contact
                       td
                         if factuur.contactPersoon == "Update deze factuur!"
                           a(href='/updateFactuur/' + factuur._id + "/" + loginHash, class="button")
-                            button(type="button" class="btn btn-outline-" + settings.thema data-html="true" data-toggle="tooltip" data-placement="top" title="Klik hier om deze factuur up te daten")=factuur.contactPersoon
+                            button(type="button" class="btn btn-outline-" + settings.theme data-html="true" data-toggle="tooltip" data-placement="top" title="Klik hier om deze factuur up te daten")=factuur.contactPersoon
                         else
                           a(href='/facturen/' + factuur.contact + "/t" + "/" + loginHash, class="button")
-                            button(type="button" class="btn btn-outline-" + settings.thema, data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
+                            button(type="button" class="btn btn-outline-" + settings.theme, data-html="true" data-toggle="tooltip" data-placement="top" title="Ga naar deze persoon's facturen")=factuur.contactPersoon
                     td=factuur.datum
                     if factuur.factuurNr
                       td
@@ -171,7 +171,7 @@ body
                       td  /
                     td
                       div(class="btn-group front")
-                        button(role="button", class="btn btn-outline-" + settings.thema + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
+                        button(role="button", class="btn btn-outline-" + settings.theme + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Acties
                         div(class="dropdown-menu", aria-labelledby="actionsDropdown")
                           if !contact
                             a(class="dropdown-item",href='/edit-factuur/' + factuur.contact + '/' + factuur._id + '/t' + loginHash) Edit
@@ -210,7 +210,7 @@ body
                     td=bestelling.bedrag
                     td=bestelling.totaal
                     td
-                      a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions
+                      a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions
                       div(class="dropdown-menu", aria-labelledby="actionsDropdown")
                         a(class="dropdown-item", href='/edit-bestelling/'+bestelling._id+"/"+loginHash) Edit
                         //a(class="dropdown-item", href='/delete-bestelling/'+bestelling._id) verwijder

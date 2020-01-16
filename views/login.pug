@@ -10,6 +10,9 @@ style.
   .btn {
     margin-bottom: 20px;
   }
+  #messages{
+    margin-bottom:4em;
+  }
   body {
     font-family: "Poppins", sans-serif;
     height: 100vh;
@@ -207,8 +210,10 @@ style.
     margin-bottom: 30px;
   }
 .wrapper.fadeInDown.container-fluid
+  include includes/messages
   #formContent
-    .fadeIn.first
-      img#icon(src='/logo.jpeg' alt=' ')
-    form(method='get' action='/register')
-      input.fadeIn.fourth(type='submit' value='login with google')
+    .fadeIn
+      img#icon(src='/logoWebApp.png' alt=' ')
+      .first
+      form(method='get' action='/register')
+        input.fadeIn.fourth(type='submit' value='login with google')

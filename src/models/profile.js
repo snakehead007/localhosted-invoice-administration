@@ -28,6 +28,9 @@ const Profile = new mongoose.Schema({
     bookmarksText: String,
     fromUser:{
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    },logoFile:{
+        data: Buffer,
+        contentType: String
     }
 });
 

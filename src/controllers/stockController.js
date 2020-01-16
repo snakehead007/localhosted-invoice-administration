@@ -39,3 +39,14 @@ exports.stock_new_item_get = (req,res) =>{
         }
     });
 };
+
+exports.stock_new_item_post = (req,res) => {
+    let new_item = new Item({
+        price: req.body.price,
+        name: req.body.name,
+        amount: req.body.amount,
+        fromUser:req.session._id
+    });
+    new_item.save();
+    res.redirect('/stock/all');
+};

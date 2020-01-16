@@ -90,18 +90,18 @@ html
                   tr
                     td
                       a(href='/facturen/' + contact._id + "/" + loginHash, class="button")
-                        button(type="button" class="btn btn-outline-"+settings.thema, data-toggle="tooltip" data-placement="top" title=contact.firma+"\n"+contact.straat+" "+contact.straatNr+"\n"+contact.postcode+" "+contact.plaats)=contact.contactPersoon
+                        button(type="button" class="btn btn-outline-"+settings.theme, data-toggle="tooltip" data-placement="top" title=contact.firma+"\n"+contact.straat+" "+contact.straatNr+"\n"+contact.postcode+" "+contact.plaats)=contact.contactPersoon
                         if contact.mail
                           if contact.mail2
                             td
-                              a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mails
+                              a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mails
                               div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
                                 a(class="dropdown-item", href='mailto:'+contact.mail)=contact.mail
                                 a(class="dropdown-item", href='mailto:'+contact.mail1)=contact.mail1
                                 a(class="dropdown-item", href='mailto:'+contact.mail2)=contact.mail2
                           else if contact.mail1
                             td
-                              a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mails
+                              a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown2", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mails
                               div(class="dropdown-menu", aria-labelledby="actionsDropdown2")
                                 a(class="dropdown-item", href='mailto:'+contact.mail)=contact.mail
                                 a(class="dropdown-item", href='mailto:'+contact.mail1)=contact.mail1
@@ -109,12 +109,12 @@ html
                           if !contact.mail1
                             td
                               a(href="mailto:"+contact.mail,class="button")
-                                button(type="button" class="btn btn-outline-"+settings.thema)=contact.mail
+                                button(type="button" class="btn btn-outline-"+settings.theme)=contact.mail
                         else
                           td
-                            button(type="button" class="btn btn-outline-"+settings.thema disabled) No e-mail
+                            button(type="button" class="btn btn-outline-"+settings.theme disabled) No e-mail
                     td
-                      a(role="button", class="btn btn-outline-"+settings.thema+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions
+                      a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions
                       div(class="dropdown-menu", aria-labelledby="actionsDropdown")
                         a(class="dropdown-item", href='/edit-contact/' + contact._id + "/" + loginHash) Edit
                         a(class="dropdown-item", href='/delete-contact/' + contact._id + "/" + loginHash) Delete

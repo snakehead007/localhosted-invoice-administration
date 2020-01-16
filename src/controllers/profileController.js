@@ -7,6 +7,7 @@ exports.view_profile_get = (req,res) => {
     let jaar = _jaar.toString();
     Profile.findOne({fromUser:req.session._id}, function(err, profile) {
         if (!err) {
+            console.log(profile);
             var _nr = profile.invoiceNrCurrent;
             var nr_str = _nr.toString();
             if (nr_str.toString().length == 1) {

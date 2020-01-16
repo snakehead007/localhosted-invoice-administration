@@ -144,13 +144,13 @@ html
                                             p(class="lead") Change password
                                             div(id="pass",style="display:none;")
                                                 a(href='/pass' + "/" + loginHash,class="button")
-                                                    button(type="button" class="btn btn-outline-"+settings.thema) Change password
+                                                    button(type="button" class="btn btn-outline-"+settings.theme) Change password
                                     tr(onclick="openBTW()",class="settingsOption optionBtw")
                                         td
                                             p(class="lead") Change VAT
                                             div(id="btw",style="display:none;")
                                                 p Btw staat op: #{settings.btw}%
-                                                a(href='/btw' + "/" + loginHash,class="button",class="btn btn-outline-"+settings.thema) Change VAT
+                                                a(href='/btw' + "/" + loginHash,class="button",class="btn btn-outline-"+settings.theme) Change VAT
                                     tr(onclick="openThema()",class="settingsOption optionThema")
                                         td
                                             p(class="lead")
@@ -159,27 +159,27 @@ html
                                                 div(class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups")
                                                     div(class="btn-group mr-4" role="group" aria-label="First group")
                                                         a(href='/change-theme/secondary' + "/" + loginHash,class="button")
-                                                            if settings.thema == "secondary"
+                                                            if settings.theme == "secondary"
                                                                 button(type="button" class="btn btn-outline-secondary") grey
                                                             else
                                                                 button(type="button" class="btn btn-secondary") grey
                                                         a(href='/change-theme/dark' + "/" + loginHash,class="button")
-                                                            if settings.thema == "dark"
+                                                            if settings.theme == "dark"
                                                                 button(type="button" class="btn btn-outline-dark") dark
                                                             else
                                                                 button(type="button" class="btn btn-dark") dark
                                                         a(href='/change-theme/light' + "/" + loginHash,class="button")
-                                                            if settings.thema == "light"
+                                                            if settings.theme == "light"
                                                                 button(type="button" class="btn btn-outline-light") white
                                                             else
                                                                 button(type="button" class="btn btn-light") white
                                                         a(href='/change-theme/info' + "/" + loginHash,class="button")
-                                                            if settings.thema == "info"
+                                                            if settings.theme == "info"
                                                                 button(type="button" class="btn btn-outline-info") blue
                                                             else
                                                                 button(type="button" class="btn btn-info") blue
                                                         a(href='/change-theme/danger' + "/" + loginHash,class="button")
-                                                            if settings.thema == "danger"
+                                                            if settings.theme == "danger"
                                                                 button(type="button" class="btn btn-outline-danger") red
                                                             else
                                                                 button(type="button" class="btn btn-danger") red
@@ -190,20 +190,20 @@ html
                                                 div(class="btn-group mb-3" role="group" aria-label="Basic example")
                                                     a(href="/change-lang/nl/" + loginHash,class="button")
                                                         if settings.lang == "nl"
-                                                            button(type="button" class="btn btn-outline-"+settings.thema) Dutch
+                                                            button(type="button" class="btn btn-outline-"+settings.theme) Dutch
                                                         else
-                                                            button(type="button" class="btn btn-"+settings.thema) Dutch
+                                                            button(type="button" class="btn btn-"+settings.theme) Dutch
                                                     a(href="/change-lang/eng/" + loginHash,class="button")
                                                         if settings.lang == "eng"
-                                                            button(type="button" class="btn btn-outline-"+settings.thema) English
+                                                            button(type="button" class="btn btn-outline-"+settings.theme) English
                                                         else
-                                                            button(type="button" class="btn btn-"+settings.thema) English
+                                                            button(type="button" class="btn btn-"+settings.theme) English
                                     tr(onclick="openText()",class="settingsOption optionText")
                                         td
                                             p(class="lead") Text footnotes
                                             div(id="text",style="display:none;")
                                                 form(action='/edit-pdf-text/'+loginHash,method='post')
-                                                    button(type="button" class="mb-1 headExtend btn-sm btn btn-outline-"+settings.thema, onclick="info()") info
+                                                    button(type="button" class="mb-1 headExtend btn-sm btn btn-outline-"+settings.theme, onclick="info()") info
                                                     div(class="input-group mb-3")
                                                         div(class="input-group-prepend")
                                                             span(class="input-group-text") Invoice text
@@ -216,7 +216,7 @@ html
                                                         div(class="input-group-prepend")
                                                             span(class="input-group-text") Offer text
                                                         textarea(input="text",name="offertetext",class="form-control" aria-label="With textarea")=settings.offertetext
-                                                    button(type="submit",class="btn btn-outline-"+settings.thema) make changes
+                                                    button(type="submit",class="btn btn-outline-"+settings.theme) make changes
                                                     div(class="",id="info",style="display:none")
                                                         p In order to use variables of the database, type them like below;
                                                         p Voor variabelen van de database te gebruiken, typ ze zoals hieronder in de texten:

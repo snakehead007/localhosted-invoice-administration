@@ -5,9 +5,9 @@ const Settings = new mongoose.Schema({
         type: String,
         default: "nl-BE"
     },
-    thema: {
+    theme: {
         type:String,
-        default: "secondary"
+        default: "dark"
     },
     variables: [
         {/*s1*/

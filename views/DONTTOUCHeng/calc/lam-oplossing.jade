@@ -19,7 +19,7 @@ html
       }
   body
     header
-      nav(class="navbar navbar-expand-md navbar-#{settings.nav} bg-#{settings.thema}")
+      nav(class="navbar navbar-expand-md navbar-#{settings.nav} bg-#{settings.theme}")
         button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
           span(class="navbar-toggler-icon")
         div(class="collapse navbar-collapse", id="navbarNav")  
@@ -45,22 +45,22 @@ html
       div(class="jumbotron")
         div(class="row no-gutters")
           div(class="col-3" id="toon_knop")
-            if settings.thema == "light"
+            if settings.theme == "light"
               button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block", onclick="toon()") Toon berekeningen
-            if settings.thema != "light"
-              button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block", onclick="toon()") Toon berekeningen
+            if settings.theme != "light"
+              button(type="button",class="btn btn-#{settings.theme} btn-lg btn-block", onclick="toon()") Toon berekeningen
           div(class="col-3" id="verberg_knop",style="display:none;" )
-            if settings.thema == "light"
+            if settings.theme == "light"
               button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block", onclick="verberg()") Verberg berekeningen
-            if settings.thema != "light"
-              button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block", onclick="verberg()") Verberg berekeningen
+            if settings.theme != "light"
+              button(type="button",class="btn btn-#{settings.theme} btn-lg btn-block", onclick="verberg()") Verberg berekeningen
           div(class="col-7")
           div(class="col-2")
             a(href='/lam'+"/"+loginHash,class="button")
-              if settings.thema == "light"
+              if settings.theme == "light"
                 button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
-              if settings.thema != "light"
-                button(type="button",class="btn btn-#{settings.thema} btn-lg btn-block") Back
+              if settings.theme != "light"
+                button(type="button",class="btn btn-#{settings.theme} btn-lg btn-block") Back
         hr 
         div(id="berekeningen", style="display:none;")
           div(class="row")
@@ -78,7 +78,7 @@ html
             div(class="col-6")
               p(class="lead") #{Ds.toFixed(3)} kg / 2.23 kg/uur = #{Ms}
           hr
-        if settings.thema == "dark" || settings.thema == "danger" || settings.thema == "info"
+        if settings.theme == "dark" || settings.theme == "danger" || settings.theme == "info"
           div(class="row")
             div(class="col-6")
               table(class="table table-#{settings.oppo} table-striped")

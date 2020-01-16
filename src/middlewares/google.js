@@ -8,11 +8,19 @@ const Settings = require('../models/settings');
 /*******************/
 let googleConfig,defaultScope;
 exports.startUp = () =>{
-    googleConfig= {
-        clientId: process.env.GOOGLE_CLIENT_ID, // e.g. asdfghjkljhgfdsghjk.apps.googleusercontent.com
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET, // e.g. _ASDFA%DFASDFASDFASD#FAD-
-        redirect: process.env.GOOGLE_REDIRECT_URL, // this must match your google api settings
-    };
+    if(process.env.DEVELOP==="false") {
+        googleConfig = {
+            clientId: process.env.GOOGLE_CLIENT_ID, // e.g. asdfghjkljhgfdsghjk.apps.googleusercontent.com
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET, // e.g. _ASDFA%DFASDFASDFASD#FAD-
+            redirect: process.env.GOOGLE_REDIRECT_URL // this must match your google api settings
+        };
+    }else if(process.env.DEVELOP==="true"&&process.env.DEVELOP_WITH_GOOGLE==="true"){
+        googleConfig = {
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            redirect: process.env.GOOGLE_REDIRECT_URL_DEVELOP
+        }
+    }
 
     defaultScope = [
         'https://www.googleapis.com/auth/plus.me',
@@ -63,7 +71,7 @@ exports.urlGoogle = () => {
  */
 
 exports.getGoogleAccountFromCode = async (code) =>{
-    const oAuth2Client = this.createConnection();
+    const oAuth2Client = await this.createConnection();
     const { tokens } = await oAuth2Client.getToken(code);
     oAuth2Client.setCredentials(tokens);
     const oauth2 = google.oauth2("v2");
@@ -94,23 +102,23 @@ exports.checkSignIn = async function checkSignIn(req,{googleId,email,tokens}){
         });
         await newUser.save();
         //find new user.__id, add ID to database
-        const currentUserId = await User.findOne({googleId:googleId},function(err,User){
+        const currentUser = await User.findOne({googleId:googleId},function(err,User){
             if(err) throw new Error(err);
             return User._id;
         });
         const newSettings = new Settings({
-            fromUser:currentUserId
+            fromUser:currentUser._id
         });
         await newSettings.save();
         const newProfile = new Profile({
-            fromUser:currentUserId
+            fromUser:currentUser._id
         });
         await newProfile.save();
-        const settings = await Settings.findOne({fromUser:currentUserId});
-        const profile = await Profile.findOne({fromUser:currentUserId});
-        await User.updateOne({_id:currentUserId},{settings:settings._id,profile:profile._id});
+        const settings = await Settings.findOne({fromUser:currentUser._id});
+        const profile = await Profile.findOne({fromUser:currentUser._id});
+        await User.updateOne({_id:currentUser._id},{settings:settings._id,profile:profile._id});
         req.session.email = email;
-        return currentUserId;
+        return currentUser;
     }else{//user already added
         req.session.email = email;
         return currentUser._id;

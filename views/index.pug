@@ -13,7 +13,7 @@ html
                   div(class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom")
                     h1(class="h2") #{__('Dashboard')}
                     div(class="btn-group dropleft mb-2 mb-md-0")
-                        button(type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle", data-toggle="dropdown",aria-haspopup="true",aria-expanded="false")
+                        button(type="button" class="btn btn-sm btn-outline-"+settings.theme+" dropdown-toggle", data-toggle="dropdown",aria-haspopup="true",aria-expanded="false")
                             span(data-feather="calendar")
                             span=year
                         div(class="dropdown-menu")
@@ -75,7 +75,7 @@ html
                                   td
                                 td
                                   div(class="btn-group front")
-                                    button(role="button", class="btn btn-outline-" + settings.thema + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") #{__('Actions')}
+                                    button(role="button", class="btn btn-outline-" + settings.theme + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") #{__('Actions')}
                                     div(class="dropdown-menu", aria-labelledby="actionsDropdown")
                                       a(class="dropdown-item button", href='/view/invoice/' + invoice._id ) #{__('View')}
                                       div(class="dropdown-divider")

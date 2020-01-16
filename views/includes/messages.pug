@@ -1,0 +1,22 @@
+//.row.justify-content-center
+    #messages.col-12
+        script.
+            console.log("#{success_msg}");
+            console.log(#{error_msg});
+        if(typeof errors !== "undefined")
+            each error in errors
+                div(class="alert alert-warning alert-dismissible fade show",role="alert")=error.msg
+                    button(type="button" class="close" data-dismiss="alert" aria-label="Close")
+                         span(aria-hidden="true") &times;
+        if success_msg!==""&success_msg
+            div(class="alert alert-success alert-dismissible fade show" role="alert")=success_msg
+                button(type="button" class="close" data-dismiss="alert" aria-label="Close")
+                    span(aria-hidden="true") &times;
+        if error_msg!==""&error_msg
+            div(class="alert alert-danger alert-dismissible fade show" role="alert")=error_msg
+                button(type="button" class="close" data-dismiss="alert" aria-label="Close")
+                    span(aria-hidden="true") &times;
+        if error!==""&error
+            div(class="alert alert-danger alert-dismissible fade show" role="alert")=error
+                button(type="button" class="close" data-dismiss="alert" aria-label="Close")
+                    span(aria-hidden="true") &times;
