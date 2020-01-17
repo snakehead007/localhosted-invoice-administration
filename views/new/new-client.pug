@@ -33,55 +33,40 @@ body
             include ../includes/bookmarks
             include ../includes/clientOptionMenu
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          h2(class="pt-3") Klant toevoegen
+          h2(class="pt-3") #{__('Add client')}
           hr
           form(action='/client/new',method='post')
             p=msg
             div(class="form-row")
               div(class="form-group col-md-5")
-                label(for="title") Contact persoon *
+                label(for="title") #{__('Client name')} *
                 input(type="text",class="form-control",name="clientName" required)
               div(class="form-group col-md-2")
               div(class="form-group col-md-5")
-                label(for="title") Firma
+                label(for="title") #{__('Firm')}
                 input(type="text",class="form-control",name="firm")
               div(class="form-group col-md-3")
-                label(for="title") Straatnaam *
+                label(for="title") #{__('Streetname')} *
                 input(type="text",class="form-control",name="street" required)
               div(class="form-group col-md-2")
-                label(for="title") Straat Nr
+                label(for="title") #{__('Street Nr')}
                 input(type="text",class="form-control",name="streetNr")
               div(class="col-md-2")
               div(class="form-group col-md-3")
-                label(for="title") E-mail
+                label(for="title") #{__('E-mail')}
                 input(type="text",class="form-control",name="email",placeholder="voorbeeld@email.be")
               div(class="form-group col-md-2")
-                label(for="title") BTW-nummer
+                label(for="title") #{__('VAT-number')}
                 input(type="text",class="form-control",name="vat")
               div(class="form-group col-md-2")
-                label(for="title") rekeningnummer
+                label(for="title") #{__('Banking number')}
                 input(type="text",class="form-control",name="bankNr")
               div(class="form-group col-md-1")
-                label(for="title") Postcode
+                label(for="title") #{__('postal')}
                 input(type="number",class="form-control",name="postal")
               div(class="form-group col-md-2")
-                label(for="title") Plaatsnaam *
+                label(for="title") #{__('place')} *
                 input(type="text",class="form-control",name="place" required)
               div(class="col-md-2")
-              div(id="col3_1", class="form-group col-md-3")
-              div(id="mail1" class="form-group col-md-3" style="display:none;")
-                label(for="title") E-mail 2
-                input(type="text", class="form-control",name="mail1", placeholder="voorbeeld@email.be")
-              div(class="form-group col-md-2", id="extra_mail1")
-                label(for="title")=" "
-                button(type="button",onclick="show_mail1()",class="btn btn-outline-"+settings.theme+" btn-sm btn-block") extra e-mail
-              div(id="col10", class="form-group col-md-10" style="display:none;")
-              div(id="col7", class="form-group col-md-7" style="display:none;")
-              div(id="mail2" class="form-group col-md-3" style="display:none;")
-                label(for="title") E-mail 3
-                input(type="text", class="form-control",name="mail2", placeholder="voorbeeld@email.be")
-              div(class="form-group col-md-2", id="extra_mail2" style="display:none;")
-                label(for="title")=" "
-                button(type="button",onclick="show_mail2()",class="btn btn-outline-"+settings.theme+" btn-sm btn-block") extra e-mail
             hr
-            button(type="submit",class="btn btn-outline-"+settings.theme) toevoegen
+            button(type="submit",class="btn btn-outline-"+settings.theme) #{__('Add')}

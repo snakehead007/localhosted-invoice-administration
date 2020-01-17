@@ -5,7 +5,7 @@ const Profile = require('../models/profile');
 //Load all images from the database into public/[ID]/logo.jpeg
 module.exports.images = async function images(app) {
     //delete everything in images
-    deleteFolderRecursive(path.join(path.resolve(),'public/images'));
+    await deleteFolderRecursive('public/images');
 
     //create new empty folder images
     await fs.mkdirSync('public/images');
@@ -15,14 +15,19 @@ module.exports.images = async function images(app) {
        if(err) console.trace(err);
        for(let profile of profiles){
            //create folder for user
-           await fs.mkdirSync('public/images/' + profile.fromUser);
+           try {
+               await fs.mkdirSync('public/images/' + profile.fromUser);
+               console.log("[DEBUG]: mkdir public/images/"+ profile.fromUser);
+           }catch(error){
+               console.trace("[Error]: "+error);
+           }
            //add logo to user folder
            try{
                if(typeof profile.logoFile.data !== "undefined") {
-                  // fs.writeFile(path.join(path.resolve(),'public/images/')+profile.fromUser, profile.logoFile.data);
                    await fs.writeFile('public/images/' + profile.fromUser+'/logo.jpeg', profile.logoFile.data, function (err) {
                        if (err) throw err;
-                       if (!err){
+                       if(!err){
+                           console.log("[DEBUG]: mkdir public/images/"+ profile.fromUser+"/logo.jpeg");
                        }
                    });
                }
@@ -44,9 +49,11 @@ const deleteFolderRecursive = function(_path) {
             if (fs.lstatSync(curPath).isDirectory()) { // recurse
                 deleteFolderRecursive(curPath);
             } else { // delete file
+                console.log("[DEBUG]: rm "+curPath);
                 fs.unlinkSync(curPath);
             }
         });
+        console.log("[DEBUG]: rm "+_path);
         fs.rmdirSync(_path);
     }
 };

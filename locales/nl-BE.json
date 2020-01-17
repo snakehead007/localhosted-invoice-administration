@@ -223,5 +223,10 @@
 	"PDF footnotes": "PDF footnotes",
 	"info": "info",
 	"Update": "Update",
-	"without": "without"
+	"without": "without",
+	"Add client": "Add client",
+	"Streetname": "Streetname",
+	"E-mail": "E-mail",
+	"VAT-number": "VAT-number",
+	"Banking number": "Banking number"
 }

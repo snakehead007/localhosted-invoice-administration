@@ -6,7 +6,7 @@ module.exports.default = async () => {
         let db;
         if(process.env.DEVELOP_NO_RANDOM_DB==="false") {
             db= String(Math.floor((Math.random() * 1000000000) + 99999999999));
-        }else if(process.env.DEVELOP_NO_RANDOM_DB==="false"){
+        }else if(process.env.DEVELOP_NO_RANDOM_DB==="true"){
             db = process.env.DB_DEVELOP_NAME;
         }
         db_uri += "/" + db;

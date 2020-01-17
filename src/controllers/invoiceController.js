@@ -29,7 +29,7 @@ exports.invoice_new_choose_get = (req,res) => {
         if(err) console.trace();
         Profile.findOne({fromUser:req.session._id},function(err,profile){
             if(err) console.trace();
-            Client.find({},function(err,clients){
+            Client.find({fromUser:req.session._id},function(err,clients){
                 if(err) console.log("ERROR]: "+err);
                 res.render('add-file-no-contact',{
                    'profile':profile,
@@ -48,7 +48,7 @@ exports.offer_new_choose_get = (req,res) => {
         if(err) console.trace();
         Profile.findOne({fromUser:req.session._id},function(err,profile){
             if(err) console.trace();
-            Client.find({},function(err,clients){
+            Client.find({fromUser:req.session._id},function(err,clients){
                 if(err) console.log("ERROR]: "+err);
                 res.render('add-file-no-contact',{
                     'profile':profile,
@@ -67,7 +67,7 @@ exports.credit_new_choose_get = (req,res) => {
         if(err) console.trace();
         Profile.findOne({fromUser:req.session._id},function(err,profile){
             if(err) console.trace();
-            Client.find({},function(err,clients){
+            Client.find({fromUser:req.session._id},function(err,clients){
                 if(err) console.log("ERROR]: "+err);
                 res.render('add-file-no-contact',{
                     'profile':profile,

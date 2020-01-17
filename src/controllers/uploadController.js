@@ -21,15 +21,14 @@ exports.upload_logo_post = async (req,res) => {
         console.log("[Info]: Upload logo "+logoFile.name+" from "+req.session._id);
         Profile.findOne({fromUser:req.session._id},async function(err,profile){
             let url = 'public/images/' + req.session._id + '/logo.jpeg';
-            if (!fs.existsSync('public/images' + req.session._id)) {
+            if (!fs.existsSync('public/images/' + req.session._id)) {
                 await fs.mkdirSync('public/images/' + req.session._id);
-                await logoFile.mv(url);
-                profile.logoFile.data = fs.readFileSync(url);
-                profile.logoFile.contentType = 'image/jpeg';
-                await profile.save();
-                res.redirect('/view/profile/');
             }
-
+            await logoFile.mv(url);
+            profile.logoFile.data = fs.readFileSync(url);
+            profile.logoFile.contentType = 'image/jpeg';
+            await profile.save();
+            res.redirect('/view/profile/');
         });
     }catch(error){
         console.trace(error);
