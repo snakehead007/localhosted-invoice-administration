@@ -1,3 +1,8 @@
+/**
+ * The main app
+ * @file app.js is main root file
+ */
+
 const {load} = require('./loaders/loader.js');
 const express = require( 'express');
 const dotenv = require('dotenv');

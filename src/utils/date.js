@@ -32,7 +32,9 @@ module.exports.getCurrentTime = (time) => {
     }
     return str;
 };
-
+/**
+ *
+ * */
 module.exports.hoursMinutesToHoursFloat = (m,h) => {
     return Number(h)+(Number(m)/60.0);
 };

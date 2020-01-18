@@ -1,7 +1,16 @@
+/**
+ * @module controllers/clientController
+ */
+
 const Profile = require('../models/profile');
 const Client = require('../models/client');
 const Settings = require('../models/settings');
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.client_all_get = (req,res) => {
     Profile.findOne({fromUser:req.session._id},function(err,profile){
         if(err) console.trace();
@@ -22,6 +31,11 @@ exports.client_all_get = (req,res) => {
     });
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.client_new_get = (req,res) => {
     Settings.findOne({},function(err, settings) {
         if(err) console.trace();
@@ -38,7 +52,11 @@ exports.client_new_get = (req,res) => {
     });
 };
 
-
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.client_new_post = (req,res) => {
     if (
         req.body.clientName &&
@@ -63,6 +81,11 @@ exports.client_new_post = (req,res) => {
     }
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.view_client_get = (req,res) => {
     Client.findOne({fromUser:req.session._id,_id: req.params.idc}, function(err, client) {
         if (!err) {

@@ -1,3 +1,7 @@
+/**
+ * @module controllers/invoiceController
+ */
+
 const Invoice = require('../models/invoice');
 const Settings = require('../models/settings');
 const Client = require('../models/client');
@@ -6,6 +10,11 @@ const Order = require('../models/order');
 const {year} = require('../utils/date');
 const i18n = require('i18n');
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.invoice_all_get = (req,res) => {
     Invoice.find({fromUser:req.session._id}, function(err, invoices) {
         if(err) console.trace();
@@ -24,6 +33,11 @@ exports.invoice_all_get = (req,res) => {
     });
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.invoice_new_choose_get = (req,res) => {
     Settings.findOne({fromUser:req.session._id},function(err,settings){
         if(err) console.trace();
@@ -43,6 +57,11 @@ exports.invoice_new_choose_get = (req,res) => {
     });
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.offer_new_choose_get = (req,res) => {
     Settings.findOne({fromUser:req.session._id},function(err,settings){
         if(err) console.trace();
@@ -61,7 +80,11 @@ exports.offer_new_choose_get = (req,res) => {
         })
     });
 };
-
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.credit_new_choose_get = (req,res) => {
     Settings.findOne({fromUser:req.session._id},function(err,settings){
         if(err) console.trace();
@@ -80,7 +103,11 @@ exports.credit_new_choose_get = (req,res) => {
         })
     });
 };
-
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.invoice_new_get = (req,res) => {
     const idc = (req.body.idc)?req.body.idc:req.params.idc;
     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
@@ -137,6 +164,11 @@ exports.invoice_new_get = (req,res) => {
     });
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.credit_new_get = (req,res) => {
     const idc = (req.body.idc)?req.body.idc:req.params.idc;
     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
@@ -188,6 +220,11 @@ exports.credit_new_get = (req,res) => {
     });
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.offer_new_get = (req,res) => {
     const idc = (req.body.idc)?req.body.idc:req.params.idc;
     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
@@ -245,6 +282,11 @@ exports.offer_new_get = (req,res) => {
     });
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.invoice_all_client = (req,res) => {
     Client.findOne({fromUser:req.session._id,_id: req.params.idc}, function(err, client) {
         if(err) console.trace();
@@ -269,6 +311,11 @@ exports.invoice_all_client = (req,res) => {
     });
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.edit_invoice_get = (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id:req.params.idi},function(err,invoice){
         if(err) console.trace();
@@ -292,6 +339,11 @@ exports.edit_invoice_get = (req,res) => {
 
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.edit_invoice_post = (req,res) => {
     Order.find({fromUser:req.session._id,fromInvoice: req.params.idi}, function(err, orders) {
         if(err) console.trace();
@@ -331,7 +383,11 @@ exports.edit_invoice_post = (req,res) => {
     });
 };
 
-
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.view_invoice_get = (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {
         if(err) console.trace(err);
@@ -360,6 +416,11 @@ exports.view_invoice_get = (req,res) => {
     });
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.invoice_paid_set = (req,res) => {
         Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {
             if (!err) {

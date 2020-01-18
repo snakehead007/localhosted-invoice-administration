@@ -1,8 +1,19 @@
+/**
+ * @module controllers/dashboardController
+ */
+
 const Settings = require('../models/settings');
 const Profile = require('../models/profile');
 const Invoice = require('../models/invoice');
 const {month, month_small,year} = require('../utils/date');
 const User = require('../models/user');
+
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 exports.main_get =  async function getLogin(req,res){
     if(!req.session._id){
         res.redirect('/');
@@ -58,7 +69,11 @@ exports.main_get =  async function getLogin(req,res){
         }
     });
 };
-
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.chart_year_get = (req,res) => {
     if(!req.session._id){
         res.redirect('/');
@@ -101,5 +116,4 @@ exports.chart_year_get = (req,res) => {
             });
         }
     });
-
-}
+};

@@ -1,9 +1,19 @@
+/**
+ * @module controller/downloadController
+ */
+
 const Profile = require('../models/profile');
 const Invoice = require('../models/invoice');
 const Order = require('../models/order');
 const Settings = require('../models/settings');
 const Client = require('../models/client');
 const {callGetBase64,createJSON, replaceAll} =require('../utils/pdfCreation');
+
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.download_invoice_get = (req,res) => {
     Profile.findOne({fromUser:req.session._id}, function(err, profile) {
         Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {

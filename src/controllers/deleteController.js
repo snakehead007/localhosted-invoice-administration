@@ -1,6 +1,16 @@
+/**
+ * @module controller/deleteController
+ */
+
 const Client = require('../models/client');
 const Invoice = require('../models/invoice');
 const Order = require('../models/order');
+
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.delete_client = (req,res) =>{
     Client.deleteOne({fromUser:req.session._id,_id: req.params.idc}, function(err) {
         if(err) console.trace();
@@ -18,6 +28,11 @@ exports.delete_client = (req,res) =>{
     });
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.delete_invoice_get = (req,res) => {
     Invoice.deleteOne({fromUser:req.session._id,_id:req.params.idi},function(err){
         if(err) console.trace(err);

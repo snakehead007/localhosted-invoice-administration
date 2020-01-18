@@ -1,9 +1,23 @@
+/**
+ * Handles redirections from google login
+ * @module routes/redirectRouter
+ */
+
+//installed modules
 const express = require("express");
 const router = express.Router();
-const redirectController = require('../controllers/redirectController');
-const User = require('../models/user');
 const fs = require('fs');
 const path = require('path');
+
+//Local modules
+const User = require('../models/user');
+const redirectController = require('../controllers/redirectController');
+
+//Get requests
+/**
+ * Handles GET /redirect
+ * Goes to {@link src/controllers/redirectController.googleLogin|RedirectController.googleLogin} then checks if user.email is in whitelist.
+ */
 router.get('/' ,redirectController.googleLogin,  async (req,res)=>{
     const jsonfile = fs.readFileSync(path.join(__dirname, '../whitelist.json'));
     const whitelist = JSON.parse(jsonfile);

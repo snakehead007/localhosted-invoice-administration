@@ -1,3 +1,7 @@
+/**
+ * @module controllers/profileController
+ */
+
 const Profile = require('../models/profile');
 const Settings = require('../models/settings');
 

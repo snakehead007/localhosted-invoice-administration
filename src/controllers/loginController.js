@@ -1,8 +1,17 @@
+/**
+ * @module controllers/loginController
+ */
+
 const google = require('../middlewares/google');
 const User = require('../models/user');
 const Settings = require('../models/settings');
 const Profile = require('../models/profile');
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.login_get =  function getLogin(req,res){
     req.session;
     //This is would redirect if session was already created
@@ -11,7 +20,12 @@ exports.login_get =  function getLogin(req,res){
     }*/
     res.render('login');
 };
-
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 exports.create_user_get = async function getCreateNewUser(req,res){
     if(process.env.DEVELOP==="true" && process.env.DEVELOP_WITH_GOOGLE==="false"){
         const googleId = Math.floor((Math.random() * 99999999999999999999999999999999999) + 10000000000000000000000000000000000);
@@ -47,6 +61,11 @@ exports.create_user_get = async function getCreateNewUser(req,res){
     }
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.logout_get = function getLogout(req,res){
     req.logout();
     res.redirect('/login');

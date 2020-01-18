@@ -1,8 +1,17 @@
+/**
+ * @module controllers/orderController
+ */
 const Order = require('../models/order');
 const Invoice = require('../models/invoice');
 const Settings = require('../models/settings');
 const Profile = require('../models/profile');
 const Client = require('../models/client');
+
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.edit_order_get = (req,res)  => {
     Order.findOne({fromUser:req.session._id,_id: req.params.ido}, function(err, order) {
         if(err) console.trace();
@@ -26,6 +35,11 @@ exports.edit_order_get = (req,res)  => {
     });
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.new_order_get = (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {
         if(err) console.trace();
@@ -56,6 +70,12 @@ exports.new_order_get = (req,res) => {
     });
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 exports.new_order_post = async (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id:req.params.idi}, async function(err,invoice){
     let newOrder = new Order({
@@ -77,6 +97,11 @@ exports.new_order_post = async (req,res) => {
     });
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.all_order_get = (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {
         if(err) console.trace();
@@ -110,6 +135,11 @@ exports.all_order_get = (req,res) => {
     });
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.view_order_get = (req,res) => {
     Order.findOne({fromUser:req.session._id,_id: req.params.ido}, function(err, order) {
         if (!err) {

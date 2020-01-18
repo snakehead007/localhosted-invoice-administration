@@ -1,6 +1,8 @@
 const logoutController = require('../controllers/logoutController');
 const Settings = require('../models/settings');
 const i18n = require('i18n');
+
+
 exports.stillSignedInCheck = (req,res,next) => {
     if(!req.session._id){
         console.log("[Warning]: not logged in anymore, destroying session & redirect to login");

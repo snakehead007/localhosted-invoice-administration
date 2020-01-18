@@ -2,7 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const Profile = require('../models/profile');
 
-//Load all images from the database into public/[ID]/logo.jpeg
+/** Load all images from the database into public/[ID]/logo.jpeg
+ *
+ * @param app
+ * @returns {Promise<void>}
+ */
 module.exports.images = async function images(app) {
     //delete everything in images
     await deleteFolderRecursive('public/images');

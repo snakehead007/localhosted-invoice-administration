@@ -1,9 +1,14 @@
+/**
+ * removes all duplicates in an array
+ * @param {Array} _array - array to distinct
+ * @returns a distinct array with no duplicates
+ * */
 export let distinct = (_array) =>{
-    var array = _array;
-    var disctincts = [];
-    for (var o of array) {
-        var isDistinct = true;
-        for (var d of disctincts) {
+    let array = _array;
+    let disctincts = [];
+    for (let o of array) {
+        let isDistinct = true;
+        for (let d of disctincts) {
             if (d._id == o._id) {
                 isDistinct = false;
             }
@@ -13,4 +18,4 @@ export let distinct = (_array) =>{
         }
     }
     return disctincts;
-}
+};

@@ -3,10 +3,11 @@ const googleAuth = require('google-auto-auth');
 const User = require('../models/user.js');
 const Profile = require('../models/profile');
 const Settings = require('../models/settings');
-/*******************/
-/** CONFIGURATION **/
-/*******************/
+
 let googleConfig,defaultScope;
+/**
+ *
+ */
 exports.startUp = () =>{
     if(process.env.DEVELOP==="false") {
         googleConfig = {
@@ -29,10 +30,10 @@ exports.startUp = () =>{
     console.log("[Info]: Google config set up");
 };
 
-/*************/
-/** HELPERS **/
-/*************/
-
+/**
+ *
+ * @returns {OAuth2Client}
+ */
 exports.createConnection  = () =>{
     return new google.auth.OAuth2(
         googleConfig.clientId,
@@ -40,7 +41,11 @@ exports.createConnection  = () =>{
         googleConfig.redirect
     );
 };
-
+/**
+ *
+ * @param auth
+ * @returns {string}
+ */
 exports.getConnectionUrl = (auth) => {
     return auth.generateAuthUrl({
         access_type: 'offline',
@@ -48,17 +53,17 @@ exports.getConnectionUrl = (auth) => {
         scope: defaultScope
     });
 };
-
+/**
+ *
+ * @param auth
+ * @returns {*}
+ */
 exports.getGooglePlusApi = (auth)=> {
     return google.plus({ version: 'v2', auth });
 };
 
-/**********/
-/** MAIN **/
-/**********/
-
 /**
- * Part 1: Create a Google URL and send to the client to log in the user.
+ * Creates a Google URL and send to the client to log in the user.
  */
 exports.urlGoogle = () => {
     const auth = this.createConnection();
@@ -67,9 +72,9 @@ exports.urlGoogle = () => {
 };
 
 /**
- * Part 2: Take the "code" parameter which Google gives us once when the user logs in, then get the user's email and id.
+ * Take the "code" parameter which Google gives us once when the user logs in, then get the user's email and id.
+ * @param {String} code - query string after succesfully logging in with Google
  */
-
 exports.getGoogleAccountFromCode = async (code) =>{
     const oAuth2Client = await this.createConnection();
     const { tokens } = await oAuth2Client.getToken(code);
@@ -87,7 +92,16 @@ exports.getGoogleAccountFromCode = async (code) =>{
         tokens:tokens
     };
 };
-
+/**
+ * Checks if the user that logged in is new or old.
+ * If it's a new user it creates a default empty User, Settings and profile model.
+ * If it's an old user it set the session parameters correct
+ * @param req
+ * @param googleId
+ * @param email
+ * @param tokens
+ * @returns {Promise<*>}
+ */
 exports.checkSignIn = async function checkSignIn(req,{googleId,email,tokens}){
     const currentUser = await User.findOne({googleId:googleId},function(err,User){
         if(err) throw new Error(err);
