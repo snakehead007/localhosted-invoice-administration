@@ -1,3 +1,8 @@
+/**
+ * @module controllers/projectController
+ * @file controllers/projectController
+ */
+
 const Settings = require('../models/settings');
 const Profile = require('../models/profile');
 const Project = require('../models/project');

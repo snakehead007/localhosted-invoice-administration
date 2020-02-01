@@ -1,3 +1,8 @@
+/**
+ * @module controllers/searchController
+ * @file controllers/searchController
+ */
+
 const Client = require('../models/client');
 const Invoice = require('../models/invoice');
 const Item = require('../models/item');

@@ -4,6 +4,7 @@
   "description": "this program is used for managing and administrating invoices and generating them into .pdf format",
   "main": "src/app.js",
   "dependencies": {
+    "apidoc": "^0.19.1",
     "async": "^3.1.0",
     "azure-batch": "^8.0.0",
     "bcryptjs": "^2.4.3",
@@ -72,13 +73,12 @@
     "ws": "^7.2.1"
   },
   "devDependencies": {
-    "@types/express": "^4.17.2",
-    "jsdoc": "^3.6.3"
+    "@types/express": "^4.17.2"
   },
   "scripts": {
     "start": "node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "doc": "jsdoc ./src/* -r\n"
+    "doc": "apidoc -i src/ -o apidoc/"
   },
   "repository": {
     "type": "git",
@@ -99,5 +99,9 @@
     "generate",
     "contacts",
     "contactbook"
-  ]
+  ],
+  "apidoc": {
+    "title": "API of invoice-administration",
+    "url": "localhost:3000"
+  }
 }

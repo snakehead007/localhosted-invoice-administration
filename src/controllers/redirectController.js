@@ -1,6 +1,7 @@
 /**
  * This modules handles redirecting from google and settings locale
  * @module ccntrollers/redirectController
+ * @file controllers/redirectControllers
  */
 
 //Installed modules

@@ -1,6 +1,7 @@
 /**
  * Handles all the routers
- * @module routes/
+ * @file routes/index
+ * @module routes/routerHandler
  * @author snakehead007
  * */
 const express = require("express");

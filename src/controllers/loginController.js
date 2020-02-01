@@ -60,7 +60,6 @@ exports.create_user_get = async function getCreateNewUser(req,res){
         res.redirect(google.urlGoogle());
     }
 };
-
 /**
  *
  * @param req

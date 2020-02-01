@@ -1,6 +1,7 @@
 /**
  * Handles redirections from google login
  * @module routes/redirectRouter
+ * @file routes/redirectRouter
  */
 
 //installed modules

@@ -1,10 +1,23 @@
-/**
- * @module controllers/profileController
- */
-
 const Profile = require('../models/profile');
 const Settings = require('../models/settings');
 
+/**
+ * @api {get} /view/profile view_profile_get
+ * @apiDescription On this page you can edit all the profile information
+ * and shows the current logo picture
+ * @apiName view_profile_get
+ * @apiGroup View
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ *  {
+ *      'currentUrl':"edit-profile",
+        'profile': profile,
+        'offerNrCurrent': Number(jaar + nroff_str),
+        'invoiceNrCurrent': Number(jaar + nr_str),
+        'creditNrCurrent': Number(jaar + nrcred_str),
+        "settings": settings
+ *  }
+ */
 exports.view_profile_get = (req,res) => {
     let date = new Date();
     let _jaar = date.getFullYear();
@@ -53,10 +66,26 @@ exports.view_profile_get = (req,res) => {
     });
 };
 
+/**
+ * @api {get} /edit/profile edit_profile_get
+ * @apiName edit_profile_get
+ * @apiDescription this will redirect to view_profile_get
+ * @apiGroup Edit
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ */
 exports.edit_profile_get = (req,res) => {
     res.redirect('/view/profile');
 };
-
+/**
+ * @api {post} /edit/profile edit_profile_post
+ * @apiName edit_profile_post
+ * @apiDescription The profile will be updated with all its given parameters in the form
+ * Afterwards will be redirected to /view/profile
+ * @apiGroup Edit
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ */
 exports.edit_profile_post = (req,res) => {
     var updateProfile = {
         firm: req.body.firm,
