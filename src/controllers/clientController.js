@@ -1,5 +1,5 @@
 /**
- * @module controllers/clientController
+ * Here are all the methods for /client
  */
 
 const Profile = require('../models/profile');
@@ -7,11 +7,20 @@ const Client = require('../models/client');
 const Settings = require('../models/settings');
 
 /**
- *
- * @param req
- * @param res
+ * @api {get} /client/all getClientAll
+ * @apiDescription Here you can view all the clients from the current user
+ * @apiName getClientAll
+ * @apiGroup Client
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ *  {
+ *      'clients': clients,
+        "settings": settings,
+        "profile":profile,
+        "currentUrl":"clientAll"
+ *  }
  */
-exports.client_all_get = (req,res) => {
+exports.getClientAll = (req, res) => {
     Profile.findOne({fromUser:req.session._id},function(err,profile){
         if(err) console.trace();
         Client.find({fromUser:req.session._id}, function(err, clients) {
@@ -32,11 +41,19 @@ exports.client_all_get = (req,res) => {
 };
 
 /**
- *
- * @param req
- * @param res
+ * @api {get} /client/new getClientNew
+ * @apiDescription Shows a form that creates a new client
+ * @apiName getClientNew
+ * @apiGroup Client
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ *  {
+ *      "settings": settings,
+        "profile":profile,
+        "currentUrl":"clientNew"
+ *  }
  */
-exports.client_new_get = (req,res) => {
+exports.getClientNew = (req, res) => {
     Settings.findOne({},function(err, settings) {
         if(err) console.trace();
         Profile.findOne({},function(err,profile) {
@@ -53,11 +70,19 @@ exports.client_new_get = (req,res) => {
 };
 
 /**
- *
- * @param req
- * @param res
+ * @api {post} /client/new postClientNew
+ * @apiDescription creates a new client for the specific user, renders /client/all
+ * @apiName postClientNew
+ * @apiGroup Client
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ *  {
+ *     'client': client,
+        "profile": profile,
+        "settings": settings
+ *  }
  */
-exports.client_new_post = (req,res) => {
+exports.postClientNew = (req, res) => {
     if (
         req.body.clientName &&
         req.body.street &&
@@ -82,11 +107,19 @@ exports.client_new_post = (req,res) => {
 };
 
 /**
- *
- * @param req
- * @param res
+ * @api {get} /client/view/:idc getClientView
+ * @apiDescription Shows all the information of the clients id from query parameter 'idc'
+ * @apiName getClientView
+ * @apiGroup Client
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ *  {
+ *     'client': client,
+        "profile": profile,
+        "settings": settings
+ *  }
  */
-exports.view_client_get = (req,res) => {
+exports.getClientView = (req, res) => {
     Client.findOne({fromUser:req.session._id,_id: req.params.idc}, function(err, client) {
         if (!err) {
             Settings.findOne({fromUser:req.session._id}, function(err, settings) {

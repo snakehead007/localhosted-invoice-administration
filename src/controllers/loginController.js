@@ -14,6 +14,7 @@ const Profile = require('../models/profile');
  */
 exports.login_get =  function getLogin(req,res){
     req.session;
+    req.session.sessionFlash = {};
     //This is would redirect if session was already created
     /*if(req.session&&req.session._id){
         return res.redirect('/dashboard');

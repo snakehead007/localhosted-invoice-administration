@@ -1,6 +1,6 @@
 const Profile = require('../models/profile');
 const Settings = require('../models/settings');
-
+const { valueMustNotBeEmpty } = require('../utils/formValidation');
 /**
  * @api {get} /view/profile view_profile_get
  * @apiDescription On this page you can edit all the profile information
@@ -87,26 +87,35 @@ exports.edit_profile_get = (req,res) => {
  *  HTTP/1.1 200 OK
  */
 exports.edit_profile_post = (req,res) => {
-    var updateProfile = {
-        firm: req.body.firm,
-        name: req.body.name,
-        street: req.body.street,
-        streetNr: req.body.streetNr,
-        postal: req.body.postal,
-        place: req.body.place,
-        vat: req.body.vat,
-        iban: req.body.iban,
-        bic: req.body.bic,
-        invoiceNrCurrent: Number(req.body.invoiceNrCurrent.toString().substring(req.body.invoiceNrCurrent.toString().length - 3)),
-        offerNrCurrent: Number(req.body.offerNrCurrent.toString().substring(req.body.offerNrCurrent.toString().length - 3)),
-        creditNrCurrent: Number(req.body.creditNrCurrent.toString().substring(req.body.creditNrCurrent.toString().length - 3)),
-        tel: req.body.tel,
-        email: [req.body.email],
-        fromUser:req.session._id
-    };
-    Profile.updateOne({fromUser:req.session._id,_id: req.params.idp}, updateProfile, function(err) {
-        if (!err) {
-            res.redirect('/view/profile');
-        }
-    });
+    var firmCheck = valueMustNotBeEmpty(req.body.firm);
+    if(firmCheck.validate){
+        req.session.sessionFlash.push({
+            type: 'warning',
+            message: firmCheck.message
+        });
+        res.redirect('/view/profile');
+    }else {
+        var updateProfile = {
+            firm: req.body.firm,
+            name: req.body.name,
+            street: req.body.street,
+            streetNr: req.body.streetNr,
+            postal: req.body.postal,
+            place: req.body.place,
+            vat: req.body.vat,
+            iban: req.body.iban,
+            bic: req.body.bic,
+            invoiceNrCurrent: Number(req.body.invoiceNrCurrent.toString().substring(req.body.invoiceNrCurrent.toString().length - 3)),
+            offerNrCurrent: Number(req.body.offerNrCurrent.toString().substring(req.body.offerNrCurrent.toString().length - 3)),
+            creditNrCurrent: Number(req.body.creditNrCurrent.toString().substring(req.body.creditNrCurrent.toString().length - 3)),
+            tel: req.body.tel,
+            email: [req.body.email],
+            fromUser: req.session._id
+        };
+        Profile.updateOne({fromUser: req.session._id, _id: req.params.idp}, updateProfile, function (err) {
+            if (!err) {
+                res.redirect('/view/profile');
+            }
+        });
+    }
 }

@@ -1,6 +1,106 @@
 [
   {
     "type": "get",
+    "url": "/calc/all",
+    "title": "getCalcAll",
+    "description": "<p>Here you can view all the calculations and navigate to the specific one.</p>",
+    "name": "getCalcAll",
+    "group": "Calc",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    'currentUrl':'calc',\n       'settings': settings,\n       'description': \"Settings\",\n       'profile':profile\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/controllers/calcController.js",
+    "groupTitle": "Calc"
+  },
+  {
+    "type": "get",
+    "url": "/client/all",
+    "title": "getClientAll",
+    "description": "<p>Here you can view all the clients from the current user</p>",
+    "name": "getClientAll",
+    "group": "Client",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    'clients': clients,\n       \"settings\": settings,\n       \"profile\":profile,\n       \"currentUrl\":\"clientAll\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/controllers/clientController.js",
+    "groupTitle": "Client"
+  },
+  {
+    "type": "get",
+    "url": "/client/new",
+    "title": "getClientNew",
+    "description": "<p>Shows a form that creates a new client</p>",
+    "name": "getClientNew",
+    "group": "Client",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"settings\": settings,\n       \"profile\":profile,\n       \"currentUrl\":\"clientNew\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/controllers/clientController.js",
+    "groupTitle": "Client"
+  },
+  {
+    "type": "get",
+    "url": "/client/view/:idc",
+    "title": "getClientView",
+    "description": "<p>Shows all the information of the clients id from query parameter 'idc'</p>",
+    "name": "getClientView",
+    "group": "Client",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   'client': client,\n       \"profile\": profile,\n       \"settings\": settings\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/controllers/clientController.js",
+    "groupTitle": "Client"
+  },
+  {
+    "type": "post",
+    "url": "/client/new",
+    "title": "postClientNew",
+    "description": "<p>creates a new client for the specific user, renders /client/all</p>",
+    "name": "postClientNew",
+    "group": "Client",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   'client': client,\n       \"profile\": profile,\n       \"settings\": settings\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/controllers/clientController.js",
+    "groupTitle": "Client"
+  },
+  {
+    "type": "get",
     "url": "/edit/profile",
     "title": "edit_profile_get",
     "name": "edit_profile_get",
@@ -117,6 +217,66 @@
     },
     "version": "0.0.0",
     "filename": "src/controllers/settingsController.js",
+    "groupTitle": "Settings"
+  },
+  {
+    "type": "get",
+    "url": "/stock/all",
+    "title": "stock_all_get",
+    "name": "stock_all_get",
+    "description": "<p>Renders the stock with all Items sorted by name</p>",
+    "group": "Settings",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n       'currentUrl':'stock',\n       'stock': stock,\n       'settings': settings,\n       \"profile\":profile\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/controllers/stockController.js",
+    "groupTitle": "Settings"
+  },
+  {
+    "type": "get",
+    "url": "/stock/new/item",
+    "title": "stock_new_item_get",
+    "name": "stock_new_item_get",
+    "description": "<p>renders new/new-item, here the user can create a new item</p>",
+    "group": "Settings",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n       'settings': settings,\n       \"profile\": profile,\n       \"currentUrl\":\"stockNew\"\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/controllers/stockController.js",
+    "groupTitle": "Settings"
+  },
+  {
+    "type": "get",
+    "url": "/stock/new/item",
+    "title": "stock_new_item_get",
+    "name": "stock_new_item_get",
+    "description": "<p>renders new/new-item, here the user can create a new item</p>",
+    "group": "Settings",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n       'settings': settings,\n       \"profile\": profile,\n       \"currentUrl\":\"stockNew\"\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/controllers/stockController.js",
     "groupTitle": "Settings"
   },
   {

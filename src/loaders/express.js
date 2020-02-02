@@ -3,10 +3,8 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const pug = require('pug');
 const session = require('express-session');
-const redis = require('redis');
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
-const flash = require('connect-flash');
 const i18n = require("i18n");
 module.exports.default = function(app){
     app.locals.title = 'invoice-administration';
@@ -48,14 +46,6 @@ module.exports.default = function(app){
         })
     );
     console.log("[Info]: . . . . Sessions set up");
-    app.use(flash());
-    app.use(function(req, res, next) {
-        res.locals.success_msg = req.flash('success_msg');
-        res.locals.error_msg = req.flash('error_msg');
-        res.locals.error = req.flash('error');
-        next();
-    });
-
     app.listen(process.env.PORT,() => {
         console.log('[Info]: Server is running at PORT ' + process.env.PORT);
     });

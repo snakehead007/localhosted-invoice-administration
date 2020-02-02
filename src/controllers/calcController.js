@@ -1,17 +1,25 @@
 /**
  * Calculations Controller
- * @module controllers/calcController
+ * Here all the methods are written for /calc
  */
+
 const Profile = require('../models/profile');
 const Settings = require('../models/settings');
 /**
- *  GET request, gives list of all calulations
- *  renders view/calc
- * @alias module:/controllers/calcController.calc_all_get
- * @param req {Object} request - request of express
- * @param res {Object} response - response of express
+ * @api {get} /calc/all getCalcAll
+ * @apiDescription Here you can view all the calculations and navigate to the specific one.
+ * @apiName getCalcAll
+ * @apiGroup Calc
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ *  {
+ *      'currentUrl':'calc',
+        'settings': settings,
+        'description': "Settings",
+        'profile':profile
+ *  }
  */
-exports.calc_all_get = (req,res) =>{
+exports.getCalcAll = (req, res) =>{
     Profile.findOne({fromUser:req.session._id},function(err,profile){
         Settings.findOne({fromUser:req.session._id}, function(err, settings) {
             res.render('calc', {

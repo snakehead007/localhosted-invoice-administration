@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const clientController = require('../controllers/clientController');
-router.get('/all',clientController.client_all_get);
-router.get('/new',clientController.client_new_get);
-router.post('/new',clientController.client_new_post);
+router.get('/all',clientController.getClientAll);
+router.get('/new',clientController.getClientNew);
+router.post('/new',clientController.postClientNew);
 module.exports = router;
