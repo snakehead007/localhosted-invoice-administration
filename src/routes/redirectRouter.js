@@ -34,6 +34,7 @@ router.get('/' ,redirectController.googleLogin,  async (req,res)=>{
             res.redirect('/dashboard');
         });
     }else {
+        req.flash('warning','You are not whitelisted, please contact the administrator');
         res.redirect('/');
     }
 });

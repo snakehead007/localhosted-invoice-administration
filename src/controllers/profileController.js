@@ -89,10 +89,7 @@ exports.edit_profile_get = (req,res) => {
 exports.edit_profile_post = (req,res) => {
     var firmCheck = valueMustNotBeEmpty(req.body.firm);
     if(firmCheck.validate){
-        req.session.sessionFlash.push({
-            type: 'warning',
-            message: firmCheck.message
-        });
+        req.flash('danger','Firma niet correct ingevuld');
         res.redirect('/view/profile');
     }else {
         var updateProfile = {

@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const pug = require('pug');
 const session = require('express-session');
+const flash = require('express-flash');
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
 const i18n = require("i18n");
@@ -45,6 +46,7 @@ module.exports.default = function(app){
             resave: false
         })
     );
+    app.use(flash());
     console.log("[Info]: . . . . Sessions set up");
     app.listen(process.env.PORT,() => {
         console.log('[Info]: Server is running at PORT ' + process.env.PORT);

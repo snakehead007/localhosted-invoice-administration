@@ -8,6 +8,7 @@ exports.stillSignedInCheck = (req,res,next) => {
         console.log("[Warning]: not logged in anymore, destroying session & redirect to login");
         return logoutController.logout_get(req,res);
     }
+    console.log(req.session);
     Settings.findOne({fromUser:req.session._id},function(err,settings){
         if(err) console.trace();
         req.locale = settings.locale;

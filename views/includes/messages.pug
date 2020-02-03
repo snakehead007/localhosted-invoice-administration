@@ -1,10 +1,12 @@
 .row.justify-content-center
     #messages.col-12
-        script.
-            console.log(sessionFlash);
-        each flash in sessionFlash
-            script.
-                console.log(flash.type+" : "+flash.message);
-            div(class="alert alert-"+flash.type+" alert-dismissible fade show" role="alert")=flash.message
-                button(type="button" class="close" data-dismiss="alert" aria-label="Close")
-                    span(aria-hidden="true") &times;
+        if messages.danger
+            each message in messages.danger
+                div(class="alert alert-danger alert-dismissible fade show" role="alert")=message
+                    button(type="button" class="close" data-dismiss="alert" aria-label="Close")
+                        span(aria-hidden="true") &times;
+        if messages.warning
+            each message in messages.warning
+                div(class="alert alert-warning alert-dismissible fade show" role="alert")=message
+                    button(type="button" class="close" data-dismiss="alert" aria-label="Close")
+                        span(aria-hidden="true") &times;
