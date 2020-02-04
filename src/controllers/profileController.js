@@ -1,6 +1,7 @@
 const Profile = require('../models/profile');
 const Settings = require('../models/settings');
-const { valueMustNotBeEmpty } = require('../utils/formValidation');
+const i18n = require('i18n');
+const { valueMustBeAName } = require('../utils/formValidation');
 /**
  * @api {get} /view/profile view_profile_get
  * @apiDescription On this page you can edit all the profile information
@@ -87,9 +88,14 @@ exports.edit_profile_get = (req,res) => {
  *  HTTP/1.1 200 OK
  */
 exports.edit_profile_post = (req,res) => {
-    var firmCheck = valueMustNotBeEmpty(req.body.firm);
-    if(firmCheck.validate){
-        req.flash('danger','Firma niet correct ingevuld');
+    let isNotValid =    valueMustBeAName(req.body.firm).validate ||
+        valueMustBeAName(req.body.name).validate ||
+        valueMustBeAName(req.body.street).validate ||
+        valueMustBeAName(req.body.firm).validate ||
+        valueMustBeAName(req.body.place).validate
+
+    if(isNotValid){
+        req.flash('danger',i18n.__('Profile not correctly filled in'));
         res.redirect('/view/profile');
     }else {
         var updateProfile = {

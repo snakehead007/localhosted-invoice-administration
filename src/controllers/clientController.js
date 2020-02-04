@@ -5,7 +5,8 @@
 const Profile = require('../models/profile');
 const Client = require('../models/client');
 const Settings = require('../models/settings');
-
+const i18n = require('i18n');
+const {valueMustBeAName} = require('../utils/formValidation');
 /**
  * @api {get} /client/all getClientAll
  * @apiDescription Here you can view all the clients from the current user
@@ -83,7 +84,14 @@ exports.getClientNew = (req, res) => {
  *  }
  */
 exports.postClientNew = (req, res) => {
-    if (
+    let isNotValid = valueMustBeAName(req.body.clientName).validate ||
+        valueMustBeAName(req.body.street).validate ||
+        valueMustBeAName(req.body.place).validate ||
+        valueMustBeAName(req.body.firm).validate;
+    if(isNotValid){
+        req.flash('danger',i18n.__('Client not correctly filled in'));
+        res.redirect('/client/new');
+    }else if(
         req.body.clientName &&
         req.body.street &&
         req.body.place) {

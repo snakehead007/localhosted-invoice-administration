@@ -228,5 +228,6 @@
 	"Streetname": "Streetname",
 	"E-mail": "E-mail",
 	"VAT-number": "VAT-number",
-	"Banking number": "Banking number"
+	"Banking number": "Banking number",
+	"Client not correctly filled in": "Client not correctly filled in"
 }

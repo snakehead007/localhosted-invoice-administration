@@ -17,38 +17,38 @@ body
             include ../includes/navFlexCollumn
             include ../includes/bookmarks
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          h2(class="pt-3") Mijn profiel - aanpassen
+          h2(class="pt-3") #{__('My profile')} - #{__('Edit')}
           hr
           include ../includes/messages
           form(action='/edit/profile/'+profile._id,method='post')
             div(class="form-row")
               div(class="form-group col-md-6")
-                label(for="title") Persoonsnaam
-                input(type="text",class="form-control",value=profile.name,name="name",placeholder="Jan Janssens")
+                label(for="title") #{__('Contact name')}
+                input(type="text",class="form-control",value=profile.name,name="name",placeholder="Jan Janssens" required="true")
               div(class="form-group col-md-6")
-                label(for="title") Firma naam
-                input(type="text",class="form-control",value=profile.firm,name="firm",placeholder="firma en co.")
+                label(for="title") #{__('Firm name')}
+                input(type="text",class="form-control",value=profile.firm,name="firm",placeholder="firma en co." required="true")
               div(class="form-group col-md-3")
-                label(for="title") Straatnaam
-                input(type="text",class="form-control",value=profile.street,name="street",placeholder="grotestraat")
+                label(for="title") #{__('Street name')}
+                input(type="text",class="form-control",value=profile.street,name="street",placeholder="grotestraat" required="true")
               div(class="form-group col-md-2")
-                label(for="title") Straat Nr
+                label(for="title") #{__('Street N°')}
                 input(type="text",class="form-control",value=profile.streetNr,name="streetNr",placeholder="12")
               div(class="col-md-1")
               div(class="form-group col-md-2")
-                label(for="title") BTW-nummer
+                label(for="title") #{__('VAT number')}
                 input(type="text",class="form-control",value=profile.vat,name="vat",placeholder="BE 0000.000.000")
               div(class="form-group col-md-2")
-                label(for="title") IBAN-nr
+                label(for="title") #{__('IBAN')}
                 input(type="text",class="form-control",value=profile.iban,name="iban",placeholder="BE77 7777 7777 7777")
               div(class="form-group col-md-2")
-                label(for="title") Postcode
+                label(for="title") #{__('Postal')}
                 input(type="number",class="form-control",value=profile.postal,name="poctal",placeholder="1234")
               div(class="form-group col-md-3")
-                label(for="title") Plaatsnaam
-                input(type="text",class="form-control",value=profile.place,name="place",placeholder="Gent")
+                label(for="title") #{__('Place')}
+                input(type="text",class="form-control",value=profile.place,name="place",placeholder="Gent" required="true")
               div(class="form-group col-md-2")
-                label(for="title") Telefoon nummer
+                label(for="title") #{__('Telephone N°')}
                 input(type="text",class="form-control",value=profile.tel,name="tel",placeholder="0487654321")
               div(class="col-md-7")
               div(class="form-group col-md-2 mr-auto")

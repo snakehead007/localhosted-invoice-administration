@@ -79,7 +79,9 @@
   "scripts": {
     "start": "node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "doc": "apidoc -i src/ -o apidoc/"
+    "doc": "apidoc -i src/ -o apidoc/",
+    "build": "sudo docker build -t snakehead007/invoice-administration:dev .",
+    "push": "docker push snakehead007/invoice-administration:dev"
   },
   "repository": {
     "type": "git",
