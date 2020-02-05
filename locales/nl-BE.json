@@ -229,5 +229,21 @@
 	"E-mail": "E-mail",
 	"VAT-number": "VAT-number",
 	"Banking number": "Banking number",
-	"Client not correctly filled in": "Client not correctly filled in"
+	"Client not correctly filled in": "Client not correctly filled in",
+	"Contact name": "Contact name",
+	"Firm name": "Firm name",
+	"Street name": "Street name",
+	"Street N°": "Street N°",
+	"VAT number": "VAT number",
+	"IBAN": "IBAN",
+	"Telephone N°": "Telephone N°",
+	"Profile not correctly filled in": "Profile not correctly filled in",
+	"This value is invalid, please provide a correct name": "This value is invalid, please provide a correct name",
+	"This value is invalid, please provide a correct email address": "This value is invalid, please provide a correct email address",
+	"Phone number is invalid, please provide a correct phone number": "Phone number is invalid, please provide a correct phone number",
+	"firm is invalid": "firm is invalid",
+	"name is invalid": "name is invalid",
+	"street name is invalid": "street name is invalid",
+	"place name is invalid": "place name is invalid",
+	"email address is invalid": "email address is invalid"
 }

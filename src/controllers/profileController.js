@@ -1,7 +1,7 @@
 const Profile = require('../models/profile');
 const Settings = require('../models/settings');
 const i18n = require('i18n');
-const { valueMustBeAName } = require('../utils/formValidation');
+const { valueMustBeAName,valueMustBeEmail,numberMustPhoneNumber, valueMustBeVatNumber} = require('../utils/formValidation');
 /**
  * @api {get} /view/profile view_profile_get
  * @apiDescription On this page you can edit all the profile information
@@ -88,16 +88,34 @@ exports.edit_profile_get = (req,res) => {
  *  HTTP/1.1 200 OK
  */
 exports.edit_profile_post = (req,res) => {
-    let isNotValid =    valueMustBeAName(req.body.firm).validate ||
-        valueMustBeAName(req.body.name).validate ||
-        valueMustBeAName(req.body.street).validate ||
-        valueMustBeAName(req.body.firm).validate ||
-        valueMustBeAName(req.body.place).validate
-
-    if(isNotValid){
-        req.flash('danger',i18n.__('Profile not correctly filled in'));
+    let firmCheck = valueMustBeAName(req.body.firm,"firm is invalid");
+    if(firmCheck.invalid)
+        req.flash('danger',i18n.__(firmCheck.message));
+    let nameCheck = valueMustBeAName(req.body.name,"name is invalid");
+    if(nameCheck.invalid)
+        req.flash('danger',i18n.__(nameCheck.message));
+    let streetCheck = valueMustBeAName(req.body.street,"street name is invalid");
+    if(streetCheck.invalid)
+        req.flash('danger',i18n.__(streetCheck.message));
+    let placeCheck = valueMustBeAName(req.body.place,"place name is invalid");
+    if(placeCheck.invalid)
+        req.flash('danger',i18n.__(placeCheck.message));
+    let emailCheck = valueMustBeEmail(req.body.email,"email address is invalid");
+    let emailInvalid = req.body.email!==""&&emailCheck.invalid;
+    if(emailInvalid)
+        req.flash('danger',i18n.__(emailCheck.message));
+    let telCheck = numberMustPhoneNumber(req.body.tel);
+    let telInvalid = req.body.tel !==""&&telCheck.invalid;
+    if(telInvalid)
+        req.flash('danger',i18n.__(telCheck.message));
+    let vatCheck = valueMustBeVatNumber(req.body.vat.trim(),"VAT number is invalid");
+    console.log(vatCheck);
+    let vatInvalid = req.body.vat !== ""&&vatCheck.invalid;
+    if(vatInvalid)
+        req.flash('danger',i18n.__(vatCheck.message));
+    if(firmCheck.invalid||nameCheck.invalid||streetCheck.invalid||placeCheck.invalid||emailInvalid||telInvalid||vatInvalid) {
         res.redirect('/view/profile');
-    }else {
+    } else {
         var updateProfile = {
             firm: req.body.firm,
             name: req.body.name,
