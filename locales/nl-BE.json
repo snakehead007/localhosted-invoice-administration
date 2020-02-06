@@ -245,5 +245,6 @@
 	"name is invalid": "name is invalid",
 	"street name is invalid": "street name is invalid",
 	"place name is invalid": "place name is invalid",
-	"email address is invalid": "email address is invalid"
+	"email address is invalid": "email address is invalid",
+	"Postal code is not valid, only Belgian postal codes support for now": "Postal code is not valid, only Belgian postal codes support for now"
 }

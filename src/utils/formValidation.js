@@ -72,7 +72,6 @@ exports.valueMustBeVatNumber = (doc, message="VAT number not valid") => {
 exports.valueMustBePostalCode = (doc, message="Postal code is not valid, only Belgian postal codes support for now") => {
     let invalid = false;
     let regex = /([1-9][0-9]{3})/;
-    console.log(doc);
     let result = doc.match(regex);
     if(result == null){
         invalid = true;

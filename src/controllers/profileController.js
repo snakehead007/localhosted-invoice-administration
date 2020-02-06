@@ -119,7 +119,6 @@ exports.edit_profile_post = (req,res) => {
         req.flash('danger',i18n.__(postalCheck.message));
     let streetNrCheck = valueMustStreetNumber(req.body.streetNr);
     let streetNrInvalid = req.body.streetNr !== "" && streetCheck.invalid;
-    console.log(streetNrInvalid);
     if(streetNrInvalid)
         req.flash('danger',i18n.__(streetNrCheck.message));
     if(firmCheck.invalid||nameCheck.invalid||streetCheck.invalid||placeCheck.invalid||emailInvalid||telInvalid||vatInvalid||postalInvalid||streetNrInvalid) {
