@@ -68,3 +68,33 @@ exports.valueMustBeVatNumber = (doc, message="VAT number not valid") => {
         message:message
     }
 };
+
+exports.valueMustBePostalCode = (doc, message="Postal code is not valid, only Belgian postal codes support for now") => {
+    let invalid = false;
+    let regex = /([1-9][0-9]{3})/;
+    console.log(doc);
+    let result = doc.match(regex);
+    if(result == null){
+        invalid = true;
+    }
+    return {
+        invalid:invalid,
+        doc:doc,
+        message:message
+    }
+};
+
+exports.valueMustStreetNumber = (doc,message="Street number is not valid, only numbers and letters allowed") => {
+    let invalid = false;
+    let regex = /([1-9][0-9]{0,9}[a-z]{0,3})/;
+    let result = doc.match(regex);
+    console.log(result);
+    if(result == null||doc !== result[0]){
+        invalid = true
+    }
+    return{
+        invalid:invalid,
+        doc:doc,
+        message:message
+    }
+};

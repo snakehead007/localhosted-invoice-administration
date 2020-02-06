@@ -1,7 +1,7 @@
 const Profile = require('../models/profile');
 const Settings = require('../models/settings');
 const i18n = require('i18n');
-const { valueMustBeAName,valueMustBeEmail,numberMustPhoneNumber, valueMustBeVatNumber} = require('../utils/formValidation');
+const { valueMustStreetNumber,valueMustBeAName,valueMustBeEmail,numberMustPhoneNumber, valueMustBeVatNumber, valueMustBePostalCode} = require('../utils/formValidation');
 /**
  * @api {get} /view/profile view_profile_get
  * @apiDescription On this page you can edit all the profile information
@@ -113,7 +113,16 @@ exports.edit_profile_post = (req,res) => {
     let vatInvalid = req.body.vat !== ""&&vatCheck.invalid;
     if(vatInvalid)
         req.flash('danger',i18n.__(vatCheck.message));
-    if(firmCheck.invalid||nameCheck.invalid||streetCheck.invalid||placeCheck.invalid||emailInvalid||telInvalid||vatInvalid) {
+    let postalCheck = valueMustBePostalCode(req.body.postal);
+    let postalInvalid = req.body.postal !== "" && postalCheck.invalid;
+    if(postalInvalid)
+        req.flash('danger',i18n.__(postalCheck.message));
+    let streetNrCheck = valueMustStreetNumber(req.body.streetNr);
+    let streetNrInvalid = req.body.streetNr !== "" && streetCheck.invalid;
+    console.log(streetNrInvalid);
+    if(streetNrInvalid)
+        req.flash('danger',i18n.__(streetNrCheck.message));
+    if(firmCheck.invalid||nameCheck.invalid||streetCheck.invalid||placeCheck.invalid||emailInvalid||telInvalid||vatInvalid||postalInvalid||streetNrInvalid) {
         res.redirect('/view/profile');
     } else {
         var updateProfile = {
