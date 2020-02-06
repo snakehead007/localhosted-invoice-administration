@@ -144,6 +144,7 @@ exports.edit_profile_post = (req,res) => {
         };
         Profile.updateOne({fromUser: req.session._id, _id: req.params.idp}, updateProfile, function (err) {
             if (!err) {
+                req.flash('success',"successfully updated your profile");
                 res.redirect('/view/profile');
             }
         });
