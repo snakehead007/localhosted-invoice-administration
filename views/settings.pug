@@ -1,0 +1,120 @@
+html
+    head
+        include includes/htmlHead
+        include includes/settingsMenuScript
+    body
+            include includes/topBar
+            div(class="container-fluid")
+                div(class ="row")
+                    nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+                        div(class="sidebar-sticky")
+                            include includes/navFlexCollumn
+                            include includes/bookmarks
+                    main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+                        h2(class="pt-3") Settings
+                        if error == 1
+                            div(class="alert alert-success col-lg-8 col-md-10 col-sm-12" role="alert") Succesfully updated!
+                        div(class="table-responsive")
+                            table(class="table")
+                                tbody
+                                    tr(onclick="openBTW()",class="settingsOption optionBtw")
+                                        td
+                                            p(class="lead") #{__('Change VAT value')}
+                                                span(class="badge badge-pill badge-warning") #{__('in progress')}
+                                            div(id="btw",style="display:none;")
+                                                p Btw staat op: #{settings.vat}%
+                                                a(href='/btw' + "/" + loginHash,class="button",class="btn btn-outline-"+settings.theme) #{__('change VAT value')}
+                                    tr(onclick="openTheme()",class="settingsOption optionTheme")
+                                        td
+                                            p(class="lead")
+                                                span #{__('Theme')}
+                                            div(id="theme",style="display:none;")
+                                                div(class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups")
+                                                    div(class="btn-group mr-4" role="group" aria-label="First group")
+                                                        a(href='/settings/change/theme/secondary',class="button")
+                                                            button(type="button" class="btn btn-"+((settings.theme==="secondary")?"outline-":"")+"secondary") #{__('grey')}
+                                                        a(href='/settings/change/theme/dark',class="button")
+                                                            button(type="button" class="btn btn-"+((settings.theme==="dark")?"outline-":"")+"dark") #{__('dark')}
+                                                        a(href='/settings/change/theme/info',class="button")
+                                                            button(type="button" class="btn btn-"+((settings.theme==="info")?"outline-":"")+"info") #{__('blue')}
+                                                        a(href='/settings/change/theme/danger',class="button")
+                                                            button(type="button" class="btn btn-"+((settings.theme==="danger")?"outline-":"")+"danger") #{__('red')}
+                                    tr(onclick="openLang()",class="settingsOption optionLang")
+                                        td
+                                            p(class="lead") #{__('Language')}
+                                            div(id="lang",style="display:none;")
+                                                div(class="btn-group mb-3" role="group" aria-label="Basic example")
+                                                    a(href="/settings/change/lang/nl-BE",class="button")
+                                                        button(type="button" class="btn btn-"+((settings.locale==="nl-BE")?"outline-":"")+settings.theme) #{__('Dutch')}
+                                                    a(href="/settings/change/lang/en-GB",class="button")
+                                                        button(type="button" class="btn btn-"+((settings.locale==="en-GB")?"outline-":"")+settings.theme) #{__('English')}
+                                    tr(onclick="openText()",class="settingsOption optionText")
+                                        td
+                                            p(class="lead") #{__('PDF footnotes')}
+                                            div(id="text",style="display:none;")
+                                                form(action='/settings/change/text',method='post')
+                                                    button(type="button" class="mb-1 headExtend btn-sm btn btn-outline-"+settings.theme, onclick="info()") #{__('info')}
+                                                    div(class="input-group mb-3")
+                                                        div(class="input-group-prepend")
+                                                            span(class="input-group-text") #{__('Invoice footer')}
+                                                        textarea(input="text",name="invoiceText",class="form-control" aria-label="With textarea")=settings.invoiceText
+                                                    div(class="input-group mb-3")
+                                                        div(class="input-group-prepend")
+                                                            span(class="input-group-text") #{__('Credit footer')}
+                                                        textarea(input="text",name="creditText",class="form-control" aria-label="With textarea")=settings.creditText
+                                                    div(class="input-group mb-3")
+                                                        div(class="input-group-prepend")
+                                                            span(class="input-group-text") #{__('Offer footer')}
+                                                        textarea(input="text",name="offerText",class="form-control" aria-label="With textarea")=settings.offerText
+                                                    button(type="submit",class="btn btn-outline-"+settings.theme) bijwerken
+                                                    div(class="",id="info",style="display:none")
+                                                        p #{__('In order to use variables of the database, type them like below')}:
+                                                        samp(class="text")
+                                                            pre
+                                                                code &#91;firma&#93;     : firma naam
+                                                                code &#91;naam&#93;      : volledige naam
+                                                                code &#91;straat&#93;    : straatnaam
+                                                                code &#91;nr&#93;        : straatnummer
+                                                                code &#91;postcode&#93;  : postcode
+                                                                code &#91;plaats&#93;    : plaatsnaam
+                                                                code &#91;btw&#93;       : btw nummer
+                                                                code &#91;iban&#93;      : Iban nummer
+                                                                code &#91;bic&#93;       : Bic nummer
+                                                                code &#91;tel&#93;       : Telefoon nummer
+                                                                code &#91;mail&#93;       : mail
+                                                                code &#91;contact.rekeningnr&#93;: mail van contactpersoon die bij de factuur hoort
+                                                                code &#91;factuur.datum&#93;     : Datum van creatie van het document in het programma
+                                                                code &#91;factuur.factuurnr&#93; : Nummer van de factuur
+                                                                code &#91;factuur.offertenr&#93; : Nummer van de offerte
+                                                                code &#91;factuur.creditnr&#93;  : Nummer van de creditnota
+                                                                code &#91;factuur.voorschot&#93; : het voorschot bedrag
+                                                                code &#91;factuur.totaal&#93;    : het totaal aantal bedrag
+                                                                code &#91;datum&#93;    : Volledig datum van vandaag (dd maand yyyy)
+                                                                code &#91;datum.d&#93;  : Dag van vandaag in getal (dd)
+                                                                code &#91;datum.m&#93;  : Volledige maand van vandaag (maand)
+                                                                code &#91;datum.j&#93;  : Volledig jaar van vandaag (yyyy)
+
+                                    tr(onclick="openBook()",class="settingsOption optionBook")
+                                        td
+                                            p(class="lead") #{__('Bookmarks')}
+                                                span(class="badge badge-pill badge-warning") #{__('in progress')}
+                                            div(id="book",style="display:none;")
+                                              form(action='/edit-bookmarks/'+loginHash,method='post')
+                                                  button(type="button" class="mb-1 headExtend btn-sm btn btn-outline-"+settings.theme, onclick="infoBook()") #{__('info')}
+                                                  div(class="input-group mb-3")
+                                                      div(class="input-group-prepend")
+                                                          span(class="input-group-text") #{__('Bookmarks')}
+                                                      textarea(input="text",name="bookmarks",class="form-control",placeholder="#{__('Click on info, for more info')}" aria-label="With textarea")=profile.bookmarksText
+                                                  button(type="submit",class="btn btn-outline-"+settings.theme) #{__('Update')}
+                                                  div(class="",id="infoBook",style="display:none")
+                                                      p #{__('write de bookmarks as the example below')} (#{__('without')} http://):
+                                                      samp(class="text")
+                                                          pre
+                                                              code my favorite site : www.favorite.be
+                                                              code facebook : myprofile.facebook.com/
+                                                              code my blog : mypersonalblog.blogger.com
+
+    script.
+        $(document).ready(function () {
+            feather.replace();
+        });

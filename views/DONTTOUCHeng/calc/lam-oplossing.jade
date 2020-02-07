@@ -1,0 +1,240 @@
+//- V1.8
+html
+  head
+    title=title
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+    script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
+    script.
+      function toon(){
+        $("#berekeningen").show();
+        $("#toon_knop").hide();
+        $("#verberg_knop").show();
+      }
+      function verberg(){
+        $("#berekeningen").hide();
+        $("#verberg_knop").hide();
+        $("#toon_knop").show();
+      }
+  body
+    header
+      nav(class="navbar navbar-expand-md navbar-#{settings.nav} bg-#{settings.theme}")
+        button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
+          span(class="navbar-toggler-icon")
+        div(class="collapse navbar-collapse", id="navbarNav")  
+          ul(class="navbar-nav mr-auto")
+            li(class="nav-item")
+              a(class="nav-link active" , href='/index'+"/"+loginHash) Home
+            li(class="nav-item")
+              a(class="nav-link active", href='/edit-profile'+"/"+loginHash) My profile    
+            li(class="nav-item")
+              a(class="nav-link active", href='/settings'+"/"+loginHash) Settings
+            li(class="nav-item")
+              a(class="nav-link", href='https://identity.basecone.com/authentication/login')
+                img(width="100", height="24", src="/basecone.png", alt="basecone")
+          span(class="navbar-text")
+            div(class="row")
+              div(class="col-4 mr-auto")
+                button(type="button", class="btn btn-light btn-sm", disabled)
+                  h6=description
+              div(class="col-8")  
+                form(class="form-inline" action="/zoeken"+"/"+loginHash, method="post")
+                  input(class="form-control" type="search" placeholder="Search" aria-label="Search" name="search")
+    main
+      div(class="jumbotron")
+        div(class="row no-gutters")
+          div(class="col-3" id="toon_knop")
+            if settings.theme == "light"
+              button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block", onclick="toon()") Toon berekeningen
+            if settings.theme != "light"
+              button(type="button",class="btn btn-#{settings.theme} btn-lg btn-block", onclick="toon()") Toon berekeningen
+          div(class="col-3" id="verberg_knop",style="display:none;" )
+            if settings.theme == "light"
+              button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block", onclick="verberg()") Verberg berekeningen
+            if settings.theme != "light"
+              button(type="button",class="btn btn-#{settings.theme} btn-lg btn-block", onclick="verberg()") Verberg berekeningen
+          div(class="col-7")
+          div(class="col-2")
+            a(href='/lam'+"/"+loginHash,class="button")
+              if settings.theme == "light"
+                button(type="button",class="btn btn-#{settings.oppo} btn-lg btn-block") Back
+              if settings.theme != "light"
+                button(type="button",class="btn btn-#{settings.theme} btn-lg btn-block") Back
+        hr 
+        div(id="berekeningen", style="display:none;")
+          div(class="row")
+            div(class="col-2")
+              h4
+                span(class="badge badge-secondary") Berekening A1 laminatie
+            div(class="col-4")
+            div(class="col-2")
+              h4
+                span(class="badge badge-secondary") Berekening weefsel
+            div(class="col-6")
+              p(class="lead") ( #{L}" * #{B}" * #{H}" ) * 0.0185 = #{As.toFixed(3)} kg
+          hr
+          div(class="row")
+            div(class="col-6")
+              p(class="lead") #{Ds.toFixed(3)} kg / 2.23 kg/uur = #{Ms}
+          hr
+        if settings.theme == "dark" || settings.theme == "danger" || settings.theme == "info"
+          div(class="row")
+            div(class="col-6")
+              table(class="table table-#{settings.oppo} table-striped")
+                tbody
+                  tr
+                    th(scope="row")
+                      h4 Siliconen
+                    td
+                      h4=Ds.toFixed(3)+" kg"
+                  tr
+                    th(scope="row")
+                      h4 Prijs Materiaal Siliconen
+                    td
+                      h4=Ps.toFixed(2)+" €"
+                  tr
+                    th(scope="row")
+                      h4 Prijs Werkuren Siliconen
+                    td
+                      h4=Pws.toFixed(2)+" €"
+                  tr
+                    th(scope="row") 
+                      h4 Totaalprijs Siliconen
+                    td
+                      h4=Number(Ps+Pws).toFixed(2)+" €"
+                  tr
+                    th(scope="row") 
+                      h4 Totaal Tijd Siliconen
+                    td
+                      h4=Ms
+            div(class="col-6")
+              table(class="table table-#{settings.oppo} table-striped")
+                tr
+                  th(scope="row")
+                    h4 Epoxie
+                  td
+                    h4=De.toFixed(3)+" kg"
+                tr
+                  th(scope="row")
+                    h4 Prijs Materiaal Epoxie
+                  td
+                    h4=Pe.toFixed(2)+" €"
+                tr
+                  th(scope="row")
+                    h4 Prijs Werkuren Epoxie
+                  td
+                    h4=Pwe.toFixed(2)+" €"
+                tr
+                  th(scope="row") 
+                    h4 Totaal Prijs Epoxie
+                  td
+                    h4=Number(Pe+Pwe).toFixed(2)+" €"
+                tr
+                  th(scope="row") 
+                    h4 Totaal Tijd Epoxie
+                  td
+                    h4=Me
+            div(class="col-3")
+            div(class="col-6")
+              table(class="table table-#{settings.oppo} table-striped")
+                tr
+                  th(scope="row")
+                    h4 Totaalprijs Werkuren
+                  td
+                    h4=Ptw.toFixed(2)+" €"
+                tr
+                  th(scope="row")
+                    h4 Totaal Prijs Materiaal
+                  td
+                    h4=Ptm.toFixed(2)+" €"
+                tr
+                  th(scope="row")
+                    h4 Totaal Prijs Alles
+                  td
+                    h4=Pt.toFixed(2)+" €"
+                tr
+                  th(scope="row") 
+                    h4 Totaal Uren Alles
+                  td
+                    h4=Mt
+        else
+          div(class="row")
+            div(class="col-6")
+              table(class="table table-#{settings.oppo} table-striped")
+                tbody
+                  tr
+                    th(scope="row")
+                      h4 Siliconen
+                    td
+                      h4=Ds.toFixed(3)+" kg"
+                  tr
+                    th(scope="row")
+                      h4 Prijs Materiaal Siliconen
+                    td
+                      h4=Ps.toFixed(2)+" €"
+                  tr
+                    th(scope="row")
+                      h4 Prijs Werkuren Siliconen
+                    td
+                      h4=Pws.toFixed(2)+" €"
+                  tr
+                    th(scope="row") 
+                      h4 Totaalprijs Siliconen
+                    td
+                      h4=Number(Ps+Pws).toFixed(2)+" €"
+                  tr
+                    th(scope="row") 
+                      h4 Totaal Tijd Siliconen
+                    td
+                      h4=Ms
+            div(class="col-6")
+              table(class="table table-#{settings.oppo} table-striped")
+                tr
+                  th(scope="row")
+                    h4 Epoxie
+                  td
+                    h4=De.toFixed(3)+" kg"
+                tr
+                  th(scope="row")
+                    h4 Prijs Materiaal Epoxie
+                  td
+                    h4=Pe.toFixed(2)+" €"
+                tr
+                  th(scope="row")
+                    h4 Prijs Werkuren Epoxie
+                  td
+                    h4=Pwe.toFixed(2)+" €"
+                tr
+                  th(scope="row") 
+                    h4 Totaal Prijs Epoxie
+                  td
+                    h4=Number(Pe+Pwe).toFixed(2)+" €"
+                tr
+                  th(scope="row") 
+                    h4 Totaal Tijd Epoxie
+                  td
+                    h4=Me
+            div(class="col-3")
+            div(class="col-6")
+              table(class="table table-#{settings.oppo} table-striped")
+                tr
+                  th(scope="row")
+                    h4 Totaalprijs Werkuren
+                  td
+                    h4=Ptw.toFixed(2)+" €"
+                tr
+                  th(scope="row")
+                    h4 Totaal Prijs Materiaal
+                  td
+                    h4=Ptm.toFixed(2)+" €"
+                tr
+                  th(scope="row")
+                    h4 Totaal Prijs Alles
+                  td
+                    h4=Pt.toFixed(2)+" €"
+                tr
+                  th(scope="row") 
+                    h4 Totaal Uren Alles
+                  td
+                    h4=Mt

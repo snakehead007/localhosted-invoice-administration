@@ -1,0 +1,45 @@
+h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+    span #{__('Invoices')} - #{__('options')}
+ul(class="nav flex-column mb-2")
+    li(class="nav-item")
+        if add==="invoice"
+            a(class="nav-link active",href='/invoice/new/invoice')
+                span(data-feather="plus-circle")
+                span #{__('New invoice')}
+        else if client
+            a(class="nav-link",href='/invoice/new/invoice/'+client._id)
+                span(data-feather="plus-circle")
+                span #{__('New invoice')}
+                    i (#{__('For this client')})
+        else
+            a(class="nav-link",href='/invoice/new/invoice')
+                span(data-feather="plus-circle")
+                span #{__('New invoice')}
+    li(class="nav-item")
+        if add==="offer"
+            a(class="nav-link active",href='/invoice/new/offer')
+                span(data-feather="plus-circle")
+                span #{__('New offer')}
+        else if client
+            a(class="nav-link", href = '/invoice/new/offer/' + client._id)
+                span(data-feather="plus-circle")
+                span #{__('New offer')}
+                    i (#{__('For this client')})
+        else
+            a(class="nav-link",href='/invoice/new/offer')
+                span(data-feather="plus-circle")
+                span #{__('New offer')}
+    li(class="nav-item")
+        if add==="creditnote"
+            a(class="nav-link active",href='/invoice/new/credit')
+                span(data-feather="plus-circle")
+                span #{__('New creditnote')}
+        else if client
+            a(class = "nav-link", href = '/invoice/new/credit/' + client._id )
+                span(data-feather="plus-circle")
+                span #{__('New creditnote')}
+                    i (#{__('For this client')})
+        else
+            a(class="nav-link",href='/invoice/new/credit')
+                span(data-feather="plus-circle")
+                span #{__('New creditnote')}

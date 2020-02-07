@@ -1,0 +1,63 @@
+//- V1.8
+html
+  head
+    include ../includes/htmlHead
+    script.
+      function show_mail1(){
+        $('#mail1').show();
+        $('#col3_1').hide();
+        $('#extra_mail1').hide();
+        $('#extra_mail2').show();
+        $('#col10').show();
+      }
+      function show_mail2(){
+        $('#mail2').show();
+        $('#col10').hide();
+        $('#col7').show();
+        $('#extra_mail2').hide();
+      }
+      function info() {
+        $("#info").toggle();
+      };
+      $(document).ready(function () {
+        feather.replace();
+      });
+      $(function () {
+        $("#datepicker").datepicker();
+        $("#datepicker2").datepicker();
+      });
+body
+  header
+    include ../includes/topBar
+
+    div(class="container-fluid")
+      div(class ="row")
+        nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+          div(class="sidebar-sticky")
+            include ../includes/navFlexCollumn
+            include ../includes/bookmarks
+            include ../includes/invoiceOptionMenu
+        main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+          h2(class="pt-3") Factuur bewerken
+          hr
+          form(action='/edit/invoice/'+invoice._id,method='post')
+            div(class="form-row")
+              div(class="form-group col-md-3")
+                label(for="title") Datum
+                input#datepicker(type="text",class="form-control",value=new Date(invoice.date).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' }),name="datum")
+              div(class="form-group col-md-3")
+                label(for="title") Betaaldatum
+                input#datepicker2(type="text",class="form-control",value=invoice.datePaid,name="datumBetaald")
+              if invoice.invoiceNr
+                div(class="form-group col-md-2")
+                  label(for="title") Factuur Nummer
+                  input(type="number",class="form-control",value=invoice.invoiceNr,name="invoiceNr")
+              if invoice.offerNr
+                div(class="form-group col-md-2")
+                  label(for="title") Offerte nummer
+                  input(type="number",class="form-control",value=invoice.offerNr,name="offerNr")
+              div(class="form-group col-md-2")
+                label(for="title") voorschot
+                input(type="number",class="form-control",value=invoice.advance,name="advance",step=".01")
+            hr
+            button(type="submit",class="btn btn-outline-"+settings.theme) bijwerken

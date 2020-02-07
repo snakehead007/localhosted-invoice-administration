@@ -1,0 +1,55 @@
+//- V1.8
+html
+  head
+    include includes/htmlHead
+    script.
+      function info(){$("#info").toggle();};
+      $(document).ready(function () {
+        feather.replace();
+      });
+      function addMateriaal(){
+        $("#addMat").toggle();
+        $("#removeMat").hide();
+      }
+      function removeMateriaal(){
+        $("#removeMat").toggle();
+        $("#addMat").hide();
+      }
+body
+  header
+    include includes/topBar
+    div(class="container-fluid")
+      div(class ="row")
+        nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+          div(class="sidebar-sticky")
+            include includes/navFlexCollumn
+            include includes/stockOptionMenu
+        main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+          h2(class="pt-3") #{__('Stock')}
+          div(class="table-responsive bigger")
+            table(class="table table-striped table-sm ",id="hoofdTabel")
+              thead(style="color:#FFF",class="thead shadow bg-" + settings.theme)
+                tr
+                  th(scope="col") #{__('Name')}
+                  th(scope="col") #{__('Price')}
+                  th(scope="col") #{__('Amount')}
+                  th(scope="col") #{__('Actions')}
+              tbody
+                each item in stock
+                  tr
+                    td=item.name
+                    td=item.price.toFixed(2)+"€ /kg"
+                    td
+                      div(class="dropdown")
+                        button(class="btn btn-outline-"+settings.theme+" /*dropdown-toggle*/" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+                          span=item.amount
+                        //div(class="dropdown-menu" aria-labelledby="dropdownMenu2")
+                          a(class="dropdown-item",onclick="addMateriaal()",href="#") +
+                          input(type="number")
+                          a(class="dropdown-item",onclick="removeMateriaal()",href="#") -
+                          input(type="number")
+                    td
+                      a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") #{__('Actions')}
+                      div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                        a(class="dropdown-item", href='/edit-mat/'+item._id) #{__('Edit')}
+                        a(class="dropdown-item", href='/delete-mat/'+item._id) #{__('Delete')}

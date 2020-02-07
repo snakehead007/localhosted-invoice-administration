@@ -1,0 +1,41 @@
+//- V1.8
+html
+  head
+    include ../includes/htmlHead
+    script.
+      function info(){$("#info").toggle();};
+      $(document).ready(function () {
+        feather.replace();
+      });
+body
+  header
+    include ../includes/topBar
+
+    div(class="container-fluid")
+      div(class ="row")
+        nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+          div(class="sidebar-sticky")
+            include ../includes/navFlexCollumn
+            include ../includes/bookmarks
+            include ../includes/orderOptionMenu
+        main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+          if invoice.invoiceNr
+            h2(class="pt-3")="Invoice " + invoice.invoiceNr + " (" + client.clientName + ")"
+          if invoice.offerNr && !invoice.invoiceNr
+            h2(class="pt-3")="Offer " + invoice.offerNr + " (" + client.clientName + ")"
+          if invoice.creditNr && !invoice.offerNr && !invoice.invoiceNr
+            h2(class="pt-3")="Creditnote " + invoice.creditNr + " (" + client.clientName + ")"
+          hr
+          form(action='/order/new/'+invoice._id,method='post')
+            div(class="form-row")
+              div(class="form-group col-md-10")
+                label(for="title") Beschrijving
+                input(type="text",class="form-control",name="description", required)
+              div(class="form-group col-md-2")
+                label(for="title") Aantal
+                input(type="number",class="form-control",name="amount", required)
+              div(class="form-group col-md-2")
+                label(for="title") Bedrag voor één
+                input(type="number",class="form-control",name="price",step=".01" required)
+            hr
+            button(type="submit",class="btn btn-outline-"+settings.theme) toevoegen

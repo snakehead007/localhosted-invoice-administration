@@ -1,0 +1,57 @@
+script.
+    $(document).ready(function () {
+        feather.replace();
+    });
+    function openSil(loginHash) {
+        $(".optionSil").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionLam").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPrijs").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionInch").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPerc").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPU").css('background-color', 'rgba(0, 0, 0, 0)');
+        window.location = "/epo-sil/" + loginHash;
+    };
+    function openLam(loginHash) {
+        $(".optionLam").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionPrijs").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionInch").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionSil").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPerc").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPU").css('background-color', 'rgba(0, 0, 0, 0)');
+    };
+    function openPrijs(loginHash) {
+        $(".optionPrijs").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionLam").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionInch").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionSil").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPerc").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPU").css('background-color', 'rgba(0, 0, 0, 0)');
+        window.location = "/prijs/" + loginHash;
+    };
+    function openInch(loginHash) {
+        $(".optionInch").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionLam").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPrijs").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionSil").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPerc").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPU").css('background-color', 'rgba(0, 0, 0, 0)');
+        window.location = "/inch/" + loginHash;
+    };
+    function openPerc(loginHash) {
+        $(".optionPerc").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionLam").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPrijs").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionSil").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionInch").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPU").css('background-color', 'rgba(0, 0, 0, 0)');
+        window.location = "/percentage/" + loginHash;
+    };
+    function openPU(loginHash) {
+        $(".optionPU").css('background-color', 'rgba(207, 207, 207, .3)');
+        $(".optionPerc").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionLam").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionPrijs").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionSil").css('background-color', 'rgba(0, 0, 0, 0)');
+        $(".optionInch").css('background-color', 'rgba(0, 0, 0, 0)');
+        window.location = "/pu/" + loginHash;
+    };

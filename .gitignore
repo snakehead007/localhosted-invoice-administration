@@ -7,6 +7,7 @@ GPUCache/
 TODO
 public/logo.*
 .idea/*
+.idea/workspace.xml
 node2docfx.json
 docfx.json
 yml/
@@ -15,6 +16,12 @@ daemon/
 node_modules/
 build/*
 data/*
+.env
+src/dump.rdb
+public/images/*/*
+public/images/*
+public/images/
+
 ### Linux ###
 *~
 

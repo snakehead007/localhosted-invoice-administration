@@ -1,0 +1,13 @@
+h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+  span #{__('This document')} - #{__('options')}
+ul(class="nav flex-column mb-2")
+    li(class="nav-item")
+      if client
+        if currentUrl === "orderNew"
+          a(class="nav-link active",href='/order/new/' + invoice._id )
+            span(data-feather="plus-circle")
+            span #{__('New order')}
+        else
+          a(class="nav-link",href='/order/new/' + invoice._id )
+            span(data-feather="plus-circle")
+            span #{__('New order')}

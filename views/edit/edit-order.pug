@@ -1,0 +1,50 @@
+//- V1.8
+html
+  head
+    include ../includes/htmlHead
+    script.
+      function show_mail1(){
+        $('#mail1').show();
+        $('#col3_1').hide();
+        $('#extra_mail1').hide();
+        $('#extra_mail2').show();
+        $('#col10').show();
+      }
+      function show_mail2(){
+        $('#mail2').show();
+        $('#col10').hide();
+        $('#col7').show();
+        $('#extra_mail2').hide();
+      }
+      function info() {
+        $("#info").toggle();
+      };
+      $(document).ready(function () {
+        feather.replace();
+      });
+body
+  header
+    include ../includes/topBar
+
+    div(class="container-fluid")
+      div(class ="row")
+        nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+          div(class="sidebar-sticky")
+            include ../includes/navFlexCollumn
+            include ../includes/bookmarks
+        main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+          h2(class="pt-3") Bestelling bewerken
+          hr
+          form(action='/edit/order/'+bestelling._id,method='post')
+            div(class="form-row")
+              div(class="form-group col-md-10")
+                label(for="title") Beschrijving
+                input(type="text",class="form-control",value=order.description,name="description", required)
+              div(class="form-group col-md-2")
+                label(for="title") Aantal
+                input(type="number",class="form-control",value=order.amount,name="amount", required)
+              div(class="form-group col-md-2")
+                label(for="title") Bedrag voor één
+                input(type="number",class="form-control",value=order.price,name="price",step=".01" required)
+            hr
+            button(type="submit",class="btn btn-outline-"+settings.theme) bijwerken
