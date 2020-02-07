@@ -1,5 +1,6 @@
 //This javascript file has the methods to invalid various forms
 const jsvat = require('jsvat');
+const IBAN = require('iban');
 const ibantools = require('ibantools');
 //Method name => [Type]+[invalids when] e.g.valueMustNotBeEmpty(), valueMustBeCorrectZipCode()
 //return value: {invalid: true, doc: [given document parameter]}
@@ -68,7 +69,8 @@ exports.numberMustPhoneNumber = (doc,message="Phone number is invalid, please pr
 };
 
 exports.valueMustBeVatNumber = (doc, message="VAT number not valid") => {
-    let invalid = !jsvat.checkVAT(doc,jsvat.countries);
+    console.log(jsvat.checkVAT(doc,jsvat.countries));
+    let invalid = !(jsvat.checkVAT(doc,jsvat.countries).isValid);
     if(process.env.DEBUG_MESSAGES)
         console.log("[DEBUG]: utils.formvalidation.valueMustBeVatNumber("+doc+") => "+invalid);
     return {
@@ -96,12 +98,12 @@ exports.valueMustBePostalCode = (doc, message="Postal code is not valid, only Be
 
 exports.valueMustBeStreetNumber = (doc,message="Street number is not valid, only numbers and letters allowed") => {
     let invalid = false;
-    let regex = /[1-9][0-9]{0,9}[a-z]{0,3}[A-Z]{0,3}/;
+    let regex = /^([1-9])([0-9]{0,9}[a-z]{0,3}[A-Z]{0,3})$/;
     let result = doc.match(regex);
-    if(doc !== result||result == null){
+    if(result == null){
         invalid = true
     }
-    if(process.env.DEBUG_MESSAGES)
+    //if(process.env.DEBUG_MESSAGES)
         console.log("[DEBUG]: utils.formvalidation.valueMustBeStreetNumber("+doc+") => "+invalid);
     return{
         invalid:invalid,
@@ -111,11 +113,8 @@ exports.valueMustBeStreetNumber = (doc,message="Street number is not valid, only
 };
 
 exports.valueMustBeValidIban = (doc,message="IBAN number is not valid") => {
-    const iban = ibantools.electronicFormatIBAN(doc); // 'NL91ABNA0517164300'
-    console.log(iban);
-    let invalid = ibantools.isValidIBAN(iban);
-
-    if(process.env.DEBUG_MESSAGES)
+    const invalid = !IBAN.isValid(doc);
+   // if(process.env.DEBUG_MESSAGES)
         console.log("[DEBUG]: utils.formvalidation.valueMustBeValidIban("+doc+") => "+invalid);
     return{
         invalid:invalid,
@@ -125,9 +124,8 @@ exports.valueMustBeValidIban = (doc,message="IBAN number is not valid") => {
 };
 
 exports.valueMustBeValidBic = (doc,message="BIC number is not valid") => {
-    let invalid = ibantools.isValidBIC(doc);
-    if(process.env.DEBUG_MESSAGES)
-        console.log("[DEBUG]: utils.formvalidation.valueMustBeValidBic("+doc+") => "+invalid);
+    let invalid = !ibantools.isValidBIC(doc);
+       console.log("[DEBUG]: utils.formvalidation.valueMustBeValidBic("+doc+") => "+invalid);
     return{
         invalid:invalid,
         doc:doc,

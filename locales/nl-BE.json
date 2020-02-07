@@ -247,5 +247,8 @@
 	"place name is invalid": "place name is invalid",
 	"email address is invalid": "email address is invalid",
 	"Postal code is not valid, only Belgian postal codes support for now": "Postal code is not valid, only Belgian postal codes support for now",
-	"Street number is not valid, only numbers and letters allowed": "Street number is not valid, only numbers and letters allowed"
+	"Street number is not valid, only numbers and letters allowed": "Street number is not valid, only numbers and letters allowed",
+	"BIC number is not valid": "BIC number is not valid",
+	"VAT number is invalid": "VAT number is invalid",
+	"IBAN number is not valid": "IBAN number is not valid"
 }

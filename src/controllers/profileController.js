@@ -90,19 +90,23 @@ exports.edit_profile_post = (req,res) => {
     let firmCheck = valueMustBeAName(req.body.firm,"firm is invalid");
     if(firmCheck.invalid)
         req.flash('danger',i18n.__(firmCheck.message));
+
     let nameCheck = valueMustBeAName(req.body.name,"name is invalid");
     if(nameCheck.invalid)
         req.flash('danger',i18n.__(nameCheck.message));
+
     let streetCheck = valueMustBeAName(req.body.street,"street name is invalid");
     if(streetCheck.invalid)
         req.flash('danger',i18n.__(streetCheck.message));
     let placeCheck = valueMustBeAName(req.body.place,"place name is invalid");
     if(placeCheck.invalid)
         req.flash('danger',i18n.__(placeCheck.message));
+
     let emailCheck = valueMustBeEmail(req.body.email,"email address is invalid");
     let emailInvalid = req.body.email!==""&&emailCheck.invalid;
     if(emailInvalid)
         req.flash('danger',i18n.__(emailCheck.message));
+
     let telCheck = numberMustPhoneNumber(req.body.tel);
     let telInvalid = req.body.tel !==""&&telCheck.invalid;
     if(telInvalid)
@@ -121,18 +125,19 @@ exports.edit_profile_post = (req,res) => {
     let bicCheck = valueMustBeValidBic(req.body.bic.trim());
     let bicInvalid = req.body.bic !== "" && bicCheck.invalid;
     if(bicInvalid)
-        req.flash('danger',i18n__(bicCheck.message));
+        req.flash('danger',i18n.__(bicCheck.message));
 
     let postalCheck = valueMustBePostalCode(req.body.postal);
     let postalInvalid = req.body.postal !== "" && postalCheck.invalid;
     if(postalInvalid)
         req.flash('danger',i18n.__(postalCheck.message));
+
     let streetNrCheck = valueMustBeStreetNumber(req.body.streetNr);
-    let streetNrInvalid = !(req.body.streetNr === "") && streetCheck.invalid;
+    let streetNrInvalid = req.body.streetNr !== "" && streetNrCheck.invalid;
     if(streetNrInvalid)
         req.flash('danger',i18n.__(streetNrCheck.message));
 
-    if(firmCheck.invalid||nameCheck.invalid||streetCheck.invalid||placeCheck.invalid||emailInvalid||telInvalid||vatInvalid||postalInvalid||streetNrInvalid) {
+    if(firmCheck.invalid||nameCheck.invalid||streetCheck.invalid||placeCheck.invalid||emailInvalid||telInvalid||vatInvalid||postalInvalid||streetNrInvalid||bicInvalid||ibanInvalid) {
         res.redirect('/view/profile');
     } else {
         var updateProfile = {
@@ -145,9 +150,11 @@ exports.edit_profile_post = (req,res) => {
             vat: req.body.vat,
             iban: req.body.iban,
             bic: req.body.bic,
+            /*
             invoiceNrCurrent: Number(req.body.invoiceNrCurrent.toString().substring(req.body.invoiceNrCurrent.toString().length - 3)),
             offerNrCurrent: Number(req.body.offerNrCurrent.toString().substring(req.body.offerNrCurrent.toString().length - 3)),
             creditNrCurrent: Number(req.body.creditNrCurrent.toString().substring(req.body.creditNrCurrent.toString().length - 3)),
+             */
             tel: req.body.tel,
             email: [req.body.email],
             fromUser: req.session._id

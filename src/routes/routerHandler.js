@@ -23,6 +23,7 @@ const uploadRouter = require('./uploadRouter');
 const orderRouter = require('./orderRouter');
 const downloadRouter = require('./downloadRouter');
 const deleteRouter = require('./deleteRouter');
+const validateRouter = require('./validateRouter');
 //Controllers
 
 router.use("/",loginRouter); //index page
@@ -41,6 +42,7 @@ router.use('/edit',stillSignedInCheck,editRouter);
 router.use('/upload',stillSignedInCheck,uploadRouter);
 router.use('/download',downloadRouter);
 router.use('/delete',stillSignedInCheck,deleteRouter);
+router.use('/valid',validateRouter);
 //Routers
 
 //error handling for 404
