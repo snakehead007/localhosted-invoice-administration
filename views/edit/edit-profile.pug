@@ -32,7 +32,7 @@ body
               input(type="text",class="form-control",value=profile.street,name="street",placeholder="grotestraat" )
             div(class="form-group col-md-2")
               label(for="title") #{__('Street N°')}
-              input(type="text",class="form-control",value=profile.streetNr,name="streetNr",placeholder="12")
+              input(type="text",class="form-control",value=profile.streetNr,name="streetNr",placeholder="12a")
             div(class="col-md-1")
             div(class="form-group col-md-2")
               label(for="title") #{__('VAT number')}
@@ -72,7 +72,7 @@ body
             div(class="col-md-3")
               p(class="lead") Upload your logo:
               a(href="/upload/logo")
-                button(type="button",role="button",class="btn-sm btn-outline-"+settings.theme) Upload...
+                button(type="button",role="button",class="btn btn-sm btn-outline-"+settings.theme) Change your logo
             div(class="col-md")
               p(class="lead") preview of current logo:
               img(src="/images/"+profile.fromUser+"/logo.jpeg" alt="your logo" class="rounded-lg" style="width:100px;height:100px")

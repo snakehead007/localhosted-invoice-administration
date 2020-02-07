@@ -18,3 +18,8 @@
         if messages.success
             each message in messages.success
                 div(class="alert alert-success fade show" role="alert")=message
+        if messages.info
+            each message in messages.info
+                div.alert.alert-info.alert-dismissible.fade.show(role="alert")=message
+                    button.close(type='button', data-dismiss="alert" aria-label="Close")
+                        span(aria-hidden="true") &times;

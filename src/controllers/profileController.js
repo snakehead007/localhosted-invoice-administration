@@ -1,7 +1,7 @@
 const Profile = require('../models/profile');
 const Settings = require('../models/settings');
 const i18n = require('i18n');
-const { valueMustStreetNumber,valueMustBeAName,valueMustBeEmail,numberMustPhoneNumber, valueMustBeVatNumber, valueMustBePostalCode} = require('../utils/formValidation');
+const { valueMustBeValidBic,valueMustBeValidIban,valueMustBeStreetNumber,valueMustBeAName,valueMustBeEmail,numberMustPhoneNumber, valueMustBeVatNumber, valueMustBePostalCode} = require('../utils/formValidation');
 /**
  * @api {get} /view/profile view_profile_get
  * @apiDescription On this page you can edit all the profile information
@@ -25,7 +25,6 @@ exports.view_profile_get = (req,res) => {
     let jaar = _jaar.toString();
     Profile.findOne({fromUser:req.session._id}, function(err, profile) {
         if (!err) {
-            console.log(profile);
             var _nr = profile.invoiceNrCurrent;
             var nr_str = _nr.toString();
             if (nr_str.toString().length == 1) {
@@ -108,19 +107,31 @@ exports.edit_profile_post = (req,res) => {
     let telInvalid = req.body.tel !==""&&telCheck.invalid;
     if(telInvalid)
         req.flash('danger',i18n.__(telCheck.message));
+
     let vatCheck = valueMustBeVatNumber(req.body.vat.trim(),"VAT number is invalid");
-    console.log(vatCheck);
     let vatInvalid = req.body.vat !== ""&&vatCheck.invalid;
     if(vatInvalid)
         req.flash('danger',i18n.__(vatCheck.message));
+
+    let ibanCheck = valueMustBeValidIban(req.body.iban.trim());
+    let ibanInvalid = req.body.iban !== "" && ibanCheck.invalid;
+    if(ibanInvalid)
+        req.flash('danger',i18n.__(ibanCheck.message));
+
+    let bicCheck = valueMustBeValidBic(req.body.bic.trim());
+    let bicInvalid = req.body.bic !== "" && bicCheck.invalid;
+    if(bicInvalid)
+        req.flash('danger',i18n__(bicCheck.message));
+
     let postalCheck = valueMustBePostalCode(req.body.postal);
     let postalInvalid = req.body.postal !== "" && postalCheck.invalid;
     if(postalInvalid)
         req.flash('danger',i18n.__(postalCheck.message));
-    let streetNrCheck = valueMustStreetNumber(req.body.streetNr);
-    let streetNrInvalid = req.body.streetNr !== "" && streetCheck.invalid;
+    let streetNrCheck = valueMustBeStreetNumber(req.body.streetNr);
+    let streetNrInvalid = !(req.body.streetNr === "") && streetCheck.invalid;
     if(streetNrInvalid)
         req.flash('danger',i18n.__(streetNrCheck.message));
+
     if(firmCheck.invalid||nameCheck.invalid||streetCheck.invalid||placeCheck.invalid||emailInvalid||telInvalid||vatInvalid||postalInvalid||streetNrInvalid) {
         res.redirect('/view/profile');
     } else {
