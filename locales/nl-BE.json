@@ -250,5 +250,10 @@
 	"Street number is not valid, only numbers and letters allowed": "Street number is not valid, only numbers and letters allowed",
 	"BIC number is not valid": "BIC number is not valid",
 	"VAT number is invalid": "VAT number is invalid",
-	"IBAN number is not valid": "IBAN number is not valid"
+	"IBAN number is not valid": "IBAN number is not valid",
+	"Cannot make an invoice with a client": "Cannot make an invoice with a client",
+	"Cannot make an offer with a client": "Cannot make an offer with a client",
+	"Cannot make an creditnote with a client": "Cannot make an creditnote with a client",
+	"client name not correctly filled in": "client name not correctly filled in",
+	"place name not correctly checked in": "place name not correctly checked in"
 }

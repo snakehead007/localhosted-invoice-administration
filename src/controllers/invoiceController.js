@@ -114,7 +114,7 @@ exports.invoice_new_get = (req,res) => {
         if(err) console.trace();
         Client.findOne({fromUser:req.session._id,_id: idc}, function(err, client) {
             if (client===null){
-                console.log("[Error]: Cannot make invoice without a client");
+                req.flash('danger',i18n.__("Cannot make an invoice with a client"));
                 res.redirect('/invoice/new/invoice');
             }else {
                 if (err) console.trace();
@@ -175,7 +175,7 @@ exports.credit_new_get = (req,res) => {
         if(err) console.trace();
         Client.findOne({fromUser:req.session._id,_id: idc}, function(err, client) {
             if (client===null){
-                console.log("[Error]: Cannot make invoice without a client");
+                req.flash('danger',i18n.__("Cannot make an creditnote with a client"));
                 res.redirect('/invoice/new/credit');
             }else {
                 if (err) console.trace();
@@ -231,7 +231,7 @@ exports.offer_new_get = (req,res) => {
         if(err) console.trace();
         Client.findOne({fromUser:req.session._id,_id: idc}, function(err, client) {
             if (client===null){
-                console.log("[Error]: Cannot make invoice without a client");
+                req.flash('danger',i18n.__("Cannot make an offer with a client"));
                 res.redirect('/invoice/new/offer');
             }else {
                 if (err) console.trace();

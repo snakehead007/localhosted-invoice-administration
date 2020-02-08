@@ -6,7 +6,7 @@ const Profile = require('../models/profile');
 const Client = require('../models/client');
 const Settings = require('../models/settings');
 const i18n = require('i18n');
-const {valueMustBeAName} = require('../utils/formValidation');
+const invalid = require('../utils/formValidation');
 /**
  * @api {get} /client/all getClientAll
  * @apiDescription Here you can view all the clients from the current user
@@ -84,12 +84,18 @@ exports.getClientNew = (req, res) => {
  *  }
  */
 exports.postClientNew = (req, res) => {
-    let isNotValid = valueMustBeAName(req.body.clientName).validate ||
-        valueMustBeAName(req.body.street).validate ||
-        valueMustBeAName(req.body.place).validate ||
-        valueMustBeAName(req.body.firm).validate;
+    let nameCheck = invalid.valueMustBeAName(req,res,req.body.clientName,"client name not correctly filled in",true);
+    let firmCheck = invalid.valueMustBeAName(req,res,req.body.firm,"firm name not correctly filled in");
+    let streetCheck = invalid.valueMustBeAName(req,res,req.body.street,);
+    let streetNrCheck = invalid.valueMustBeStreetNumber(req,res,req.body.streetNr);
+    let emailCheck = invalid.valueMustBeEmail(req,res,req.body.email,);
+    let vatCheck = invalid.valueMustBeVatNumber(req,res,req.body.vat,);
+    let bankCheck = invalid.valueMustBeValidIban(req,res,req.body.bankNr,);
+    let postalCheck = invalid.valueMustBePostalCode(req,res,req.body.postal);
+    let placeCheck = invalid.valueMustBeAName(req,res,req.body.place,"place name not correctly checked in",true);
+    let isNotValid = nameCheck||firmCheck||streetCheck||streetNrCheck||emailCheck||vatCheck||bankCheck||postalCheck||placeCheck;
     if(isNotValid){
-        req.flash('danger',i18n.__('Client not correctly filled in'));
+        console.log('[error]: making client, not valid');
         res.redirect('/client/new');
     }else if(
         req.body.clientName &&

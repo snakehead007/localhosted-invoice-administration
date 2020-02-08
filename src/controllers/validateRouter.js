@@ -1,5 +1,5 @@
 const validate = require('../utils/formValidation');
-
+/*
 exports.iban = (req,res)=> {
     res.send(validate.valueMustBeValidIban(req.params.iban));
 };
@@ -15,3 +15,4 @@ exports.vat = (req,res) => {
 exports.streetNr = (req,res) => {
     res.send(validate.valueMustBeStreetNumber(req.params.nr));
 };
+*/

@@ -19,6 +19,7 @@ body
             main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
                 h2(class="pt-3")="Nieuwe "+add+ " toevoegen"
                 hr
+                include includes/messages
                 form(action='/invoice/new/'+addlink,method='post')
                     div(class="form-row")
                         div(class="form-group col-md-5")
