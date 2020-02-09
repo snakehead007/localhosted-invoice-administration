@@ -1,3 +1,5 @@
+//This is testing router, to test validations without having to login each time
+
 const validate = require('../utils/formValidation');
 /*
 exports.iban = (req,res)=> {
@@ -16,3 +18,10 @@ exports.streetNr = (req,res) => {
     res.send(validate.valueMustBeStreetNumber(req.params.nr));
 };
 */
+
+exports.name = (req,res) => {
+    res.send(validate.valueMustBeAName(req,res,req.params.name,"",req.params.bool==="true"));
+};
+exports.noName = (req,res) => {
+    res.send(validate.valueMustBeAName(req,res,"","",req.params.bool==="true"));
+};

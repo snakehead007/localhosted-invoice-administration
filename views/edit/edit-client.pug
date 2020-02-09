@@ -32,12 +32,13 @@ body
           div(class="sidebar-sticky")
             include ../includes/navFlexCollumn
             include ../includes/bookmarks
-            include ../includes/invoiceOptionMenu
+            if currentUrl !== "clientNew"
+              include ../includes/invoiceOptionMenu
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          h2(class="pt-3") Klant bewerken
+          h2(class="pt-3")=(currentUrl==="clientNew")?__('Add client'):__("Edit client")
           hr
           include ../includes/messages
-          form(action='/edit/client/'+client._id ,method='post')
+          form(action=((currentUrl==="clientNew")?'/client/new':'/edit/client/'+client._id) ,method='post')
             p=msg
             div(class="form-row")
               div(class="form-group col-md-5")

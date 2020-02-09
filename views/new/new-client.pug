@@ -41,14 +41,14 @@ body
             div(class="form-row")
               div(class="form-group col-md-5")
                 label(for="title") #{__('Client name')} *
-                input(type="text",class="form-control",name="clientName" required)
+                input(type="text",class="form-control",name="clientName")
               div(class="form-group col-md-2")
               div(class="form-group col-md-5")
                 label(for="title") #{__('Firm')}
                 input(type="text",class="form-control",name="firm")
               div(class="form-group col-md-3")
                 label(for="title") #{__('Streetname')} *
-                input(type="text",class="form-control",name="street" required)
+                input(type="text",class="form-control",name="street" )
               div(class="form-group col-md-2")
                 label(for="title") #{__('Street Nr')}
                 input(type="text",class="form-control",name="streetNr")
@@ -67,7 +67,7 @@ body
                 input(type="number",class="form-control",name="postal")
               div(class="form-group col-md-2")
                 label(for="title") #{__('place')} *
-                input(type="text",class="form-control",name="place" required)
+                input(type="text",class="form-control",name="place")
               div(class="col-md-2")
             hr
             button(type="submit",class="btn btn-outline-"+settings.theme) #{__('Add')}

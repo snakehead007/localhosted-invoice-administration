@@ -5,7 +5,6 @@
 const Profile = require('../models/profile');
 const Client = require('../models/client');
 const Settings = require('../models/settings');
-const i18n = require('i18n');
 const invalid = require('../utils/formValidation');
 /**
  * @api {get} /client/all getClientAll
@@ -55,9 +54,9 @@ exports.getClientAll = (req, res) => {
  *  }
  */
 exports.getClientNew = (req, res) => {
-    Settings.findOne({},function(err, settings) {
+    Settings.findOne({fromUser:req.session._id},function(err, settings) {
         if(err) console.trace();
-        Profile.findOne({},function(err,profile) {
+        Profile.findOne({fromUser:req.session._id},function(err,profile) {
             if(err) console.trace();
             if (!err) {
                 res.render('new/new-client', {
@@ -84,23 +83,44 @@ exports.getClientNew = (req, res) => {
  *  }
  */
 exports.postClientNew = (req, res) => {
-    let nameCheck = invalid.valueMustBeAName(req,res,req.body.clientName,"client name not correctly filled in",true);
-    let firmCheck = invalid.valueMustBeAName(req,res,req.body.firm,"firm name not correctly filled in");
-    let streetCheck = invalid.valueMustBeAName(req,res,req.body.street,);
+    let nameCheck = invalid.valueMustBeAName(req,res,req.body.clientName,true,"client name not correctly filled in");
+    let firmCheck = invalid.valueMustBeAName(req,res,req.body.firm,false,"firm name not correctly filled in");
+    let streetCheck = invalid.valueMustBeAName(req,res,req.body.street,true);
     let streetNrCheck = invalid.valueMustBeStreetNumber(req,res,req.body.streetNr);
     let emailCheck = invalid.valueMustBeEmail(req,res,req.body.email,);
     let vatCheck = invalid.valueMustBeVatNumber(req,res,req.body.vat,);
     let bankCheck = invalid.valueMustBeValidIban(req,res,req.body.bankNr,);
     let postalCheck = invalid.valueMustBePostalCode(req,res,req.body.postal);
-    let placeCheck = invalid.valueMustBeAName(req,res,req.body.place,"place name not correctly checked in",true);
+    let placeCheck = invalid.valueMustBeAName(req,res,req.body.place,true,"place name not correctly checked in");
     let isNotValid = nameCheck||firmCheck||streetCheck||streetNrCheck||emailCheck||vatCheck||bankCheck||postalCheck||placeCheck;
+    console.log("isnotvalid = "+isNotValid);
     if(isNotValid){
         console.log('[error]: making client, not valid');
-        res.redirect('/client/new');
-    }else if(
-        req.body.clientName &&
-        req.body.street &&
-        req.body.place) {
+        Settings.findOne({fromUser:req.session._id},function(err, settings) {
+            if(err) console.trace();
+            Profile.findOne({fromUser:req.session._id},function(err,profile) {
+                if(err) console.trace();
+                if (!err) {
+                    res.render('edit/edit-client', {
+                        "settings": settings,
+                        "profile":profile,
+                        "currentUrl":"clientNew",
+                        "client" : {
+                            "clientName":req.body.clientName,
+                            "firm":req.body.firm,
+                            "street":req.body.street,
+                            "streetNr":req.body.streetNr,
+                            "email":req.body.email,
+                            "vat":req.body.vat,
+                            "bankNr":req.body.bankNr,
+                            "postal":req.body.postal,
+                            "place":req.body.place
+                        }
+                    });
+                }
+            });
+        });
+    }else{
         let newClient = new Client({
             firm: req.body. firm,
             clientName: req.body.clientName,

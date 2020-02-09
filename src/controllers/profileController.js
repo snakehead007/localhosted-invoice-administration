@@ -87,18 +87,18 @@ exports.edit_profile_get = (req,res) => {
  *  HTTP/1.1 200 OK
  */
 exports.edit_profile_post = (req,res) => {
-    let firmCheck = valueMustBeAName(req,res,req.body.firm,"firm is invalid");
-    let nameCheck = valueMustBeAName(req,res,req.body.name,"name is invalid");
-    let streetCheck = valueMustBeAName(req,res,req.body.street,"street name is invalid");
-    let placeCheck = valueMustBeAName(req,res,req.body.place,"place name is invalid");
-    let emailCheck = valueMustBeEmail(req,res,req.body.email,"email address is invalid");
+    let firmCheck = valueMustBeAName(req,res,req.body.firm,false,"firm is invalid");
+    let nameCheck = valueMustBeAName(req,res,req.body.name,true,"name is invalid");
+    let streetCheck = valueMustBeAName(req,res,req.body.street,false,"street name is invalid");
+    let placeCheck = valueMustBeAName(req,res,req.body.place,false,"place name is invalid");
+    let emailCheck = valueMustBeEmail(req,res,req.body.email,false,"email address is invalid");
     let telCheck = numberMustPhoneNumber(req,res,req.body.tel);
-    let vatCheck = valueMustBeVatNumber(req,res,req.body.vat.trim(),"VAT number is invalid");
+    let vatCheck = valueMustBeVatNumber(req,res,req.body.vat.trim(),false,"VAT number is invalid");
     let ibanCheck = valueMustBeValidIban(req,res,req.body.iban.trim());
     let bicCheck = valueMustBeValidBic(req,res,req.body.bic.trim());
     let postalCheck = valueMustBePostalCode(req,res,req.body.postal);
     let streetNrCheck = valueMustBeStreetNumber(req,res,req.body.streetNr);
-    if(firmCheck.invalid||nameCheck.invalid||streetCheck.invalid||placeCheck.invalid||emailCheck||telCheck||vatCheck||postalCheck||streetCheck||bicCheck||ibanCheck) {
+    if(firmCheck||nameCheck||streetCheck||placeCheck||emailCheck||telCheck||vatCheck||postalCheck||streetCheck||bicCheck||ibanCheck||streetNrCheck) {
         res.redirect('/view/profile');
     } else {
         var updateProfile = {
