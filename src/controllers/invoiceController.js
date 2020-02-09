@@ -126,9 +126,10 @@ exports.invoice_new_get = (req,res) => {
                             if (err) console.trace();
                             Profile.updateOne({
                                 fromUser: req.session._id,
-                                nr: profile.invoiceNrCurrent + 1
+                                invoiceNrCurrent: profile.invoiceNrCurrent + 1
                             }, async function (err) {
-                                if (err) console.trace();
+                                if (err) console.trace(err);
+                                console.log(profile);
                                 let invoiceNr;
                                 if (profile.invoiceNrCurrent.toString().length === 1) {
                                     invoiceNr = "00" + profile.invoiceNrCurrent.toString();
@@ -292,7 +293,7 @@ exports.invoice_all_client = (req,res) => {
         if(err) console.trace();
             Invoice.find({fromUser:req.session._id,fromClient: req.params.idc}).sort('-invoiceNr').exec(function(err, invoices) {
                 if(err) console.trace();
-                    Settings.findOne({}, function(err, settings) {
+                    Settings.findOne({fromUser:req.session._id}, function(err, settings) {
                         if(err) console.trace();
                         Profile.findOne({},function(err,profile){
                             if(err) console.trace();
@@ -373,7 +374,10 @@ exports.edit_invoice_post = (req,res) => {
                 total:totOrders
             };
         }
-        Client.findOne({fromUser:req.session._id,_id:orders[0].fromClient}, function(err, contact) {
+        let searchCriteria = {fromUer:req.session._id};
+        if(orders.length > 0)
+            searchCriteria.push({_id:orders[0].fromClient});
+        Client.findOne(searchCriteria, function(err, contact) {
             Invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, updateInvoice, function(err) {
                 if (!err) {
                     res.redirect('/invoice/' + contact._id);
