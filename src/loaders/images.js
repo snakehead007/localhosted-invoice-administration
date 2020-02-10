@@ -21,29 +21,41 @@ module.exports.images = async function images(app) {
            //create folder for user
            try {
                await fs.mkdirSync('public/images/' + profile.fromUser);
-               //console.log("[DEBUG]: mkdir public/images/"+ profile.fromUser);
+               if(process.env.LOGGING>2)
+                    console.log("[DEBUG]: mkdir public/images/"+ profile.fromUser);
            }catch(error){
-               //console.trace("[Error]: "+error);
+               if(process.env.LOGGING>2)
+                    console.log("[Error]: Got error in making directory");
+               if(process.env.LOGGING>2)
+                    console.trace("[Error]: "+error);
            }
            //add logo to user folder
            try{
                if(typeof profile.logoFile.data !== "undefined") {
                    await fs.writeFile('public/images/' + profile.fromUser+'/logo.jpeg', profile.logoFile.data, function (err) {
-                       if (err) throw err;
+                       if (err) {
+                           if(process.env.LOGGING>2){
+                               console.trace("[Error]: "+err);
+                           }
+                           throw err;
+                       }
                        if(!err){
-                          // console.log("[DEBUG]: mkdir public/images/"+ profile.fromUser+"/logo.jpeg");
+                           if(process.env.LOGGING>2)
+                                console.log("[DEBUG]: mkdir public/images/"+ profile.fromUser+"/logo.jpeg");
                        }
                    });
                }
            }catch(e){
-               //console.trace("[Error]: "+e);
+               if(process.env.LOGGING>2)
+                    console.trace("[Error]: "+e);
            }
        }
     });
 
     ///TODO: check if any folder is empty delete them
     /// ...
-    //console.log('[Info]: Wrote images/, all logo of profile written to disk');
+    if(process.env.LOGGING>1)
+        console.log('[Info]: Wrote images/, all logo of profile written to disk');
 };
 
 const deleteFolderRecursive = function(_path) {
@@ -53,11 +65,13 @@ const deleteFolderRecursive = function(_path) {
             if (fs.lstatSync(curPath).isDirectory()) { // recurse
                 deleteFolderRecursive(curPath);
             } else { // delete file
-                //console.log("[DEBUG]: rm "+curPath);
+                if(process.env.LOGGING>2)
+                    console.log("[DEBUG]: rm "+curPath);
                 fs.unlinkSync(curPath);
             }
         });
-        //console.log("[DEBUG]: rm "+_path);
+        if(process.env.LOGGING>2)
+            console.log("[DEBUG]: rm "+_path);
         fs.rmdirSync(_path);
     }
 };

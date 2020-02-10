@@ -49,11 +49,18 @@ router.use('/search',stillSignedInCheck,searchRouter);
 
 //error handling for 404
 router.use((req, res) => {
+    if(process.env.LOGGING>2) {
+        console.log('[Debug]: 404 page send');
+        console.trace();
+    }
     res.status(404).send('404: Page not Found');
 });
 //error handling for 500
 router.use((error, req, res, next) => {
-    console.log(error);
+    if(process.env.LOGGING>2) {
+        console.log('[Debug]: 500 page send');
+        console.trace();
+    }
     res.status(500).send('500: Internal Server Error');
     next();
 });

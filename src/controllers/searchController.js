@@ -86,7 +86,8 @@ module.exports.search_get = (req,res) => {
                                         "orders": orders_d,
                                         "invoices": invoices_d,
                                         "items": items_d,
-                                        "profile": profile
+                                        "profile": profile,
+                                        "currentSearch":str
                                     });
                                 }
                             });

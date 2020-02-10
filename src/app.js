@@ -13,11 +13,14 @@ async function start(){
     console.log('--------  Invoice-administration  -------');
     dotenv.config(); //when starting up node inside the src folder, use => .config({ path: '../.env' }
     if(!process.env.PORT) throw new Error(".env file not found, or wrong path");
-    console.log("[Info]: Dotenv config done");
+    if(process.env.LOGGING>1)
+        console.log("[Info]: Dotenv config done");
     await load(app);
-    console.log("[Info]: Routes loaded");
+    if(process.env.LOGGING>1)
+        console.log("[Info]: Routes loaded");
     app.use(function (req,res,next) {
-        console.log("[%s request]: %s%s  from %s", req.method, process.env.LOCAL_URL,req.url,((req.session._id)?req.session._id:"unknown"));
+        if(process.env.LOGGING>1)
+            console.log("[%s request]: %s%s  from %s", req.method, process.env.LOCAL_URL,req.url,((req.session._id)?req.session._id:"unknown"));
         next();
     });
     app.use('/',routes);

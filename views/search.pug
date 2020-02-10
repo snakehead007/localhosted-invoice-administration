@@ -1,17 +1,7 @@
 //- V1.8
 html
   head
-    title=title
-    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
-    link(rel="stylesheet" href="/stylesheet.css")
-    scrip(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/core.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
-    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js")
-    script(src="https://www.chartjs.org/samples/latest/utils.js")
-    script(src="https://unpkg.com/feather-icons")
+    include includes/htmlHead
     script.
       function info(){$("#info").toggle();};
       $(document).ready(function () {
@@ -25,36 +15,35 @@ html
         }
       }
 body
-  header
-    include includes/topBar
-    div(class="container-fluid")
-      div(class ="row")
-        nav(class="col-md-2 d-none d-md-block bg-light sidebar")
-          div(class="sidebar-sticky")
-            include includes/navFlexCollumn
-            include includes/bookmarks
-        main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          h2(class="pt-3")=description
-          if clients.length > 0
-            hr
-            h4=__('Clients')
-            div(class="table-responsive")
-              include includes/tables/clients
-                
-          if invoices.length != 0
-            hr
-            h4=__('Invoices')
-            div(class="table-responsive")  
-              include includes/tables/invoices
-          if orders.length != 0
-            hr
-            h4=__("Orders")
-            div(class="table-responsive")
-              include includes/tables/orders
-          if items.length != 0
-            hr
-            h4=__('Stock')
-            div(class="table-responsive")
-              include includes/tables/stock
-          if orders.length==0 && invoices.length==0 && clients.length==0 && items.length==0
-              div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert")=__('Nothing was found')
+  include includes/topBar
+  div(class="container-fluid")
+    div(class ="row")
+      nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+        div(class="sidebar-sticky")
+          include includes/navFlexCollumn
+          include includes/bookmarks
+      main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+        h2(class="pt-3")=description
+        if clients.length > 0
+          hr
+          h4=__('Clients')
+          div(class="table-responsive")
+            include includes/tables/clients
+
+        if invoices.length != 0
+          hr
+          h4=__('Invoices')
+          div(class="table-responsive")
+            include includes/tables/invoices
+        if orders.length != 0
+          hr
+          h4=__("Orders")
+          div(class="table-responsive")
+            include includes/tables/orders
+        if items.length != 0
+          hr
+          h4=__('Stock')
+          div(class="table-responsive")
+            include includes/tables/stock
+        if orders.length==0 && invoices.length==0 && clients.length==0 && items.length==0
+            div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert")=__('Nothing was found')

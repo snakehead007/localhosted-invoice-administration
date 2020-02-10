@@ -13,7 +13,8 @@ module.exports.default = function(app){
     app.engine('pug', pug.__express);
     app.set('views', path.join(path.resolve(), 'views'));
     app.set('view engine', 'pug');
-    console.log("[Info]: . . . . Engine and view loaded");
+    if(process.env.LOGGING>1)
+        console.log("[Info]: . . . . Engine and view loaded");
     app.use(cookieParser());
     i18n.configure({
         locales:['en-GB', 'nl-BE'],
@@ -30,14 +31,16 @@ module.exports.default = function(app){
         };
         next();
     });
-    console.log("[Info]: . . . . Locales set up");
+    if(process.env.LOGGING>1)
+        console.log("[Info]: . . . . Locales set up");
     app.use(fileUpload());
     app.use(express.static(path.join(path.resolve(), 'public')));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({
         extended: true
     }));
-    console.log("[Info]: . . . . Express settings set up");
+    if(process.env.LOGGING>1)
+        console.log("[Info]: . . . . Express settings set up");
     app.use(
         session({
             name: 'session',
@@ -47,8 +50,10 @@ module.exports.default = function(app){
         })
     );
     app.use(flash());
-    console.log("[Info]: . . . . Sessions set up");
+    if(process.env.LOGGING>1)
+        console.log("[Info]: . . . . Sessions set up");
     app.listen(process.env.PORT,() => {
-        console.log('[Info]: Server is running at PORT ' + process.env.PORT);
+        if(process.env.LOGGING>0)
+            console.log('[Info]: Server is running at PORT ' + process.env.PORT);
     });
 };

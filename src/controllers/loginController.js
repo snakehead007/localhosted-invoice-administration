@@ -21,7 +21,12 @@ exports.login_get =  function getLogin(req,res){
     }*/
     req.session.regenerate(function(err) {
         // will have a new session here
-
+        if(err){
+            console.log('[Error]: got an error on regnerating session in loginController');
+            if(process.env.LOGGING>2){
+                console.trace("[Error]: "+err);
+            }
+        }
         res.render('login');
     });
     //res.render('login');
@@ -58,6 +63,10 @@ exports.create_user_get = async function getCreateNewUser(req,res){
         const settings = await Settings.findOne({fromUser:currentUser._id});
         const profile = await Profile.findOne({fromUser:currentUser._id});
         await User.updateOne({_id:currentUser._id},{settings:settings._id,profile:profile._id});
+        if(process.env.LOGGING>1){
+            console.log("[Info]: Generated new random user:");
+            console.log(newUser);
+        }
         req.session.email = email;
         req.session._id = currentUser._id;
         req.session.loggedIn = currentUser;
