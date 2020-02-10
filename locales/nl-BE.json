@@ -258,5 +258,8 @@
 	"place name not correctly checked in": "place name not correctly checked in",
 	"": "",
 	"firm name not correctly filled in": "firm name not correctly filled in",
-	"VAT number not valid": "VAT number not valid"
+	"VAT number not valid": "VAT number not valid",
+	"search on": "search on",
+	"Successfully logged out": "Successfully logged out",
+	"search on ": "search on "
 }

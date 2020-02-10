@@ -13,12 +13,18 @@ const Profile = require('../models/profile');
  * @param res
  */
 exports.login_get =  function getLogin(req,res){
-    req.session;
+    //req.session;
+
     //This is would redirect if session was already created
     /*if(req.session&&req.session._id){
         return res.redirect('/dashboard');
     }*/
-    res.render('login');
+    req.session.regenerate(function(err) {
+        // will have a new session here
+
+        res.render('login');
+    });
+    //res.render('login');
 };
 /**
  *

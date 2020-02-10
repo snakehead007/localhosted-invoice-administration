@@ -10,7 +10,11 @@ exports.stillSignedInCheck = (req,res,next) => {
     }
     console.log(req.session);
     Settings.findOne({fromUser:req.session._id},function(err,settings){
-        if(err) console.trace();
+        if(err){
+            console.trace(err);
+            req.flash('danger',"couldn't find user");
+            req.redirect('/');
+        }
         req.locale = settings.locale;
         i18n.setLocale(req, settings.locale);
         i18n.setLocale(res, settings.locale);

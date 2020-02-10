@@ -7,17 +7,21 @@ const Client = require('../models/client');
 const Invoice = require('../models/invoice');
 const Item = require('../models/item');
 const Order = require("../models/order");
-
+const Profile = require('../models/profile');
+const Settings = require('../models/settings');
+const {isNumeric} = require('../utils/numbers');
+const {distinct} = require('../utils/array');
+const i18n = require('i18n');
 module.exports.search_get = (req,res) => {
     let str = req.body.search.toString().toLowerCase();
     let clients = [];
     let invoices = [];
     let orders = [];
     let items = [];
-    Client.find({}, function(err, clients_) {
-        Invoice.find({}, function(err, invoices_) {
-            Order.find({}, function(err, orders_) {
-                Item.find({},function(err, mats_){
+    Client.find({fromUser:req.session._id}, function(err, clients_) {
+        Invoice.find({fromUser:req.session._id}, function(err, invoices_) {
+            Order.find({fromUser:req.session._id}, function(err, orders_) {
+                Item.find({fromUser:req.session._id},function(err, mats_){
                     //orders
                     for (let order of orders_) {
                         if (String(order.description).toLowerCase().includes(str)) {
@@ -30,6 +34,8 @@ module.exports.search_get = (req,res) => {
                             if (String(invoice.invoiceNr).includes(str)) {
                                 invoices.push(invoice);
                             } else if (String(invoice.offerNr).includes(str)) {
+                                invoices.push(invoice);
+                            } else if (String(invoice.creditNr).includes(str)){
                                 invoices.push(invoice);
                             }
                         }
@@ -69,18 +75,17 @@ module.exports.search_get = (req,res) => {
                     let orders_d = distinct(orders);
                     let invoices_d = distinct(invoices);
                     let items_d = distinct(items);
-                    Settings.findOne({}, function(err, settings) {
+                    Settings.findOne({fromUser:req.session._id}, function(err, settings) {
                         if (!err) {
-                            Profile.findOne({}, function (err, profile) {
+                            Profile.findOne({fromUser:req.session._id}, function (err, profile) {
                                 if (!err) {
-                                    res.render(settings.lang + '/zoeken', {
-                                        "description": "Zoeken op \"" + str + "\"",
+                                    res.render('search', {
+                                        "description":  i18n.__("search on ")+"\"" + str + "\"",
                                         "settings": settings,
                                         "clients": clients_d,
                                         "orders": orders_d,
                                         "invoices": invoices_d,
                                         "items": items_d,
-                                        "loginHash": req.params.loginHash,
                                         "profile": profile
                                     });
                                 }

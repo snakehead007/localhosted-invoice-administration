@@ -24,11 +24,12 @@ const orderRouter = require('./orderRouter');
 const downloadRouter = require('./downloadRouter');
 const deleteRouter = require('./deleteRouter');
 const validateRouter = require('./validateRouter');
+const searchRouter = require('./searchRouter');
 //Controllers
 
 router.use("/",loginRouter); //index page
 router.use("/dashboard",stillSignedInCheck,dashboardRouter);
-router.use('/logout',logoutRouter);
+router.use('/logout',stillSignedInCheck,logoutRouter);
 router.use('/redirect',redirectRouter); //only used when logged in and redirected by google
 router.use('/view',stillSignedInCheck,viewRouter);
 router.use('/order',stillSignedInCheck,orderRouter);
@@ -43,6 +44,7 @@ router.use('/upload',stillSignedInCheck,uploadRouter);
 router.use('/download',downloadRouter);
 router.use('/delete',stillSignedInCheck,deleteRouter);
 router.use('/valid',validateRouter);
+router.use('/search',stillSignedInCheck,searchRouter);
 //Routers
 
 //error handling for 404
