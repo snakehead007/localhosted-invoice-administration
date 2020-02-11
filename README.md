@@ -5,6 +5,7 @@ This program is mainly used for managing and administrating invoices and generat
 
 Version 2.0(beta) is out. We are still improving and adding things on a daily basis.
 This is not a finished product, but you can still contribute and/or test it out.
+Check out the projects > core functionalities. for the current progess.
 
 This project is translated in 2 languages, Dutch and English.
 
