@@ -262,5 +262,9 @@
 	"Successfully logged out": "Successfully logged out",
 	"search on ": "search on ",
 	"Nothing was found": "Nothing was found",
-	"--------FROM-HERE-ALL-ABOVE-CHECKED-----------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------"
+	"--------FROM-HERE-ALL-ABOVE-CHECKED-----------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------",
+	"Update invoice": "Update invoice",
+	"Pay date": "Pay date",
+	"Invoice number": "Invoice number",
+	"Advance": "Advance"
 }

@@ -3,7 +3,7 @@ services:
   app:
     container_name: app
     restart: always
-    image: 'localhost:5000/app:latest'
+    image: 'localhost:3000/app:latest'
     build: .
     ports:
       - "3000:3000"

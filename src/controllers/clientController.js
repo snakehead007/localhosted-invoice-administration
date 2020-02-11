@@ -93,7 +93,6 @@ exports.postClientNew = (req, res) => {
     let postalCheck = invalid.valueMustBePostalCode(req,res,req.body.postal);
     let placeCheck = invalid.valueMustBeAName(req,res,req.body.place,true,"place name not correctly checked in");
     let isNotValid = nameCheck||firmCheck||streetCheck||streetNrCheck||emailCheck||vatCheck||bankCheck||postalCheck||placeCheck;
-    console.log("isnotvalid = "+isNotValid);
     if(isNotValid){
         console.log('[error]: making client, not valid');
         Settings.findOne({fromUser:req.session._id},function(err, settings) {
@@ -130,7 +129,7 @@ exports.postClientNew = (req, res) => {
             place: req.body.place,
             vat: req.body.vat,
             lang: req.body.lang,
-            email: [req.body.mail],
+            email: req.body.email,
             bankNr: req.body.rekeningnr,
             fromUser:req.session._id,
             invoices:[]
@@ -155,10 +154,13 @@ exports.postClientNew = (req, res) => {
  */
 exports.getClientView = (req, res) => {
     Client.findOne({fromUser:req.session._id,_id: req.params.idc}, function(err, client) {
+        if(err) console.trace(err);
         if (!err) {
             Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+                if(err) console.trace(err);
                 if (!err) {
                     Profile.findOne({fromUser:req.session._id}, function(err, profile) {
+                        if(err) console.trace(err);
                         if (!err) {
                             res.render('view/view-client', {
                                 'client': client,
