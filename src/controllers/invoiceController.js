@@ -136,6 +136,9 @@ exports.invoice_new_get = (req,res) => {
                                 } else if (profile.invoiceNrCurrent.toString().length === 2) {
                                     invoiceNr = "0" + profile.invoiceNrCurrent.toString();
                                 }
+                                if(process.env.LOGGING>2){
+                                    console.log("[DEBUG]: created invoice for "+client.clientName+" ("+client._id+")");
+                                }
                                 let newInvoice = new Invoice({
                                     fromClient: client._id,
                                     date: Date.now(),

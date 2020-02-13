@@ -262,5 +262,11 @@
 	"Successfully logged out": "Succevol uitgelogd",
 	"search on ": "zoeken op ",
 	"Nothing was found": "Niets was gevonden",
-	"--------FROM-HERE-ALL-ABOVE-CHECKED---- -------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------"
+	"--------FROM-HERE-ALL-ABOVE-CHECKED---- -------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------",
+	"Update invoice": "Update invoice",
+	"Pay date": "Pay date",
+	"Invoice number": "Invoice number",
+	"Advance": "Advance",
+	"Update order": "Update order",
+	"Price for each": "Price for each"
 }

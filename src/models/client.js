@@ -39,6 +39,10 @@ const Client = new mongoose.Schema({
     lastUpdated:{
         type:Date,
         default:Date.now()
+    },
+    locale:{
+        type:String,
+        default:'nl-BE'
     }
 });
 

@@ -46,7 +46,7 @@ router.use('/delete',stillSignedInCheck,deleteRouter);
 router.use('/valid',validateRouter);
 router.use('/search',stillSignedInCheck,searchRouter);
 //Routers
-
+/*
 //error handling for 404
 router.use((req, res) => {
     if(process.env.LOGGING>2) {
@@ -64,7 +64,7 @@ router.use((error, req, res, next) => {
     res.status(500).send('500: Internal Server Error');
     next();
 });
-
+*/
 //This fixed this error: "database names cannot contain the character '.' MongoError"
 router.get('/favicon.ico', function(req, res) {
     res.sendStatus(204);
