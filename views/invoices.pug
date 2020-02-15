@@ -7,8 +7,6 @@ html
         function toonBerekeningen() {
           $("#berekeningen").toggle();
         }
-
-        feather.replace();
       });
   body
     include includes/topBar
@@ -43,10 +41,5 @@ html
                   a(class="dropdown-item" onclick="sortTable(3,\"kost\")") #{__('Price')}
           div(class="table-responsive bigger")
             include includes/tables/invoices
-          script.
-            $(document).ready(function () {
-              feather.replace();
-            });
-            function setStatus(id) {
-                window.location = "/edit/invoice/paid/" + id ;
-            }
+          include includes/scripts/feather
+          include includes/scripts/setStatus

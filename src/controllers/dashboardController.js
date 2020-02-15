@@ -19,6 +19,7 @@ exports.main_get =  async function getLogin(req,res){
         res.redirect('/');
     }
     let fact_open = [];
+    //Finds a profile, if not found will create a new one
     Profile.findOne({fromUser:req.session._id}, async function(err,profile){
         if(profile===null){
             console.log("[Error]: Profile not found from user");
@@ -36,31 +37,28 @@ exports.main_get =  async function getLogin(req,res){
                 if (!err) {
                     Invoice.find({fromUser:req.session._id}, function (err, invoices) {
                         if (!err) {
-                            let total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                            for (let i = 0; i <= 11; i++) {
-                                for (let invoice of invoices) {// TODO: 'for of' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
-                                    if (invoice.invoiceNr) {
-                                        if (invoice.datePaid) {
-                                            if ((String(invoice.datePaid).includes(month[i]) || String(invoice.datePaid).includes(month_small[i]) || String(invoice.datePaid).includes(month[i]) || String(invoice.datePaid).includes(month_small[i])) && invoice.datePaid.includes(year) && invoice.datePaid && invoice.isPaid) {
-                                                total[i] += invoice.total;
-                                            }
-                                        } else if ((String(invoice.date).includes(month[i]) || String(invoice.date).includes(month_small[i]) || String(invoice.date).includes(month[i]) || String(invoice.date).includes(month_small[i])) && iString(invoice.date).includes(year) && invoice.invoiceNr && invoice.isPaid) {
-                                            total[i] += invoice.total;
-                                        }
-                                        if ((String(invoice.date).includes(month[i]) || String(invoice.date).includes(month_small[i]) || String(invoice.date).includes(month[i]) || String(invoice.date).includes(month_small[i])) && !invoice.isPaid){
-                                            fact_open.push(invoice);
-                                        }
+                            let chart = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            let invoice_open = [];
+                            //finds unpaid invoices
+                            for (let invoice of invoices) {
+                                if (invoice.invoiceNr) {
+                                    if(!invoice.isPaid){
+                                        invoice_open.push(invoice);
                                     }
                                 }
                             }
+                            //createa data for chart
+                            /*
+                            for (let i = 0; i <= 11; i++) {
+
+                            }*/
                             res.render('index', {
                                 'currentUrl':"dashboard",
-                                "total": total,
+                                "total": chart,
                                 "settings": settings,
                                 "year": year,
                                 "profile": profile,
-                                "facturenLijst":invoices,
-                                "fact_open":fact_open
+                                "invoices":invoice_open
                             });
                         }
                     });
