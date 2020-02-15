@@ -89,6 +89,7 @@ exports.new_order_post = async (req,res) => {
     });
     await newOrder.save();
     let totInvoice = ((((invoice.total + invoice.advance) + (req.body.amount * req.body.price)) - invoice.advance));
+    console.log("total invoice:" +totInvoice);
     invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, {total:totInvoice,lastUpdated:Date.now()},function(err){
         if(err) console.trace(err);
         res.redirect('/order/all/' + req.params.idi);

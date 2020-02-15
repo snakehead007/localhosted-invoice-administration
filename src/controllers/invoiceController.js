@@ -9,7 +9,7 @@ const Profile = require('../models/profile');
 const Order = require('../models/order');
 const {year} = require('../utils/date');
 const i18n = require('i18n');
-
+const invoiceUtil = require('../utils/invoices');
 /**
  *
  * @param req
@@ -32,7 +32,6 @@ exports.invoice_all_get = (req,res) => {
             });
     });
 };
-
 /**
  *
  * @param req
@@ -44,6 +43,7 @@ exports.invoice_new_choose_get = (req,res) => {
         Profile.findOne({fromUser:req.session._id},function(err,profile){
             if(err) console.trace();
             Client.find({fromUser:req.session._id},function(err,clients){
+                console.log(clients);
                 if(err) console.log("ERROR]: "+err);
                 res.render('add-file-no-contact',{
                    'profile':profile,
@@ -56,7 +56,6 @@ exports.invoice_new_choose_get = (req,res) => {
         })
     });
 };
-
 /**
  *
  * @param req
@@ -147,10 +146,11 @@ exports.invoice_new_get = (req,res) => {
                                     total: 0,
                                     fromUser: req.session._id
                                 });
-                                await Client.updateOne({fromUser: req.session._id,}, function (err) {
+                                await Client.findOne({fromUser: req.session._id,_id:client._id}, async function (err) {
                                     if (err) console.trace();
                                     if (!err) {
                                         client.invoices.push(newInvoice._id);
+                                        await client.save();
                                     }
                                 });
                                 await newInvoice.save(function (err) {
@@ -201,14 +201,14 @@ exports.credit_new_get = (req,res) => {
                                         nr_str = "0" + profile.creditNrCurrent.toString();
                                     }
                                     let newInvoice = new Invoice({
-                                        fromClient: req.params.idc,
+                                        fromClient: idc,
                                         date: Date.now(),
                                         creditNr: String(year + nr_str),
-                                        clientName: client.contactPersoon,
+                                        clientName: client.clientName,
                                         total: 0,
                                         fromUser: req.session._id
                                     });
-                                    await Client.updateOne({fromUser: req.session._id}, function (err) {
+                                    await Client.findOne({fromUser: req.session._id,_id:client._id}, function (err) {
                                         if (err) console.trace();
                                         client.invoices.push(newInvoice._id);
                                     });
@@ -260,13 +260,13 @@ exports.offer_new_get = (req,res) => {
                                                 nr_str = "0" + profile.offerNrCurrent.toString();
                                             }
                                             let newInvoice = new Invoice({
-                                                fromClient: req.params.idc,
+                                                fromClient: idc,
                                                 date: Date.now(),
                                                 offerNr: String(year + nr_str),
                                                 clientName: client.clientName,
                                                 fromUser: req.session._id
                                             });
-                                            await Client.updateOne({fromUser: req.session._id}, function (err) {
+                                            await Client.findOne({fromUser: req.session._id,_id:client._id}, function (err) {
                                                 if (err) console.trace();
                                                 client.invoices.push(newInvoice._id);
                                             });
@@ -410,7 +410,7 @@ exports.view_invoice_get = (req,res) => {
                             res.render('view/view-invoice', {
                                 'invoice': invoice,
                                 'client': client,
-                                "description": i18n.__(description) + " " + client.clientName + " (" + invoice.invoiceNr + ")",
+                                "description": i18n.__(description) + " " + client.clientName + " (" + invoiceUtil.getDefaultNumberOfInvoice(invoice) + ")",
                                 "settings": settings,
                                 "currentUrl": "creditView",
                                 "profile":profile
