@@ -78,22 +78,23 @@ exports.new_order_get = (req,res) => {
  */
 exports.new_order_post = async (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id:req.params.idi}, async function(err,invoice){
-    let newOrder = new Order({
-        description: req.body.description,
-        amount: req.body.amount,
-        price: req.body.price,
-        total: req.body.amount * req.body.price ,
-        fromUser:req.session._id,
-        fromClient:invoice.fromClient,
-        fromInvoice:req.params.idi
-    });
-    await newOrder.save();
-    let totInvoice = ((((invoice.total + invoice.advance) + (req.body.amount * req.body.price)) - invoice.advance));
-    console.log("total invoice:" +totInvoice);
-    invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, {total:totInvoice,lastUpdated:Date.now()},function(err){
-        if(err) console.trace(err);
+        let newOrder = new Order({
+            description: req.body.description,
+            amount: req.body.amount,
+            price: req.body.price,
+            total: req.body.amount * req.body.price ,
+            fromUser:req.session._id,
+            fromClient:invoice.fromClient,
+            fromInvoice:req.params.idi
+        });
+        await newOrder.save();
+        let totInvoice = ((((invoice.total + invoice.advance) + (req.body.amount * req.body.price)) - invoice.advance));
+        console.log("total invoice:" +totInvoice);
+        await Invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, {total:totInvoice,lastUpdated:Date.now()},function(err,invoice){
+            console.log(invoice);
+            if(err) console.trace(err);
+        });
         res.redirect('/order/all/' + req.params.idi);
-    });
     });
 };
 
