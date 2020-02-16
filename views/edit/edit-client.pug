@@ -62,6 +62,9 @@ body
                 label(for="title") BTW-nummer
                 input(type="text",class="form-control",value=client.vat,name="vat")
               div(class="form-group col-md-2")
+                label(for="title") VAT Percentage
+                input(type="text",class="form-control",value=(client.vatPercentage)?client.vatPercentage:settings.vatPercentage,name="vatPercentage",required="true")
+              div(class="form-group col-md-2")
                 label(for="title") Rekeningnr
                 input(type="text",class="form-control",value=client.bankNr,name="bankNr")
               div(class="form-group col-md-1")

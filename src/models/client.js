@@ -10,7 +10,11 @@ const Client = new mongoose.Schema({
     streetNr: String,
     postalCode: String,
     place: String,
-    vat: String,
+    vatPercentage: {
+        type: Number,
+        default:21
+    },
+    vat:String,
     country:String,
     email: [{
         type: String,

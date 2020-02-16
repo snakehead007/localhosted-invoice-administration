@@ -10,6 +10,7 @@ const Order = require('../models/order');
 const {year} = require('../utils/date');
 const i18n = require('i18n');
 const invoiceUtil = require('../utils/invoices');
+const {findOneHasError,updateOneHasError} = require('../middlewares/error');
 /**
  *
  * @param req
@@ -377,12 +378,14 @@ exports.edit_invoice_post = (req,res) => {
                 total:totOrders
             };
         }
-        let searchCriteria = {fromUer:req.session._id};
-        if(orders.length > 0)
-            searchCriteria.push({_id:orders[0].fromClient});
+        let searchCriteria = {fromUser:req.session._id};
+        if(JSON.stringify(orders)!=="null") {
+            console.log(orders);
+            searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient};
+        }
         Client.findOne(searchCriteria, function(err, contact) {
             Invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, updateInvoice, function(err) {
-                if (!err) {
+                if (!updateOneHasError(req,res,err)) {
                     res.redirect('/invoice/' + contact._id);
                 }
             });
@@ -397,27 +400,27 @@ exports.edit_invoice_post = (req,res) => {
  */
 exports.view_invoice_get = (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {
-        if(err) console.trace(err);
-        if (!err) {
+        if (!findOneHasError(req,res,err,invoice)) {
             Client.findOne({fromUser:req.session._id,_id: invoice.fromClient}, function(err, client) {
-                if(err) console.trace(err);
-                Settings.findOne({fromUser:req.session._id}, function(err, settings) {
-                    if(err) console.trace(err);
-                    if (!err){
-                        Profile.findOne({fromUser:req.session._id},function(err,profile){
-                        if(err) console.trace(err);
-                            let description = (invoice.creditNr)? "View credit of":"View invoice of";
-                            res.render('view/view-invoice', {
-                                'invoice': invoice,
-                                'client': client,
-                                "description": i18n.__(description) + " " + client.clientName + " (" + invoiceUtil.getDefaultNumberOfInvoice(invoice) + ")",
-                                "settings": settings,
-                                "currentUrl": "creditView",
-                                "profile":profile
-                            })
-                        });
-                    }
-                });
+                if(!findOneHasError(req,res,err,client)) {
+                    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+                        if (!findOneHasError(req,res,err,settings)) {
+                            Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+                                if(!findOneHasError(req,res,err,profile)) {
+                                    let description = (invoice.creditNr) ? "View credit of" : "View invoice of";
+                                    res.render('view/view-invoice', {
+                                        'invoice': invoice,
+                                        'client': client,
+                                        "description": i18n.__(description) + " " + client.clientName + " (" + invoiceUtil.getDefaultNumberOfInvoice(invoice) + ")",
+                                        "settings": settings,
+                                        "currentUrl": "creditView",
+                                        "profile": profile
+                                    })
+                                }
+                            });
+                        }
+                    });
+                }
             });
         }
     });
@@ -430,12 +433,42 @@ exports.view_invoice_get = (req,res) => {
  */
 exports.invoice_paid_set = (req,res) => {
         Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {
-            if (!err) {
+            if (!findOneHasError(req,res,err,invoice)) {
                 Invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, {isPaid: !(invoice.isPaid),datePaid: Date.now(),lastUpdated:Date.now()}, function(err) {
-                    if (!err) {
+                    if (!updateOneHasError(req,res,err)) {
                         res.redirect('back');
                     }
                 });
             }
         });
+};
+
+exports.invoice_upgrade_get = (req,res) => {
+    Invoice.findOne({fromUser:req.session._id,_id:req.params.idi},function(err,invoice){
+        if(!findOneHasError(req,res,err,invoice)){
+            Invoice.updateOne({fromUser:req.session._id,_id:req.params.idi},{
+                invoiceNr:invoice.offerNr,
+                offerNr: ""
+            },function(err){
+                if(!updateOneHasError(req,res,err)){
+                    res.redirect('back');
+                }
+            });
+        }
+    });
+};
+
+exports.invoice_downgrade_get = (req,res) => {
+    Invoice.findOne({fromUser:req.session._id,_id:req.params.idi},function(err,invoice){
+        if(!findOneHasError(req,res,err,invoice)){
+            Invoice.updateOne({fromUser:req.session._id,_id:req.params.idi},{
+                offerNr:invoice.invoiceNr,
+                invoiceNr: ""
+            },function(err){
+                if(!updateOneHasError(req,res,err)){
+                    res.redirect('back');
+                }
+            });
+        }
+    });
 };

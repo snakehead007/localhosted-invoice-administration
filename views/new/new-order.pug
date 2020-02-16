@@ -26,6 +26,7 @@ body
           if invoice.creditNr && !invoice.offerNr && !invoice.invoiceNr
             h2(class="pt-3")="Creditnote " + invoice.creditNr + " (" + client.clientName + ")"
           hr
+          include ../includes/messages
           form(action='/order/new/'+invoice._id,method='post')
             div(class="form-row")
               div(class="form-group col-md-10")

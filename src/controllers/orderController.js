@@ -7,6 +7,7 @@ const Settings = require('../models/settings');
 const Profile = require('../models/profile');
 const Client = require('../models/client');
 
+const {findOneHasError} = require('../middlewares/error');
 /**
  *
  * @param req
@@ -169,27 +170,31 @@ exports.view_order_get = (req,res) => {
 
 exports.edit_order_post = (req,res) =>
 {
-    Order.findOne({fromUser:req.session._id,_id: req.params.id}, function (err, order) {
-        let updateOrder = {
-            description: req.body.description,
-            amount: req.body.amount,
-            price: req.body.price,
-            total: req.body.total * req.body.amount,
-            lastUpdated: Date.now()
-        };
-        Invoice.findOne({fromUser:req.session._id,_id: order.fromInvoice}, async function (err, invoice) {
-            await Order.updateOne({fromUser:req.session._id,_id: req.params.id}, updateOrder);
-            let tot = invoice.total - (bestelling.aantal * bestelling.bedrag);
-            let updateInvoice = {
-                total: ((tot + (req.body.amount * req.body.price) - invoice.advance)),
+    console.log('EDIT ORDER POST: '+req.session._id+", "+req.params.ido);
+    Order.findOne({fromUser:req.session._id,_id: req.params.ido}, function (err, order) {
+        if(!findOneHasError(req,res,err,order)){
+            let updateOrder = {
+                description: req.body.description,
+                amount: req.body.amount,
+                price: req.body.price,
+                total: req.body.price * req.body.amount,
                 lastUpdated: Date.now()
             };
-            Invoice.updateOne({fromUser:req.session._id,_id: order.invoice}, updateInvoice, function (err) {
-                if (err) {
-                    console.trace(err);
-                }
-                res.redirect('/');
+            Invoice.findOne({fromUser: req.session._id, _id: order.fromInvoice}, async function (err, invoice) {
+                await Order.updateOne({fromUser: req.session._id, _id: req.params.ido}, updateOrder);
+                let tot = invoice.total - (order.amount * order.price);
+                let updateInvoice = {
+                    total: ((tot + (req.body.amount * req.body.price) - invoice.advance)),
+                    lastUpdated: Date.now()
+                };
+                console.log("updating invoice : "+JSON.stringify(updateInvoice));
+                Invoice.updateOne({fromUser: req.session._id, _id: order.invoice}, updateInvoice, function (err) {
+                    if (err) {
+                        console.trace(err);
+                    }
+                    res.redirect('/order/all/'+invoice._id);
+                });
             });
-        });
+        }
     });
-}
+};

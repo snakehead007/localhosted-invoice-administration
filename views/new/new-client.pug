@@ -57,8 +57,11 @@ body
                 label(for="title") #{__('E-mail')}
                 input(type="text",class="form-control",name="email",placeholder="voorbeeld@email.be")
               div(class="form-group col-md-2")
-                label(for="title") #{__('VAT-number')}
-                input(type="text",class="form-control",name="vat")
+                  label(for="title") BTW-nummer
+                  input(type="text",class="form-control",name="vat")
+              div(class="form-group col-md-2")
+                  label(for="title") VAT Percentage
+                  input(type="text",class="form-control",value=settings.vatPercentage,name="vatPercentage",required="true")
               div(class="form-group col-md-2")
                 label(for="title") #{__('Banking number')}
                 input(type="text",class="form-control",name="bankNr")

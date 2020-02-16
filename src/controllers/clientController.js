@@ -87,12 +87,13 @@ exports.postClientNew = (req, res) => {
     let firmCheck = invalid.valueMustBeAName(req,res,req.body.firm,false,"firm name not correctly filled in");
     let streetCheck = invalid.valueMustBeAName(req,res,req.body.street,true);
     let streetNrCheck = invalid.valueMustBeStreetNumber(req,res,req.body.streetNr);
-    let emailCheck = invalid.valueMustBeEmail(req,res,req.body.email,);
-    let vatCheck = invalid.valueMustBeVatNumber(req,res,req.body.vat,);
-    let bankCheck = invalid.valueMustBeValidIban(req,res,req.body.bankNr,);
+    let emailCheck = invalid.valueMustBeEmail(req,res,req.body.email);
+    let vatCheck = invalid.valueMustBeVatNumber(req,res,req.body.vat);
+    let vatPercentageCheck = invalid.valueMustBeAnInteger(req,res,req.body.vatPercentage,true);
+    let bankCheck = invalid.valueMustBeValidIban(req,res,req.body.bankNr);
     let postalCheck = invalid.valueMustBePostalCode(req,res,req.body.postal);
     let placeCheck = invalid.valueMustBeAName(req,res,req.body.place,true,"place name not correctly checked in");
-    let isNotValid = nameCheck||firmCheck||streetCheck||streetNrCheck||emailCheck||vatCheck||bankCheck||postalCheck||placeCheck;
+    let isNotValid = nameCheck||firmCheck||streetCheck||vatPercentageCheck||streetNrCheck||emailCheck||vatCheck||bankCheck||postalCheck||placeCheck;
     if(isNotValid){
         console.log('[error]: making client, not valid');
         Settings.findOne({fromUser:req.session._id},function(err, settings) {
@@ -113,7 +114,8 @@ exports.postClientNew = (req, res) => {
                             "vat":req.body.vat,
                             "bankNr":req.body.bankNr,
                             "postal":req.body.postal,
-                            "place":req.body.place
+                            "place":req.body.place,
+                            "vatPercentage":req.body.vatPercentage
                         }
                     });
                 }
@@ -132,6 +134,7 @@ exports.postClientNew = (req, res) => {
             email: req.body.email,
             bankNr: req.body.rekeningnr,
             fromUser:req.session._id,
+            vatPercentage: req.body.vatPercentage,
             invoices:[]
         });
         newClient.save();

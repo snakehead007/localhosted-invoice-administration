@@ -74,6 +74,16 @@ exports.valueMustBeVatNumber = (req,res,doc,mustBeFilledIn=false,message="VAT nu
     return showMessage
 };
 
+exports.valueMustBeAnInteger = (req,res,doc,mustBeFilledIn=false,message="VAT percentage is not valid") => {
+    let invalid = false;
+    let regex = /([1-9][0-9]{0,100})/;
+    let showMessage = ((mustBeFilledIn)&&!(doc !== "" && !invalid));
+    if(showMessage)
+        req.flash('danger',i18n.__(message));
+    console.log("[DEBUG]: utils.formvalidation.valueMustBePostalCode("+doc+") => "+invalid);
+    return showMessage;
+};
+
 exports.valueMustBePostalCode = (req,res,doc,mustBeFilledIn=false,message="Postal code is not valid, only Belgian postal codes support for now") => {
     let invalid = false;
     let regex = /([1-9][0-9]{3})/;

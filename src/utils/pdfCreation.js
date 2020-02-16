@@ -1,20 +1,22 @@
 const fs = require('fs');
-var imageToBase64 = require('image-to-base64');
-module.exports.callGetBase64 = async () => {
-    var imgData = await (getBase64());
-    return imgData
+let path = require('path');
+let imageToBase64 = require('image-to-base64');
+module.exports.callGetBase64 = async (id) => {
+    return await (getBase64(id));
 };
 
-let getBase64 = () => {
+let getBase64 = (id) => {
     return new Promise((resolve,reject) => {
-        let path = 'public/logo.jpeg';
-        fs.access(path, fs.F_OK, (err) => {
+        let _path = path.join(__dirname,'../../public/images/'+id+'/logo.jpeg');
+        console.log('looking on path '+_path);
+        fs.access(_path, fs.F_OK, (err) => {
             if (err) {
                 //BASE64 image if no logo is uploaded
+                console.log('base64: no logo found or uploaded');
                 resolve("data:image/png;base64,iVBORw0KGgoAAAANSUhsEUgAAASwAAACWCAYAAABkW7XSAAAAxUlEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOA1v9QAATX68/0AAAAASUVORK5CYII=");
                 return;
             }else{
-                imageToBase64(path).then((response) => {
+                imageToBase64(_path).then((response) => {
                     let imgData ="data:image/jpeg;base64,";
                     imgData +=response;
                     resolve(imgData);

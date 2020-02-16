@@ -17,5 +17,7 @@ html
             include includes/clientOptionMenu
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           h2(class="pt-3") #{__('All clients')}
+          hr
+          include includes/messages
           div(class="table-responsive bigger")
             include includes/tables/clients

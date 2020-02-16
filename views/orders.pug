@@ -26,5 +26,6 @@ body
           if invoice.creditNr && !invoice.offerNr && !invoice.invoiceNr
             h2(class="pt-3")=__('Creditnote')+" "+invoice.creditNr+" ("+client.clientName+")"
           hr
+          include includes/messages
           div(class="table-responsive bigger")
             include includes/tables/orders
