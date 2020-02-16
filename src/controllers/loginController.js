@@ -19,16 +19,10 @@ exports.login_get =  function getLogin(req,res){
     /*if(req.session&&req.session._id){
         return res.redirect('/dashboard');
     }*/
-    req.session.regenerate(function(err) {
+    //req.session.regenerate(function(err) {
         // will have a new session here
-        if(err){
-            console.log('[Error]: got an error on regnerating session in loginController');
-            if(process.env.LOGGING>2){
-                console.trace("[Error]: "+err);
-            }
-        }
-        res.render('login');
-    });
+    res.render('login');
+    //});
     //res.render('login');
 };
 /**
@@ -72,7 +66,6 @@ exports.create_user_get = async function getCreateNewUser(req,res){
             await User.findOne({},function(err,User){
                 if(err) throw new Error(err);
                 if(User.length<=0){
-
                 }else{
                     newUser = User[0];
                 }

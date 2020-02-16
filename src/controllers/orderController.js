@@ -182,13 +182,16 @@ exports.edit_order_post = (req,res) =>
             };
             Invoice.findOne({fromUser: req.session._id, _id: order.fromInvoice}, async function (err, invoice) {
                 await Order.updateOne({fromUser: req.session._id, _id: req.params.ido}, updateOrder);
-                let tot = invoice.total - (order.amount * order.price);
+                //total of the invoice minus old order total minus the advance
+                let tot = invoice.total - (order.amount * order.price) - invoice.advance;
+                console.log("total: "+tot);
                 let updateInvoice = {
-                    total: ((tot + (req.body.amount * req.body.price) - invoice.advance)),
+                    //total of new invoice = total above + new total of order + the advance of the total
+                    total: ((tot + (req.body.amount * req.body.price) + invoice.advance)),
                     lastUpdated: Date.now()
                 };
                 console.log("updating invoice : "+JSON.stringify(updateInvoice));
-                Invoice.updateOne({fromUser: req.session._id, _id: order.invoice}, updateInvoice, function (err) {
+                Invoice.updateOne({fromUser: req.session._id, _id: order.fromInvoice}, updateInvoice, function (err) {
                     if (err) {
                         console.trace(err);
                     }
@@ -197,4 +200,8 @@ exports.edit_order_post = (req,res) =>
             });
         }
     });
+};
+
+exports.delete_order_get = (req,res) => {
+    throw new Error('Not yet implemented');
 };

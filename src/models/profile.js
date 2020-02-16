@@ -9,6 +9,7 @@ const Profile = new mongoose.Schema({
     place: String,
     iban: String,
     bic: String,
+    vat: String,
     invoiceNrCurrent : {
         type: Number,
         default: 1,

@@ -10,6 +10,7 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 
+
 //Local modules
 const User = require('../models/user');
 const redirectController = require('../controllers/redirectController');
@@ -35,6 +36,7 @@ router.get('/' ,redirectController.googleLogin,  async (req,res)=>{
         });
     }else {
         req.flash('warning','You are not whitelisted, please contact the administrator');
+        console.log(req.session);
         res.redirect('/');
     }
 });
