@@ -60,9 +60,9 @@ exports.view_profile_get = (req,res) => {
                             });
                         }
                     });
-                };
+                }
             });
-        };
+        }
     });
 };
 
@@ -127,4 +127,4 @@ exports.edit_profile_post = (req,res) => {
             }
         });
     }
-}
+};

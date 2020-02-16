@@ -233,7 +233,7 @@ exports.postEditClient = (req,res) => {
                  }
               });
           }else{
-              console.log('[Error]: isnotvalid equals '+isNotValid);
+              console.log('[Error]: isNotValid equals '+isNotValid);
               res.redirect('/edit/client/'+client._id);
           }
       }

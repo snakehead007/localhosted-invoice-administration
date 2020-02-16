@@ -2,11 +2,11 @@
 html
   head
     include ../includes/htmlHead
-    script.
-      function info(){$("#info").toggle();};
-      $(document).ready(function () {
-        feather.replace();
-      });
+    style.
+      .buttonsBelow{
+        margin-top: 20px;
+      }
+
 body
   include ../includes/topBar
   div(class="container-fluid")
@@ -72,6 +72,31 @@ body
               p(class="lead") Upload your logo:
               a(href="/upload/logo")
                 button(type="button",role="button",class="btn btn-sm btn-outline-"+settings.theme) Change your logo
+              a(href="/delete/logo")
+                button.buttonsBelow(type="button",role="button",class="btn btn-sm btn-outline-" + settings.theme) Delete your logo
             div(class="col-md")
               p(class="lead") preview of current logo:
-              img(src="/images/"+profile.fromUser+"/logo.jpeg" alt="your logo" class="rounded-lg" style="width:100px;height:100px")
+              img#logo(src="/no-logo.jpg" alt="your logo" class="rounded-lg" style="width:100px;height:100px")
+  script.
+    function info(){
+      $("#info").toggle();
+    };
+    $(document).ready(function () {
+      feather.replace();
+    });
+
+    function imageExists(url, callback) {
+      let img = new Image();
+      img.onload = function () {
+        callback(true);
+      };
+      img.onerror = function () {
+        callback(false);
+      };
+      img.src = url;
+    }
+    imageExists(src="/images/" + "#{profile.fromUser}" + "/logo.jpeg", function (exists) {
+      if (exists) {
+        document.getElementById("logo").src = src;
+      }
+    });

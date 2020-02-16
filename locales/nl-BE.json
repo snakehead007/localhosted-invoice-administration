@@ -272,5 +272,7 @@
 	"Downgrade to offer": "Downgrade to offer",
 	"Edit client": "Edit client",
 	"Street number": "Street number",
-	"VAT percentage": "VAT percentage"
+	"VAT percentage": "VAT percentage",
+	"There is no logo to delete": "There is no logo to delete",
+	"Successfully deleted your current logo": "Successfully deleted your current logo"
 }
