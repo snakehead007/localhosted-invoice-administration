@@ -23,9 +23,7 @@ html
         feather.replace();
       });
 body
-  header
     include ../includes/topBar
-
     div(class="container-fluid")
       div(class ="row")
         nav(class="col-md-2 d-none d-md-block bg-light sidebar")
@@ -42,36 +40,36 @@ body
             p=msg
             div(class="form-row")
               div(class="form-group col-md-5")
-                label(for="title") client persoon *
+                label(for="title")=__('Client name')+'*'
                 input(type="text",class="form-control",value=client.clientName,name="clientName" required)
               div(class="form-group col-md-2")
               div(class="form-group col-md-5")
-                label(for="title") Firma
+                label(for="title")=__('Firm name')
                 input(type="text",class="form-control",value=client.firm,name="firm")
               div(class="form-group col-md-3")
-                label(for="title") Straatnaam *
+                label(for="title")=__('Street name')+'*'
                 input(type="text",class="form-control",value=client.street,name="street" required)
               div(class="form-group col-md-2")
-                label(for="title") Straat Nr
+                label(for="title")=__('Street number')
                 input(type="text",class="form-control",value=client.streetNr,name="streetNr")
               div(class="col-md-2")
               div(class="form-group col-md-3")
-                label(for="title") E-mail
-                input(type="text",class="form-control",value=client.email,name="email",placeholder="voorbeel@email.be")
+                label(for="title")=__('E-mail')
+                input(type="text",class="form-control",value=client.email[0],name="email",placeholder="voorbeel@email.be")
               div(class="form-group col-md-2")
-                label(for="title") BTW-nummer
+                label(for="title")=__('VAT number')
                 input(type="text",class="form-control",value=client.vat,name="vat")
               div(class="form-group col-md-2")
-                label(for="title") VAT Percentage
+                label(for="title")=__('VAT percentage')
                 input(type="text",class="form-control",value=(client.vatPercentage)?client.vatPercentage:settings.vatPercentage,name="vatPercentage",required="true")
               div(class="form-group col-md-2")
-                label(for="title") Rekeningnr
+                label(for="title")=__('Banking number')
                 input(type="text",class="form-control",value=client.bankNr,name="bankNr")
               div(class="form-group col-md-1")
-                label(for="title") Postcode
+                label(for="title")=__('Postal')
                 input(type="number",class="form-control",value=client.postal,name="postal")
               div(class="form-group col-md-2")
-                label(for="title") Plaatsnaam *
+                label(for="title")=__('Place')+'*'
                 input(type="text",class="form-control",value=client.place,name="place" required)
             hr
-            button(type="submit",class="btn btn-outline-"+settings.theme) bijwerken
+            button(type="submit",class="btn btn-outline-"+settings.theme)=__('Update')
