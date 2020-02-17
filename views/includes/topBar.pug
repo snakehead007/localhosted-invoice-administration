@@ -1,7 +1,7 @@
 nav(class="navbar navbar-dark fixed-top bg-"+settings.theme+" flex-md-nowrap p-0 shadow")
     a(class="navbar-brand col-sm-3 col-md-2 mr-0",href="/view/profile") invoice-administration
     form(class="form", method="post",action="/search/")
-        input(class="form-control form-control-dark w-100" type="text",name="search", placeholder=__('search') aria-label="zoeken")
+        input(class="form-control form-control-"+settings.theme+" w-100" type="text",name="search", placeholder=__('search'),value=currentSearch, aria-label="zoeken")
         button(type="sumbit",style="display:none")
     ul(class="navbar-nav px-3")
         li(class="nav-item text-nowrap")

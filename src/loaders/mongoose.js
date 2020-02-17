@@ -13,21 +13,29 @@ module.exports.default = async () => {
     }else{
         db_uri=process.env.DB_URI;
     }
+
     try {
-        console.log("[Info]: Trying to connect to "+db_uri);
+        if(process.env.LOGGING>1)
+            console.log("[Info]: Trying to connect to "+db_uri);
         mongoose.connect(db_uri, {
             useCreateIndex: true,
             useUnifiedTopology: true,
             useNewUrlParser: true
         });
         mongoose.connection.on('open', () => {
-            console.log('[Info]: Mongoose connected!');
+            if(process.env.LOGGING>0)
+                console.log('[Info]: Mongoose connected!');
         });
         mongoose.connection.on('close', () => {
-            console.log('[Info]: Mongoose connection lost!');
+            if(process.env.LOGGING>0)
+                console.log('[Info]: Mongoose connection lost!');
         });
     } catch (e) {
         console.log("[Error]: Timout error, failed to connect to mongodb");
+        if(process.env.LOGGING>1) {
+            console.log("[Info]: Check if .env file is correctly filled in (DEVELOP)");
+            console.log("[Info]: Exiting now...");
+        }
         process.exit(1);
     }
 

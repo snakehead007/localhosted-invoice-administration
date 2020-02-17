@@ -10,7 +10,11 @@ const Client = new mongoose.Schema({
     streetNr: String,
     postalCode: String,
     place: String,
-    vat: String,
+    vatPercentage: {
+        type: Number,
+        default:21
+    },
+    vat:String,
     country:String,
     email: [{
         type: String,
@@ -39,6 +43,10 @@ const Client = new mongoose.Schema({
     lastUpdated:{
         type:Date,
         default:Date.now()
+    },
+    locale:{
+        type:String,
+        default:'nl-BE'
     }
 });
 

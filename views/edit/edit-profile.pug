@@ -2,11 +2,7 @@
 html
   head
     include ../includes/htmlHead
-    script.
-      function info(){$("#info").toggle();};
-      $(document).ready(function () {
-        feather.replace();
-      });
+
 body
   include ../includes/topBar
   div(class="container-fluid")
@@ -40,32 +36,31 @@ body
             div(class="form-group col-md-2")
               label(for="title") #{__('IBAN')}
               input(type="text",class="form-control",value=profile.iban,name="iban",placeholder="BE77 7777 7777 7777")
-            div(class="form-group col-md-2")
-              label(for="title") #{__('Postal')}
-              input(type="number",class="form-control",value=profile.postal,name="postal",placeholder="1234")
+            div(class="form-group col-md-2 mr-auto")
+              label(for="title") BIC-nr
+              input(type="text",class="form-control",value=profile.bic,name="bic",placeholder="KREDBEBB")
             div(class="form-group col-md-3")
               label(for="title") #{__('Place')}
               input(type="text",class="form-control",value=profile.place,name="place",placeholder="Gent" )
             div(class="form-group col-md-2")
-              label(for="title") #{__('Telephone N°')}
-              input(type="text",class="form-control",value=profile.tel,name="tel",placeholder="+32487654321")
+              label(for="title") #{__('Postal')}
+              input(type="number",class="form-control",value=profile.postal,name="postal",placeholder="1234")
             div(class="col-md-7")
-            div(class="form-group col-md-2 mr-auto")
+            //div(class="form-group col-md-2 mr-auto")
               label(for="title") Factuur nr:
               input(type="text",class="form-control",value=invoiceNrCurrent,name="invoiceNrCurrent")
-            div(class="form-group col-md-2 mr-auto")
+            //div(class="form-group col-md-2 mr-auto")
               label(for="title") Offerte nr:
               input(typ='text',class='form-control',value=offerNrCurrent,name="offerNrCurrent")
-            div(class="form-group col-md-2 mr-auto")
+            //div(class="form-group col-md-2 mr-auto")
               label(for="title") Creditnr:
               input(typ='text',class='form-control',value=creditNrCurrent,name="creditNrCurrent")
-            div(class="form-group col-md-2 mr-auto")
-              label(for="title") BIC-nr
-              input(type="text",class="form-control",value=profile.bic,name="bic",placeholder="KREDBEBB")
-            div(class="col-md-2")
             div(class="form-group col-md-5")
               label(for="title") E-mail
               input(type="text",class="form-control",value=profile.email[0],name="email",placeholder="voorbeeld@email.be")
+            div(class="form-group col-md-2")
+              label(for="title") #{__('Telephone N°')}
+              input(type="text",class="form-control",value=profile.tel,name="tel",placeholder="+32487654321")
           button(type="submit",class="btn btn-outline-"+settings.theme) profiel bijwerken
           hr(class="mb-3")
           div(class="row no-gutters")
@@ -73,6 +68,31 @@ body
               p(class="lead") Upload your logo:
               a(href="/upload/logo")
                 button(type="button",role="button",class="btn btn-sm btn-outline-"+settings.theme) Change your logo
+              a(href="/delete/logo")
+                button.buttonsBelow(type="button",role="button",class="btn btn-sm btn-outline-" + settings.theme) Delete your logo
             div(class="col-md")
               p(class="lead") preview of current logo:
-              img(src="/images/"+profile.fromUser+"/logo.jpeg" alt="your logo" class="rounded-lg" style="width:100px;height:100px")
+              img#logo(src="/no-logo.jpg" alt="your logo" class="rounded-lg" style="width:100px;height:100px")
+  script.
+    function info(){
+      $("#info").toggle();
+    };
+    $(document).ready(function () {
+      feather.replace();
+    });
+
+    function imageExists(url, callback) {
+      let img = new Image();
+      img.onload = function () {
+        callback(true);
+      };
+      img.onerror = function () {
+        callback(false);
+      };
+      img.src = url;
+    }
+    imageExists(src="/images/" + "#{profile.fromUser}" + "/logo.jpeg", function (exists) {
+      if (exists) {
+        document.getElementById("logo").src = src;
+      }
+    });

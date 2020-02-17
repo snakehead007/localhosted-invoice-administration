@@ -14,6 +14,7 @@ html
       Ppostal = "#{profile.postal}";
       Pplace = "#{profile.place}";
       Pvat = "#{profile.vat}";
+      vatPercentage = "#{client.vatPercentage}";
       Piban = "#{profile.iban}";
       Pbic = "#{profile.bic}";
       firm = "#{client.firm}";
@@ -24,7 +25,7 @@ html
       postal = "#{client.postal}";
       place = "#{client.place}";
       Cvat = "#{client.vat}";
-      date = "#{invoice.date}";
+      date = new Date("#{invoice.date}").toLocaleString("#{settings.locale}",{ year: 'numeric', month: 'numeric', day: 'numeric' })
       let vat = Number(#{Cvat});
       advance = Number(#{invoice.advance});
       offerText = [];
@@ -118,7 +119,7 @@ html
       let orders = [];
       let amount = Number(#{length});
       let totalEx = 0;
-      let _btw;
+      let _vat;
       let totalInc;
       for(let i = 0; i <=amount-1;i++){
         orders.push([current[i].description,current[i].amount,current[i].price,current[i].total]);
@@ -129,7 +130,7 @@ html
       }
       let ordersPrint = [];
       for(let i = 0; i <=amount-1;i++){
-        ordersPrint.push([current[i].orders,current[i].amount,current[i].price.toFixed(2)+" €",current[i].total.toFixed(2)+" €"]);
+        ordersPrint.push([current[i].description,current[i].amount,current[i].price.toFixed(2)+" €",current[i].total.toFixed(2)+" €"]);
       }
       doc.autoTable({
         theme: 'grid',
@@ -144,7 +145,7 @@ html
         head: [["#{__('Order')}", "#{__('Amount')}", "#{__('Price')}","#{__('Total')}"]],
         body: ordersPrint
       });
-      _vat = Math.round((totalEx-advance)*vat)/100;
+      _vat = Math.round((totalEx-advance)*vatPercentage)/100;
       totalExSub  = totalEx - advance;
       totalInc = totalExSub+_vat;
       if(advance==0){
@@ -159,7 +160,7 @@ html
           styles: {fillColor: [140, 140, 140]},
           body: [
             [[""],["                               "],["#{__('subtotal')}"],[totalEx.toFixed(2)+" €"]],
-            [[""],["                               "],["#{__('vat')}"+vat+"%"],[_vat.toFixed(2)+" €"]],
+            [[""],["                               "],["#{__('vat')} "+vatPercentage+"%"],[_vat.toFixed(2)+" €"]],
             [[""],["                               "],["#{__('total')}"],[totalInc.toFixed(2)+" €"]]
           ]
         })
@@ -177,7 +178,7 @@ html
             [[""],["                               "],["#{__('subtotal')}"],[totalEx.toFixed(2)+" €"]],
             [[""],["                               "],["#{__('advance')}"],["-"+advance.toFixed(2)+" €"]],
             [[""],["                               "],["#{__('subtotal')}"],[totalExSub.toFixed(2)+" €"]],
-            [[""],["                               "],["#{__('vat')} "+vat+"%"],[_vat.toFixed(2)+" €"]],
+            [[""],["                               "],["#{__('vat')} "+vatPercentage+"%"],[_vat.toFixed(2)+" €"]],
             [[""],["                               "],["#{__('total')}"],[totalInc.toFixed(2)+" €"]]
           ]
         })

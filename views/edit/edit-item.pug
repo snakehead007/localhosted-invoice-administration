@@ -35,6 +35,7 @@ body
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           h2(class="pt-3") Materiaal bewerken
           hr
+          include ../includes/messages
           form(action='/edit/item/'+item._id,method='post')
             div(class="form-row")
               div(class="form-group col-md-10")

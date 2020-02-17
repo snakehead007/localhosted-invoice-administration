@@ -23,11 +23,13 @@ const uploadRouter = require('./uploadRouter');
 const orderRouter = require('./orderRouter');
 const downloadRouter = require('./downloadRouter');
 const deleteRouter = require('./deleteRouter');
+const validateRouter = require('./validateRouter');
+const searchRouter = require('./searchRouter');
 //Controllers
 
 router.use("/",loginRouter); //index page
 router.use("/dashboard",stillSignedInCheck,dashboardRouter);
-router.use('/logout',logoutRouter);
+router.use('/logout',stillSignedInCheck,logoutRouter);
 router.use('/redirect',redirectRouter); //only used when logged in and redirected by google
 router.use('/view',stillSignedInCheck,viewRouter);
 router.use('/order',stillSignedInCheck,orderRouter);
@@ -41,19 +43,28 @@ router.use('/edit',stillSignedInCheck,editRouter);
 router.use('/upload',stillSignedInCheck,uploadRouter);
 router.use('/download',downloadRouter);
 router.use('/delete',stillSignedInCheck,deleteRouter);
+router.use('/valid',validateRouter);
+router.use('/search',stillSignedInCheck,searchRouter);
 //Routers
-
+/*
 //error handling for 404
 router.use((req, res) => {
+    if(process.env.LOGGING>2) {
+        console.log('[Debug]: 404 page send');
+        console.trace();
+    }
     res.status(404).send('404: Page not Found');
 });
 //error handling for 500
 router.use((error, req, res, next) => {
-    console.log(error);
+    if(process.env.LOGGING>2) {
+        console.log('[Debug]: 500 page send');
+        console.trace();
+    }
     res.status(500).send('500: Internal Server Error');
     next();
 });
-
+*/
 //This fixed this error: "database names cannot contain the character '.' MongoError"
 router.get('/favicon.ico', function(req, res) {
     res.sendStatus(204);

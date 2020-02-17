@@ -12,18 +12,12 @@ html
                             include includes/bookmarks
                     main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
                         h2(class="pt-3") Settings
+                        include includes/messages
                         if error == 1
                             div(class="alert alert-success col-lg-8 col-md-10 col-sm-12" role="alert") Succesfully updated!
                         div(class="table-responsive")
                             table(class="table")
                                 tbody
-                                    tr(onclick="openBTW()",class="settingsOption optionBtw")
-                                        td
-                                            p(class="lead") #{__('Change VAT value')}
-                                                span(class="badge badge-pill badge-warning") #{__('in progress')}
-                                            div(id="btw",style="display:none;")
-                                                p Btw staat op: #{settings.vat}%
-                                                a(href='/btw' + "/" + loginHash,class="button",class="btn btn-outline-"+settings.theme) #{__('change VAT value')}
                                     tr(onclick="openTheme()",class="settingsOption optionTheme")
                                         td
                                             p(class="lead")

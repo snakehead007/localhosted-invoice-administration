@@ -29,7 +29,6 @@ html
 body
   header
     include ../includes/topBar
-
     div(class="container-fluid")
       div(class ="row")
         nav(class="col-md-2 d-none d-md-block bg-light sidebar")
@@ -38,26 +37,27 @@ body
             include ../includes/bookmarks
             include ../includes/invoiceOptionMenu
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          h2(class="pt-3") Factuur bewerken
+          h2(class="pt-3")=__('Update invoice')
           hr
+          include ../includes/messages
           form(action='/edit/invoice/'+invoice._id,method='post')
             div(class="form-row")
               div(class="form-group col-md-3")
                 label(for="title") Datum
-                input#datepicker(type="text",class="form-control",value=new Date(invoice.date).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' }),name="datum")
+                input#datepicker(type="text",class="form-control",value=new Date(invoice.date).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' }),name="date")
               div(class="form-group col-md-3")
-                label(for="title") Betaaldatum
-                input#datepicker2(type="text",class="form-control",value=invoice.datePaid,name="datumBetaald")
+                label(for="title")=__('Pay date')
+                input#datepicker2(type="text",class="form-control",value=(invoice.datePaid)?new Date(invoice.datePaid).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' }):"",name="datePaid")
               if invoice.invoiceNr
                 div(class="form-group col-md-2")
-                  label(for="title") Factuur Nummer
+                  label(for="title")=__('Invoice number')
                   input(type="number",class="form-control",value=invoice.invoiceNr,name="invoiceNr")
               if invoice.offerNr
                 div(class="form-group col-md-2")
-                  label(for="title") Offerte nummer
+                  label(for="title")=__('Offer number')
                   input(type="number",class="form-control",value=invoice.offerNr,name="offerNr")
               div(class="form-group col-md-2")
-                label(for="title") voorschot
+                label(for="title")=__('Advance')
                 input(type="number",class="form-control",value=invoice.advance,name="advance",step=".01")
             hr
-            button(type="submit",class="btn btn-outline-"+settings.theme) bijwerken
+            button(type="submit",class="btn btn-outline-"+settings.theme)=__('Update')

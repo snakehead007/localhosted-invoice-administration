@@ -10,6 +10,10 @@ const Item = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    type: {
+        type:String,
+        default: "g"
+    },
     fromUser:{
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
     },

@@ -25,6 +25,14 @@ const Order = new mongoose.Schema({
     },
     fromClient:{
         type: mongoose.Schema.Types.ObjectId, ref: 'Client'
+    },
+    creationDate:{
+        type:Date,
+        default:Date.now()
+    },
+    lastUpdated:{
+        type:Date,
+        default:Date.now()
     }
 });
 

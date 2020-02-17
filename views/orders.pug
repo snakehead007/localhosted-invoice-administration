@@ -20,31 +20,12 @@ body
             include includes/orderOptionMenu
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           if invoice.invoiceNr
-            h2(class="pt-3")=#{__('Invoice')} + " " +invoice.invoiceNr+" ("+client.clientName+")"
+            h2(class="pt-3")=__('Invoice')+" "+invoice.invoiceNr+" ("+client.clientName+")"
           if invoice.offerNr && !invoice.invoiceNr
-            h2(class="pt-3")=#{__('Offer')} +" "+ invoice.offerNr+" ("+client.clientName+")"
+            h2(class="pt-3")=__('Offer')+" "+invoice.offerNr+" ("+client.clientName+")"
           if invoice.creditNr && !invoice.offerNr && !invoice.invoiceNr
-            h2(class="pt-3")=#{__('Creditnote')}+ " "+invoice.creditNr+" ("+client.clientName+")"
+            h2(class="pt-3")=__('Creditnote')+" "+invoice.creditNr+" ("+client.clientName+")"
           hr
+          include includes/messages
           div(class="table-responsive bigger")
-            table(class="table table-striped table-sm ",id="hoofdTabel")
-              thead(style="color:#FFF",class="thead shadow bg-" + settings.theme)
-                tr
-                  th(scope="col") #{__('Description')}
-                  th(scope="col") #{__('Amount')}
-                  th(scope="col") #{__('Price')}
-                  th(scope="col") #{__('Total')}
-                  th(scope="col") #{__('Actions')}
-              tbody
-                each order in orders
-                  tr
-                    td=order.description
-                    td=order.amount
-                    td=order.price+" €"
-                    td=order.total+" €"
-                    td
-                      a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") #{__('Actions')}
-                      div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                        a(class="dropdown-item", href='/edit/order/'+order._id) #{__('Edit')}
-                        a(class="dropdown-item", href='/delete/order/'+order._id) #{__('Delete')}
-                        a(class="dropdown-item", href='/view/order/'+order._id) #{__('View')}
+            include includes/tables/orders

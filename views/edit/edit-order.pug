@@ -23,9 +23,7 @@ html
         feather.replace();
       });
 body
-  header
     include ../includes/topBar
-
     div(class="container-fluid")
       div(class ="row")
         nav(class="col-md-2 d-none d-md-block bg-light sidebar")
@@ -33,18 +31,19 @@ body
             include ../includes/navFlexCollumn
             include ../includes/bookmarks
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          h2(class="pt-3") Bestelling bewerken
+          h2(class="pt-3")=__('Update order')
           hr
-          form(action='/edit/order/'+bestelling._id,method='post')
+          include ../includes/messages
+          form(action='/order/edit/'+order._id,method='post')
             div(class="form-row")
               div(class="form-group col-md-10")
-                label(for="title") Beschrijving
+                label(for="title")=__('Description')
                 input(type="text",class="form-control",value=order.description,name="description", required)
               div(class="form-group col-md-2")
-                label(for="title") Aantal
+                label(for="title")=__('Amount')
                 input(type="number",class="form-control",value=order.amount,name="amount", required)
               div(class="form-group col-md-2")
-                label(for="title") Bedrag voor één
+                label(for="title")=__('Price for each')
                 input(type="number",class="form-control",value=order.price,name="price",step=".01" required)
             hr
-            button(type="submit",class="btn btn-outline-"+settings.theme) bijwerken
+            button(type="submit",class="btn btn-outline-"+settings.theme)=__('Update')

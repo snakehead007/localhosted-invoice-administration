@@ -27,7 +27,8 @@ exports.startUp = () =>{
         'https://www.googleapis.com/auth/plus.me',
         'https://www.googleapis.com/auth/userinfo.email',
     ];
-    console.log("[Info]: Google config set up");
+    if(process.env.LOGGING>1)
+        console.log("[Info]: Google config set up");
 };
 
 /**
@@ -67,7 +68,10 @@ exports.getGooglePlusApi = (auth)=> {
  */
 exports.urlGoogle = () => {
     const auth = this.createConnection();
-    const url = this.getConnectionUrl(auth);
+    const url = this.getConnectionUrl(auth)
+    if(process.env.LOGGING>2){
+        console.log("[Debug]: generated google url: "+url);
+    }
     return url;
 };
 
@@ -85,7 +89,8 @@ exports.getGoogleAccountFromCode = async (code) =>{
     } = await oauth2.userinfo.v2.me.get({
         auth: oAuth2Client
     });
-    console.log("[info]: new login with email: "+email);
+    if(process.env.LOGGING>1)
+        console.log("[info]: new login with email: "+email);
     return {
         googleId: google_id,
         email: email,
