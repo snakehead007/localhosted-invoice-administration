@@ -7,6 +7,7 @@ const Client = require('../models/client');
 const Settings = require('../models/settings');
 const invalid = require('../utils/formValidation');
 const error = require('../middlewares/error');
+const i18n = require('i18n');
 /**
  * @api {get} /client/all getClientAll
  * @apiDescription Here you can view all the clients from the current user
@@ -203,6 +204,7 @@ exports.getEditClient = (req,res) => {
 exports.postEditClient = (req,res) => {
   Client.findOne({fromUser:req.session._id,_id:req.params.idc},function(err,client){
       if(!error.findOneHasError(req,res,err,client)){
+          console.log("found client that is editing: "+JSON.stringify(client));
           let nameCheck = invalid.valueMustBeAName(req,res,req.body.clientName,true,"client name not correctly filled in");
           let firmCheck = invalid.valueMustBeAName(req,res,req.body.firm,false,"firm name not correctly filled in");
           let streetCheck = invalid.valueMustBeAName(req,res,req.body.street,true);
@@ -214,7 +216,7 @@ exports.postEditClient = (req,res) => {
           let postalCheck = invalid.valueMustBePostalCode(req,res,req.body.postal);
           let placeCheck = invalid.valueMustBeAName(req,res,req.body.place,true,"place name not correctly checked in");
           let isNotValid = nameCheck||firmCheck||streetCheck||vatPercentageCheck||streetNrCheck||emailCheck||vatCheck||bankCheck||postalCheck||placeCheck;
-          if(isNotValid) {
+          if(!isNotValid) {
               let updatedClient = {
                   clientName:req.body.clientName,
                   firm: req.body.firm,
@@ -227,13 +229,14 @@ exports.postEditClient = (req,res) => {
                   postal:req.body.postal,
                   place:req.body.place
               };
-              Client.updateOne({fromUser:req.session._id,id:client._id},updatedClient,function(err){
+              console.log('Looking for client with : {fromUser: '+req.session._id+" , _id: "+client._id);
+              Client.updateOne({fromUser:req.session._id,_id:client._id},updatedClient,function(err){
                  if(!error.updateOneHasError(req,res,err)){
+                     req.flash('success',i18n.__("Successfully updated client"));
                      res.redirect('/client/all');
                  }
               });
           }else{
-              console.log('[Error]: isNotValid equals '+isNotValid);
               res.redirect('/edit/client/'+client._id);
           }
       }

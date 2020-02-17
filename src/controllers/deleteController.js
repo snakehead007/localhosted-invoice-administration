@@ -9,26 +9,31 @@ const Profile = require('../models/profile');
 const fs = require('fs');
 const i18n = require('i18n');
 const path = require('path');
+const error = require('../middlewares/error');
 /**
  *
  * @param req
  * @param res
  */
 exports.delete_client = (req,res) =>{
-    Client.deleteOne({fromUser:req.session._id,_id: req.params.idc}, function(err) {
-        if(err) console.trace();
-        if (!err) {
-            Invoice.deleteMany({fromUser:req.session._id,fromClient: req.params.idc},function(err){
-                if(err) console.trace();
-                Client.find({fromUser:req.session._id}, function(err){
-                    if(err) console.trace();
-                    if(!err) {
-                        res.redirect('client/all');
-                    }
-                });
-            });
+    Client.find({fromUser:req.session._id,_id:req.params.idc},(err,client) =>{
+        if(!error.findOneHasError(req,res,err,client)){
+            Invoice.deleteMany({fromUser:req.session._id,fromClient:client._id},(err) => {
+                if(!err){
+                    Order.deleteMany({fromUser:req.session._id,fromClient:client._id},(err) => {
+                        if(!err){
+                            Client.deleteOne({fromUser:req.session._id,_id:req.params.idc},(err) => {
+                                if(!err){
+                                    req.flash('success','Successfully deleted the client');
+                                    res.redirect('/client/all');
+                                }
+                            });
+                        }
+                    })
+                }
+            })
         }
-    });
+    })
 };
 
 /**
@@ -72,6 +77,28 @@ exports.delete_logo_get = (req,res) => {
                     res.redirect('/view/profile');
                 }
             });
+        }
+    })
+};
+
+exports.delete_order_get = (req,res) => {
+    Order.findOne({fromUser:req.session._id,_id:req.params.ido},(err,order)=> {
+        if(!error.findOneHasError(req,res,err,order)){
+            Invoice.findOne({fromUser:req.session._id,_id:order.fromInvoice}, (err,invoice) => {
+                if(!error.findOneHasError(req,res,err,invoice)){
+                    let updateInvoice = {
+                        total: invoice.total - (order.amount * order.price)
+                    };
+                    Order.deleteOne({fromUser:req.session._id,_id:order._id}, (err)=> {
+                        if(err) console.trace("[Error]: "+err);
+                        Invoice.updateOne({fromUser:req.session._id,_id:invoice._id},updateInvoice,(err) => {
+                            if(err) console.trace("[Error]: "+err);
+                            req.flash('success',i18n.__("Successfully deleted the order"));
+                            res.redirect('/order/all/'+invoice._id);
+                        })
+                    });
+                }
+            })
         }
     })
 };
