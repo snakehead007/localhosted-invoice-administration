@@ -1,5 +1,6 @@
 # Invoice-administration
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2b050f3946714359aaca43cc883f5115)](https://www.codacy.com/manual/snakehead007/invoice-administration?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=snakehead007/invoice-administration&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.com/snakehead007/invoice-administration.svg?branch=master)](https://travis-ci.com/snakehead007/invoice-administration)
 
 This program is mainly used for managing and administrating invoices and generating them into .pdf format
 
