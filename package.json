@@ -5,12 +5,14 @@
   "main": "src/app.js",
   "dependencies": {
     "apidoc": "^0.19.1",
+    "assert": "^2.0.0",
     "async": "^3.1.1",
     "azure-batch": "^8.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "braces": "^2.3.2",
     "bytes": "^3.1.0",
+    "chai": "^4.2.0",
     "chartjs": "^0.3.24",
     "clean-css": "^4.2.3",
     "codacy-coverage": "^3.4.0",
@@ -91,7 +93,8 @@
     "build:dev": "sudo docker build -t snakehead007/invoice-administration:dev .",
     "push:dev": "docker push snakehead007/invoice-administration:dev",
     "build:latest": "sudo docker build -t snakehead007/invoice-administration:latest .",
-    "push:latest": "docker push snakehead007/invoice-administration:latest"
+    "push:latest": "docker push snakehead007/invoice-administration:latest",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
