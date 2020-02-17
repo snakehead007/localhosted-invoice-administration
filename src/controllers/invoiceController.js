@@ -17,7 +17,7 @@ const {findOneHasError,updateOneHasError} = require('../middlewares/error');
  * @param res
  */
 exports.invoice_all_get = (req,res) => {
-    Invoice.find({fromUser:req.session._id}, function(err, invoices) {
+    Invoice.find({fromUser:req.session._id},null,{sort:{creationDate:-1}}, function(err, invoices) {
         if(err) console.trace();
             Settings.findOne({fromUser:req.session._id}, function(err, settings) {
                 if(err) console.trace();

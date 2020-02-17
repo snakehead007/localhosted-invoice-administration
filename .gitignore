@@ -17,6 +17,9 @@ node_modules/
 build/*
 data/*
 .env
+/.env
+/.env/
+.env/
 src/dump.rdb
 public/images/*/*
 public/images/*
