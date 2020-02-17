@@ -39,19 +39,32 @@ exports.main_get =  async function getLogin(req,res){
                         if (!err) {
                             let chart = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                             let invoice_open = [];
-                            //finds unpaid invoices
                             for (let invoice of invoices) {
                                 if (invoice.invoiceNr) {
                                     if(!invoice.isPaid){
+                                        //adds to unpaid invoices
                                         invoice_open.push(invoice);
+                                    }else{
+                                        //Adds to chart data
+                                        let monthOfPayment = invoice.datePaid.getMonth();
+                                        console.log("adding invoice with month "+monthOfPayment+" idi: "+invoice._id);
+                                        console.log("current year of invoice is:"+invoice.datePaid.getFullYear());
+                                        console.log("Invoice is paid: "+invoice.isPaid);
+                                        console.log('current year is: '+year);
+                                        if(year===invoice.datePaid.getFullYear()&&invoice.isPaid) {
+                                            chart[monthOfPayment] += invoice.total;
+                                            console.log('added');
+                                        }else{
+                                            console.log('not added');
+                                        }
                                     }
                                 }
                             }
+                            console.log('chart done: '+chart);
                             //createa data for chart
-                            /*
                             for (let i = 0; i <= 11; i++) {
 
-                            }*/
+                            }
                             res.render('index', {
                                 'currentUrl':"dashboard",
                                 "total": chart,
@@ -83,30 +96,41 @@ exports.chart_year_get = (req,res) => {
                 if (!err) {
                     Invoice.find({fromUser:req.session._id}, function (err, invoices) {
                         if (!err) {
-                            let total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                            for (let i = 0; i <= 11; i++) {
-                                for (let invoice of invoices) {// TODO: 'for of' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
-                                    if (invoice.invoiceNr) {
-                                        if (invoice.datePaid) {
-                                            if ((invoice.datePaid.includes(month[i]) || invoice.datePaid.includes(month_small[i]) || invoice.datePaid.includes(month[i]) || invoice.datePaid.includes(month_small[i])) && invoice.datePaid.includes(req.params.year) && invoice.datePaid && invoice.isPaid) {
-                                                total[i] += invoice.total;
-                                            }
-                                        } else if ((invoice.date.includes(month[i]) || invoice.date.includes(month_small[i]) || invoice.date.includes(month[i]) || invoice.date.includes(month_small[i])) && invoice.date.includes(req.params.year) && invoice.invoiceNr && invoice.isPaid) {
-                                            total[i] += invoice.total;
-                                        }
-                                        if ((invoice.date.includes(month[i]) || invoice.date.includes(month_small[i]) || invoice.date.includes(month[i]) || invoice.date.includes(month_small[i])) && !invoice.isPaid){
-                                            fact_open.push(invoice);
+                            let chart = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            let invoice_open = [];
+                            for (let invoice of invoices) {
+                                if (invoice.invoiceNr) {
+                                    if(!invoice.isPaid){
+                                        //adds to unpaid invoices
+                                        invoice_open.push(invoice);
+                                    }else{
+                                        //Adds to chart data
+                                        let monthOfPayment = invoice.datePaid.getMonth();
+                                        console.log("adding invoice with month "+monthOfPayment+" idi: "+invoice._id);
+                                        console.log("current year of invoice is:"+invoice.datePaid.getFullYear());
+                                        console.log("Invoice is paid: "+invoice.isPaid);
+                                        console.log('current year is: '+req.params.year);
+                                        if(req.params.year==invoice.datePaid.getFullYear()&&invoice.isPaid) {
+                                            chart[monthOfPayment] += invoice.total;
+                                            console.log('added');
+                                        }else{
+                                            console.log('not added');
                                         }
                                     }
                                 }
                             }
-                            console.log(year);
-                            res.render('chart', {
-                                'currentUrl':"chart",
-                                "total": total,
+                            console.log('chart done: '+chart);
+                            //createa data for chart
+                            for (let i = 0; i <= 11; i++) {
+
+                            }
+                            res.render('index', {
+                                'currentUrl':"dashboard",
+                                "total": chart,
                                 "settings": settings,
                                 "year": req.params.year,
                                 "profile": profile,
+                                "invoices":invoice_open
                             });
                         }
                     });

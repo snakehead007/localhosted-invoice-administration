@@ -18,13 +18,6 @@ html
                         div(class="table-responsive")
                             table(class="table")
                                 tbody
-                                    tr(onclick="openBTW()",class="settingsOption optionBtw")
-                                        td
-                                            p(class="lead") #{__('Change VAT value')}
-                                                span(class="badge badge-pill badge-warning") #{__('in progress')}
-                                            div(id="btw",style="display:none;")
-                                                p Btw staat op: #{settings.vat}%
-                                                a(href='/btw' + "/" + loginHash,class="button",class="btn btn-outline-"+settings.theme) #{__('change VAT value')}
                                     tr(onclick="openTheme()",class="settingsOption optionTheme")
                                         td
                                             p(class="lead")

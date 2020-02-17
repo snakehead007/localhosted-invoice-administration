@@ -60,7 +60,8 @@ body
                   td
                     h4=client.bankNr
               each mail in client.email
-                tr
-                  th(scope="row") #{__('Email')}
-                  td
-                    h4=mail
+                if mail!==""
+                  tr
+                    th(scope="row") #{__('Email')}
+                    td
+                      h4=mail
