@@ -30,6 +30,7 @@ exports.getClientAll = (req, res) => {
             Settings.findOne({fromUser:req.session._id}, function(err, settings) {
                 if(err) console.trace();
                 if (!err ) {
+                    console.log(clients);
                     res.render('clients', {
                         'clients': clients,
                         "settings": settings,
@@ -89,7 +90,12 @@ exports.postClientNew = (req, res) => {
     let firmCheck = invalid.valueMustBeAName(req,res,req.body.firm,false,"firm name not correctly filled in");
     let streetCheck = invalid.valueMustBeAName(req,res,req.body.street,true);
     let streetNrCheck = invalid.valueMustBeStreetNumber(req,res,req.body.streetNr);
-    let emailCheck = invalid.valueMustBeEmail(req,res,req.body.email);
+    let emailCheck = false;
+    req.body.emails.forEach(email => {
+        if(invalid.valueMustBeEmail(req,res,email)){
+            emailCheck=true;
+        }
+    });
     let vatCheck = invalid.valueMustBeVatNumber(req,res,req.body.vat);
     let vatPercentageCheck = invalid.valueMustBeAnInteger(req,res,req.body.vatPercentage,true);
     let bankCheck = invalid.valueMustBeValidIban(req,res,req.body.bankNr);
@@ -112,7 +118,6 @@ exports.postClientNew = (req, res) => {
                             "firm":req.body.firm,
                             "street":req.body.street,
                             "streetNr":req.body.streetNr,
-                            "email":req.body.email,
                             "vat":req.body.vat,
                             "bankNr":req.body.bankNr,
                             "postal":req.body.postal,
@@ -133,7 +138,7 @@ exports.postClientNew = (req, res) => {
             place: req.body.place,
             vat: req.body.vat,
             lang: req.body.lang,
-            email: req.body.email,
+            email: req.body.emails,
             bankNr: req.body.rekeningnr,
             fromUser:req.session._id,
             vatPercentage: req.body.vatPercentage,

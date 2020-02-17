@@ -21,7 +21,39 @@ html
       };
       $(document).ready(function () {
         feather.replace();
+        let maxField = 10; //Input fields increment limitation
+        let addButton = $('.add_button'); //Add button selector
+        let wrapper = $('.field_wrapper'); //Input field wrappe
+        let x = 5; //Initial field counter is 1
+        let emails = "#{client.email}".split(',');
+        window.alert(emails);
+         //New input field html
+
+        //Once add button is clicked
+        $(addButton).click(function () {
+          //Check maximum number of input fields
+          if (x < maxField) {
+            x++; //Increment field counter
+            let currentEmail = (!emails[x-5])?"":emails[x-5];
+            let fieldHTML = '<div><input class="form-control" type="text" value="'+currentEmail+'" name="emails[]"/><a href="javascript:void(0);" class="remove_button"><span class="fa-color-buttons"><i class="fas fa-minus-square""></span></i>\n</a></div>';
+            $(wrapper).append(fieldHTML); //Add field html
+          }
+        });
+
+        //Once remove button is clicked
+        $(wrapper).on('click', '.remove_button', function (e) {
+          e.preventDefault();
+          $(this).parent('div').remove(); //Remove field html
+          x--; //Decrement field counter
+        });
       });
+    style.
+      span.fa-color-buttons {
+      color:#b1b1b1;
+      }
+      span.fa-color-buttons:hover {
+        color:#007bff;
+      }
 body
     include ../includes/topBar
     div(class="container-fluid")
@@ -53,9 +85,13 @@ body
                 label(for="title")=__('Street number')
                 input(type="text",class="form-control",value=client.streetNr,name="streetNr")
               div(class="col-md-2")
-              div(class="form-group col-md-3")
-                label(for="title")=__('E-mail')
-                input(type="text",class="form-control",value=client.email[0],name="email",placeholder="voorbeel@email.be")
+              div.field_wrapper(class="form-group col-md-3")
+                label(for="title") #{__('E-mails')}
+                div
+                  input(type="text",class="form-control",value=client.email[0], name="emails[]",placeholder="voorbeeld@email.be")
+                  a(href="javascript:void(0);" class="add_button" title="Add field")
+                    span.fa-color-buttons
+                      i.fas.fa-plus-square.fa-2x
               div(class="form-group col-md-2")
                 label(for="title")=__('VAT number')
                 input(type="text",class="form-control",value=client.vat,name="vat")

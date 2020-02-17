@@ -145,7 +145,7 @@ exports.invoice_new_get = (req,res) => {
                                     invoiceNr: String(new Date().getFullYear() + invoiceNr),
                                     clientName: client.clientName,
                                     total: 0,
-                                    fromUser: req.session._id
+                                    fromUser: req.session._id,
                                 });
                                 await Client.findOne({fromUser: req.session._id,_id:client._id}, async function (err) {
                                     if (err) console.trace();
@@ -354,39 +354,33 @@ exports.edit_invoice_post = (req,res) => {
         if(err) console.trace();
         let totOrders = 0;
         for (let i = 0; i <= orders.length - 1; i++) {
-            totOrders += orders[i].total;
+            totOrders += (orders[i].price*orders[i].amount);
         }
+        console.log(totOrders);
         let updateInvoice;
-        if (req.body.advance) {
-            updateInvoice = {
-                date: Date.parse(req.body.date),
-                invoiceNr: req.body.invoiceNr,
-                advance: req.body.advance,
-                offerNr: req.body.offer,
-                datePaid: req.body.datePaid,
-                lastUpdated:Date.now(),
-                total: totOrders - req.body.total
-            };
-        } else {
-            updateInvoice = {
-                date: Date.parse(req.body.date),
-                invoice: req.body.invoice,
-                advance: req.body.advance,
-                offerNr: req.body.offerNr,
-                datePaid: req.body.datePaid,
-                lastUpdated:Date.now(),
-                total:totOrders
-            };
+        updateInvoice = {
+            date: Date.parse(req.body.date.replace(/[^0-9//]/g,"") ),
+            invoiceNr: req.body.invoiceNr,
+            advance: req.body.advance,
+            offerNr: req.body.offer,
+            datePaid: (req.body.datePaid.toString()!=="")?Date.parse(req.body.datePaid.replace(/[^0-9//]/g)):"",
+            lastUpdated:Date.now(),
+            total: totOrders - req.body.advance
         }
-        let searchCriteria = {fromUser:req.session._id};
-        if(JSON.stringify(orders)!=="null") {
+        let searchCriteria = {fromUser:req.session._id,};
+        if(orders.length > 0) {
             console.log(orders);
             searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient};
         }
+        console.log(searchCriteria);
+        console.log(orders);
+        console.log(updateInvoice);
         Client.findOne(searchCriteria, function(err, contact) {
+            console.log(contact);
             Invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, updateInvoice, function(err) {
                 if (!updateOneHasError(req,res,err)) {
-                    res.redirect('/invoice/' + contact._id);
+                    req.flash('success',i18n.__("Successfully updated the invoice"));
+                    res.redirect('/invoice/all');
                 }
             });
         });

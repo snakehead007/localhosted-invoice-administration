@@ -44,10 +44,10 @@ body
             div(class="form-row")
               div(class="form-group col-md-3")
                 label(for="title") Datum
-                input#datepicker(type="text",class="form-control",value=new Date(invoice.date).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' }),name="datum")
+                input#datepicker(type="text",class="form-control",value=new Date(invoice.date).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' }),name="date")
               div(class="form-group col-md-3")
                 label(for="title")=__('Pay date')
-                input#datepicker2(type="text",class="form-control",value=new Date(invoice.datePaid).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' }),name="datumBetaald")
+                input#datepicker2(type="text",class="form-control",value=(invoice.datePaid)?new Date(invoice.datePaid).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' }):"",name="datePaid")
               if invoice.invoiceNr
                 div(class="form-group col-md-2")
                   label(for="title")=__('Invoice number')

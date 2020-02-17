@@ -5,15 +5,20 @@ table(class="table table-striped table-sm ",id="hoofdTabel")
             th(scope="col") #{__('Email')}
             th(scope="col") #{__('Action')}
     tbody
+        script.
         each client in clients
             tr
                 td
                     a(href='/invoice/all/' + client._id)=client.clientName
                 td
-                    if client.email !== ""
-                        each mail in client.email
-                            a(href="mailto:"+mail)=mail
-                    else
+                    if client.email.length===1
+                        a(href="mailto:"+mail)=mail
+                    if client.email.length > 1
+                        a(role="button", class="btn btn-outline-" + settings.theme + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") E-mails
+                        div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                            each email in client.email
+                             a(class="dropdown-item", href='mailto:' + email)=email
+                    if client.email.length===0||client.email.length[0]===''||!client.email
                         span #{__('no e-mail')}
                 td
                     a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") #{__('Actions')}
