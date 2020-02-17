@@ -86,8 +86,10 @@
     "start": "node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "doc": "apidoc -i src/ -o apidoc/",
-    "build": "sudo docker build -t snakehead007/invoice-administration:dev .",
-    "push": "docker push snakehead007/invoice-administration:dev"
+    "build:dev": "sudo docker build -t snakehead007/invoice-administration:dev .",
+    "push:dev": "docker push snakehead007/invoice-administration:dev",
+    "build:latest": "sudo docker build -t snakehead007/invoice-administration:latest .",
+    "push:latest": "docker push snakehead007/invoice-administration:latest"
   },
   "repository": {
     "type": "git",
