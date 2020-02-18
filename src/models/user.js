@@ -44,8 +44,12 @@ const User = new mongoose.Schema({
         },
         tokens: [{
             type: Object
-        }]
-    }
+        }],
+        hasAgreed:{
+            type:Boolean,
+            default:false
+        }
+    },
 );
 
 
