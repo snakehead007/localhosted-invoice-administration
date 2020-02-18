@@ -58,6 +58,6 @@ body
                   input(type="number",class="form-control",value=invoice.offerNr,name="offerNr")
               div(class="form-group col-md-2")
                 label(for="title")=__('Advance')
-                input(type="number",class="form-control",value=invoice.advance,name="advance",step=".01")
+                input(type="number",class="form-control",value=invoice.advance,name="advance",step="any")
             hr
             button(type="submit",class="btn btn-outline-"+settings.theme)=__('Update')

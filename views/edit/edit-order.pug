@@ -44,6 +44,6 @@ body
                 input(type="number",class="form-control",value=order.amount,name="amount", required)
               div(class="form-group col-md-2")
                 label(for="title")=__('Price for each')
-                input(type="number",class="form-control",value=order.price,name="price",step=".01" required)
+                input(type="number",class="form-control",value=order.price,name="price",step="any" required)
             hr
             button(type="submit",class="btn btn-outline-"+settings.theme)=__('Update')

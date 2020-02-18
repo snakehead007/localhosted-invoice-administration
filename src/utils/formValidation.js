@@ -129,3 +129,5 @@ exports.valueMustBeValidBic = (req,res,doc,mustBeFilledIn=false,message="BIC num
     console.log("[DEBUG]: utils.formvalidation.valueMustBeValidBic("+doc+") => "+invalid);
     return showMessage
 };
+
+exports.valueMustBe

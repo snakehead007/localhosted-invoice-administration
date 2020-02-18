@@ -42,9 +42,9 @@ body
                 input(id="name",type="text",class="form-control",name="name", required)
               div(class="form-group col-md-2")
                 label(for="price") #{__('Price')}
-                input(id="price" type="number",class="form-control",name="price",step=".01" required)
+                input(id="price" type="number",class="form-control",name="price",step="any" required)
               div(class="form-group col-md-2")
                 label(for="amount") #{__('Amount')}
-                input(id="amount",type="number",class="form-control",name="amount",step=".01",value="0" required)
+                input(id="amount",type="number",class="form-control",name="amount",step="any",value="0" required)
             hr
             button(type="submit",class="btn btn-outline-"+settings.theme) #{__('Add')}
