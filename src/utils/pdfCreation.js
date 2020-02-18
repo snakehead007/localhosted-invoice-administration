@@ -1,6 +1,7 @@
 const fs = require('fs');
-let path = require('path');
-let imageToBase64 = require('image-to-base64');
+const path = require('path');
+const base64Img = require('base64-img');
+global.atob = require('atob');
 module.exports.callGetBase64 = async (id) => {
     return await (getBase64(id));
 };
@@ -14,14 +15,11 @@ let getBase64 = (id) => {
                 //BASE64 image if no logo is uploaded
                 console.log('base64: no logo found or uploaded');
                 resolve("data:image/png;base64,iVBORw0KGgoAAAANSUhsEUgAAASwAAACWCAYAAABkW7XSAAAAxUlEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOA1v9QAATX68/0AAAAASUVORK5CYII=");
-                return;
             }else{
-                imageToBase64(_path).then((response) => {
-                    let imgData ="data:image/jpeg;base64,";
-                    imgData +=response;
+                base64Img.base64(_path ,(err,data) => {
+                    let imgData =data
+                    console.log(imgData.substring(0,100));
                     resolve(imgData);
-                }).catch((err) =>{
-
                 });
             }});
     });
