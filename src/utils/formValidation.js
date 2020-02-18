@@ -113,6 +113,10 @@ exports.valueMustBeStreetNumber = (req,res,doc,mustBeFilledIn=false,message="Str
 };
 
 exports.valueMustBeValidIban = (req,res,doc,mustBeFilledIn=false,message="IBAN number is not valid") => {
+    //Test if only numbers (true)? => put locale client in front of number BE00000000000
+    //If (false)? => check for validation below (regex)
+    //else test if it contains '.' (true)? => remove '.' and check above
+
     const invalid = !IBAN.isValid(doc);
     let showMessage = ((mustBeFilledIn)&&!(doc !== "" && !invalid));
     if(showMessage)

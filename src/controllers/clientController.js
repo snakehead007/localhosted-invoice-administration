@@ -232,7 +232,7 @@ exports.postEditClient = (req,res) => {
                   firm: req.body.firm,
                   street:req.body.street,
                   streetNr:req.body.streetNr,
-                  email:req.body.email,
+                  email:req.body.emails,
                   vat:req.body.vat,
                   vatPercentage:req.body.vatPercentage,
                   bankNr:req.body.bankNr,

@@ -278,5 +278,7 @@
 	"Successfully updated client": "Successfully updated client",
 	"Successfully deleted the order": "Successfully deleted the order",
 	"E-mails": "E-mails",
-	"Successfully updated the invoice": "Successfully updated the invoice"
+	"Successfully updated the invoice": "Successfully updated the invoice",
+	"Account number": "Account number",
+	"Error in this clients email": "Error in this clients email"
 }
