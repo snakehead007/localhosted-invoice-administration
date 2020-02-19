@@ -26,6 +26,7 @@ exports.download_invoice_get = (req,res) => {
                     Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
                         if(!error.findOneHasError(req,res,err,client)) {
                             Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
+                                console.log(orders);
                                 Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                                     if (!err) {
                                             createPDF(req,res,"invoice",profile,settings,client,invoice,orders);

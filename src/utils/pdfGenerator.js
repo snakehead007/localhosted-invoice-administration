@@ -153,20 +153,35 @@ exports.createPDF = async (req,res,style="invoice",profile,settings,client,invoi
     let totalEx = 0;
     let _vat;
     let totalInc;
-    for(let o in orders){
-        if(orders.hasOwnProperty(o)) {
+    try {
+        orders.forEach((o)=> {
             pdfOrders.push([o.description, o.amount, o.price, o.total]);
-        }
+        });
+    }catch (e) {
+        console.trace(e);
+
+        req.flash('danger',i18n.__('Something went wrong, please try again'));
+        req.redirect('back');
     }
     for(let i = 0; i <=pdfOrders.length-1; i++){
         totalEx +=pdfOrders[i][3];
     }
     let ordersPrint = [];
-    for(let o in orders){
-        if(orders.hasOwnProperty(o)) {
-            ordersPrint.push([o.description, o.amount, o.price.toFixed(2) + " €", o.total.toFixed(2) + " €"]);
-        }
+    console.log(orders);
+    try {
+        orders.forEach((o) => {
+                console.log("order: ");
+                console.log(o);
+                ordersPrint.push([o.description, o.amount, o.price.toFixed(2) + " €", o.total.toFixed(2) + " €"]);
+
+        });
+    }catch(err){
+        console.trace(err);
+        req.flash('danger',i18n.__('Something went wrong, please try again'));
+        req.redirect('back');
     }
+    console.log(ordersPrint);
+    console.log(pdfOrders);
     doc.autoTable({
         theme: 'grid',
         columnStyles: {
