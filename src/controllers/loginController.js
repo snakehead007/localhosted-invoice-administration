@@ -76,6 +76,7 @@ exports.create_user_get = async function getCreateNewUser(req,res){
             console.log(newUser);
         }
         req.session.email = newUser.email;
+        req.session.role = "visitor";
         res.redirect('/dashboard');
     }else {
         res.redirect(google.urlGoogle());

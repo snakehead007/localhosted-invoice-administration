@@ -7,6 +7,7 @@ const Settings = require('../models/settings');
 const Profile = require('../models/profile');
 const Client = require('../models/client');
 
+const User = require('../models/user');
 const {findOneHasError} = require('../middlewares/error');
 /**
  *
@@ -20,7 +21,7 @@ exports.edit_order_get = (req,res)  => {
             if(err) console.trace();
             Settings.findOne({fromUser:req.session._id,}, function(err, settings) {
                 if(err) console.trace();
-                Profile.findOne({fromUser:req.session._id,}, function(err, profile) {
+                Profile.findOne({fromUser:req.session._id,}, async(err, profile)=> {
                     if(err) console.trace();
                     if (!err) {
                         res.render('edit/edit-order', {
@@ -28,6 +29,7 @@ exports.edit_order_get = (req,res)  => {
                             "invoice": invoice,
                             "profile":  profile,
                             "settings": settings,
+                            "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                         });
                     }
                 });
@@ -51,7 +53,7 @@ exports.new_order_get = (req,res) => {
                     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
                         if(err) console.trace();
                         if (!err) {
-                            Profile.findOne({fromUser:req.session._id}, function(err, profile) {
+                            Profile.findOne({fromUser:req.session._id}, async(err, profile)=> {
                                 if(err) console.trace();
                                 if (!err) {
                                     res.render('new/new-order', {
@@ -59,7 +61,8 @@ exports.new_order_get = (req,res) => {
                                         "profile": profile,
                                         "settings": settings,
                                         "client": client,
-                                        "currentUrl":"orderNew"
+                                        "currentUrl":"orderNew",
+                                        "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                                     });
                                 }
                             });
@@ -117,7 +120,7 @@ exports.all_order_get = (req,res) => {
                         Settings.findOne({fromUser:req.session._id}, function (err, settings) {
                             if(err) console.trace();
                             if (!err) {
-                                Profile.findOne({fromUser:req.session._id}, function (err, profile) {
+                                Profile.findOne({fromUser:req.session._id}, async (err, profile)=> {
                                     if(err) console.trace();
                                     if (!err) {
                                         res.render('orders', {
@@ -126,6 +129,7 @@ exports.all_order_get = (req,res) => {
                                             "profile": profile,
                                             "client": client,
                                             "settings": settings,
+                                            "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                                         });
                                     }
                                 });
@@ -150,13 +154,14 @@ exports.view_order_get = (req,res) => {
                 if (!err) {
                     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
                         if (!err) {
-                            Profile.findOne({fromUser:req.session._id}, function(err, profile) {
+                            Profile.findOne({fromUser:req.session._id}, async(err, profile) =>{
                                 if (!err) {
                                     res.render('view/view-order', {
                                         'order': order,
                                         "invoice": invoice,
                                         "profile": profile,
                                         "settings": settings,
+                                        "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                                     });
                                 }
                             });

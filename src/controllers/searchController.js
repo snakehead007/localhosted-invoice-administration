@@ -12,6 +12,7 @@ const Settings = require('../models/settings');
 const {isNumeric} = require('../utils/numbers');
 const {distinct} = require('../utils/array');
 const i18n = require('i18n');
+const User = require('../models/user');
 module.exports.search_get = (req,res) => {
     let str = req.body.search.toString().toLowerCase();
     let clients = [];

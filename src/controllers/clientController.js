@@ -8,6 +8,7 @@ const Settings = require('../models/settings');
 const invalid = require('../utils/formValidation');
 const error = require('../middlewares/error');
 const i18n = require('i18n');
+const User = require('../models/user');
 /**
  * @api {get} /client/all getClientAll
  * @apiDescription Here you can view all the clients from the current user
@@ -28,7 +29,7 @@ exports.getClientAll = (req, res) => {
         if(err) console.trace();
         Client.find({fromUser:req.session._id}, function(err, clients) {
             if(err) console.trace();
-            Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+            Settings.findOne({fromUser:req.session._id}, async(err, settings) => {
                 if(err) console.trace();
                 if (!err ) {
                     console.log(clients);
@@ -37,7 +38,8 @@ exports.getClientAll = (req, res) => {
                         'clients': clients,
                         "settings": settings,
                         "profile":profile,
-                        "currentUrl":"clientAll"
+                        "currentUrl":"clientAll",
+                        "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                     });
                 }
             });
@@ -61,13 +63,14 @@ exports.getClientAll = (req, res) => {
 exports.getClientNew = (req, res) => {
     Settings.findOne({fromUser:req.session._id},function(err, settings) {
         if(err) console.trace();
-        Profile.findOne({fromUser:req.session._id},function(err,profile) {
+        Profile.findOne({fromUser:req.session._id},async(err,profile) =>{
             if(err) console.trace();
             if (!err) {
                 res.render('new/new-client', {
                     "settings": settings,
                     "profile":profile,
-                    "currentUrl":"clientNew"
+                    "currentUrl":"clientNew",
+                    "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                 });
             }
         });
@@ -108,7 +111,7 @@ exports.postClientNew = (req, res) => {
         console.log('[error]: making client, not valid');
         Settings.findOne({fromUser:req.session._id},function(err, settings) {
             if(err) console.trace();
-            Profile.findOne({fromUser:req.session._id},function(err,profile) {
+            Profile.findOne({fromUser:req.session._id},async(err,profile)=> {
                 if(err) console.trace();
                 if (!err) {
                     res.render('edit/edit-client', {
@@ -125,7 +128,8 @@ exports.postClientNew = (req, res) => {
                             "postal":req.body.postal,
                             "place":req.body.place,
                             "vatPercentage":req.body.vatPercentage
-                        }
+                        },
+                        "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                     });
                 }
             });
@@ -171,13 +175,14 @@ exports.getClientView = (req, res) => {
             Settings.findOne({fromUser:req.session._id}, function(err, settings) {
                 if(err) console.trace(err);
                 if (!err) {
-                    Profile.findOne({fromUser:req.session._id}, function(err, profile) {
+                    Profile.findOne({fromUser:req.session._id}, async(err, profile) => {
                         if(err) console.trace(err);
                         if (!err) {
                             res.render('view/view-client', {
                                 'client': client,
                                 "profile": profile,
-                                "settings": settings
+                                "settings": settings,
+                                "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                             });
                         }
                     });
@@ -192,13 +197,14 @@ exports.getEditClient = (req,res) => {
       if (!error.findOneHasError(req, res, err, client)) {
           Settings.findOne({fromUser: req.session._id}, function (err, settings) {
               if (!error.findOneHasError(req, res, err, settings)){
-                Profile.findOne({fromUser:req.session._id},function(err,profile){
+                Profile.findOne({fromUser:req.session._id},async(err,profile) =>{
                     if(!error.findOneHasError(req,res,err,profile)){
                           res.render('edit/edit-client',{
                               'client':client,
                               'profile':profile,
                               'settings':settings,
-                              "currentUrl":"clientEdit"
+                              "currentUrl":"clientEdit",
+                              "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                           })
                     }
                 });

@@ -19,7 +19,7 @@ const User = new mongoose.Schema({
         },
         role: {
             type: String,
-            default: 'user',
+            default: 'visitor',
         },
         creationDate: {
             type: Date,
@@ -51,8 +51,6 @@ const User = new mongoose.Schema({
         }
     },
 );
-
-
 
 const user = mongoose.model('User', User);
 

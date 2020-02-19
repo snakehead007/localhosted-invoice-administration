@@ -1,6 +1,7 @@
 const Profile = require('../models/profile');
 const Settings = require('../models/settings');
 const i18n = require('i18n');
+const User = require('../models/user');
 
 /**
  * @api {get} /settings settings_all_get
@@ -20,13 +21,14 @@ const i18n = require('i18n');
 exports.settings_all_get = (req,res) =>{
     Profile.findOne({fromUser:req.session._id},function(err,profile){
         if(err) console.trace();
-        Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+        Settings.findOne({fromUser:req.session._id}, async(err, settings)=> {
             if(err) console.trace();
             res.render('settings', {
                 'currentUrl': 'settings',
                 'settings': settings,
                 'description': "Settings",
-                'profile':profile
+                'profile':profile,
+                "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
             });
         });
     });

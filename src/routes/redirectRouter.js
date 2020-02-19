@@ -9,7 +9,7 @@ const express = require("express");
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
-
+const Profile = require('../models/profile');
 
 //Local modules
 const User = require('../models/user');
@@ -21,8 +21,6 @@ const Whitelist = require('../models/whitelist');
  * Goes to {@link src/controllers/redirectController.googleLogin|RedirectController.googleLogin} then checks if user.email is in whitelist.
  */
 router.get('/' ,redirectController.googleLogin,  async (req,res)=>{
-    const jsonfile = fs.readFileSync(path.join(__dirname, '../whitelist.json'));
-    const whitelistFile = JSON.parse(jsonfile);
     let found = false;
     await Whitelist.find({},async (err,whitelistUsers) => {
         console.log(whitelistUsers);
@@ -37,9 +35,29 @@ router.get('/' ,redirectController.googleLogin,  async (req,res)=>{
         }
     });
     if(found){
-        User.updateOne({_id:req.session._id},{lastLogin:Date.now()},function(err){
+        User.updateOne({_id:req.session._id},{lastLogin:Date.now()},async (err) => {
+            await Profile.findOne({fromUser:req.session._id}, async function(err,profile) {
+                if (profile === null) {
+                    console.log("[Error]: Profile not found from user");
+                    const newProfile = new Profile({
+                        fromUser: req.session._id
+                    });
+                    await newProfile.save();
+                    profile = await Profile.findOne({fromUser: req.session._id});
+                    await User.updateOne({_id: req.session._id}, {profile: profile._Id});
+                    console.log("[Error]: New profile successfully created for user");
+                }
+            });
             if(err) console.trace(err);
-            res.redirect('/dashboard');
+            let role = (await User.findOne({_id:req.session._id},(err,user)=> {return user})).role;
+            console.log("got role: redirecting... role:"+role);
+            req.session.role  = role;
+            if(role==="visitor"){
+                res.redirect('/view/profile');
+            }else{
+                res.redirect('/dashboard');
+            }
+
         });
     }else {
         req.flash('warning','You are not whitelisted, please contact the administrator');

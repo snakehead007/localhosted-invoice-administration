@@ -12,12 +12,13 @@ exports.project_all_get = (req,res) => {
         if(err){console.log("err:"+err)}
         Profile.findOne({fromUser: req.session._id},function(err,profile){
             if(err){console.log("err:"+err)}
-            Project.find({fromUser: req.session._id},function(err,projects){
+            Project.find({fromUser: req.session._id},async(err,projects)=>{
                 if(err){console.log("err:"+err)}
                 res.render(settings.lang+'/project',{
                     'settings': settings,
                     'profile':profile,
-                    "projects":projects
+                    "projects":projects,
+                    "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                 });
             });
         });

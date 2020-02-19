@@ -1,6 +1,8 @@
 const Profile = require('../models/profile');
 const Settings = require('../models/settings');
+const User = require('../models/user');
 const i18n = require('i18n');
+const {findOneHasError,updateOneHasError} = require('../middlewares/error');
 const { valueMustBeValidBic,valueMustBeValidIban,valueMustBeStreetNumber,valueMustBeAName,valueMustBeEmail,numberMustPhoneNumber, valueMustBeVatNumber, valueMustBePostalCode} = require('../utils/formValidation');
 /**
  * @api {get} /view/profile view_profile_get
@@ -23,7 +25,7 @@ exports.view_profile_get = (req,res) => {
     let date = new Date();
     let _jaar = date.getFullYear();
     let jaar = _jaar.toString();
-    Profile.findOne({fromUser:req.session._id}, function(err, profile) {
+    Profile.findOne({fromUser:req.session._id}, async (err, profile) => {
         if (!err) {
             var _nr = profile.invoiceNrCurrent;
             var nr_str = _nr.toString();
@@ -46,9 +48,12 @@ exports.view_profile_get = (req,res) => {
             } else if (nrcred_str.toString().length == 2) {
                 nrcred_str = "0" + _ncred.toString();
             }
+            let role = (await User.findOne({_id:req.session._id},(err,user)=> {return user})).role;
+            let title = i18n.__((role==="visitor")?"Create a new profile":"Edit");
+            console.log(role);
             Settings.findOne({fromUser:req.session._id}, function(err, settings) {
                 if (!err) {
-                    Profile.findOne({fromUser:req.session._id}, function(err, profile) {
+                    Profile.findOne({fromUser:req.session._id}, async(err, profile) =>{
                         if (!err) {
                             res.render('edit/edit-profile', {
                                 'currentUrl':"edit-profile",
@@ -56,7 +61,9 @@ exports.view_profile_get = (req,res) => {
                                 'offerNrCurrent': Number(jaar + nroff_str),
                                 'invoiceNrCurrent': Number(jaar + nr_str),
                                 'creditNrCurrent': Number(jaar + nrcred_str),
-                                "settings": settings
+                                "settings": settings,
+                                "title":title,
+                                "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                             });
                         }
                     });
@@ -101,7 +108,7 @@ exports.edit_profile_post = (req,res) => {
     if(firmCheck||nameCheck||streetCheck||placeCheck||emailCheck||telCheck||vatCheck||postalCheck||streetCheck||bicCheck||ibanCheck||streetNrCheck) {
         res.redirect('/view/profile');
     } else {
-        var updateProfile = {
+        let updateProfile = {
             firm: req.body.firm,
             name: req.body.name,
             street: req.body.street,
@@ -120,10 +127,24 @@ exports.edit_profile_post = (req,res) => {
             email: [req.body.email],
             fromUser: req.session._id
         };
-        Profile.updateOne({fromUser: req.session._id, _id: req.params.idp}, updateProfile, function (err) {
+        Profile.updateOne({fromUser: req.session._id, _id: req.params.idp}, updateProfile, async (err) => {
             if (!err) {
-                req.flash('success',"successfully updated your profile");
-                res.redirect('/view/profile');
+                let user = await User.findOne({_id:req.session._id},(err,user)=> {
+                    if(findOneHasError(req,res,err,user)){
+                           return user;
+                    }
+                });
+                if(user.role==="visitor") {
+                   await User.updateOne({_id: req.session._id}, {role: "user"}, (err) => {
+                       console.log('updating user');
+                        req.flash('success', "successfully updated your profile");
+                        res.redirect('/view/profile');
+                    });
+                }else{
+                    console.log('user has role user, redirecting');
+                    req.flash('success', "successfully updated your profile");
+                    res.redirect('/view/profile');
+                }
             }
         });
     }

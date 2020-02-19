@@ -8,6 +8,7 @@ const Client = require('../models/client');
 const Profile = require('../models/profile');
 const Order = require('../models/order');
 const {year} = require('../utils/date');
+const User = require('../models/user');
 const i18n = require('i18n');
 const invoiceUtil = require('../utils/invoices');
 const {findOneHasError,updateOneHasError} = require('../middlewares/error');
@@ -21,13 +22,14 @@ exports.invoice_all_get = (req,res) => {
         if(err) console.trace();
             Settings.findOne({fromUser:req.session._id}, function(err, settings) {
                 if(err) console.trace();
-                    Profile.findOne({fromUser:req.session._id}, function(err, profile) {
+                    Profile.findOne({fromUser:req.session._id}, async(err, profile)=> {
                         if(err) console.trace();
                             res.render('invoices', {
                                 "currentUrl":"invoices",
                                 'invoices': invoices,
                                 "profile": profile,
                                 "settings": settings,
+                                "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                             });
                     });
             });
@@ -43,7 +45,7 @@ exports.invoice_new_choose_get = (req,res) => {
         if(err) console.trace();
         Profile.findOne({fromUser:req.session._id},function(err,profile){
             if(err) console.trace();
-            Client.find({fromUser:req.session._id},function(err,clients){
+            Client.find({fromUser:req.session._id},async(err,clients)=>{
                 console.log(clients);
                 if(err) console.log("ERROR]: "+err);
                 res.render('add-file-no-contact',{
@@ -51,7 +53,8 @@ exports.invoice_new_choose_get = (req,res) => {
                    'settings':settings,
                    'add':"invoice",
                    'addlink':"invoice",
-                   'clients':clients
+                   'clients':clients,
+                    "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                 });
             });
         })
@@ -67,14 +70,15 @@ exports.offer_new_choose_get = (req,res) => {
         if(err) console.trace();
         Profile.findOne({fromUser:req.session._id},function(err,profile){
             if(err) console.trace();
-            Client.find({fromUser:req.session._id},function(err,clients){
+            Client.find({fromUser:req.session._id},async(err,clients)=>{
                 if(err) console.log("ERROR]: "+err);
                 res.render('add-file-no-contact',{
                     'profile':profile,
                     'settings':settings,
                     'add':"offer",
                     'addlink':"offer",
-                    'clients':clients
+                    'clients':clients,
+                    "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                 });
             });
         })
@@ -90,14 +94,15 @@ exports.credit_new_choose_get = (req,res) => {
         if(err) console.trace();
         Profile.findOne({fromUser:req.session._id},function(err,profile){
             if(err) console.trace();
-            Client.find({fromUser:req.session._id},function(err,clients){
+            Client.find({fromUser:req.session._id},async(err,clients)=>{
                 if(err) console.log("ERROR]: "+err);
                 res.render('add-file-no-contact',{
                     'profile':profile,
                     'settings':settings,
                     'add':"creditnote",
                     'addlink':"credit",
-                    'clients':clients
+                    'clients':clients,
+                    "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                 });
             });
         })
@@ -297,9 +302,9 @@ exports.invoice_all_client = (req,res) => {
         if(err) console.trace();
             Invoice.find({fromUser:req.session._id,fromClient: req.params.idc}).sort('-invoiceNr').exec(function(err, invoices) {
                 if(err) console.trace();
-                    Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+                    Settings.findOne({fromUser:req.session._id}, async(err, settings)=> {
                         if(err) console.trace();
-                        Profile.findOne({},function(err,profile){
+                        Profile.findOne({},async(err,profile)=>{
                             if(err) console.trace();
                             if (!err) {
                                 res.render('invoices', {
@@ -307,7 +312,8 @@ exports.invoice_all_client = (req,res) => {
                                     'invoices': invoices,
                                     "settings": settings,
                                     "profile":profile,
-                                    "currentUrl": "invoiceClient"
+                                    "currentUrl": "invoiceClient",
+                                    "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                                 });
                             }
                         });
@@ -328,14 +334,15 @@ exports.edit_invoice_get = (req,res) => {
             if(err) console.trace();
             Settings.findOne({fromUser:req.session._id},function(err,settings){
                 if(err) console.trace();
-                Profile.findOne({fromUser:req.session._id},function(err,profile){
+                Profile.findOne({fromUser:req.session._id},async(err,profile)=>{
                     if(err) console.trace();
                     res.render('edit/edit-invoice',{
                     'invoice':invoice,
                     'client':client,
                     'settings':settings,
                     'profile':profile,
-                    'currentUrl':"invoiceEdit"
+                    'currentUrl':"invoiceEdit",
+                    "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                     });
                 });
             });
@@ -399,16 +406,17 @@ exports.view_invoice_get = (req,res) => {
                 if(!findOneHasError(req,res,err,client)) {
                     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                         if (!findOneHasError(req,res,err,settings)) {
-                            Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+                            Profile.findOne({fromUser: req.session._id}, async (err, profile)=> {
                                 if(!findOneHasError(req,res,err,profile)) {
                                     let description = (invoice.creditNr) ? "View credit of" : "View invoice of";
                                     res.render('view/view-invoice', {
                                         'invoice': invoice,
                                         'client': client,
-                                        "description": i18n.__(description) + " " + client.clientName + " (" + invoiceUtil.getDefaultNumberOfInvoice(invoice) + ")",
+                                        "description": i18n.__(description) + " " + client.clientName,
                                         "settings": settings,
                                         "currentUrl": "creditView",
-                                        "profile": profile
+                                        "profile": profile,
+                                        "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                                     })
                                 }
                             });

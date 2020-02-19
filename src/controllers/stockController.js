@@ -21,13 +21,14 @@ exports.stock_all_get = (req,res) => {
         if (!err) {
             Item.find({fromUser:req.session._id}).sort('name').exec(function(err, stock) {
                 if (!err) {
-                    Profile.findOne({fromUser:req.session._id},function(err,profile){
+                    Profile.findOne({fromUser:req.session._id},async(err,profile)=>{
                         if(!err) {
                             res.render('stock', {
                                 'currentUrl':'stock',
                                 'stock': stock,
                                 'settings': settings,
-                                "profile":profile
+                                "profile":profile,
+                                "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                             });
                         }
                     });
@@ -53,11 +54,12 @@ exports.stock_new_item_get = (req,res) =>{
     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
         if(err) console.trace(err);
         if (!err) {
-            Profile.findOne({fromUser:req.session._id},function(err,profile){if(!err){
+            Profile.findOne({fromUser:req.session._id},async(err,profile)=>{if(!err){
                 res.render('new/new-item', {
                     'settings': settings,
                     "profile": profile,
-                    "currentUrl":"stockNew"
+                    "currentUrl":"stockNew",
+                    "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                 });
             }});
         }

@@ -1,13 +1,15 @@
 const Settings = require('../models/settings');
+const User = require('../models/user');
 const Profile = require('../models/profile');
 const fs = require('fs');
 exports.upload_logo_get = (req,res) => {
     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
-        Profile.findOne({fromUser:req.session._id},function(err,profile){
+        Profile.findOne({fromUser:req.session._id},async(err,profile)=>{
             res.render('upload',{
                 "settings":settings,
                 "description":"Upload logo",
-                "profile":profile
+                "profile":profile,
+                "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
             });
         });
     });

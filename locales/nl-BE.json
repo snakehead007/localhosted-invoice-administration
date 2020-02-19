@@ -280,9 +280,13 @@
 	"Successfully updated the invoice": "Factuur is succesvol bijgewerkt",
 	"Account number": "Rekening nummer",
 	"Error in this clients email": "Fout in deze klant zijn email",
+	"Click on info, for more info": "Klik op info, voor meer info",
+	"creditnote of": "creditnota van",
+	"creditnote nr": "creditnota nr",
+	"Something went wrong, please try again": "Er ging iets fout, probeer nog eens",
+	"Last year": "Vorig jaar",
+	"Create": "Maken",
+	"Create a new profile": "Maak een nieuw profiel aan",
 	"--------FROM-HERE-ALL-ABOVE-CHECKED---- -------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------",
-	"Click on info, for more info": "Click on info, for more info",
-	"creditnote of": "creditnote of",
-	"creditnote nr": "creditnote nr",
-	"Something went wrong, please try again": "Something went wrong, please try again"
+	"VAT precentage": "VAT precentage"
 }

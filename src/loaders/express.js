@@ -50,6 +50,10 @@ module.exports.default = function(app){
         })
     );
     app.use(flash());
+    app.use(function(req,res,next){
+        res.locals.session = req.session;
+        next();
+    });
     if(process.env.LOGGING>1)
         console.log("[Info]: . . . . Sessions set up");
     app.listen(process.env.PORT,() => {
