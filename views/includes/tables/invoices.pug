@@ -10,6 +10,13 @@ table(class="table table-striped table-sm ",id="hoofdTabel")
             th #{__('Action')}
     tbody
         each invoice in invoices
+            script.
+                console.log(new Date("#{invoice.date}").toLocaleString("#{settings.locale}", {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric'
+                }));
+                console.log("#{settings.locale}");
             tr
                 td
                     if invoice.invoiceNr
@@ -21,7 +28,7 @@ table(class="table table-striped table-sm ",id="hoofdTabel")
                 if !client
                     td
                         a(href='/invoice/all/' + invoice.fromClient)=invoice.clientName
-                td=new Date(invoice.date).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' })
+                td=new Date(invoice.date).toLocaleString("nl-BE",{ year: 'numeric', month: 'numeric', day: 'numeric' })
                 if invoice.invoiceNr
                     td
                         span=(invoice.total * 1.21).toFixed(2) + "€"

@@ -25,6 +25,7 @@ const downloadRouter = require('./downloadRouter');
 const deleteRouter = require('./deleteRouter');
 const validateRouter = require('./validateRouter');
 const searchRouter = require('./searchRouter');
+const whitelistRouter = require('./whitelistRouter');
 //Controllers
 
 router.use("/",loginRouter); //index page
@@ -45,26 +46,27 @@ router.use('/download',downloadRouter);
 router.use('/delete',stillSignedInCheck,deleteRouter);
 router.use('/valid',validateRouter);
 router.use('/search',stillSignedInCheck,searchRouter);
+router.use('/whitelist',whitelistRouter);
 //Routers
-/*
+if(process.env.DEVELOP==="false") {
 //error handling for 404
-router.use((req, res) => {
-    if(process.env.LOGGING>2) {
-        console.log('[Debug]: 404 page send');
-        console.trace();
-    }
-    res.status(404).send('404: Page not Found');
-});
+    router.use((req, res) => {
+        if (process.env.LOGGING > 2) {
+            console.log('[Debug]: 404 page send');
+            console.trace();
+        }
+        res.status(404).send('404: Page not Found');
+    });
 //error handling for 500
-router.use((error, req, res, next) => {
-    if(process.env.LOGGING>2) {
-        console.log('[Debug]: 500 page send');
-        console.trace();
-    }
-    res.status(500).send('500: Internal Server Error');
-    next();
-});
-*/
+    router.use((error, req, res, next) => {
+        if (process.env.LOGGING > 2) {
+            console.log('[Debug]: 500 page send');
+            console.trace();
+        }
+        res.status(500).send('500: Internal Server Error');
+        next();
+    });
+}
 //This fixed this error: "database names cannot contain the character '.' MongoError"
 router.get('/favicon.ico', function(req, res) {
     res.sendStatus(204);

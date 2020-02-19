@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
-const Settings = new mongoose.Schema({
+const Whitelist = new mongoose.Schema({
     mail:{
         type:String
     }
 });
 
-const settings = mongoose.model('Settings', Settings);
-module.exports = settings;
+const whitelist = mongoose.model('Whitelist', Whitelist);
+module.exports = whitelist;

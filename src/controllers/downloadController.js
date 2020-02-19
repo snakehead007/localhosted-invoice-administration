@@ -29,7 +29,14 @@ exports.download_invoice_get = (req,res) => {
                                 console.log(orders);
                                 Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                                     if (!err) {
+                                        try{
                                             createPDF(req,res,"invoice",profile,settings,client,invoice,orders);
+
+                                        }catch(err){
+                                            console.trace(err);
+                                            req.flash('danger',i18n.__('Something went wrong, please try again'));
+                                            req.redirect('back');
+                                        }
                                             /*res.render('pdf/pdf', {
                                                 'profile': profile,
                                                 'client': client,

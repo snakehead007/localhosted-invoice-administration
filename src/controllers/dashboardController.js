@@ -35,6 +35,8 @@ exports.main_get =  async function getLogin(req,res){
         if(!err){
             Settings.findOne({fromUser:req.session._id}, function(err, settings) {
                 if (!err) {
+                    console.log("settings");
+                    console.log(settings);
                     Invoice.find({fromUser:req.session._id}, function (err, invoices) {
                         if (!err) {
                             let chart = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];

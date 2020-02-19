@@ -23,6 +23,7 @@ const i18n = require('i18n');
  *  }
  */
 exports.getClientAll = (req, res) => {
+    console.log("getClientAll");
     Profile.findOne({fromUser:req.session._id},function(err,profile){
         if(err) console.trace();
         Client.find({fromUser:req.session._id}, function(err, clients) {
@@ -31,6 +32,7 @@ exports.getClientAll = (req, res) => {
                 if(err) console.trace();
                 if (!err ) {
                     console.log(clients);
+                    console.log(settings);
                     res.render('clients', {
                         'clients': clients,
                         "settings": settings,

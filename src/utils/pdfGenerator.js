@@ -8,8 +8,8 @@ global.window = {
 global.navigator = {};
 global.html2pdf = {};
 global.btoa = require('atob');
-global.PNG = require('png-js');
-global.zlib = require('zlib');
+//global.PNG = require('png-js');
+//global.zlib = require('zlib');
 const fs = require('fs');
 const jsPDF = require('jspdf');
 

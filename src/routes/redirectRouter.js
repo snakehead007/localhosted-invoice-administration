@@ -14,7 +14,7 @@ const path = require('path');
 //Local modules
 const User = require('../models/user');
 const redirectController = require('../controllers/redirectController');
-
+const Whitelist = require('../models/whitelist');
 //Get requests
 /**
  * Handles GET /redirect
@@ -22,11 +22,18 @@ const redirectController = require('../controllers/redirectController');
  */
 router.get('/' ,redirectController.googleLogin,  async (req,res)=>{
     const jsonfile = fs.readFileSync(path.join(__dirname, '../whitelist.json'));
-    const whitelist = JSON.parse(jsonfile);
+    const whitelistFile = JSON.parse(jsonfile);
     let found = false;
-    await whitelist.forEach(o => {
-        if(req.session.email===o.mail){
-            found = true;
+    await Whitelist.find({},async (err,whitelistUsers) => {
+        console.log(whitelistUsers);
+        if(err){
+            res.flash('danger','Something happen, try again');
+        }else{
+            await whitelistUsers.forEach(o => {
+                if(req.session.email===o.mail){
+                    found = true;
+                }
+            });
         }
     });
     if(found){
