@@ -14,10 +14,10 @@ let getBase64 = (id) => {
             if (err) {
                 //BASE64 image if no logo is uploaded
                 console.log('base64: no logo found or uploaded');
-                resolve("data:image/png;base64,iVBORw0KGgoAAAANSUhsEUgAAASwAAACWCAYAAABkW7XSAAAAxUlEQVR4nO3BMQEAAADCoPVPbQhfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOA1v9QAATX68/0AAAAASUVORK5CYII=");
+                reject();
             }else{
                 base64Img.base64(_path ,(err,data) => {
-                    let imgData =data
+                    let imgData =data;
                     console.log(imgData.substring(0,100));
                     resolve(imgData);
                 });

@@ -31,7 +31,7 @@ module.exports.images = async function images(app) {
            }
            //add logo to user folder
            try{
-               if(typeof profile.logoFile.data !== "undefined") {
+               if(typeof profile.logoFile.data !== "undefined" || !profile.logoFile) {
                    await fs.writeFile('public/images/' + profile.fromUser+'/logo.jpeg', profile.logoFile.data, function (err) {
                        if (err) {
                            if(process.env.LOGGING>2){

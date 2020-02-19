@@ -71,10 +71,7 @@ exports.delete_logo_get = (req,res) => {
                     res.redirect('/view/profile');
                 }else{
                     let updatedLogoFile = {
-                        logoFile:{
-                            data:null,
-                            contentType:""
-                        }
+                        logoFile:null
                     };
                     await Profile.updateOne({fromUser:req.session._id},updatedLogoFile,function(err){
                         if(err) console.trace(err);

@@ -7,7 +7,9 @@ global.window = {
 };
 global.navigator = {};
 global.html2pdf = {};
-global.btoa = () => {};
+global.btoa = require('atob');
+global.PNG = require('png-js');
+global.zlib = require('zlib');
 const fs = require('fs');
 const jsPDF = require('jspdf');
 
@@ -19,7 +21,12 @@ require('jspdf-autotable');
 exports.createPDF = async (req,res,style="invoice",profile,settings,client,invoice,orders) => {
     console.log("invoice: ");
     console.log(invoice);
-    let imgData = await callGetBase64(req.session._id);
+    let imgData;
+    try {
+        imgData = await callGetBase64(req.session._id);
+    }catch(err){
+        console.trace(err);
+    }
     let dataText;
     if(style==="invoice")
         dataText=replaceAll(settings.invoiceText, profile, client, invoice, settings.locale);
@@ -60,7 +67,6 @@ exports.createPDF = async (req,res,style="invoice",profile,settings,client,invoi
         });
     }
     try {
-        console.log(imgData);
         doc.addImage(imgData, 'JPEG', 15, 5, 50, 50);
     }catch(err){
         console.trace(err);
@@ -189,7 +195,7 @@ exports.createPDF = async (req,res,style="invoice",profile,settings,client,invoi
             styles: {fillColor: [140, 140, 140]},
             body: [
                 [[""],["                               "],[i18n.__('subtotal')],[totalEx.toFixed(2)+" €"]],
-                [[""],["                               "],[i18n.__('vat')+client.vatPercentage+"%"],[_vat.toFixed(2)+" €"]],
+                [[""],["                               "],[i18n.__('vat')+" "+client.vatPercentage+"%"],[_vat.toFixed(2)+" €"]],
                 [[""],["                               "],[i18n.__('total')],[totalInc.toFixed(2)+" €"]]
             ]
         })
@@ -207,7 +213,7 @@ exports.createPDF = async (req,res,style="invoice",profile,settings,client,invoi
                 [[""],["                               "],[i18n.__('subtotal')],[totalEx.toFixed(2)+" €"]],
                 [[""],["                               "],[i18n.__('advance')],["-"+invoice.advance.toFixed(2)+" €"]],
                 [[""],["                               "],[i18n.__('subtotal')],[totalExSub.toFixed(2)+" €"]],
-                [[""],["                               "],[i18n.__('vat')  +client.vatPercentage+"%"],[_vat.toFixed(2)+" €"]],
+                [[""],["                               "],[i18n.__('vat')+" "+client.vatPercentage+"%"],[_vat.toFixed(2)+" €"]],
                 [[""],["                               "],[i18n.__('total')],[totalInc.toFixed(2)+" €"]]
             ]
         })
