@@ -2,14 +2,14 @@
  * @module controller/deleteController
  */
 
-const Client = require('../models/client');
-const Invoice = require('../models/invoice');
-const Order = require('../models/order');
-const Profile = require('../models/profile');
-const fs = require('fs');
-const i18n = require('i18n');
-const path = require('path');
-const error = require('../middlewares/error');
+const Client = require("../models/client");
+const Invoice = require("../models/invoice");
+const Order = require("../models/order");
+const Profile = require("../models/profile");
+const fs = require("fs");
+const i18n = require("i18n");
+const path = require("path");
+const error = require("../middlewares/error");
 /**
  *
  * @param req
@@ -18,20 +18,20 @@ const error = require('../middlewares/error');
 exports.delete_client = (req,res) =>{
     Client.find({fromUser:req.session._id,_id:req.params.idc},(err,client) =>{
         if(!error.findOneHasError(req,res,err,client)){
-            console.log('Found client: '+JSON.stringify(client));
-            console.log('clientid = '+client._id);
+            console.log("Found client: "+JSON.stringify(client));
+            console.log("clientid = "+client._id);
             Invoice.deleteMany({fromUser:req.session._id,fromClient:req.params.idc},(err,info) => {
                 if(!err){
-                    console.log('deleted many invoices '+JSON.stringify(info));
-                    console.log('search criteria: '+req.session._id+" & "+req.params.idc);
+                    console.log("deleted many invoices "+JSON.stringify(info));
+                    console.log("search criteria: "+req.session._id+" & "+req.params.idc);
                     Order.deleteMany({fromUser:req.session._id,fromClient:req.params.idc},(err,info) => {
                         if(!err){
-                            console.log('deleted many invoices '+JSON.stringify(info));
-                            console.log('search criteria: '+req.session._id+" & "+req.params.idc);
+                            console.log("deleted many invoices "+JSON.stringify(info));
+                            console.log("search criteria: "+req.session._id+" & "+req.params.idc);
                             Client.deleteOne({fromUser:req.session._id,_id:req.params.idc},(err) => {
                                 if(!err){
-                                    req.flash('success','Successfully deleted the client');
-                                    res.redirect('/client/all');
+                                    req.flash("success","Successfully deleted the client");
+                                    res.redirect("/client/all");
                                 }
                             });
                         }
@@ -52,23 +52,23 @@ exports.delete_invoice_get = (req,res) => {
         if(err) console.trace(err);
         Order.deleteMany({fromInvoice:req.params.idi,fromUser:req.session._id},function(err){
             if(err) console.trace(err);
-            res.redirect('/invoice/all');
+            res.redirect("/invoice/all");
         });
     });
 };
 
 exports.delete_logo_get = (req,res) => {
-    let pathOfLogo = path.join(__dirname,'../../public/images/'+req.session._id+'/logo.jpeg');
-    console.log('[Debug]: trying to delete logo at path '+pathOfLogo);
+    let pathOfLogo = path.join(__dirname,"../../public/images/"+req.session._id+"/logo.jpeg");
+    console.log("[Debug]: trying to delete logo at path "+pathOfLogo);
     fs.access(pathOfLogo, fs.F_OK, (err) => {
         if (err) {
-            req.flash('warning',i18n.__("There is no logo to delete"));
-            res.redirect('/view/profile');
+            req.flash("warning",i18n.__("There is no logo to delete"));
+            res.redirect("/view/profile");
         }else{
             fs.unlink(pathOfLogo, async (err) => {
                 if(err){
-                    req.flash('danger',i18n.__("Error, something went wrong"));
-                    res.redirect('/view/profile');
+                    req.flash("danger",i18n.__("Error, something went wrong"));
+                    res.redirect("/view/profile");
                 }else{
                     let updatedLogoFile = {
                         logoFile:null
@@ -76,8 +76,8 @@ exports.delete_logo_get = (req,res) => {
                     await Profile.updateOne({fromUser:req.session._id},updatedLogoFile,function(err){
                         if(err) console.trace(err);
                     });
-                    req.flash('success',i18n.__('Successfully deleted your current logo'));
-                    res.redirect('/view/profile');
+                    req.flash("success",i18n.__("Successfully deleted your current logo"));
+                    res.redirect("/view/profile");
                 }
             });
         }
@@ -96,8 +96,8 @@ exports.delete_order_get = (req,res) => {
                         if(err) console.trace("[Error]: "+err);
                         Invoice.updateOne({fromUser:req.session._id,_id:invoice._id},updateInvoice,(err) => {
                             if(err) console.trace("[Error]: "+err);
-                            req.flash('success',i18n.__("Successfully deleted the order"));
-                            res.redirect('/order/all/'+invoice._id);
+                            req.flash("success",i18n.__("Successfully deleted the order"));
+                            res.redirect("/order/all/"+invoice._id);
                         })
                     });
                 }

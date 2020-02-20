@@ -2,13 +2,13 @@
  * Here are all the methods for /client
  */
 
-const Profile = require('../models/profile');
-const Client = require('../models/client');
-const Settings = require('../models/settings');
-const invalid = require('../utils/formValidation');
-const error = require('../middlewares/error');
-const i18n = require('i18n');
-const User = require('../models/user');
+const Profile = require("../models/profile");
+const Client = require("../models/client");
+const Settings = require("../models/settings");
+const invalid = require("../utils/formValidation");
+const error = require("../middlewares/error");
+const i18n = require("i18n");
+const User = require("../models/user");
 /**
  * @api {get} /client/all getClientAll
  * @apiDescription Here you can view all the clients from the current user
@@ -17,7 +17,7 @@ const User = require('../models/user');
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  *  {
- *      'clients': clients,
+ *      "clients": clients,
         "settings": settings,
         "profile":profile,
         "currentUrl":"clientAll"
@@ -34,12 +34,12 @@ exports.getClientAll = (req, res) => {
                 if (!err ) {
                     console.log(clients);
                     console.log(settings);
-                    res.render('clients', {
-                        'clients': clients,
+                    res.render("clients", {
+                        "clients": clients,
                         "settings": settings,
                         "profile":profile,
                         "currentUrl":"clientAll",
-                        "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
+                        "role":(await User.findOne({_id:req.session._id},(err,user) => {return user})).role
                     });
                 }
             });
@@ -63,14 +63,14 @@ exports.getClientAll = (req, res) => {
 exports.getClientNew = (req, res) => {
     Settings.findOne({fromUser:req.session._id},function(err, settings) {
         if(err) console.trace();
-        Profile.findOne({fromUser:req.session._id},async(err,profile) =>{
+        Profile.findOne({fromUser:req.session._id},async(err,profile)=>{
             if(err) console.trace();
             if (!err) {
-                res.render('new/new-client', {
+                res.render("new/new-client", {
                     "settings": settings,
                     "profile":profile,
                     "currentUrl":"clientNew",
-                    "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
+                    "role":(await User.findOne({_id:req.session._id},(err,user) => {return user})).role
                 });
             }
         });
@@ -85,7 +85,7 @@ exports.getClientNew = (req, res) => {
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  *  {
- *     'client': client,
+ *     "client": client,
         "profile": profile,
         "settings": settings
  *  }
@@ -108,13 +108,13 @@ exports.postClientNew = (req, res) => {
     let placeCheck = invalid.valueMustBeAName(req,res,req.body.place,true,"place name not correctly checked in");
     let isNotValid = nameCheck||firmCheck||streetCheck||vatPercentageCheck||streetNrCheck||emailCheck||vatCheck||bankCheck||postalCheck||placeCheck;
     if(isNotValid){
-        console.log('[error]: making client, not valid');
+        console.log("[error]: making client, not valid");
         Settings.findOne({fromUser:req.session._id},function(err, settings) {
             if(err) console.trace();
-            Profile.findOne({fromUser:req.session._id},async(err,profile)=> {
+            Profile.findOne({fromUser:req.session._id},async(err,profile) => {
                 if(err) console.trace();
                 if (!err) {
-                    res.render('edit/edit-client', {
+                    res.render("edit/edit-client", {
                         "settings": settings,
                         "profile":profile,
                         "currentUrl":"clientNew",
@@ -129,7 +129,7 @@ exports.postClientNew = (req, res) => {
                             "place":req.body.place,
                             "vatPercentage":req.body.vatPercentage
                         },
-                        "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
+                        "role":(await User.findOne({_id:req.session._id},(err,user)     => {return user})).role
                     });
                 }
             });
@@ -151,19 +151,19 @@ exports.postClientNew = (req, res) => {
             invoices:[]
         });
         newClient.save();
-        res.redirect('/client/all');
+        res.redirect("/client/all");
     }
 };
 
 /**
  * @api {get} /client/view/:idc getClientView
- * @apiDescription Shows all the information of the clients id from query parameter 'idc'
+ * @apiDescription Shows all the information of the clients id from query parameter "idc"
  * @apiName getClientView
  * @apiGroup Client
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  *  {
- *     'client': client,
+ *     "client": client,
         "profile": profile,
         "settings": settings
  *  }
@@ -178,8 +178,8 @@ exports.getClientView = (req, res) => {
                     Profile.findOne({fromUser:req.session._id}, async(err, profile) => {
                         if(err) console.trace(err);
                         if (!err) {
-                            res.render('view/view-client', {
-                                'client': client,
+                            res.render("view/view-client", {
+                                "client": client,
                                 "profile": profile,
                                 "settings": settings,
                                 "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
@@ -199,10 +199,10 @@ exports.getEditClient = (req,res) => {
               if (!error.findOneHasError(req, res, err, settings)){
                 Profile.findOne({fromUser:req.session._id},async(err,profile) =>{
                     if(!error.findOneHasError(req,res,err,profile)){
-                          res.render('edit/edit-client',{
-                              'client':client,
-                              'profile':profile,
-                              'settings':settings,
+                          res.render("edit/edit-client",{
+                              "client":client,
+                              "profile":profile,
+                              "settings":settings,
                               "currentUrl":"clientEdit",
                               "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
                           })
@@ -247,15 +247,15 @@ exports.postEditClient = (req,res) => {
                   postal:req.body.postal,
                   place:req.body.place
               };
-              console.log('Looking for client with : {fromUser: '+req.session._id+" , _id: "+client._id);
+              console.log("Looking for client with : {fromUser: "+req.session._id+" , _id: "+client._id);
               Client.updateOne({fromUser:req.session._id,_id:client._id},updatedClient,function(err){
                  if(!error.updateOneHasError(req,res,err)){
-                     req.flash('success',i18n.__("Successfully updated client"));
-                     res.redirect('/client/all');
+                     req.flash("success",i18n.__("Successfully updated client"));
+                     res.redirect("/client/all");
                  }
               });
           }else{
-              res.redirect('/edit/client/'+client._id);
+              res.redirect("/edit/client/"+client._id);
           }
       }
   })

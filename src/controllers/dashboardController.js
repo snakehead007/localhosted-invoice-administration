@@ -37,7 +37,7 @@ exports.main_get =  async function getLogin(req,res){
                 if (!err) {
                     console.log("settings");
                     console.log(settings);
-                    Invoice.find({fromUser:req.session._id}, async (err, invoices)=> {
+                    Invoice.find({fromUser:req.session._id}, async (err, invoices) => {
                         if (!err) {
                             let chart = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                             let invoice_open = [];
@@ -67,7 +67,7 @@ exports.main_get =  async function getLogin(req,res){
                             for (let i = 0; i <= 11; i++) {
 
                             }
-                            let role = (await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
+                            let role = (await User.findOne({_id:req.session._id},(err,user) => {return user})).role
                             res.render('index', {
                                 'currentUrl':"dashboard",
                                 "total": chart,
@@ -128,7 +128,7 @@ exports.chart_year_get = (req,res) => {
                             for (let i = 0; i <= 11; i++) {
 
                             }
-                            let role = (await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
+                            let role = (await User.findOne({_id:req.session._id},(err,user) => {return user})).role
                             res.render('index', {
                                 'currentUrl':"dashboard",
                                 "total": chart,

@@ -1,9 +1,9 @@
 /**
  * @module controller/itemController
  */
-const Settings = require('../models/settings');
-const Item = require('../models/item');
-const Profile = require('../models/profile');
+const Settings = require('../models/settings");
+const Item = require("../models/item");
+const Profile = require("../models/profile");
 /**
  *
  * @param req
@@ -18,9 +18,9 @@ exports.edit_item_get =  (req,res) => {
                 Profile.findOne({}, function(err, profile) {
                     if(err) console.trace();
                     if (!err) {
-                        res.render('edit/edit-item', {
-                            'settings': settings,
-                            'item': item,
+                        res.render("edit/edit-item", {
+                            "settings": settings,
+                            "item": item,
                             "profile":profile,
                         });
                     }

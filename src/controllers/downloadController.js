@@ -2,14 +2,14 @@
  * @module controller/downloadController
  */
 
-const Profile = require('../models/profile');
-const Invoice = require('../models/invoice');
-const Order = require('../models/order');
-const Settings = require('../models/settings');
-const Client = require('../models/client');
-const error = require('../middlewares/error');
-const {createPDF} = require('../utils/pdfGenerator');
-const {callGetBase64,createJSON, replaceAll} =require('../utils/pdfCreation');
+const Profile = require("../models/profile");
+const Invoice = require("../models/invoice");
+const Order = require("../models/order");
+const Settings = require("../models/settings");
+const Client = require("../models/client");
+const error = require("../middlewares/error");
+const {createPDF} = require("../utils/pdfGenerator");
+const {callGetBase64,createJSON, replaceAll} =require("../utils/pdfCreation");
 
 /**
  *
@@ -34,15 +34,15 @@ exports.download_invoice_get = (req,res) => {
 
                                         }catch(err){
                                             console.trace(err);
-                                            req.flash('danger',i18n.__('Something went wrong, please try again'));
-                                            req.redirect('back');
+                                            req.flash("danger",i18n.__("Something went wrong, please try again"));
+                                            req.redirect("back");
                                         }
-                                            /*res.render('pdf/pdf', {
-                                                'profile': profile,
-                                                'client': client,
-                                                'orders': createJSON(orders),
+                                            /*res.render("pdf/pdf", {
+                                                "profile": profile,
+                                                "client": client,
+                                                "orders": createJSON(orders),
                                                 "invoice": invoice,
-                                                'length': orders.length,
+                                                "length": orders.length,
                                                 "settings": settings,
                                                 "invoiceText": replaceAll(settings.invoiceText, profile, client, invoice, settings.locale),
                                                 "imgData": imgData,
