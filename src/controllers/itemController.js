@@ -1,7 +1,7 @@
 /**
  * @module controller/itemController
  */
-const Settings = require('../models/settings");
+const Settings = require("../models/settings");
 const Item = require("../models/item");
 const Profile = require("../models/profile");
 /**
