@@ -387,7 +387,7 @@ exports.edit_invoice_post = (req,res) => {
             Invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, updateInvoice, function(err) {
                 if (!updateOneHasError(req,res,err)) {
                     req.flash('success',i18n.__("Successfully updated the invoice"));
-                    res.redirect('/invoice/all');
+                    res.redirect('/order/all/'+req.params.idi);
                 }
             });
         });

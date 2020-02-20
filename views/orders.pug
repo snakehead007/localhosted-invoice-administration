@@ -27,5 +27,7 @@ body
             h2(class="pt-3")=__('Creditnote')+" "+invoice.creditNr+" ("+client.clientName+")"
           hr
           include includes/messages
+          div(class="table")
+            include includes/forms/edit-invoice
           div(class="table-responsive bigger")
             include includes/tables/orders

@@ -12,7 +12,6 @@ global.btoa = require('atob');
 //global.zlib = require('zlib');
 const fs = require('fs');
 const jsPDF = require('jspdf');
-
 window.jsPDF = require('jspdf');
 const i18n = require('i18n');
 const path = require('path');
@@ -86,8 +85,9 @@ exports.createPDF = async (req,res,style="invoice",profile,settings,client,invoi
     c = [20,60];
     doc.text(c[0],c[1],profile.name);
     doc.setFontType("bold");
-    c[1] += 10;
+    /*c[1] += 10;
     doc.text(c[0],c[1],i18n.__('Company info'));
+     */
     doc.setFontType("courier");
     c[1] += 5;
     doc.text(c[0],c[1],profile.firm);
@@ -127,7 +127,7 @@ exports.createPDF = async (req,res,style="invoice",profile,settings,client,invoi
 
     c = [120,75];
     doc.setFontType("bold");
-    doc.text(c[0],c[1],i18n.__('Invoice info'));
+    doc.text(c[0],c[1],i18n.__('Client'));
     c[1] +=5;
     doc.setFontType("courier");
     if(client.firm){
