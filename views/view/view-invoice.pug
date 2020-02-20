@@ -26,7 +26,7 @@ body
               tr
                 th(scope="row") #{__('Date')}
                 td
-                  h4=new Date(invoice.date).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' })
+                  h4(id="date"+invoice.invoiceNr)
               if invoice.invoiceNr
                 tr
                   th(scope="row") #{__('Invoice Nr')}
@@ -47,3 +47,12 @@ body
                   th(scope="row") #{__('Advance')}
                   td
                     h4=invoice.advance
+              script.
+                //date is done via DOM, the locale cannot be set right when using pug
+                let id = "date"+"#{invoice.invoiceNr}";
+                let date = new Date("#{invoice.date}").toLocaleString("#{settings.locale}", {
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric'
+                });
+                document.getElementById(id).innerHTML = date;

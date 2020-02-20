@@ -43,11 +43,12 @@ body
           form(action='/edit/invoice/'+invoice._id,method='post')
             div(class="form-row")
               div(class="form-group col-md-3")
+              div(class="form-group col-md-3")
                 label(for="title") Datum
-                input#datepicker(type="text",class="form-control",value=new Date(invoice.date).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' }),name="date")
+                input#datepicker(type="text",class="form-control",name="date")
               div(class="form-group col-md-3")
                 label(for="title")=__('Pay date')
-                input#datepicker2(type="text",class="form-control",value=(invoice.datePaid)?new Date(invoice.datePaid).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' }):"",name="datePaid")
+                input#datepicker2(type="text",class="form-control",name="datePaid")
               if invoice.invoiceNr
                 div(class="form-group col-md-2")
                   label(for="title")=__('Invoice number')
@@ -61,3 +62,20 @@ body
                 input(type="number",class="form-control",value=invoice.advance,name="advance",step="any")
             hr
             button(type="submit",class="btn btn-outline-"+settings.theme)=__('Update')
+            script.
+              //date is done via DOM, the locale cannot be set right when using pug
+              let id = "date"+"#{invoice.invoiceNr}";
+              let date = new Date("#{invoice.date}").toLocaleString("#{settings.locale}", {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric'
+              });
+              document.getElementById("datepicker").value = date;
+              if ("#{invoice.datePaid}" !== "") {
+                let datePaid = new Date("#{invoice.datePaid}").toLocaleString("#{settings.locale}", {
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric'
+                });
+                document.getElementById("datepicker2").value = datePaid;
+              }

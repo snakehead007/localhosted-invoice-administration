@@ -36,6 +36,8 @@ exports.createPDF = async (req,res,style="invoice",profile,settings,client,invoi
     let c = [0,0];
     let date;
     date=new Date(invoice.date).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' });
+    console.log(date);
+    console.log(settings.locale);
     let doc = new jsPDF();
     doc.setFont(doc.getFontList()[0]);
     if(style==="invoice") {

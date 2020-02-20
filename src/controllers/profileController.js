@@ -1,9 +1,9 @@
-const Profile = require('../models/profile');
-const Settings = require('../models/settings');
-const User = require('../models/user');
-const i18n = require('i18n');
-const {findOneHasError,updateOneHasError} = require('../middlewares/error');
-const { valueMustBeValidBic,valueMustBeValidIban,valueMustBeStreetNumber,valueMustBeAName,valueMustBeEmail,numberMustPhoneNumber, valueMustBeVatNumber, valueMustBePostalCode} = require('../utils/formValidation');
+const Profile = require("../models/profile");
+const Settings = require("../models/settings");
+const User = require("../models/user");
+const i18n = require("i18n");
+const {findOneHasError,updateOneHasError} = require("../middlewares/error");
+const { valueMustBeValidBic,valueMustBeValidIban,valueMustBeStreetNumber,valueMustBeAName,valueMustBeEmail,numberMustPhoneNumber, valueMustBeVatNumber, valueMustBePostalCode} = require("../utils/formValidation");
 /**
  * @api {get} /view/profile view_profile_get
  * @apiDescription On this page you can edit all the profile information
@@ -13,15 +13,15 @@ const { valueMustBeValidBic,valueMustBeValidIban,valueMustBeStreetNumber,valueMu
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  *  {
- *      'currentUrl':"edit-profile",
-        'profile': profile,
-        'offerNrCurrent': Number(jaar + nroff_str),
-        'invoiceNrCurrent': Number(jaar + nr_str),
-        'creditNrCurrent': Number(jaar + nrcred_str),
+ *      "currentUrl":"edit-profile",
+        "profile": profile,
+        "offerNrCurrent": Number(jaar + nroff_str),
+        "invoiceNrCurrent": Number(jaar + nr_str),
+        "creditNrCurrent": Number(jaar + nrcred_str),
         "settings": settings
  *  }
  */
-exports.view_profile_get = (req,res) => {
+exports.viewProfileGet = (req,res) => {
     let date = new Date();
     let _jaar = date.getFullYear();
     let jaar = _jaar.toString();
@@ -55,12 +55,12 @@ exports.view_profile_get = (req,res) => {
                 if (!err) {
                     Profile.findOne({fromUser:req.session._id}, async(err, profile) =>{
                         if (!err) {
-                            res.render('edit/edit-profile', {
-                                'currentUrl':"edit-profile",
-                                'profile': profile,
-                                'offerNrCurrent': Number(jaar + nroff_str),
-                                'invoiceNrCurrent': Number(jaar + nr_str),
-                                'creditNrCurrent': Number(jaar + nrcred_str),
+                            res.render("edit/edit-profile", {
+                                "currentUrl":"edit-profile",
+                                "profile": profile,
+                                "offerNrCurrent": Number(jaar + nroff_str),
+                                "invoiceNrCurrent": Number(jaar + nr_str),
+                                "creditNrCurrent": Number(jaar + nrcred_str),
                                 "settings": settings,
                                 "title":title,
                                 "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
@@ -81,8 +81,8 @@ exports.view_profile_get = (req,res) => {
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  */
-exports.edit_profile_get = (req,res) => {
-    res.redirect('/view/profile');
+exports.editProfileGet = (req,res) => {
+    res.redirect("/view/profile");
 };
 /**
  * @api {post} /edit/profile edit_profile_post
@@ -93,7 +93,7 @@ exports.edit_profile_get = (req,res) => {
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  */
-exports.edit_profile_post = (req,res) => {
+exports.editProfilePost = (req,res) => {
     let firmCheck = valueMustBeAName(req,res,req.body.firm,false,"firm is invalid");
     let nameCheck = valueMustBeAName(req,res,req.body.name,true,"name is invalid");
     let streetCheck = valueMustBeAName(req,res,req.body.street,false,"street name is invalid");
@@ -106,7 +106,7 @@ exports.edit_profile_post = (req,res) => {
     let postalCheck = valueMustBePostalCode(req,res,req.body.postal);
     let streetNrCheck = valueMustBeStreetNumber(req,res,req.body.streetNr);
     if(firmCheck||nameCheck||streetCheck||placeCheck||emailCheck||telCheck||vatCheck||postalCheck||streetCheck||bicCheck||ibanCheck||streetNrCheck) {
-        res.redirect('/view/profile');
+        res.redirect("/view/profile");
     } else {
         let updateProfile = {
             firm: req.body.firm,
@@ -136,14 +136,14 @@ exports.edit_profile_post = (req,res) => {
                 });
                 if(user.role==="visitor") {
                    await User.updateOne({_id: req.session._id}, {role: "user"}, (err) => {
-                       console.log('updating user');
-                        req.flash('success', "successfully updated your profile");
-                        res.redirect('/view/profile');
+                       console.log("updating user");
+                        req.flash("success", "successfully updated your profile");
+                        res.redirect("/view/profile");
                     });
                 }else{
-                    console.log('user has role user, redirecting');
-                    req.flash('success', "successfully updated your profile");
-                    res.redirect('/view/profile');
+                    console.log("user has role user, redirecting");
+                    req.flash("success", "successfully updated your profile");
+                    res.redirect("/view/profile");
                 }
             }
         });

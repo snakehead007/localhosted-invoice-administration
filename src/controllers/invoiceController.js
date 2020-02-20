@@ -17,7 +17,7 @@ const {findOneHasError,updateOneHasError} = require("../middlewares/error");
  * @param req
  * @param res
  */
-exports.invoice_all_get = (req,res) => {
+exports.invoiceAllGet = (req,res) => {
     Invoice.find({fromUser:req.session._id},null,{sort:{date:-1}}, function(err, invoices) {
         if(err) console.trace();
             Settings.findOne({fromUser:req.session._id}, function(err, settings) {
@@ -40,7 +40,7 @@ exports.invoice_all_get = (req,res) => {
  * @param req
  * @param res
  */
-exports.invoice_new_choose_get = (req,res) => {
+exports.invoiceNewChooseGet = (req,res) => {
     Settings.findOne({fromUser:req.session._id},function(err,settings){
         if(err) console.trace();
         Profile.findOne({fromUser:req.session._id},function(err,profile){
@@ -65,7 +65,7 @@ exports.invoice_new_choose_get = (req,res) => {
  * @param req
  * @param res
  */
-exports.offer_new_choose_get = (req,res) => {
+exports.offerNewChooseGet = (req,res) => {
     Settings.findOne({fromUser:req.session._id},function(err,settings){
         if(err) console.trace();
         Profile.findOne({fromUser:req.session._id},function(err,profile){
@@ -89,21 +89,24 @@ exports.offer_new_choose_get = (req,res) => {
  * @param req
  * @param res
  */
-exports.credit_new_choose_get = (req,res) => {
+exports.creditNewChooseGet = (req,res) => {
     Settings.findOne({fromUser:req.session._id},function(err,settings){
         if(err) console.trace();
         Profile.findOne({fromUser:req.session._id},function(err,profile){
             if(err) console.trace();
             Client.find({fromUser:req.session._id},async(err,clients)=>{
                 if(err) console.log("ERROR]: "+err);
-                res.render("add-file-no-contact",{
-                    "profile":profile,
-                    "settings":settings,
-                    "add":"creditnote",
-                    "addlink":"credit",
-                    "clients":clients,
-                    "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
-                });
+                let givenObjects = {
+                    "profile": profile,
+                    "settings": settings,
+                    "add": "creditnote",
+                    "addlink": "credit",
+                    "clients": clients,
+                    "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                        return user
+                    })).role
+                };
+                res.render("add-file-no-contact",givenObjects);
             });
         })
     });
@@ -113,7 +116,7 @@ exports.credit_new_choose_get = (req,res) => {
  * @param req
  * @param res
  */
-exports.invoice_new_get = (req,res) => {
+exports.invoiceNewGet = (req,res) => {
     const idc = (req.body.idc)?req.body.idc:req.params.idc;
     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
         if(err) console.trace();
@@ -179,7 +182,7 @@ exports.invoice_new_get = (req,res) => {
  * @param req
  * @param res
  */
-exports.credit_new_get = (req,res) => {
+exports.creditNewGet = (req,res) => {
     const idc = (req.body.idc)?req.body.idc:req.params.idc;
     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
         if(err) console.trace();
@@ -235,7 +238,7 @@ exports.credit_new_get = (req,res) => {
  * @param req
  * @param res
  */
-exports.offer_new_get = (req,res) => {
+exports.offerNewGet = (req,res) => {
     const idc = (req.body.idc)?req.body.idc:req.params.idc;
     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
         if(err) console.trace();
@@ -297,7 +300,7 @@ exports.offer_new_get = (req,res) => {
  * @param req
  * @param res
  */
-exports.invoice_all_client = (req,res) => {
+exports.invoiceAllClient = (req,res) => {
     Client.findOne({fromUser:req.session._id,_id: req.params.idc}, function(err, client) {
         if(err) console.trace();
             Invoice.find({fromUser:req.session._id,fromClient: req.params.idc}).sort("-invoiceNr").exec(function(err, invoices) {
@@ -307,14 +310,15 @@ exports.invoice_all_client = (req,res) => {
                         Profile.findOne({},async(err,profile)=>{
                             if(err) console.trace();
                             if (!err) {
-                                res.render("invoices", {
+                                let givenObject = {
                                     "client": client,
                                     "invoices": invoices,
                                     "settings": settings,
                                     "profile":profile,
                                     "currentUrl": "invoiceClient",
                                     "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
-                                });
+                                };
+                                res.render("invoices", givenObject);
                             }
                         });
                     });
@@ -327,7 +331,7 @@ exports.invoice_all_client = (req,res) => {
  * @param req
  * @param res
  */
-exports.edit_invoice_get = (req,res) => {
+exports.editInvoiceGet = (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id:req.params.idi},function(err,invoice){
         if(err) console.trace();
         Client.findOne({fromUser:req.session._id,_id:invoice.fromClient},function(err,client){
@@ -336,14 +340,15 @@ exports.edit_invoice_get = (req,res) => {
                 if(err) console.trace();
                 Profile.findOne({fromUser:req.session._id},async(err,profile)=>{
                     if(err) console.trace();
-                    res.render("edit/edit-invoice",{
-                    "invoice":invoice,
-                    "client":client,
-                    "settings":settings,
-                    "profile":profile,
-                    "currentUrl":"invoiceEdit",
-                    "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
-                    });
+                    let givenObject = {
+                        "invoice":invoice,
+                        "client":client,
+                        "settings":settings,
+                        "profile":profile,
+                        "currentUrl":"invoiceEdit",
+                        "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
+                    };
+                    res.render("edit/edit-invoice",givenObject);
                 });
             });
         });
@@ -356,7 +361,7 @@ exports.edit_invoice_get = (req,res) => {
  * @param req
  * @param res
  */
-exports.edit_invoice_post = (req,res) => {
+exports.editInvoicePost = (req,res) => {
     Order.find({fromUser:req.session._id,fromInvoice: req.params.idi}, function(err, orders) {
         if(err) console.trace();
         let totOrders = 0;
@@ -409,15 +414,18 @@ exports.view_invoice_get = (req,res) => {
                             Profile.findOne({fromUser: req.session._id}, async (err, profile)=> {
                                 if(!findOneHasError(req,res,err,profile)) {
                                     let description = (invoice.creditNr) ? "View credit of" : "View invoice of";
-                                    res.render("view/view-invoice", {
+                                    let givenObject = {
                                         "invoice": invoice,
                                         "client": client,
                                         "description": i18n.__(description) + " " + client.clientName,
                                         "settings": settings,
                                         "currentUrl": "creditView",
                                         "profile": profile,
-                                        "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
-                                    })
+                                        "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                                            return user
+                                        })).role
+                                    };
+                                        res.render("view/view-invoice", givenObject)
                                 }
                             });
                         }
