@@ -63,7 +63,7 @@ exports.getClientAll = (req, res) => {
 exports.getClientNew = (req, res) => {
     Settings.findOne({fromUser:req.session._id},function(err, settings) {
         if(err) console.trace();
-        Profile.findOne({fromUser:req.session._id},async(err,profile)=>{
+        Profile.findOne({fromUser:req.session._id},async(err,profile) =>{
             if(err) console.trace();
             if (!err) {
                 res.render("new/new-client", {
@@ -111,11 +111,10 @@ exports.postClientNew = (req, res) => {
     let placeCheck = (req.body.place)?invalid.valueMustBeAName(req,res,req.body.place,true,"place name not correctly checked in"):false;
     let isNotValid = nameCheck||firmCheck||streetCheck||vatPercentageCheck||streetNrCheck||emailCheck||vatCheck||bankCheck||postalCheck||placeCheck;
     if(isNotValid){
-        console.log("[error]: making client, not valid");
         Settings.findOne({fromUser:req.session._id},function(err, settings) {
-            if(err) console.trace();
+            if(err) {console.trace();}
             Profile.findOne({fromUser:req.session._id},async(err,profile) => {
-                if(err) console.trace();
+                if(err) {console.trace();}
                 if (!err) {
                     res.render("edit/edit-client", {
                         "settings": settings,
@@ -132,7 +131,7 @@ exports.postClientNew = (req, res) => {
                             "place":req.body.place,
                             "vatPercentage":req.body.vatPercentage
                         },
-                        "role":(await User.findOne({_id:req.session._id},(err,user)     => {return user})).role
+                        "role":(await User.findOne({_id:req.session._id},(err,user) => {return user})).role
                     });
                 }
             });
@@ -185,7 +184,7 @@ exports.getClientView = (req, res) => {
                                 "client": client,
                                 "profile": profile,
                                 "settings": settings,
-                                "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
+                                "role":(await User.findOne({_id:req.session._id},(err,user) => {return user})).role
                             });
                         }
                     });
@@ -207,7 +206,7 @@ exports.getEditClient = (req,res) => {
                               "profile":profile,
                               "settings":settings,
                               "currentUrl":"clientEdit",
-                              "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
+                              "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user;})).role
                           })
                     }
                 });
@@ -220,13 +219,12 @@ exports.getEditClient = (req,res) => {
 exports.postEditClient = (req,res) => {
   Client.findOne({fromUser:req.session._id,_id:req.params.idc},function(err,client){
       if(!error.findOneHasError(req,res,err,client)){
-          console.log("found client that is editing: "+JSON.stringify(client));
           let nameCheck = invalid.valueMustBeAName(req,res,req.body.clientName,true,"client name not correctly filled in");
           let firmCheck = invalid.valueMustBeAName(req,res,req.body.firm,false,"firm name not correctly filled in");
           let streetCheck = (req.body.street)?invalid.valueMustBeAName(req,res,req.body.street,true):false;
           let streetNrCheck = (req.body.streetNr)?invalid.valueMustBeStreetNumber(req,res,req.body.streetNr):false;
           let emailCheck = false;
-          req.body.emails.forEach(email => {
+          req.body.emails.forEach((email) => {
               if(invalid.valueMustBeEmail(req,res,email)){
                   emailCheck=true;
               }
@@ -250,7 +248,6 @@ exports.postEditClient = (req,res) => {
                   postalCode:req.body.postalCode,
                   place:req.body.place
               };
-              console.log("Looking for client with : {fromUser: "+req.session._id+" , _id: "+client._id);
               Client.updateOne({fromUser:req.session._id,_id:client._id},updatedClient,function(err){
                  if(!error.updateOneHasError(req,res,err)){
                      req.flash("success",i18n.__("Successfully updated client"));
@@ -261,5 +258,5 @@ exports.postEditClient = (req,res) => {
               res.redirect("/edit/client/"+client._id);
           }
       }
-  })
+  });
 };
