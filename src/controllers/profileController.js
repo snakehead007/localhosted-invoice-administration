@@ -118,12 +118,10 @@ exports.editProfilePost = (req,res) => {
                 });
                 if(user.role==="visitor") {
                    await User.updateOne({_id: req.session._id}, {role: "user"}, (err) => {
-                       console.log("updating user");
                         req.flash("success", "successfully updated your profile");
                         res.redirect("/view/profile");
                     });
                 }else{
-                    console.log("user has role user, redirecting");
                     req.flash("success", "successfully updated your profile");
                     res.redirect("/view/profile");
                 }
