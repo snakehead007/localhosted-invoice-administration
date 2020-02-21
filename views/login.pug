@@ -214,16 +214,25 @@ style.
     margin-bottom:40px;
   }
 
-    #copyright {
+    .center {
       margin-top:0px;
       text-align: center;
       display: block;
       width: 100%;
     }
-    #copyright p a {
+    .spaceLeft {
       margin-left:5px;
     }
+    .tabLeft {
+      margin-left: 20px;
+    }
+    .tabRight {
+      margin-right: 20px;
+    }
 
+    .spaceRight {
+      margin-right: 5px;
+    }
 
 .wrapper.fadeInDown.container-fluid
   include includes/messages
@@ -247,9 +256,22 @@ style.
                 span#not_signed_in1lbqwyknjc3g Sign in with Google
                 span#connected1lbqwyknjc3g(style='display:none') Signed in with Google
       form(method='get' action='/register')
-div(class="panel-footer")#copyright
-  p Copyright &copy; by
-    a(href="https://snakehead007.github.io/") snakehead007
+div(class="panel-footer").center
+  span Copyright &copy; by
+    a.spaceRight.spaceLeft(href="https://snakehead007.github.io/") snakehead007
+  span.spaceRight.spaceLeft our
+    a.spaceLeft(href="#" data-toggle="modal" data-target=".bd-example-modal-lg")   privacy policy
+.modal.fade.bd-example-modal-lg(tabindex='-1' role='dialog' aria-labelledby='myLargeModalLabel' aria-hidden='true')
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        h5.modal-title Privacy Policy for https://account.karel.be/
+        button.close(type='button' data-dismiss='modal' aria-label='Close')
+          span(aria-hidden='true') &times;
+      .modal-body
+        include includes/modals/privacyPolicy
+
+
 
 script(src="https://apis.google.com/js/platform.js?onload=renderButton")
 script.
