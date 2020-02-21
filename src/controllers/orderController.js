@@ -14,22 +14,18 @@ const {findOneHasError} = require("../middlewares/error");
  * @param req
  * @param res
  */
-exports.editOrderGet = (req,res)  => {
+exports.editOrderGet = (req,res) => {
     Order.findOne({fromUser:req.session._id,_id: req.params.ido}, function(err, order) {
-        if(err) console.trace();
         Invoice.findOne({fromUser:req.session._id,_id: order.fromInvoice}, function(err, invoice) {
-            if(err) console.trace();
             Settings.findOne({fromUser:req.session._id,}, function(err, settings) {
-                if(err) console.trace();
-                Profile.findOne({fromUser:req.session._id,}, async(err, profile)=> {
-                    if(err) console.trace();
+                Profile.findOne({fromUser:req.session._id,}, async(err, profile) => {
                     if (!err) {
                         res.render("edit/edit-order", {
                             "order": order,
                             "invoice": invoice,
                             "profile":  profile,
                             "settings": settings,
-                            "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
+                            "role":(await User.findOne({_id:req.session._id},(err,user) => {return user;})).role
                         });
                     }
                 });
@@ -45,16 +41,12 @@ exports.editOrderGet = (req,res)  => {
  */
 exports.newOrderGet = (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {
-        if(err) console.trace();
         if (!err) {
             Client.findOne({fromUser:req.session._id,_id:invoice.fromClient},function(err,client){
-                if(err) console.trace();
                 if(!err){
                     Settings.findOne({fromUser:req.session._id}, function(err, settings) {
-                        if(err) console.trace();
                         if (!err) {
-                            Profile.findOne({fromUser:req.session._id}, async(err, profile)=> {
-                                if(err) console.trace();
+                            Profile.findOne({fromUser:req.session._id}, async(err, profile) => {
                                 if (!err) {
                                     let sendObject = {
                                         "invoice": invoice,
@@ -62,7 +54,7 @@ exports.newOrderGet = (req,res) => {
                                         "settings": settings,
                                         "client": client,
                                         "currentUrl":"orderNew",
-                                        "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
+                                        "role":(await User.findOne({_id:req.session._id},(err,user) => {return user;})).role
                                     };
                                     res.render("new/new-order", sendObject);
                                 }
@@ -94,10 +86,8 @@ exports.newOrderPost = async (req,res) => {
         });
         await newOrder.save();
         let totInvoice = ((((invoice.total + invoice.advance) + (req.body.amount * req.body.price)) - invoice.advance));
-        console.log("total invoice:" +totInvoice);
         await Invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, {total:totInvoice,lastUpdated:Date.now()},function(err,invoice){
             if(err) {
-                console.trace(err);
             }
         });
         res.redirect("/order/all/" + req.params.idi);
@@ -112,28 +102,15 @@ exports.newOrderPost = async (req,res) => {
 exports.allOrderGet = (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {
         if(err) {
-            console.trace();
         }
         if (!err) {
             Order.find({fromUser:req.session._id,fromInvoice: req.params.idi}, function(err, orders) {
-                if(err) {
-                    console.trace();
-                }
                 if (!err) {
                     console.log("Trying to find Client with id: "+ invoice);
                     Client.findOne({fromUser:req.session._id,_id:invoice.fromClient},function(err,client) {
-                        if(err) {
-                            console.trace();
-                        }
                         Settings.findOne({fromUser:req.session._id}, function (err, settings) {
-                            if(err) {
-                                console.trace();
-                            }
                             if (!err) {
-                                Profile.findOne({fromUser:req.session._id}, async (err, profile)=> {
-                                    if(err) {
-                                        console.trace();
-                                    }
+                                Profile.findOne({fromUser:req.session._id}, async (err, profile) => {
                                     if (!err) {
                                         let sendObject = {
                                             "invoice": invoice,
@@ -141,7 +118,7 @@ exports.allOrderGet = (req,res) => {
                                             "profile": profile,
                                             "client": client,
                                             "settings": settings,
-                                            "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
+                                            "role":(await User.findOne({_id:req.session._id},(err,user) => {return user;})).role
                                         };
                                         res.render("orders", sendObject);
                                     }
@@ -174,7 +151,7 @@ exports.viewOrderGet = (req,res) => {
                                         "invoice": invoice,
                                         "profile": profile,
                                         "settings": settings,
-                                        "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
+                                        "role":(await User.findOne({_id:req.session._id},(err,user) => {return user;})).role
                                     };
                                     res.render("view/view-order", );
                                 }
@@ -189,7 +166,6 @@ exports.viewOrderGet = (req,res) => {
 
 exports.editOrderPost = (req,res) =>
 {
-    console.log("EDIT ORDER POST: "+req.session._id+", "+req.params.ido);
     Order.findOne({fromUser:req.session._id,_id: req.params.ido}, function (err, order) {
         if(!findOneHasError(req,res,err,order)){
             let updateOrder = {
@@ -203,17 +179,12 @@ exports.editOrderPost = (req,res) =>
                 await Order.updateOne({fromUser: req.session._id, _id: req.params.ido}, updateOrder);
                 //total of the invoice minus old order total minus the advance
                 let tot = invoice.total - (order.amount * order.price) - invoice.advance;
-                console.log("total: "+tot);
                 let updateInvoice = {
                     //total of new invoice = total above + new total of order + the advance of the total
                     total: ((tot + (req.body.amount * req.body.price) + invoice.advance)),
                     lastUpdated: Date.now()
                 };
-                console.log("updating invoice : "+JSON.stringify(updateInvoice));
                 Invoice.updateOne({fromUser: req.session._id, _id: order.fromInvoice}, updateInvoice, function (err) {
-                    if (err) {
-                        console.trace(err);
-                    }
                     res.redirect("/order/all/"+invoice._id);
                 });
             });
