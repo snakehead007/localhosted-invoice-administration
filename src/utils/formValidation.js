@@ -8,7 +8,7 @@ const i18n = require("i18n");
 
 exports.valueMustNotBeEmpty = (req,res,doc,mustBeFilledIn=false,message="This value must not be empty!") => {
         let invalid = false;
-        if (doc == null) {
+        if (doc === null) {
             invalid = true;
         }
         //let showMessage = invalid || mustBeFilledIn&&doc==="";
@@ -40,7 +40,6 @@ exports.valueMustBeAName = (req,res,doc,mustBeFilledIn=false,message="This value
         }*/
     if(showMessage)
        { req.flash("danger",i18n.__(message));}
-    console.log("[DEBUG]: utils.formvalidations.valueMustBeAName("+doc+") => "+showMessage);
     return showMessage;
 };
 
@@ -63,7 +62,6 @@ exports.valueMustBeEmail = (req,res,doc,mustBeFilledIn=false,message="This value
         }*/
     if(showMessage)
      {   req.flash("danger",i18n.__(message));}
-    console.log("[DEBUG]: utils.formvalidation.valueMustBeEmail("+doc+") => "+invalid);
 };
 
 exports.numberMustPhoneNumber = (req,res,doc,mustBeFilledIn=false,message="Phone number is invalid, please provide a correct phone number") => {
@@ -145,7 +143,7 @@ exports.valueMustBeStreetNumber = (req,res,doc,mustBeFilledIn=false,message="Str
     let regex = /^([1-9])([0-9]{0,9}[a-z]{0,3}[A-Z]{0,3})$/;
     let result = doc.match(regex);
     if(result === null){
-        invalid = true
+        invalid = true;
     }
     let showMessage = invalid;
     /*if(!mustBeFilledIn&&doc===""){
@@ -190,5 +188,5 @@ exports.valueMustBeValidBic = (req,res,doc,mustBeFilledIn=false,message="BIC num
     }*/if(showMessage)
         {req.flash("danger",i18n.__(message));}
     //console.log("[DEBUG]: utils.formvalidation.valueMustBeValidBic("+doc+") => "+invalid);
-    return showMessage
+    return showMessage;
 };
