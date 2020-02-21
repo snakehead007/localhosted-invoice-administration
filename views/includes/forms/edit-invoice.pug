@@ -1,8 +1,8 @@
 form(action='/edit/invoice/'+invoice._id,method='post')
     script.
         $(function () {
-            $("#datepicker").datepicker();
-            $("#datepicker2").datepicker();
+            $("#datepicker").datepicker($.datepicker.regional["#{settings.locale}"]);
+            $("#datepicker2").datepicker($.datepicker.regional["#{settings.locale}"]);
         });
     div(class="form-row")
         div(class="form-group col-md-3")

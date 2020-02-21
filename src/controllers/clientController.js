@@ -104,7 +104,7 @@ exports.postClientNew = (req, res) => {
     let vatCheck = invalid.valueMustBeVatNumber(req,res,req.body.vat);
     let vatPercentageCheck = invalid.valueMustBeAnInteger(req,res,req.body.vatPercentage,true);
     let bankCheck = invalid.valueMustBeValidIban(req,res,req.body.bankNr);
-    let postalCheck = invalid.valueMustBePostalCode(req,res,req.body.postal);
+    let postalCheck = invalid.valueMustBePostalCode(req,res,req.body.postalCode);
     let placeCheck = invalid.valueMustBeAName(req,res,req.body.place,true,"place name not correctly checked in");
     let isNotValid = nameCheck||firmCheck||streetCheck||vatPercentageCheck||streetNrCheck||emailCheck||vatCheck||bankCheck||postalCheck||placeCheck;
     if(isNotValid){
@@ -125,7 +125,7 @@ exports.postClientNew = (req, res) => {
                             "streetNr":req.body.streetNr,
                             "vat":req.body.vat,
                             "bankNr":req.body.bankNr,
-                            "postal":req.body.postal,
+                            "postalCode":req.body.postalCode,
                             "place":req.body.place,
                             "vatPercentage":req.body.vatPercentage
                         },
@@ -140,7 +140,7 @@ exports.postClientNew = (req, res) => {
             clientName: req.body.clientName,
             street: req.body.street,
             streetNr: req.body.streetNr,
-            postal: req.body.postal,
+            postalCode: req.body.postalCode,
             place: req.body.place,
             vat: req.body.vat,
             lang: req.body.lang,
@@ -231,7 +231,7 @@ exports.postEditClient = (req,res) => {
           let vatCheck = invalid.valueMustBeVatNumber(req,res,req.body.vat);
           let vatPercentageCheck = invalid.valueMustBeAnInteger(req,res,req.body.vatPercentage,true);
           let bankCheck = invalid.valueMustBeValidIban(req,res,req.body.bankNr);
-          let postalCheck = invalid.valueMustBePostalCode(req,res,req.body.postal);
+          let postalCheck = invalid.valueMustBePostalCode(req,res,req.body.postalCode);
           let placeCheck = invalid.valueMustBeAName(req,res,req.body.place,true,"place name not correctly checked in");
           let isNotValid = nameCheck||firmCheck||streetCheck||vatPercentageCheck||streetNrCheck||emailCheck||vatCheck||bankCheck||postalCheck||placeCheck;
           if(!isNotValid) {
@@ -244,14 +244,14 @@ exports.postEditClient = (req,res) => {
                   vat:req.body.vat,
                   vatPercentage:req.body.vatPercentage,
                   bankNr:req.body.bankNr,
-                  postal:req.body.postal,
+                  postalCode:req.body.postalCode,
                   place:req.body.place
               };
               console.log("Looking for client with : {fromUser: "+req.session._id+" , _id: "+client._id);
               Client.updateOne({fromUser:req.session._id,_id:client._id},updatedClient,function(err){
                  if(!error.updateOneHasError(req,res,err)){
                      req.flash("success",i18n.__("Successfully updated client"));
-                     res.redirect("/client/all");
+                     res.redirect("back");
                  }
               });
           }else{

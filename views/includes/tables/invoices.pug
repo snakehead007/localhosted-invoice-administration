@@ -14,19 +14,16 @@ table(class="table table-striped table-sm ",id="hoofdTabel")
                 td
                     if invoice.invoiceNr
                         a(href='/order/all/' + invoice._id )=invoice.invoiceNr
-                    if invoice.offerNr && !invoice.invoiceNr
+                    if invoice.offerNr
                         a(href='/order/all/' + invoice._id) #{__('Offer')}  #{" "+invoice.offerNr}
-                    if invoice.creditNr && !invoice.offerNr && !invoice.invoiceNr
+                    if invoice.creditNr
                         a(href='/order/all/' + invoice._id ) #{__('Creditnote')} #{" "+invoice.creditNr}
                 if !client
                     td
                         a(href='/invoice/all/' + invoice.fromClient)=invoice.clientName
                 td(id="date"+invoice.invoiceNr)
-                if invoice.invoiceNr
                     td
                         span=(invoice.total * 1.21).toFixed(2) + "€"
-                else
-                    td
                 if invoice.invoiceNr
                     td
                         div(class="custom-control custom-switch")
@@ -47,12 +44,12 @@ table(class="table table-striped table-sm ",id="hoofdTabel")
                             a(class="dropdown-item", href='/delete/invoice/' + invoice._id) #{__('Delete')}
                             div(class="dropdown-divider")
                             if invoice.creditNr
-                                a(class="dropdown-item", href='/download/credit/' + invoice._id ,id="target",target="_tab" rel="noopener noreferrer") #{__('Download invoice')}
+                                a(class="dropdown-item", href='/download/credit/' + invoice._id ,id="target",target="_tab" rel="noopener noreferrer") #{__('View invoice')}
                             if invoice.invoiceNr
-                                a(class="dropdown-item", href='/download/invoice/' + invoice._id ,id="target",target="_tab" rel="noopener noreferrer") #{__('Download invoice')}
+                                a(class="dropdown-item", href='/download/invoice/' + invoice._id ,id="target",target="_tab" rel="noopener noreferrer") #{__('View invoice')}
                                 a(class="dropdown-item", href='/invoice/change/downgrade/' + invoice._id ) #{__('Downgrade to offer')}
                             if invoice.offerNr
-                                a(class="dropdown-item", href='/download/offer/' + invoice._id ,target="_tab" rel="noopener noreferrer") #{__('Download offer')}
+                                a(class="dropdown-item", href='/download/offer/' + invoice._id ,target="_tab" rel="noopener noreferrer") #{__('View offer')}
                                 if !invoice.invoiceNr
                                     a(class="dropdown-item button", href="/invoice/change/upgrade/" + invoice._id ) #{__('Upgrade to invoice')}
             script.

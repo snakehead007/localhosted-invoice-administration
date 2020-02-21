@@ -31,7 +31,7 @@ body
             include ../includes/navFlexCollumn
             include ../includes/bookmarks
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          h2(class="pt-3")=__('Update order')
+          h2(class="pt-3")=__('Update line')
           hr
           include ../includes/messages
           form(action='/order/edit/'+order._id,method='post')

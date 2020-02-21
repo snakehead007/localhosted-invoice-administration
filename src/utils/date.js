@@ -148,3 +148,13 @@ module.exports.getDatum = (lang) =>{
         return date.getDate() + " " + month[date.getMonth()] + " " + date.getFullYear().toString();
     }
 };
+
+module.exports.parseDateDDMMYYYY = (dateString)=>{
+    console.log("parsing... got: "+dateString);
+    let arrayOfDate = dateString.split('/'); //0 DAY , 1 MONTH , 2 YEAR
+    console.log('split: '+arrayOfDate);
+    let date = new Date(Number(arrayOfDate[2]),Number(arrayOfDate[1]),Number(arrayOfDate[0]));
+    console.log("done! : "+date);
+    return date
+
+};

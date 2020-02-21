@@ -15,6 +15,7 @@ const jsPDF = require('jspdf');
 window.jsPDF = require('jspdf');
 const i18n = require('i18n');
 const path = require('path');
+
 const {callGetBase64,createJSON, replaceAll} =require('../utils/pdfCreation');
 require('jspdf-autotable');
 exports.createPDF = async (req,res,style="invoice",profile,settings,client,invoice,orders) => {
@@ -34,10 +35,9 @@ exports.createPDF = async (req,res,style="invoice",profile,settings,client,invoi
     if(style==="credit")
         dataText=replaceAll(settings.creditText, profile, client, invoice, settings.locale);
     let c = [0,0];
-    let date;
-    date=new Date(invoice.date).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' });
-    console.log(date);
+    let dateObject=new Date(invoice.date);
     console.log(settings.locale);
+    let date = dateObject.getDate()+"/"+dateObject.getMonth()+"/"+dateObject.getFullYear();
     let doc = new jsPDF();
     doc.setFont(doc.getFontList()[0]);
     if(style==="invoice") {
@@ -172,7 +172,6 @@ exports.createPDF = async (req,res,style="invoice",profile,settings,client,invoi
     console.log(orders);
     try {
         orders.forEach((o) => {
-                console.log("order: ");
                 console.log(o);
                 ordersPrint.push([o.description, o.amount, o.price.toFixed(2) + " €", o.total.toFixed(2) + " €"]);
 
@@ -194,7 +193,7 @@ exports.createPDF = async (req,res,style="invoice",profile,settings,client,invoi
         },
         styles: {fillColor: [140, 140, 140]},
         startY: 110,
-        head: [[i18n.__('Order'), i18n.__('Amount'), i18n.__('Price'),i18n.__('Total')]],
+        head: [[i18n.__('Description'), i18n.__('Amount'), i18n.__('Price'),i18n.__('Total')]],
         body: ordersPrint
     });
     _vat = Math.round((totalEx-invoice.advance)*client.vatPercentage)/100;
@@ -239,12 +238,13 @@ exports.createPDF = async (req,res,style="invoice",profile,settings,client,invoi
     doc.setFontType("courier");
     doc.setFontSize(10);
     let textC = 265;
-    dataText.forEach(text => () => {
-        doc.text(20,textC,text);
+    dataText.forEach((text) => {
+        console.log(textC+" : "+text);
+        let px = 92.0-visualLength(text);
+        console.log(px);
+        doc.text(px,textC,text);
         textC +=5
     });
-    doc.setFontType("bold");
-    doc.text(80,285,i18n.__('We thank you for your trust.'));
     let filename;
     if(style==="invoice")
         filename = invoice.invoiceNr+".pdf";
@@ -274,4 +274,8 @@ exports.createPDF = async (req,res,style="invoice",profile,settings,client,invoi
     delete global.navigator;
     delete global.btoa;
     delete global.html2pdf;
+};
+visualLength = (string) =>
+{
+    return string.length*0.7;
 };

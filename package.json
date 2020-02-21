@@ -50,6 +50,7 @@
     "ibantools": "^2.2.0",
     "iconv-lite": "^0.4.24",
     "image-to-base64": "^2.0.1",
+    "jsdom": "^16.2.0",
     "jsonwebtoken": "^8.5.1",
     "jspdf": "^1.5.3",
     "jspdf-autotable": "^3.2.13",

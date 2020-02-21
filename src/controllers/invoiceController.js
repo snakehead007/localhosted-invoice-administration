@@ -12,6 +12,7 @@ const User = require("../models/user");
 const i18n = require("i18n");
 const invoiceUtil = require("../utils/invoices");
 const {findOneHasError,updateOneHasError} = require("../middlewares/error");
+const {parseDateDDMMYYYY} = require("../utils/date");
 /**
  *
  * @param req
@@ -362,23 +363,60 @@ exports.editInvoiceGet = (req,res) => {
  * @param res
  */
 exports.editInvoicePost = (req,res) => {
-    Order.find({fromUser:req.session._id,fromInvoice: req.params.idi}, function(err, orders) {
+    Order.find({fromUser:req.session._id,fromInvoice: req.params.idi}, async (err, orders) => {
         if(err) console.trace();
         let totOrders = 0;
         for (let i = 0; i <= orders.length - 1; i++) {
             totOrders += (orders[i].price*orders[i].amount);
         }
-        console.log(totOrders);
+        let currentInvoice = await Invoice.findOne({fromUser:req.session._id,_id:req.params.idi},(err,invoice) => {return invoice});
         let updateInvoice;
-        updateInvoice = {
-            date: Date.parse(req.body.date.replace(/[^0-9//]/g,"") ),
-            invoiceNr: req.body.invoiceNr,
-            advance: req.body.advance,
-            offerNr: req.body.offer,
-            datePaid: (req.body.datePaid.toString()!=="")?Date.parse(req.body.datePaid.replace(/[^0-9//]/g)):"",
-            lastUpdated:Date.now(),
-            total: totOrders - req.body.advance
+        let dateBody;
+        if(currentInvoice.date!==req.body.date){
+            dateBody = parseDateDDMMYYYY(req.body.date)
         }
+        let datePaidBody;
+        if(currentInvoice.datePaid!==req.body.datePaid){
+            datePaidBody = parseDateDDMMYYYY(req.body.datePaid)
+        }
+        if(dateBody&&!datePaidBody){
+            updateInvoice = {
+                date: dateBody,
+                invoiceNr: req.body.invoiceNr,
+                advance: req.body.advance,
+                offerNr: req.body.offer,
+                lastUpdated:Date.now(),
+                total: totOrders - req.body.advance
+            };
+        }else if(!dateBody&&datePaidBody){
+            updateInvoice = {
+                invoiceNr: req.body.invoiceNr,
+                advance: req.body.advance,
+                offerNr: req.body.offer,
+                datePaid: datePaidBody,
+                lastUpdated:Date.now(),
+                total: totOrders - req.body.advance
+            };
+        }else if(dateBody&&datePaidBody){
+            updateInvoice = {
+                date: dateBody,
+                invoiceNr: req.body.invoiceNr,
+                advance: req.body.advance,
+                offerNr: req.body.offer,
+                datePaid: datePaidBody,
+                lastUpdated:Date.now(),
+                total: totOrders - req.body.advance
+            };
+        }else{//both not changed
+            updateInvoice = {
+                invoiceNr: req.body.invoiceNr,
+                advance: req.body.advance,
+                offerNr: req.body.offer,
+                lastUpdated:Date.now(),
+                total: totOrders - req.body.advance
+            };
+        }
+        console.log(updateInvoice);
         let searchCriteria = {fromUser:req.session._id,};
         if(orders.length > 0) {
             console.log(orders);

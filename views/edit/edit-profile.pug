@@ -18,7 +18,7 @@ body
         form(action='/edit/profile/'+profile._id,method='post')
           div(class="form-row")
             div(class="form-group col-md-6")
-              label(for="title") #{__('Contact name')}
+              label(for="title") #{__('Your name')}
               input(type="text",class="form-control",value=profile.name,name="name",placeholder="Jan Janssens")
             div(class="form-group col-md-6")
               label(for="title") #{__('Firm name')}
