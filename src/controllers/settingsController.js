@@ -18,7 +18,7 @@ const User = require("../models/user");
         "profile":profile
     }
  */
-exports.settings_all_get = (req,res) =>{
+exports.settings_all_get = (req,res) => {
     Profile.findOne({fromUser:req.session._id},function(err,profile){
         if(err) {
             console.trace();
@@ -32,7 +32,7 @@ exports.settings_all_get = (req,res) =>{
                 "settings": settings,
                 "description": "Settings",
                 "profile":profile,
-                "role":(await User.findOne({_id:req.session._id},(err,user) => {return user})).role
+                "role":(await User.findOne({_id:req.session._id},(err,user) => {return user;})).role
             });
         });
     });
@@ -98,9 +98,6 @@ exports.changeTextGet = (req,res) => {
                 offerText: String(req.body.offerText)
             };
             Settings.updateOne({fromUser:req.session._id,_id: settings._id}, updateSettings, function(err) {
-                if(err){
-                    console.trace(err);
-                }
                 res.redirect("/settings");
             });
         }
