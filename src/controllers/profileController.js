@@ -3,6 +3,7 @@ const Settings = require("../models/settings");
 const User = require("../models/user");
 const i18n = require("i18n");
 const {findOneHasError,updateOneHasError} = require("../middlewares/error");
+const {getFullNr}  = require('../utils/invoices');
 const { valueMustBeValidBic,valueMustBeValidIban,valueMustBeStreetNumber,valueMustBeAName,valueMustBeEmail,numberMustPhoneNumber, valueMustBeVatNumber, valueMustBePostalCode} = require("../utils/formValidation");
 /**
  * @api {get} /view/profile view_profile_get
@@ -27,27 +28,9 @@ exports.viewProfileGet = (req,res) => {
     let jaar = _jaar.toString();
     Profile.findOne({fromUser:req.session._id}, async (err, profile) => {
         if (!err) {
-            var _nr = profile.invoiceNrCurrent;
-            var nr_str = _nr.toString();
-            if (nr_str.toString().length == 1) {
-                nr_str = "00" + _nr.toString();
-            } else if (nr_str.toString().length == 2) {
-                nr_str = "0" + _nr.toString();
-            }
-            var _nroff = profile.offerNrCurrent;
-            var nroff_str = _nroff.toString();
-            if (nroff_str.toString().length == 1) {
-                nroff_str = "00" + _nroff.toString();
-            } else if (nroff_str.toString().length == 2) {
-                nroff_str = "0" + _nroff.toString();
-            }
-            var _nrcred = profile.creditNrCurrent;
-            var nrcred_str = _nrcred.toString();
-            if (nrcred_str.toString().length == 1) {
-                nrcred_str = "00" + _nrcred.toString();
-            } else if (nrcred_str.toString().length == 2) {
-                nrcred_str = "0" + _ncred.toString();
-            }
+            let invoiceNr = getFullNr(profile.invoiceNrCurrent);
+            let offerNr = getFullNr(profile.offerNrCurrent);
+            let creditNr = getFullNr(profile.creditNrCurrent);
             let role = (await User.findOne({_id:req.session._id},(err,user)=> {return user})).role;
             let title = i18n.__((role==="visitor")?"Create a new profile":"Edit");
             console.log(role);
@@ -58,9 +41,9 @@ exports.viewProfileGet = (req,res) => {
                             res.render("edit/edit-profile", {
                                 "currentUrl":"edit-profile",
                                 "profile": profile,
-                                "offerNrCurrent": Number(jaar + nroff_str),
-                                "invoiceNrCurrent": Number(jaar + nr_str),
-                                "creditNrCurrent": Number(jaar + nrcred_str),
+                                "offerNrCurrent": offerNr,
+                                "invoiceNrCurrent": invoiceNr,
+                                "creditNrCurrent": creditNr,
                                 "settings": settings,
                                 "title":title,
                                 "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
