@@ -12,7 +12,7 @@ const User = require("../models/user");
 const i18n = require("i18n");
 const invoiceUtil = require("../utils/invoices");
 const {findOneHasError,updateOneHasError} = require("../middlewares/error");
-const {parseDateDDMMYYYY} = require("../utils/date");
+const {parseDateDDMMYYYY,parseDateSwapDayMonth} = require("../utils/date");
 /**
  *
  * @param req
@@ -369,14 +369,27 @@ exports.editInvoicePost = (req,res) => {
         for (let i = 0; i <= orders.length - 1; i++) {
             totOrders += (orders[i].price*orders[i].amount);
         }
+        let settings = await Settings.findOne({fromUser:req.session._id},(err,settings) => {return settings});
         let currentInvoice = await Invoice.findOne({fromUser:req.session._id,_id:req.params.idi},(err,invoice) => {return invoice});
+        let cDate = new Date(currentInvoice.date).toLocaleString(undefined, {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric'
+        });
+        let cDatePaid = new Date(currentInvoice.datePaid).toLocaleString( undefined,{
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric'
+        });
+        console.log(parseDateSwapDayMonth(cDate)+" "+req.body.datePaid);
+        console.log(parseDateSwapDayMonth(cDatePaid)+" "+req.body.datePaid);
         let updateInvoice;
         let dateBody;
-        if(currentInvoice.date!==req.body.date){
+        if(parseDateSwapDayMonth(cDate)!==req.body.date){
             dateBody = parseDateDDMMYYYY(req.body.date)
         }
         let datePaidBody;
-        if(currentInvoice.datePaid!==req.body.datePaid){
+        if(parseDateSwapDayMonth(cDatePaid)!==req.body.datePaid){
             datePaidBody = parseDateDDMMYYYY(req.body.datePaid)
         }
         if(dateBody&&!datePaidBody){

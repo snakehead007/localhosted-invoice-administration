@@ -153,8 +153,11 @@ module.exports.parseDateDDMMYYYY = (dateString)=>{
     console.log("parsing... got: "+dateString);
     let arrayOfDate = dateString.split('/'); //0 DAY , 1 MONTH , 2 YEAR
     console.log('split: '+arrayOfDate);
-    let date = new Date(Number(arrayOfDate[2]),Number(arrayOfDate[1]),Number(arrayOfDate[0]));
+    let date = new Date(Number(arrayOfDate[2]),Number(arrayOfDate[0])-1,Number(arrayOfDate[1]));
     console.log("done! : "+date);
-    return date
-
+    return date;
+};
+module.exports.parseDateSwapDayMonth = (dateString)=> {
+    let arrayOfDate = dateString.split('/');
+    return arrayOfDate[1]+"/"+arrayOfDate[0]+"/"+arrayOfDate[2]
 };
