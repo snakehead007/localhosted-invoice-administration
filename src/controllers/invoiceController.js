@@ -134,7 +134,7 @@ exports.invoiceNewGet = (req,res) => {
                         profile.save(function (err) {
                             if (err) console.trace();
                             Profile.updateOne({
-                                fromUser: req.session._id,
+                                fromUser: req.session._id},{
                                 invoiceNrCurrent: profile.invoiceNrCurrent + 1
                             }, async function (err) {
                                 if (err) console.trace(err);
@@ -198,10 +198,9 @@ exports.creditNewGet = (req,res) => {
                     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
                         profile.save(function (err) {
                             if (err) console.trace();
-                            Profile.updateOne({
-                                fromUser: req.session._id,
-                                creditNrCurrent: profile.creditNrCurrent + 1
-                            }, async function (err) {
+                            Profile.updateOne(
+                            {fromUser: req.session._id},
+                                {creditNrCurrent: profile.creditNrCurrent + 1 }, async function (err) {
                                 if (err) console.trace();
                                 if (!err) {
                                     let nr_str;
@@ -258,7 +257,7 @@ exports.offerNewGet = (req,res) => {
                                 if (err) console.trace();
                                 if (!err) {
                                     Profile.updateOne({
-                                        fromUser: req.session._id,
+                                        fromUser: req.session._id},{
                                         offerNrCurrent: profile.offerNrCurrent + 1
                                     }, async function (err) {
                                         if (err) console.trace();

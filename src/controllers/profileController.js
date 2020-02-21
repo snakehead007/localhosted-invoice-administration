@@ -124,8 +124,7 @@ exports.editProfilePost = (req,res) => {
             creditNrCurrent: Number(req.body.creditNrCurrent.toString().substring(req.body.creditNrCurrent.toString().length - 3)),
              */
             tel: req.body.tel,
-            email: [req.body.email],
-            fromUser: req.session._id
+            email: [req.body.email]
         };
         Profile.updateOne({fromUser: req.session._id, _id: req.params.idp}, updateProfile, async (err) => {
             if (!err) {

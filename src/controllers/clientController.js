@@ -93,19 +93,22 @@ exports.getClientNew = (req, res) => {
 exports.postClientNew = (req, res) => {
     let nameCheck = invalid.valueMustBeAName(req,res,req.body.clientName,true,"client name not correctly filled in");
     let firmCheck = invalid.valueMustBeAName(req,res,req.body.firm,false,"firm name not correctly filled in");
-    let streetCheck = invalid.valueMustBeAName(req,res,req.body.street,true);
-    let streetNrCheck = invalid.valueMustBeStreetNumber(req,res,req.body.streetNr);
+    let streetCheck = (req.body.street)?invalid.valueMustBeAName(req,res,req.body.street,true):false;
+    let streetNrCheck = (req.body.streetNr)?invalid.valueMustBeStreetNumber(req,res,req.body.streetNr):false;
     let emailCheck = false;
     req.body.emails.forEach(email => {
         if(invalid.valueMustBeEmail(req,res,email)){
             emailCheck=true;
         }
     });
-    let vatCheck = invalid.valueMustBeVatNumber(req,res,req.body.vat);
+    if(req.body.emails.length===0||req.body.emails[0]===""){
+        emailCheck=false;
+    }
+    let vatCheck = (req.body.vat)?invalid.valueMustBeVatNumber(req,res,req.body.vat):false;
     let vatPercentageCheck = invalid.valueMustBeAnInteger(req,res,req.body.vatPercentage,true);
-    let bankCheck = invalid.valueMustBeValidIban(req,res,req.body.bankNr);
-    let postalCheck = invalid.valueMustBePostalCode(req,res,req.body.postalCode);
-    let placeCheck = invalid.valueMustBeAName(req,res,req.body.place,true,"place name not correctly checked in");
+    let bankCheck = (req.body.bankNr)?invalid.valueMustBeValidIban(req,res,req.body.bankNr):false;
+    let postalCheck = (req.body.postalCode)?invalid.valueMustBePostalCode(req,res,req.body.postalCode):false;
+    let placeCheck = (req.body.place)?invalid.valueMustBeAName(req,res,req.body.place,true,"place name not correctly checked in"):false;
     let isNotValid = nameCheck||firmCheck||streetCheck||vatPercentageCheck||streetNrCheck||emailCheck||vatCheck||bankCheck||postalCheck||placeCheck;
     if(isNotValid){
         console.log("[error]: making client, not valid");
@@ -220,19 +223,19 @@ exports.postEditClient = (req,res) => {
           console.log("found client that is editing: "+JSON.stringify(client));
           let nameCheck = invalid.valueMustBeAName(req,res,req.body.clientName,true,"client name not correctly filled in");
           let firmCheck = invalid.valueMustBeAName(req,res,req.body.firm,false,"firm name not correctly filled in");
-          let streetCheck = invalid.valueMustBeAName(req,res,req.body.street,true);
-          let streetNrCheck = invalid.valueMustBeStreetNumber(req,res,req.body.streetNr);
+          let streetCheck = (req.body.street)?invalid.valueMustBeAName(req,res,req.body.street,true):false;
+          let streetNrCheck = (req.body.streetNr)?invalid.valueMustBeStreetNumber(req,res,req.body.streetNr):false;
           let emailCheck = false;
           req.body.emails.forEach(email => {
               if(invalid.valueMustBeEmail(req,res,email)){
                   emailCheck=true;
               }
           });
-          let vatCheck = invalid.valueMustBeVatNumber(req,res,req.body.vat);
+          let vatCheck = (req.body.vat)?invalid.valueMustBeVatNumber(req,res,req.body.vat):false;
           let vatPercentageCheck = invalid.valueMustBeAnInteger(req,res,req.body.vatPercentage,true);
-          let bankCheck = invalid.valueMustBeValidIban(req,res,req.body.bankNr);
-          let postalCheck = invalid.valueMustBePostalCode(req,res,req.body.postalCode);
-          let placeCheck = invalid.valueMustBeAName(req,res,req.body.place,true,"place name not correctly checked in");
+          let bankCheck = (req.body.bankNr)?invalid.valueMustBeValidIban(req,res,req.body.bankNr):false;
+          let postalCheck = (req.body.postalCode)?invalid.valueMustBePostalCode(req,res,req.body.postalCode):false;
+          let placeCheck = (req.body.place)?invalid.valueMustBeAName(req,res,req.body.place,true,"place name not correctly checked in"):false;
           let isNotValid = nameCheck||firmCheck||streetCheck||vatPercentageCheck||streetNrCheck||emailCheck||vatCheck||bankCheck||postalCheck||placeCheck;
           if(!isNotValid) {
               let updatedClient = {
