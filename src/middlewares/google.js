@@ -1,14 +1,14 @@
-const  {google}= require('googleapis');
-const googleAuth = require('google-auto-auth');
-const User = require('../models/user.js');
-const Profile = require('../models/profile');
-const Settings = require('../models/settings');
+const  {google}= require("googleapis");
+const googleAuth = require("google-auto-auth");
+const User = require("../models/user.js");
+const Profile = require("../models/profile");
+const Settings = require("../models/settings");
 
 let googleConfig,defaultScope;
 /**
  *
  */
-exports.startUp = () =>{
+exports.startUp = () => {
     if(process.env.DEVELOP==="false") {
         googleConfig = {
             clientId: process.env.GOOGLE_CLIENT_ID, // e.g. asdfghjkljhgfdsghjk.apps.googleusercontent.com
@@ -20,22 +20,20 @@ exports.startUp = () =>{
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             redirect: process.env.GOOGLE_REDIRECT_URL_DEVELOP
-        }
+        };
     }
 
     defaultScope = [
-        'https://www.googleapis.com/auth/plus.me',
-        'https://www.googleapis.com/auth/userinfo.email',
+        "https://www.googleapis.com/auth/plus.me",
+        "https://www.googleapis.com/auth/userinfo.email",
     ];
-    if(process.env.LOGGING>1)
-        console.log("[Info]: Google config set up");
 };
 
 /**
  *
  * @returns {OAuth2Client}
  */
-exports.createConnection  = () =>{
+exports.createConnection  = () => {
     return new google.auth.OAuth2(
         googleConfig.clientId,
         googleConfig.clientSecret,
@@ -49,8 +47,8 @@ exports.createConnection  = () =>{
  */
 exports.getConnectionUrl = (auth) => {
     return auth.generateAuthUrl({
-        access_type: 'offline',
-        prompt: 'consent',
+        access_type: "offline",
+        prompt: "consent",
         scope: defaultScope
     });
 };
@@ -60,7 +58,7 @@ exports.getConnectionUrl = (auth) => {
  * @returns {*}
  */
 exports.getGooglePlusApi = (auth)=> {
-    return google.plus({ version: 'v2', auth });
+    return google.plus({ version: "v2", auth });
 };
 
 /**
@@ -68,18 +66,15 @@ exports.getGooglePlusApi = (auth)=> {
  */
 exports.urlGoogle = () => {
     const auth = this.createConnection();
-    const url = this.getConnectionUrl(auth)
-    if(process.env.LOGGING>2){
-        console.log("[Debug]: generated google url: "+url);
-    }
+    const url = this.getConnectionUrl(auth);
     return url;
 };
 
 /**
- * Take the "code" parameter which Google gives us once when the user logs in, then get the user's email and id.
+ * Take the "code" parameter which Google gives us once when the user logs in, then get the user"s email and id.
  * @param {String} code - query string after succesfully logging in with Google
  */
-exports.getGoogleAccountFromCode = async (code) =>{
+exports.getGoogleAccountFromCode = async (code) => {
     const oAuth2Client = await this.createConnection();
     const { tokens } = await oAuth2Client.getToken(code);
     oAuth2Client.setCredentials(tokens);
@@ -89,8 +84,6 @@ exports.getGoogleAccountFromCode = async (code) =>{
     } = await oauth2.userinfo.v2.me.get({
         auth: oAuth2Client
     });
-    if(process.env.LOGGING>1)
-        console.log("[info]: new login with email: "+email);
     return {
         googleId: google_id,
         email: email,
@@ -99,8 +92,8 @@ exports.getGoogleAccountFromCode = async (code) =>{
 };
 /**
  * Checks if the user that logged in is new or old.
- * If it's a new user it creates a default empty User, Settings and profile model.
- * If it's an old user it set the session parameters correct
+ * If it"s a new user it creates a default empty User, Settings and profile model.
+ * If it"s an old user it set the session parameters correct
  * @param req
  * @param googleId
  * @param email
