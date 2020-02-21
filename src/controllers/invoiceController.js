@@ -371,17 +371,15 @@ exports.editInvoicePost = (req,res) => {
         let settings = await Settings.findOne({fromUser:req.session._id},(err,settings) => {return settings});
         let currentInvoice = await Invoice.findOne({fromUser:req.session._id,_id:req.params.idi},(err,invoice) => {return invoice});
         let cDate = new Date(currentInvoice.date).toLocaleString(undefined, {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric'
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
         });
         let cDatePaid = new Date(currentInvoice.datePaid).toLocaleString( undefined,{
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric'
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
         });
-        console.log(parseDateSwapDayMonth(cDate)+" "+req.body.datePaid);
-        console.log(parseDateSwapDayMonth(cDatePaid)+" "+req.body.datePaid);
         let updateInvoice;
         let dateBody;
         if(parseDateSwapDayMonth(cDate)!==req.body.date){
@@ -428,17 +426,11 @@ exports.editInvoicePost = (req,res) => {
                 total: totOrders - req.body.advance
             };
         }
-        console.log(updateInvoice);
         let searchCriteria = {fromUser:req.session._id,};
         if(orders.length > 0) {
-            console.log(orders);
             searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient};
         }
-        console.log(searchCriteria);
-        console.log(orders);
-        console.log(updateInvoice);
         Client.findOne(searchCriteria, function(err, contact) {
-            console.log(contact);
             Invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, updateInvoice, function(err) {
                 if (!updateOneHasError(req,res,err)) {
                     req.flash("success",i18n.__("Successfully updated the invoice"));
@@ -454,7 +446,7 @@ exports.editInvoicePost = (req,res) => {
  * @param req
  * @param res
  */
-exports.view_invoice_get = (req,res) => {
+exports.viewInvoiceGet = (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {
         if (!findOneHasError(req,res,err,invoice)) {
             Client.findOne({fromUser:req.session._id,_id: invoice.fromClient}, function(err, client) {
@@ -491,7 +483,7 @@ exports.view_invoice_get = (req,res) => {
  * @param req
  * @param res
  */
-exports.invoice_paid_set = (req,res) => {
+exports.invoicePaidGet = (req,res) => {
         Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {
             if (!findOneHasError(req,res,err,invoice)) {
                 Invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, {isPaid: !(invoice.isPaid),datePaid: Date.now(),lastUpdated:Date.now()}, function(err) {
@@ -503,7 +495,7 @@ exports.invoice_paid_set = (req,res) => {
         });
 };
 
-exports.invoice_upgrade_get = (req,res) => {
+exports.invoiceUpgradeGet = (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id:req.params.idi},function(err,invoice){
         if(!findOneHasError(req,res,err,invoice)){
             Invoice.updateOne({fromUser:req.session._id,_id:req.params.idi},{
@@ -518,7 +510,7 @@ exports.invoice_upgrade_get = (req,res) => {
     });
 };
 
-exports.invoice_downgrade_get = (req,res) => {
+exports.invoiceDowngradeGet = (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id:req.params.idi},function(err,invoice){
         if(!findOneHasError(req,res,err,invoice)){
             Invoice.updateOne({fromUser:req.session._id,_id:req.params.idi},{

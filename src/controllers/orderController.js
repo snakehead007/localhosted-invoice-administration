@@ -1,20 +1,20 @@
 /**
  * @module controllers/orderController
  */
-const Order = require('../models/order');
-const Invoice = require('../models/invoice');
-const Settings = require('../models/settings');
-const Profile = require('../models/profile');
-const Client = require('../models/client');
+const Order = require("../models/order");
+const Invoice = require("../models/invoice");
+const Settings = require("../models/settings");
+const Profile = require("../models/profile");
+const Client = require("../models/client");
 
-const User = require('../models/user');
-const {findOneHasError} = require('../middlewares/error');
+const User = require("../models/user");
+const {findOneHasError} = require("../middlewares/error");
 /**
  *
  * @param req
  * @param res
  */
-exports.edit_order_get = (req,res)  => {
+exports.editOrderGet = (req,res)  => {
     Order.findOne({fromUser:req.session._id,_id: req.params.ido}, function(err, order) {
         if(err) console.trace();
         Invoice.findOne({fromUser:req.session._id,_id: order.fromInvoice}, function(err, invoice) {
@@ -24,8 +24,8 @@ exports.edit_order_get = (req,res)  => {
                 Profile.findOne({fromUser:req.session._id,}, async(err, profile)=> {
                     if(err) console.trace();
                     if (!err) {
-                        res.render('edit/edit-order', {
-                            'order': order,
+                        res.render("edit/edit-order", {
+                            "order": order,
                             "invoice": invoice,
                             "profile":  profile,
                             "settings": settings,
@@ -43,7 +43,7 @@ exports.edit_order_get = (req,res)  => {
  * @param req
  * @param res
  */
-exports.new_order_get = (req,res) => {
+exports.newOrderGet = (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {
         if(err) console.trace();
         if (!err) {
@@ -56,14 +56,15 @@ exports.new_order_get = (req,res) => {
                             Profile.findOne({fromUser:req.session._id}, async(err, profile)=> {
                                 if(err) console.trace();
                                 if (!err) {
-                                    res.render('new/new-order', {
-                                        'invoice': invoice,
+                                    let sendObject = {
+                                        "invoice": invoice,
                                         "profile": profile,
                                         "settings": settings,
                                         "client": client,
                                         "currentUrl":"orderNew",
                                         "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
-                                    });
+                                    };
+                                    res.render("new/new-order", sendObject);
                                 }
                             });
                         }
@@ -80,7 +81,7 @@ exports.new_order_get = (req,res) => {
  * @param res
  * @returns {Promise<void>}
  */
-exports.new_order_post = async (req,res) => {
+exports.newOrderPost = async (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id:req.params.idi}, async function(err,invoice){
         let newOrder = new Order({
             description: req.body.description,
@@ -95,10 +96,11 @@ exports.new_order_post = async (req,res) => {
         let totInvoice = ((((invoice.total + invoice.advance) + (req.body.amount * req.body.price)) - invoice.advance));
         console.log("total invoice:" +totInvoice);
         await Invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, {total:totInvoice,lastUpdated:Date.now()},function(err,invoice){
-            console.log(invoice);
-            if(err) console.trace(err);
+            if(err) {
+                console.trace(err);
+            }
         });
-        res.redirect('/order/all/' + req.params.idi);
+        res.redirect("/order/all/" + req.params.idi);
     });
 };
 
@@ -107,30 +109,41 @@ exports.new_order_post = async (req,res) => {
  * @param req
  * @param res
  */
-exports.all_order_get = (req,res) => {
+exports.allOrderGet = (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {
-        if(err) console.trace();
+        if(err) {
+            console.trace();
+        }
         if (!err) {
             Order.find({fromUser:req.session._id,fromInvoice: req.params.idi}, function(err, orders) {
-                if(err) console.trace();
+                if(err) {
+                    console.trace();
+                }
                 if (!err) {
                     console.log("Trying to find Client with id: "+ invoice);
                     Client.findOne({fromUser:req.session._id,_id:invoice.fromClient},function(err,client) {
-                        if(err) console.trace();
+                        if(err) {
+                            console.trace();
+                        }
                         Settings.findOne({fromUser:req.session._id}, function (err, settings) {
-                            if(err) console.trace();
+                            if(err) {
+                                console.trace();
+                            }
                             if (!err) {
                                 Profile.findOne({fromUser:req.session._id}, async (err, profile)=> {
-                                    if(err) console.trace();
+                                    if(err) {
+                                        console.trace();
+                                    }
                                     if (!err) {
-                                        res.render('orders', {
-                                            'invoice': invoice,
-                                            'orders': orders,
+                                        let sendObject = {
+                                            "invoice": invoice,
+                                            "orders": orders,
                                             "profile": profile,
                                             "client": client,
                                             "settings": settings,
                                             "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
-                                        });
+                                        };
+                                        res.render("orders", sendObject);
                                     }
                                 });
                             }
@@ -147,7 +160,7 @@ exports.all_order_get = (req,res) => {
  * @param req
  * @param res
  */
-exports.view_order_get = (req,res) => {
+exports.viewOrderGet = (req,res) => {
     Order.findOne({fromUser:req.session._id,_id: req.params.ido}, function(err, order) {
         if (!err) {
             Invoice.findOne({fromUser:req.session._id,_id: order.factuur}, function(err, invoice) {
@@ -156,13 +169,14 @@ exports.view_order_get = (req,res) => {
                         if (!err) {
                             Profile.findOne({fromUser:req.session._id}, async(err, profile) =>{
                                 if (!err) {
-                                    res.render('view/view-order', {
-                                        'order': order,
+                                    let sendObject = {
+                                        "order": order,
                                         "invoice": invoice,
                                         "profile": profile,
                                         "settings": settings,
                                         "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
-                                    });
+                                    };
+                                    res.render("view/view-order", );
                                 }
                             });
                         }
@@ -173,9 +187,9 @@ exports.view_order_get = (req,res) => {
     });
 };
 
-exports.edit_order_post = (req,res) =>
+exports.editOrderPost = (req,res) =>
 {
-    console.log('EDIT ORDER POST: '+req.session._id+", "+req.params.ido);
+    console.log("EDIT ORDER POST: "+req.session._id+", "+req.params.ido);
     Order.findOne({fromUser:req.session._id,_id: req.params.ido}, function (err, order) {
         if(!findOneHasError(req,res,err,order)){
             let updateOrder = {
@@ -200,13 +214,13 @@ exports.edit_order_post = (req,res) =>
                     if (err) {
                         console.trace(err);
                     }
-                    res.redirect('/order/all/'+invoice._id);
+                    res.redirect("/order/all/"+invoice._id);
                 });
             });
         }
     });
 };
 
-exports.delete_order_get = (req,res) => {
-    throw new Error('Not yet implemented');
+exports.deleteOrderGet = (req,res) => {
+    throw new Error("Not yet implemented");
 };
