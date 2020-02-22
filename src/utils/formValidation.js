@@ -19,8 +19,9 @@ exports.valueMustNotBeEmpty = (req,res,doc,mustBeFilledIn=false,message="This va
             showMessage = invalid;
         }else{
         }*/
-        if (showMessage)
-            {req.flash("danger", i18n.__(message));}
+        if (showMessage) {
+req.flash("danger", i18n.__(message));
+}
         return showMessage;
 };
 
@@ -38,8 +39,9 @@ exports.valueMustBeAName = (req,res,doc,mustBeFilledIn=false,message="This value
             showMessage = invalid;
         }else{
         }*/
-    if(showMessage)
-       { req.flash("danger",i18n.__(message));}
+    if(showMessage) {
+ req.flash("danger",i18n.__(message));
+}
     return showMessage;
 };
 
@@ -60,8 +62,9 @@ exports.valueMustBeEmail = (req,res,doc,mustBeFilledIn=false,message="This value
             showMessage = invalid;
         }else{
         }*/
-    if(showMessage)
-     {   req.flash("danger",i18n.__(message));}
+    if(showMessage) {
+   req.flash("danger",i18n.__(message));
+}
 };
 
 exports.numberMustPhoneNumber = (req,res,doc,mustBeFilledIn=false,message="Phone number is invalid, please provide a correct phone number") => {
@@ -79,8 +82,9 @@ exports.numberMustPhoneNumber = (req,res,doc,mustBeFilledIn=false,message="Phone
         showMessage = invalid;
     }else{
     }*/
-    if(showMessage)
-        {req.flash("danger",i18n.__(message));}
+    if(showMessage) {
+req.flash("danger",i18n.__(message));
+}
     //console.log("[DEBUG]: utils.formvalidation.valueMustBeAName("+doc+") => "+invalid);
     return showMessage
 };
@@ -95,8 +99,9 @@ exports.valueMustBeVatNumber = (req,res,doc,mustBeFilledIn=false,message="VAT nu
         showMessage = invalid;
     }else{
     }*/
-    if(showMessage)
-    {    req.flash("danger",i18n.__(message));}
+    if(showMessage) {
+    req.flash("danger",i18n.__(message));
+}
     //console.log("[DEBUG]: utils.formvalidation.valueMustBeVatNumber("+doc+") => "+invalid);
     return showMessage
 };
@@ -111,8 +116,9 @@ exports.valueMustBeAnInteger = (req,res,doc,mustBeFilledIn=false,message="VAT pe
         showMessage = invalid;
     }else{
     }*/
-    if(showMessage)
-        {req.flash("danger",i18n.__(message));}
+    if(showMessage) {
+req.flash("danger",i18n.__(message));
+}
     //console.log("[DEBUG]: utils.formvalidation.valueMustBePostalCode("+doc+") => "+invalid);
     return showMessage;
 };
@@ -132,8 +138,9 @@ exports.valueMustBePostalCode = (req,res,doc,mustBeFilledIn=false,message="Posta
         showMessage = invalid;
     }else{
     }*/
-    if(showMessage)
-        {req.flash("danger",i18n.__(message));}
+    if(showMessage) {
+req.flash("danger",i18n.__(message));
+}
     //console.log("[DEBUG]: utils.formvalidation.valueMustBePostalCode("+doc+") => "+invalid);
     return showMessage
 };
@@ -152,8 +159,9 @@ exports.valueMustBeStreetNumber = (req,res,doc,mustBeFilledIn=false,message="Str
         showMessage = invalid;
     }else{
     }*/
-    if(showMessage)
-       { req.flash("danger",i18n.__(message));}
+    if(showMessage) {
+ req.flash("danger",i18n.__(message));
+}
     //console.log("[DEBUG]: utils.formvalidation.valueMustBeStreetNumber("+doc+") => "+invalid);
     return showMessage
 };
@@ -171,8 +179,9 @@ exports.valueMustBeValidIban = (req,res,doc,mustBeFilledIn=false,message="IBAN n
         showMessage = invalid;
     }else{
     }*/
-    if(showMessage)
-       { req.flash("danger",i18n.__(message));}
+    if(showMessage) {
+ req.flash("danger",i18n.__(message));
+}
     //console.log("[DEBUG]: utils.formvalidation.valueMustBeValidIban("+doc+") => "+invalid);
     return showMessage
 };
@@ -185,8 +194,9 @@ exports.valueMustBeValidBic = (req,res,doc,mustBeFilledIn=false,message="BIC num
     }else if (mustBeFilledIn){
         showMessage = invalid;
     }else{
-    }*/if(showMessage)
-        {req.flash("danger",i18n.__(message));}
+    }*/if(showMessage) {
+req.flash("danger",i18n.__(message));
+}
     //console.log("[DEBUG]: utils.formvalidation.valueMustBeValidBic("+doc+") => "+invalid);
     return showMessage;
 };

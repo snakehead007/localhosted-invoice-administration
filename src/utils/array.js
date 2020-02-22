@@ -9,7 +9,7 @@ exports.distinct = (_array) =>{
     for (let o of array) {
         let isDistinct = true;
         for (let d of disctincts) {
-            if (d._id == o._id) {
+            if (d._id === o._id) {
                 isDistinct = false;
             }
         }

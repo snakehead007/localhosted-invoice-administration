@@ -17,7 +17,8 @@ module.exports.getRangeDates = (start,end) => {
         dayRanges.push(n.toDateString().substring(4,n.toDateString().length-5));
         if (n.getFullYear()==e.getFullYear() && n.getMonth() === e.getMonth() && n.getDate() === e.getDate()) {
             isRunning = false;
-        }else{
+        }
+else{
             day++;
             n.setDate(day);
             if(n.getMonth() != month){
@@ -49,7 +50,8 @@ module.exports.getDatum = (lang) =>{
     let date = new Date();
     if(lang==="nl"){
         return date.getDate() + " " + maand[date.getMonth()] + " " + date.getFullYear().toString();
-    }else{
+    }
+else{
         return date.getDate() + " " + month[date.getMonth()] + " " + date.getFullYear().toString();
     }
 };
