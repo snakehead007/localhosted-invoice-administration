@@ -57,9 +57,9 @@ body
     include ../includes/topBar
     div(class="container-fluid")
       div(class ="row")
-        nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+        nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
           div(class="sidebar-sticky")
-            include ../includes/navFlexCollumn
+            include ../includes/mainMenu
             include ../includes/bookmarks
             if currentUrl !== "clientNew"
               include ../includes/invoiceOptionMenu
