@@ -17,13 +17,16 @@ body
         include ../includes/forms/edit-profile
         hr(class="mb-3")
         div(class="row no-gutters")
-            div(class="col-xl-3 col-md-6 offset-xl-1 ")
+            div(class="col-xl-3 col-md-4 offset-xl-0 ")
               p(class="lead") Upload your logo:
-              a(href="/upload/logo")
-                button(type="button",role="button",class="btn btn-sm btn-outline-"+settings.theme) Change your logo
-              a(href="/delete/logo")
-                button.buttonsBelow(type="button",role="button",class="btn btn-sm btn-outline-" + settings.theme) Delete your logo
-            div(class="col-xl-3 col-md-6 offset-xl-3")
+               div.row
+                 div.col-md-5
+                  a(href="/upload/logo")
+                    button(type="button",role="button",class="btn btn-sm btn-outline-"+settings.theme) Change your logo
+                 div.col-md-5
+                   a(href="/delete/logo")
+                    button.buttonsBelow(type="button",role="button",class="btn btn-sm btn-outline-" + settings.theme) Delete your logo
+            div(class="col-xl-3 col-md-6 offset-xl-1").underWhiteSpace
               p(class="lead") preview of current logo:
               img#logo(src="/no-logo.jpg" alt="your logo" class="rounded-lg" style="width:200px;height:200px")
   script.

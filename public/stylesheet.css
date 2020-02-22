@@ -15,6 +15,9 @@ body {
     position: fixed !important;
 }
 
+.underWhiteSpace{
+    margin-bottom: 20px;
+}
 .sidebar {
     position: fixed;
     top: 0;
