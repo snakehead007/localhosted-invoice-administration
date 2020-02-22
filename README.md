@@ -26,19 +26,18 @@ Functionalities:
 -   A yearly chart (automatically updated);
 -   Downloadable pdfs for Invoices, quotations and offers
 -   Upload your logo to use on the pdf's. 
--   Your profile can be edited
--   All documents have a switch, to keep that it has been payed or not.
--   Calculations (inch to cm, precentages, using your materials calculating how much something costs, ...) (currenlty in progress)
--   A search function (currently in progress)
+-   A personalized profile
+-   All documents have a status, to keep that it has been payed or not.
+-   A search function
 -   5 different themes
--   Logging on using Google Connect Id
--   changeable text for the pdf's
+-   Sign in by Google
+-   Changeable text for the pdf's
 -   2 languages: English and Dutch
 
 ### How to Install locally or host
 
 -   local: 
-
+       rename .env.bak to .env
       `docker-compose up --build`
 
 -   synology/hub.docker:
@@ -49,15 +48,11 @@ Functionalities:
 
 ### About (technical)
 
-All data is kept locally by mongodb.
-
-(Changing from computer, you will have to export and import all data manually,for now.)
+All data is stored safely on by mongoDB behind a firewall on my server. unless you use a local version.
 
 The front end view is handled by 'pug' and the backend is runned by 'nodejs'.
 
 All the request are run with 'Express'.
-
-For more information about all the packages that are used in this project check the [wiki](https://github.com/snakehead007/simple-invoice-administration/wiki) .
 
 ## Screenshots
 

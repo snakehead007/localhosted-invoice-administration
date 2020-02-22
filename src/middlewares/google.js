@@ -15,7 +15,7 @@ exports.startUp = () => {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET, // e.g. _ASDFA%DFASDFASDFASD#FAD-
             redirect: process.env.GOOGLE_REDIRECT_URL // this must match your google api settings
         };
-    } else if (process.env.DEVELOP === "true" && process.env.DEVELOP_WITH_GOOGLE === "true") {
+    } else if (process.env.DEVELOP === "true" && process.env.DEVELOP_WITH_GOOGLE === "true"||process.env.DOCKER_COMPOSITE==="true") {
         googleConfig = {
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,

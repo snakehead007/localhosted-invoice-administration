@@ -6,19 +6,19 @@ const upload = require('./upload/main');
 const view = require('./view/main');
 
 //setup
-before(async function() {
+before(async function () {
 
 });
 
 //Run all tests
-describe('Dashboard tests',() => dashboard.default());
-describe('Dashboard tests',() => deletes.default());
-describe('Dashboard tests',() => download.default());
-describe('Dashboard tests',() => upload.default());
-describe('Dashboard tests',() => view.default());
+describe('Dashboard tests', () => dashboard.default());
+describe('Dashboard tests', () => deletes.default());
+describe('Dashboard tests', () => download.default());
+describe('Dashboard tests', () => upload.default());
+describe('Dashboard tests', () => view.default());
 
-describe('testing test function', function() {
-        it('should not fail', function() {
-            assert.equal(true,true);
-        });
+describe('testing test function', function () {
+    it('should not fail', function () {
+        assert.equal(true, true);
+    });
 });
