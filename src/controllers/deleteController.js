@@ -18,16 +18,10 @@ const error = require("../middlewares/error");
 exports.delete_client = (req,res) =>{
     Client.find({fromUser:req.session._id,_id:req.params.idc},(err,client) =>{
         if(!error.findOneHasError(req,res,err,client)){
-            console.log("Found client: "+JSON.stringify(client));
-            console.log("clientid = "+client._id);
             Invoice.deleteMany({fromUser:req.session._id,fromClient:req.params.idc},(err,info) => {
                 if(!err){
-                    console.log("deleted many invoices "+JSON.stringify(info));
-                    console.log("search criteria: "+req.session._id+" & "+req.params.idc);
                     Order.deleteMany({fromUser:req.session._id,fromClient:req.params.idc},(err,info) => {
                         if(!err){
-                            console.log("deleted many invoices "+JSON.stringify(info));
-                            console.log("search criteria: "+req.session._id+" & "+req.params.idc);
                             Client.deleteOne({fromUser:req.session._id,_id:req.params.idc},(err) => {
                                 if(!err){
                                     req.flash("success","Successfully deleted the client");
@@ -59,7 +53,6 @@ exports.delete_invoice_get = (req,res) => {
 
 exports.delete_logo_get = (req,res) => {
     let pathOfLogo = path.join(__dirname,"../../public/images/"+req.session._id+"/logo.jpeg");
-    console.log("[Debug]: trying to delete logo at path "+pathOfLogo);
     fs.access(pathOfLogo, fs.F_OK, (err) => {
         if (err) {
             req.flash("warning",i18n.__("There is no logo to delete"));

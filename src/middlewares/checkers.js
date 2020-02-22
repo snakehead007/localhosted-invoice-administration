@@ -4,10 +4,7 @@ const i18n = require('i18n');
 
 
 exports.stillSignedInCheck = (req,res,next) => {
-    console.log(req.session);
     if(!req.session._id){
-        if(process.env.LOGGING>1)
-            console.log("[Info]: not logged in anymore, destroying session & redirect to login");
         return logoutController.logout_get(req,res);
     }
     Settings.findOne({fromUser:req.session._id},function(err,settings){

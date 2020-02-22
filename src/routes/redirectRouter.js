@@ -23,7 +23,6 @@ const Whitelist = require('../models/whitelist');
 router.get('/' ,redirectController.googleLogin,  async (req,res)=>{
     let found = false;
     await Whitelist.find({},async (err,whitelistUsers) => {
-        console.log(whitelistUsers);
         if(err){
             res.flash('danger','Something happen, try again');
         }else{
@@ -38,19 +37,16 @@ router.get('/' ,redirectController.googleLogin,  async (req,res)=>{
         User.updateOne({_id:req.session._id},{lastLogin:Date.now()},async (err) => {
             await Profile.findOne({fromUser:req.session._id}, async function(err,profile) {
                 if (profile === null) {
-                    console.log("[Error]: Profile not found from user");
                     const newProfile = new Profile({
                         fromUser: req.session._id
                     });
                     await newProfile.save();
                     profile = await Profile.findOne({fromUser: req.session._id});
                     await User.updateOne({_id: req.session._id}, {profile: profile._Id});
-                    console.log("[Error]: New profile successfully created for user");
                 }
             });
             if(err) console.trace(err);
             let role = (await User.findOne({_id:req.session._id},(err,user)=> {return user})).role;
-            console.log("got role: redirecting... role:"+role);
             req.session.role  = role;
             if(role==="visitor"){
                 res.redirect('/view/profile');
@@ -61,7 +57,6 @@ router.get('/' ,redirectController.googleLogin,  async (req,res)=>{
         });
     }else {
         req.flash('warning','You are not whitelisted, please contact the administrator');
-        console.log(req.session);
         res.redirect('/');
     }
 });

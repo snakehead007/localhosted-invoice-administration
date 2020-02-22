@@ -9,16 +9,13 @@ module.exports.callGetBase64 = async (id) => {
 let getBase64 = (id) => {
     return new Promise((resolve, reject) => {
         let _path = path.join(__dirname, '../../public/images/' + id + '/logo.jpeg');
-        console.log('looking on path ' + _path);
         fs.access(_path, fs.F_OK, (err) => {
             if (err) {
                 //BASE64 image if no logo is uploaded
-                console.log('base64: no logo found or uploaded');
                 reject();
             } else {
                 base64Img.base64(_path, (err, data) => {
                     let imgData = data;
-                    console.log(imgData.substring(0, 100));
                     resolve(imgData);
                 });
             }

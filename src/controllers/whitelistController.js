@@ -10,10 +10,6 @@ exports.addToWhitelist = async (req,res) => {
                 console.trace(err);
                 res.send('error');
             }else{
-                Whitelist.find({},(err,list) => {
-                    console.log("list: ");
-                    console.log(list);
-                });
                 res.send('success');
             }
         });
