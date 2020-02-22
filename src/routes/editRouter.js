@@ -12,6 +12,7 @@ router.post('/invoice/:idi', invoiceController.editInvoicePost);
 router.get('/order/:ido', orderController.editOrderGet);
 router.get('/item/:idi', itemController.editItemGet);
 router.get('/invoice/paid/:idi', invoiceController.invoicePaidGet);
+router.get('/offer/agreed/:idi',invoiceController.offerAgreedGet);
 router.get('/client/:idc', clientController.getEditClient);
 router.post('/client/:idc', clientController.postEditClient);
 

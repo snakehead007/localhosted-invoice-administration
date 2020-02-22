@@ -10,6 +10,10 @@ const Invoice = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    isAgreed: {
+        type:Boolean,
+        default:false
+    },
     advance: {
         type: Number,
         default: 0

@@ -471,6 +471,21 @@ exports.invoicePaidGet = (req, res) => {
     });
 };
 
+exports.offerAgreedGet = (req, res) => {
+    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+        if (!findOneHasError(req, res, err, invoice)) {
+            Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
+                isAgreed: !(invoice.isAgreed),
+                lastUpdated: Date.now()
+            }, function (err) {
+                if (!updateOneHasError(req, res, err)) {
+                    res.redirect("back");
+                }
+            });
+        }
+    });
+};
+
 exports.invoiceUpgradeGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
         if (!findOneHasError(req, res, err, invoice)) {

@@ -33,6 +33,15 @@ table(class="table table-striped table-sm ",id="hoofdTabel")
                             if !invoice.isPaid
                                 input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id, onclick='setStatus(\"' + invoice._id + '\")')
                                 label(class="custom-control-label" for=invoice._id) #{__('Unpaid')}
+                else if invoice.offerNr
+                    td
+                        div(class="custom-control custom-switch")
+                            if invoice.isAgreed
+                                input(type="checkbox" class="custom-control-input bg-success" id=invoice._id, onclick='setAgreedStatus(\"' + invoice._id + '\")', checked)
+                                label(class="custom-control-label" for=invoice._id) #{__('Agreed')}
+                            if !invoice.isAgreed
+                                input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id, onclick='setAgreedStatus(\"' + invoice._id + '\")')
+                                label(class="custom-control-label" for=invoice._id) #{__('Not agreed')}
                 else
                     td
                 td
