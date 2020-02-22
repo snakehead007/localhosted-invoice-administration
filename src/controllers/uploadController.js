@@ -40,6 +40,7 @@ exports.uploadLogoPost = async (req, res) => {
             throw new Error();
         }
     } catch (error) {
+        req.flash('danger',"Something happend, please try again");
         res.redirect("/upload/logo");
     }
 };
