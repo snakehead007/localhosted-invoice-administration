@@ -3,7 +3,7 @@
  * @param {Array} _array - array to distinct
  * @returns a distinct array with no duplicates
  * */
-exports.distinct = (_array) =>{
+exports.distinct = (_array) => {
     let array = _array;
     let disctincts = [];
     for (let o of array) {
