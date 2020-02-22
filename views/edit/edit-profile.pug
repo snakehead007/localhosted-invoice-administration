@@ -15,64 +15,18 @@ body
         h2(class="pt-3")=__('My profile')+" - "+title
         hr
         include ../includes/messages
-        form(action='/edit/profile/'+profile._id,method='post')
-          div(class="form-row")
-            div(class="form-group col-md-6")
-              label(for="title") #{__('Your name')}
-              input(type="text",class="form-control",value=profile.name,name="name",placeholder="Jan Janssens", require="true")
-            div(class="form-group col-md-6")
-              label(for="title") #{__('Firm name')}
-              input(type="text",class="form-control",value=profile.firm,name="firm",placeholder="firma en co.", require="true")
-            div(class="form-group col-md-3")
-              label(for="title") #{__('Street name')}
-              input(type="text",class="form-control",value=profile.street,name="street",placeholder="grotestraat", require="true")
-            div(class="form-group col-md-2")
-              label(for="title") #{__('Street N°')}
-              input(type="text",class="form-control",value=profile.streetNr,name="streetNr",placeholder="12a", require="true")
-            div(class="col-md-1")
-            div(class="form-group col-md-2")
-              label(for="title") #{__('VAT number')}
-              input(type="text",class="form-control",value=profile.vat,name="vat",placeholder="BE 0000.000.000", require="true")
-            div(class="form-group col-md-2")
-              label(for="title") #{__('IBAN')}
-              input(type="text",class="form-control",value=profile.iban,name="iban",placeholder="BE77 7777 7777 7777", require="true")
-            div(class="form-group col-md-2 mr-auto")
-              label(for="title") BIC-nr
-              input(type="text",class="form-control",value=profile.bic,name="bic",placeholder="KREDBEBB", require="true")
-            div(class="form-group col-md-3")
-              label(for="title") #{__('Place')}
-              input(type="text",class="form-control",value=profile.place,name="place",placeholder="Gent" ,require="true")
-            div(class="form-group col-md-2")
-              label(for="title") #{__('Postal')}
-              input(type="number",class="form-control",value=profile.postal,name="postal",placeholder="1234", require="true")
-            div(class="col-md-7")
-            //div(class="form-group col-md-2 mr-auto")
-              label(for="title") Factuur nr:
-              input(type="text",class="form-control",value=invoiceNrCurrent,name="invoiceNrCurrent")
-            //div(class="form-group col-md-2 mr-auto")
-              label(for="title") Offerte nr:
-              input(typ='text',class='form-control',value=offerNrCurrent,name="offerNrCurrent")
-            //div(class="form-group col-md-2 mr-auto")
-              label(for="title") Creditnr:
-              input(typ='text',class='form-control',value=creditNrCurrent,name="creditNrCurrent")
-            div(class="form-group col-md-5")
-              label(for="title") E-mail
-              input(type="text",class="form-control",value=profile.email[0],name="email",placeholder="voorbeeld@email.be")
-            div(class="form-group col-md-2")
-              label(for="title") #{__('Telephone N°')}
-              input(type="text",class="form-control",value=profile.tel,name="tel",placeholder="+32487654321", require="true")
-          button(type="submit",class="btn btn-outline-"+settings.theme) profiel bijwerken
-          hr(class="mb-3")
-          div(class="row no-gutters")
-            div(class="col-md-3")
+        include ../includes/forms/edit-profile
+        hr(class="mb-3")
+        div(class="row no-gutters")
+            div(class="col-xl-3 col-md-6 offset-xl-1 ")
               p(class="lead") Upload your logo:
               a(href="/upload/logo")
                 button(type="button",role="button",class="btn btn-sm btn-outline-"+settings.theme) Change your logo
               a(href="/delete/logo")
                 button.buttonsBelow(type="button",role="button",class="btn btn-sm btn-outline-" + settings.theme) Delete your logo
-            div(class="col-md")
+            div(class="col-xl-3 col-md-6 offset-xl-3")
               p(class="lead") preview of current logo:
-              img#logo(src="/no-logo.jpg" alt="your logo" class="rounded-lg" style="width:100px;height:100px")
+              img#logo(src="/no-logo.jpg" alt="your logo" class="rounded-lg" style="width:200px;height:200px")
   script.
     function info(){
       $("#info").toggle();
