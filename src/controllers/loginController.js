@@ -12,7 +12,7 @@ const Profile = require("../models/profile");
  * @param req
  * @param res
  */
-exports.loginGet =  function getLogin(req,res){
+exports.loginGet = function getLogin(req, res) {
     //req.session;
 
     //This is would redirect if session was already created
@@ -20,7 +20,7 @@ exports.loginGet =  function getLogin(req,res){
         return res.redirect("/dashboard");
     }*/
     //req.session.regenerate(function(err) {
-        // will have a new session here
+    // will have a new session here
     res.render("login");
     //});
     //res.render("login");
@@ -31,10 +31,10 @@ exports.loginGet =  function getLogin(req,res){
  * @param res
  * @returns {Promise<void>}
  */
-exports.createUserGet = async function getCreateNewUser(req,res){
-    if(process.env.DEVELOP==="true" && process.env.DEVELOP_WITH_GOOGLE==="false"){
+exports.createUserGet = async function getCreateNewUser(req, res) {
+    if (process.env.DEVELOP === "true" && process.env.DEVELOP_WITH_GOOGLE === "false") {
         let newUser;
-        if(process.env.DEVELOP_NO_RANDOM_USER==="false") {
+        if (process.env.DEVELOP_NO_RANDOM_USER === "false") {
             const googleId = Math.floor((Math.random() * 99999999999999999999999999999999999) + 10000000000000000000000000000000000);
             const email = Math.floor((Math.random() * 99999999999999999999999999999999999) + 10000000000000000000000000000000000);
             newUser = new User({
@@ -62,21 +62,21 @@ exports.createUserGet = async function getCreateNewUser(req,res){
 
             req.session._id = currentUser._id;
             req.session.loggedIn = currentUser;
-        }else{ //DEVELOP_NO_RANDOM_USER === true
-            await User.findOne({},function(err,User){
-                if(err) throw new Error(err);
-                if(User.length<=0){
-                }else{
+        } else { //DEVELOP_NO_RANDOM_USER === true
+            await User.findOne({}, function (err, User) {
+                if (err) throw new Error(err);
+                if (User.length <= 0) {
+                } else {
                     newUser = User[0];
                 }
             });
         }
-        if(process.env.LOGGING>1){
+        if (process.env.LOGGING > 1) {
         }
         req.session.email = newUser.email;
         req.session.role = "visitor";
         res.redirect("/dashboard");
-    }else {
+    } else {
         res.redirect(google.urlGoogle());
     }
 };
@@ -85,7 +85,7 @@ exports.createUserGet = async function getCreateNewUser(req,res){
  * @param req
  * @param res
  */
-exports.logoutGet = function getLogout(req,res){
+exports.logoutGet = function getLogout(req, res) {
     req.logout();
     res.redirect("/login");
 };

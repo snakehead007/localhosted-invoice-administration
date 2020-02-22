@@ -1,19 +1,19 @@
 const Whitelist = require('../models/whitelist');
 
-exports.addToWhitelist = async (req,res) => {
-    if(req.params.secret===process.env.ADMIN_SECRET){
+exports.addToWhitelist = async (req, res) => {
+    if (req.params.secret === process.env.ADMIN_SECRET) {
         let newWhitelist = new Whitelist({
-            mail:req.params.mail
+            mail: req.params.mail
         });
         await newWhitelist.save((err) => {
-            if(err){
+            if (err) {
                 console.trace(err);
                 res.send('error');
-            }else{
+            } else {
                 res.send('success');
             }
         });
-    }else{
+    } else {
         res.send('failed');
     }
 };

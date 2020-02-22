@@ -20,22 +20,22 @@ const Whitelist = require('../models/whitelist');
  * Handles GET /redirect
  * Goes to {@link src/controllers/redirectController.googleLogin|RedirectController.googleLogin} then checks if user.email is in whitelist.
  */
-router.get('/' ,redirectController.googleLogin,  async (req,res)=>{
+router.get('/', redirectController.googleLogin, async (req, res) => {
     let found = false;
-    await Whitelist.find({},async (err,whitelistUsers) => {
-        if(err){
-            res.flash('danger','Something happen, try again');
-        }else{
+    await Whitelist.find({}, async (err, whitelistUsers) => {
+        if (err) {
+            res.flash('danger', 'Something happen, try again');
+        } else {
             await whitelistUsers.forEach(o => {
-                if(req.session.email===o.mail){
+                if (req.session.email === o.mail) {
                     found = true;
                 }
             });
         }
     });
-    if(found){
-        User.updateOne({_id:req.session._id},{lastLogin:Date.now()},async (err) => {
-            await Profile.findOne({fromUser:req.session._id}, async function(err,profile) {
+    if (found) {
+        User.updateOne({_id: req.session._id}, {lastLogin: Date.now()}, async (err) => {
+            await Profile.findOne({fromUser: req.session._id}, async function (err, profile) {
                 if (profile === null) {
                     const newProfile = new Profile({
                         fromUser: req.session._id
@@ -45,18 +45,20 @@ router.get('/' ,redirectController.googleLogin,  async (req,res)=>{
                     await User.updateOne({_id: req.session._id}, {profile: profile._Id});
                 }
             });
-            if(err) console.trace(err);
-            let role = (await User.findOne({_id:req.session._id},(err,user)=> {return user})).role;
-            req.session.role  = role;
-            if(role==="visitor"){
+            if (err) console.trace(err);
+            let role = (await User.findOne({_id: req.session._id}, (err, user) => {
+                return user
+            })).role;
+            req.session.role = role;
+            if (role === "visitor") {
                 res.redirect('/view/profile');
-            }else{
+            } else {
                 res.redirect('/dashboard');
             }
 
         });
-    }else {
-        req.flash('warning','You are not whitelisted, please contact the administrator');
+    } else {
+        req.flash('warning', 'You are not whitelisted, please contact the administrator');
         res.redirect('/');
     }
 });

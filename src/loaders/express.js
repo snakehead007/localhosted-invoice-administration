@@ -1,4 +1,4 @@
-const express = require( "express");
+const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const pug = require("pug");
@@ -7,7 +7,7 @@ const flash = require("express-flash");
 const fileUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
 const i18n = require("i18n");
-module.exports.default = function(app){
+module.exports.default = function (app) {
     app.locals.title = "invoice-administration";
     app.locals.email = "snakehead007@pm.me";
     app.engine("pug", pug.__express);
@@ -15,16 +15,16 @@ module.exports.default = function(app){
     app.set("view engine", "pug");
     app.use(cookieParser());
     i18n.configure({
-        locales:["en-GB", "nl-BE"],
+        locales: ["en-GB", "nl-BE"],
         defaultLocale: "nl-BE",
-        directory: path.join(path.resolve(),"locales"),
-        cookie:"session"
+        directory: path.join(path.resolve(), "locales"),
+        cookie: "session"
     });
-    app.use(function(req,res,next){
-        i18n.init(req,res,next);
+    app.use(function (req, res, next) {
+        i18n.init(req, res, next);
     });
-    app.use(function(req, res, next) {
-        res.locals.__ = res.__ = function() {
+    app.use(function (req, res, next) {
+        res.locals.__ = res.__ = function () {
             return i18n.__.apply(req, arguments);
         };
         next();
@@ -44,7 +44,7 @@ module.exports.default = function(app){
         })
     );
     app.use(flash());
-    app.use(function(req,res,next){
+    app.use(function (req, res, next) {
         res.locals.session = req.session;
         next();
     });

@@ -22,19 +22,19 @@ const Invoice = new mongoose.Schema({
     orders: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'Order'
     }],
-    fromClient:{
+    fromClient: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Client'
     },
-    fromUser:{
+    fromUser: {
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
     },
-    creationDate:{
-        type:Date,
-        default:Date.now()
+    creationDate: {
+        type: Date,
+        default: Date.now()
     },
-    lastUpdated:{
-        type:Date,
-        default:Date.now()
+    lastUpdated: {
+        type: Date,
+        default: Date.now()
     }
 });
 

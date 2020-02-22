@@ -14,18 +14,20 @@ const {findOneHasError} = require("../middlewares/error");
  * @param req
  * @param res
  */
-exports.editOrderGet = (req,res) => {
-    Order.findOne({fromUser:req.session._id,_id: req.params.ido}, function(err, order) {
-        Invoice.findOne({fromUser:req.session._id,_id: order.fromInvoice}, function(err, invoice) {
-            Settings.findOne({fromUser:req.session._id,}, function(err, settings) {
-                Profile.findOne({fromUser:req.session._id,}, async(err, profile) => {
+exports.editOrderGet = (req, res) => {
+    Order.findOne({fromUser: req.session._id, _id: req.params.ido}, function (err, order) {
+        Invoice.findOne({fromUser: req.session._id, _id: order.fromInvoice}, function (err, invoice) {
+            Settings.findOne({fromUser: req.session._id,}, function (err, settings) {
+                Profile.findOne({fromUser: req.session._id,}, async (err, profile) => {
                     if (!err) {
                         res.render("edit/edit-order", {
                             "order": order,
                             "invoice": invoice,
-                            "profile":  profile,
+                            "profile": profile,
                             "settings": settings,
-                            "role":(await User.findOne({_id:req.session._id},(err,user) => {return user;})).role
+                            "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                                return user;
+                            })).role
                         });
                     }
                 });
@@ -39,22 +41,24 @@ exports.editOrderGet = (req,res) => {
  * @param req
  * @param res
  */
-exports.newOrderGet = (req,res) => {
-    Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {
+exports.newOrderGet = (req, res) => {
+    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
         if (!err) {
-            Client.findOne({fromUser:req.session._id,_id:invoice.fromClient},function(err,client){
-                if(!err){
-                    Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+            Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
+                if (!err) {
+                    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                         if (!err) {
-                            Profile.findOne({fromUser:req.session._id}, async(err, profile) => {
+                            Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                                 if (!err) {
                                     let sendObject = {
                                         "invoice": invoice,
                                         "profile": profile,
                                         "settings": settings,
                                         "client": client,
-                                        "currentUrl":"orderNew",
-                                        "role":(await User.findOne({_id:req.session._id},(err,user) => {return user;})).role
+                                        "currentUrl": "orderNew",
+                                        "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                                            return user;
+                                        })).role
                                     };
                                     res.render("new/new-order", sendObject);
                                 }
@@ -73,21 +77,24 @@ exports.newOrderGet = (req,res) => {
  * @param res
  * @returns {Promise<void>}
  */
-exports.newOrderPost = async (req,res) => {
-    Invoice.findOne({fromUser:req.session._id,_id:req.params.idi}, async function(err,invoice){
+exports.newOrderPost = async (req, res) => {
+    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, async function (err, invoice) {
         let newOrder = new Order({
             description: req.body.description,
             amount: req.body.amount,
             price: req.body.price,
-            total: req.body.amount * req.body.price ,
-            fromUser:req.session._id,
-            fromClient:invoice.fromClient,
-            fromInvoice:req.params.idi
+            total: req.body.amount * req.body.price,
+            fromUser: req.session._id,
+            fromClient: invoice.fromClient,
+            fromInvoice: req.params.idi
         });
         await newOrder.save();
         let totInvoice = ((((invoice.total + invoice.advance) + (req.body.amount * req.body.price)) - invoice.advance));
-        await Invoice.updateOne({fromUser:req.session._id,_id: req.params.idi}, {total:totInvoice,lastUpdated:Date.now()},function(err,invoice){
-            if(err) {
+        await Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
+            total: totInvoice,
+            lastUpdated: Date.now()
+        }, function (err, invoice) {
+            if (err) {
             }
         });
         res.redirect("/order/all/" + req.params.idi);
@@ -99,18 +106,18 @@ exports.newOrderPost = async (req,res) => {
  * @param req
  * @param res
  */
-exports.allOrderGet = (req,res) => {
-    Invoice.findOne({fromUser:req.session._id,_id: req.params.idi}, function(err, invoice) {
-        if(err) {
+exports.allOrderGet = (req, res) => {
+    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+        if (err) {
         }
         if (!err) {
-            Order.find({fromUser:req.session._id,fromInvoice: req.params.idi}, function(err, orders) {
+            Order.find({fromUser: req.session._id, fromInvoice: req.params.idi}, function (err, orders) {
                 if (!err) {
-                    console.log("Trying to find Client with id: "+ invoice);
-                    Client.findOne({fromUser:req.session._id,_id:invoice.fromClient},function(err,client) {
-                        Settings.findOne({fromUser:req.session._id}, function (err, settings) {
+                    console.log("Trying to find Client with id: " + invoice);
+                    Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
+                        Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                             if (!err) {
-                                Profile.findOne({fromUser:req.session._id}, async (err, profile) => {
+                                Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                                     if (!err) {
                                         let sendObject = {
                                             "invoice": invoice,
@@ -118,7 +125,9 @@ exports.allOrderGet = (req,res) => {
                                             "profile": profile,
                                             "client": client,
                                             "settings": settings,
-                                            "role":(await User.findOne({_id:req.session._id},(err,user) => {return user;})).role
+                                            "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                                                return user;
+                                            })).role
                                         };
                                         res.render("orders", sendObject);
                                     }
@@ -137,23 +146,25 @@ exports.allOrderGet = (req,res) => {
  * @param req
  * @param res
  */
-exports.viewOrderGet = (req,res) => {
-    Order.findOne({fromUser:req.session._id,_id: req.params.ido}, function(err, order) {
+exports.viewOrderGet = (req, res) => {
+    Order.findOne({fromUser: req.session._id, _id: req.params.ido}, function (err, order) {
         if (!err) {
-            Invoice.findOne({fromUser:req.session._id,_id: order.factuur}, function(err, invoice) {
+            Invoice.findOne({fromUser: req.session._id, _id: order.factuur}, function (err, invoice) {
                 if (!err) {
-                    Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+                    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                         if (!err) {
-                            Profile.findOne({fromUser:req.session._id}, async(err, profile) =>{
+                            Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                                 if (!err) {
                                     let sendObject = {
                                         "order": order,
                                         "invoice": invoice,
                                         "profile": profile,
                                         "settings": settings,
-                                        "role":(await User.findOne({_id:req.session._id},(err,user) => {return user;})).role
+                                        "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                                            return user;
+                                        })).role
                                     };
-                                    res.render("view/view-order", );
+                                    res.render("view/view-order",);
                                 }
                             });
                         }
@@ -164,10 +175,9 @@ exports.viewOrderGet = (req,res) => {
     });
 };
 
-exports.editOrderPost = (req,res) =>
-{
-    Order.findOne({fromUser:req.session._id,_id: req.params.ido}, function (err, order) {
-        if(!findOneHasError(req,res,err,order)){
+exports.editOrderPost = (req, res) => {
+    Order.findOne({fromUser: req.session._id, _id: req.params.ido}, function (err, order) {
+        if (!findOneHasError(req, res, err, order)) {
             let updateOrder = {
                 description: req.body.description,
                 amount: req.body.amount,
@@ -185,13 +195,13 @@ exports.editOrderPost = (req,res) =>
                     lastUpdated: Date.now()
                 };
                 Invoice.updateOne({fromUser: req.session._id, _id: order.fromInvoice}, updateInvoice, function (err) {
-                    res.redirect("/order/all/"+invoice._id);
+                    res.redirect("/order/all/" + invoice._id);
                 });
             });
         }
     });
 };
 
-exports.deleteOrderGet = (req,res) => {
+exports.deleteOrderGet = (req, res) => {
     throw new Error("Not yet implemented");
 };

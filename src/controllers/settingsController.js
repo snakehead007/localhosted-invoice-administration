@@ -18,21 +18,23 @@ const User = require("../models/user");
         "profile":profile
     }
  */
-exports.settings_all_get = (req,res) => {
-    Profile.findOne({fromUser:req.session._id},function(err,profile){
-        if(err) {
+exports.settings_all_get = (req, res) => {
+    Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+        if (err) {
             console.trace();
         }
-        Settings.findOne({fromUser:req.session._id}, async(err, settings) => {
-            if(err) {
+        Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
+            if (err) {
                 console.trace();
             }
             res.render("settings", {
                 "currentUrl": "settings",
                 "settings": settings,
                 "description": "Settings",
-                "profile":profile,
-                "role":(await User.findOne({_id:req.session._id},(err,user) => {return user;})).role
+                "profile": profile,
+                "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                    return user;
+                })).role
             });
         });
     });
@@ -49,9 +51,9 @@ exports.settings_all_get = (req,res) => {
  *  HTTP/1.1 200 OK
  *
  */
-exports.settingsChangeLangGet = (req,res) => {
-    Settings.updateOne({fromUser:req.session._id},{locale:req.params.lang},function(err){
-        if(err) {
+exports.settingsChangeLangGet = (req, res) => {
+    Settings.updateOne({fromUser: req.session._id}, {locale: req.params.lang}, function (err) {
+        if (err) {
             console.trace(err);
         }
         req.locale = req.params.lang;
@@ -71,13 +73,13 @@ exports.settingsChangeLangGet = (req,res) => {
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  */
-exports.settingsChangeThemeGet = (req,res) => {
-  Settings.updateOne({fromUser:req.session._id},{theme:req.params.theme},function(err){
-      if(err) {
-          console.trace(err);
-      }
-      res.redirect("/settings");
-  });
+exports.settingsChangeThemeGet = (req, res) => {
+    Settings.updateOne({fromUser: req.session._id}, {theme: req.params.theme}, function (err) {
+        if (err) {
+            console.trace(err);
+        }
+        res.redirect("/settings");
+    });
 
 };
 /**
@@ -89,15 +91,15 @@ exports.settingsChangeThemeGet = (req,res) => {
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  */
-exports.changeTextGet = (req,res) => {
-    Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+exports.changeTextGet = (req, res) => {
+    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
         if (!err) {
             let updateSettings = {
                 invoiceText: String(req.body.invoiceText),
                 creditText: String(req.body.creditText),
                 offerText: String(req.body.offerText)
             };
-            Settings.updateOne({fromUser:req.session._id,_id: settings._id}, updateSettings, function(err) {
+            Settings.updateOne({fromUser: req.session._id, _id: settings._id}, updateSettings, function (err) {
                 res.redirect("/settings");
             });
         }

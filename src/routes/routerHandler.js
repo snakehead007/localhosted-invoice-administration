@@ -28,27 +28,27 @@ const searchRouter = require("./searchRouter");
 const whitelistRouter = require("./whitelistRouter");
 //Controllers
 
-router.use("/",loginRouter); //index page
-router.use("/dashboard",stillSignedInCheck,dashboardRouter);
-router.use("/logout",stillSignedInCheck,logoutRouter);
-router.use("/redirect",redirectRouter); //only used when logged in and redirected by google
-router.use("/view",stillSignedInCheck,viewRouter);
-router.use("/order",stillSignedInCheck,orderRouter);
-router.use("/invoice",stillSignedInCheck,invoiceRouter);
-router.use("/client",stillSignedInCheck,clientRouter);
+router.use("/", loginRouter); //index page
+router.use("/dashboard", stillSignedInCheck, dashboardRouter);
+router.use("/logout", stillSignedInCheck, logoutRouter);
+router.use("/redirect", redirectRouter); //only used when logged in and redirected by google
+router.use("/view", stillSignedInCheck, viewRouter);
+router.use("/order", stillSignedInCheck, orderRouter);
+router.use("/invoice", stillSignedInCheck, invoiceRouter);
+router.use("/client", stillSignedInCheck, clientRouter);
 //router.use("/project",stillSignedInCheck,projectRouter);
-router.use("/stock",stillSignedInCheck,stockRouter);
-router.use("/settings",stillSignedInCheck,settingsRouter);
+router.use("/stock", stillSignedInCheck, stockRouter);
+router.use("/settings", stillSignedInCheck, settingsRouter);
 //router.use("/calc",stillSignedInCheck,calcRouter);
-router.use("/edit",stillSignedInCheck,editRouter);
-router.use("/upload",stillSignedInCheck,uploadRouter);
-router.use("/download",downloadRouter);
-router.use("/delete",stillSignedInCheck,deleteRouter);
-router.use("/valid",validateRouter);
-router.use("/search",stillSignedInCheck,searchRouter);
-router.use("/whitelist",whitelistRouter);
+router.use("/edit", stillSignedInCheck, editRouter);
+router.use("/upload", stillSignedInCheck, uploadRouter);
+router.use("/download", downloadRouter);
+router.use("/delete", stillSignedInCheck, deleteRouter);
+router.use("/valid", validateRouter);
+router.use("/search", stillSignedInCheck, searchRouter);
+router.use("/whitelist", whitelistRouter);
 //Routers
-if(process.env.DEVELOP==="false") {
+if (process.env.DEVELOP === "false") {
 //error handling for 404
     router.use((req, res) => {
         res.status(404).send("404: Page not Found");
@@ -60,7 +60,7 @@ if(process.env.DEVELOP==="false") {
     });
 }
 //This fixed this error: "database names cannot contain the character "." MongoError"
-router.get("/favicon.ico", function(req, res) {
+router.get("/favicon.ico", function (req, res) {
     res.sendStatus(204);
 });
 

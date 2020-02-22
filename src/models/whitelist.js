@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const Whitelist = new mongoose.Schema({
-    mail:{
-        type:String
+    mail: {
+        type: String
     }
 });
 

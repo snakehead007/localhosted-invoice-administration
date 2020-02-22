@@ -19,14 +19,14 @@ const Settings = require('../models/settings');
         'profile':profile
  *  }
  */
-exports.getCalcAll = (req, res) =>{
-    Profile.findOne({fromUser:req.session._id},function(err,profile){
-        Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+exports.getCalcAll = (req, res) => {
+    Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+        Settings.findOne({fromUser: req.session._id}, function (err, settings) {
             res.render('calc', {
-                'currentUrl':'calc',
+                'currentUrl': 'calc',
                 'settings': settings,
                 'description': "Settings",
-                'profile':profile
+                'profile': profile
             });
         });
     });

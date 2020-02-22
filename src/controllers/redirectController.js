@@ -8,9 +8,9 @@
 const i18n = require('i18n');
 const User = require('../models/user');
 //Local modules
-const {getGoogleAccountFromCode,checkSignIn} = require('../middlewares/google');
+const {getGoogleAccountFromCode, checkSignIn} = require('../middlewares/google');
 const Settings = require('../models/settings');
-const {findOneHasError,updateOneHasError} = require('../middlewares/error');
+const {findOneHasError, updateOneHasError} = require('../middlewares/error');
 
 /**
  * This will use the {@link src/middlewares/google|Google middleware} to decrypt to OAuth2 login information of the user
@@ -21,17 +21,17 @@ const {findOneHasError,updateOneHasError} = require('../middlewares/error');
  * @returns {Promise<void>}
  * @exports src/controllers/redirectController.googleLogin
  */
-exports.googleLogin = async (req,res,next) => {
-    const userInfo = await checkSignIn(req,await getGoogleAccountFromCode(req.query.code));
+exports.googleLogin = async (req, res, next) => {
+    const userInfo = await checkSignIn(req, await getGoogleAccountFromCode(req.query.code));
     req.session.loggedIn = userInfo;
     req.session._id = userInfo._id;
-    req.session.role = await User.findOne({_id:userInfo._id},(err,user)=>{
-        if(findOneHasError(req,res,err,user)){
+    req.session.role = await User.findOne({_id: userInfo._id}, (err, user) => {
+        if (findOneHasError(req, res, err, user)) {
             return user.role;
         }
     });
-    Settings.findOne({fromUser:userInfo._id},function(err,settings){
-        if(err) console.trace();
+    Settings.findOne({fromUser: userInfo._id}, function (err, settings) {
+        if (err) console.trace();
         req.locale = settings.locale;
         i18n.setLocale(req, settings.locale);
         i18n.setLocale(res, settings.locale);

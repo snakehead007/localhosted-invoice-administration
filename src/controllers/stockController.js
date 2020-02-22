@@ -16,19 +16,21 @@ const Profile = require("../models/profile");
         "profile":profile
     }
  */
-exports.stockAllGet = (req,res) => {
-    Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+exports.stockAllGet = (req, res) => {
+    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
         if (!err) {
-            Item.find({fromUser:req.session._id}).sort("name").exec(function(err, stock) {
+            Item.find({fromUser: req.session._id}).sort("name").exec(function (err, stock) {
                 if (!err) {
-                    Profile.findOne({fromUser:req.session._id},async(err,profile)=>{
-                        if(!err) {
+                    Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
+                        if (!err) {
                             res.render("stock", {
-                                "currentUrl":"stock",
+                                "currentUrl": "stock",
                                 "stock": stock,
                                 "settings": settings,
-                                "profile":profile,
-                                "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
+                                "profile": profile,
+                                "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                                    return user
+                                })).role
                             });
                         }
                     });
@@ -50,18 +52,22 @@ exports.stockAllGet = (req,res) => {
         "currentUrl":"stockNew"
     }
  */
-exports.stockNewItemGet = (req,res) =>{
-    Settings.findOne({fromUser:req.session._id}, function(err, settings) {
-        if(err) console.trace(err);
+exports.stockNewItemGet = (req, res) => {
+    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+        if (err) console.trace(err);
         if (!err) {
-            Profile.findOne({fromUser:req.session._id},async(err,profile) =>{if(!err){
-                res.render("new/new-item", {
-                    "settings": settings,
-                    "profile": profile,
-                    "currentUrl":"stockNew",
-                    "role":(await User.findOne({_id:req.session._id},(err,user) => {return user})).role
-                });
-            }});
+            Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
+                if (!err) {
+                    res.render("new/new-item", {
+                        "settings": settings,
+                        "profile": profile,
+                        "currentUrl": "stockNew",
+                        "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                            return user
+                        })).role
+                    });
+                }
+            });
         }
     });
 };
@@ -78,12 +84,12 @@ exports.stockNewItemGet = (req,res) =>{
         "currentUrl":"stockNew"
     }
  */
-exports.stockNewItemPost = (req,res) => {
+exports.stockNewItemPost = (req, res) => {
     let new_item = new Item({
         price: req.body.price,
         name: req.body.name,
         amount: req.body.amount,
-        fromUser:req.session._id
+        fromUser: req.session._id
     });
     new_item.save();
     res.redirect("/stock/all");
