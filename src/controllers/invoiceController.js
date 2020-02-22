@@ -13,7 +13,7 @@ const i18n = require("i18n");
 const invoiceUtil = require("../utils/invoices");
 const {findOneHasError,updateOneHasError} = require("../middlewares/error");
 const {parseDateDDMMYYYY,parseDateSwapDayMonth} = require("../utils/date");
-const {getFullNr} = require('../utils/invoices');
+const {getFullNr} = require("../utils/invoices");
 /**
  *
  * @param req
@@ -22,13 +22,13 @@ const {getFullNr} = require('../utils/invoices');
 exports.invoiceAllGet = (req,res) => {
     Invoice.find({fromUser:req.session._id},null,{sort:{date:-1}}, function(err, invoices) {
             Settings.findOne({fromUser:req.session._id}, function(err, settings) {
-                    Profile.findOne({fromUser:req.session._id}, async(err, profile)=> {
+                    Profile.findOne({fromUser:req.session._id}, async(err, profile) => {
                             res.render("invoices", {
                                 "currentUrl":"invoices",
                                 "invoices": invoices,
                                 "profile": profile,
                                 "settings": settings,
-                                "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
+                                "role":(await User.findOne({_id:req.session._id},(err,user) => {return user;})).role
                             });
                     });
             });
@@ -42,17 +42,17 @@ exports.invoiceAllGet = (req,res) => {
 exports.invoiceNewChooseGet = (req,res) => {
     Settings.findOne({fromUser:req.session._id},function(err,settings){
         Profile.findOne({fromUser:req.session._id},function(err,profile){
-            Client.find({fromUser:req.session._id},async(err,clients)=>{
+            Client.find({fromUser:req.session._id},async(err,clients) =>{
                 res.render("add-file-no-contact",{
                    "profile":profile,
                    "settings":settings,
                    "add":"invoice",
                    "addlink":"invoice",
                    "clients":clients,
-                    "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
+                    "role":(await User.findOne({_id:req.session._id},(err,user) => {return user;})).role
                 });
             });
-        })
+        });
     });
 };
 /**
@@ -63,14 +63,14 @@ exports.invoiceNewChooseGet = (req,res) => {
 exports.offerNewChooseGet = (req,res) => {
     Settings.findOne({fromUser:req.session._id},function(err,settings){
         Profile.findOne({fromUser:req.session._id},function(err,profile){
-            Client.find({fromUser:req.session._id},async(err,clients)=>{
+            Client.find({fromUser:req.session._id},async(err,clients) =>{
                 res.render("add-file-no-contact",{
                     "profile":profile,
                     "settings":settings,
                     "add":"offer",
                     "addlink":"offer",
                     "clients":clients,
-                    "role":(await User.findOne({_id:req.session._id},(err,user)=> {return user})).role
+                    "role":(await User.findOne({_id:req.session._id},(err,user) => {return user;})).role
                 });
             });
         })
@@ -84,7 +84,7 @@ exports.offerNewChooseGet = (req,res) => {
 exports.creditNewChooseGet = (req,res) => {
     Settings.findOne({fromUser:req.session._id},function(err,settings){
         Profile.findOne({fromUser:req.session._id},function(err,profile){
-            Client.find({fromUser:req.session._id},async(err,clients)=>{
+            Client.find({fromUser:req.session._id},async(err,clients) =>{
                 let givenObjects = {
                     "profile": profile,
                     "settings": settings,
@@ -92,7 +92,7 @@ exports.creditNewChooseGet = (req,res) => {
                     "addlink": "credit",
                     "clients": clients,
                     "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                        return user
+                        return user;
                     })).role
                 };
                 res.render("add-file-no-contact",givenObjects);
@@ -257,7 +257,7 @@ exports.invoiceAllClient = (req,res) => {
     Client.findOne({fromUser:req.session._id,_id: req.params.idc}, function(err, client) {
             Invoice.find({fromUser:req.session._id,fromClient: req.params.idc}).sort("-invoiceNr").exec(function(err, invoices) {
                     Settings.findOne({fromUser:req.session._id}, async(err, settings) => {
-                        Profile.findOne({},async(err,profile)=>{
+                        Profile.findOne({},async(err,profile) => {
                             if (!err) {
                                 let givenObject = {
                                     "client": client,
@@ -265,7 +265,7 @@ exports.invoiceAllClient = (req,res) => {
                                     "settings": settings,
                                     "profile":profile,
                                     "currentUrl": "invoiceClient",
-                                    "role":(await User.findOne({_id:req.session._id},(err,user) => {return user})).role
+                                    "role":(await User.findOne({_id:req.session._id},(err,user) => {return user;})).role
                                 };
                                 res.render("invoices", givenObject);
                             }
@@ -284,14 +284,14 @@ exports.editInvoiceGet = (req,res) => {
     Invoice.findOne({fromUser:req.session._id,_id:req.params.idi},function(err,invoice){
         Client.findOne({fromUser:req.session._id,_id:invoice.fromClient},function(err,client){
             Settings.findOne({fromUser:req.session._id},function(err,settings){
-                Profile.findOne({fromUser:req.session._id},async(err,profile) =>{
+                Profile.findOne({fromUser:req.session._id},async(err,profile) => {
                     let givenObject = {
                         "invoice":invoice,
                         "client":client,
                         "settings":settings,
                         "profile":profile,
                         "currentUrl":"invoiceEdit",
-                        "role":(await User.findOne({_id:req.session._id},(err,user) => {return user})).role
+                        "role":(await User.findOne({_id:req.session._id},(err,user) => {return user;})).role
                     };
                     res.render("edit/edit-invoice",givenObject);
                 });
@@ -314,12 +314,12 @@ exports.editInvoicePost = (req,res) => {
         }
         let settings = await Settings.findOne({fromUser:req.session._id},(err,settings) => {return settings});
         let currentInvoice = await Invoice.findOne({fromUser:req.session._id,_id:req.params.idi},(err,invoice) => {return invoice});
-        let cDate = new Date(currentInvoice.date).toLocaleString(undefined, {
+        let cDate = new Date(currentInvoice.date).toLocaleString("undefined", {
             year: "numeric",
             month: "numeric",
             day: "numeric"
         });
-        let cDatePaid = new Date(currentInvoice.datePaid).toLocaleString( undefined,{
+        let cDatePaid = new Date(currentInvoice.datePaid).toLocaleString( "undefined",{
             year: "numeric",
             month: "numeric",
             day: "numeric"
