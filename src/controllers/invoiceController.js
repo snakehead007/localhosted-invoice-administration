@@ -140,6 +140,7 @@ exports.invoiceNewGet = (req, res) => {
                                     clientName: client.clientName,
                                     total: 0,
                                     fromUser: req.session._id,
+                                    description:""
                                 });
                                 await Client.findOne({
                                     fromUser: req.session._id,
@@ -241,7 +242,8 @@ exports.offerNewGet = (req, res) => {
                                                 date: Date.now(),
                                                 offerNr: offerNr,
                                                 clientName: client.clientName,
-                                                fromUser: req.session._id
+                                                fromUser: req.session._id,
+                                                description:""
                                             });
                                             await Client.findOne({
                                                 fromUser: req.session._id,
@@ -331,6 +333,7 @@ exports.editInvoiceGet = (req, res) => {
  * @param res
  */
 exports.editInvoicePost = (req, res) => {
+    console.log(req.body);
     Order.find({fromUser: req.session._id, fromInvoice: req.params.idi}, async (err, orders) => {
         let totOrders = 0;
         for (let i = 0; i <= orders.length - 1; i++) {
@@ -342,66 +345,77 @@ exports.editInvoicePost = (req, res) => {
         let currentInvoice = await Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, (err, invoice) => {
             return invoice
         });
-        let cDate = new Date(currentInvoice.date).toLocaleString("undefined", {
+        let cDate = new Date(currentInvoice.date).toLocaleString(undefined, {
             year: "numeric",
             month: "numeric",
             day: "numeric"
         });
-        let cDatePaid = new Date(currentInvoice.datePaid).toLocaleString("undefined", {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-        });
+        console.log(req.body.datePaid);
+        let cDatePaid;
+        if(req.body.datePaid!==""&&req.body.datePaid&&req.body.datePaid!=="undefined") {
+             cDatePaid = new Date(currentInvoice.datePaid).toLocaleString(undefined, {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric"
+            });
+        }
         let updateInvoice;
         let dateBody;
         if (parseDateSwapDayMonth(cDate) !== req.body.date) {
             dateBody = parseDateDDMMYYYY(req.body.date)
         }
         let datePaidBody;
-        if (parseDateSwapDayMonth(cDatePaid) !== req.body.datePaid) {
-            datePaidBody = parseDateDDMMYYYY(req.body.datePaid)
+        if(req.body.datePaid!==""&&req.body.datePaid&&req.body.datePaid!=="undefined") {
+            if (parseDateSwapDayMonth(cDatePaid) !== req.body.datePaid) {
+                datePaidBody = parseDateDDMMYYYY(req.body.datePaid)
+            }
         }
         if (dateBody && !datePaidBody) {
             updateInvoice = {
                 date: dateBody,
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
-                offerNr: req.body.offer,
+                offerNr: req.body.offerNr,
                 lastUpdated: Date.now(),
-                total: totOrders - req.body.advance
+                total: totOrders - req.body.advance,
+                description:req.body.description
             };
         } else if (!dateBody && datePaidBody) {
             updateInvoice = {
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
-                offerNr: req.body.offer,
+                offerNr: req.body.offerNr,
                 datePaid: datePaidBody,
                 lastUpdated: Date.now(),
-                total: totOrders - req.body.advance
+                total: totOrders - req.body.advance,
+                description:req.body.description
             };
         } else if (dateBody && datePaidBody) {
             updateInvoice = {
                 date: dateBody,
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
-                offerNr: req.body.offer,
+                offerNr: req.body.offerNr,
                 datePaid: datePaidBody,
                 lastUpdated: Date.now(),
-                total: totOrders - req.body.advance
+                total: totOrders - req.body.advance,
+                description:req.body.description
             };
         } else {//both not changed
             updateInvoice = {
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
-                offerNr: req.body.offer,
+                offerNr: req.body.offerNr,
                 lastUpdated: Date.now(),
-                total: totOrders - req.body.advance
+                total: totOrders - req.body.advance,
+                description:req.body.description
             };
         }
         let searchCriteria = {fromUser: req.session._id,};
         if (orders.length > 0) {
             searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient};
         }
+        console.log(updateInvoice);
         Client.findOne(searchCriteria, function (err, contact) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, function (err) {
                 if (!updateOneHasError(req, res, err)) {

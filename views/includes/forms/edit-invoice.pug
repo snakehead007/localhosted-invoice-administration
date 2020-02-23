@@ -8,10 +8,10 @@ form(action='/edit/invoice/'+invoice._id,method='post')
         div(class="form-group col-md-3")
             label(for="title") Datum
             input#datepicker(type="text",class="form-control",name="date")
-        div(class="form-group col-md-3")
-            label(for="title")=__('Pay date')
-            input#datepicker2(type="text",class="form-control",name="datePaid")
         if invoice.invoiceNr
+            div(class="form-group col-md-3")
+                label(for="title")=__('Pay date')
+                input#datepicker2(type="text",class="form-control",name="datePaid")
             div(class="form-group col-md-2")
                 label(for="title")=__('Invoice number')
                 input(type="number",class="form-control",value=invoice.invoiceNr,name="invoiceNr")
@@ -22,6 +22,13 @@ form(action='/edit/invoice/'+invoice._id,method='post')
         div(class="form-group col-md-2")
             label(for="title")=__('Advance')
             input(type="number",class="form-control",value=invoice.advance,name="advance",step="any")
+    if invoice.offerNr
+        div.form-row
+            div(class="col-10 input-group mb-3")
+                div(class="input-group-prepend")
+                    span(class="input-group-text") #{__('Offer description')}
+                textarea(input="text",name="description",class="form-control" aria-label="With textarea")=invoice.description
+
         script.
             //date is done via DOM, the locale cannot be set right when using pug
             let id = "date"+"#{invoice.invoiceNr}";

@@ -76,8 +76,13 @@ module.exports.replaceAll = (_str, profile, client, invoice, language) => {
     res = res.replace("[factuur.nr]", invoice.invoiceNr);
     res = res.replace("[invoice.nr]", invoice.invoiceNr);
 
-    res = res.replace("[factuur.datum]", invoice.date);
-    res = res.replace("[invoice.date]", invoice.date);
+    let dateInv = new Date(invoice.date).toLocaleString("nl-BE", {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric'
+    });
+    res = res.replace("[factuur.datum]", dateInv);
+    res = res.replace("[invoice.date]", dateInv);
 
     res = res.replace("[date]", Date.now());
     res = res.replace("[datum]", Date.now());

@@ -47,23 +47,23 @@ exports.mainGet = async function getLogin(req, res) {
                                     } else {
                                         //Adds to chart data
                                         let monthOfPayment = invoice.datePaid.getMonth();
-                                        if (year === invoice.datePaid.getFullYear() && invoice.isPaid) {
+                                        if ((new Date()).getFullYear() == invoice.datePaid.getFullYear() && invoice.isPaid) {
                                             chart[monthOfPayment] += invoice.total;
                                         }
                                     }
                                 }
                             }
-                            //createa data for chart
-                            for (let i = 0; i <= 11; i++) {
-
-                            }
+                            let newChart = [];
+                            chart.forEach((n) => {
+                                newChart.push(n.toFixed(2))
+                            });
                             let role = (await User.findOne({_id: req.session._id}, (err, user) => {
                                 return user
                             })).role;
                             console.log(year);
                             res.render("index", {
                                 "currentUrl": "dashboard",
-                                "total": chart,
+                                "total": newChart,
                                 "settings": settings,
                                 "year": (new Date).getFullYear(),
                                 "profile": profile,
@@ -109,16 +109,16 @@ exports.chartYearGet = (req, res) => {
                                     }
                                 }
                             }
-                            //createa data for chart
-                            for (let i = 0; i <= 11; i++) {
-
-                            }
+                            let newChart = [];
+                            chart.forEach((n) => {
+                                newChart.push(n.toFixed(2))
+                            });
                             let role = (await User.findOne({_id: req.session._id}, (err, user) => {
                                 return user
                             })).role;
                             res.render("index", {
                                 "currentUrl": "dashboard",
-                                "total": chart,
+                                "total": newChart,
                                 "settings": settings,
                                 "year": req.params.year,
                                 "profile": profile,

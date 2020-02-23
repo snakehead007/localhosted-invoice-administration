@@ -229,10 +229,36 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
             ]
         })
     }
+    console.log(c);
+    c[0] = 150+(pdfOrders.length*7)+10;
+    c[1] = 20;
+    console.log(c);
+    let description = invoice.description.split('\r\n');
+    description.forEach((text) => {
+        doc.text(c[1], c[0],text);
+        c[0]+=5;
+    });
+    c[0]+=10;
+    doc.setFontType("bold");
+    doc.setFontSize(12);
+    doc.text(c[1],c[0],"Naam:");
+    c[0]+=15;
+    doc.setFontSize(12);
+    doc.text(c[1],c[0],"Datum:");
+
+
+    c[0]-=15;
+    c[1]+=105;
+    doc.setFontType("courier");
+    doc.setFontSize(12);
+    doc.text(c[1],c[0],"Handtekening voor akkoord:");
+
+
+
     /**Footer & Disclaimer**/
     doc.setFontType("courier");
     doc.setFontSize(10);
-    let textC = 265;
+    let textC = 270;
     dataText.forEach((text) => {
         let px = 92.0 - visualLength(text);
         doc.text(px, textC, text);

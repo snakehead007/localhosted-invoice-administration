@@ -39,6 +39,10 @@ const Invoice = new mongoose.Schema({
     lastUpdated: {
         type: Date,
         default: Date.now()
+    },
+    description: {
+        type: String,
+        default: ""
     }
 });
 
