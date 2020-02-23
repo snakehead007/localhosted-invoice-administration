@@ -48,7 +48,7 @@ exports.valueMustBePostalCode = (req, res, doc, mustBeFilledIn = false, message 
 };
 
 exports.valueMustBeStreetNumber = (req, res, doc, mustBeFilledIn = false, message = "Street number is not valid, only numbers and letters allowed") => {
-    let invalid = valueMustBeAName(req,res,doc,mustBeFilledIn,message);
+    let invalid = this.valueMustBeAName(req,res,doc,mustBeFilledIn,message);
     //let invalid = checkRegex(doc, /^([1-9])([0-9]{0,9}[a-z]{0,3}[A-Z]{0,3})$/,mustBeFilledIn);
     return checkForMessage(req, invalid,message);
 };

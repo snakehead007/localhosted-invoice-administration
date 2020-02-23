@@ -16,7 +16,6 @@ body
         nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
           div(class="sidebar-sticky")
             include ../includes/mainMenu
-            include ../includes/bookmarks
             include ../includes/orderOptionMenu
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           if invoice.invoiceNr
@@ -34,7 +33,7 @@ body
                 input(type="text",class="form-control",name="description", required)
               div(class="form-group col-md-2")
                 label(for="title") Aantal
-                input(type="number",class="form-control",name="amount", required)
+                input(type="number",class="form-control",name="amount",step="any" required)
               div(class="form-group col-md-2")
                 label(for="title") Bedrag voor één
                 input(type="number",class="form-control",name="price",step="any" required)

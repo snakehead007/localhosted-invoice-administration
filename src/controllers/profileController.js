@@ -4,6 +4,7 @@ const User = require("../models/user");
 const i18n = require("i18n");
 const {findOneHasError, updateOneHasError} = require("../middlewares/error");
 const {getFullNr} = require('../utils/invoices');
+const {sendMessage} = require('../../messages/messages');
 const {valueMustBeValidBic, valueMustBeValidIban, valueMustBeStreetNumber, valueMustBeAName, valueMustBeEmail, numberMustPhoneNumber, valueMustBeVatNumber, valueMustBePostalCode} = require("../utils/formValidation");
 /**
  * @api {get} /view/profile view_profile_get

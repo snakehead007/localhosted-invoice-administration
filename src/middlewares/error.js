@@ -1,3 +1,4 @@
+const {sendMessage} = require('../../messages/messages');
 exports.findOneHasError = (req, res, err, object) => {
     if (err || !object || object === "null" || object === "undefined" || JSON.stringify(object) === "null") {
         req.flash('danger', "Error: something happened, please try again");

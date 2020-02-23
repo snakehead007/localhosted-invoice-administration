@@ -1,19 +1,19 @@
 form(action='/edit/profile/'+profile._id,method='post')
     div(class="form-row row")
 
-        div(class="form-group col-xl-4 col-md-6 offset-xl-0 offset-md-0 offset-sm-0 ")
+        div(class="form-group col-xl-5 col-md-6 offset-xl-0 offset-md-0 offset-sm-0 ")
             label(for="title") #{__('Your name')}
             input(type="text",class="form-control",value=profile.name,name="name",placeholder="Jan Janssens", require="true")
 
-        div(class="form-group col-xl-6 col-md-6 offset-xl-2 offset-md-0 offset-sm-0")
+        div(class="form-group col-xl-6 col-md-6 offset-xl-1 offset-md-0 offset-sm-0")
             label(for="title") #{__('VAT number')}
             input(type="text",class="form-control",value=profile.vat,name="vat",placeholder="BE 0000.000.000", require="true")
 
-        div(class="form-group col-xl-4 col-md-6 offset-xl-0 offset-md-0 offset-sm-0")
+        div(class="form-group col-xl-5 col-md-6 offset-xl-0 offset-md-0 offset-sm-0")
             label(for="title") #{__('Firm name')}
             input(type="text",class="form-control",value=profile.firm,name="firm",placeholder="firma en co.", require="true")
 
-        div(class="form-group col-xl-3 col-md-6 offset-xl-2 offset-md-0 offset-sm-0")
+        div(class="form-group col-xl-3 col-md-6 offset-xl-1 offset-md-0 offset-sm-0")
             label(for="title") #{__('IBAN')}
             input(type="text",class="form-control",value=profile.iban,name="iban",placeholder="BE77 7777 7777 7777", require="true")
         div(class="form-group col-xl-3 col-md-6 offset-xl-0 offset-md-0 offset-sm-0")
@@ -23,11 +23,11 @@ form(action='/edit/profile/'+profile._id,method='post')
             label(for="title") #{__('Street name')}
             input(type="text",class="form-control",value=profile.street,name="street",placeholder="grotestraat", require="true")
 
-        div(class="form-group col-xl-1 col-md-6")
+        div(class="form-group col-xl-2 col-md-6")
             label(for="title") #{__('Street N°')}
             input(type="text",class="form-control",value=profile.streetNr,name="streetNr",placeholder="12a", require="true")
 
-        div(class="form-group col-xl-2 col-md-6 offset-xl-2 offset-md-0 offset-sm-0")
+        div(class="form-group col-xl-2 col-md-6 offset-xl-1 offset-md-0 offset-sm-0")
             label(for="title") #{__('Telephone N°')}
             input(type="text",class="form-control",value=profile.tel,name="tel",placeholder="+32487654321", require="true")
 
@@ -39,7 +39,7 @@ form(action='/edit/profile/'+profile._id,method='post')
             label(for="title") #{__('Postal')}
             input(type="number",class="form-control",value=profile.postal,name="postal",placeholder="1234", require="true")
 
-        div(class="form-group col-xl-2 col-md-6 offset-xl-0 offset-md-0 offset-sm-0")
+        div(class="form-group col-xl-5 col-md-6 offset-xl-0 offset-md-0 offset-sm-0")
             label(for="title") E-mail
             input(type="text",class="form-control",value=profile.email,name="email",placeholder="voorbeeld@email.be")
     div.row

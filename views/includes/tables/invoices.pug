@@ -21,7 +21,7 @@ table(class="table table-striped table-sm ",id="hoofdTabel")
                 if !client
                     td
                         a(href='/invoice/all/' + invoice.fromClient)=invoice.clientName
-                td(id="date"+invoice.invoiceNr)
+                td(id="date"+invoice._id)
                     td
                         span=(invoice.total * 1.21).toFixed(2) + "€"
                 if invoice.invoiceNr
@@ -63,10 +63,9 @@ table(class="table table-striped table-sm ",id="hoofdTabel")
                                     a(class="dropdown-item button", href="/invoice/change/upgrade/" + invoice._id ) #{__('Upgrade to invoice')}
             script.
                 //date is done via DOM, the locale cannot be set right when using pug
-                let id = "date"+"#{invoice.invoiceNr}";
-                let date = new Date("#{invoice.date}").toLocaleString("#{settings.locale}", {
+                let id#{invoice._id} = "date"+"#{invoice._id}";
+                document.getElementById(id#{invoice._id}).innerHTML = new Date("#{invoice.date}").toLocaleString("#{settings.locale}", {
                     year: 'numeric',
                     month: 'numeric',
                     day: 'numeric'
                 });
-                document.getElementById(id).innerHTML = date;
