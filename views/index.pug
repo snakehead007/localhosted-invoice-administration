@@ -22,7 +22,7 @@ html
                           a(class="dropdown-item" href="/dashboard/chart/" + String(Number(year) + Number(1)))=String(Number(year) + Number(1))
                           a(class="dropdown-item" href="/dashboard/chart/" + String(Number(year) + Number(2)))=String(Number(year) + Number(2))
                   include includes/messages
-                  canvas(class="my-4 w-100" id="myChart" width="900" height="380")
+                  canvas(class="my-4 w-100 h-60" id="myChart" width="900" height="380")
                   h2 #{__('Unpaid invoices')}
                   if invoices.length == 0
                       div(class="alert alert-info col-lg-12 col-md-12 col-sm-12" role="alert") #{__('No unpaid invoices found.')}

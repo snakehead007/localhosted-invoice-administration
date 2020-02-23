@@ -239,19 +239,19 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         c[0]+=5;
     });
     c[0]+=10;
-    doc.setFontType("bold");
+    doc.setFontType("courier");
     doc.setFontSize(12);
-    doc.text(c[1],c[0],"Naam:");
+    doc.text(c[1],c[0],i18n.__("Name")+":");
     c[0]+=15;
     doc.setFontSize(12);
-    doc.text(c[1],c[0],"Datum:");
+    doc.text(c[1],c[0],i18n.__("Date")+":");
 
 
     c[0]-=15;
     c[1]+=105;
     doc.setFontType("courier");
     doc.setFontSize(12);
-    doc.text(c[1],c[0],"Handtekening voor akkoord:");
+    doc.text(c[1],c[0],i18n.__("Signature for agreement")+":");
 
 
 

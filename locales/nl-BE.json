@@ -295,7 +295,10 @@
 	"View documents of this client": "Bekijk documenten van deze klant",
 	"Not agreed": "Niet Akkoord",
 	"Agreed": "Akkoord",
+	"Offer description": "Omschrijving offerte",
+	"Successfully deleted the order": "Lijn succesvol verwijderd",
+	"Signature for agreement": "Handtekening voor akkoord",
 	"--------FROM-HERE-ALL-ABOVE-CHECKED---- -------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------",
-	"Offer description": "Offer description",
-	"Successfully deleted the order": "Successfully deleted the order"
+	"green": "green",
+	"yellow": "yellow"
 }

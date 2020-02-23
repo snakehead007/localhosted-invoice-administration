@@ -32,6 +32,10 @@ html
                                                             button(type="button" class="btn btn-"+((settings.theme==="info")?"outline-":"")+"info") #{__('blue')}
                                                         a(href='/settings/change/theme/danger',class="button")
                                                             button(type="button" class="btn btn-"+((settings.theme==="danger")?"outline-":"")+"danger") #{__('red')}
+                                                        a(href='/settings/change/theme/success',class="button")
+                                                            button(type="button" class="btn btn-" + ((settings.theme === "success") ? "outline-" : "") + "success") #{__('green')}
+                                                        a(href='/settings/change/theme/warning',class="button")
+                                                            button(type="button" class="btn btn-" + ((settings.theme === "warning") ? "outline-" : "") + "warning") #{__('yellow')}
                                     tr(onclick="openLang()",class="settingsOption optionLang")
                                         td
                                             p(class="lead") #{__('Language')}
