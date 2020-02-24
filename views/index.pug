@@ -5,10 +5,9 @@ html
     include includes/topBar
     div(class="container-fluid")
         div(class ="row")
-            nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+            nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
                     div(class="sidebar-sticky")
-                          include includes/navFlexCollumn
-                          include includes/bookmarks
+                          include includes/mainMenu
             main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
                   div(class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom")
                     h1(class="h2") #{__('Dashboard')}
@@ -22,7 +21,8 @@ html
                           a(class="dropdown-item active" href="/dashboard/chart/" + year )=year
                           a(class="dropdown-item" href="/dashboard/chart/" + String(Number(year) + Number(1)))=String(Number(year) + Number(1))
                           a(class="dropdown-item" href="/dashboard/chart/" + String(Number(year) + Number(2)))=String(Number(year) + Number(2))
-                  canvas(class="my-4 w-100" id="myChart" width="900" height="380")
+                  include includes/messages
+                  canvas(class="my-4 w-100 h-60" id="myChart" width="900" height="380")
                   h2 #{__('Unpaid invoices')}
                   if invoices.length == 0
                       div(class="alert alert-info col-lg-12 col-md-12 col-sm-12" role="alert") #{__('No unpaid invoices found.')}

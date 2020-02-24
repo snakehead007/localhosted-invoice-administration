@@ -19,9 +19,9 @@ exports.streetNr = (req,res) => {
 };
 */
 
-exports.name = (req,res) => {
-    res.send(validate.valueMustBeAName(req,res,req.params.name,"",req.params.bool==="true"));
+exports.name = (req, res) => {
+    res.send(validate.valueMustBeAName(req, res, req.params.name, "", req.params.bool === "true"));
 };
-exports.noName = (req,res) => {
-    res.send(validate.valueMustBeAName(req,res,"","",req.params.bool==="true"));
+exports.noName = (req, res) => {
+    res.send(validate.valueMustBeAName(req, res, "", "", req.params.bool === "true"));
 };

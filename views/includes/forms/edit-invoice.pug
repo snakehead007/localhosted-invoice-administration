@@ -1,0 +1,52 @@
+form(action='/edit/invoice/'+invoice._id,method='post')
+    script.
+        $(function () {
+            $("#datepicker").datepicker($.datepicker.regional["#{settings.locale}"]);
+            $("#datepicker2").datepicker($.datepicker.regional["#{settings.locale}"]);
+        });
+    div(class="form-row")
+        div(class="form-group col-md-3")
+            label(for="title") Datum
+            input#datepicker(type="text",class="form-control",name="date")
+        if invoice.invoiceNr
+            div(class="form-group col-md-3")
+                label(for="title")=__('Pay date')
+                input#datepicker2(type="text",class="form-control",name="datePaid")
+            div(class="form-group col-md-2")
+                label(for="title")=__('Invoice number')
+                input(type="number",class="form-control",value=invoice.invoiceNr,name="invoiceNr")
+        if invoice.offerNr
+            div(class="form-group col-md-2")
+                label(for="title")=__('Offer number')
+                input(type="number",class="form-control",value=invoice.offerNr,name="offerNr")
+        div(class="form-group col-md-2")
+            label(for="title")=__('Advance')
+            input(type="number",class="form-control",value=invoice.advance,name="advance",step="any")
+    if invoice.offerNr
+        div.form-row
+            div(class="col-10 input-group mb-3")
+                div(class="input-group-prepend")
+                    span(class="input-group-text") #{__('Offer description')}
+                textarea(input="text",name="description",class="form-control" aria-label="With textarea")=invoice.description
+
+        script.
+            //date is done via DOM, the locale cannot be set right when using pug
+            let id = "date"+"#{invoice.invoiceNr}";
+            let date = new Date("#{invoice.date}").toLocaleString("#{settings.locale}", {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric'
+            });
+            document.getElementById("datepicker").value = date;
+            if("#{invoice.datePaid}"!==""){
+                let datePaid = new Date("#{invoice.datePaid}").toLocaleString("#{settings.locale}", {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric'
+                });
+                document.getElementById("datepicker2").value = datePaid;
+            }
+
+
+    hr
+    button(type="submit",class="btn btn-outline-"+settings.theme)=__('Update')

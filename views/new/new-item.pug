@@ -26,10 +26,9 @@ body
     include ../includes/topBar
     div(class="container-fluid")
       div(class ="row")
-        nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+        nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
           div(class="sidebar-sticky")
-            include ../includes/navFlexCollumn
-            include ../includes/bookmarks
+            include ../includes/mainMenu
             include ../includes/stockOptionMenu
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           h2(class="pt-3") #{__('Add item')}
@@ -42,9 +41,9 @@ body
                 input(id="name",type="text",class="form-control",name="name", required)
               div(class="form-group col-md-2")
                 label(for="price") #{__('Price')}
-                input(id="price" type="number",class="form-control",name="price",step=".01" required)
+                input(id="price" type="number",class="form-control",name="price",step="any" required)
               div(class="form-group col-md-2")
                 label(for="amount") #{__('Amount')}
-                input(id="amount",type="number",class="form-control",name="amount",step=".01",value="0" required)
+                input(id="amount",type="number",class="form-control",name="amount",step="any",value="0" required)
             hr
             button(type="submit",class="btn btn-outline-"+settings.theme) #{__('Add')}

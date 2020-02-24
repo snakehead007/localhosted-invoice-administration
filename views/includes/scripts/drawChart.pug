@@ -1,6 +1,5 @@
 script.
     function drawChart(totaal) {
-        console.log(totaal);
         var ctx = document.getElementById('myChart').getContext('2d');
         var maand = ["#{__('January')}", "#{__('February')}", "#{__('March')}", "#{__('April')}", "#{__('May')}", "#{__('June')}", "#{__('July')}", "#{__('August')}", "#{__('September')}", "#{__('October')}", "#{__('November')}", "#{__('December')}"];
         var color = Chart.helpers.color;
@@ -16,7 +15,7 @@ script.
                     borderWidth: 1
                 }, {
                     label: " #{__('Incl. vat')} €",
-                    data: [totaal[0] * 1.21, totaal[1] * 1.21, totaal[2] * 1.21, totaal[3] * 1.21, totaal[4] * 1.21, totaal[5] * 1.21, totaal[6] * 1.21, totaal[7] * 1.21, totaal[8] * 1.21, totaal[9] * 1.21, totaal[10] * 1.21, totaal[11] * 1.21],
+                    data: [(totaal[0] * 1.21).toFixed(2), (totaal[1] * 1.21).toFixed(2), (totaal[2] * 1.21).toFixed(2), (totaal[3] * 1.21).toFixed(2), (totaal[4] * 1.21).toFixed(2), (totaal[5] * 1.21).toFixed(2), (totaal[6] * 1.21).toFixed(2), (totaal[7] * 1.21).toFixed(2), (totaal[8] * 1.21).toFixed(2), (totaal[9] * 1.21).toFixed(2), (totaal[10] * 1.21).toFixed(2), (totaal[11] * 1.21).toFixed(2)],
                     backgroundColor: color(window.chartColors.blue).alpha(1).rgbString(),
                     borderColor: window.chartColors.blue,
                     borderWidth: 1

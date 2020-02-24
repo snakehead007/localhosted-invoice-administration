@@ -5,9 +5,9 @@ const clientController = require('../controllers/clientController');
 const invoiceController = require('../controllers/invoiceController');
 const orderController = require('../controllers/orderController');
 
-router.get('/profile',profileController.view_profile_get);
-router.get('/client/:idc',clientController.getClientView);
-router.get('/invoice/:idi',invoiceController.view_invoice_get);
-router.get('/order/:ido',orderController.view_order_get);
+router.get('/profile', profileController.viewProfileGet);
+router.get('/client/:idc', clientController.getClientView);
+router.get('/invoice/:idi', invoiceController.viewInvoiceGet);
+router.get('/order/:ido', orderController.viewOrderGet);
 
 module.exports = router;

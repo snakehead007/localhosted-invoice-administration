@@ -17,24 +17,24 @@ const Order = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    fromUser:{
+    fromUser: {
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
     },
-    fromInvoice:{
+    fromInvoice: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Invoice'
     },
-    fromClient:{
+    fromClient: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Client'
     },
-    creationDate:{
-        type:Date,
-        default:Date.now()
+    creationDate: {
+        type: Date,
+        default: Date.now()
     },
-    lastUpdated:{
-        type:Date,
-        default:Date.now()
+    lastUpdated: {
+        type: Date,
+        default: Date.now()
     }
 });
 
-const order =  mongoose.model('Order', Order);
+const order = mongoose.model('Order', Order);
 module.exports = order;

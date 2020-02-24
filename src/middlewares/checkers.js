@@ -3,16 +3,14 @@ const Settings = require('../models/settings');
 const i18n = require('i18n');
 
 
-exports.stillSignedInCheck = (req,res,next) => {
-    if(!req.session._id){
-        if(process.env.LOGGING>1)
-            console.log("[Info]: not logged in anymore, destroying session & redirect to login");
-        return logoutController.logout_get(req,res);
+exports.stillSignedInCheck = (req, res, next) => {
+    if (!req.session._id) {
+        return logoutController.logout_get(req, res);
     }
-    Settings.findOne({fromUser:req.session._id},function(err,settings){
-        if(err){
+    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+        if (err) {
             console.trace(err);
-            req.flash('danger',"couldn't find user");
+            req.flash('danger', "couldn't find user");
             req.redirect('/');
         }
         req.locale = settings.locale;
@@ -22,4 +20,4 @@ exports.stillSignedInCheck = (req,res,next) => {
         res.locals.language = settings.locale;
         next();
     });
-} ;
+};

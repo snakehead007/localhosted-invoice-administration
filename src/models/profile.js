@@ -10,30 +10,30 @@ const Profile = new mongoose.Schema({
     iban: String,
     bic: String,
     vat: String,
-    invoiceNrCurrent : {
+    invoiceNrCurrent: {
         type: Number,
         default: 1,
     },
-    offerNrCurrent : {
+    offerNrCurrent: {
         type: Number,
         default: 1,
     },
-    creditNrCurrent : {
+    creditNrCurrent: {
         type: Number,
         default: 1,
     },
     tel: String,
-    email: [String],
-    bookmarks: [[String,String]],
+    email: String,
+    bookmarks: [[String, String]],
     bookmarksText: String,
-    fromUser:{
+    fromUser: {
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
-    },logoFile:{
+    }, logoFile: {
         data: Buffer,
         contentType: String
     }
 });
 
-const profile =  mongoose.model('Profile', Profile);
+const profile = mongoose.model('Profile', Profile);
 
 module.exports = profile;

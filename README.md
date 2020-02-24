@@ -1,7 +1,7 @@
 # Invoice-administration
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/999b1f235964441b98dfccc5eef26217)](https://app.codacy.com/manual/snakehead007/invoice-administration?utm_source=github.com&utm_medium=referral&utm_content=snakehead007/invoice-administration&utm_campaign=Badge_Grade_Settings)
-
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2b050f3946714359aaca43cc883f5115)](https://www.codacy.com/manual/snakehead007/invoice-administration?utm_source=github.com&utm_medium=referral&utm_content=snakehead007/invoice-administration&utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.com/snakehead007/invoice-administration.svg?branch=master)](https://travis-ci.com/snakehead007/invoice-administration)
 
 This program is mainly used for managing and administrating invoices and generating them into .pdf format
 
@@ -13,53 +13,48 @@ This project is translated in 2 languages, Dutch and English.
 
 This program is created and maintained for [www.mdsart.be/](https://www.mdsart.be/)
 
-demo
----
+## demo
+
 If you want to test it out and help make this program better, you can contact me so I can whitelist you.
 After that, you'll be able to go to [account.karel.be](https://account.karel.be/) and use it.
 
-about
---
+## about
 
 Functionalities:
-  - Add contacts, invoices, quotations, offers, materials
-  - A yearly chart (automatically updated);
-  - Downloadable pdfs for Invoices, quotations and offers
-  - Upload your logo to use on the pdf's. 
-  - Your profile can be edited
-  - All documents have a switch, to keep that it has been payed or not.
-  - Calculations (inch to cm, precentages, using your materials calculating how much something costs, ...) (currenlty in progress)
-  - A search function (currently in progress)
-  - 5 different themes
-  - Logging on using Google Connect Id
-  - changeable text for the pdf's
-  - 2 languages: English and Dutch
+
+-   Add contacts, invoices, quotations, offers, materials
+-   A yearly chart (automatically updated);
+-   Downloadable pdfs for Invoices, quotations and offers
+-   Upload your logo to use on the pdf's. 
+-   A personalized profile
+-   All documents have a status, to keep that it has been payed or not.
+-   A search function
+-   5 different themes
+-   Sign in by Google
+-   Changeable text for the pdf's
+-   2 languages: English and Dutch
 
 ### How to Install locally or host
 
- - local:
- 
-   `docker-compose up --build`
- 
- - synology/hub.docker:
-   
-   start container [mongo](https://hub.docker.com/_/mongo) first.
-  
-   start container [invoice-administration](https://hub.docker.com/repository/docker/snakehead007/invoice-administration) second, with link to mongo container as 'mongo'.
+-   local: 
+       rename .env.bak to .env
+      `docker-compose up --build`
+
+-   synology/hub.docker:
+
+     start container [mongo](https://hub.docker.com/_/mongo) first.
+
+     start container [invoice-administration](https://hub.docker.com/repository/docker/snakehead007/invoice-administration) second, with link to mongo container as 'mongo'.
 
 ### About (technical)
-All data is kept locally by mongodb.
 
-(Changing from computer, you will have to export and import all data manually,for now.)
+All data is stored safely on by mongoDB behind a firewall on my server. unless you use a local version.
 
 The front end view is handled by 'pug' and the backend is runned by 'nodejs'.
 
 All the request are run with 'Express'.
 
-For more information about all the packages that are used in this project check the [wiki](https://github.com/snakehead007/simple-invoice-administration/wiki) .
-
-Screenshots
--
+## Screenshots
 
 ![Profile edit page](screenshots/1.png)
 
@@ -75,7 +70,7 @@ Screenshots
 
 ![the chart](screenshots/7.png)
 
-Future plans
--
-* In the future the view engine, Pug, will be replace by React.
-* When this project comes out of beta, you'll be able to create an account  for a monthly fee.
+## Future plans
+
+-   In the future the view engine, Pug, will be replace by React.
+-   When this project comes out of beta, you'll be able to create an account  for a monthly fee.

@@ -13,10 +13,9 @@ body
 
     div(class="container-fluid")
       div(class ="row")
-        nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+        nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
           div(class="sidebar-sticky")
-            include ../includes/navFlexCollumn
-            include ../includes/bookmarks
+            include ../includes/mainMenu
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           h2(class="pt-3")=description
           hr
@@ -26,7 +25,7 @@ body
               tr
                 th(scope="row") #{__('Date')}
                 td
-                  h4=new Date(invoice.date).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' })
+                  h4(id="date"+invoice.invoiceNr)
               if invoice.invoiceNr
                 tr
                   th(scope="row") #{__('Invoice Nr')}
@@ -47,3 +46,12 @@ body
                   th(scope="row") #{__('Advance')}
                   td
                     h4=invoice.advance
+              script.
+                //date is done via DOM, the locale cannot be set right when using pug
+                let id = "date"+"#{invoice.invoiceNr}";
+                let date = new Date("#{invoice.date}").toLocaleString("#{settings.locale}", {
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric'
+                });
+                document.getElementById(id).innerHTML = date;
