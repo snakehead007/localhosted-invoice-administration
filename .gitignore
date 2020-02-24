@@ -17,7 +17,6 @@ node_modules/
 build/*
 data/*
 .env
-/.env
 /.env/
 .env/
 src/dump.rdb
