@@ -1,3 +1,7 @@
+.table-responsive{
+    overflow-x: visible !important;
+}
+
 body {
     font-size: .875rem;
 }
@@ -15,9 +19,6 @@ body {
     position: fixed !important;
 }
 
-.underWhiteSpace{
-    margin-bottom: 20px;
-}
 .sidebar {
     position: fixed;
     top: 0;

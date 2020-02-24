@@ -300,5 +300,8 @@
 	"Signature for agreement": "Handtekening voor akkoord",
 	"--------FROM-HERE-ALL-ABOVE-CHECKED---- -------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------",
 	"green": "green",
-	"yellow": "yellow"
+	"yellow": "yellow",
+	"Download invoice": "Download invoice",
+	"Download offer": "Download offer",
+	"Download creditnote": "Download creditnote"
 }

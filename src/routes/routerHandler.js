@@ -26,6 +26,7 @@ const deleteRouter = require("./deleteRouter");
 const validateRouter = require("./validateRouter");
 const searchRouter = require("./searchRouter");
 const whitelistRouter = require("./whitelistRouter");
+const streamRouter = require("./streamRouter");
 //Controllers
 
 router.use("/", loginRouter); //index page
@@ -42,11 +43,12 @@ router.use("/settings", stillSignedInCheck, settingsRouter);
 //router.use("/calc",stillSignedInCheck,calcRouter);
 router.use("/edit", stillSignedInCheck, editRouter);
 router.use("/upload", stillSignedInCheck, uploadRouter);
-router.use("/download", downloadRouter);
+router.use("/download",stillSignedInCheck, downloadRouter);
 router.use("/delete", stillSignedInCheck, deleteRouter);
 router.use("/valid", validateRouter);
 router.use("/search", stillSignedInCheck, searchRouter);
 router.use("/whitelist", whitelistRouter);
+router.use("/stream", stillSignedInCheck,streamRouter);
 //Routers
 if (process.env.DEVELOP === "false") {
 //error handling for 404

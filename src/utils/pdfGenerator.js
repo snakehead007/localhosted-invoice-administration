@@ -18,7 +18,8 @@ const path = require("path");
 
 const {callGetBase64, createJSON, replaceAll} = require("../utils/pdfCreation");
 require("jspdf-autotable");
-exports.createPDF = async (req, res, style = "invoice", profile, settings, client, invoice, orders) => {
+exports.createPDF = async (req, res, style = "invoice", profile, settings, client, invoice, orders,download=false) => {
+    console.log('download set to: '+download);
     let imgData;
     try {
         imgData = await callGetBase64(req.session._id);
@@ -271,24 +272,33 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         filename = i18n.__("creditnote") + " " + invoice.creditNr + ".pdf";
     if (style === "offer")
         filename = i18n.__("offer") + " " + invoice.offerNr + ".pdf";
-    let file = "./public/images/" + req.session._id + "/" + filename;
+    try{
+        await fs.mkdirSync("./temp/"+req.session._id);
+    }catch(e){
+        console.error(e);
+    }
+    let file = "./temp/" + req.session._id + "/" + filename;
+    console.log(file);
     await fs.writeFileSync(file, doc.output(), "binary");
-    await fs.readFile(file, function (err, data) {
-        if (data) {
-            res.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
-            res.setHeader("Content-Type", "application/pdf");
-            res.setHeader("Content-Length", data.length);
-            res.status(200).end(data, "binary");
-        } else {
-            req.flash("danger", "something went wrong, please try again");
-            res.redirect("back");
-        }
-    });
-    /*let stream = await fs.readStream(location);
-    filename = encodeURIComponent(filename);
-    res.setHeader("Content-disposition", "inline; filename="" + filename + """);
-    res.setHeader("Content-type", "application/pdf");
-    stream.pipe(res);*/
+    if(download){
+        res.download(file);
+    }else{
+        fs.readFile(file, function (err,data){
+            res.contentType("application/pdf");
+            res.send(data);
+        });
+        /*await fs.readFile(file, function (err, data) {
+            if (data) {
+                res.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
+                res.setHeader("Content-Type", "application/pdf");
+                res.setHeader("Content-Length", data.length);
+                res.status(200).end(data, "binary");
+            } else {
+                req.flash("danger", "something went wrong, please try again");
+                res.redirect("back");
+            }
+        });*/
+    }
     delete global.window;
     delete global.navigator;
     delete global.btoa;

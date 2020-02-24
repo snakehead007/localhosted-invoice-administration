@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const downloadController = require("../controllers/downloadController");
 
-router.get('/invoice/:idi', downloadController.download_invoice_get);
-router.get('/offer/:idi', downloadController.download_offer_get);
-router.get('/credit/:idi', downloadController.download_credit_get);
+router.get('/invoice/:idi', downloadController.downloadInvoicePDF);
+router.get('/offer/:idi', downloadController.downloadOfferPDF);
+router.get('/credit/:idi', downloadController.downloadCreditPDF);
 
 module.exports = router;

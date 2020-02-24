@@ -16,7 +16,7 @@ const {callGetBase64, createJSON, replaceAll} = require("../utils/pdfCreation");
  * @param req
  * @param res
  */
-exports.download_invoice_get = (req, res) => {
+exports.streamInvoicePDF = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
         if (!error.findOneHasError(req, res, err, profile)) {
             Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
@@ -37,17 +37,6 @@ exports.download_invoice_get = (req, res) => {
                                             req.flash("danger", i18n.__("Something went wrong, please try again"));
                                             req.redirect("back");
                                         }
-                                        /*res.render("pdf/pdf", {
-                                            "profile": profile,
-                                            "client": client,
-                                            "orders": createJSON(orders),
-                                            "invoice": invoice,
-                                            "length": orders.length,
-                                            "settings": settings,
-                                            "invoiceText": replaceAll(settings.invoiceText, profile, client, invoice, settings.locale),
-                                            "imgData": imgData,
-                                            "vat": settings.vatPercentage
-                                        });*/
                                     }
                                 });
                             });
@@ -59,7 +48,7 @@ exports.download_invoice_get = (req, res) => {
     });
 };
 
-exports.download_offer_get = (req, res) => {
+exports.streamOfferPDF = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
@@ -76,7 +65,7 @@ exports.download_offer_get = (req, res) => {
     });
 };
 
-exports.download_credit_get = (req, res) => {
+exports.streamCreditPDF = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
@@ -85,6 +74,54 @@ exports.download_credit_get = (req, res) => {
                         if (!err) {
 
                             createPDF(req, res, "credit", profile, settings, client, invoice, orders);
+                        }
+                    });
+                });
+            });
+        });
+    });
+};
+
+exports.downloadCreditPDF = (req, res) => {
+    Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+        Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+            Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
+                Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
+                    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+                        if (!err) {
+                            createPDF(req, res, "credit", profile, settings, client, invoice, orders,true);
+                        }
+                    });
+                });
+            });
+        });
+    });
+};
+
+exports.downloadInvoicePDF = (req, res) => {
+    Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+        Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+            Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
+                Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
+                    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+                        if (!err) {
+                            createPDF(req, res, "invoice", profile, settings, client, invoice, orders,true);
+                        }
+                    });
+                });
+            });
+        });
+    });
+};
+
+exports.downloadOfferPDF = (req, res) => {
+    Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+        Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+            Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
+                Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
+                    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+                        if (!err) {
+                            createPDF(req, res, "offer", profile, settings, client, invoice, orders,true);
                         }
                     });
                 });
