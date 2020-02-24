@@ -43,3 +43,8 @@ ul(class="nav flex-column mb-2")
             a(class="nav-link",href='/invoice/new/credit')
                 span(data-feather="plus-circle")
                 span #{__('New creditnote')}
+    if client
+        li(class="nav-item")
+            a(class="nav-link",href='/edit/client/'+client._id)
+                span(data-feather="edit-3")
+                span #{__('Edit this client')}

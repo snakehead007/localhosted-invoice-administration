@@ -14,19 +14,16 @@ table(class="table table-striped table-sm ",id="hoofdTabel")
                 td
                     if invoice.invoiceNr
                         a(href='/order/all/' + invoice._id )=invoice.invoiceNr
-                    if invoice.offerNr && !invoice.invoiceNr
+                    if invoice.offerNr
                         a(href='/order/all/' + invoice._id) #{__('Offer')}  #{" "+invoice.offerNr}
-                    if invoice.creditNr && !invoice.offerNr && !invoice.invoiceNr
+                    if invoice.creditNr
                         a(href='/order/all/' + invoice._id ) #{__('Creditnote')} #{" "+invoice.creditNr}
                 if !client
                     td
                         a(href='/invoice/all/' + invoice.fromClient)=invoice.clientName
-                td=new Date(invoice.date).toLocaleString(settings.locale,{ year: 'numeric', month: 'numeric', day: 'numeric' })
-                if invoice.invoiceNr
+                td(id="date"+invoice._id)
                     td
                         span=(invoice.total * 1.21).toFixed(2) + "€"
-                else
-                    td
                 if invoice.invoiceNr
                     td
                         div(class="custom-control custom-switch")
@@ -36,6 +33,15 @@ table(class="table table-striped table-sm ",id="hoofdTabel")
                             if !invoice.isPaid
                                 input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id, onclick='setStatus(\"' + invoice._id + '\")')
                                 label(class="custom-control-label" for=invoice._id) #{__('Unpaid')}
+                else if invoice.offerNr
+                    td
+                        div(class="custom-control custom-switch")
+                            if invoice.isAgreed
+                                input(type="checkbox" class="custom-control-input bg-success" id=invoice._id, onclick='setAgreedStatus(\"' + invoice._id + '\")', checked)
+                                label(class="custom-control-label" for=invoice._id) #{__('Agreed')}
+                            if !invoice.isAgreed
+                                input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id, onclick='setAgreedStatus(\"' + invoice._id + '\")')
+                                label(class="custom-control-label" for=invoice._id) #{__('Not agreed')}
                 else
                     td
                 td
@@ -43,15 +49,26 @@ table(class="table table-striped table-sm ",id="hoofdTabel")
                         button(role="button", class="btn btn-outline-" + settings.theme + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") #{__('Actions')}
                         div(class="dropdown-menu", aria-labelledby="actionsDropdown")
                             a(class="dropdown-item button", href='/view/invoice/' + invoice._id ) #{__('View')}
-                            a(class="dropdown-item",href='/edit/invoice/' + invoice._id) #{__('Edit')}
+                            a(class="dropdown-item",href='/order/all/' + invoice._id) #{__('Edit')}
                             a(class="dropdown-item", href='/delete/invoice/' + invoice._id) #{__('Delete')}
                             div(class="dropdown-divider")
                             if invoice.creditNr
-                                a(class="dropdown-item", href='/download/credit/' + invoice._id ,id="target",target="_blank") #{__('Download invoice')}
+                                a(class="dropdown-item", href='/stream/credit/' + invoice._id ,id="target",target="_tab" rel="noopener noreferrer") #{__('View creditnote')}
+                                a.dropdown-item#target(href="/download/credit/"+invoice._id,)=__("Download creditnote")
                             if invoice.invoiceNr
-                                a(class="dropdown-item", href='/download/invoice/' + invoice._id ,id="target",target="_blank") #{__('Download invoice')}
+                                a(class="dropdown-item", href='/stream/invoice/' + invoice._id ,id="target",target="_tab" rel="noopener noreferrer") #{__('View invoice')}
+                                a.dropdown-item#target(href="/download/invoice/"+invoice._id,)=__("Download invoice")
                                 a(class="dropdown-item", href='/invoice/change/downgrade/' + invoice._id ) #{__('Downgrade to offer')}
                             if invoice.offerNr
-                                a(class="dropdown-item", href='/download/offer/' + invoice._id ,id="target",target="_blank") #{__('Download offer')}
+                                a(class="dropdown-item", href='/stream/offer/' + invoice._id ,target="_tab" rel="noopener noreferrer") #{__('View offer')}
+                                a.dropdown-item#target(href="/download/offer/"+invoice._id,)=__("Download offer")
                                 if !invoice.invoiceNr
                                     a(class="dropdown-item button", href="/invoice/change/upgrade/" + invoice._id ) #{__('Upgrade to invoice')}
+            script.
+                //date is done via DOM, the locale cannot be set right when using pug
+                let id#{invoice._id} = "date"+"#{invoice._id}";
+                document.getElementById(id#{invoice._id}).innerHTML = new Date("#{invoice.date}").toLocaleString("#{settings.locale}", {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric'
+                });

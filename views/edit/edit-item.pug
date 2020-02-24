@@ -28,9 +28,9 @@ body
 
     div(class="container-fluid")
       div(class ="row")
-        nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+        nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
           div(class="sidebar-sticky")
-            include ../includes/navFlexCollumn
+            include ../includes/mainMenu
             include ../includes/bookmarks
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           h2(class="pt-3") Materiaal bewerken
@@ -43,6 +43,6 @@ body
                 input(type="text",class="form-control",value=item.name,name="name", required)
               div(class="form-group col-md-2")
                 label(for="title") Prijs
-                input(type="number",class="form-control",value=item.price,name="price",step=".01" required)
+                input(type="number",class="form-control",value=item.price,name="price",step="any" required)
             hr
             button(type="submit",class="btn btn-outline"+settings.theme) bijwerken

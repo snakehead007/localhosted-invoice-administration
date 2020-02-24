@@ -58,10 +58,9 @@ body
     include ../includes/topBar
     div(class="container-fluid")
       div(class ="row")
-        nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+        nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
           div(class="sidebar-sticky")
-            include ../includes/navFlexCollumn
-            include ../includes/bookmarks
+            include ../includes/mainMenu
             include ../includes/clientOptionMenu
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           h2(class="pt-3") #{__('Add client')}
@@ -91,13 +90,13 @@ body
                       span.fa-color-buttons
                         i.fas.fa-plus-square.fa-2x
               div(class="form-group col-md-2")
-                  label(for="title") BTW-nummer
+                  label(for="title")=__('VAT number')
                   input(type="text",class="form-control",name="vat")
               div(class="form-group col-md-2")
-                  label(for="title") VAT Percentage
+                  label(for="title")=__('VAT precentage')
                   input(type="text",class="form-control",value=settings.vatPercentage,name="vatPercentage",required="true")
               div(class="form-group col-md-2")
-                label(for="title") #{__('Banking number')}
+                label(for="title") #{__('Account number')}
                 input(type="text",class="form-control",name="bankNr")
               div(class="form-group col-md-1")
                 label(for="title") #{__('postal')}

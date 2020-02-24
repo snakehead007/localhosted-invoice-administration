@@ -1,4 +1,4 @@
-const mongoose = require( "mongoose");
+const mongoose = require("mongoose");
 
 const Item = new mongoose.Schema({
     name: String,
@@ -11,19 +11,19 @@ const Item = new mongoose.Schema({
         default: 0
     },
     type: {
-        type:String,
+        type: String,
         default: "g"
     },
-    fromUser:{
+    fromUser: {
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
     },
-    creationDate:{
-        type:Date,
-        default:Date.now()
+    creationDate: {
+        type: Date,
+        default: Date.now()
     },
-    lastUpdated:{
-        type:Date,
-        default:Date.now()
+    lastUpdated: {
+        type: Date,
+        default: Date.now()
     }
 });
 

@@ -6,10 +6,9 @@ html
             include includes/topBar
             div(class="container-fluid")
                 div(class ="row")
-                    nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+                    nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
                         div(class="sidebar-sticky")
-                            include includes/navFlexCollumn
-                            include includes/bookmarks
+                            include includes/mainMenu
                     main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
                         h2(class="pt-3") Settings
                         include includes/messages
@@ -33,6 +32,10 @@ html
                                                             button(type="button" class="btn btn-"+((settings.theme==="info")?"outline-":"")+"info") #{__('blue')}
                                                         a(href='/settings/change/theme/danger',class="button")
                                                             button(type="button" class="btn btn-"+((settings.theme==="danger")?"outline-":"")+"danger") #{__('red')}
+                                                        a(href='/settings/change/theme/success',class="button")
+                                                            button(type="button" class="btn btn-" + ((settings.theme === "success") ? "outline-" : "") + "success") #{__('green')}
+                                                        a(href='/settings/change/theme/warning',class="button")
+                                                            button(type="button" class="btn btn-" + ((settings.theme === "warning") ? "outline-" : "") + "warning") #{__('yellow')}
                                     tr(onclick="openLang()",class="settingsOption optionLang")
                                         td
                                             p(class="lead") #{__('Language')}
@@ -76,19 +79,12 @@ html
                                                                 code &#91;bic&#93;       : Bic nummer
                                                                 code &#91;tel&#93;       : Telefoon nummer
                                                                 code &#91;mail&#93;       : mail
-                                                                code &#91;contact.rekeningnr&#93;: mail van contactpersoon die bij de factuur hoort
-                                                                code &#91;factuur.datum&#93;     : Datum van creatie van het document in het programma
-                                                                code &#91;factuur.factuurnr&#93; : Nummer van de factuur
-                                                                code &#91;factuur.offertenr&#93; : Nummer van de offerte
-                                                                code &#91;factuur.creditnr&#93;  : Nummer van de creditnota
-                                                                code &#91;factuur.voorschot&#93; : het voorschot bedrag
-                                                                code &#91;factuur.totaal&#93;    : het totaal aantal bedrag
                                                                 code &#91;datum&#93;    : Volledig datum van vandaag (dd maand yyyy)
                                                                 code &#91;datum.d&#93;  : Dag van vandaag in getal (dd)
                                                                 code &#91;datum.m&#93;  : Volledige maand van vandaag (maand)
                                                                 code &#91;datum.j&#93;  : Volledig jaar van vandaag (yyyy)
 
-                                    tr(onclick="openBook()",class="settingsOption optionBook")
+                                    //tr(onclick="openBook()",class="settingsOption optionBook")
                                         td
                                             p(class="lead") #{__('Bookmarks')}
                                                 span(class="badge badge-pill badge-warning") #{__('in progress')}

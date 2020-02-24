@@ -12,16 +12,17 @@ const Settings = require('../models/settings');
 const {isNumeric} = require('../utils/numbers');
 const {distinct} = require('../utils/array');
 const i18n = require('i18n');
-module.exports.search_get = (req,res) => {
+const User = require('../models/user');
+module.exports.search_get = (req, res) => {
     let str = req.body.search.toString().toLowerCase();
     let clients = [];
     let invoices = [];
     let orders = [];
     let items = [];
-    Client.find({fromUser:req.session._id}, function(err, clients_) {
-        Invoice.find({fromUser:req.session._id}, function(err, invoices_) {
-            Order.find({fromUser:req.session._id}, function(err, orders_) {
-                Item.find({fromUser:req.session._id},function(err, mats_){
+    Client.find({fromUser: req.session._id}, function (err, clients_) {
+        Invoice.find({fromUser: req.session._id}, function (err, invoices_) {
+            Order.find({fromUser: req.session._id}, function (err, orders_) {
+                Item.find({fromUser: req.session._id}, function (err, mats_) {
                     //orders
                     for (let order of orders_) {
                         if (String(order.description).toLowerCase().includes(str)) {
@@ -35,7 +36,7 @@ module.exports.search_get = (req,res) => {
                                 invoices.push(invoice);
                             } else if (String(invoice.offerNr).includes(str)) {
                                 invoices.push(invoice);
-                            } else if (String(invoice.creditNr).includes(str)){
+                            } else if (String(invoice.creditNr).includes(str)) {
                                 invoices.push(invoice);
                             }
                         }
@@ -62,10 +63,10 @@ module.exports.search_get = (req,res) => {
                         }
                     }
                     //items
-                    if(!mats_.length == 0){
-                        for (let mat of mats_){
+                    if (!mats_.length == 0) {
+                        for (let mat of mats_) {
                             let _mat = String(mat.naam).toLowerCase();
-                            if(_mat.includes(str)){
+                            if (_mat.includes(str)) {
                                 items.push(mat);
                             }
                         }
@@ -75,19 +76,19 @@ module.exports.search_get = (req,res) => {
                     let orders_d = distinct(orders);
                     let invoices_d = distinct(invoices);
                     let items_d = distinct(items);
-                    Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+                    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                         if (!err) {
-                            Profile.findOne({fromUser:req.session._id}, function (err, profile) {
+                            Profile.findOne({fromUser: req.session._id}, function (err, profile) {
                                 if (!err) {
                                     res.render('search', {
-                                        "description":  i18n.__("search on ")+"\"" + str + "\"",
+                                        "description": i18n.__("search on ") + "\"" + str + "\"",
                                         "settings": settings,
                                         "clients": clients_d,
                                         "orders": orders_d,
                                         "invoices": invoices_d,
                                         "items": items_d,
                                         "profile": profile,
-                                        "currentSearch":str
+                                        "currentSearch": str
                                     });
                                 }
                             });

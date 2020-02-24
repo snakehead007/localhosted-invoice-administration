@@ -12,10 +12,10 @@ const Client = new mongoose.Schema({
     place: String,
     vatPercentage: {
         type: Number,
-        default:21
+        default: 21
     },
-    vat:String,
-    country:String,
+    vat: String,
+    country: String,
     email: [{
         type: String,
         lowercase: true
@@ -29,26 +29,26 @@ const Client = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Project'
     }],
-    fromUser:{
+    fromUser: {
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
     },
-    lang:{
-        type:String,
-        default:"en-GB"
+    lang: {
+        type: String,
+        default: "en-GB"
     },
-    creationDate:{
-        type:Date,
-        default:Date.now()
+    creationDate: {
+        type: Date,
+        default: Date.now()
     },
-    lastUpdated:{
-        type:Date,
-        default:Date.now()
+    lastUpdated: {
+        type: Date,
+        default: Date.now()
     },
-    locale:{
-        type:String,
-        default:'nl-BE'
+    locale: {
+        type: String,
+        default: 'nl-BE'
     }
 });
 
-const client = mongoose.model('Client',Client);
+const client = mongoose.model('Client', Client);
 module.exports = client;

@@ -7,7 +7,9 @@
     "apidoc": "^0.19.1",
     "assert": "^2.0.0",
     "async": "^3.1.1",
+    "atob": "^2.1.2",
     "azure-batch": "^8.0.0",
+    "base64-img": "^1.0.4",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "braces": "^2.3.2",
@@ -31,6 +33,7 @@
     "debug": "^4.1.1",
     "dotenv": "^8.2.0",
     "engine.io-client": "^3.4.0",
+    "eslint": "^6.8.0",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.6",
     "express-flash": "0.0.2",
@@ -48,7 +51,10 @@
     "ibantools": "^2.2.0",
     "iconv-lite": "^0.4.24",
     "image-to-base64": "^2.0.1",
+    "jsdom": "^16.2.0",
     "jsonwebtoken": "^8.5.1",
+    "jspdf": "^1.5.3",
+    "jspdf-autotable": "^3.2.13",
     "jsvat": "^2.1.4",
     "lodash": "^4.17.15",
     "mem": "^6.0.1",
@@ -69,6 +75,7 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
+    "png-js": "^1.0.0",
     "pug": "^2.0.4",
     "qs": "^6.9.1",
     "raw-body": "^2.4.1",
@@ -82,10 +89,12 @@
     "view-helpers": "^0.2.0",
     "winston": "^3.2.1",
     "ws": "^7.2.1",
-    "xmlhttprequest": "^1.8.0"
+    "xmlhttprequest": "^1.8.0",
+    "zlib": "^1.0.5"
   },
   "devDependencies": {
-    "@types/express": "^4.17.2"
+    "@types/express": "^4.17.2",
+    "babel-eslint": "^10.0.3"
   },
   "scripts": {
     "start": "node src/app.js",
@@ -93,9 +102,9 @@
     "test-with-coverage2": "require('dotenv').config()&& istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info  | codacy-coverage --accountToken process.env. --username snakehead007 --projectName invoice-administration && rm -rf ./coverage",
     "doc": "apidoc -i src/ -o apidoc/",
     "build:dev": "sudo docker build -t snakehead007/invoice-administration:dev .",
-    "push:dev": "docker push snakehead007/invoice-administration:dev",
+    "push:dev": "sudo docker push snakehead007/invoice-administration:dev",
     "build:latest": "sudo docker build -t snakehead007/invoice-administration:latest .",
-    "push:latest": "docker push snakehead007/invoice-administration:latest"
+    "push:latest": "sudo docker push snakehead007/invoice-administration:latest"
   },
   "repository": {
     "type": "git",

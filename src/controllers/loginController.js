@@ -2,28 +2,28 @@
  * @module controllers/loginController
  */
 
-const google = require('../middlewares/google');
-const User = require('../models/user');
-const Settings = require('../models/settings');
-const Profile = require('../models/profile');
+const google = require("../middlewares/google");
+const User = require("../models/user");
+const Settings = require("../models/settings");
+const Profile = require("../models/profile");
 
 /**
  *
  * @param req
  * @param res
  */
-exports.login_get =  function getLogin(req,res){
+exports.loginGet = function getLogin(req, res) {
     //req.session;
 
     //This is would redirect if session was already created
     /*if(req.session&&req.session._id){
-        return res.redirect('/dashboard');
+        return res.redirect("/dashboard");
     }*/
     //req.session.regenerate(function(err) {
-        // will have a new session here
-    res.render('login');
+    // will have a new session here
+    res.render("login");
     //});
-    //res.render('login');
+    //res.render("login");
 };
 /**
  *
@@ -31,10 +31,10 @@ exports.login_get =  function getLogin(req,res){
  * @param res
  * @returns {Promise<void>}
  */
-exports.create_user_get = async function getCreateNewUser(req,res){
-    if(process.env.DEVELOP==="true" && process.env.DEVELOP_WITH_GOOGLE==="false"){
+exports.createUserGet = async function getCreateNewUser(req, res) {
+    if (process.env.DEVELOP === "true" && process.env.DEVELOP_WITH_GOOGLE === "false") {
         let newUser;
-        if(process.env.DEVELOP_NO_RANDOM_USER==="false") {
+        if (process.env.DEVELOP_NO_RANDOM_USER === "false") {
             const googleId = Math.floor((Math.random() * 99999999999999999999999999999999999) + 10000000000000000000000000000000000);
             const email = Math.floor((Math.random() * 99999999999999999999999999999999999) + 10000000000000000000000000000000000);
             newUser = new User({
@@ -62,22 +62,21 @@ exports.create_user_get = async function getCreateNewUser(req,res){
 
             req.session._id = currentUser._id;
             req.session.loggedIn = currentUser;
-        }else{ //DEVELOP_NO_RANDOM_USER === true
-            await User.findOne({},function(err,User){
-                if(err) throw new Error(err);
-                if(User.length<=0){
-                }else{
+        } else { //DEVELOP_NO_RANDOM_USER === true
+            await User.findOne({}, function (err, User) {
+                if (err) throw new Error(err);
+                if (User.length <= 0) {
+                } else {
                     newUser = User[0];
                 }
             });
         }
-        if(process.env.LOGGING>1){
-            console.log("[Info]: Generated new random user:");
-            console.log(newUser);
+        if (process.env.LOGGING > 1) {
         }
         req.session.email = newUser.email;
-        res.redirect('/dashboard');
-    }else {
+        req.session.role = "visitor";
+        res.redirect("/dashboard");
+    } else {
         res.redirect(google.urlGoogle());
     }
 };
@@ -86,7 +85,7 @@ exports.create_user_get = async function getCreateNewUser(req,res){
  * @param req
  * @param res
  */
-exports.logout_get = function getLogout(req,res){
+exports.logoutGet = function getLogout(req, res) {
     req.logout();
-    res.redirect('/login');
+    res.redirect("/login");
 };

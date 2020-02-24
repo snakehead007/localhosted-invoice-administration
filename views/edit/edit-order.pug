@@ -26,12 +26,11 @@ body
     include ../includes/topBar
     div(class="container-fluid")
       div(class ="row")
-        nav(class="col-md-2 d-none d-md-block bg-light sidebar")
+        nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
           div(class="sidebar-sticky")
-            include ../includes/navFlexCollumn
-            include ../includes/bookmarks
+            include ../includes/mainMenu
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          h2(class="pt-3")=__('Update order')
+          h2(class="pt-3")=__('Update line')
           hr
           include ../includes/messages
           form(action='/order/edit/'+order._id,method='post')
@@ -44,6 +43,6 @@ body
                 input(type="number",class="form-control",value=order.amount,name="amount", required)
               div(class="form-group col-md-2")
                 label(for="title")=__('Price for each')
-                input(type="number",class="form-control",value=order.price,name="price",step=".01" required)
+                input(type="number",class="form-control",value=order.price,name="price",step="any" required)
             hr
             button(type="submit",class="btn btn-outline-"+settings.theme)=__('Update')

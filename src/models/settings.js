@@ -6,7 +6,7 @@ const Settings = new mongoose.Schema({
         default: "nl-BE"
     },
     theme: {
-        type:String,
+        type: String,
         default: "dark"
     },
     variables: [
@@ -51,7 +51,7 @@ const Settings = new mongoose.Schema({
         type: String,
         default: ""
     },
-    offerText:{
+    offerText: {
         type: String,
         default: ""
     },
@@ -59,7 +59,7 @@ const Settings = new mongoose.Schema({
         type: Number,
         default: 21
     },
-    fromUser:{
+    fromUser: {
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
     }
 });
