@@ -240,7 +240,7 @@ exports.postEditClient = (req, res) => {
                     emailCheck = true;
                 }
             });
-            let vatCheck = (req.body.vat) ? invalid.valueMustBeVatNumber(req, res, req.body.vat) : false;
+            let vatCheck = (req.body.vat) ? invalid.valueMustBeVatNumber(req, res, req.body.vat,false,client.locale) : false;
             let vatPercentageCheck = invalid.valueMustBeAnInteger(req, res, req.body.vatPercentage, true);
             let bankCheck = (req.body.bankNr) ? invalid.valueMustBeValidIban(req, res, req.body.bankNr) : false;
             let postalCheck = (req.body.postalCode) ? invalid.valueMustBePostalCode(req, res, req.body.postalCode) : false;
@@ -253,9 +253,9 @@ exports.postEditClient = (req, res) => {
                     street: req.body.street,
                     streetNr: req.body.streetNr,
                     email: req.body.emails,
-                    vat: req.body.vat,
+                    vat: invalid.formatBEVat(req.body.vat),
                     vatPercentage: req.body.vatPercentage,
-                    bankNr: req.body.bankNr,
+                    bankNr: invalid.formatBEIban(req.body.bankNr),
                     postalCode: req.body.postalCode,
                     place: req.body.place
                 };

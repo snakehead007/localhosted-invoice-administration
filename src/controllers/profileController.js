@@ -5,7 +5,7 @@ const i18n = require("i18n");
 const {findOneHasError, updateOneHasError} = require("../middlewares/error");
 const {getFullNr} = require('../utils/invoices');
 const {sendMessage} = require('../../messages/messages');
-const {valueMustBeValidBic, valueMustBeValidIban, valueMustBeStreetNumber, valueMustBeAName, valueMustBeEmail, numberMustPhoneNumber, valueMustBeVatNumber, valueMustBePostalCode} = require("../utils/formValidation");
+const {formatBEVat,formatBEIban,valueMustBeValidBic, valueMustBeValidIban, valueMustBeStreetNumber, valueMustBeAName, valueMustBeEmail, numberMustPhoneNumber, valueMustBeVatNumber, valueMustBePostalCode} = require("../utils/formValidation");
 /**
  * @api {get} /view/profile view_profile_get
  * @apiDescription On this page you can edit all the profile information
@@ -72,7 +72,7 @@ exports.editProfilePost = async (req, res) => {
     let placeCheck = valueMustBeAName(req, res, req.body.place, false, "place name is invalid");
     let emailCheck = valueMustBeEmail(req, res, req.body.email, false, "email address is invalid");
     let telCheck = numberMustPhoneNumber(req, res, req.body.tel);
-    let vatCheck = valueMustBeVatNumber(req, res, req.body.vat, false, "VAT number is invalid");
+    let vatCheck = valueMustBeVatNumber(req, res, req.body.vat, false, "nl-BE","VAT number is invalid");
     let ibanCheck = valueMustBeValidIban(req, res, req.body.iban);
     let bicCheck = valueMustBeValidBic(req, res, req.body.bic);
     let postalCheck = valueMustBePostalCode(req, res, req.body.postal);
@@ -119,8 +119,8 @@ exports.editProfilePost = async (req, res) => {
             streetNr: req.body.streetNr,
             postal: req.body.postal,
             place: req.body.place,
-            vat: req.body.vat,
-            iban: req.body.iban,
+            vat: formatBEVat(req.body.vat),
+            iban: formatBEIban(req.body.iban),
             bic: req.body.bic,
             tel: req.body.tel,
             email:  req.body.email
