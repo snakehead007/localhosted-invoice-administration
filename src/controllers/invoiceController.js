@@ -309,6 +309,7 @@ exports.editInvoiceGet = (req, res) => {
         Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                 Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
+                    console.log(invoice);
                     let givenObject = {
                         "invoice": invoice,
                         "client": client,
@@ -345,34 +346,11 @@ exports.editInvoicePost = (req, res) => {
         let currentInvoice = await Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, (err, invoice) => {
             return invoice
         });
-        let cDate = new Date(currentInvoice.date).toLocaleString(undefined, {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-        });
-        console.log(req.body.datePaid);
-        let cDatePaid;
-        if(req.body.datePaid!==""&&req.body.datePaid&&req.body.datePaid!=="undefined") {
-             cDatePaid = new Date(currentInvoice.datePaid).toLocaleString(undefined, {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric"
-            });
-        }
         let updateInvoice;
-        let dateBody;
-        if (parseDateSwapDayMonth(cDate) !== req.body.date) {
-            dateBody = parseDateDDMMYYYY(req.body.date)
-        }
-        let datePaidBody;
-        if(req.body.datePaid!==""&&req.body.datePaid&&req.body.datePaid!=="undefined") {
-            if (parseDateSwapDayMonth(cDatePaid) !== req.body.datePaid) {
-                datePaidBody = parseDateDDMMYYYY(req.body.datePaid)
-            }
-        }
-        if (dateBody && !datePaidBody) {
+
+        if (req.body.date && !req.body.datePaid) {
             updateInvoice = {
-                date: dateBody,
+                date: parseDateDDMMYYYY(req.body.date),
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
                 offerNr: req.body.offerNr,
@@ -380,23 +358,23 @@ exports.editInvoicePost = (req, res) => {
                 total: totOrders - req.body.advance,
                 description:req.body.description
             };
-        } else if (!dateBody && datePaidBody) {
+        } else if (!req.body.date && req.body.datePaid) {
             updateInvoice = {
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
                 offerNr: req.body.offerNr,
-                datePaid: datePaidBody,
+                datePaid: parseDateDDMMYYYY(req.body.datePaid),
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
                 description:req.body.description
             };
-        } else if (dateBody && datePaidBody) {
+        } else if (req.body.date && req.body.datePaid) {
             updateInvoice = {
-                date: dateBody,
+                date: parseDateDDMMYYYY(req.body.date),
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
                 offerNr: req.body.offerNr,
-                datePaid: datePaidBody,
+                datePaid: parseDateDDMMYYYY(req.body.datePaid),
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
                 description:req.body.description

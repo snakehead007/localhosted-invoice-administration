@@ -49,6 +49,7 @@ exports.newOrderGet = (req, res) => {
                     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                         if (!err) {
                             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
+                                console.log(invoice);
                                 if (!err) {
                                     let sendObject = {
                                         "invoice": invoice,
@@ -119,6 +120,7 @@ exports.allOrderGet = (req, res) => {
                             if (!err) {
                                 Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                                     if (!err) {
+                                        console.log(invoice);
                                         let sendObject = {
                                             "invoice": invoice,
                                             "orders": orders,
