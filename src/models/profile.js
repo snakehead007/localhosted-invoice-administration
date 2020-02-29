@@ -31,6 +31,10 @@ const Profile = new mongoose.Schema({
     }, logoFile: {
         data: Buffer,
         contentType: String
+    },
+    isRemoved: {
+        type:Boolean,
+        default:false
     }
 });
 

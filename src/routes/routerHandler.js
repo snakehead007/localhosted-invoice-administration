@@ -27,6 +27,7 @@ const validateRouter = require("./validateRouter");
 const searchRouter = require("./searchRouter");
 const whitelistRouter = require("./whitelistRouter");
 const streamRouter = require("./streamRouter");
+const activityRouter = require('./activityRouter');
 //Controllers
 
 router.use("/", loginRouter); //index page
@@ -49,6 +50,8 @@ router.use("/valid", validateRouter);
 router.use("/search", stillSignedInCheck, searchRouter);
 router.use("/whitelist", whitelistRouter);
 router.use("/stream", stillSignedInCheck,streamRouter);
+router.use('/activity',stillSignedInCheck,activityRouter);
+
 //Routers
 if (process.env.DEVELOP === "false") {
 //error handling for 404

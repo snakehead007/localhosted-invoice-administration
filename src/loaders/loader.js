@@ -2,6 +2,7 @@ const mongooseLoader = require('./mongoose.js');
 const expressLoader = require('./express.js');
 const google = require('../middlewares/google.js');
 const {images} = require('./images');
+const winston = require('./winston');
 module.exports.load = async function load(app) {
     if (process.env.DEVELOP_WITH_GOOGLE === "true" && process.env.DEVELOP === "true") {
         //develop mode set
@@ -11,5 +12,6 @@ module.exports.load = async function load(app) {
     }
     await mongooseLoader.default();
     await expressLoader.default(app);
+    await winston.default(app);
     await images(app);
 };

@@ -47,6 +47,10 @@ const Client = new mongoose.Schema({
     locale: {
         type: String,
         default: 'nl-BE'
+    },
+    isRemoved: {
+        type:Boolean,
+        default:false
     }
 });
 

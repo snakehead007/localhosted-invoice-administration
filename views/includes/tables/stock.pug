@@ -20,7 +20,8 @@ table(class="table table-striped table-sm ",id="hoofdTabel")
                           a(class="dropdown-item",onclick="removeMateriaal()",href="#") -
                           input(type="number")
                 td
-                    a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") #{__('Actions')}
-                    div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                        a(class="dropdown-item", href='/edit-mat/'+item._id) #{__('Edit')}
-                        a(class="dropdown-item", href='/delete-mat/'+item._id) #{__('Delete')}
+                    div.btn-group.dropleft
+                        a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") #{__('Actions')}
+                        div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                            a(class="dropdown-item", href='/edit-mat/'+item._id) #{__('Edit')}
+                            a(class="dropdown-item", href='/delete-mat/'+item._id) #{__('Delete')}

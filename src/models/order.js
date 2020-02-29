@@ -33,6 +33,10 @@ const Order = new mongoose.Schema({
     lastUpdated: {
         type: Date,
         default: Date.now()
+    },
+    isRemoved: {
+        type:Boolean,
+        default:false
     }
 });
 
