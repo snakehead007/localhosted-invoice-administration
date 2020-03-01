@@ -9,6 +9,7 @@ const Client = require("../models/client");
 
 const User = require("../models/user");
 const {findOneHasError} = require("../middlewares/error");
+const activity = require('../utils/activity');
 /**
  *
  * @param req
@@ -102,6 +103,7 @@ exports.newOrderPost = async (req, res) => {
             if (err) {
             }
         });
+        activity.addOrder(newOrder,req.session._id);
         res.redirect("/order/all/" + req.params.idi);
     });
 };
@@ -201,13 +203,10 @@ exports.editOrderPost = (req, res) => {
                     lastUpdated: Date.now()
                 };
                 Invoice.updateOne({fromUser: req.session._id, _id: order.fromInvoice}, updateInvoice, function (err) {
+                    activity.editedOrder(order,req.session._id);
                     res.redirect("/order/all/" + invoice._id);
                 });
             });
         }
     });
-};
-
-exports.deleteOrderGet = (req, res) => {
-    throw new Error("Not yet implemented");
 };

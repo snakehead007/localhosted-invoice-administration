@@ -84,6 +84,7 @@ exports.formatBEIban = (iban) => {
 
     //remove all whitespace
     let currentIban = iban.trim();
+    currentIban = currentIban.replace(' ','');
     //remove all letters
     currentIban = currentIban.replace(/[A-Za-z]/g,'');
     //remove all dots (there should be none, but just to be sure)

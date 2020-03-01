@@ -2,7 +2,7 @@ const Profile = require("../models/profile");
 const Settings = require("../models/settings");
 const i18n = require("i18n");
 const User = require("../models/user");
-
+const activity = require('../utils/activity');
 /**
  * @api {get} /settings settings_all_get
  * @apiName settings_all_get
@@ -61,6 +61,7 @@ exports.settingsChangeLangGet = (req, res) => {
         i18n.setLocale(res, req.params.lang);
         req.setLocale(req.params.lang);
         res.locals.language = req.params.lang;
+        activity.changedLanguage(req.params.lang,req.session._id);
         res.redirect("/settings");
     });
 };
@@ -78,6 +79,7 @@ exports.settingsChangeThemeGet = (req, res) => {
         if (err) {
             console.trace(err);
         }
+        activity.changedTheme(req.params.theme,req.session._id);
         res.redirect("/settings");
     });
 

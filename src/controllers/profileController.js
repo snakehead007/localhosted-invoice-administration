@@ -6,6 +6,7 @@ const {findOneHasError, updateOneHasError} = require("../middlewares/error");
 const {getFullNr} = require('../utils/invoices');
 const {sendMessage} = require('../../messages/messages');
 const {formatBEVat,formatBEIban,valueMustBeValidBic, valueMustBeValidIban, valueMustBeStreetNumber, valueMustBeAName, valueMustBeEmail, numberMustPhoneNumber, valueMustBeVatNumber, valueMustBePostalCode} = require("../utils/formValidation");
+const activity = require('../utils/activity');
 /**
  * @api {get} /view/profile view_profile_get
  * @apiDescription On this page you can edit all the profile information
@@ -142,6 +143,7 @@ exports.editProfilePost = async (req, res) => {
                         res.redirect("/view/profile");
                     });
                 } else {
+                    activity.editedProfile(updateProfile,req.session._id);
                     req.flash("success", "successfully updated your profile");
                     res.redirect("/view/profile");
                 }

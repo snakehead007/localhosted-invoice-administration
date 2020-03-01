@@ -50,3 +50,9 @@ exports.getUndoActivity = async (req,res) => {
     await Activity.remove({_id:req.params.id,fromUser:req.session._id});
     res.redirect('/activity');
 };
+
+exports.remove = async (req,res)=> {
+    await Activity.remove({_id:req.params.id,fromUser:req.session._id});
+    req.flash('success',"Successfully deleted the activity");
+    res.redirect('/activity');
+};

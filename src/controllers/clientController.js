@@ -9,6 +9,7 @@ const invalid = require("../utils/formValidation");
 const error = require("../middlewares/error");
 const i18n = require("i18n");
 const User = require("../models/user");
+const activity = require('../utils/activity');
 /**
  * @api {get} /client/all getClientAll
  * @apiDescription Here you can view all the clients from the current user
@@ -91,7 +92,7 @@ exports.getClientNew = (req, res) => {
         "settings": settings
  *  }
  */
-exports.postClientNew = (req, res) => {
+exports.postClientNew = async (req, res) => {
     let nameCheck = invalid.valueMustBeAName(req, res, req.body.clientName, true, "client name not correctly filled in");
     let firmCheck = invalid.valueMustBeAName(req, res, req.body.firm, false, "firm name not correctly filled in");
     let streetCheck = (req.body.street) ? invalid.valueMustBeAName(req, res, req.body.street, true) : false;
@@ -160,6 +161,7 @@ exports.postClientNew = (req, res) => {
             invoices: []
         });
         newClient.save();
+        await activity.addClient(newClient,req.session._id);
         res.redirect("/client/all");
     }
 };
@@ -259,8 +261,9 @@ exports.postEditClient = (req, res) => {
                     postalCode: req.body.postalCode,
                     place: req.body.place
                 };
-                Client.updateOne({fromUser: req.session._id, _id: client._id}, updatedClient, function (err) {
+                Client.updateOne({fromUser: req.session._id, _id: client._id}, updatedClient, async (err) => {
                     if (!error.updateOneHasError(req, res, err)) {
+                        await activity.editedClient(client,req.session._id);
                         req.flash("success", i18n.__("Successfully updated client"));
                         res.redirect("back");
                     }

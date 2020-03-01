@@ -15,6 +15,7 @@ const Profile = require('../models/profile');
 const User = require('../models/user');
 const redirectController = require('../controllers/redirectController');
 const Whitelist = require('../models/whitelist');
+const activity = require('../utils/activity');
 //Get requests
 /**
  * Handles GET /redirect
@@ -50,6 +51,7 @@ router.get('/', redirectController.googleLogin, async (req, res) => {
                 return user
             })).role;
             req.session.role = role;
+            await activity.login(req.session._id);
             if (role === "visitor") {
                 res.redirect('/view/profile');
             } else {

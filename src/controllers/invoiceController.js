@@ -14,6 +14,7 @@ const invoiceUtil = require("../utils/invoices");
 const {findOneHasError, updateOneHasError} = require("../middlewares/error");
 const {parseDateDDMMYYYY, parseDateSwapDayMonth} = require("../utils/date");
 const {getFullNr} = require("../utils/invoices");
+const activity = require('../utils/activity');
 /**
  *
  * @param req
@@ -154,6 +155,7 @@ exports.invoiceNewGet = (req, res) => {
                                 });
                                 await newInvoice.save(function (err) {
                                     if (!err) {
+                                        activity.addInvoice(newInvoice,req.session._id);
                                         res.redirect("/invoice/all");
                                     }
                                 });
@@ -203,6 +205,7 @@ exports.creditNewGet = (req, res) => {
                                             client.invoices.push(newInvoice._id);
                                         });
                                         await newInvoice.save();
+                                        activity.addCredit(newInvoice,req.session._id);
                                         res.redirect("/invoice/all");
                                     }
                                 });
@@ -255,6 +258,7 @@ exports.offerNewGet = (req, res) => {
                                             });
                                             await newInvoice.save();
                                             if (!err) {
+                                                activity.addOffer(newInvoice,req.session._id);
                                                 res.redirect("/invoice/all");
                                             }
                                         }
@@ -399,6 +403,7 @@ exports.editInvoicePost = (req, res) => {
         Client.findOne(searchCriteria, function (err, contact) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, function (err) {
                 if (!updateOneHasError(req, res, err)) {
+                    activity.editedInvoice(updateInvoice,req.session._id);
                     req.flash("success", i18n.__("Successfully updated the invoice"));
                     res.redirect("/order/all/" + req.params.idi);
                 }
@@ -458,6 +463,7 @@ exports.invoicePaidGet = (req, res) => {
                 lastUpdated: Date.now()
             }, function (err) {
                 if (!updateOneHasError(req, res, err)) {
+                    activity.setPaid(invoice,!invoice.isAgreed,req.session._id);
                     res.redirect("back");
                 }
             });
@@ -473,6 +479,7 @@ exports.offerAgreedGet = (req, res) => {
                 lastUpdated: Date.now()
             }, function (err) {
                 if (!updateOneHasError(req, res, err)) {
+                    activity.setAgreed(invoice,!invoice.isAgreed,req.session._id);
                     res.redirect("back");
                 }
             });
@@ -488,6 +495,7 @@ exports.invoiceUpgradeGet = (req, res) => {
                 offerNr: ""
             }, function (err) {
                 if (!updateOneHasError(req, res, err)) {
+                    activity.upgrade(invoice,req.session._id);
                     res.redirect("back");
                 }
             });
@@ -503,6 +511,7 @@ exports.invoiceDowngradeGet = (req, res) => {
                 invoiceNr: ""
             }, function (err) {
                 if (!updateOneHasError(req, res, err)) {
+                    activity.downgrade(invoice,req.session._id);
                     res.redirect("back");
                 }
             });

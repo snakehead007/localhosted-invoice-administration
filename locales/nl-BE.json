@@ -309,5 +309,7 @@
 	"All Activities": "All Activities",
 	"Type": "Type",
 	"Undo": "Undo",
-	"Delete permanently": "Delete permanently"
+	"Delete permanently": "Delete permanently",
+	"Remove permanently": "Remove permanently",
+	"Remove": "Remove"
 }

@@ -10,6 +10,7 @@ const Client = require("../models/client");
 const error = require("../middlewares/error");
 const {createPDF} = require("../utils/pdfGenerator");
 const {callGetBase64, createJSON, replaceAll} = require("../utils/pdfCreation");
+const activity = require('../utils/activity');
 
 /**
  *
@@ -27,9 +28,10 @@ exports.streamInvoicePDF = (req, res) => {
                         if (!error.findOneHasError(req, res, err, client)) {
                             Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
                                 console.log(orders);
-                                Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+                                Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                                     if (!err) {
                                         try {
+                                            await activity.downloadInvoice(invoice,req.session._id);
                                             createPDF(req, res, "invoice", profile, settings, client, invoice, orders);
 
                                         } catch (err) {
@@ -53,9 +55,9 @@ exports.streamOfferPDF = (req, res) => {
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
                 Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
-                    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+                    Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                         if (!err) {
-
+                            await activity.downloadInvoice(invoice,req.session._id);
                             createPDF(req, res, "offer", profile, settings, client, invoice, orders);
                         }
                     });
@@ -70,9 +72,9 @@ exports.streamCreditPDF = (req, res) => {
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
                 Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
-                    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+                    Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                         if (!err) {
-
+                            await activity.downloadInvoice(invoice,req.session._id);
                             createPDF(req, res, "credit", profile, settings, client, invoice, orders);
                         }
                     });
@@ -87,8 +89,10 @@ exports.downloadCreditPDF = (req, res) => {
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
                 Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
-                    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+                    Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                         if (!err) {
+
+                            await activity.downloadInvoice(invoice,fromUser);
                             createPDF(req, res, "credit", profile, settings, client, invoice, orders,true);
                         }
                     });
@@ -103,8 +107,9 @@ exports.downloadInvoicePDF = (req, res) => {
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
                 Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
-                    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+                    Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                         if (!err) {
+                            await activity.downloadInvoice(invoice,req.session._id);
                             createPDF(req, res, "invoice", profile, settings, client, invoice, orders,true);
                         }
                     });
@@ -119,8 +124,9 @@ exports.downloadOfferPDF = (req, res) => {
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
                 Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
-                    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+                    Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                         if (!err) {
+                            await activity.downloadInvoice(invoice,req.session._id);
                             createPDF(req, res, "offer", profile, settings, client, invoice, orders,true);
                         }
                     });

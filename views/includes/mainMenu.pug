@@ -43,3 +43,8 @@ ul(class="nav flex-column")
                 a(class=(currentUrl === 'settings' || currentUrl === "password")?"nav-link active":"nav-link" href="/settings")
                     span(data-feather="settings")
                     span #{__('Settings')}
+ul(class="nav flex-column")
+    li(class="nav-item")
+        a(class="nav-link",href="https://identity.basecone.com/authentication/login")
+            span(data-feather="bookmark")
+            span Basecone logins
