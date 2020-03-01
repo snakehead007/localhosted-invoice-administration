@@ -456,14 +456,20 @@ exports.viewInvoiceGet = (req, res) => {
  */
 exports.invoicePaidGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+        let isPaid = !(invoice.isPaid);
         if (!findOneHasError(req, res, err, invoice)) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
-                isPaid: !(invoice.isPaid),
+                isPaid: isPaid,
                 datePaid: Date.now(),
                 lastUpdated: Date.now()
-            }, function (err) {
+            }, async (err) =>  {
                 if (!updateOneHasError(req, res, err)) {
-                    activity.setPaid(invoice,!invoice.isAgreed,req.session._id);
+                    activity.setPaid(invoice,isPaid,req.session._id);
+                    let _client = await Client.findOne({fromUser:req.session._id,_id:invoice.fromClient},(err,client) => {return client;});
+                    console.log(_client);
+                    let newTotal = (isPaid)?_client.totalPaid+invoice.total:_client.totalPaid-invoice.total;
+                    console.log(newTotal);
+                    await Client.updateOne({fromUser:req.session._id,_id:invoice.fromClient},{totalPaid:newTotal});
                     res.redirect("back");
                 }
             });

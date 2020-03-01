@@ -1,8 +1,14 @@
-table(class="table table-striped table-sm ",id="hoofdTabel")
+script( type="text/javascript"  src="/dist/tablesorter-master/js/jquery.tablesorter.combined.js")
+script.
+    $(function () {
+        $("#tabelClients").tablesorter();
+    });
+table(class="table table-striped table-sm ",id="tabelClients")
     thead(style="color:#FFF",class="thead shadow bg-" + settings.theme)
         tr
             th(scope="col") #{__('Client')}
             th(scope="col") #{__('Email')}
+            th(scope="col")=__("Total paid")
             th(scope="col") #{__('Action')}
     tbody
         each client in clients
@@ -22,6 +28,8 @@ table(class="table table-striped table-sm ",id="hoofdTabel")
                             span #{__('no e-mail')}
                     else
                         span #{__('no e-mail')}
+                td
+                    span=(client.totalPaid * 1.21).toFixed(2) + "€"
                 td
                     div.btn-group.dropleft
                         a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") #{__('Actions')}

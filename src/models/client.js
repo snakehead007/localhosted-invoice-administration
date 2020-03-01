@@ -51,6 +51,10 @@ const Client = new mongoose.Schema({
     isRemoved: {
         type:Boolean,
         default:false
+    },
+    totalPaid:{
+        type:Number,
+        default:0
     }
 });
 

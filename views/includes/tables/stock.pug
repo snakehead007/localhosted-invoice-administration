@@ -1,4 +1,9 @@
-table(class="table table-striped table-sm ",id="hoofdTabel")
+script( type="text/javascript"  src="/dist/tablesorter-master/js/jquery.tablesorter.combined.js")
+script.
+    $(function () {
+        $("#tabelStock").tablesorter();
+    });
+table(class="table table-striped table-sm ",id="tabelStock")
     thead(style="color:#FFF",class="thead shadow bg-" + settings.theme)
         tr
             th(scope="col") #{__('Name')}

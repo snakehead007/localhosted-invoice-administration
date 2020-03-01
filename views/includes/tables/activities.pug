@@ -1,4 +1,9 @@
-table(class="table table-striped table-sm ",id="hoofdTabel")
+script( type="text/javascript"  src="/dist/tablesorter-master/js/jquery.tablesorter.combined.js")
+script.
+    $(function () {
+        $("#tabelActivities").tablesorter();
+    });
+table(class="table table-striped table-sm ",id="tabelActivities")
     thead(style="color:#FFF",class="thead shadow bg-" + settings.theme)
         tr
             th(scope="col") #{__('Type')}
@@ -39,8 +44,4 @@ table(class="table table-striped table-sm ",id="hoofdTabel")
             script.
                 //date is done via DOM, the locale cannot be set right when using pug
                 let id#{act._id} = "date" + "#{act._id}";
-                document.getElementById(id#{act._id}).innerHTML = new Date("#{act.time}").toLocaleString("#{settings.locale}", {
-                    year: 'numeric',
-                    month: 'numeric',
-                    day: 'numeric'
-                });
+                document.getElementById(id#{act._id}).innerHTML = new Date("#{act.time}").toLocaleString("#{settings.locale}");

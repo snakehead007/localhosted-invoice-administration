@@ -1,4 +1,9 @@
-table(class="table table-striped table-sm ",id="hoofdTabel")
+script( type="text/javascript"  src="/dist/tablesorter-master/js/jquery.tablesorter.combined.js")
+script.
+    $(function () {
+        $("#tabelInvoices").tablesorter();
+    });
+table(class="table table-striped table-sm ",id="tabelInvoices")
     thead(style="color:#FFF",class="thead shadow bg-"+settings.theme)
         tr
             th #{__('Number')}
