@@ -304,5 +304,10 @@
 	"Download invoice": "Download invoice",
 	"Download offer": "Download offer",
 	"Download creditnote": "Download creditnote",
-	"Download pdf of this document": "Download pdf of this document"
+	"Download pdf of this document": "Download pdf of this document",
+	"My activities": "My activities",
+	"All Activities": "All Activities",
+	"Type": "Type",
+	"Undo": "Undo",
+	"Delete permanently": "Delete permanently"
 }

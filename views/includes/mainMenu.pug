@@ -23,6 +23,10 @@ ul(class="nav flex-column")
                 a(class=(currentUrl==="invoices")?"nav-link active":"nav-link" href="/invoice/all")
                     span(data-feather="file")
                     span #{__('All invoices')}
+        li(class="nav-item")
+            a(class=(currentUrl === "activities") ? "nav-link active": "nav-link" href="/activity")
+                span(data-feather="activity")
+                span #{__('My activities')}
         //li(class="nav-item")
             a(class="nav-link" href="#disabled")
                 span(data-feather="book")

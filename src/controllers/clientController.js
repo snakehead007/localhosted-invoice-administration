@@ -26,7 +26,7 @@ const User = require("../models/user");
 exports.getClientAll = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
         if (err) console.trace();
-        Client.find({fromUser: req.session._id}, function (err, clients) {
+        Client.find({fromUser: req.session._id,isRemoved:false}, function (err, clients) {
             if (err) console.trace();
             Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                 if (err) console.trace();
@@ -178,7 +178,7 @@ exports.postClientNew = (req, res) => {
  *  }
  */
 exports.getClientView = (req, res) => {
-    Client.findOne({fromUser: req.session._id, _id: req.params.idc}, function (err, client) {
+    Client.findOne({fromUser: req.session._id, _id: req.params.idc,isRemoved:false}, function (err, client) {
         if (err) console.trace(err);
         if (!err) {
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
@@ -204,7 +204,7 @@ exports.getClientView = (req, res) => {
 };
 
 exports.getEditClient = (req, res) => {
-    Client.findOne({fromUser: req.session._id, _id: req.params.idc}, function (err, client) {
+    Client.findOne({fromUser: req.session._id, _id: req.params.idc,isRemoved:false}, function (err, client) {
         if (!error.findOneHasError(req, res, err, client)) {
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                 if (!error.findOneHasError(req, res, err, settings)) {

@@ -20,7 +20,7 @@ const {getFullNr} = require("../utils/invoices");
  * @param res
  */
 exports.invoiceAllGet = (req, res) => {
-    Invoice.find({fromUser: req.session._id}, null, {sort: {date: -1}}, function (err, invoices) {
+    Invoice.find({fromUser: req.session._id,isRemoved:false}, null, {sort: {date: -1}}, function (err, invoices) {
         Settings.findOne({fromUser: req.session._id}, function (err, settings) {
             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                 res.render("invoices", {
@@ -44,7 +44,7 @@ exports.invoiceAllGet = (req, res) => {
 exports.invoiceNewChooseGet = (req, res) => {
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
         Profile.findOne({fromUser: req.session._id}, function (err, profile) {
-            Client.find({fromUser: req.session._id}, async (err, clients) => {
+            Client.find({fromUser: req.session._id,isRemoved:false}, async (err, clients) => {
                 res.render("add-file-no-contact", {
                     "profile": profile,
                     "settings": settings,
@@ -66,8 +66,8 @@ exports.invoiceNewChooseGet = (req, res) => {
  */
 exports.offerNewChooseGet = (req, res) => {
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        Profile.findOne({fromUser: req.session._id}, function (err, profile) {
-            Client.find({fromUser: req.session._id}, async (err, clients) => {
+        Profile.findOne({fromUser: req.session._id,isRemoved:false}, function (err, profile) {
+            Client.find({fromUser: req.session._id,isRemoved:false}, async (err, clients) => {
                 res.render("add-file-no-contact", {
                     "profile": profile,
                     "settings": settings,
@@ -90,7 +90,7 @@ exports.offerNewChooseGet = (req, res) => {
 exports.creditNewChooseGet = (req, res) => {
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
         Profile.findOne({fromUser: req.session._id}, function (err, profile) {
-            Client.find({fromUser: req.session._id}, async (err, clients) => {
+            Client.find({fromUser: req.session._id,isRemoved:false}, async (err, clients) => {
                 let givenObjects = {
                     "profile": profile,
                     "settings": settings,
@@ -114,7 +114,7 @@ exports.creditNewChooseGet = (req, res) => {
 exports.invoiceNewGet = (req, res) => {
     const idc = (req.body.idc) ? req.body.idc : req.params.idc;
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        Client.findOne({fromUser: req.session._id, _id: idc}, function (err, client) {
+        Client.findOne({fromUser: req.session._id, _id: idc,isRemoved:false}, function (err, client) {
             if (client === null) {
                 req.flash("danger", i18n.__("Cannot make an invoice with a client"));
                 res.redirect("/invoice/new/invoice");
@@ -140,11 +140,12 @@ exports.invoiceNewGet = (req, res) => {
                                     clientName: client.clientName,
                                     total: 0,
                                     fromUser: req.session._id,
-                                    description:""
+                                    description:"",
+                                    isRemoved:false
                                 });
                                 await Client.findOne({
                                     fromUser: req.session._id,
-                                    _id: client._id
+                                    _id: client._id,isRemoved:false
                                 }, async function (err) {
                                     if (!err) {
                                         client.invoices.push(newInvoice._id);
@@ -173,7 +174,7 @@ exports.invoiceNewGet = (req, res) => {
 exports.creditNewGet = (req, res) => {
     const idc = (req.body.idc) ? req.body.idc : req.params.idc;
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        Client.findOne({fromUser: req.session._id, _id: idc}, function (err, client) {
+        Client.findOne({fromUser: req.session._id, _id: idc,isRemoved:false}, function (err, client) {
             if (client === null) {
                 req.flash("danger", i18n.__("Cannot make an creditnote with a client"));
                 res.redirect("/invoice/new/credit");
@@ -193,10 +194,11 @@ exports.creditNewGet = (req, res) => {
                                             clientName: client.clientName,
                                             total: 0,
                                             fromUser: req.session._id
+                                            ,isRemoved:false
                                         });
                                         await Client.findOne({
                                             fromUser: req.session._id,
-                                            _id: client._id
+                                            _id: client._id,isRemoved:false
                                         }, function (err) {
                                             client.invoices.push(newInvoice._id);
                                         });
@@ -220,7 +222,7 @@ exports.creditNewGet = (req, res) => {
 exports.offerNewGet = (req, res) => {
     const idc = (req.body.idc) ? req.body.idc : req.params.idc;
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        Client.findOne({fromUser: req.session._id, _id: idc}, function (err, client) {
+        Client.findOne({fromUser: req.session._id, _id: idc,isRemoved:false}, function (err, client) {
             if (client === null) {
                 req.flash("danger", i18n.__("Cannot make an offer with a client"));
                 res.redirect("/invoice/new/offer");
@@ -243,11 +245,11 @@ exports.offerNewGet = (req, res) => {
                                                 offerNr: offerNr,
                                                 clientName: client.clientName,
                                                 fromUser: req.session._id,
-                                                description:""
+                                                description:"",isRemoved:false
                                             });
                                             await Client.findOne({
                                                 fromUser: req.session._id,
-                                                _id: client._id
+                                                _id: client._id,isRemoved:false
                                             }, function (err) {
                                                 client.invoices.push(newInvoice._id);
                                             });
@@ -273,10 +275,10 @@ exports.offerNewGet = (req, res) => {
  * @param res
  */
 exports.invoiceAllClient = (req, res) => {
-    Client.findOne({fromUser: req.session._id, _id: req.params.idc}, function (err, client) {
+    Client.findOne({fromUser: req.session._id, _id: req.params.idc,isRemoved:false}, function (err, client) {
         Invoice.find({
             fromUser: req.session._id,
-            fromClient: req.params.idc
+            fromClient: req.params.idc,isRemoved:false
         }).sort("-invoiceNr").exec(function (err, invoices) {
             Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                 Profile.findOne({}, async (err, profile) => {
@@ -305,8 +307,8 @@ exports.invoiceAllClient = (req, res) => {
  * @param res
  */
 exports.editInvoiceGet = (req, res) => {
-    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
-        Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
+    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, function (err, invoice) {
+        Client.findOne({fromUser: req.session._id, _id: invoice.fromClient,isRemoved:false}, function (err, client) {
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                 Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                     console.log(invoice);
@@ -335,7 +337,7 @@ exports.editInvoiceGet = (req, res) => {
  */
 exports.editInvoicePost = (req, res) => {
     console.log(req.body);
-    Order.find({fromUser: req.session._id, fromInvoice: req.params.idi}, async (err, orders) => {
+    Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved:false}, async (err, orders) => {
         let totOrders = 0;
         for (let i = 0; i <= orders.length - 1; i++) {
             totOrders += (orders[i].price * orders[i].amount);
@@ -343,7 +345,7 @@ exports.editInvoicePost = (req, res) => {
         let settings = await Settings.findOne({fromUser: req.session._id}, (err, settings) => {
             return settings
         });
-        let currentInvoice = await Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, (err, invoice) => {
+        let currentInvoice = await Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, (err, invoice) => {
             return invoice
         });
         let updateInvoice;
@@ -389,9 +391,9 @@ exports.editInvoicePost = (req, res) => {
                 description:req.body.description
             };
         }
-        let searchCriteria = {fromUser: req.session._id,};
+        let searchCriteria = {fromUser: req.session._id,isRemoved:false};
         if (orders.length > 0) {
-            searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient};
+            searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient,isRemoved:false};
         }
         console.log(updateInvoice);
         Client.findOne(searchCriteria, function (err, contact) {
@@ -411,9 +413,9 @@ exports.editInvoicePost = (req, res) => {
  * @param res
  */
 exports.viewInvoiceGet = (req, res) => {
-    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, function (err, invoice) {
         if (!findOneHasError(req, res, err, invoice)) {
-            Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
+            Client.findOne({fromUser: req.session._id, _id: invoice.fromClient,isRemoved:false}, function (err, client) {
                 if (!findOneHasError(req, res, err, client)) {
                     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                         if (!findOneHasError(req, res, err, settings)) {

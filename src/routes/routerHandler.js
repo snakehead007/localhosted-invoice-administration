@@ -11,6 +11,7 @@ const dashboardRouter = require("./dashboardRouter");
 const logoutRouter = require("./logoutRouter");
 const redirectRouter = require("./redirectRouter");
 const {stillSignedInCheck} = require("../middlewares/checkers");
+const update = require("../middlewares/update");
 const viewRouter = require("./viewRouter");
 const invoiceRouter = require("./invoiceRouter");
 const clientRouter = require("./clientRouter");
@@ -31,7 +32,7 @@ const activityRouter = require('./activityRouter');
 //Controllers
 
 router.use("/", loginRouter); //index page
-router.use("/dashboard", stillSignedInCheck, dashboardRouter);
+router.use("/dashboard", stillSignedInCheck,update.updateUndoAbility, dashboardRouter);
 router.use("/logout", stillSignedInCheck, logoutRouter);
 router.use("/redirect", redirectRouter); //only used when logged in and redirected by google
 router.use("/view", stillSignedInCheck, viewRouter);

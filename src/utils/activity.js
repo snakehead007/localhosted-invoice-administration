@@ -5,29 +5,54 @@ const Order = require('../models/order');
 const Item = require('../models/item');
 
 exports.addActivity = async (description, fromUser, object,type="time" ,objectTodelete="") => {
-    //create new activity here;
+    console.log("------------ADD ACTIVITY--------------");
+    console.log('activity to keep: '+type);
+    let info = "";
     if(type==="delete"){
+        console.log("deleting "+objectTodelete+" : ");
+        console.log(object);
         switch (objectTodelete) {
             case "client":
-                await Client.updateOne({_id:object._id,fromUser:fromUser},{isRemoved:true});
-                let client = await Client.find({_id:object._id,fromUser:fromUser},(err,client) => {return client});
-                for(let invoices of client.invoices){
-                    await Invoice.updateOne({_id:object._id,fromUser:fromUser},{isRemoved:true});
-                    let invoice = await Invoice.find({_id:object._id,fromUser:fromUser},(err,invoice) => {return invoice});
-                    for(let order of invoice.orders){
-                        await Order.updateOne({_id:order._id,fromUser:fromUser},{isRemoved:true});
+                info = object.ClientName;
+                let clientDeleted = await Client.updateOne({_id:object._id,fromUser:fromUser},{isRemoved:true});
+                console.log('client removed:');
+                console.log(clientDeleted);
+                for(let invoiceID of object.invoices){
+                    console.log("deleting invoice: ");
+                    let invoiceDeleted = await Invoice.updateOne({_id:invoiceID,fromUser:fromUser},{isRemoved:true});
+                    console.log('invoice removed: ');
+                    console.log(invoiceDeleted);
+                    let invoice = await Invoice.findOne({_id:invoiceID,fromUser:fromUser},(err,invoice) => {return invoice;});
+                    console.log(invoice);
+                    for(let orderID of invoice.orders){
+                        console.log("deleting line: ");
+                        let orderDeleted = await Order.updateOne({_id:orderID,fromUser:fromUser},{isRemoved:true});
+                        console.log("line removed: ");
+                        console.log(orderDeleted);
                     }
                 }
                 break;
             case "invoice":
-                await Invoice.updateOne({_id:object._id,fromUser:fromUser},{isRemoved:true});
-                let invoice = await Invoice.find({_id:object._id,fromUser:fromUser},(err,invoice) => {return invoice});
-                for(let order of invoice.orders){
-                    await Order.updateOne({_id:order._id,fromUser:fromUser},{isRemoved:true});
+                if(object.offerNr){
+                    info = object.offerNr;
+                }else if(object.creditNr){
+                    info = object.creditNr;
+                }else if(object.invoiceNr){
+                    info = object.invoiceNr;
+                }
+                let invoiceDeleted = await Invoice.updateOne({_id:object._id,fromUser:fromUser},{isRemoved:true});
+                console.log('invoice removed: ');
+                for(let orderID of object.orders){
+                    console.log("deleting line: ");
+                    console.log(orderID);
+                    let orderDeleted = await Order.updateOne({_id:orderID,fromUser:fromUser},{isRemoved:true});
+                    console.log("line removed: ");
+                    console.log(orderDeleted);
                 }
                 break;
 
-            case "order":
+            case "line":
+                info = object.description;
                 await Order.updateOne({_id:object._id,fromUser:fromUser},{isRemoved:true});
                 break;
             case "item":
@@ -38,7 +63,9 @@ exports.addActivity = async (description, fromUser, object,type="time" ,objectTo
        type:type,
        description:description,
        fromUser:fromUser,
-       withObjectId: object._id
+       withObjectId: object._id,
+       objectName:objectTodelete,
+       info : info
     });
     newAct.save();
 };
@@ -57,7 +84,7 @@ exports.addCredit = async (invoice, fromUser) => {
   this.addActivity("Created new creditnote",fromUser,invoice,"add");
 };
 exports.addOrder = async (order, fromUser) => {
-    this.addActivity("Created new order",fromUser,order,"add");
+    this.addActivity("Created new line",fromUser,order,"add");
 };
 
 //Editing
@@ -74,7 +101,7 @@ exports.editedCredit = async (invoice, fromUser) => {
     this.addActivity("Edited credit",fromUser,invoice,"edit");
 };
 exports.editedOrder = async (order, fromUser) => {
-    this.addActivity("Edited order",fromUser,order,"edit");
+    this.addActivity("Edited line",fromUser,order,"edit");
 };
 exports.editedProfile = async (profile, fromUser) => {
     this.addActivity("Edited profile",fromUser,profile,"edit");
@@ -85,7 +112,7 @@ exports.deleteClient = async (client, fromUser) => {
     this.addActivity("Deleted client",fromUser,client,"delete","client");
 };
 exports.deleteInvoice = async (invoice, fromUser) => {
-    this.addActivity("Deleted client",fromUser,invoice,"delete","invoice");
+    this.addActivity("Deleted invoice",fromUser,invoice,"delete","invoice");
 };
 exports.deleteOffer = async (invoice, fromUser) => {
     this.addActivity("Deleted offer",fromUser,invoice,"delete","invoice");
@@ -94,6 +121,6 @@ exports.deleteCredit = async (invoice, fromUser) => {
     this.addActivity("Deleted credit",fromUser,invoice,"delete","invoice");
 };
 exports.deleteOrder = async (order, fromUser) => {
-    this.addActivity("Deleted order",fromUser,order,"delete","order");
+    this.addActivity("Deleted line",fromUser,order,"delete","line");
 };
 

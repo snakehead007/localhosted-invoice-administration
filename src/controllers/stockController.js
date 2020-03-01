@@ -19,7 +19,7 @@ const Profile = require("../models/profile");
 exports.stockAllGet = (req, res) => {
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
         if (!err) {
-            Item.find({fromUser: req.session._id}).sort("name").exec(function (err, stock) {
+            Item.find({fromUser: req.session._id,isRemoved:false}).sort("name").exec(function (err, stock) {
                 if (!err) {
                     Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                         if (!err) {

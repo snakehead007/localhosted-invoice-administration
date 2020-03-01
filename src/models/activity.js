@@ -18,7 +18,8 @@ const Activity = new mongoose.Schema({
     withObjectId: {
         type: mongoose.Schema.Types.ObjectId,
         isRequired: true
-    }
+    },
+    objectName:String
 });
 
 const activity = mongoose.model('Activity', Activity);

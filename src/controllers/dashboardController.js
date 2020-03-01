@@ -35,7 +35,7 @@ exports.mainGet = async function getLogin(req, res) {
         if (!err) {
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                 if (!err) {
-                    Invoice.find({fromUser: req.session._id}, async (err, invoices) => {
+                    Invoice.find({fromUser: req.session._id,isRemoved:false}, async (err, invoices) => {
                         if (!err) {
                             let chart = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                             let invoice_open = [];
@@ -91,7 +91,7 @@ exports.chartYearGet = (req, res) => {
         if (!err) {
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                 if (!err) {
-                    Invoice.find({fromUser: req.session._id}, async (err, invoices) => {
+                    Invoice.find({fromUser: req.session._id,isRemoved:false}, async (err, invoices) => {
                         if (!err) {
                             let chart = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                             let invoice_open = [];

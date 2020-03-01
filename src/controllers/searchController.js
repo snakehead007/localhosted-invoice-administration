@@ -19,10 +19,10 @@ module.exports.search_get = (req, res) => {
     let invoices = [];
     let orders = [];
     let items = [];
-    Client.find({fromUser: req.session._id}, function (err, clients_) {
-        Invoice.find({fromUser: req.session._id}, function (err, invoices_) {
-            Order.find({fromUser: req.session._id}, function (err, orders_) {
-                Item.find({fromUser: req.session._id}, function (err, mats_) {
+    Client.find({fromUser: req.session._id,isRemoved:false}, function (err, clients_) {
+        Invoice.find({fromUser: req.session._id,isRemoved:false}, function (err, invoices_) {
+            Order.find({fromUser: req.session._id,isRemoved:false}, function (err, orders_) {
+                Item.find({fromUser: req.session._id,isRemoved:false}, function (err, mats_) {
                     //orders
                     for (let order of orders_) {
                         if (String(order.description).toLowerCase().includes(str)) {
