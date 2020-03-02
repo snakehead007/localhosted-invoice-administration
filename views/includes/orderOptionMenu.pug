@@ -6,8 +6,39 @@ ul(class="nav flex-column mb-2")
         if currentUrl === "orderNew"
           a(class="nav-link active",href='/order/new/' + invoice._id )
             span(data-feather="plus-circle")
-            span #{__('New order')}
+            span #{__('New line')}
         else
           a(class="nav-link",href='/order/new/' + invoice._id )
             span(data-feather="plus-circle")
-            span #{__('New order')}
+            span #{__('New line')}
+      li(class="nav-item")
+        if invoice.offerNr
+          a(class="nav-link",href='/download/offer/' + invoice._id)
+            span(data-feather="download")
+            span #{__('Download pdf of this document')}
+        else if invoice.creditNr
+          a(class="nav-link",href='/download/credit/' + invoice._id)
+            span(data-feather="download")
+            span #{__('Download pdf of this document')}
+        else if invoice.invoiceNr
+          a(class="nav-link",href='/download/invoice/' + invoice._id)
+            span(data-feather="download")
+            span #{__('Download pdf of this document')}
+    li(class="nav-item")
+      if invoice.offerNr
+        a(class="nav-link",href='/stream/offer/' + invoice._id target="_blank")
+          span(data-feather="align-left")
+          span #{__('View pdf of this document')}
+      else if invoice.creditNr
+        a(class="nav-link",href='/stream/credit/' + invoice._id target="_blank")
+          span(data-feather="align-left")
+          span #{__('View pdf of this document')}
+      else if invoice.invoiceNr
+        a(class="nav-link",href='/stream/invoice/' + invoice._id target="_blank")
+          span(data-feather="align-left")
+          span #{__('View pdf of this document')}
+    li(class="nav-item")
+      if client
+        a(class="nav-link",href='/invoice/all/' + client._id )
+          span(data-feather="book-open")
+          span #{__('View documents of this client')}

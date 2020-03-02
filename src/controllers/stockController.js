@@ -1,6 +1,6 @@
-const Settings = require('../models/settings');
-const Item = require('../models/item');
-const Profile = require('../models/profile');
+const Settings = require("../models/settings");
+const Item = require("../models/item");
+const Profile = require("../models/profile");
 
 /**
  * @api {get} /stock/all stock_all_get
@@ -10,24 +10,27 @@ const Profile = require('../models/profile');
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  *  {
-        'currentUrl':'stock',
-        'stock': stock,
-        'settings': settings,
+        "currentUrl":"stock",
+        "stock": stock,
+        "settings": settings,
         "profile":profile
     }
  */
-exports.stock_all_get = (req,res) => {
-    Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+exports.stockAllGet = (req, res) => {
+    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
         if (!err) {
-            Item.find({fromUser:req.session._id}).sort('name').exec(function(err, stock) {
+            Item.find({fromUser: req.session._id,isRemoved:false}).sort("name").exec(function (err, stock) {
                 if (!err) {
-                    Profile.findOne({fromUser:req.session._id},function(err,profile){
-                        if(!err) {
-                            res.render('stock', {
-                                'currentUrl':'stock',
-                                'stock': stock,
-                                'settings': settings,
-                                "profile":profile
+                    Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
+                        if (!err) {
+                            res.render("stock", {
+                                "currentUrl": "stock",
+                                "stock": stock,
+                                "settings": settings,
+                                "profile": profile,
+                                "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                                    return user
+                                })).role
                             });
                         }
                     });
@@ -44,22 +47,27 @@ exports.stock_all_get = (req,res) => {
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  *  {
-        'settings': settings,
+        "settings": settings,
         "profile": profile,
         "currentUrl":"stockNew"
     }
  */
-exports.stock_new_item_get = (req,res) =>{
-    Settings.findOne({fromUser:req.session._id}, function(err, settings) {
-        if(err) console.trace(err);
+exports.stockNewItemGet = (req, res) => {
+    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+        if (err) console.trace(err);
         if (!err) {
-            Profile.findOne({fromUser:req.session._id},function(err,profile){if(!err){
-                res.render('new/new-item', {
-                    'settings': settings,
-                    "profile": profile,
-                    "currentUrl":"stockNew"
-                });
-            }});
+            Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
+                if (!err) {
+                    res.render("new/new-item", {
+                        "settings": settings,
+                        "profile": profile,
+                        "currentUrl": "stockNew",
+                        "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                            return user
+                        })).role
+                    });
+                }
+            });
         }
     });
 };
@@ -71,18 +79,18 @@ exports.stock_new_item_get = (req,res) =>{
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  *  {
-        'settings': settings,
+        "settings": settings,
         "profile": profile,
         "currentUrl":"stockNew"
     }
  */
-exports.stock_new_item_post = (req,res) => {
+exports.stockNewItemPost = (req, res) => {
     let new_item = new Item({
         price: req.body.price,
         name: req.body.name,
         amount: req.body.amount,
-        fromUser:req.session._id
+        fromUser: req.session._id
     });
     new_item.save();
-    res.redirect('/stock/all');
+    res.redirect("/stock/all");
 };

@@ -96,9 +96,6 @@ html
         angle_mat += 180;
         //$('.arrowMat').css('transform','rotate(' + angle_mat + 'deg)');
       }
-      function check(deez){
-        console.log(deez);
-      }
       
 body
   header
@@ -607,9 +604,7 @@ body
         }else{ 
           day++;
           n.setDate(day);
-          console.log("CHANGE OF MONTHS "+month+" / "+ n.getMonth());
           if(n.getMonth() != month){
-            console.log("day "+day);
             month = n.getMonth();
             day = 1;
           }

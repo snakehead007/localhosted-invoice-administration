@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const stockController = require("../controllers/stockController.js");
 
-router.get('/all' ,stockController.stock_all_get);
-router.get('/new/item',stockController.stock_new_item_get);
-router.post("/new/item",stockController.stock_new_item_post);
+router.get('/all', stockController.stockAllGet);
+router.get('/new/item', stockController.stockNewItemGet);
+router.post("/new/item", stockController.stockNewItemPost);
 
 module.exports = router;

@@ -10,6 +10,10 @@ const Invoice = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    isAgreed: {
+        type:Boolean,
+        default:false
+    },
     advance: {
         type: Number,
         default: 0
@@ -22,19 +26,27 @@ const Invoice = new mongoose.Schema({
     orders: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'Order'
     }],
-    fromClient:{
+    fromClient: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Client'
     },
-    fromUser:{
+    fromUser: {
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
     },
-    creationDate:{
-        type:Date,
-        default:Date.now()
+    creationDate: {
+        type: Date,
+        default: Date.now()
     },
-    lastUpdated:{
-        type:Date,
-        default:Date.now()
+    lastUpdated: {
+        type: Date,
+        default: Date.now()
+    },
+    description: {
+        type: String,
+        default: ""
+    },
+    isRemoved: {
+        type:Boolean,
+        default:false
     }
 });
 

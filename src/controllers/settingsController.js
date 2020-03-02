@@ -1,7 +1,8 @@
-const Profile = require('../models/profile');
-const Settings = require('../models/settings');
-const i18n = require('i18n');
-
+const Profile = require("../models/profile");
+const Settings = require("../models/settings");
+const i18n = require("i18n");
+const User = require("../models/user");
+const activity = require('../utils/activity');
 /**
  * @api {get} /settings settings_all_get
  * @apiName settings_all_get
@@ -11,22 +12,29 @@ const i18n = require('i18n');
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  *  {
-        'currentUrl': 'settings',
-        'settings': settings,
-        'description': "Settings",
-        'profile':profile
+        "currentUrl": "settings",
+        "settings": settings,
+        "description": "Settings",
+        "profile":profile
     }
  */
-exports.settings_all_get = (req,res) =>{
-    Profile.findOne({fromUser:req.session._id},function(err,profile){
-        if(err) console.trace();
-        Settings.findOne({fromUser:req.session._id}, function(err, settings) {
-            if(err) console.trace();
-            res.render('settings', {
-                'currentUrl': 'settings',
-                'settings': settings,
-                'description': "Settings",
-                'profile':profile
+exports.settings_all_get = (req, res) => {
+    Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+        if (err) {
+            console.trace();
+        }
+        Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
+            if (err) {
+                console.trace();
+            }
+            res.render("settings", {
+                "currentUrl": "settings",
+                "settings": settings,
+                "description": "Settings",
+                "profile": profile,
+                "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                    return user;
+                })).role
             });
         });
     });
@@ -43,15 +51,18 @@ exports.settings_all_get = (req,res) =>{
  *  HTTP/1.1 200 OK
  *
  */
-exports.settings_change_lang_get = (req,res) => {
-    Settings.updateOne({fromUser:req.session._id},{locale:req.params.lang},function(err){
-        if(err) console.trace(err);
+exports.settingsChangeLangGet = (req, res) => {
+    Settings.updateOne({fromUser: req.session._id}, {locale: req.params.lang}, function (err) {
+        if (err) {
+            console.trace(err);
+        }
         req.locale = req.params.lang;
         i18n.setLocale(req, req.params.lang);
         i18n.setLocale(res, req.params.lang);
         req.setLocale(req.params.lang);
         res.locals.language = req.params.lang;
-        res.redirect('/settings');
+        activity.changedLanguage(req.params.lang,req.session._id);
+        res.redirect("/settings");
     });
 };
 /**
@@ -63,11 +74,14 @@ exports.settings_change_lang_get = (req,res) => {
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  */
-exports.settings_change_theme_get = (req,res) => {
-  Settings.updateOne({fromUser:req.session._id},{theme:req.params.theme},function(err){
-      if(err) console.trace(err);
-      res.redirect('/settings');
-  });
+exports.settingsChangeThemeGet = (req, res) => {
+    Settings.updateOne({fromUser: req.session._id}, {theme: req.params.theme}, function (err) {
+        if (err) {
+            console.trace(err);
+        }
+        activity.changedTheme(req.params.theme,req.session._id);
+        res.redirect("/settings");
+    });
 
 };
 /**
@@ -79,17 +93,16 @@ exports.settings_change_theme_get = (req,res) => {
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  */
-exports.change_text_post = (req,res) => {
-    Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+exports.changeTextGet = (req, res) => {
+    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
         if (!err) {
             let updateSettings = {
                 invoiceText: String(req.body.invoiceText),
                 creditText: String(req.body.creditText),
                 offerText: String(req.body.offerText)
             };
-            Settings.updateOne({fromUser:req.session._id,_id: settings._id}, updateSettings, function(err) {
-                if(err){console.trace(err);}
-                res.redirect('/settings');
+            Settings.updateOne({fromUser: req.session._id, _id: settings._id}, updateSettings, function (err) {
+                res.redirect("/settings");
             });
         }
     });

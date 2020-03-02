@@ -1,0 +1,14 @@
+---
+languages:
+  css:
+    extensions:
+      - '-css.resource'
+exclude_paths:
+  - 'apidoc/**'
+  - '.github/**'
+  - '**.min.js'
+  - '**/tests/**'
+  - 'README.md'
+  - 'CONTRIBUTING.md'
+  - 'CODE_OF_CONDUCT.md'
+  - 'LICENSE'

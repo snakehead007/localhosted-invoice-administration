@@ -2,76 +2,84 @@
  * @module controllers/dashboardController
  */
 
-const Settings = require('../models/settings');
-const Profile = require('../models/profile');
-const Invoice = require('../models/invoice');
-const {month, month_small,year} = require('../utils/date');
-const User = require('../models/user');
+const Settings = require("../models/settings");
+const Profile = require("../models/profile");
+const Invoice = require("../models/invoice");
+const {month, month_small, year} = require("../utils/date");
+const User = require("../models/user");
 
 /**
- *
- * @param req
- * @param res
- * @returns {Promise<void>}
+ * @api {get} / mainGet
+ * @apiDescription This gives back the dashboard
+ * @apiName mainGet
+ * @apiGroup Dashboard
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ *  {{
+        "currentUrl": "dashboard",
+        "total": newChart,
+        "settings": settings,
+        "year": (new Date).getFullYear(),
+        "profile": profile,
+        "invoices": invoice_open,
+        "role": role
+    }
  */
-exports.main_get =  async function getLogin(req,res){
-    if(!req.session._id){
-        res.redirect('/');
+exports.mainGet = async function getLogin(req, res) {
+    if (!req.session._id) {
+        res.redirect("/");
     }
     let fact_open = [];
     //Finds a profile, if not found will create a new one
-    Profile.findOne({fromUser:req.session._id}, async function(err,profile){
-        if(profile===null){
-            console.log("[Error]: Profile not found from user");
+    Profile.findOne({fromUser: req.session._id}, async function (err, profile) {
+        if (profile === null) {
             const newProfile = new Profile({
-                fromUser:req.session._id
+                fromUser: req.session._id
             });
             await newProfile.save();
-            profile = await Profile.findOne({fromUser:req.session._id});
-            await User.updateOne({_id:req.session._id},{profile:profile._Id});
-            console.log("[Error]: New profile successfully created for user");
+            profile = await Profile.findOne({fromUser: req.session._id});
+            await User.updateOne({_id: req.session._id}, {profile: profile._Id});
         }
-        if(err) console.trace(err);
-        if(!err){
-            Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+        if (err) {
+            console.trace(err);
+        }
+        if (!err) {
+            Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                 if (!err) {
-                    Invoice.find({fromUser:req.session._id}, function (err, invoices) {
+                    Invoice.find({fromUser: req.session._id,isRemoved:false}, async (err, invoices) => {
                         if (!err) {
                             let chart = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                             let invoice_open = [];
                             for (let invoice of invoices) {
                                 if (invoice.invoiceNr) {
-                                    if(!invoice.isPaid){
+                                    if (!invoice.isPaid) {
                                         //adds to unpaid invoices
                                         invoice_open.push(invoice);
-                                    }else{
+                                    } else {
                                         //Adds to chart data
                                         let monthOfPayment = invoice.datePaid.getMonth();
-                                        console.log("adding invoice with month "+monthOfPayment+" idi: "+invoice._id);
-                                        console.log("current year of invoice is:"+invoice.datePaid.getFullYear());
-                                        console.log("Invoice is paid: "+invoice.isPaid);
-                                        console.log('current year is: '+year);
-                                        if(year===invoice.datePaid.getFullYear()&&invoice.isPaid) {
+                                        if ((new Date()).getFullYear() == invoice.datePaid.getFullYear() && invoice.isPaid) {
                                             chart[monthOfPayment] += invoice.total;
-                                            console.log('added');
-                                        }else{
-                                            console.log('not added');
                                         }
                                     }
                                 }
                             }
-                            console.log('chart done: '+chart);
-                            //createa data for chart
-                            for (let i = 0; i <= 11; i++) {
-
-                            }
-                            res.render('index', {
-                                'currentUrl':"dashboard",
-                                "total": chart,
+                            let newChart = [];
+                            chart.forEach((n) => {
+                                newChart.push(n.toFixed(2))
+                            });
+                            let role = (await User.findOne({_id: req.session._id}, (err, user) => {
+                                return user
+                            })).role;
+                            console.log(year);
+                            res.render("index", {
+                                "currentUrl": "dashboard",
+                                "total": newChart,
                                 "settings": settings,
-                                "year": year,
+                                "year": (new Date).getFullYear(),
                                 "profile": profile,
-                                "invoices":invoice_open
+                                "invoices": invoice_open,
+                                "role": role
                             });
                         }
                     });
@@ -81,56 +89,68 @@ exports.main_get =  async function getLogin(req,res){
     });
 };
 /**
- *
- * @param req
- * @param res
+ * @api {get} /chart/:year chartYearGet
+ * @apiDescription This gives back the dashboard but with a different year, with the parameter :year as a number
+ * @apiName chartYearGet
+ * @apiGroup Dashboard
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ *  {
+        "currentUrl": "dashboard",
+        "total": newChart,
+        "settings": settings,
+        "year": req.params.year,
+        "profile": profile,
+        "invoices": invoice_open,
+        "role": role
+    }
+ @apiParamExample Request-Example:
+ *  {
+ *     "year": 2019
+ *  }
  */
-exports.chart_year_get = (req,res) => {
-    if(!req.session._id){
-        res.redirect('/');
+exports.chartYearGet = (req, res) => {
+    if (!req.session._id) {
+        res.redirect("/");
     }
     let fact_open = [];
-    Profile.findOne({fromUser:req.session._id}, function(err,profile){
-        if(!err){
-            Settings.findOne({fromUser:req.session._id}, function(err, settings) {
+    Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+        if (!err) {
+            Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                 if (!err) {
-                    Invoice.find({fromUser:req.session._id}, function (err, invoices) {
+                    Invoice.find({fromUser: req.session._id,isRemoved:false}, async (err, invoices) => {
                         if (!err) {
                             let chart = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                             let invoice_open = [];
                             for (let invoice of invoices) {
                                 if (invoice.invoiceNr) {
-                                    if(!invoice.isPaid){
+                                    if (!invoice.isPaid) {
                                         //adds to unpaid invoices
                                         invoice_open.push(invoice);
-                                    }else{
+                                    } else {
                                         //Adds to chart data
                                         let monthOfPayment = invoice.datePaid.getMonth();
-                                        console.log("adding invoice with month "+monthOfPayment+" idi: "+invoice._id);
-                                        console.log("current year of invoice is:"+invoice.datePaid.getFullYear());
-                                        console.log("Invoice is paid: "+invoice.isPaid);
-                                        console.log('current year is: '+req.params.year);
-                                        if(req.params.year==invoice.datePaid.getFullYear()&&invoice.isPaid) {
+                                        if (req.params.year == invoice.datePaid.getFullYear() && invoice.isPaid) {
                                             chart[monthOfPayment] += invoice.total;
-                                            console.log('added');
-                                        }else{
-                                            console.log('not added');
                                         }
                                     }
                                 }
                             }
-                            console.log('chart done: '+chart);
-                            //createa data for chart
-                            for (let i = 0; i <= 11; i++) {
-
-                            }
-                            res.render('index', {
-                                'currentUrl':"dashboard",
-                                "total": chart,
+                            let newChart = [];
+                            chart.forEach((n) => {
+                                newChart.push(n.toFixed(2))
+                            });
+                            let role = (await User.findOne({_id: req.session._id}, (err, user) => {
+                                return user
+                            })).role;
+                            res.render("index", {
+                                "currentUrl": "dashboard",
+                                "total": newChart,
                                 "settings": settings,
                                 "year": req.params.year,
                                 "profile": profile,
-                                "invoices":invoice_open
+                                "invoices": invoice_open,
+                                "role": role
                             });
                         }
                     });
