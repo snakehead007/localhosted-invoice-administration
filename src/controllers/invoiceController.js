@@ -494,14 +494,17 @@ exports.offerAgreedGet = (req, res) => {
 };
 
 exports.invoiceUpgradeGet = (req, res) => {
-    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, async (err, invoice) => {
         if (!findOneHasError(req, res, err, invoice)) {
+            let profile = await Profile.findOne({fromUser:req.session._id},(err,profile)=> {return profile;});
+            let nr = getFullNr(profile.invoiceNrCurrent);
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
-                invoiceNr: invoice.offerNr,
+                invoiceNr: nr ,
                 offerNr: ""
-            }, function (err) {
+            }, async (err) => {
                 if (!updateOneHasError(req, res, err)) {
-                    activity.upgrade(invoice,req.session._id);
+                    await Profile.updateOne({fromUser:req.session._id},{invoiceNrCurrent:nr+1});
+                    await activity.upgrade(invoice,req.session._id);
                     res.redirect("back");
                 }
             });

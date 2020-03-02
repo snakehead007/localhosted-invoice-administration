@@ -1,8 +1,17 @@
 nav(class="navbar navbar-dark fixed-top bg-"+settings.theme+" flex-md-nowrap p-0 shadow")
     a(class="navbar-brand col-sm-3 col-md-2 mr-0",href="/view/profile") invoice-administration
-    form(class="form", method="post",action="/search/")
+    button.navbar-toggler(id="navbarButton" type='button' data-toggle='collapse' data-target='#navbar' aria-controls='navbar' aria-expanded='false' aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+    form#navbar-form-small(class="form", method="post",action="/search/")
+        input(class="form-control form-control-" + settings.theme + " w-100" type="text",name="search", placeholder=__('search'),value=currentSearch, aria-label="zoeken")
+        button(type="sumbit",style="display:none")
+    #navbar.collapse.navbar-collapse
+        .navbar-nav
+            include ./mainMenu
+    form#navbar-form-big(class="form", method="post",action="/search/")
         input(class="form-control form-control-"+settings.theme+" w-100" type="text",name="search", placeholder=__('search'),value=currentSearch, aria-label="zoeken")
         button(type="sumbit",style="display:none")
-    ul(class="navbar-nav px-3")
+    ul#navbar-logout(class="navbar-nav px-3")
         li(class="nav-item text-nowrap")
             a(class="nav-link" style="color:#FFF", href="/logout") #{__('Sign out')}
+
