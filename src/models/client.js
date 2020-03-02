@@ -47,6 +47,14 @@ const Client = new mongoose.Schema({
     locale: {
         type: String,
         default: 'nl-BE'
+    },
+    isRemoved: {
+        type:Boolean,
+        default:false
+    },
+    totalPaid:{
+        type:Number,
+        default:0
     }
 });
 

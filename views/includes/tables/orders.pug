@@ -1,4 +1,9 @@
-table(class="table table-striped table-sm ",id="hoofdTabel")
+script( type="text/javascript"  src="/dist/tablesorter-master/js/jquery.tablesorter.combined.js")
+script.
+    $(function () {
+        $("#tabelOrders").tablesorter();
+    });
+table(class="table table-striped table-sm ",id="tabelOrders")
     thead(style="color:#FFF",class="thead shadow bg-" + settings.theme)
         tr
             th(scope="col") #{__('Description')}
@@ -14,8 +19,9 @@ table(class="table table-striped table-sm ",id="hoofdTabel")
                 td=order.price+" €"
                 td=order.total.toFixed(2)+" €"
                 td
-                    a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") #{__('Actions')}
-                    div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                        a(class="dropdown-item", href='/edit/order/'+order._id) #{__('Edit')}
-                        a(class="dropdown-item", href='/delete/order/'+order._id) #{__('Delete')}
-                        a(class="dropdown-item", href='/view/order/'+order._id) #{__('View')}
+                    div.btn-group.dropleft
+                        a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") #{__('Actions')}
+                        div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                            a(class="dropdown-item", href='/edit/order/'+order._id) #{__('Edit')}
+                            a(class="dropdown-item", href='/delete/order/'+order._id) #{__('Delete')}
+                            a(class="dropdown-item", href='/view/order/'+order._id) #{__('View')}

@@ -2,13 +2,15 @@
  * @module controller/logoutController
  */
 
+const activity = require('../utils/activity');
 /**
  *
  * @param req
  * @param res
  */
 const i18n = require("i18n");
-exports.logout_get = (req, res) => {
+exports.logout_get = async (req, res) => {
+    await activity.logout(req.session._id);
     req.session.regenerate(function (err) {
         //new empty session
         req.flash("success", i18n.__("Successfully logged out"));

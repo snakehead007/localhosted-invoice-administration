@@ -28,13 +28,27 @@ exports.numberMustPhoneNumber = (req, res, doc, mustBeFilledIn = false, message 
     return checkForMessage(req, invalid,message);
 };
 
-exports.valueMustBeVatNumber = (req, res, doc, mustBeFilledIn = false, message = "VAT number not valid") => {
+exports.valueMustBeVatNumber = (req, res, doc, mustBeFilledIn = false,locale="nl-BE", message = "VAT number not valid") => {
     if(doc==="" && !mustBeFilledIn){
         return false;
     }else {
-        let invalid = !(jsvat.checkVAT(doc, jsvat.countries).isValid);
+        //replace all '.' occurences in the vat string with nothing
+        let currentVat = this.formatBEVat(doc);
+
+        let invalid = !(jsvat.checkVAT(currentVat, jsvat.countries).isValid);
         return checkForMessage(req, invalid, message);
     }
+};
+exports.formatBEVat=(vat)=> {
+    //remove dots
+    let currentVat = vat.replace(/\.+/g,'');
+    //remove letters
+    currentVat = currentVat.replace(/[A-Za-z]/g,'');
+    //remove whitespace
+    currentVat = currentVat.trim();
+    let finalVat = "";
+        finalVat = "BE"+currentVat.substring(0,4)+"."+currentVat.substring(4,7)+"."+currentVat.substring(7,10);
+    return finalVat;
 };
 
 exports.valueMustBeAnInteger = (req, res, doc, mustBeFilledIn = false, message = "VAT percentage is not valid") => {
@@ -60,11 +74,26 @@ exports.valueMustBeValidIban = (req, res, doc, mustBeFilledIn = false, message =
     if(doc==="" && !mustBeFilledIn){
         return false;
     }else {
-        const invalid = !IBAN.isValid(doc);
+        let currentIban = this.formatBEIban(doc);
+        const invalid = !IBAN.isValid(currentIban);
         return checkForMessage(req, invalid, message);
     }
 };
+exports.formatBEIban = (iban) => {
+    //format iban number: BE01 2345 6789 0123
 
+    //remove all whitespace
+    let currentIban = iban.trim();
+    currentIban = currentIban.replace(' ','');
+    //remove all letters
+    currentIban = currentIban.replace(/[A-Za-z]/g,'');
+    //remove all dots (there should be none, but just to be sure)
+    currentIban = currentIban.replace(/\.+/g,'');
+
+    //formatting
+    let finalIban = "BE"+currentIban.substring(0,2)+" "+currentIban.substring(2,6)+" "+currentIban.substring(6,10)+" "+currentIban.substring(10,14);
+    return finalIban;
+};
 exports.valueMustBeValidBic = (req, res, doc, mustBeFilledIn = false, message = "BIC number is not valid") => {
     if(doc==="" && !mustBeFilledIn){
         return false
@@ -91,3 +120,4 @@ let checkRegex = (doc="", regex,mustBeFilledIn) => {
         return (doc.match(regex)) === null;
     }
 };
+

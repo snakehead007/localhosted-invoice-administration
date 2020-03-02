@@ -14,13 +14,14 @@ const invoiceUtil = require("../utils/invoices");
 const {findOneHasError, updateOneHasError} = require("../middlewares/error");
 const {parseDateDDMMYYYY, parseDateSwapDayMonth} = require("../utils/date");
 const {getFullNr} = require("../utils/invoices");
+const activity = require('../utils/activity');
 /**
  *
  * @param req
  * @param res
  */
 exports.invoiceAllGet = (req, res) => {
-    Invoice.find({fromUser: req.session._id}, null, {sort: {date: -1}}, function (err, invoices) {
+    Invoice.find({fromUser: req.session._id,isRemoved:false}, null, {sort: {date: -1}}, function (err, invoices) {
         Settings.findOne({fromUser: req.session._id}, function (err, settings) {
             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                 res.render("invoices", {
@@ -44,7 +45,7 @@ exports.invoiceAllGet = (req, res) => {
 exports.invoiceNewChooseGet = (req, res) => {
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
         Profile.findOne({fromUser: req.session._id}, function (err, profile) {
-            Client.find({fromUser: req.session._id}, async (err, clients) => {
+            Client.find({fromUser: req.session._id,isRemoved:false}, async (err, clients) => {
                 res.render("add-file-no-contact", {
                     "profile": profile,
                     "settings": settings,
@@ -66,8 +67,8 @@ exports.invoiceNewChooseGet = (req, res) => {
  */
 exports.offerNewChooseGet = (req, res) => {
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        Profile.findOne({fromUser: req.session._id}, function (err, profile) {
-            Client.find({fromUser: req.session._id}, async (err, clients) => {
+        Profile.findOne({fromUser: req.session._id,isRemoved:false}, function (err, profile) {
+            Client.find({fromUser: req.session._id,isRemoved:false}, async (err, clients) => {
                 res.render("add-file-no-contact", {
                     "profile": profile,
                     "settings": settings,
@@ -90,7 +91,7 @@ exports.offerNewChooseGet = (req, res) => {
 exports.creditNewChooseGet = (req, res) => {
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
         Profile.findOne({fromUser: req.session._id}, function (err, profile) {
-            Client.find({fromUser: req.session._id}, async (err, clients) => {
+            Client.find({fromUser: req.session._id,isRemoved:false}, async (err, clients) => {
                 let givenObjects = {
                     "profile": profile,
                     "settings": settings,
@@ -114,7 +115,7 @@ exports.creditNewChooseGet = (req, res) => {
 exports.invoiceNewGet = (req, res) => {
     const idc = (req.body.idc) ? req.body.idc : req.params.idc;
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        Client.findOne({fromUser: req.session._id, _id: idc}, function (err, client) {
+        Client.findOne({fromUser: req.session._id, _id: idc,isRemoved:false}, function (err, client) {
             if (client === null) {
                 req.flash("danger", i18n.__("Cannot make an invoice with a client"));
                 res.redirect("/invoice/new/invoice");
@@ -140,11 +141,12 @@ exports.invoiceNewGet = (req, res) => {
                                     clientName: client.clientName,
                                     total: 0,
                                     fromUser: req.session._id,
-                                    description:""
+                                    description:"",
+                                    isRemoved:false
                                 });
                                 await Client.findOne({
                                     fromUser: req.session._id,
-                                    _id: client._id
+                                    _id: client._id,isRemoved:false
                                 }, async function (err) {
                                     if (!err) {
                                         client.invoices.push(newInvoice._id);
@@ -153,6 +155,7 @@ exports.invoiceNewGet = (req, res) => {
                                 });
                                 await newInvoice.save(function (err) {
                                     if (!err) {
+                                        activity.addInvoice(newInvoice,req.session._id);
                                         res.redirect("/invoice/all");
                                     }
                                 });
@@ -173,7 +176,7 @@ exports.invoiceNewGet = (req, res) => {
 exports.creditNewGet = (req, res) => {
     const idc = (req.body.idc) ? req.body.idc : req.params.idc;
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        Client.findOne({fromUser: req.session._id, _id: idc}, function (err, client) {
+        Client.findOne({fromUser: req.session._id, _id: idc,isRemoved:false}, function (err, client) {
             if (client === null) {
                 req.flash("danger", i18n.__("Cannot make an creditnote with a client"));
                 res.redirect("/invoice/new/credit");
@@ -193,14 +196,16 @@ exports.creditNewGet = (req, res) => {
                                             clientName: client.clientName,
                                             total: 0,
                                             fromUser: req.session._id
+                                            ,isRemoved:false
                                         });
                                         await Client.findOne({
                                             fromUser: req.session._id,
-                                            _id: client._id
+                                            _id: client._id,isRemoved:false
                                         }, function (err) {
                                             client.invoices.push(newInvoice._id);
                                         });
                                         await newInvoice.save();
+                                        activity.addCredit(newInvoice,req.session._id);
                                         res.redirect("/invoice/all");
                                     }
                                 });
@@ -220,7 +225,7 @@ exports.creditNewGet = (req, res) => {
 exports.offerNewGet = (req, res) => {
     const idc = (req.body.idc) ? req.body.idc : req.params.idc;
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        Client.findOne({fromUser: req.session._id, _id: idc}, function (err, client) {
+        Client.findOne({fromUser: req.session._id, _id: idc,isRemoved:false}, function (err, client) {
             if (client === null) {
                 req.flash("danger", i18n.__("Cannot make an offer with a client"));
                 res.redirect("/invoice/new/offer");
@@ -243,16 +248,17 @@ exports.offerNewGet = (req, res) => {
                                                 offerNr: offerNr,
                                                 clientName: client.clientName,
                                                 fromUser: req.session._id,
-                                                description:""
+                                                description:"",isRemoved:false
                                             });
                                             await Client.findOne({
                                                 fromUser: req.session._id,
-                                                _id: client._id
+                                                _id: client._id,isRemoved:false
                                             }, function (err) {
                                                 client.invoices.push(newInvoice._id);
                                             });
                                             await newInvoice.save();
                                             if (!err) {
+                                                activity.addOffer(newInvoice,req.session._id);
                                                 res.redirect("/invoice/all");
                                             }
                                         }
@@ -273,10 +279,10 @@ exports.offerNewGet = (req, res) => {
  * @param res
  */
 exports.invoiceAllClient = (req, res) => {
-    Client.findOne({fromUser: req.session._id, _id: req.params.idc}, function (err, client) {
+    Client.findOne({fromUser: req.session._id, _id: req.params.idc,isRemoved:false}, function (err, client) {
         Invoice.find({
             fromUser: req.session._id,
-            fromClient: req.params.idc
+            fromClient: req.params.idc,isRemoved:false
         }).sort("-invoiceNr").exec(function (err, invoices) {
             Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                 Profile.findOne({}, async (err, profile) => {
@@ -305,10 +311,11 @@ exports.invoiceAllClient = (req, res) => {
  * @param res
  */
 exports.editInvoiceGet = (req, res) => {
-    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
-        Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
+    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, function (err, invoice) {
+        Client.findOne({fromUser: req.session._id, _id: invoice.fromClient,isRemoved:false}, function (err, client) {
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                 Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
+                    console.log(invoice);
                     let givenObject = {
                         "invoice": invoice,
                         "client": client,
@@ -334,7 +341,7 @@ exports.editInvoiceGet = (req, res) => {
  */
 exports.editInvoicePost = (req, res) => {
     console.log(req.body);
-    Order.find({fromUser: req.session._id, fromInvoice: req.params.idi}, async (err, orders) => {
+    Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved:false}, async (err, orders) => {
         let totOrders = 0;
         for (let i = 0; i <= orders.length - 1; i++) {
             totOrders += (orders[i].price * orders[i].amount);
@@ -342,37 +349,14 @@ exports.editInvoicePost = (req, res) => {
         let settings = await Settings.findOne({fromUser: req.session._id}, (err, settings) => {
             return settings
         });
-        let currentInvoice = await Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, (err, invoice) => {
+        let currentInvoice = await Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, (err, invoice) => {
             return invoice
         });
-        let cDate = new Date(currentInvoice.date).toLocaleString(undefined, {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-        });
-        console.log(req.body.datePaid);
-        let cDatePaid;
-        if(req.body.datePaid!==""&&req.body.datePaid&&req.body.datePaid!=="undefined") {
-             cDatePaid = new Date(currentInvoice.datePaid).toLocaleString(undefined, {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric"
-            });
-        }
         let updateInvoice;
-        let dateBody;
-        if (parseDateSwapDayMonth(cDate) !== req.body.date) {
-            dateBody = parseDateDDMMYYYY(req.body.date)
-        }
-        let datePaidBody;
-        if(req.body.datePaid!==""&&req.body.datePaid&&req.body.datePaid!=="undefined") {
-            if (parseDateSwapDayMonth(cDatePaid) !== req.body.datePaid) {
-                datePaidBody = parseDateDDMMYYYY(req.body.datePaid)
-            }
-        }
-        if (dateBody && !datePaidBody) {
+
+        if (req.body.date && !req.body.datePaid) {
             updateInvoice = {
-                date: dateBody,
+                date: parseDateDDMMYYYY(req.body.date),
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
                 offerNr: req.body.offerNr,
@@ -380,23 +364,23 @@ exports.editInvoicePost = (req, res) => {
                 total: totOrders - req.body.advance,
                 description:req.body.description
             };
-        } else if (!dateBody && datePaidBody) {
+        } else if (!req.body.date && req.body.datePaid) {
             updateInvoice = {
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
                 offerNr: req.body.offerNr,
-                datePaid: datePaidBody,
+                datePaid: parseDateDDMMYYYY(req.body.datePaid),
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
                 description:req.body.description
             };
-        } else if (dateBody && datePaidBody) {
+        } else if (req.body.date && req.body.datePaid) {
             updateInvoice = {
-                date: dateBody,
+                date: parseDateDDMMYYYY(req.body.date),
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
                 offerNr: req.body.offerNr,
-                datePaid: datePaidBody,
+                datePaid: parseDateDDMMYYYY(req.body.datePaid),
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
                 description:req.body.description
@@ -411,14 +395,15 @@ exports.editInvoicePost = (req, res) => {
                 description:req.body.description
             };
         }
-        let searchCriteria = {fromUser: req.session._id,};
+        let searchCriteria = {fromUser: req.session._id,isRemoved:false};
         if (orders.length > 0) {
-            searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient};
+            searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient,isRemoved:false};
         }
         console.log(updateInvoice);
         Client.findOne(searchCriteria, function (err, contact) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, function (err) {
                 if (!updateOneHasError(req, res, err)) {
+                    activity.editedInvoice(updateInvoice,req.session._id);
                     req.flash("success", i18n.__("Successfully updated the invoice"));
                     res.redirect("/order/all/" + req.params.idi);
                 }
@@ -433,9 +418,9 @@ exports.editInvoicePost = (req, res) => {
  * @param res
  */
 exports.viewInvoiceGet = (req, res) => {
-    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, function (err, invoice) {
         if (!findOneHasError(req, res, err, invoice)) {
-            Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
+            Client.findOne({fromUser: req.session._id, _id: invoice.fromClient,isRemoved:false}, function (err, client) {
                 if (!findOneHasError(req, res, err, client)) {
                     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                         if (!findOneHasError(req, res, err, settings)) {
@@ -471,13 +456,20 @@ exports.viewInvoiceGet = (req, res) => {
  */
 exports.invoicePaidGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+        let isPaid = !(invoice.isPaid);
         if (!findOneHasError(req, res, err, invoice)) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
-                isPaid: !(invoice.isPaid),
+                isPaid: isPaid,
                 datePaid: Date.now(),
                 lastUpdated: Date.now()
-            }, function (err) {
+            }, async (err) =>  {
                 if (!updateOneHasError(req, res, err)) {
+                    activity.setPaid(invoice,isPaid,req.session._id);
+                    let _client = await Client.findOne({fromUser:req.session._id,_id:invoice.fromClient},(err,client) => {return client;});
+                    console.log(_client);
+                    let newTotal = (isPaid)?_client.totalPaid+invoice.total:_client.totalPaid-invoice.total;
+                    console.log(newTotal);
+                    await Client.updateOne({fromUser:req.session._id,_id:invoice.fromClient},{totalPaid:newTotal});
                     res.redirect("back");
                 }
             });
@@ -493,6 +485,7 @@ exports.offerAgreedGet = (req, res) => {
                 lastUpdated: Date.now()
             }, function (err) {
                 if (!updateOneHasError(req, res, err)) {
+                    activity.setAgreed(invoice,!invoice.isAgreed,req.session._id);
                     res.redirect("back");
                 }
             });
@@ -501,13 +494,17 @@ exports.offerAgreedGet = (req, res) => {
 };
 
 exports.invoiceUpgradeGet = (req, res) => {
-    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, async (err, invoice) => {
         if (!findOneHasError(req, res, err, invoice)) {
+            let profile = await Profile.findOne({fromUser:req.session._id},(err,profile)=> {return profile;});
+            let nr = getFullNr(profile.invoiceNrCurrent);
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
-                invoiceNr: invoice.offerNr,
+                invoiceNr: nr ,
                 offerNr: ""
-            }, function (err) {
+            }, async (err) => {
                 if (!updateOneHasError(req, res, err)) {
+                    await Profile.updateOne({fromUser:req.session._id},{invoiceNrCurrent:nr+1});
+                    await activity.upgrade(invoice,req.session._id);
                     res.redirect("back");
                 }
             });
@@ -523,6 +520,7 @@ exports.invoiceDowngradeGet = (req, res) => {
                 invoiceNr: ""
             }, function (err) {
                 if (!updateOneHasError(req, res, err)) {
+                    activity.downgrade(invoice,req.session._id);
                     res.redirect("back");
                 }
             });

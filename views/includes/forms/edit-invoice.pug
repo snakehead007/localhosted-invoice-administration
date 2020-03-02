@@ -1,8 +1,9 @@
 form(action='/edit/invoice/'+invoice._id,method='post')
+    script(src="/datepicker/nl.js")
     script.
         $(function () {
-            $("#datepicker").datepicker($.datepicker.regional["#{settings.locale}"]);
-            $("#datepicker2").datepicker($.datepicker.regional["#{settings.locale}"]);
+            $("#datepicker").datepicker($.datepicker.regional["#{settings.locale}".substring(0,2)]);
+            $("#datepicker2").datepicker($.datepicker.regional["#{settings.locale}".substring(0,2)]);
         });
     div(class="form-row")
         div(class="form-group col-md-3")
@@ -29,23 +30,23 @@ form(action='/edit/invoice/'+invoice._id,method='post')
                     span(class="input-group-text") #{__('Offer description')}
                 textarea(input="text",name="description",class="form-control" aria-label="With textarea")=invoice.description
 
-        script.
-            //date is done via DOM, the locale cannot be set right when using pug
-            let id = "date"+"#{invoice.invoiceNr}";
-            let date = new Date("#{invoice.date}").toLocaleString("#{settings.locale}", {
+    script.
+        //date is done via DOM, the locale cannot be set right when using pug
+        let id = "date"+"#{invoice.invoiceNr}";
+        let date = new Date("#{invoice.date}").toLocaleString("#{settings.locale}", {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric'
+        });
+        document.getElementById("datepicker").value = date;
+        if("#{invoice.datePaid}"!==""){
+            let datePaid = new Date("#{invoice.datePaid}").toLocaleString("#{settings.locale}", {
                 year: 'numeric',
                 month: 'numeric',
                 day: 'numeric'
             });
-            document.getElementById("datepicker").value = date;
-            if("#{invoice.datePaid}"!==""){
-                let datePaid = new Date("#{invoice.datePaid}").toLocaleString("#{settings.locale}", {
-                    year: 'numeric',
-                    month: 'numeric',
-                    day: 'numeric'
-                });
-                document.getElementById("datepicker2").value = datePaid;
-            }
+            document.getElementById("datepicker2").value = datePaid;
+        }
 
 
     hr

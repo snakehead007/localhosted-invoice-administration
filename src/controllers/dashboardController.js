@@ -9,10 +9,21 @@ const {month, month_small, year} = require("../utils/date");
 const User = require("../models/user");
 
 /**
- *
- * @param req
- * @param res
- * @returns {Promise<void>}
+ * @api {get} / mainGet
+ * @apiDescription This gives back the dashboard
+ * @apiName mainGet
+ * @apiGroup Dashboard
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ *  {{
+        "currentUrl": "dashboard",
+        "total": newChart,
+        "settings": settings,
+        "year": (new Date).getFullYear(),
+        "profile": profile,
+        "invoices": invoice_open,
+        "role": role
+    }
  */
 exports.mainGet = async function getLogin(req, res) {
     if (!req.session._id) {
@@ -35,7 +46,7 @@ exports.mainGet = async function getLogin(req, res) {
         if (!err) {
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                 if (!err) {
-                    Invoice.find({fromUser: req.session._id}, async (err, invoices) => {
+                    Invoice.find({fromUser: req.session._id,isRemoved:false}, async (err, invoices) => {
                         if (!err) {
                             let chart = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                             let invoice_open = [];
@@ -78,9 +89,25 @@ exports.mainGet = async function getLogin(req, res) {
     });
 };
 /**
- *
- * @param req
- * @param res
+ * @api {get} /chart/:year chartYearGet
+ * @apiDescription This gives back the dashboard but with a different year, with the parameter :year as a number
+ * @apiName chartYearGet
+ * @apiGroup Dashboard
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ *  {
+        "currentUrl": "dashboard",
+        "total": newChart,
+        "settings": settings,
+        "year": req.params.year,
+        "profile": profile,
+        "invoices": invoice_open,
+        "role": role
+    }
+ @apiParamExample Request-Example:
+ *  {
+ *     "year": 2019
+ *  }
  */
 exports.chartYearGet = (req, res) => {
     if (!req.session._id) {
@@ -91,7 +118,7 @@ exports.chartYearGet = (req, res) => {
         if (!err) {
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                 if (!err) {
-                    Invoice.find({fromUser: req.session._id}, async (err, invoices) => {
+                    Invoice.find({fromUser: req.session._id,isRemoved:false}, async (err, invoices) => {
                         if (!err) {
                             let chart = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                             let invoice_open = [];

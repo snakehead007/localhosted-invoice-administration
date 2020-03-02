@@ -19,10 +19,10 @@ module.exports.search_get = (req, res) => {
     let invoices = [];
     let orders = [];
     let items = [];
-    Client.find({fromUser: req.session._id}, function (err, clients_) {
-        Invoice.find({fromUser: req.session._id}, function (err, invoices_) {
-            Order.find({fromUser: req.session._id}, function (err, orders_) {
-                Item.find({fromUser: req.session._id}, function (err, mats_) {
+    Client.find({fromUser: req.session._id,isRemoved:false}, function (err, clients_) {
+        Invoice.find({fromUser: req.session._id,isRemoved:false}, function (err, invoices_) {
+            Order.find({fromUser: req.session._id,isRemoved:false}, function (err, orders_) {
+                Item.find({fromUser: req.session._id,isRemoved:false}, function (err, mats_) {
                     //orders
                     for (let order of orders_) {
                         if (String(order.description).toLowerCase().includes(str)) {
@@ -78,7 +78,7 @@ module.exports.search_get = (req, res) => {
                     let items_d = distinct(items);
                     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                         if (!err) {
-                            Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+                            Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                                 if (!err) {
                                     res.render('search', {
                                         "description": i18n.__("search on ") + "\"" + str + "\"",
@@ -88,7 +88,10 @@ module.exports.search_get = (req, res) => {
                                         "invoices": invoices_d,
                                         "items": items_d,
                                         "profile": profile,
-                                        "currentSearch": str
+                                        "currentSearch": str,
+                                        "role":(await User.findOne({_id: req.session._id}, (err, user) => {
+                                            return user
+                                        })).role
                                     });
                                 }
                             });

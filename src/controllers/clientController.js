@@ -9,6 +9,7 @@ const invalid = require("../utils/formValidation");
 const error = require("../middlewares/error");
 const i18n = require("i18n");
 const User = require("../models/user");
+const activity = require('../utils/activity');
 /**
  * @api {get} /client/all getClientAll
  * @apiDescription Here you can view all the clients from the current user
@@ -26,7 +27,7 @@ const User = require("../models/user");
 exports.getClientAll = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
         if (err) console.trace();
-        Client.find({fromUser: req.session._id}, function (err, clients) {
+        Client.find({fromUser: req.session._id,isRemoved:false}, function (err, clients) {
             if (err) console.trace();
             Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                 if (err) console.trace();
@@ -91,7 +92,7 @@ exports.getClientNew = (req, res) => {
         "settings": settings
  *  }
  */
-exports.postClientNew = (req, res) => {
+exports.postClientNew = async (req, res) => {
     let nameCheck = invalid.valueMustBeAName(req, res, req.body.clientName, true, "client name not correctly filled in");
     let firmCheck = invalid.valueMustBeAName(req, res, req.body.firm, false, "firm name not correctly filled in");
     let streetCheck = (req.body.street) ? invalid.valueMustBeAName(req, res, req.body.street, true) : false;
@@ -160,6 +161,7 @@ exports.postClientNew = (req, res) => {
             invoices: []
         });
         newClient.save();
+        await activity.addClient(newClient,req.session._id);
         res.redirect("/client/all");
     }
 };
@@ -178,7 +180,7 @@ exports.postClientNew = (req, res) => {
  *  }
  */
 exports.getClientView = (req, res) => {
-    Client.findOne({fromUser: req.session._id, _id: req.params.idc}, function (err, client) {
+    Client.findOne({fromUser: req.session._id, _id: req.params.idc,isRemoved:false}, function (err, client) {
         if (err) console.trace(err);
         if (!err) {
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
@@ -204,7 +206,7 @@ exports.getClientView = (req, res) => {
 };
 
 exports.getEditClient = (req, res) => {
-    Client.findOne({fromUser: req.session._id, _id: req.params.idc}, function (err, client) {
+    Client.findOne({fromUser: req.session._id, _id: req.params.idc,isRemoved:false}, function (err, client) {
         if (!error.findOneHasError(req, res, err, client)) {
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                 if (!error.findOneHasError(req, res, err, settings)) {
@@ -240,7 +242,7 @@ exports.postEditClient = (req, res) => {
                     emailCheck = true;
                 }
             });
-            let vatCheck = (req.body.vat) ? invalid.valueMustBeVatNumber(req, res, req.body.vat) : false;
+            let vatCheck = (req.body.vat) ? invalid.valueMustBeVatNumber(req, res, req.body.vat,false,client.locale) : false;
             let vatPercentageCheck = invalid.valueMustBeAnInteger(req, res, req.body.vatPercentage, true);
             let bankCheck = (req.body.bankNr) ? invalid.valueMustBeValidIban(req, res, req.body.bankNr) : false;
             let postalCheck = (req.body.postalCode) ? invalid.valueMustBePostalCode(req, res, req.body.postalCode) : false;
@@ -253,14 +255,15 @@ exports.postEditClient = (req, res) => {
                     street: req.body.street,
                     streetNr: req.body.streetNr,
                     email: req.body.emails,
-                    vat: req.body.vat,
+                    vat: invalid.formatBEVat(req.body.vat),
                     vatPercentage: req.body.vatPercentage,
-                    bankNr: req.body.bankNr,
+                    bankNr: invalid.formatBEIban(req.body.bankNr),
                     postalCode: req.body.postalCode,
                     place: req.body.place
                 };
-                Client.updateOne({fromUser: req.session._id, _id: client._id}, updatedClient, function (err) {
+                Client.updateOne({fromUser: req.session._id, _id: client._id}, updatedClient, async (err) => {
                     if (!error.updateOneHasError(req, res, err)) {
+                        await activity.editedClient(client,req.session._id);
                         req.flash("success", i18n.__("Successfully updated client"));
                         res.redirect("back");
                     }

@@ -43,6 +43,10 @@ const Invoice = new mongoose.Schema({
     description: {
         type: String,
         default: ""
+    },
+    isRemoved: {
+        type:Boolean,
+        default:false
     }
 });
 

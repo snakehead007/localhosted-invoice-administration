@@ -1,0 +1,17 @@
+html
+    head
+        include includes/htmlHead
+    body
+        include includes/topBar
+        div(class="container-fluid")
+            div(class ="row")
+                nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
+                    div(class="sidebar-sticky")
+                        include includes/mainMenu
+                main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+                    h2(class="pt-3") #{__('All Activities')}
+                    hr
+                    include includes/messages
+                    div(class="table-responsive bigger")
+                       include includes/tables/activities
+                    include includes/scripts/feather

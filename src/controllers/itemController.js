@@ -15,7 +15,7 @@ exports.editItemGet = (req, res) => {
             console.trace();
         }
         if (!err) {
-            Item.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, item) {
+            Item.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, function (err, item) {
                 if (err) {
                     console.trace();
                 }
