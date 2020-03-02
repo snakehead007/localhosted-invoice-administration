@@ -18,6 +18,7 @@ const Settings = require('../models/settings');
         'description': "Settings",
         'profile':profile
  *  }
+ *  @apiDeprecated Currenlty left out. and not tested
  */
 exports.getCalcAll = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {

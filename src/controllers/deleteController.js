@@ -13,6 +13,7 @@ const error = require("../middlewares/error");
 const activity = require("../utils/activity");
 
 /**
+ * @apiVersion 3.0.0
  * @api {get} /delete/client/:idc deleteClient
  * @apiDescription Deletes the client and redirects to /clients/all
  * @apiName deleteClient
@@ -31,6 +32,7 @@ exports.deleteClient = (req, res) => {
 };
 
 /**
+ * @apiVersion 3.0.0
  * @api {get} /delete/invoice/:idi deleteInvoiceGet
  * @apiDescription Deletes the invoice and redirects to /invoices/all
  * @apiName deleteInvoiceGet
@@ -48,6 +50,7 @@ exports.deleteInvoiceGet = async (req, res) => {
 };
 
 /**
+ * @apiVersion 3.0.0
  * @api {get} /delete/logo deleteLogoGet
  * @apiDescription Deletes the logo of the profile of the user in session and redirects to /clients/all
  * @apiName deleteClient
@@ -81,6 +84,7 @@ exports.deleteLogoGet = (req, res) => {
     })
 };
 /**
+ * @apiVersion 3.0.0
  * @api {get} /delete/order/:ido deleteClient
  * @apiDescription Deletes the order of an invoice and redirects to /order/all
  * @apiName deleteOrderGet

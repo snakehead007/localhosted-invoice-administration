@@ -9,6 +9,7 @@ const {month, month_small, year} = require("../utils/date");
 const User = require("../models/user");
 
 /**
+ * @apiVersion 3.0.0
  * @api {get} / mainGet
  * @apiDescription This gives back the dashboard
  * @apiName mainGet
@@ -89,6 +90,7 @@ exports.mainGet = async function getLogin(req, res) {
     });
 };
 /**
+ * @apiVersion 3.0.0
  * @api {get} /chart/:year chartYearGet
  * @apiDescription This gives back the dashboard but with a different year, with the parameter :year as a number
  * @apiName chartYearGet

@@ -54,6 +54,8 @@ The front end view is handled by 'pug' and the backend is runned by 'nodejs'.
 
 All the request are run with 'Express'.
 
+The API documentation are hosted on [snakehead007.github.io/invoice-administration](https://snakehead007.github.io/invoice-administration)
+  
 ## Screenshots
 
 ![Profile edit page](screenshots/1.png)

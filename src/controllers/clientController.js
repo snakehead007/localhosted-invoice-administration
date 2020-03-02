@@ -11,18 +11,20 @@ const i18n = require("i18n");
 const User = require("../models/user");
 const activity = require('../utils/activity');
 /**
+ * @apiVersion 3.0.0
  * @api {get} /client/all getClientAll
- * @apiDescription Here you can view all the clients from the current user
+ * @apiDescription Shows all clients of the user
  * @apiName getClientAll
  * @apiGroup Client
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
- *  {
- *      "clients": clients,
-        "settings": settings,
-        "profile":profile,
-        "currentUrl":"clientAll"
- *  }
+ res.render("clients", {
+    "clients": clients,
+    "settings": settings,
+    "profile": profile,
+    "currentUrl": "clientAll",
+    "role": role
+});
  */
 exports.getClientAll = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
@@ -48,17 +50,19 @@ exports.getClientAll = (req, res) => {
 };
 
 /**
+ * @apiVersion 3.0.0
  * @api {get} /client/new getClientNew
- * @apiDescription Shows a form that creates a new client
+ * @apiDescription Shows a form where the user can create a new user
  * @apiName getClientNew
  * @apiGroup Client
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
- *  {
- *      "settings": settings,
-        "profile":profile,
-        "currentUrl":"clientNew"
- *  }
+ res.render("new/new-client", {
+    "settings": settings,
+    "profile": profile,
+    "currentUrl": "clientNew",
+    "role": role
+});
  */
 exports.getClientNew = (req, res) => {
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
@@ -80,17 +84,33 @@ exports.getClientNew = (req, res) => {
 };
 
 /**
+ * @apiVersion 3.0.0
  * @api {post} /client/new postClientNew
- * @apiDescription creates a new client for the specific user, renders /client/all
+ * @apiDescription creates a new client all parameters given in the form are checked using the formValidator.js
  * @apiName postClientNew
  * @apiGroup Client
+ * @apiSuccess Creates a new client for the logged in user
  * @apiSuccessExample Success-Response:
- *  HTTP/1.1 200 OK
- *  {
- *     "client": client,
-        "profile": profile,
-        "settings": settings
- *  }
+     res.redirect("/client/all");
+ * @apiError Does not create a new client it redirects you back to /client/new
+ * @apiErrorExample Error-response:
+ * res.render("edit/edit-client", {
+    "settings": settings,
+    "profile": profile,
+    "currentUrl": "clientNew",
+    "client": {
+        "clientName": req.body.clientName,
+        "firm": req.body.firm,
+        "street": req.body.street,
+        "streetNr": req.body.streetNr,
+        "vat": req.body.vat,
+        "bankNr": req.body.bankNr,
+        "postalCode": req.body.postalCode,
+        "place": req.body.place,
+        "vatPercentage": req.body.vatPercentage
+    },
+    "role": role
+});
  */
 exports.postClientNew = async (req, res) => {
     let nameCheck = invalid.valueMustBeAName(req, res, req.body.clientName, true, "client name not correctly filled in");
@@ -167,6 +187,7 @@ exports.postClientNew = async (req, res) => {
 };
 
 /**
+ * @apiVersion 3.0.0
  * @api {get} /client/view/:idc getClientView
  * @apiDescription Shows all the information of the clients id from query parameter "idc"
  * @apiName getClientView

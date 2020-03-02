@@ -7,7 +7,23 @@ const Client = require('../models/client');
 const Invoice = require('../models/invoice');
 const Order = require('../models/order');
 const Item = require('../models/item');
-
+/**
+ * @apiVersion 3.0.0
+ * @api {get} / getActivity
+ * @apiHeader {String} describes idc here
+ * @apiDescription shows a list of all the activities of the user
+ * @apiName getActivity
+ * @apiGroup Activity
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+   {
+   "settings":settings,
+    "role":role,
+    "profile":profile,
+    "currentUrl":"activities",
+    "activities":activities
+   }
+ */
 exports.getActivity = async (req,res) => {
     const activities = await Activity.find({fromUser:req.session._id}, null,{sort: {time: -1}},(err,activities) => {return activities});
     console.log(activities);
@@ -24,6 +40,19 @@ exports.getActivity = async (req,res) => {
 
 };
 
+/**
+ * @apiVersion 3.0.0
+ * @api {get} /undo/:id getUndoActivity
+ * @apiParam {String} _id of the object that has been removed
+ * @apiParamExample {String} title:
+     "ido": order._id
+ * @apiDescription Undo the removal of an object by setting the isRemove of the object and subdocuments to false
+ * @apiName getUndoActivity
+ * @apiGroup Activity
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+     redirect to /activity
+ */
 exports.getUndoActivity = async (req,res) => {
     let act = await Activity.findOne({_id:req.params.id,fromUser:req.session._id},(err,activity) => {return activity;});
     console.log(act);
@@ -51,7 +80,20 @@ exports.getUndoActivity = async (req,res) => {
     res.redirect('/activity');
 };
 
-exports.remove = async (req,res)=> {
+/**
+ * @apiVersion 3.0.0
+ * @api {get} /remove/:id removeGet
+ * @apiParam {String} _id of the object to be removed
+ * @apiParamExample {String} title:
+     "ido": order._id
+ * @apiDescription sets the object and its subdocuments property isRemoved to true
+ * @apiName removeGet
+ * @apiGroup Activity
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+    redirect to /activity
+ */
+exports.removeGet = async (req,res)=> {
     await Activity.remove({_id:req.params.id,fromUser:req.session._id});
     req.flash('success',"Successfully deleted the activity");
     res.redirect('/activity');

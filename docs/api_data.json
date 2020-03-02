@@ -1,5 +1,118 @@
 [
   {
+    "version": "3.0.0",
+    "type": "get",
+    "url": "/",
+    "title": "getActivity",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "describes",
+            "description": "<p>idc here</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>shows a list of all the activities of the user</p>",
+    "name": "getActivity",
+    "group": "Activity",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n  {\n  \"settings\":settings,\n   \"role\":role,\n   \"profile\":profile,\n   \"currentUrl\":\"activities\",\n   \"activities\":activities\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/activityController.js",
+    "groupTitle": "Activity"
+  },
+  {
+    "version": "3.0.0",
+    "type": "get",
+    "url": "/undo/:id",
+    "title": "getUndoActivity",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>of the object that has been removed</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "title:",
+          "content": "\"ido\": order._id",
+          "type": "String"
+        }
+      ]
+    },
+    "description": "<p>Undo the removal of an object by setting the isRemove of the object and subdocuments to false</p>",
+    "name": "getUndoActivity",
+    "group": "Activity",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n    redirect to /activity",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/activityController.js",
+    "groupTitle": "Activity"
+  },
+  {
+    "version": "3.0.0",
+    "type": "get",
+    "url": "/remove/:id",
+    "title": "removeGet",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>of the object to be removed</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "title:",
+          "content": "\"ido\": order._id",
+          "type": "String"
+        }
+      ]
+    },
+    "description": "<p>sets the object and its subdocuments property isRemoved to true</p>",
+    "name": "removeGet",
+    "group": "Activity",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n   redirect to /activity",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/activityController.js",
+    "groupTitle": "Activity"
+  },
+  {
     "type": "get",
     "url": "/calc/all",
     "title": "getCalcAll",
@@ -15,31 +128,55 @@
         }
       ]
     },
+    "deprecated": {
+      "content": "Currenlty left out. and not tested"
+    },
     "version": "0.0.0",
     "filename": "src/controllers/calcController.js",
     "groupTitle": "Calc"
   },
   {
+    "version": "3.0.0",
     "type": "get",
     "url": "/client/all",
     "title": "getClientAll",
-    "description": "<p>Here you can view all the clients from the current user</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>unique of id of a client</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "title:",
+          "content": "\"id\": client._id",
+          "type": "String"
+        }
+      ]
+    },
+    "description": "<p>Shows all clients of the user</p>",
     "name": "getClientAll",
     "group": "Client",
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"clients\": clients,\n       \"settings\": settings,\n       \"profile\":profile,\n       \"currentUrl\":\"clientAll\"\n}",
+          "content": " HTTP/1.1 200 OK\n res.render(\"clients\", {\n    \"clients\": clients,\n    \"settings\": settings,\n    \"profile\": profile,\n    \"currentUrl\": \"clientAll\",\n    \"role\": role\n});",
           "type": "json"
         }
       ]
     },
-    "version": "0.0.0",
     "filename": "src/controllers/clientController.js",
     "groupTitle": "Client"
   },
   {
+    "version": "3.0.0",
     "type": "get",
     "url": "/client/new",
     "title": "getClientNew",
@@ -55,11 +192,11 @@
         }
       ]
     },
-    "version": "0.0.0",
     "filename": "src/controllers/clientController.js",
     "groupTitle": "Client"
   },
   {
+    "version": "3.0.0",
     "type": "get",
     "url": "/client/view/:idc",
     "title": "getClientView",
@@ -75,11 +212,11 @@
         }
       ]
     },
-    "version": "0.0.0",
     "filename": "src/controllers/clientController.js",
     "groupTitle": "Client"
   },
   {
+    "version": "3.0.0",
     "type": "post",
     "url": "/client/new",
     "title": "postClientNew",
@@ -95,11 +232,11 @@
         }
       ]
     },
-    "version": "0.0.0",
     "filename": "src/controllers/clientController.js",
     "groupTitle": "Client"
   },
   {
+    "version": "3.0.0",
     "type": "get",
     "url": "/chart/:year",
     "title": "chartYearGet",
@@ -124,11 +261,11 @@
         }
       ]
     },
-    "version": "0.0.0",
     "filename": "src/controllers/dashboardController.js",
     "groupTitle": "Dashboard"
   },
   {
+    "version": "3.0.0",
     "type": "get",
     "url": "/",
     "title": "mainGet",
@@ -144,11 +281,11 @@
         }
       ]
     },
-    "version": "0.0.0",
     "filename": "src/controllers/dashboardController.js",
     "groupTitle": "Dashboard"
   },
   {
+    "version": "3.0.0",
     "type": "get",
     "url": "/delete/client/:idc",
     "title": "deleteClient",
@@ -164,11 +301,11 @@
         }
       ]
     },
-    "version": "0.0.0",
     "filename": "src/controllers/deleteController.js",
     "groupTitle": "Delete"
   },
   {
+    "version": "3.0.0",
     "type": "get",
     "url": "/delete/logo",
     "title": "deleteLogoGet",
@@ -187,11 +324,11 @@
         ]
       }
     },
-    "version": "0.0.0",
     "filename": "src/controllers/deleteController.js",
     "groupTitle": "Delete"
   },
   {
+    "version": "3.0.0",
     "type": "get",
     "url": "/delete/invoice/:idi",
     "title": "deleteInvoiceGet",
@@ -207,11 +344,11 @@
         }
       ]
     },
-    "version": "0.0.0",
     "filename": "src/controllers/deleteController.js",
     "groupTitle": "Delete"
   },
   {
+    "version": "3.0.0",
     "type": "get",
     "url": "/delete/order/:ido",
     "title": "deleteClient",
@@ -227,7 +364,6 @@
         }
       ]
     },
-    "version": "0.0.0",
     "filename": "src/controllers/deleteController.js",
     "groupTitle": "Delete"
   },

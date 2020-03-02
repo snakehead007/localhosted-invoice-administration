@@ -1,5 +1,4 @@
 include includes/htmlHead
-include includes/scripts/cookie-consent
 style.
   /* BASIC */
   html {
@@ -234,10 +233,30 @@ style.
     .spaceRight {
       margin-right: 5px;
     }
+    div#boxCookie{
+      position: relative;
+    }
+    div#cookie:hover{
+      text-shadow: 0 0 7px #b5986c;
+    }
+
+    div#cookie:active{
+      text-shadow: 0 0 14px #b5986c;
+    }
+    div#cookie {
+      cursor:pointer;
+      font-size: 1rem;
+      color: #6c4027;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      margin-right:25px;
+    }
+
+
 
 .wrapper.fadeInDown.container-fluid
   include includes/messages
-  //include includes/snippets/cookie-footer
   #formContent
     h3.title Invoice-administration
     .fadeIn
@@ -263,6 +282,9 @@ div(class="panel-footer").center
     a.spaceRight.spaceLeft(href="https://snakehead007.github.io/") snakehead007
   span.spaceRight.spaceLeft our
     a.spaceLeft(href="#" data-toggle="modal" data-target=".bd-example-modal-lg")   privacy policy
+div#boxCookie
+  div#cookie(data-container="body" data-toggle="popover" data-placement="left" data-content="We only use temporarily cookies. We do not track you.")
+     i(class="fas fa-cookie-bite fa-3x" )
 .modal.fade.bd-example-modal-lg(tabindex='-1' role='dialog' aria-labelledby='myLargeModalLabel' aria-hidden='true')
   .modal-dialog.modal-lg
     .modal-content
@@ -273,8 +295,6 @@ div(class="panel-footer").center
       .modal-body
         include includes/modals/privacyPolicy
 
-
-
 script(src="https://apis.google.com/js/platform.js?onload=renderButton")
 script.
   function renderButton(){
@@ -283,3 +303,32 @@ script.
   function register(){
     window.location.href = '/register';
   }
+  let isCookieOn = false;
+  let rotation = 0;
+  jQuery.fn.rotate = function (degrees) {
+    $(this).animate({borderSpacing: degrees}, {
+      step: function (now) {
+        $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+        $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+        $(this).css('transform', 'rotate(' + now + 'deg)');
+      },
+      duration: 'slow'
+    }, 'linear');
+    return $(this);
+  };
+  $(document).ready(function () {
+    $("#cookie").click(function () {
+      console.log(isCookieOn);
+      if (isCookieOn) {
+        rotation = 0;
+        $("#cookie").popover('toggle', {delay: {"show": 0, "hide": 0}});
+        $(this).rotate(rotation);
+        isCookieOn = false;
+      } else {
+        rotation = 90;
+        $(this).rotate(rotation);
+        $("#cookie").popover('show'), {delay: {"show": 0, "hide": 0}};
+        isCookieOn = true;
+      }
+    });
+  });

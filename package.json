@@ -1,6 +1,6 @@
 {
   "name": "invoice-admin",
-  "version": "1.9.3",
+  "version": "3.0.0",
   "description": "this program is used for managing and administrating invoices and generating them into .pdf format",
   "main": "src/app.js",
   "dependencies": {
@@ -105,7 +105,7 @@
     "start": "node src/app.js",
     "test": "mocha",
     "test-with-coverage2": "require('dotenv').config()&& istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info  | codacy-coverage --accountToken process.env. --username snakehead007 --projectName invoice-administration && rm -rf ./coverage",
-    "doc": "apidoc -i src/ -o doc/",
+    "doc": "apidoc -i src/ -o docs/",
     "build:dev": "sudo docker build -t snakehead007/invoice-administration:dev .",
     "push:dev": "sudo docker push snakehead007/invoice-administration:dev",
     "build:latest": "sudo docker build -t snakehead007/invoice-administration:latest .",
@@ -133,6 +133,7 @@
   ],
   "apidoc": {
     "title": "API of invoice-administration",
-    "url": "localhost:3000"
+    "url": "account.karel.be",
+    "version": "3.0.0"
   }
 }
