@@ -5,6 +5,9 @@
 body {
     font-size: .875rem;
 }
+*{
+    touch-action: none;
+}
 
 .feather {
     width: 16px;

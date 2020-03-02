@@ -105,7 +105,7 @@
     "start": "node src/app.js",
     "test": "mocha",
     "test-with-coverage2": "require('dotenv').config()&& istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info  | codacy-coverage --accountToken process.env. --username snakehead007 --projectName invoice-administration && rm -rf ./coverage",
-    "doc": "apidoc -i src/ -o apidoc/",
+    "doc": "apidoc -i src/ -o doc/",
     "build:dev": "sudo docker build -t snakehead007/invoice-administration:dev .",
     "push:dev": "sudo docker push snakehead007/invoice-administration:dev",
     "build:latest": "sudo docker build -t snakehead007/invoice-administration:latest .",

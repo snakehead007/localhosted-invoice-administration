@@ -13,9 +13,14 @@ const {callGetBase64, createJSON, replaceAll} = require("../utils/pdfCreation");
 const activity = require('../utils/activity');
 
 /**
- *
- * @param req
- * @param res
+ * @api {get} /stream/invoice/:idi streamInvoicePDF
+ * @apiDescription Streams the pdf inline on the users browser
+ * @apiName streamInvoicePDF
+ * @apiGroup Stream
+ * @apiParamExample Request-Example:
+ * {
+ *    "idi": invoice._id
+ * }
  */
 exports.streamInvoicePDF = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
@@ -50,6 +55,16 @@ exports.streamInvoicePDF = (req, res) => {
     });
 };
 
+/**
+ * @api {get} /stream/offer/:idi streamOfferPDF
+ * @apiDescription Streams the pdf inline on the users browser
+ * @apiName streamOfferPDF
+ * @apiGroup Stream
+ * @apiParamExample Request-Example:
+ * {
+ *    "idi": invoice._id
+ * }
+ */
 exports.streamOfferPDF = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
@@ -67,6 +82,16 @@ exports.streamOfferPDF = (req, res) => {
     });
 };
 
+/**
+ * @api {get} /stream/credit/:idi streamCreditPDF
+ * @apiDescription Streams the pdf inline on the users browser
+ * @apiName streamCreditPDF
+ * @apiGroup Stream
+ * @apiParamExample Request-Example:
+ * {
+ *    "idi": invoice._id
+ * }
+ */
 exports.streamCreditPDF = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
@@ -84,6 +109,16 @@ exports.streamCreditPDF = (req, res) => {
     });
 };
 
+/**
+ * @api {get} /download/credit/:idi downloadCreditPDF
+ * @apiDescription Prompts a download of the pdf inline on the users browser
+ * @apiName downloadCreditPDF
+ * @apiGroup Download
+ * @apiParamExample Request-Example:
+ * {
+ *    "idi": invoice._id
+ * }
+ */
 exports.downloadCreditPDF = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
@@ -102,6 +137,16 @@ exports.downloadCreditPDF = (req, res) => {
     });
 };
 
+/**
+ * @api {get} /download/invoice/:idi downloadInvoicePDF
+ * @apiDescription Prompts a download of the pdf inline on the users browser
+ * @apiName downloadInvoicePDF
+ * @apiGroup Download
+ * @apiParamExample Request-Example:
+ * {
+ *    "idi": invoice._id
+ * }
+ */
 exports.downloadInvoicePDF = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
@@ -119,6 +164,16 @@ exports.downloadInvoicePDF = (req, res) => {
     });
 };
 
+/**
+ * @api {get} /download/offer/:idi downloadOfferPDF
+ * @apiDescription Prompts a download of the pdf inline on the users browser
+ * @apiName downloadOfferPDF
+ * @apiGroup Download
+ * @apiParamExample Request-Example:
+ * {
+ *    "idi": invoice._id
+ * }
+ */
 exports.downloadOfferPDF = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {

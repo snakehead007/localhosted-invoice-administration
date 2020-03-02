@@ -11,12 +11,18 @@ const i18n = require("i18n");
 const path = require("path");
 const error = require("../middlewares/error");
 const activity = require("../utils/activity");
+
 /**
- *
- * @param req
- * @param res
+ * @api {get} /delete/client/:idc deleteClient
+ * @apiDescription Deletes the client and redirects to /clients/all
+ * @apiName deleteClient
+ * @apiGroup Delete
+ *  @apiParamExample Request-Example:
+*  {
+*     "idc": client._id
+*  }
  */
-exports.delete_client = (req, res) => {
+exports.deleteClient = (req, res) => {
     Client.findOne({fromUser: req.session._id, _id: req.params.idc}, async (err, client) => {
         await activity.deleteClient(client, req.session._id);
         req.flash("success", "Successfully deleted the client");
@@ -25,18 +31,30 @@ exports.delete_client = (req, res) => {
 };
 
 /**
- *
- * @param req
- * @param res
+ * @api {get} /delete/invoice/:idi deleteInvoiceGet
+ * @apiDescription Deletes the invoice and redirects to /invoices/all
+ * @apiName deleteInvoiceGet
+ * @apiGroup Delete
+ *  @apiParamExample Request-Example:
+ *  {
+ *     "idi": invoice._id
+ *  }
  */
-exports.delete_invoice_get = async (req, res) => {
+exports.deleteInvoiceGet = async (req, res) => {
     let invoice = await Invoice.findOne({_id:req.params.idi,fromUser:req.session._id,isRemoved:false}, async (err,invoice) => {return invoice;});
     console.log(invoice);
     await activity.deleteInvoice(invoice,req.session._id);
     res.redirect("/invoice/all");
 };
 
-exports.delete_logo_get = (req, res) => {
+/**
+ * @api {get} /delete/logo deleteLogoGet
+ * @apiDescription Deletes the logo of the profile of the user in session and redirects to /clients/all
+ * @apiName deleteClient
+ * @apiGroup Delete
+ * @apiError On error redirects to /view/profile and flashes error: "Error, something went wrong" or "There is no logo to delete"
+ */
+exports.deleteLogoGet = (req, res) => {
     let pathOfLogo = path.join(__dirname, "../../public/images/" + req.session._id + "/logo.jpeg");
     fs.access(pathOfLogo, fs.F_OK, (err) => {
         if (err) {
@@ -62,8 +80,17 @@ exports.delete_logo_get = (req, res) => {
         }
     })
 };
-
-exports.delete_order_get = (req, res) => {
+/**
+ * @api {get} /delete/order/:ido deleteClient
+ * @apiDescription Deletes the order of an invoice and redirects to /order/all
+ * @apiName deleteOrderGet
+ * @apiGroup Delete
+ * @apiParamExample Request-Example:
+ * {
+ *    "ido": order._id
+ * }
+ */
+exports.deleteOrderGet = (req, res) => {
     Order.findOne({fromUser: req.session._id, _id: req.params.ido}, (err, order) => {
         if (!error.findOneHasError(req, res, err, order)) {
             Invoice.findOne({fromUser: req.session._id, _id: order.fromInvoice}, async (err, invoice) => {
