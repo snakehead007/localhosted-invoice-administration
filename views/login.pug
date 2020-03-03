@@ -321,12 +321,14 @@ script.
       console.log(isCookieOn);
       if (isCookieOn) {
         rotation = 0;
-        $("#cookie").popover('toggle', {delay: {"show": 0, "hide": 0}});
+        $('#cookie').popover('disable')
+        $("#cookie").popover('hide', {delay: {"show": 0, "hide": 0}});
         $(this).rotate(rotation);
         isCookieOn = false;
       } else {
         rotation = 90;
         $(this).rotate(rotation);
+        $("#cookie").popover('enable'), {delay: {"show": 0, "hide": 0}};
         $("#cookie").popover('show'), {delay: {"show": 0, "hide": 0}};
         isCookieOn = true;
       }

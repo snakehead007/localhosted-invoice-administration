@@ -16,6 +16,7 @@ daemon/
 node_modules/
 build/*
 data/*
+temp/*
 .env
 /.env
 src/dump.rdb

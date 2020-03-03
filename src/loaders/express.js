@@ -51,5 +51,6 @@ module.exports.default = function (app) {
         res.locals.session = req.session;
         next();
     });
+
     app.listen(process.env.PORT);
 };
