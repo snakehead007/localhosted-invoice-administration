@@ -79,12 +79,13 @@ exports.valueMustBeValidIban = (req, res, doc, mustBeFilledIn = false, message =
         return checkForMessage(req, invalid, message);
     }
 };
+
 exports.formatBEIban = (iban) => {
     //format iban number: BE01 2345 6789 0123
 
     //remove all whitespace
     let currentIban = iban.trim();
-    currentIban = currentIban.replace(' ','');
+    currentIban = currentIban.replace(/\s/g,'');
     //remove all letters
     currentIban = currentIban.replace(/[A-Za-z]/g,'');
     //remove all dots (there should be none, but just to be sure)

@@ -120,8 +120,8 @@ exports.editProfilePost = async (req, res) => {
             streetNr: req.body.streetNr,
             postal: req.body.postal,
             place: req.body.place,
-            vat: req.body.vat,
-            iban: req.body.iban,
+            vat: (req.body.vat)?formatBEVat(req.body.vat):"",
+            iban: (req.body.iban)?formatBEIban(req.body.iban):"",
             bic: req.body.bic,
             tel: req.body.tel,
             email:  req.body.email
