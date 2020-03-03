@@ -98,3 +98,8 @@ exports.removeGet = async (req,res)=> {
     req.flash('success',"Successfully deleted the activity");
     res.redirect('/activity');
 };
+
+exports.removePermanently = async (req,res) => {
+    req.flash('warning',"This option is not available yet");
+    res.redirect('back');
+};

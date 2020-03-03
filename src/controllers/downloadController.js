@@ -9,7 +9,6 @@ const Settings = require("../models/settings");
 const Client = require("../models/client");
 const error = require("../middlewares/error");
 const {createPDF} = require("../utils/pdfGenerator");
-const {callGetBase64, createJSON, replaceAll} = require("../utils/pdfCreation");
 const activity = require('../utils/activity');
 
 /**

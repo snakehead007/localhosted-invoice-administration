@@ -1,3 +1,4 @@
+const path = require('path');
 exports.getDefaultNumberOfInvoice = (invoice) => {
     if (!invoice.invoiceNr) {
         if (!invoice.offerNr) {
@@ -6,7 +7,37 @@ exports.getDefaultNumberOfInvoice = (invoice) => {
             return invoice.offerNr
         }
     } else {
-        return invoice.creditNr
+        return invoice.invoiceNr
+    }
+    return "error no number found";
+};
+
+exports.getPathOfInvoice = (fromUser,invoice) => {
+    let pdfname;
+    //only works if you have first prompted a pdf generation
+    if (!invoice.invoiceNr) {
+        if (!invoice.offerNr) {
+            pdfname= "creditnota "+invoice.creditNr+'.pdf'
+        } else {
+            pdfname= "offerte" + invoice.offerNr+".pdf"
+        }
+    } else if(invoice.invoiceNr){
+        pdfname= invoice.invoiceNr+".pdf"
+    }else{
+        throw Error();
+    }
+    return path.resolve(__dirname,'../../temp/'+fromUser+'/'+pdfname);
+};
+
+exports.getOnlyTypeOfInvoice = (invoice) => {
+    if (!invoice.invoiceNr) {
+        if (!invoice.offerNr) {
+            return "credit";
+        } else {
+            return "offer";
+        }
+    } else {
+        return "invoice";
     }
     return "error no number found";
 };

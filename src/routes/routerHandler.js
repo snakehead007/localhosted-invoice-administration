@@ -29,29 +29,46 @@ const searchRouter = require("./searchRouter");
 const whitelistRouter = require("./whitelistRouter");
 const streamRouter = require("./streamRouter");
 const activityRouter = require('./activityRouter');
+const mailRouter = require('./mailRouter');
 //Controllers
-
-router.use("/", loginRouter); //index page
-router.use("/dashboard", stillSignedInCheck,update.updateUndoAbility, dashboardRouter);
-router.use("/logout", stillSignedInCheck, logoutRouter);
-router.use("/redirect", redirectRouter); //only used when logged in and redirected by google
-router.use("/view", stillSignedInCheck, viewRouter);
-router.use("/order", stillSignedInCheck, orderRouter);
-router.use("/invoice", stillSignedInCheck, invoiceRouter);
-router.use("/client", stillSignedInCheck, clientRouter);
+try {
+    router.use("/dashboard", stillSignedInCheck, update.updateUndoAbility, dashboardRouter);
+    router.use("/logout", stillSignedInCheck, logoutRouter);
+    router.use("/view", stillSignedInCheck, viewRouter);
+    router.use("/order", stillSignedInCheck, orderRouter);
+    router.use("/invoice", stillSignedInCheck, invoiceRouter);
+    router.use("/client", stillSignedInCheck, clientRouter);
 //router.use("/project",stillSignedInCheck,projectRouter);
-router.use("/stock", stillSignedInCheck, stockRouter);
-router.use("/settings", stillSignedInCheck, settingsRouter);
+    router.use("/stock", stillSignedInCheck, stockRouter);
+    router.use("/settings", stillSignedInCheck, settingsRouter);
 //router.use("/calc",stillSignedInCheck,calcRouter);
-router.use("/edit", stillSignedInCheck, editRouter);
-router.use("/upload", stillSignedInCheck, uploadRouter);
-router.use("/download",stillSignedInCheck, downloadRouter);
-router.use("/delete", stillSignedInCheck, deleteRouter);
-router.use("/valid", validateRouter);
-router.use("/search", stillSignedInCheck, searchRouter);
-router.use("/whitelist", whitelistRouter);
-router.use("/stream", stillSignedInCheck,streamRouter);
-router.use('/activity',stillSignedInCheck,activityRouter);
+    router.use("/edit", stillSignedInCheck, editRouter);
+    router.use("/upload", stillSignedInCheck, uploadRouter);
+    router.use("/download", stillSignedInCheck, downloadRouter);
+    router.use("/delete", stillSignedInCheck, deleteRouter);
+    router.use("/search", stillSignedInCheck, searchRouter);
+    router.use("/stream", stillSignedInCheck, streamRouter);
+    router.use('/activity', stillSignedInCheck, activityRouter);
+    router.use('/mail', stillSignedInCheck, mailRouter);
+}catch(err){
+    console.trace(err);
+    router.use((req,res)=>{
+        req.flash('danger',"something went wrong, please try again");
+        res.redirect('back');
+    })
+}
+try {
+    router.use("/", loginRouter); //index page
+    router.use("/redirect", redirectRouter); //only used when logged in and redirected by google
+    router.use("/valid", validateRouter);
+    router.use("/whitelist", whitelistRouter);
+}catch(err){
+    console.trace(err);
+    router.use((req,res)=>{
+        req.flash('danger',"something went wrong, please try again");
+        res.redirect('/');
+    })
+}
 
 //Routers
 if (process.env.DEVELOP === "false") {

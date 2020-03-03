@@ -18,7 +18,7 @@ const path = require("path");
 
 const {callGetBase64, createJSON, replaceAll} = require("../utils/pdfCreation");
 require("jspdf-autotable");
-exports.createPDF = async (req, res, style = "invoice", profile, settings, client, invoice, orders,download=false) => {
+exports.createPDF = async (req, res, style = "invoice", profile, settings, client, invoice, orders,download=false,onlyPrompt=false) => {
     console.log('download set to: '+download);
     let imgData;
     try {
@@ -280,24 +280,26 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     let file = "./temp/" + req.session._id + "/" + filename;
     console.log(file);
     await fs.writeFileSync(file, doc.output(), "binary");
-    if(download){
-        res.download(file);
-    }else{
-        fs.readFile(file, function (err,data){
-            res.contentType("application/pdf");
-            res.send(data);
-        });
-        /*await fs.readFile(file, function (err, data) {
-            if (data) {
-                res.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
-                res.setHeader("Content-Type", "application/pdf");
-                res.setHeader("Content-Length", data.length);
-                res.status(200).end(data, "binary");
-            } else {
-                req.flash("danger", "something went wrong, please try again");
-                res.redirect("back");
-            }
-        });*/
+    if(!onlyPrompt) {
+        if (download) {
+            res.download(file);
+        } else {
+            fs.readFile(file, function (err, data) {
+                res.contentType("application/pdf");
+                res.send(data);
+            });
+            /*await fs.readFile(file, function (err, data) {
+                if (data) {
+                    res.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
+                    res.setHeader("Content-Type", "application/pdf");
+                    res.setHeader("Content-Length", data.length);
+                    res.status(200).end(data, "binary");
+                } else {
+                    req.flash("danger", "something went wrong, please try again");
+                    res.redirect("back");
+                }
+            });*/
+        }
     }
     delete global.window;
     delete global.navigator;

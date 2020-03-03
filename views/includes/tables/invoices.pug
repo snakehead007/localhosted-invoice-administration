@@ -69,6 +69,7 @@ table(class="table table-striped table-sm ",id="tabelInvoices")
                                 a.dropdown-item#target(href="/download/offer/"+invoice._id,)=__("Download offer")
                                 if !invoice.invoiceNr
                                     a(class="dropdown-item button", href="/invoice/change/upgrade/" + invoice._id ) #{__('Upgrade to invoice')}
+                            a(class="dropdown-item button", href="/mail/attachment/" + invoice._id ) #{__('Send PDF to mail')}
             script.
                 //date is done via DOM, the locale cannot be set right when using pug
                 let id#{invoice._id} = "date"+"#{invoice._id}";

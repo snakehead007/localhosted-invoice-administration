@@ -6,7 +6,6 @@ const google = require("../middlewares/google");
 const User = require("../models/user");
 const Settings = require("../models/settings");
 const Profile = require("../models/profile");
-
 /**
  *
  * @param req
