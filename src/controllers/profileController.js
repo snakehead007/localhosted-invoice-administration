@@ -5,7 +5,7 @@ const i18n = require("i18n");
 const {findOneHasError, updateOneHasError} = require("../middlewares/error");
 const {getFullNr} = require('../utils/invoices');
 const {sendMessage} = require('../../messages/messages');
-const {formatBEVat,formatBEIban,valueMustBeValidBic, valueMustBeValidIban, valueMustBeStreetNumber, valueMustBeAName, valueMustBeEmail, numberMustPhoneNumber, valueMustBeVatNumber, valueMustBePostalCode} = require("../utils/formValidation");
+const {formatBEVat,formatBEBic,formatBEIban,valueMustBeValidBic, valueMustBeValidIban, valueMustBeStreetNumber, valueMustBeAName, valueMustBeEmail, numberMustPhoneNumber, valueMustBeVatNumber, valueMustBePostalCode} = require("../utils/formValidation");
 const activity = require('../utils/activity');
 /**
  * @api {get} /view/profile view_profile_get
@@ -122,7 +122,7 @@ exports.editProfilePost = async (req, res) => {
             place: req.body.place,
             vat: (req.body.vat)?formatBEVat(req.body.vat):"",
             iban: (req.body.iban)?formatBEIban(req.body.iban):"",
-            bic: req.body.bic,
+            bic: (req.body.bic)?formatBEBic(req.body.bic):"",
             tel: req.body.tel,
             email:  req.body.email
         };

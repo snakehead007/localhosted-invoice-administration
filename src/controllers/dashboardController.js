@@ -161,3 +161,40 @@ exports.chartYearGet = (req, res) => {
         }
     });
 };
+
+
+exports.chartYearlyGet = (req, res) => {
+    if (!req.session._id) {
+        res.redirect("/");
+    }
+    let fact_open = [];
+    Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+        if (!err) {
+            Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+                if (!err) {
+                    client.find({fromUser: req.session._id,isRemoved:false}, async (err, clients) => {
+                        if (!err) {
+                            let chart= [0,0,0];
+                            }
+                            let newChart = [];
+                            chart.forEach((n) => {
+                                newChart.push(n.toFixed(2))
+                            });
+                            let role = (await User.findOne({_id: req.session._id}, (err, user) => {
+                                return user
+                            })).role;
+                            res.render("index", {
+                                "currentUrl": "dashboard",
+                                "total": newChart,
+                                "settings": settings,
+                                "year": req.params.year,
+                                "profile": profile,
+                                "invoices": invoice_open,
+                                "role": role
+                            });
+                    });
+                }
+            });
+        }
+    });
+};

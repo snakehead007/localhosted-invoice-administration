@@ -1,0 +1,34 @@
+script.
+    function drawChart(totaal) {
+        let ctx = document.getElementById('myChart').getContext('2d');
+        let year = [year-2,year-1,year-0];
+        let color = Chart.helpers.color;
+        let allClients = "#{clientNames}".split(',');
+        let dataSets = [];
+        let index = 0;
+        for(let c of allClients.length){
+
+        }
+        let myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: year,
+                datasets: [{
+                    label: client.clientName,
+                    data: [],
+                    backgroundColor: color(window.chartColors.red).alpha(1).rgbString(),
+                    borderColor: window.chartColors.red,
+                    borderWidth: 1
+                },]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }

@@ -37,8 +37,13 @@ ul(class="nav flex-column mb-2")
         a(class="nav-link",href='/stream/invoice/' + invoice._id target="_blank")
           span(data-feather="align-left")
           span #{__('View pdf of this document')}
-    li(class="nav-item")
-      if client
+    if client
+      li(class="nav-item")
         a(class="nav-link",href='/invoice/all/' + client._id )
           span(data-feather="book-open")
           span #{__('View documents of this client')}
+      li(class="nav-item")
+        a(class="nav-link",href='/edit/client/' + client._id )
+          span(data-feather="edit-3")
+          span #{__('Edit this client')}
+

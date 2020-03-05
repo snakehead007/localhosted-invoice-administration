@@ -172,10 +172,10 @@ exports.postClientNew = async (req, res) => {
             streetNr: req.body.streetNr,
             postalCode: req.body.postalCode,
             place: req.body.place,
-            vat: req.body.vat,
+            vat: (req.body.vat)?invalid.formatBEVat(req.body.vat):"",
             lang: req.body.lang,
             email: req.body.emails,
-            bankNr: req.body.rekeningnr,
+            bankNr: (req.body.bankNr)?invalid.formatBEIban(req.body.bankNr):"",
             fromUser: req.session._id,
             vatPercentage: req.body.vatPercentage,
             invoices: []
@@ -253,7 +253,7 @@ exports.getEditClient = (req, res) => {
 exports.postEditClient = (req, res) => {
     Client.findOne({fromUser: req.session._id, _id: req.params.idc}, function (err, client) {
         if (!error.findOneHasError(req, res, err, client)) {
-            let nameCheck = invalid.valueMustBeAName(req, res, req.body.clientName, true, "client name not correctly filled in");
+            let nameCheck = invalid.valueMustBeAName(req, res, req.body.clientName, false, "client name not correctly filled in");
             let firmCheck = invalid.valueMustBeAName(req, res, req.body.firm, false, "firm name not correctly filled in");
             let streetCheck = (req.body.street) ? invalid.valueMustBeAName(req, res, req.body.street, true) : false;
             let streetNrCheck = (req.body.streetNr) ? invalid.valueMustBeStreetNumber(req, res, req.body.streetNr) : false;
@@ -276,9 +276,9 @@ exports.postEditClient = (req, res) => {
                     street: req.body.street,
                     streetNr: req.body.streetNr,
                     email: req.body.emails,
-                    vat: invalid.formatBEVat(req.body.vat),
+                    vat: (req.body.vat)?invalid.formatBEVat():"",
                     vatPercentage: req.body.vatPercentage,
-                    bankNr: invalid.formatBEIban(req.body.bankNr),
+                    bankNr: (req.body.bankNr)?invalid.formatBEIban(req.body.bankNr):"",
                     postalCode: req.body.postalCode,
                     place: req.body.place
                 };

@@ -5,9 +5,10 @@ form(action='/edit/invoice/'+invoice._id,method='post')
             $("#datepicker").datepicker($.datepicker.regional["#{settings.locale}".substring(0,2)]);
             $("#datepicker2").datepicker($.datepicker.regional["#{settings.locale}".substring(0,2)]);
         });
+    include ../scripts/setStatus
     div(class="form-row")
         div(class="form-group col-md-3")
-            label(for="title") Datum
+            label(for="title")=__("Date")
             input#datepicker(type="text",class="form-control",name="date")
         if invoice.invoiceNr
             div(class="form-group col-md-3")
@@ -23,12 +24,30 @@ form(action='/edit/invoice/'+invoice._id,method='post')
         div(class="form-group col-md-2")
             label(for="title")=__('Advance')
             input(type="number",class="form-control",value=invoice.advance,name="advance",step="any")
-    if invoice.offerNr
+        div.col-1.form-group
+            label(for="status")=__("status")
+            if invoice.invoiceNr
+                    div(class="custom-control custom-switch")
+                        if invoice.isPaid
+                            input(type="checkbox" class="custom-control-input bg-success" id=invoice._id, onclick='setStatus(\"' + invoice._id + '\")', checked)
+                            label(class="custom-control-label" for=invoice._id) #{__('Paid')}
+                        if !invoice.isPaid
+                            input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id, onclick='setStatus(\"' + invoice._id + '\")')
+                            label(class="custom-control-label" for=invoice._id) #{__('Unpaid')}
+            else if invoice.offerNr
+                    div(class="custom-control custom-switch")
+                        if invoice.isAgreed
+                            input(type="checkbox" class="custom-control-input bg-success" id=invoice._id, onclick='setAgreedStatus(\"' + invoice._id + '\")', checked)
+                            label(class="custom-control-label" for=invoice._id) #{__('Agreed')}
+                        if !invoice.isAgreed
+                            input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id, onclick='setAgreedStatus(\"' + invoice._id + '\")')
+                            label(class="custom-control-label" for=invoice._id) #{__('Not agreed')}
+            else
         div.form-row
             div(class="col-10 input-group mb-3")
                 div(class="input-group-prepend")
-                    span(class="input-group-text") #{__('Offer description')}
-                textarea(input="text",name="description",class="form-control" aria-label="With textarea")=invoice.description
+                    span(class="input-group-text") #{__('Description')}
+                textarea(style="resize:none;" input="text",name="description",class="form-control" cols="94" maxrows="5" maxlength="390" wrap="HARD" rows="6" aria-label="With textarea")=invoice.description
 
     script.
         //date is done via DOM, the locale cannot be set right when using pug

@@ -157,7 +157,7 @@ exports.allOrderGet = (req, res) => {
 exports.viewOrderGet = (req, res) => {
     Order.findOne({fromUser: req.session._id, _id: req.params.ido,isRemoved:false}, function (err, order) {
         if (!err) {
-            Invoice.findOne({fromUser: req.session._id, _id: order.factuur,isRemoved:false}, function (err, invoice) {
+            Invoice.findOne({fromUser: req.session._id, _id: order.fromInvoice,isRemoved:false}, function (err, invoice) {
                 if (!err) {
                     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                         if (!err) {
@@ -172,7 +172,7 @@ exports.viewOrderGet = (req, res) => {
                                             return user;
                                         })).role
                                     };
-                                    res.render("view/view-order",);
+                                    res.render("view/view-order",sendObject);
                                 }
                             });
                         }

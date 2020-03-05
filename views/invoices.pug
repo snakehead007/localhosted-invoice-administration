@@ -20,7 +20,8 @@ html
           if !client
             h2(class="pt-3") #{__('All invoices')}
           else
-            h2(class="pt-3") #{__('All invoices of')} #{client.clientName}
+            h2(class="pt-3")=__('All invoices of')+" "
+              a(href="/edit/client/"+client._id)=(client.firm)?client.firm:client.clientName
           hr
           include includes/messages
           //div(class="headExtend")

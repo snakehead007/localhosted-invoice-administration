@@ -1,5 +1,5 @@
 //- V1.8
-html
+html(lang="nl-BE")
   head
     include ../includes/htmlHead
     script.
@@ -40,7 +40,7 @@ body
                 input(type="text",class="form-control",value=order.description,name="description", required)
               div(class="form-group col-md-2")
                 label(for="title")=__('Amount')
-                input(type="number",class="form-control",value=order.amount,name="amount", required)
+                input(type="number",class="form-control",value=order.amount,name="amount", step="any",  required)
               div(class="form-group col-md-2")
                 label(for="title")=__('Price for each')
                 input(type="number",class="form-control",value=order.price,name="price",step="any" required)

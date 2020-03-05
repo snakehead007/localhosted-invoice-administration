@@ -79,6 +79,12 @@ exports.valueMustBeValidIban = (req, res, doc, mustBeFilledIn = false, message =
         return checkForMessage(req, invalid, message);
     }
 };
+exports.formatBEBic = (bic) => {
+    //removes all whitespace
+    let c = bic.replace(/\s/g,'');
+    return c.substring(0,4)+" "+c.substring(4,6)+" "+c.substring(6,8);
+};
+
 
 exports.formatBEIban = (iban) => {
     //format iban number: BE01 2345 6789 0123
@@ -90,7 +96,8 @@ exports.formatBEIban = (iban) => {
     currentIban = currentIban.replace(/[A-Za-z]/g,'');
     //remove all dots (there should be none, but just to be sure)
     currentIban = currentIban.replace(/\.+/g,'');
-
+    //removes all '-'
+    currentIban = currentIban.replace(/-+/g,'');
     //formatting
     let finalIban = "BE"+currentIban.substring(0,2)+" "+currentIban.substring(2,6)+" "+currentIban.substring(6,10)+" "+currentIban.substring(10,14);
     return finalIban;
@@ -99,7 +106,7 @@ exports.valueMustBeValidBic = (req, res, doc, mustBeFilledIn = false, message = 
     if(doc==="" && !mustBeFilledIn){
         return false
     }else{
-        let invalid = !ibantools.isValidBIC(doc);
+        let invalid = !ibantools.isValidBIC(doc.replace(/\s/g,''));
         return checkForMessage(req, invalid,message);
     }
 };

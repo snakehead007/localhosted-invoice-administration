@@ -24,7 +24,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     try {
         imgData = await callGetBase64(req.session._id);
     } catch (err) {
-        console.trace(err);
+        console.log("[Error]: No image found");
     }
     let dataText;
     if (style === "invoice")
@@ -35,7 +35,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         dataText = replaceAll(settings.creditText, profile, client, invoice, settings.locale);
     let c = [0, 0];
     let dateObject = new Date(invoice.date);
-    let date = dateObject.getDate() + "/" + dateObject.getMonth() + "/" + dateObject.getFullYear();
+    let date = dateObject.getDate() + "/" + (dateObject.getMonth()+1) + "/" + dateObject.getFullYear();
     let doc = new JsPDF();
     doc.setFont(doc.getFontList()[0]);
     if (style === "invoice") {
@@ -68,7 +68,10 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     try {
         doc.addImage(imgData, "JPEG", 15, 5, 50, 50);
     } catch (err) {
-        console.trace(err);
+        console.log("Putting in place holder name");
+        doc.setFontType("bold");
+        doc.setFontSize(42);
+        doc.text(15, 20,profile.firm);
     }
     doc.setFontType("bold");
     doc.setFontSize(36);
@@ -94,7 +97,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     c[1] += 5;
     doc.text(c[0], c[1], profile.street + " " + profile.streetNr);
     c[1] += 5;
-    doc.text(c[0], c[1], i18n.__("vat nr") + ": " + profile.vat);
+    doc.text(c[0], c[1], i18n.__("VAT nr") + ": " + profile.vat);
     doc.setFontType("bold");
     c[1] += 10;
     doc.text(c[0], c[1], i18n.__("Banking info"));
@@ -147,7 +150,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         c[1] += 5;
     }
     if (client.vat) {
-        doc.text(c[0], c[1], i18n.__("vat nr") + ": " + client.vat);
+        doc.text(c[0], c[1], i18n.__("VAT nr") + ": " + client.vat);
     }
     let pdfOrders = [];
     let totalEx = 0;
@@ -206,7 +209,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
             styles: {fillColor: [140, 140, 140]},
             body: [
                 [[""], ["                               "], [i18n.__("subtotal")], [totalEx.toFixed(2) + " €"]],
-                [[""], ["                               "], [i18n.__("vat") + " " + client.vatPercentage + "%"], [_vat.toFixed(2) + " €"]],
+                [[""], ["                               "], [i18n.__("VAT") + " " + client.vatPercentage + "%"], [_vat.toFixed(2) + " €"]],
                 [[""], ["                               "], [i18n.__("total")], [totalInc.toFixed(2) + " €"]]
             ]
         })
@@ -225,7 +228,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
                 [[""], ["                               "], [i18n.__("subtotal")], [totalEx.toFixed(2) + " €"]],
                 [[""], ["                               "], [i18n.__("advance")], ["-" + invoice.advance.toFixed(2) + " €"]],
                 [[""], ["                               "], [i18n.__("subtotal")], [totalExSub.toFixed(2) + " €"]],
-                [[""], ["                               "], [i18n.__("vat") + " " + client.vatPercentage + "%"], [_vat.toFixed(2) + " €"]],
+                [[""], ["                               "], [i18n.__("VAT") + " " + client.vatPercentage + "%"], [_vat.toFixed(2) + " €"]],
                 [[""], ["                               "], [i18n.__("total")], [totalInc.toFixed(2) + " €"]]
             ]
         })
@@ -309,3 +312,21 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
 visualLength = (string) => {
     return string.length * 0.7;
 };
+String.prototype.splice = function(start, delCount, newSubStr) {
+    return this.slice(0, start) + newSubStr + this.slice(start + Math.abs(delCount));
+};
+
+function addreturnsInString(s) {
+    let newStr = "";
+    for(let i = 0; i < 5;i++){
+        console.log(i);
+        let cur = s.substring(i,78*(i+1));
+        console.log(cur);
+        if(cur.indexOf('\r\n')=== -1){
+            cur = cur.splice(78,0,"\r\n");
+        }
+        newStr+=cur;
+
+    }
+    return newStr;
+}

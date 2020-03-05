@@ -1,5 +1,5 @@
 //- V1.8
-html
+html(lang="nl-BE")
   head
     include includes/htmlHead
     script.
@@ -19,11 +19,14 @@ body
             include includes/orderOptionMenu
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           if invoice.invoiceNr
-            h2(class="pt-3")=__('Invoice')+" "+invoice.invoiceNr+" ("+client.clientName+")"
+            h2(class="pt-3")=__('Invoice')+" "+invoice.invoiceNr+" "+__('from')+" "
+              a(href="/edit/client/"+client._id)=(client.firm)?client.firm:client.clientName
           if invoice.offerNr && !invoice.invoiceNr
-            h2(class="pt-3")=__('Offer')+" "+invoice.offerNr+" ("+client.clientName+")"
+            h2(class="pt-3")=__('Offer')+" "+invoice.offerNr+" "+__('from')+" "
+              a(href="/edit/client/" + client._id)=(client.firm) ? client.firm : client.clientName
           if invoice.creditNr && !invoice.offerNr && !invoice.invoiceNr
-            h2(class="pt-3")=__('Creditnote')+" "+invoice.creditNr+" ("+client.clientName+")"
+            h2(class="pt-3")=__('Creditnote')+" "+invoice.creditNr+" "+__('from')+" "
+              a(href="/edit/client/" + client._id)=(client.firm) ? client.firm : client.clientName
           hr
           include includes/messages
           div(class="table")

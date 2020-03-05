@@ -1,5 +1,5 @@
 //- V1.8
-html
+html(lang="nl-BE")
   head
     include ../includes/htmlHead
     script.
@@ -29,13 +29,13 @@ body
           form(action='/order/new/'+invoice._id,method='post')
             div(class="form-row")
               div(class="form-group col-md-10")
-                label(for="title") Beschrijving
+                label(for="title")=__('Description')
                 input(type="text",class="form-control",name="description", required)
               div(class="form-group col-md-2")
-                label(for="title") Aantal
-                input(type="number",class="form-control",name="amount",step="any" required)
+                label(for="title")=__('Amount')
+                input(type="number",class="form-control",name="amount", step="any",required)
               div(class="form-group col-md-2")
-                label(for="title") Bedrag voor één
+                label(for="title")=__('Price for each')
                 input(type="number",class="form-control",name="price",step="any" required)
             hr
-            button(type="submit",class="btn btn-outline-"+settings.theme) toevoegen
+            button(type="submit",class="btn btn-outline-" + settings.theme)=__('Update')

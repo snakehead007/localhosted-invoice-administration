@@ -156,7 +156,7 @@ exports.invoiceNewGet = (req, res) => {
                                 await newInvoice.save(function (err) {
                                     if (!err) {
                                         activity.addInvoice(newInvoice,req.session._id);
-                                        res.redirect("/invoice/all");
+                                        res.redirect("/order/all/"+newInvoice._id);
                                     }
                                 });
                             });
@@ -206,7 +206,7 @@ exports.creditNewGet = (req, res) => {
                                         });
                                         await newInvoice.save();
                                         activity.addCredit(newInvoice,req.session._id);
-                                        res.redirect("/invoice/all");
+                                        res.redirect("/order/all/"+newInvoice._id);
                                     }
                                 });
                         });
@@ -259,7 +259,7 @@ exports.offerNewGet = (req, res) => {
                                             await newInvoice.save();
                                             if (!err) {
                                                 activity.addOffer(newInvoice,req.session._id);
-                                                res.redirect("/invoice/all");
+                                                res.redirect("/order/all/"+newInvoice._id);
                                             }
                                         }
                                     });
@@ -352,24 +352,30 @@ exports.editInvoicePost = (req, res) => {
         let currentInvoice = await Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, (err, invoice) => {
             return invoice
         });
+        if(currentInvoice.isPaid && (req.body.datePaid).trim()===""){
+            req.flash('danger',i18n.__("Change this invoice to unpaid first, to remove its pay date."));
+            req.redirect('.');
+            return;
+        }
+        let datePaid = (req.body.datePaid)?parseDateDDMMYYYY(req.body.datePaid):"";
         let updateInvoice;
-
-        if (req.body.date && !req.body.datePaid) {
+        if (req.body.date) {
             updateInvoice = {
                 date: parseDateDDMMYYYY(req.body.date),
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
                 offerNr: req.body.offerNr,
+                datePaid:datePaid,
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
                 description:req.body.description
             };
-        } else if (!req.body.date && req.body.datePaid) {
+        } else if (!req.body.date) {
             updateInvoice = {
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
                 offerNr: req.body.offerNr,
-                datePaid: parseDateDDMMYYYY(req.body.datePaid),
+                datePaid: datePaid,
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
                 description:req.body.description
@@ -380,12 +386,12 @@ exports.editInvoicePost = (req, res) => {
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
                 offerNr: req.body.offerNr,
-                datePaid: parseDateDDMMYYYY(req.body.datePaid),
+                datePaid: datePaid,
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
                 description:req.body.description
             };
-        } else {//both not changed
+        } else {
             updateInvoice = {
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
@@ -430,7 +436,7 @@ exports.viewInvoiceGet = (req, res) => {
                                     let givenObject = {
                                         "invoice": invoice,
                                         "client": client,
-                                        "description": i18n.__(description) + " " + client.clientName,
+                                        "description": i18n.__(description) + " " + (client.firm)?client.firm:client.clientName,
                                         "settings": settings,
                                         "currentUrl": "creditView",
                                         "profile": profile,
