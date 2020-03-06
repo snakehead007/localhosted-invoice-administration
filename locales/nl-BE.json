@@ -324,5 +324,9 @@
 	"Close": "Close",
 	"Send bug report": "Send bug report",
 	"About": "About",
-	"Your bug report has been send, thank you!": "Your bug report has been send, thank you!"
+	"Your bug report has been send, thank you!": "Your bug report has been send, thank you!",
+	"Successfully updated the offer": "Successfully updated the offer",
+	"Credit number": "Credit number",
+	"Successfully updated the creditnote": "Successfully updated the creditnote",
+	"This invoice number is already in use.": "This invoice number is already in use."
 }

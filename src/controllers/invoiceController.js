@@ -352,12 +352,22 @@ exports.editInvoicePost = (req, res) => {
         let currentInvoice = await Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, (err, invoice) => {
             return invoice
         });
+        if(!req.body.invoiceNr||!req.body.date){
+            req.flash('danger',i18n.__("Please fill in all the required fields"));
+            res.redirect('back');
+            return;
+        }
         if(currentInvoice.isPaid){
             if(!req.body.datePaid||req.body.datePaid!== parseDate(currentInvoice.datePaid)) {
                 req.flash('danger', i18n.__("Change this invoice to unpaid first, to remove its pay date."));
                 res.redirect('back');
                 return;
             }
+        }
+        if(await invoiceUtil.isInvoiceNrAlreadyInUse(req.body.invoiceNr,req.session._id)){
+            req.flash('danger',i18n.__("This invoice number is already in use."));
+            res.redirect('back');
+            return;
         }
         let datePaid = (req.body.datePaid)?parseDateDDMMYYYY(req.body.datePaid):"";
         let updateInvoice;
@@ -366,7 +376,6 @@ exports.editInvoicePost = (req, res) => {
                 date: parseDateDDMMYYYY(req.body.date),
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
-                offerNr: req.body.offerNr,
                 datePaid:datePaid,
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
@@ -376,7 +385,6 @@ exports.editInvoicePost = (req, res) => {
             updateInvoice = {
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
-                offerNr: req.body.offerNr,
                 datePaid: datePaid,
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
@@ -387,7 +395,6 @@ exports.editInvoicePost = (req, res) => {
                 date: parseDateDDMMYYYY(req.body.date),
                 invoiceNr: req.body.invoiceNr,
                 advance: req.body.advance,
-                offerNr: req.body.offerNr,
                 datePaid: datePaid,
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
@@ -413,7 +420,153 @@ exports.editInvoicePost = (req, res) => {
                 if (!updateOneHasError(req, res, err)) {
                     activity.editedInvoice(updateInvoice,req.session._id);
                     req.flash("success", i18n.__("Successfully updated the invoice"));
-                    res.redirect("/order/all/" + req.params.idi);
+                    res.redirect("back");
+                }
+            });
+        });
+    });
+};
+
+exports.editOfferPost = (req, res) => {
+    console.log(req.body);
+    Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved:false}, async (err, orders) => {
+        let totOrders = 0;
+        for (let i = 0; i <= orders.length - 1; i++) {
+            totOrders += (orders[i].price * orders[i].amount);
+        }
+        let settings = await Settings.findOne({fromUser: req.session._id}, (err, settings) => {
+            return settings
+        });
+        let currentInvoice = await Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, (err, invoice) => {
+            return invoice
+        });
+        if(!req.body.offerNr||!req.body.date){
+            req.flash('danger',i18n.__("Please fill in all the required fields"));
+            res.redirect('back');
+            return;
+        }
+        if(currentInvoice.isPaid){
+            if(!req.body.datePaid||req.body.datePaid!== parseDate(currentInvoice.datePaid)) {
+                req.flash('danger', i18n.__("Change this invoice to unpaid first, to remove its pay date."));
+                res.redirect('back');
+                return;
+            }
+        }
+        if(await invoiceUtil.isOfferNrAlreadyInUse(req.body.offerNr,req.session._id)){
+            req.flash('danger',i18n.__("This invoice number is already in use."));
+            res.redirect('back');
+            return;
+        }
+        let datePaid = (req.body.datePaid)?parseDateDDMMYYYY(req.body.datePaid):"";
+        let updateInvoice;
+        if (req.body.date) {
+            updateInvoice = {
+                date: parseDateDDMMYYYY(req.body.date),
+                offerNr: req.body.offerNr,
+                advance: req.body.advance,
+                datePaid:datePaid,
+                lastUpdated: Date.now(),
+                total: totOrders - req.body.advance,
+                description:req.body.description
+            };
+        } else if (!req.body.date) {
+            updateInvoice = {
+                offerNr: req.body.offerNr,
+                advance: req.body.advance,
+                datePaid: datePaid,
+                lastUpdated: Date.now(),
+                total: totOrders - req.body.advance,
+                description:req.body.description
+            };
+        } else if (req.body.date && req.body.datePaid) {
+            updateInvoice = {
+                date: parseDateDDMMYYYY(req.body.date),
+                offerNr: req.body.offerNr,
+                advance: req.body.advance,
+                datePaid: datePaid,
+                lastUpdated: Date.now(),
+                total: totOrders - req.body.advance,
+                description:req.body.description
+            };
+        } else {
+            updateInvoice = {
+                offerNr: req.body.offerNr,
+                advance: req.body.advance,
+                offerNr: req.body.offerNr,
+                lastUpdated: Date.now(),
+                total: totOrders - req.body.advance,
+                description:req.body.description
+            };
+        }
+        let searchCriteria = {fromUser: req.session._id,isRemoved:false};
+        if (orders.length > 0) {
+            searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient,isRemoved:false};
+        }
+        console.log(updateInvoice);
+        Client.findOne(searchCriteria, function (err, contact) {
+            Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, function (err) {
+                if (!updateOneHasError(req, res, err)) {
+                    activity.editedInvoice(updateInvoice,req.session._id);
+                    req.flash("success", i18n.__("Successfully updated the offer"));
+                    res.redirect("back");
+                }
+            });
+        });
+    });
+};
+
+exports.editCreditPost = (req, res) => {
+    console.log(req.body);
+    Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved:false}, async (err, orders) => {
+        let totOrders = 0;
+        for (let i = 0; i <= orders.length - 1; i++) {
+            totOrders += (orders[i].price * orders[i].amount);
+        }
+        let settings = await Settings.findOne({fromUser: req.session._id}, (err, settings) => {
+            return settings
+        });
+        let currentInvoice = await Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, (err, invoice) => {
+            return invoice
+        });
+        if(!req.body.creditNr||!req.body.date){
+            req.flash('danger',i18n.__("Please fill in all the required fields"));
+            res.redirect('back');
+            return;
+        }
+        if(currentInvoice.isPaid){
+            if(!req.body.datePaid||req.body.datePaid!== parseDate(currentInvoice.datePaid)) {
+                req.flash('danger', i18n.__("Change this invoice to unpaid first, to remove its pay date."));
+                res.redirect('back');
+                return;
+            }
+        }
+        if(await invoiceUtil.isCreditNrAlreadyInUse(req.body.creditNr,req.session._id)){
+            req.flash('danger',i18n.__("This invoice number is already in use."));
+            res.redirect('back');
+            return;
+        }
+        let datePaid = (req.body.datePaid)?parseDateDDMMYYYY(req.body.datePaid):"";
+        let updateInvoice;
+        updateInvoice = {
+            creditNr: req.body.creditNr,
+            date:req.body.date,
+            advance: req.body.advance,
+            offerNr: req.body.offerNr,
+            lastUpdated: Date.now(),
+            total: totOrders - req.body.advance,
+            description:req.body.description
+        };
+        let searchCriteria = {fromUser: req.session._id,isRemoved:false};
+        if (orders.length > 0) {
+            searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient,isRemoved:false};
+        }
+        console.log(updateInvoice);
+        Client.findOne(searchCriteria, function (err, contact) {
+            Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, function (err) {
+                if (!updateOneHasError(req, res, err)) {
+                    activity.editedInvoice(updateInvoice,req.session._id);
+                    req.flash("success", i18n.__("Successfully updated the creditnote"));
+                    res.redirect("back");
                 }
             });
         });

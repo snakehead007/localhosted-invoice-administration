@@ -1,4 +1,5 @@
-form(action='/edit/invoice/'+invoice._id,method='post')
+
+form(action='/edit'+((invoice.creditNr)?"/credit/":((invoice.offerNr)?"/offer/":"/invoice/"))+invoice._id,method='post')
     script(src="/datepicker/nl.js")
     script.
         $(function () {
@@ -21,12 +22,16 @@ form(action='/edit/invoice/'+invoice._id,method='post')
             div(class="form-group col-md-2")
                 label(for="title")=__('Offer number')
                 input(type="number",class="form-control",value=invoice.offerNr,name="offerNr")
+        if invoice.creditNr
+            div(class="form-group col-md-2")
+                label(for="title")=__('Credit number')
+                input(type="number",class="form-control",value=invoice.creditNr,name="creditNr")
         div(class="form-group col-md-2")
             label(for="title")=__('Advance')
             input(type="number",class="form-control",value=invoice.advance,name="advance",step="any")
         div.col-1.form-group
-            label(for="status")=__("status")
             if invoice.invoiceNr
+                label(for="status")=__("status")
                     div(class="custom-control custom-switch")
                         if invoice.isPaid
                             input(type="checkbox" class="custom-control-input bg-success" id=invoice._id, onclick='setStatus(\"' + invoice._id + '\")', checked)
@@ -35,6 +40,7 @@ form(action='/edit/invoice/'+invoice._id,method='post')
                             input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id, onclick='setStatus(\"' + invoice._id + '\")')
                             label(class="custom-control-label" for=invoice._id) #{__('Unpaid')}
             else if invoice.offerNr
+                label(for="status")=__("status")
                     div(class="custom-control custom-switch")
                         if invoice.isAgreed
                             input(type="checkbox" class="custom-control-input bg-success" id=invoice._id, onclick='setAgreedStatus(\"' + invoice._id + '\")', checked)
@@ -42,7 +48,6 @@ form(action='/edit/invoice/'+invoice._id,method='post')
                         if !invoice.isAgreed
                             input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id, onclick='setAgreedStatus(\"' + invoice._id + '\")')
                             label(class="custom-control-label" for=invoice._id) #{__('Not agreed')}
-            else
         div.form-row
             div(class="col-10 input-group mb-3")
                 div(class="input-group-prepend")

@@ -9,6 +9,8 @@ router.get('profile', profileController.editProfileGet);
 router.post('/profile/:idp', profileController.editProfilePost);
 router.get('/invoice/:idi', invoiceController.editInvoiceGet);
 router.post('/invoice/:idi', invoiceController.editInvoicePost);
+router.post('/credit/:idi', invoiceController.editCreditPost);
+router.post('/offer/:idi', invoiceController.editOfferPost);
 router.get('/order/:ido', orderController.editOrderGet);
 router.get('/item/:idi', itemController.editItemGet);
 router.get('/invoice/paid/:idi', invoiceController.invoicePaidGet);

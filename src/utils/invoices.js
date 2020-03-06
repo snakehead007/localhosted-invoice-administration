@@ -1,3 +1,4 @@
+const Invoice = require('../models/invoice');
 const path = require('path');
 exports.getDefaultNumberOfInvoice = (invoice) => {
     if (!invoice.invoiceNr) {
@@ -12,6 +13,37 @@ exports.getDefaultNumberOfInvoice = (invoice) => {
     return "error no number found";
 };
 
+exports.isInvoiceNrAlreadyInUse = async (invoiceNr,userId) => {
+  let invoices = await Invoice.find({fromUser:userId},(err,invoices)=>{return invoices;});
+  for(let i of invoices){
+      console.log(i.invoiceNr+" ? "+invoiceNr);
+      if(i.invoiceNr==invoiceNr){
+          console.log('true');
+          return true;
+      }
+  }
+  return false;
+};
+
+exports.isOfferNrAlreadyInUse = async (offerNr,userId) => {
+    let invoices = await Invoice.find({fromUser:userId},(err,invoices)=>{return invoices;});
+    for(let i of invoices){
+        if(i.offerNr==offerNr){
+            return true;
+        }
+    }
+    return false;
+};
+
+exports.isCreditNrAlreadyInUse = async (creditNr,userId) => {
+    let invoices = await Invoice.find({fromUser:userId},(err,invoices)=>{return invoices;});
+    for(let i of invoices){
+        if(i.creditNr==creditNr){
+            return true;
+        }
+    }
+    return false;
+};
 exports.getPathOfInvoice = (fromUser,invoice) => {
     let pdfname;
     //only works if you have first prompted a pdf generation
