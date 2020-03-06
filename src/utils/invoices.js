@@ -15,34 +15,36 @@ exports.getDefaultNumberOfInvoice = (invoice) => {
 
 exports.isInvoiceNrAlreadyInUse = async (invoiceNr,userId) => {
   let invoices = await Invoice.find({fromUser:userId},(err,invoices)=>{return invoices;});
+  let timesFound = 0;
   for(let i of invoices){
       console.log(i.invoiceNr+" ? "+invoiceNr);
       if(i.invoiceNr==invoiceNr){
-          console.log('true');
-          return true;
+          timesFound++;
       }
   }
-  return false;
+ return(timesFound>1);
 };
 
 exports.isOfferNrAlreadyInUse = async (offerNr,userId) => {
     let invoices = await Invoice.find({fromUser:userId},(err,invoices)=>{return invoices;});
+    let timesFound = 0;
     for(let i of invoices){
         if(i.offerNr==offerNr){
-            return true;
+            timesFound++;
         }
     }
-    return false;
+    return(timesFound>1);
 };
 
 exports.isCreditNrAlreadyInUse = async (creditNr,userId) => {
     let invoices = await Invoice.find({fromUser:userId},(err,invoices)=>{return invoices;});
+    let timesFound = 0;
     for(let i of invoices){
         if(i.creditNr==creditNr){
-            return true;
+            timesFound++;
         }
     }
-    return false;
+    return(timesFound>1);
 };
 exports.getPathOfInvoice = (fromUser,invoice) => {
     let pdfname;

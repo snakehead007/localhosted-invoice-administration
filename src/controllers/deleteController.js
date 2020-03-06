@@ -17,7 +17,7 @@ const activity = require("../utils/activity");
  * @api {get} /delete/client/:idc deleteClient
  * @apiDescription Deletes the client and redirects to /clients/all
  * @apiName deleteClient
- * @apiGroup Delete
+ * @apiGroup DeleteRouter
  *  @apiParamExample Request-Example:
 *  {
 *     "idc": client._id
@@ -36,7 +36,7 @@ exports.deleteClient = (req, res) => {
  * @api {get} /delete/invoice/:idi deleteInvoiceGet
  * @apiDescription Deletes the invoice and redirects to /invoices/all
  * @apiName deleteInvoiceGet
- * @apiGroup Delete
+ * @apiGroup DeleteRouter
  *  @apiParamExample Request-Example:
  *  {
  *     "idi": invoice._id
@@ -54,7 +54,7 @@ exports.deleteInvoiceGet = async (req, res) => {
  * @api {get} /delete/logo deleteLogoGet
  * @apiDescription Deletes the logo of the profile of the user in session and redirects to /clients/all
  * @apiName deleteClient
- * @apiGroup Delete
+ * @apiGroup DeleteRouter
  * @apiError On error redirects to /view/profile and flashes error: "Error, something went wrong" or "There is no logo to delete"
  */
 exports.deleteLogoGet = (req, res) => {
@@ -88,7 +88,7 @@ exports.deleteLogoGet = (req, res) => {
  * @api {get} /delete/order/:ido deleteClient
  * @apiDescription Deletes the order of an invoice and redirects to /order/all
  * @apiName deleteOrderGet
- * @apiGroup Delete
+ * @apiGroup DeleteRouter
  * @apiParamExample Request-Example:
  * {
  *    "ido": order._id

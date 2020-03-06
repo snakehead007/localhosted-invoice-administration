@@ -1,8 +1,3 @@
-/**
- * @module controllers/searchController
- * @file controllers/searchController
- */
-
 const Client = require('../models/client');
 const Invoice = require('../models/invoice');
 const Item = require('../models/item');
@@ -13,7 +8,28 @@ const {isNumeric} = require('../utils/numbers');
 const {distinct} = require('../utils/array');
 const i18n = require('i18n');
 const User = require('../models/user');
-module.exports.search_get = (req, res) => {
+
+/**
+ * @apiVersion 3.0.0
+ * @api {post} /search searchGet
+ * @apiDescription Searches the string if it contains in Clients, Invoices and orders
+ * @apiName searchGet
+ * @apiGroup SearchRouter
+ * @apiSuccessExample Success-Response:
+ *  res.render('search', {
+    "description": i18n.__("search on ") + "\"" + str + "\"",
+    "settings": settings,
+    "clients": clients_d,
+    "orders": orders_d,
+    "invoices": invoices_d,
+    "items": items_d,
+    "profile": profile,
+    "currentSearch": str,
+    "role":role
+});
+ */
+
+module.exports.searchGet = (req, res) => {
     let str = req.body.search.toString().toLowerCase();
     let clients = [];
     let invoices = [];

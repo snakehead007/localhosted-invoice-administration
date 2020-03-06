@@ -233,7 +233,6 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
             ]
         })
     }
-    if(invoice.offerNr) {
         c[0] = 150 + (pdfOrders.length * 7) + 10;
         c[1] = 20;
         console.log(c);
@@ -242,6 +241,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
             doc.text(c[1], c[0], text);
             c[0] += 5;
         });
+    if(invoice.offerNr){
         c[0] += 10;
         doc.setFontType("courier");
         doc.setFontSize(12);

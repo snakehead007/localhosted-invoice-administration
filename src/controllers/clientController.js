@@ -15,7 +15,7 @@ const activity = require('../utils/activity');
  * @api {get} /client/all getClientAll
  * @apiDescription Shows all clients of the user
  * @apiName getClientAll
- * @apiGroup Client
+ * @apiGroup ClientRouter
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  res.render("clients", {
@@ -54,7 +54,7 @@ exports.getClientAll = (req, res) => {
  * @api {get} /client/new getClientNew
  * @apiDescription Shows a form where the user can create a new user
  * @apiName getClientNew
- * @apiGroup Client
+ * @apiGroup ClientRouter
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  res.render("new/new-client", {
@@ -88,11 +88,11 @@ exports.getClientNew = (req, res) => {
  * @api {post} /client/new postClientNew
  * @apiDescription creates a new client all parameters given in the form are checked using the formValidator.js
  * @apiName postClientNew
- * @apiGroup Client
+ * @apiGroup ClientRouter
  * @apiSuccess Creates a new client for the logged in user
  * @apiSuccessExample Success-Response:
      res.redirect("/client/all");
- * @apiError Does not create a new client it redirects you back to /client/new
+ * @apiError ClientError Does not create a new client it redirects you back to /client/new
  * @apiErrorExample Error-response:
  * res.render("edit/edit-client", {
     "settings": settings,
@@ -191,7 +191,7 @@ exports.postClientNew = async (req, res) => {
  * @api {get} /client/view/:idc getClientView
  * @apiDescription Shows all the information of the clients id from query parameter "idc"
  * @apiName getClientView
- * @apiGroup Client
+ * @apiGroup ViewRouter
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  *  {

@@ -11,9 +11,22 @@ const User = require("../models/user");
 const {findOneHasError} = require("../middlewares/error");
 const activity = require('../utils/activity');
 /**
- *
- * @param req
- * @param res
+ * @apiVersion 3.0.0
+ * @api {get} /order/edit/:ido editOrderGet
+ * @apiParam {String} ido unique id the order
+ * @apiParamExample {String} title:
+ "ido": order._id
+ * @apiDescription shows a form where the user can edit an existing order
+ * @apiName editOrderGet
+ * @apiGroup OrderRouter
+ * @apiSuccessExample Success-Response:
+ *  res.render("edit/edit-order", {
+            "order": order,
+            "invoice": invoice,
+            "profile": profile,
+            "settings": settings,
+            "role": role
+        });
  */
 exports.editOrderGet = (req, res) => {
     Order.findOne({fromUser: req.session._id, _id: req.params.ido,isRemoved:false}, function (err, order) {
@@ -39,9 +52,23 @@ exports.editOrderGet = (req, res) => {
 };
 
 /**
- *
- * @param req
- * @param res
+ * @apiVersion 3.0.0
+ * @api {get} /order/new/:idi newOrderGet
+ * @apiParam {String} idi unique id of the invoice where the order should be added to
+ * @apiParamExample {String} title:
+ "idi": invoice._id
+ * @apiDescription show a form where you can add an order that will be added to a certain invoice
+ * @apiName newOrderGet
+ * @apiGroup OrderRouter
+ * @apiSuccessExample Success-Response:
+ *  res.render("new/new-order", {
+        "invoice": invoice,
+        "profile": profile,
+        "settings": settings,
+        "client": client,
+        "currentUrl": "orderNew",
+        "role": role
+    });
  */
 exports.newOrderGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, function (err, invoice) {
@@ -53,7 +80,7 @@ exports.newOrderGet = (req, res) => {
                             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                                 console.log(invoice);
                                 if (!err) {
-                                    let sendObject = {
+                                    res.render("new/new-order", {
                                         "invoice": invoice,
                                         "profile": profile,
                                         "settings": settings,
@@ -62,8 +89,7 @@ exports.newOrderGet = (req, res) => {
                                         "role": (await User.findOne({_id: req.session._id}, (err, user) => {
                                             return user;
                                         })).role
-                                    };
-                                    res.render("new/new-order", sendObject);
+                                    });
                                 }
                             });
                         }
@@ -75,10 +101,16 @@ exports.newOrderGet = (req, res) => {
 };
 
 /**
- *
- * @param req
- * @param res
- * @returns {Promise<void>}
+ * @apiVersion 3.0.0
+ * @api {post} /order/new/:idi newOrderPost
+ * @apiParam {String} idi unique id of the invoice where the order should be added to
+ * @apiParamExample {String} title:
+ "idi": invoice._id
+ * @apiDescription Adds an order to the given unique invoice
+ * @apiName newOrderPost
+ * @apiGroup OrderRouter
+ * @apiSuccessExample Success-Response:
+    res.redirect("/order/all/" + req.params.idi);
  */
 exports.newOrderPost = async (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, async function (err, invoice) {
@@ -109,9 +141,23 @@ exports.newOrderPost = async (req, res) => {
 };
 
 /**
- *
- * @param req
- * @param res
+ * @apiVersion 3.0.0
+ * @api {get} /order/all/:idi allOrderGet
+ * @apiParam {String} idi unique id of the invoice where we want to see all the orders from
+ * @apiParamExample {String} title:
+ "idi": invoice._id
+ * @apiDescription Shows a form of the invoice where the user can edit the invoice, and shows all orders of that invoice in a table
+ * @apiName allOrderGet
+ * @apiGroup OrderRouter
+ * @apiSuccessExample Success-Response:
+     res.render("orders", {
+        "invoice": invoice,
+        "orders": orders,
+        "profile": profile,
+        "client": client,
+        "settings": settings,
+        "role": role
+    });
  */
 exports.allOrderGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, function (err, invoice) {
@@ -126,8 +172,7 @@ exports.allOrderGet = (req, res) => {
                             if (!err) {
                                 Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                                     if (!err) {
-                                        console.log(invoice);
-                                        let sendObject = {
+                                        res.render("orders", {
                                             "invoice": invoice,
                                             "orders": orders,
                                             "profile": profile,
@@ -136,8 +181,7 @@ exports.allOrderGet = (req, res) => {
                                             "role": (await User.findOne({_id: req.session._id}, (err, user) => {
                                                 return user;
                                             })).role
-                                        };
-                                        res.render("orders", sendObject);
+                                        });
                                     }
                                 });
                             }
@@ -150,9 +194,22 @@ exports.allOrderGet = (req, res) => {
 };
 
 /**
- *
- * @param req
- * @param res
+ * @apiVersion 3.0.0
+ * @api {get} /view/order/:ido viewOrderGet
+ * @apiParam {String} ido unique id of the order where we want to see the order from
+ * @apiParamExample {String} title:
+ "ido": order._id
+ * @apiDescription shows a table of the information of a specific order
+ * @apiName viewOrderGet
+ * @apiGroup ViewRouter
+ * @apiSuccessExample Success-Response:
+     res.render("view/view-order",{
+        "order": order,
+        "invoice": invoice,
+        "profile": profile,
+        "settings": settings,
+        "role": role
+    });
  */
 exports.viewOrderGet = (req, res) => {
     Order.findOne({fromUser: req.session._id, _id: req.params.ido,isRemoved:false}, function (err, order) {
@@ -163,7 +220,7 @@ exports.viewOrderGet = (req, res) => {
                         if (!err) {
                             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                                 if (!err) {
-                                    let sendObject = {
+                                    res.render("view/view-order",{
                                         "order": order,
                                         "invoice": invoice,
                                         "profile": profile,
@@ -171,8 +228,7 @@ exports.viewOrderGet = (req, res) => {
                                         "role": (await User.findOne({_id: req.session._id}, (err, user) => {
                                             return user;
                                         })).role
-                                    };
-                                    res.render("view/view-order",sendObject);
+                                    });
                                 }
                             });
                         }
@@ -182,7 +238,18 @@ exports.viewOrderGet = (req, res) => {
         }
     });
 };
-
+/**
+ * @apiVersion 3.0.0
+ * @api {post} /order/edit/:ido editOrderPost
+ * @apiParam {String} ido unique id of the order where we want to see the order from
+ * @apiParamExample {String} title:
+ "ido": order._id
+ * @apiDescription Updates an exisiting order with new information
+ * @apiName editOrderPost
+ * @apiGroup OrderRouter
+ * @apiSuccessExample Success-Response:
+ res.redirect("/order/all/" + invoice._id);
+ */
 exports.editOrderPost = (req, res) => {
     Order.findOne({fromUser: req.session._id, _id: req.params.ido,isRemoved:false}, function (err, order) {
         if (!findOneHasError(req, res, err, order)) {

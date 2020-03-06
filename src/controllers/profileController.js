@@ -8,11 +8,11 @@ const {sendMessage} = require('../../messages/messages');
 const {formatBEVat,formatBEBic,formatBEIban,valueMustBeValidBic, valueMustBeValidIban, valueMustBeStreetNumber, valueMustBeAName, valueMustBeEmail, numberMustPhoneNumber, valueMustBeVatNumber, valueMustBePostalCode} = require("../utils/formValidation");
 const activity = require('../utils/activity');
 /**
- * @api {get} /view/profile view_profile_get
+ * @api {get} /view/profile viewProfileGet
  * @apiDescription On this page you can edit all the profile information
  * and shows the current logo picture
- * @apiName view_profile_get
- * @apiGroup View
+ * @apiName viewProfileGet
+ * @apiGroup ViewRouter
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  *  {
@@ -50,7 +50,7 @@ exports.viewProfileGet = async (req, res) => {
  * @api {get} /edit/profile edit_profile_get
  * @apiName edit_profile_get
  * @apiDescription this will redirect to view_profile_get
- * @apiGroup Edit
+ * @apiGroup EditRouter
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  */

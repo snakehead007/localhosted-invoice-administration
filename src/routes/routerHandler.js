@@ -38,10 +38,8 @@ try {
     router.use("/order", stillSignedInCheck, orderRouter);
     router.use("/invoice", stillSignedInCheck, invoiceRouter);
     router.use("/client", stillSignedInCheck, clientRouter);
-//router.use("/project",stillSignedInCheck,projectRouter);
     router.use("/stock", stillSignedInCheck, stockRouter);
     router.use("/settings", stillSignedInCheck, settingsRouter);
-//router.use("/calc",stillSignedInCheck,calcRouter);
     router.use("/edit", stillSignedInCheck, editRouter);
     router.use("/upload", stillSignedInCheck, uploadRouter);
     router.use("/download", stillSignedInCheck, downloadRouter);

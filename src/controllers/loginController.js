@@ -6,30 +6,17 @@ const google = require("../middlewares/google");
 const User = require("../models/user");
 const Settings = require("../models/settings");
 const Profile = require("../models/profile");
-/**
- *
- * @param req
- * @param res
- */
+
 exports.loginGet = function getLogin(req, res) {
     //req.session;
-
-    //This is would redirect if session was already created
-    /*if(req.session&&req.session._id){
+    if(req.session&&req.session._id){
         return res.redirect("/dashboard");
-    }*/
+    }
     //req.session.regenerate(function(err) {
     // will have a new session here
     res.render("login");
-    //});
-    //res.render("login");
 };
-/**
- *
- * @param req
- * @param res
- * @returns {Promise<void>}
- */
+
 exports.createUserGet = async function getCreateNewUser(req, res) {
     if (process.env.DEVELOP === "true" && process.env.DEVELOP_WITH_GOOGLE === "false") {
         let newUser;
@@ -79,11 +66,7 @@ exports.createUserGet = async function getCreateNewUser(req, res) {
         res.redirect(google.urlGoogle());
     }
 };
-/**
- *
- * @param req
- * @param res
- */
+
 exports.logoutGet = function getLogout(req, res) {
     req.logout();
     res.redirect("/login");

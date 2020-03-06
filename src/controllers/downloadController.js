@@ -15,7 +15,7 @@ const activity = require('../utils/activity');
  * @api {get} /stream/invoice/:idi streamInvoicePDF
  * @apiDescription Streams the pdf inline on the users browser
  * @apiName streamInvoicePDF
- * @apiGroup Stream
+ * @apiGroup StreamRouter
  * @apiParamExample Request-Example:
  * {
  *    "idi": invoice._id
@@ -58,7 +58,7 @@ exports.streamInvoicePDF = (req, res) => {
  * @api {get} /stream/offer/:idi streamOfferPDF
  * @apiDescription Streams the pdf inline on the users browser
  * @apiName streamOfferPDF
- * @apiGroup Stream
+ * @apiGroup StreamRouter
  * @apiParamExample Request-Example:
  * {
  *    "idi": invoice._id
@@ -85,7 +85,7 @@ exports.streamOfferPDF = (req, res) => {
  * @api {get} /stream/credit/:idi streamCreditPDF
  * @apiDescription Streams the pdf inline on the users browser
  * @apiName streamCreditPDF
- * @apiGroup Stream
+ * @apiGroup StreamRouter
  * @apiParamExample Request-Example:
  * {
  *    "idi": invoice._id
@@ -112,7 +112,7 @@ exports.streamCreditPDF = (req, res) => {
  * @api {get} /download/credit/:idi downloadCreditPDF
  * @apiDescription Prompts a download of the pdf inline on the users browser
  * @apiName downloadCreditPDF
- * @apiGroup Download
+ * @apiGroup DownloadRouter
  * @apiParamExample Request-Example:
  * {
  *    "idi": invoice._id
@@ -140,7 +140,7 @@ exports.downloadCreditPDF = (req, res) => {
  * @api {get} /download/invoice/:idi downloadInvoicePDF
  * @apiDescription Prompts a download of the pdf inline on the users browser
  * @apiName downloadInvoicePDF
- * @apiGroup Download
+ * @apiGroup DownloadRouter
  * @apiParamExample Request-Example:
  * {
  *    "idi": invoice._id
@@ -167,7 +167,7 @@ exports.downloadInvoicePDF = (req, res) => {
  * @api {get} /download/offer/:idi downloadOfferPDF
  * @apiDescription Prompts a download of the pdf inline on the users browser
  * @apiName downloadOfferPDF
- * @apiGroup Download
+ * @apiGroup DownloadRouter
  * @apiParamExample Request-Example:
  * {
  *    "idi": invoice._id

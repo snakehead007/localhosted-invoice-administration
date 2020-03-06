@@ -2,6 +2,22 @@ const Settings = require("../models/settings");
 const User = require("../models/user");
 const Profile = require("../models/profile");
 const fs = require("fs");
+
+/**
+ * @apiVersion 3.0.0
+ * @api {get} /upload/logo uploadLogoGet
+ * @apiDescription Shows a form where you can upload a logo (only .jpeg or .jpg) file onto your profile
+ * @apiName uploadLogoGet
+ * @apiGroup UploadRouter
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+     res.render("upload", {
+        "settings": settings,
+        "description": "Upload logo",
+        "profile": profile,
+        "role": role
+    })
+ */
 exports.uploadLogoGet = (req, res) => {
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
         Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
@@ -16,7 +32,17 @@ exports.uploadLogoGet = (req, res) => {
         });
     });
 };
-
+/**
+ * @apiVersion 3.0.0
+ * @api {post} /upload/logo uploadLogoPost
+ * @apiDescription uploads the logo as binary onto the profile model in the database
+ * @apiName uploadLogoPost
+ * @apiGroup UploadRouter
+ * @apiSuccessExample Success-Response:
+    res.redirect("/view/profile/");
+ * @apiErrorExample Error-Response:
+    res.redirect("/upload/logo");
+ */
 exports.uploadLogoPost = async (req, res) => {
     try {
         if (Object.keys(req.files).length === 0) // TODO: THIS CHECK DOESNT WORK

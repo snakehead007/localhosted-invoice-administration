@@ -574,9 +574,24 @@ exports.editCreditPost = (req, res) => {
 };
 
 /**
- *
- * @param req
- * @param res
+ * @apiVersion 3.0.0
+ * @api {get} /view/invoice/:idi viewInvoiceGet
+ * @apiParam {String} idi unique id of the invoice where we want to see the invoice from
+ * @apiParamExample {String} title:
+ "idi": invoice._id
+ * @apiDescription shows a table of the information of a specific invoice
+ * @apiName viewInvoiceGet
+ * @apiGroup View
+ * @apiSuccessExample Success-Response:
+ res.render("view/view-invoice", {
+        "invoice": invoice,
+        "client": client,
+        "description": i18n.__(description) + " " + (client.firm)?client.firm:client.clientName,
+        "settings": settings,
+        "currentUrl": "creditView",
+        "profile": profile,
+        "role": role
+    })
  */
 exports.viewInvoiceGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, function (err, invoice) {
@@ -588,7 +603,7 @@ exports.viewInvoiceGet = (req, res) => {
                             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                                 if (!findOneHasError(req, res, err, profile)) {
                                     let description = (invoice.creditNr) ? "View credit of" : "View invoice of";
-                                    let givenObject = {
+                                    res.render("view/view-invoice", {
                                         "invoice": invoice,
                                         "client": client,
                                         "description": i18n.__(description) + " " + (client.firm)?client.firm:client.clientName,
@@ -598,8 +613,7 @@ exports.viewInvoiceGet = (req, res) => {
                                         "role": (await User.findOne({_id: req.session._id}, (err, user) => {
                                             return user
                                         })).role
-                                    };
-                                    res.render("view/view-invoice", givenObject)
+                                    })
                                 }
                             });
                         }

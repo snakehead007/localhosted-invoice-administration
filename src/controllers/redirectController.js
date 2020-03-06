@@ -21,6 +21,17 @@ const {findOneHasError, updateOneHasError} = require('../middlewares/error');
  * @returns {Promise<void>}
  * @exports src/controllers/redirectController.googleLogin
  */
+
+/**
+ * @apiVersion 3.0.0
+ * @api {get} /redirect/ googleLogin
+ * @apiParam {String} [field] unique id the user
+ * @apiParamExample {String} title:
+ "id": client._id
+ * @apiDescription this will use the {@link src/middlewares/google|Google middleware} to decrypt to OAuth2 login information of the user
+ * @apiName getClientAll
+ * @apiGroup RedirectRouter
+ */
 exports.googleLogin = async (req, res, next) => {
     const userInfo = await checkSignIn(req, await getGoogleAccountFromCode(req.query.code));
     req.session.loggedIn = userInfo;

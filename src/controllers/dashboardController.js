@@ -13,7 +13,7 @@ const User = require("../models/user");
  * @api {get} / mainGet
  * @apiDescription This gives back the dashboard
  * @apiName mainGet
- * @apiGroup Dashboard
+ * @apiGroup DashboardRouter
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  *  {{
@@ -94,7 +94,7 @@ exports.mainGet = async function getLogin(req, res) {
  * @api {get} /chart/:year chartYearGet
  * @apiDescription This gives back the dashboard but with a different year, with the parameter :year as a number
  * @apiName chartYearGet
- * @apiGroup Dashboard
+ * @apiGroup DashboardRouter
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
  *  {

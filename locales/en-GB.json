@@ -318,5 +318,17 @@
 	"Send PDF to mail": "Send PDF to mail",
 	"status": "status",
 	"Change this invoice to unpaid first, to remove its pay date.": "Change this invoice to unpaid first, to remove its pay date.",
+	"Bug reporter": "Bug reporter",
+	"Report": "Report",
+	"Close": "Close",
+	"Send bug report": "Send bug report",
+	"About": "About",
+	"Your bug report has been send, thank you!": "Your bug report has been send, thank you!",
+	"Successfully updated the offer": "Successfully updated the offer",
+	"Credit number": "Credit number",
+	"Successfully updated the creditnote": "Successfully updated the creditnote",
+	"This invoice number is already in use.": "This invoice number is already in use.",
+	"Add a new line": "Add a new line",
+	"Add a new client": "Add a new client",
 	"--------FROM-HERE-ALL-ABOVE-CHECKED-----------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------"
 }

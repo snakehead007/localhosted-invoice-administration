@@ -13,7 +13,7 @@ const Item = require('../models/item');
  * @apiHeader {String} describes idc here
  * @apiDescription shows a list of all the activities of the user
  * @apiName getActivity
- * @apiGroup Activity
+ * @apiGroup ActivityRouter
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
    {
@@ -48,7 +48,7 @@ exports.getActivity = async (req,res) => {
      "ido": order._id
  * @apiDescription Undo the removal of an object by setting the isRemove of the object and subdocuments to false
  * @apiName getUndoActivity
- * @apiGroup Activity
+ * @apiGroup ActivityRouter
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
      redirect to /activity
@@ -88,7 +88,7 @@ exports.getUndoActivity = async (req,res) => {
      "ido": order._id
  * @apiDescription sets the object and its subdocuments property isRemoved to true
  * @apiName removeGet
- * @apiGroup Activity
+ * @apiGroup ActivityRouter
  * @apiSuccessExample Success-Response:
  *  HTTP/1.1 200 OK
     redirect to /activity

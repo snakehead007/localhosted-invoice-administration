@@ -3,11 +3,7 @@
  */
 
 const activity = require('../utils/activity');
-/**
- *
- * @param req
- * @param res
- */
+
 const i18n = require("i18n");
 exports.logout_get = async (req, res) => {
     await activity.logout(req.session._id);

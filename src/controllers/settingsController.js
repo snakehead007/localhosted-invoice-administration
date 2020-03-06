@@ -4,21 +4,21 @@ const i18n = require("i18n");
 const User = require("../models/user");
 const activity = require('../utils/activity');
 /**
- * @api {get} /settings settings_all_get
- * @apiName settings_all_get
+ * @api {get} /settings settingsAllGet
+ * @apiName settingsAllGet
  * @apiDescription Renders the main settings view
  * where the user can edit there theme, footnotes and vat
- * @apiGroup Settings
+ * @apiGroup SettingsRouter
  * @apiSuccessExample Success-Response:
- *  HTTP/1.1 200 OK
- *  {
-        "currentUrl": "settings",
-        "settings": settings,
-        "description": "Settings",
-        "profile":profile
-    }
+ *  res.render("settings", {
+                "currentUrl": "settings",
+                "settings": settings,
+                "description": "Settings",
+                "profile": profile,
+                "role": role
+            });
  */
-exports.settings_all_get = (req, res) => {
+exports.settingsAllGet = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
         if (err) {
             console.trace();
@@ -41,15 +41,14 @@ exports.settings_all_get = (req, res) => {
 };
 
 /**
- * @api {get} /settings/change/lang/:lang settings_change_lang_Get
- * @apiName settings_change_lang_get
+ * @api {get} /settings/change/lang/:lang settingsChangeLangGet
+ * @apiName settingsChangeLangGet
  * @apiDescription Changes the settings locale to the chosen language
  * Also changes the locals and locale session to the chosen language
  * Afterwards redirects to /settings
- * @apiGroup Settings
+ * @apiGroup SettingsRouter
  * @apiSuccessExample Success-Response:
- *  HTTP/1.1 200 OK
- *
+ *  res.redirect("/settings");
  */
 exports.settingsChangeLangGet = (req, res) => {
     Settings.updateOne({fromUser: req.session._id}, {locale: req.params.lang}, function (err) {
@@ -66,13 +65,13 @@ exports.settingsChangeLangGet = (req, res) => {
     });
 };
 /**
- * @api {get} /settings/change/theme/:theme settings_change_theme_get
- * @apiName settings_change_theme_get
+ * @api {get} /settings/change/theme/:theme settingsChangeThemeGet
+ * @apiName settingsChangeThemeGet
  * @apiDescription Updates the theme in the settings of the current user
  * afterwards redirects to /settings
- * @apiGroup Settings
+ * @apiGroup SettingsRouter
  * @apiSuccessExample Success-Response:
- *  HTTP/1.1 200 OK
+ *  res.redirect("/settings")
  */
 exports.settingsChangeThemeGet = (req, res) => {
     Settings.updateOne({fromUser: req.session._id}, {theme: req.params.theme}, function (err) {
@@ -85,13 +84,13 @@ exports.settingsChangeThemeGet = (req, res) => {
 
 };
 /**
- * @api {get} /settings/change/text change_text_post
- * @apiName change_text_post
+ * @api {get} /settings/change/text changeTextGet
+ * @apiName changeTextGet
  * @apiDescription Updates the settings invoiceText, creditText and offerText of the current user
  * aftwards redirects to /settings
- * @apiGroup Settings
+ * @apiGroup SettingsRouter
  * @apiSuccessExample Success-Response:
- *  HTTP/1.1 200 OK
+ *  res.redirect("/settings");
  */
 exports.changeTextGet = (req, res) => {
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
