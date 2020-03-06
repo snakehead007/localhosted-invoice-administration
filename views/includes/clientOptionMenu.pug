@@ -4,9 +4,9 @@ ul(class="nav flex-column mb-2")
     li(class="nav-item")
         if currentUrl === "clientNew"
             a(class="nav-link active",href='/client/new')
-                span(data-feather="plus-circle")
+                i.nav-fas(class="fas fa-user-plus")
                 span #{__('New client')}
         else
             a(class="nav-link",href='/client/new')
-                span(data-feather="plus-circle")
+                i.nav-fas(class="fas fa-user-plus")
                 span #{__('New client')}

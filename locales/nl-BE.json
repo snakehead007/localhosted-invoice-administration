@@ -312,10 +312,17 @@
 	"Remove permanently": "Permanent verwijderen",
 	"Remove": "Verwijderen",
 	"Total paid": "Totaal Betaalt",
-	"--------FROM-HERE-ALL-ABOVE-CHECKED---- -------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------",
 	"Send PDF to mail": "Send PDF to mail",
 	"VAT nr": "VAT nr",
 	"VAT": "VAT",
 	"from": "from",
-	"status": "status"
+	"status": "status",
+	"Change this invoice to unpaid first, to remove its pay date.": "Verander deze factuur eerst naar onbetaalt, vooraleer je de betaalt datum aanpast.",
+	"--------FROM-HERE-ALL-ABOVE-CHECKED---- -------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------",
+	"Bug reporter": "Bug reporter",
+	"Report": "Report",
+	"Close": "Close",
+	"Send bug report": "Send bug report",
+	"About": "About",
+	"Your bug report has been send, thank you!": "Your bug report has been send, thank you!"
 }

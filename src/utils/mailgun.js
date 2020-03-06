@@ -80,3 +80,21 @@ exports.sendAttachment = (to,attachmentPath,attachmentName) => {
         }
     });
 };
+
+exports.sendMessageRichData = (to,message,userID,userObject) => {
+    const mailgun = new Mailgun({apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN});
+    const data = {
+        from: process.env.MAILGUN_FROM,
+        to: to,
+        subject: "Bug report from "+userID,
+        html: message+"<br><hr><br>"+"This data was send on "+Date.now()+"<br> User id: "+userObject._id+"<br> Usermail: "+userObject.email+"<br> role: "+userObject.role
+    };
+    mailgun.messages().send(data, function (err, body) {
+        if (err) {
+            console.log("got an error: ", err);
+        }
+        else {
+            console.log(body);
+        }
+    });
+};

@@ -5,45 +5,45 @@ ul(class="nav flex-column mb-2")
       if client
         if currentUrl === "orderNew"
           a(class="nav-link active",href='/order/new/' + invoice._id )
-            span(data-feather="plus-circle")
+            i.nav-fas(class="fas fa-plus-circle")
             span #{__('New line')}
         else
           a(class="nav-link",href='/order/new/' + invoice._id )
-            span(data-feather="plus-circle")
+            i.nav-fas(class="fas fa-plus-circle")
             span #{__('New line')}
       li(class="nav-item")
         if invoice.offerNr
           a(class="nav-link",href='/download/offer/' + invoice._id)
-            span(data-feather="download")
+            i.nav-fas(class="fas fa-file-download")
             span #{__('Download pdf of this document')}
         else if invoice.creditNr
           a(class="nav-link",href='/download/credit/' + invoice._id)
-            span(data-feather="download")
+            i.nav-fas(class="fas fa-file-download")
             span #{__('Download pdf of this document')}
         else if invoice.invoiceNr
           a(class="nav-link",href='/download/invoice/' + invoice._id)
-            span(data-feather="download")
+            i.nav-fas(class="fas fa-file-download")
             span #{__('Download pdf of this document')}
     li(class="nav-item")
       if invoice.offerNr
         a(class="nav-link",href='/stream/offer/' + invoice._id target="_blank")
-          span(data-feather="align-left")
+          i.nav-fas(class="fas fa-eye")
           span #{__('View pdf of this document')}
       else if invoice.creditNr
         a(class="nav-link",href='/stream/credit/' + invoice._id target="_blank")
-          span(data-feather="align-left")
+          i.nav-fas(class="fas fa-eye")
           span #{__('View pdf of this document')}
       else if invoice.invoiceNr
         a(class="nav-link",href='/stream/invoice/' + invoice._id target="_blank")
-          span(data-feather="align-left")
+          i.nav-fas(class="fas fa-eye")
           span #{__('View pdf of this document')}
     if client
       li(class="nav-item")
         a(class="nav-link",href='/invoice/all/' + client._id )
-          span(data-feather="book-open")
+          i.nav-fas(class="fas fa-book-open")
           span #{__('View documents of this client')}
       li(class="nav-item")
         a(class="nav-link",href='/edit/client/' + client._id )
-          span(data-feather="edit-3")
+          i.nav-fas(class="fas fa-user-edit")
           span #{__('Edit this client')}
 

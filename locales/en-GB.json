@@ -316,5 +316,7 @@
 	"VAT": "VAT",
 	"from": "from",
 	"Send PDF to mail": "Send PDF to mail",
+	"status": "status",
+	"Change this invoice to unpaid first, to remove its pay date.": "Change this invoice to unpaid first, to remove its pay date.",
 	"--------FROM-HERE-ALL-ABOVE-CHECKED-----------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------"
 }

@@ -55,6 +55,7 @@ module.exports.getDatum = (lang) => {
 };
 
 module.exports.parseDateDDMMYYYY = (dateString) => {
+    if(!dateString) return "";
     console.log(dateString);
     let arrayOfDate = dateString.split("/"); //0 DAY , 1 MONTH , 2 YEAR
     let date = new Date(Number(arrayOfDate[2]), Number(arrayOfDate[1])-1 , Number(arrayOfDate[0]));
@@ -64,4 +65,14 @@ module.exports.parseDateDDMMYYYY = (dateString) => {
 module.exports.parseDateSwapDayMonth = (dateString) => {
     let arrayOfDate = dateString.split("/");
     return arrayOfDate[1] + "/" + arrayOfDate[0] + "/" + arrayOfDate[2];
+};
+
+module.exports.parseDate = (date) => {
+  if(!date) return null;
+  let returnDate = date.toLocaleDateString("nl-BE", {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric'
+  });
+  return returnDate;
 };

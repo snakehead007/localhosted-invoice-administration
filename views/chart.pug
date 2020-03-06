@@ -16,7 +16,7 @@ html
                             h1(class="h2") #{__('Chart for')} #{" "+year}
                             div(class="btn-group dropleft mb-2 mb-md-0")
                                 button(type="button" class="btn btn-sm btn-outline-"+settings.theme+" dropdown-toggle", data-toggle="dropdown",aria-haspopup="true",aria-expanded="false")
-                                    span(data-feather="calendar")
+                                    i.fas.fa-calendar-alt.not-nav-fas
                                     span=year
                                 div(class="dropdown-menu")
                                     a(class="dropdown-item" href="/dashboard/chart/"+String(year-2))=year-2
@@ -70,3 +70,4 @@ html
                     window.location = "/change-betaald/" + id + "/" + loginHash;
                 }
             }
+    include includes/modals/bugReporter

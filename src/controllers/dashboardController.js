@@ -56,7 +56,7 @@ exports.mainGet = async function getLogin(req, res) {
                                     if (!invoice.isPaid) {
                                         //adds to unpaid invoices
                                         invoice_open.push(invoice);
-                                    } else {
+                                    } else if(invoice.datePaid){
                                         //Adds to chart data
                                         let monthOfPayment = invoice.datePaid.getMonth();
                                         if ((new Date()).getFullYear() == invoice.datePaid.getFullYear() && invoice.isPaid) {

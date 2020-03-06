@@ -15,21 +15,21 @@ table(class="table table-striped table-sm ",id="tabelActivities")
             tr
                 td
                     if(act.type==="delete")
-                        span(data-feather="x-square")
+                        i.act-fas.fas.fa-trash-alt
                     if(act.type==="time")
-                        span(data-feather="clock")
+                        i.act-fas.fas.fa-sign-in-alt
                     if(act.type === "edit")
-                        span(data-feather="edit")
+                        i.act-fas.fas.fa-edit
                     if(act.type === "add")
-                        span(data-feather="plus-square")
+                        i.act-fas.fas.fa-plus-square
                     if(act.type === "download")
-                        span(data-feather="download")
+                        i.act-fas.fas.fa-file-download
                     if(act.type === "settings")
-                        span(data-feather="settings")
+                        i.act-fas.fas.fa-cog
                     if(act.type === "upgrade")
-                        span(data-feather="rotate-cw")
+                        i.act-fas.fas.fa-angle-douple-up
                     if(act.type === "change")
-                        span(data-feather="flag")
+                        i.act-fas.fas.fa-exchange-alt
                 td=(act.info)?act.description+" : "+act.info:act.description
                 td(id="date"+act._id)=act.time
                 td

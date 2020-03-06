@@ -1,0 +1,15 @@
+#bugReporter.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+    .modal-dialog(role='document')
+        .modal-content
+            .modal-header
+                h5#bugReporterLabel.modal-title=__("Bug reporter")
+                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+            form(action="/mail/bugreport", method="post")
+                .modal-body
+                        .form-group
+                            label.col-form-label(for='bugReport')=__('Report')
+                            textarea#bugReport.form-control( name="message", placeholder="")
+                .modal-footer
+                    button.btn.btn-secondary(type='button' data-dismiss='modal')=__("Close")
+                    button.btn.btn-primary(role="button" type='submit')=__("Send bug report")

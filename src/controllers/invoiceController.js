@@ -12,7 +12,7 @@ const User = require("../models/user");
 const i18n = require("i18n");
 const invoiceUtil = require("../utils/invoices");
 const {findOneHasError, updateOneHasError} = require("../middlewares/error");
-const {parseDateDDMMYYYY, parseDateSwapDayMonth} = require("../utils/date");
+const {parseDateDDMMYYYY, parseDateSwapDayMonth,parseDate} = require("../utils/date");
 const {getFullNr} = require("../utils/invoices");
 const activity = require('../utils/activity');
 /**
@@ -352,10 +352,12 @@ exports.editInvoicePost = (req, res) => {
         let currentInvoice = await Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, (err, invoice) => {
             return invoice
         });
-        if(currentInvoice.isPaid && (req.body.datePaid).trim()===""){
-            req.flash('danger',i18n.__("Change this invoice to unpaid first, to remove its pay date."));
-            req.redirect('.');
-            return;
+        if(currentInvoice.isPaid){
+            if(!req.body.datePaid||req.body.datePaid!== parseDate(currentInvoice.datePaid)) {
+                req.flash('danger', i18n.__("Change this invoice to unpaid first, to remove its pay date."));
+                res.redirect('back');
+                return;
+            }
         }
         let datePaid = (req.body.datePaid)?parseDateDDMMYYYY(req.body.datePaid):"";
         let updateInvoice;
@@ -464,11 +466,20 @@ exports.invoicePaidGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
         let isPaid = !(invoice.isPaid);
         if (!findOneHasError(req, res, err, invoice)) {
-            Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
-                isPaid: isPaid,
-                datePaid: Date.now(),
-                lastUpdated: Date.now()
-            }, async (err) =>  {
+            let invoiceUpdate;
+            if(!invoice.datePaid){
+                invoiceUpdate ={
+                    isPaid: isPaid,
+                    datePaid: Date.now(),
+                    lastUpdated: Date.now()
+                };
+            }else{
+                invoiceUpdate ={
+                    isPaid: isPaid,
+                    lastUpdated: Date.now()
+                };
+            }
+            Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, invoiceUpdate, async (err) =>  {
                 if (!updateOneHasError(req, res, err)) {
                     activity.setPaid(invoice,isPaid,req.session._id);
                     let _client = await Client.findOne({fromUser:req.session._id,_id:invoice.fromClient},(err,client) => {return client;});
