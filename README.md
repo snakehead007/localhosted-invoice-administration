@@ -4,10 +4,9 @@
 [![Build Status](https://travis-ci.com/snakehead007/invoice-administration.svg?branch=master)](https://travis-ci.com/snakehead007/invoice-administration)
 
 This program is mainly used for managing and administrating invoices and generating them into .pdf format
-
-Version 2.0(beta) is out. We are still improving and adding things on a daily basis.
-This is not a finished product, but you can still contribute and/or test it out.
-Check out the projects > core functionalities. for the current progess.
+<br> Currently only used for Belgian clients and users.  
+<br> Version 3.0.0 (close beta) is out. We are still improving and adding things on a daily basis. 
+<br> To contribute, use and/or test it out, contact me. 
 
 This project is translated in 2 languages, Dutch and English.
 
@@ -37,7 +36,8 @@ Functionalities:
 ### How to Install locally or host
 
 -   local: 
-       rename .env.bak to .env
+       rename .env.bak to .env 
+       <br> and fill in the top most stuff (apis.google.com and mailgun.com info)
       `docker-compose up --build`
 
 -   synology/hub.docker:
