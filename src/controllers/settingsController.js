@@ -5,6 +5,7 @@ const User = require("../models/user");
 const activity = require('../utils/activity');
 /**
  * @api {get} /settings settingsAllGet
+ * @apiVersion 3.0.0
  * @apiName settingsAllGet
  * @apiDescription Renders the main settings view
  * where the user can edit there theme, footnotes and vat
@@ -42,6 +43,7 @@ exports.settingsAllGet = (req, res) => {
 
 /**
  * @api {get} /settings/change/lang/:lang settingsChangeLangGet
+ * @apiVersion 3.0.0
  * @apiName settingsChangeLangGet
  * @apiDescription Changes the settings locale to the chosen language
  * Also changes the locals and locale session to the chosen language
@@ -66,6 +68,7 @@ exports.settingsChangeLangGet = (req, res) => {
 };
 /**
  * @api {get} /settings/change/theme/:theme settingsChangeThemeGet
+ * @apiVersion 3.0.0
  * @apiName settingsChangeThemeGet
  * @apiDescription Updates the theme in the settings of the current user
  * afterwards redirects to /settings
@@ -85,6 +88,7 @@ exports.settingsChangeThemeGet = (req, res) => {
 };
 /**
  * @api {get} /settings/change/text changeTextGet
+ * @apiVersion 3.0.0
  * @apiName changeTextGet
  * @apiDescription Updates the settings invoiceText, creditText and offerText of the current user
  * aftwards redirects to /settings

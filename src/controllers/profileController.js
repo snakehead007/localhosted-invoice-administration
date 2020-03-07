@@ -9,20 +9,19 @@ const {formatBEVat,formatBEBic,formatBEIban,valueMustBeValidBic, valueMustBeVali
 const activity = require('../utils/activity');
 /**
  * @api {get} /view/profile viewProfileGet
+ * @apiVersion 3.0.0
  * @apiDescription On this page you can edit all the profile information
  * and shows the current logo picture
  * @apiName viewProfileGet
  * @apiGroup ViewRouter
  * @apiSuccessExample Success-Response:
- *  HTTP/1.1 200 OK
- *  {
- *      "currentUrl":"edit-profile",
+ *  res.render("edit/edit-profile", {
+        "currentUrl": "edit-profile",
         "profile": profile,
-        "offerNrCurrent": Number(jaar + nroff_str),
-        "invoiceNrCurrent": Number(jaar + nr_str),
-        "creditNrCurrent": Number(jaar + nrcred_str),
-        "settings": settings
- *  }
+        "settings": settings,
+        "title": title,
+        "role": role
+    });
  */
 exports.viewProfileGet = async (req, res) => {
     let role = (await User.findOne({_id: req.session._id}, (err, user) => {
@@ -47,24 +46,48 @@ exports.viewProfileGet = async (req, res) => {
 };
 
 /**
- * @api {get} /edit/profile edit_profile_get
- * @apiName edit_profile_get
- * @apiDescription this will redirect to view_profile_get
+ * @api {get} /edit/profile editProfileGet
+ * @apiName editProfileGet
+ * @apiVersion 3.0.0
+ * @apiDescription this will redirect to editProfileGet
  * @apiGroup EditRouter
  * @apiSuccessExample Success-Response:
- *  HTTP/1.1 200 OK
+ * res.redirect("/view/profile");
  */
 exports.editProfileGet = (req, res) => {
     res.redirect("/view/profile");
 };
 /**
- * @api {post} /edit/profile edit_profile_post
- * @apiName edit_profile_post
+ * @api {post} /edit/profile editProfilePost
+ * @apiVersion 3.0.0
+ * @apiName editProfilePost
  * @apiDescription The profile will be updated with all its given parameters in the form
  * Afterwards will be redirected to /view/profile
- * @apiGroup Edit
+ * @apiGroup EditRouter
  * @apiSuccessExample Success-Response:
- *  HTTP/1.1 200 OK
+ *  res.redirect("/view/profile");
+*  @apiErrorExample Error-Respone:
+ *  res.render("edit/edit-profile", {
+                    "currentUrl": "edit-profile",
+                    "profile": {
+                        "firm": req.body.firm,
+                        "name": req.body.name,
+                        "street": req.body.street,
+                        "streetNr": req.body.streetNr,
+                        "postal": req.body.postal,
+                        "place": req.body.place,
+                        "vat": req.body.vat,
+                        "iban": req.body.iban,
+                        "bic": req.body.bic,
+                        "tel": req.body.tel,
+                        "email":  req.body.email,
+                        "_id": req.params.idp,
+                        "fromUser":req.session._id
+                    },
+                    "settings": settings,
+                    "title": title,
+                    "role": role
+                });
  */
 exports.editProfilePost = async (req, res) => {
     let firmCheck =  valueMustBeAName(req, res, req.body.firm, false, "firm is invalid");

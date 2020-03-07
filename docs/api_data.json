@@ -396,42 +396,71 @@
   {
     "type": "get",
     "url": "/edit/profile",
-    "title": "edit_profile_get",
-    "name": "edit_profile_get",
-    "description": "<p>this will redirect to view_profile_get</p>",
+    "title": "editProfileGet",
+    "name": "editProfileGet",
+    "version": "3.0.0",
+    "description": "<p>this will redirect to editProfileGet</p>",
     "group": "EditRouter",
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK",
+          "content": "res.redirect(\"/view/profile\");",
           "type": "json"
         }
       ]
     },
-    "version": "0.0.0",
     "filename": "src/controllers/profileController.js",
     "groupTitle": "EditRouter"
   },
   {
     "type": "post",
     "url": "/edit/profile",
-    "title": "edit_profile_post",
-    "name": "edit_profile_post",
+    "title": "editProfilePost",
+    "version": "3.0.0",
+    "name": "editProfilePost",
     "description": "<p>The profile will be updated with all its given parameters in the form Afterwards will be redirected to /view/profile</p>",
-    "group": "Edit",
+    "group": "EditRouter",
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK",
+          "content": "res.redirect(\"/view/profile\");",
           "type": "json"
         }
       ]
     },
-    "version": "0.0.0",
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Respone:",
+          "content": "res.render(\"edit/edit-profile\", {\n                   \"currentUrl\": \"edit-profile\",\n                   \"profile\": {\n                       \"firm\": req.body.firm,\n                       \"name\": req.body.name,\n                       \"street\": req.body.street,\n                       \"streetNr\": req.body.streetNr,\n                       \"postal\": req.body.postal,\n                       \"place\": req.body.place,\n                       \"vat\": req.body.vat,\n                       \"iban\": req.body.iban,\n                       \"bic\": req.body.bic,\n                       \"tel\": req.body.tel,\n                       \"email\":  req.body.email,\n                       \"_id\": req.params.idp,\n                       \"fromUser\":req.session._id\n                   },\n                   \"settings\": settings,\n                   \"title\": title,\n                   \"role\": role\n               });",
+          "type": "json"
+        }
+      ]
+    },
     "filename": "src/controllers/profileController.js",
-    "groupTitle": "Edit"
+    "groupTitle": "EditRouter"
+  },
+  {
+    "version": "3.0.0",
+    "type": "get",
+    "url": "/logout/",
+    "title": "logoutGet",
+    "description": "<p>Deletes and makes a clean new session, and redirects to the login page</p>",
+    "name": "logoutGet",
+    "group": "LogoutRouter",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "res.redirect(\"/\");",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/logoutController.js",
+    "groupTitle": "LogoutRouter"
   },
   {
     "version": "3.0.0",
@@ -728,6 +757,7 @@
     "type": "get",
     "url": "/settings/change/text",
     "title": "changeTextGet",
+    "version": "3.0.0",
     "name": "changeTextGet",
     "description": "<p>Updates the settings invoiceText, creditText and offerText of the current user aftwards redirects to /settings</p>",
     "group": "SettingsRouter",
@@ -740,7 +770,6 @@
         }
       ]
     },
-    "version": "0.0.0",
     "filename": "src/controllers/settingsController.js",
     "groupTitle": "SettingsRouter"
   },
@@ -748,6 +777,7 @@
     "type": "get",
     "url": "/settings",
     "title": "settingsAllGet",
+    "version": "3.0.0",
     "name": "settingsAllGet",
     "description": "<p>Renders the main settings view where the user can edit there theme, footnotes and vat</p>",
     "group": "SettingsRouter",
@@ -760,7 +790,6 @@
         }
       ]
     },
-    "version": "0.0.0",
     "filename": "src/controllers/settingsController.js",
     "groupTitle": "SettingsRouter"
   },
@@ -768,6 +797,7 @@
     "type": "get",
     "url": "/settings/change/lang/:lang",
     "title": "settingsChangeLangGet",
+    "version": "3.0.0",
     "name": "settingsChangeLangGet",
     "description": "<p>Changes the settings locale to the chosen language Also changes the locals and locale session to the chosen language Afterwards redirects to /settings</p>",
     "group": "SettingsRouter",
@@ -780,7 +810,6 @@
         }
       ]
     },
-    "version": "0.0.0",
     "filename": "src/controllers/settingsController.js",
     "groupTitle": "SettingsRouter"
   },
@@ -788,6 +817,7 @@
     "type": "get",
     "url": "/settings/change/theme/:theme",
     "title": "settingsChangeThemeGet",
+    "version": "3.0.0",
     "name": "settingsChangeThemeGet",
     "description": "<p>Updates the theme in the settings of the current user afterwards redirects to /settings</p>",
     "group": "SettingsRouter",
@@ -800,7 +830,6 @@
         }
       ]
     },
-    "version": "0.0.0",
     "filename": "src/controllers/settingsController.js",
     "groupTitle": "SettingsRouter"
   },
@@ -977,6 +1006,7 @@
     "type": "get",
     "url": "/view/profile",
     "title": "viewProfileGet",
+    "version": "3.0.0",
     "description": "<p>On this page you can edit all the profile information and shows the current logo picture</p>",
     "name": "viewProfileGet",
     "group": "ViewRouter",
@@ -984,12 +1014,11 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"currentUrl\":\"edit-profile\",\n       \"profile\": profile,\n       \"offerNrCurrent\": Number(jaar + nroff_str),\n       \"invoiceNrCurrent\": Number(jaar + nr_str),\n       \"creditNrCurrent\": Number(jaar + nrcred_str),\n       \"settings\": settings\n}",
+          "content": "res.render(\"edit/edit-profile\", {\n       \"currentUrl\": \"edit-profile\",\n       \"profile\": profile,\n       \"settings\": settings,\n       \"title\": title,\n       \"role\": role\n   });",
           "type": "json"
         }
       ]
     },
-    "version": "0.0.0",
     "filename": "src/controllers/profileController.js",
     "groupTitle": "ViewRouter"
   },

@@ -235,12 +235,13 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     }
         c[0] = 150 + (pdfOrders.length * 7) + 10;
         c[1] = 20;
-        console.log(c);
-        let description = invoice.description.split('\r\n');
-        description.forEach((text) => {
-            doc.text(c[1], c[0], text);
-            c[0] += 5;
-        });
+        if(invoice.description) {
+            let description = invoice.description.split('\r\n');
+            description.forEach((text) => {
+                doc.text(c[1], c[0], text);
+                c[0] += 5;
+            });
+        }
     if(invoice.offerNr){
         c[0] += 10;
         doc.setFontType("courier");
@@ -249,8 +250,6 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         c[0] += 15;
         doc.setFontSize(12);
         doc.text(c[1], c[0], i18n.__("Date") + ":");
-
-
         c[0] -= 15;
         c[1] += 105;
         doc.setFontType("courier");

@@ -16,7 +16,6 @@ const viewRouter = require("./viewRouter");
 const invoiceRouter = require("./invoiceRouter");
 const clientRouter = require("./clientRouter");
 //const projectRouter = require("./projectRouter");
-const stockRouter = require("./stockRouter");
 const settingsRouter = require("./settingsRouter");
 //const calcRouter = require("./calcRouter");
 const editRouter = require("./editRouter");
@@ -24,7 +23,6 @@ const uploadRouter = require("./uploadRouter");
 const orderRouter = require("./orderRouter");
 const downloadRouter = require("./downloadRouter");
 const deleteRouter = require("./deleteRouter");
-const validateRouter = require("./validateRouter");
 const searchRouter = require("./searchRouter");
 const whitelistRouter = require("./whitelistRouter");
 const streamRouter = require("./streamRouter");
@@ -38,7 +36,6 @@ try {
     router.use("/order", stillSignedInCheck, orderRouter);
     router.use("/invoice", stillSignedInCheck, invoiceRouter);
     router.use("/client", stillSignedInCheck, clientRouter);
-    router.use("/stock", stillSignedInCheck, stockRouter);
     router.use("/settings", stillSignedInCheck, settingsRouter);
     router.use("/edit", stillSignedInCheck, editRouter);
     router.use("/upload", stillSignedInCheck, uploadRouter);
@@ -58,7 +55,6 @@ try {
 try {
     router.use("/", loginRouter); //index page
     router.use("/redirect", redirectRouter); //only used when logged in and redirected by google
-    router.use("/valid", validateRouter);
     router.use("/whitelist", whitelistRouter);
 }catch(err){
     console.trace(err);
