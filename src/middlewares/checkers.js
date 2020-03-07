@@ -10,7 +10,7 @@ const i18n = require('i18n');
  */
 exports.stillSignedInCheck = (req, res, next) => {
     if (!req.session._id) {
-        return logoutController.logout_get(req, res);
+        return logoutController.logoutGet(req, res);
     }
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
         if (err) {

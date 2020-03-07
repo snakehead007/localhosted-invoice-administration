@@ -7,7 +7,7 @@ const Profile = require("../models/profile");
 const Invoice = require("../models/invoice");
 const {month, month_small, year} = require("../utils/date");
 const User = require("../models/user");
-
+const i18n = require("i18n");
 /**
  * @apiVersion 3.0.0
  * @api {get} / mainGet
@@ -197,4 +197,11 @@ exports.chartYearlyGet = (req, res) => {
             });
         }
     });
+};
+
+exports.about = (req,res) => {
+    req.flash('warning',i18n.__("This page is still under construction"));
+    res.redirect('back');
+    return;
+    //write here the about controller
 };
