@@ -6,7 +6,7 @@
 This program is mainly used for managing and administrating invoices and generating them into .pdf format
 <br> Currently only used for Belgian clients and users.  
 <br> Version 3.0.0 (close beta) is out. We are still improving and adding things on a daily basis. 
-<br> To contribute, use and/or test it out, contact me. 
+<br> To contribute, use and/or test it out, contact me.  
 
 This project is translated in 2 languages, Dutch and English.
 
@@ -37,8 +37,8 @@ Functionalities:
 
 -   local: 
        rename .env.bak to .env 
-       <br> and fill in the top most stuff (apis.google.com and mailgun.com info)
-      `docker-compose up --build`
+       <br> and fill in the top most stuff (apis.google.com and mailgun.com info) 
+       <br> command to build the docker: `docker-compose up --build`
 
 -   synology/hub.docker:
 
