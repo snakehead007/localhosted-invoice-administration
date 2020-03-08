@@ -677,6 +677,23 @@ exports.offerAgreedGet = (req, res) => {
     });
 };
 
+exports.setVat = (req, res) => {
+    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+        console.log(invoice);
+        if (!findOneHasError(req, res, err, invoice)) {
+            Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
+                isVatOn: !(invoice.isVatOn),
+                lastUpdated: Date.now()
+            }, async (err) => {
+                if (!updateOneHasError(req, res, err)) {
+                    await Client.updateOne({fromUser:req.session._id,_id:invoice.fromClient},{lastUpdated:Date.now()});
+                    res.redirect("back");
+                }
+            });
+        }
+    });
+};
+
 exports.invoiceUpgradeGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, async (err, invoice) => {
         if (!findOneHasError(req, res, err, invoice)) {

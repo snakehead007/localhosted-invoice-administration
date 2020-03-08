@@ -192,7 +192,10 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         head: [[i18n.__("Description"), i18n.__("Amount"), i18n.__("Price"), i18n.__("Total")]],
         body: ordersPrint
     });
-    _vat = Math.round((totalEx - invoice.advance) * client.vatPercentage) / 100;
+    let vatOfClient = (invoice.isVatOn)?0.0:client.vatPercentage;
+    console.log(vatOfClient);
+    _vat = Math.round((totalEx - invoice.advance) *vatOfClient) / 100;
+    console.log(_vat);
     totalExSub = totalEx - invoice.advance;
     totalInc = totalExSub + _vat;
     if (invoice.advance == 0) {
@@ -208,7 +211,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
             styles: {fillColor: [140, 140, 140]},
             body: [
                 [[""], ["                               "], [i18n.__("subtotal")], [totalEx.toFixed(2) + " €"]],
-                [[""], ["                               "], [i18n.__("VAT") + " " + client.vatPercentage + "%"], [_vat.toFixed(2) + " €"]],
+                [[""], ["                               "], [i18n.__("VAT") + " " +vatOfClient + "%"], [_vat.toFixed(2) + " €"]],
                 [[""], ["                               "], [i18n.__("total")], [totalInc.toFixed(2) + " €"]]
             ]
         })
@@ -227,7 +230,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
                 [[""], ["                               "], [i18n.__("subtotal")], [totalEx.toFixed(2) + " €"]],
                 [[""], ["                               "], [i18n.__("advance")], ["-" + invoice.advance.toFixed(2) + " €"]],
                 [[""], ["                               "], [i18n.__("subtotal")], [totalExSub.toFixed(2) + " €"]],
-                [[""], ["                               "], [i18n.__("VAT") + " " + client.vatPercentage + "%"], [_vat.toFixed(2) + " €"]],
+                [[""], ["                               "], [i18n.__("VAT") + " " + vatOfClient + "%"], [_vat.toFixed(2) + " €"]],
                 [[""], ["                               "], [i18n.__("total")], [totalInc.toFixed(2) + " €"]]
             ]
         })

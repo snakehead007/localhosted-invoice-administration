@@ -344,5 +344,10 @@
 	"Are you sure you want to delete this client": "Are you sure you want to delete this client",
 	"Delete this line": "Delete this line",
 	"Are you sure you want to delete this line": "Are you sure you want to delete this line",
+	"View client information of": "View client information of",
+	"address": "address",
+	"View order information": "View order information",
+	"Without VAT": "Without VAT",
+	"With VAT": "With VAT",
 	"--------FROM-HERE-ALL-ABOVE-CHECKED-----------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------"
 }

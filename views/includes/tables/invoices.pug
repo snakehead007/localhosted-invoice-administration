@@ -29,7 +29,10 @@ table(class="table table-striped table-sm ",id="tabelInvoices")
                         a(href='/invoice/all/' + invoice.fromClient)=invoice.clientName
                 td(id="date"+invoice._id)
                     td
-                        span=(invoice.total * 1.21).toFixed(2) + "€"
+                        if invoice.isVatOn
+                            span=(invoice.total * 1.00).toFixed(2) + "€"
+                        else
+                            span=(invoice.total * 1.21).toFixed(2) + "€"
                 if invoice.invoiceNr
                     td
                         div(class="custom-control custom-switch")

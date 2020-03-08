@@ -48,6 +48,13 @@ form(action='/edit'+((invoice.creditNr)?"/credit/":((invoice.offerNr)?"/offer/":
                         if !invoice.isAgreed
                             input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id, onclick='setAgreedStatus(\"' + invoice._id + '\")')
                             label(class="custom-control-label" for=invoice._id) #{__('Not agreed')}
+            div(class="custom-control custom-switch")
+                if invoice.isVatOn
+                    input(type="checkbox" class="custom-control-input bg-success" id=invoice._id+"VAT", onclick='setVat(\"' + invoice._id + '\")', checked)
+                    label(class="custom-control-label" for=invoice._id+"VAT") #{__('Without VAT')}
+                if !invoice.isVatOn
+                    input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id+"VAT", onclick='setVat(\"' + invoice._id + '\")')
+                    label(class="custom-control-label" for=invoice._id+"VAT") #{__('With VAT')}
         div.form-row
             div(class="col-10 input-group mb-3")
                 div(class="input-group-prepend")

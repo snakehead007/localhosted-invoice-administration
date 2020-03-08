@@ -10,7 +10,8 @@ exports.updateUndoAbility = async (req, res, next) => {
     await Order.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
     await Item.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
     //Adds the isSend property to invoices that doesn't have a isSend property yet. will set it too 'false'
-    await Invoice.updateMany({fromUser:req.session._id,isSend:null},{isSend:false});
+    await Invoice.updateMany({fromUser:req.session._id,isSend:null},{isSend:false})
+    await Invoice.updateMany({fromUser:req.session._id,isVatOn:null},{isVatOn:false});
 
     //searches all orders for each invoice of the user, and adds it properly to the invoice.orders array
     //this didnt work in the earlier versions
