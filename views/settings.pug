@@ -1,7 +1,7 @@
 html
     head
         include includes/htmlHead
-        include includes/settingsMenuScript
+        include includes/scripts/settingsMenuScript
     body
             include includes/topBar
             div(class="container-fluid")
@@ -14,7 +14,7 @@ html
                         h2(class="pt-3") Settings
                         include includes/messages
                         if error == 1
-                            div(class="alert alert-success col-lg-8 col-md-10 col-sm-12" role="alert") Succesfully updated!
+                            div(class="alert alert-success col-lg-8 col-md-10 col-sm-12" role="alert")=__("Succesfully updated")+"!"
                         div(class="table-responsive")
                             table(class="table")
                                 tbody
@@ -64,7 +64,7 @@ html
                                                         div(class="input-group-prepend")
                                                             span(class="input-group-text") #{__('Offer footer')}
                                                         textarea(input="text",name="offerText",class="form-control" aria-label="With textarea")=settings.offerText
-                                                    button(type="submit",class="btn btn-outline-"+settings.theme) bijwerken
+                                                    button(type="submit",class="btn btn-outline-"+settings.theme)=__("Update")
                                                     div(class="",id="info",style="display:none")
                                                         p #{__('In order to use variables of the database, type them like below')}:
                                                         samp(class="text")
@@ -84,25 +84,6 @@ html
                                                                 code &#91;datum.d&#93;  : Dag van vandaag in getal (dd)
                                                                 code &#91;datum.m&#93;  : Volledige maand van vandaag (maand)
                                                                 code &#91;datum.j&#93;  : Volledig jaar van vandaag (yyyy)
-
-                                    //tr(onclick="openBook()",class="settingsOption optionBook")
-                                        td
-                                            p(class="lead") #{__('Bookmarks')}
-                                                span(class="badge badge-pill badge-warning") #{__('in progress')}
-                                            div(id="book",style="display:none;")
-                                              form(action='/edit-bookmarks/'+loginHash,method='post')
-                                                  button(type="button" class="mb-1 headExtend btn-sm btn btn-outline-"+settings.theme, onclick="infoBook()") #{__('info')}
-                                                  div(class="input-group mb-3")
-                                                      div(class="input-group-prepend")
-                                                          span(class="input-group-text") #{__('Bookmarks')}
-                                                      textarea(input="text",name="bookmarks",class="form-control",placeholder="#{__('Click on info, for more info')}" aria-label="With textarea")=profile.bookmarksText
-                                                  button(type="submit",class="btn btn-outline-"+settings.theme) #{__('Update')}
-                                                  div(class="",id="infoBook",style="display:none")
-                                                      p #{__('write de bookmarks as the example below')} (#{__('without')} http://):
-                                                      samp(class="text")
-                                                          pre
-                                                              code my favorite site : www.favorite.be
-                                                              code facebook : myprofile.facebook.com/
                                                               code my blog : mypersonalblog.blogger.com
 
     script.

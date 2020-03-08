@@ -17,13 +17,13 @@ body
             include includes/mainMenu
             include includes/downMenu
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-          h2(class="pt-3")="Nieuw logo upload"
+          h2(class="pt-3")=__("New logo upload")
           hr
           include includes/messages
           form(ref='uploadForm',id='uploadForm' ,action='/upload/logo/',method='post',encType="multipart/form-data")
             div(class="input-group form-group col-md-5 mr-auto")
-              label(for="inputGroupFile04") Choose file for logo
+              label(for="inputGroupFile04")=__("Choose file for logo")
               input(type="file",name="logoFile",class="form-control-file" id="inputGroupFile04")
             div(class="input-group-append col-2")
-              button(class="btn-sm btn-outline-"+settings.theme+" form-control", type="submit", id="inputGroupFileAddon04") Upload
+              button(class="btn-sm btn-outline-"+settings.theme+" form-control", type="submit", id="inputGroupFileAddon04")=__("Upload")
  include includes/modals/bugReporter

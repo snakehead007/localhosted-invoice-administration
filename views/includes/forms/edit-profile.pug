@@ -44,4 +44,4 @@ form(action='/edit/profile/'+profile._id,method='post')
             input(type="text",class="form-control",value=profile.email,name="email",placeholder="voorbeeld@email.be")
     div.row
         div.col-xl-2.offset-xl-0.offset-md-0.offset-sm-0
-            button(type="submit",class="btn btn-outline-"+settings.theme) profiel bijwerken
+            button(type="submit",class="btn btn-outline-"+settings.theme)=__("Update profile")

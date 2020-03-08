@@ -1,0 +1,39 @@
+script.
+    function info() {
+        $("#info").toggle();
+    };
+    $(document).ready(function () {
+        feather.replace();
+        let maxField = 10; //Input fields increment limitation
+        let addButton = $('.add_button'); //Add button selector
+        let wrapper = $('.field_wrapper'); //Input field wrappe
+        let x = 5; //Initial field counter is 1
+        let emails = "#{client.email}".split(',');
+        //New input field html
+
+        //Once add button is clicked
+        $(addButton).click(function () {
+            //Check maximum number of input fields
+            if (x < maxField) {
+                x++; //Increment field counter
+                let currentEmail = (!emails[x - 5]) ? "" : emails[x - 5];
+                let fieldHTML = '' +
+                    '<a href="javascript:void(0);" class="remove_button">' +
+                    '<span class="fa-color-buttons">' +
+                    '<i class="fas fa-minus-square"">' +
+                    '</i>' +
+                    '</span>' +
+                    '\n' +
+                    '</a>' +
+                    '<input class="form-control" type="text" placeholder="voorbeeld@email.be" value="' + currentEmail + '" name="emails[]"/>';
+                $(wrapper).append(fieldHTML); //Add field html
+            }
+        });
+
+        //Once remove button is clicked
+        $(wrapper).on('click', '.remove_button', function (e) {
+            e.preventDefault();
+            $(this).parent('div').remove(); //Remove field html
+            x--; //Decrement field counter
+        });
+    });

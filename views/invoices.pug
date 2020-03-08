@@ -1,12 +1,8 @@
 html
   head
     include includes/htmlHead
-    script(src = "/sorters.js")
     script.
       $(document).ready(function () {
-        function toonBerekeningen() {
-          $("#berekeningen").toggle();
-        }
       });
   body
     include includes/topBar
@@ -25,23 +21,6 @@ html
               a(href="/edit/client/"+client._id)=(client.firm)?client.firm:client.clientName
           hr
           include includes/messages
-          //div(class="headExtend")
-            div(class="btn-group dropleft mb-2 mb-md-0")
-              button(type="button" class="btn btn-sm btn-outline-"+settings.theme+" dropdown-toggle", data-toggle="dropdown",aria-haspopup="true",aria-expanded="false")
-                span(data-feather="bar-chart")
-                span #{__('sort')}
-              div(class="dropdown-menu")
-                a(class="dropdown-item" onclick="sortTable(0)") #
-                if !client
-                  a(class="dropdown-item" onclick="sortTable(1)") #{__('Client')}
-                if client
-                  a(class="dropdown-item" onclick="sortTable(1,\"date\")") #{__('Date')}
-                if !client
-                  a(class="dropdown-item" onclick="sortTable(2,\"date\")") #{__('Date')}
-                if client
-                  a(class="dropdown-item" onclick="sortTable(2,\"kost\")") #{__('Price')}
-                if !client
-                  a(class="dropdown-item" onclick="sortTable(3,\"kost\")") #{__('Price')}
           div(class="table-responsive bigger")
             include includes/tables/invoices
           include includes/scripts/feather

@@ -17,7 +17,7 @@ body
                     include includes/invoiceOptionMenu
                     include includes/downMenu
             main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-                h2(class="pt-3")="Nieuwe "+add+ " toevoegen"
+                h2(class="pt-3")=__("Add a new document")+": ("+add+")"
                 hr
                 include includes/messages
                 form(action='/invoice/new/'+addlink,method='post')
@@ -25,10 +25,10 @@ body
                         div(class="form-group col-md-5")
                             div(class="input-group mb-3")
                                 span
-                                    p(class="lead nextToInput") Voor contact:
+                                    p(class="lead nextToInput")=__("For contact")+":"
                                 select(class="custom-select" id="inputGroupSelect03"  name="idc")
                                     each client in clients
                                         option(value=client._id)=client.clientName
                     hr
-                    button(type="submit",class="btn btn-outline-"+settings.theme)=add+" maken"
+                    button(type="submit",class="btn btn-outline-"+settings.theme)=__("Create new document")+" ("+add+")"
     include includes/modals/bugReporter
