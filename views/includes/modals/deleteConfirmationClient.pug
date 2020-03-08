@@ -1,0 +1,14 @@
+div.modal.fade(id="deleteConfirmationClient"+client._id tabindex='-1' role='dialog' aria-labelledby='deleteConfirmationClient' aria-hidden='true')
+    .modal-dialog(role='document')
+        .modal-content
+            .modal-header
+                h5.modal-title=__("Delete this client")
+                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+            form(action="/delete/client/"+client._id, method="get")
+                .modal-body
+                    p.lead=__("Are you sure you want to delete this client")+"?"
+                    p=__("You can always undo this in the activities menu")+"."
+                .modal-footer
+                    button.btn.btn-secondary(type="button" data-dismiss="modal" )=__("Close")
+                    button.btn.btn-danger(role="button" type='submit')=__("Delete")

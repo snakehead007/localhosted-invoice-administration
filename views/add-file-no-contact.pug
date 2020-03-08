@@ -25,7 +25,7 @@ body
                         div(class="form-group col-md-5")
                             div(class="input-group mb-3")
                                 span
-                                    p(class="lead nextToInput")=__("For contact")+":"
+                                    p(class="lead nextToInput")=__("For client")+":"
                                 select(class="custom-select" id="inputGroupSelect03"  name="idc")
                                     each client in clients
                                         option(value=client._id)=client.clientName

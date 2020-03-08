@@ -1,0 +1,14 @@
+div.modal.fade(id="deleteConfirmationLine"+order._id tabindex='-1' role='dialog' aria-labelledby='deleteConfirmationLine' aria-hidden='true')
+    .modal-dialog(role='document')
+        .modal-content
+            .modal-header
+                h5.modal-title=__("Delete this line")
+                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+            form(action="/delete/order/"+order._id, method="get")
+                .modal-body
+                    p.lead=__("Are you sure you want to delete this line")+"?"
+                    p=__("You can always undo this in the activities menu")+"."
+                .modal-footer
+                    button.btn.btn-secondary(type="button" data-dismiss="modal" )=__("Close")
+                    button.btn.btn-danger(role="button" type='submit')=__("Delete")
