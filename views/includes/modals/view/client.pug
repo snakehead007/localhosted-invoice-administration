@@ -1,0 +1,48 @@
+div.modal.fade(id="viewClient"+client._id, tabindex='-1' role='dialog' aria-labelledby='viewClient' aria-hidden='true')
+    .modal-dialog.modal-lg(role='document')
+        .modal-content
+            .modal-header
+                h5.modal-title=__("View client information of")+" "+(client.firm)?client.firm:client.clientName
+                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+            .modal-body
+                    table(class="table  table-striped")
+                        tbody
+                            if client.firm
+                                tr
+                                    th(scope="row") #{__('Firm')}
+                                    td
+                                        h4=client.firm
+                            if client.clientName
+                                tr
+                                    th(scope="row") #{__('Client name')}
+                                    td
+                                        h4=client.clientName
+                            if client.street
+                                tr
+                                    th(scope="row") #{__('address')}
+                                    td
+                                        h4=(client.streetNr)?client.street+" "+client.streetNr:client.street
+                            if client.place
+                                tr
+                                    th(scope="row") #{__('Place')}
+                                    td
+                                        h4=(client.postalCode)?client.postalCode+" "+client.place:client.place
+                            if client.vat
+                                tr
+                                    th(scope="row") #{__('Vat nr')}
+                                    td
+                                        h4=client.vat
+                            if client.bankNr
+                                tr
+                                    th(scope="row") #{__('Bank nr')}
+                                    td
+                                        h4=client.bankNr
+                            each mail in client.email
+                                if mail !== ""
+                                    tr
+                                        th(scope="row") #{__('Email')}
+                                        td
+                                            h4=mail
+            .modal-footer
+                button.btn.btn-primary(type='button' data-dismiss='modal')=__("Close")

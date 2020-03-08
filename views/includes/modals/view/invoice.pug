@@ -1,0 +1,45 @@
+div.modal.fade(id="viewInvoice"+invoice._id, tabindex='-1' role='dialog' aria-labelledby='viewInvoice' aria-hidden='true')
+    .modal-dialog.modal-lg(role='document')
+        .modal-content
+            .modal-header
+                h5.modal-title=__("View")+((invoice.offerNr)?" "+__("offer")+" "+invoice.offerNr:((invoice.creditNr)?" "+__("creditnote")+" "+invoice.creditNr:" "+__("invoice")+" "+invoice.invoiceNr))
+                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+            .modal-body
+                    table(class="table table-striped")
+                        tbody
+                            tr
+                                th(scope="row") #{__('Date')}
+                                td
+                                    h4(id="date" + invoice._id)
+                            if invoice.invoiceNr
+                                tr
+                                    th(scope="row") #{__('Invoice Nr')}
+                                    td
+                                        h4=invoice.invoiceNr
+                            if invoice.offerNr
+                                tr
+                                    th(scope="row") #{__('Offer Nr')}
+                                    td
+                                        h4=invoice.offerNr
+                            if invoice.creditNr
+                                tr
+                                    th(scope="row") #{__('Credit Nr')}
+                                    td
+                                        h4=invoice.creditNr
+                            tr
+                                if invoice.advance != 0
+                                    th(scope="row") #{__('Advance')}
+                                    td
+                                        h4=invoice.advance
+                            script.
+                                //date is done via DOM, the locale cannot be set right when using pug
+                                let id = "date" + "#{invoice._id}";
+                                let date = new Date("#{invoice.date}").toLocaleString("#{settings.locale}", {
+                                    year: 'numeric',
+                                    month: 'numeric',
+                                    day: 'numeric'
+                                });
+                                document.getElementById(id).innerHTML = date;
+            .modal-footer
+                button.btn.btn-primary(type='button' data-dismiss='modal')=__("Close")

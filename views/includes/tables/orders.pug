@@ -25,6 +25,7 @@ table(class="table table-striped table-sm ",id="tabelOrders")
         each order in orders
             tr
                 td
+                    include ../modals/view/order
                     a(href="/edit/order/"+order._id)=order.description
                 td=order.amount
                 td=order.price+" €"
@@ -34,6 +35,6 @@ table(class="table table-striped table-sm ",id="tabelOrders")
                         a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") #{__('Actions')}
                         div(class="dropdown-menu", aria-labelledby="actionsDropdown")
                             a(class="dropdown-item", href='/edit/order/'+order._id) #{__('Edit')}
-                            a(class="dropdown-item", href='/view/order/'+order._id) #{__('View')}
+                            a(class="dropdown-item", href="#viewOrder"+ order._id, data-toggle='modal' data-target='#viewOrder'+ order._id ) #{__('View')}
                             a(class="dropdown-item", href="#deleteConfirmationLine" + invoice._id, data-toggle='modal' data-target='#deleteConfirmationLine' + order._id ) #{__('Delete')}
             include ../modals/deleteConfirmationLine

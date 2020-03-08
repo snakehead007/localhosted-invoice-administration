@@ -1,0 +1,28 @@
+div.modal.fade(id="viewOrder"+order._id, tabindex='-1' role='dialog' aria-labelledby='viewOrder' aria-hidden='true')
+    .modal-dialog.modal-lg(role='document')
+        .modal-content
+            .modal-header
+                h5.modal-title=__("View order information")
+                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+            .modal-body
+                table(class="table table-striped")
+                    tbody
+                        tr
+                            th(scope="row") #{__('Description')}
+                            td
+                                h4=order.description
+                        tr
+                            th(scope="row") #{__('Amount')}
+                            td
+                                h4=order.amount
+                        tr
+                            th(scope="row") #{__('Price')}
+                            td
+                                h4=order.price + " €"
+                        tr
+                            th(scope="row") #{__('Total')}
+                            td
+                                h4=(order.amount * order.price) + " €"
+            .modal-footer
+                button.btn.btn-primary(type='button' data-dismiss='modal')=__("Close")
