@@ -315,7 +315,6 @@ exports.editInvoiceGet = (req, res) => {
         Client.findOne({fromUser: req.session._id, _id: invoice.fromClient,isRemoved:false}, function (err, client) {
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                 Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
-                    console.log(invoice);
                     let givenObject = {
                         "invoice": invoice,
                         "client": client,
@@ -340,7 +339,6 @@ exports.editInvoiceGet = (req, res) => {
  * @param res
  */
 exports.editInvoicePost = (req, res) => {
-    console.log(req.body);
     Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved:false}, async (err, orders) => {
         let totOrders = 0;
         for (let i = 0; i <= orders.length - 1; i++) {
@@ -414,7 +412,6 @@ exports.editInvoicePost = (req, res) => {
         if (orders.length > 0) {
             searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient,isRemoved:false};
         }
-        console.log(updateInvoice);
         Client.findOne(searchCriteria, function (err, contact) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, function (err) {
                 if (!updateOneHasError(req, res, err)) {
@@ -428,7 +425,6 @@ exports.editInvoicePost = (req, res) => {
 };
 
 exports.editOfferPost = (req, res) => {
-    console.log(req.body);
     Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved:false}, async (err, orders) => {
         let totOrders = 0;
         for (let i = 0; i <= orders.length - 1; i++) {
@@ -502,7 +498,6 @@ exports.editOfferPost = (req, res) => {
         if (orders.length > 0) {
             searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient,isRemoved:false};
         }
-        console.log(updateInvoice);
         Client.findOne(searchCriteria, function (err, contact) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, function (err) {
                 if (!updateOneHasError(req, res, err)) {
@@ -516,7 +511,6 @@ exports.editOfferPost = (req, res) => {
 };
 
 exports.editCreditPost = (req, res) => {
-    console.log(req.body);
     Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved:false}, async (err, orders) => {
         let totOrders = 0;
         for (let i = 0; i <= orders.length - 1; i++) {
@@ -560,7 +554,6 @@ exports.editCreditPost = (req, res) => {
         if (orders.length > 0) {
             searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient,isRemoved:false};
         }
-        console.log(updateInvoice);
         Client.findOne(searchCriteria, function (err, contact) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, function (err) {
                 if (!updateOneHasError(req, res, err)) {

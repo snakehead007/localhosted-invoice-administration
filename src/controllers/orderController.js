@@ -30,7 +30,6 @@ const activity = require('../utils/activity');
  */
 exports.editOrderGet = (req, res) => {
     Order.findOne({fromUser: req.session._id, _id: req.params.ido,isRemoved:false}, function (err, order) {
-        console.log(order);
         Invoice.findOne({fromUser: req.session._id, _id: order.fromInvoice}, function (err, invoice) {
             Settings.findOne({fromUser: req.session._id,}, function (err, settings) {
                 Profile.findOne({fromUser: req.session._id,}, async (err, profile) => {
@@ -78,7 +77,6 @@ exports.newOrderGet = (req, res) => {
                     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                         if (!err) {
                             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
-                                console.log(invoice);
                                 if (!err) {
                                     res.render("new/new-order", {
                                         "invoice": invoice,
@@ -166,7 +164,6 @@ exports.allOrderGet = (req, res) => {
         if (!err) {
             Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved: false}, function (err, orders) {
                 if (!err) {
-                    console.log("Trying to find Client with id: " + invoice);
                     Client.findOne({fromUser: req.session._id, _id: invoice.fromClient,isRemoved:false}, function (err, client) {
                         Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                             if (!err) {

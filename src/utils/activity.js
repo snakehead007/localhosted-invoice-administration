@@ -5,8 +5,6 @@ const Order = require('../models/order');
 const Item = require('../models/item');
 
 exports.addActivity = async (description, fromUser, object,type="time" ,_object="") => {
-    console.log("------------ADD ACTIVITY--------------");
-    console.log('activity to keep: '+type);
     let info = "";
     switch (_object) {
         case "invoice":

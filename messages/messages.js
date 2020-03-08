@@ -6,7 +6,6 @@ exports.getMessage = async (req, res, enr=0) => {
     try{
         let _path = path.resolve(__dirname,'./messages.json');
         messages = JSON.parse(fs.readFileSync(_path, 'utf8'));
-        console.log(messages);
         return {
             message: i18n.__(messages[enr].message),
             type: messages[enr].type
@@ -18,6 +17,5 @@ exports.getMessage = async (req, res, enr=0) => {
 
 exports.sendMessage = (req,res,enr) => {
     const o = this.getMessage(req,res,enr);
-    console.log(o);
     req.flash(o.type,o.message);
 };

@@ -21,6 +21,7 @@ body
       nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
         div(class="sidebar-sticky")
           include includes/mainMenu
+          include includes/downMenu
       main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
         h2(class="pt-3")=description
         if clients.length > 0
@@ -39,11 +40,6 @@ body
           h4=__("Orders")
           div(class="table-responsive")
             include includes/tables/orders
-        if items.length != 0
-          hr
-          h4=__('Stock')
-          div(class="table-responsive")
-            include includes/tables/stock
-        if orders.length==0 && invoices.length==0 && clients.length==0 && items.length==0
+        if orders.length==0 && invoices.length==0 && clients.length==0
             div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert")=__('Nothing was found')
 include includes/modals/bugReporter

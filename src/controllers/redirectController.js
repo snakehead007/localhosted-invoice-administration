@@ -34,11 +34,7 @@ exports.googleLogin = async (req, res, next) => {
     });
     Settings.findOne({fromUser: userInfo._id}, function (err, settings) {
         if (err) console.trace();
-        req.locale = settings.locale;
-        i18n.setLocale(req, settings.locale);
-        i18n.setLocale(res, settings.locale);
-        req.setLocale(settings.locale);
-        res.locals.language = settings.locale;
         next();
     });
 };
+

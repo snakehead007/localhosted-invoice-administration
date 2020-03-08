@@ -48,6 +48,10 @@ const User = new mongoose.Schema({
         hasAgreed: {
             type: Boolean,
             default: false
+        },
+        isDeveloper:{
+            type: Boolean,
+            default:false
         }
     },
 );

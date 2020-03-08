@@ -47,6 +47,10 @@ const Invoice = new mongoose.Schema({
     isRemoved: {
         type:Boolean,
         default:false
+    },
+    isSend:{
+        type:Boolean,
+        default:false
     }
 });
 

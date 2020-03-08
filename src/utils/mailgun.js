@@ -4,23 +4,16 @@ const path = require('path');
 exports.sendTestMail = (to) => {
     const mailgun = new Mailgun({apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN});
     const data = {
-        //Specify email data
         from: process.env.MAILGUN_FROM,
-        //The email to contact
         to: to,
-        //Subject and text data
         subject: 'test mail',
         html: 'test'
     };
     mailgun.messages().send(data, function (err, body) {
-        //If there is an error, render the error page
         if (err) {
             console.log("got an error: ", err);
         }
-        //Else we can greet    and leave
         else {
-            //Here "submitted.jade" is the view file for this landing page
-            //We pass the variable "email" from the url parameter in an object rendered by Jade
             console.log(body);
         }
     });
@@ -32,23 +25,16 @@ exports.sendWelcome = (to) => {
     console.log(_path);
     fs.readFile(_path, 'utf8', function(err, text) {
          const data = {
-            //Specify email data
             from: process.env.MAILGUN_FROM,
-            //The email to contact
             to: to,
-            //Subject and text data
             subject: 'Welcome to invoice-administration!',
             html: text.toString()
         };
         mailgun.messages().send(data, function (err, body) {
-            //If there is an error, render the error page
             if (err) {
                 console.log("got an error: ", err);
             }
-            //Else we can greet    and leave
             else {
-                //Here "submitted.jade" is the view file for this landing page
-                //We pass the variable "email" from the url parameter in an object rendered by Jade
                 console.log(body);
             }
         });
@@ -58,36 +44,29 @@ exports.sendWelcome = (to) => {
 exports.sendAttachment = (to,attachmentPath,attachmentName) => {
     const mailgun = new Mailgun({apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN});
     const data = {
-        //Specify email data
         from: process.env.MAILGUN_FROM,
-        //The email to contact
         to: to,
-        //Subject and text data
         subject: 'Your invoice '+attachmentName,
         html: 'You can download your invoice in the attachment',
         attachment:attachmentPath
     };
     mailgun.messages().send(data, function (err, body) {
-        //If there is an error, render the error page
         if (err) {
             console.log("got an error: ", err);
         }
-        //Else we can greet    and leave
         else {
-            //Here "submitted.jade" is the view file for this landing page
-            //We pass the variable "email" from the url parameter in an object rendered by Jade
             console.log(body);
         }
     });
 };
 
-exports.sendMessageRichData = (to,message,userID,userObject) => {
+exports.sendBugReport = (to,message,userID,userObject) => {
     const mailgun = new Mailgun({apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN});
     const data = {
         from: process.env.MAILGUN_FROM,
         to: to,
-        subject: "Bug report from "+userID,
-        html: message+"<br><hr><br>"+"This data was send on "+Date.now()+"<br> User id: "+userObject._id+"<br> Usermail: "+userObject.email+"<br> role: "+userObject.role
+        subject: "New Bug report from "+userObject.email,
+        html: message+"<br><hr><br>"+"This data was send on "+Date.now()+"<br> User id: "+userObject._id+"<br> Usermail: "+userObject.email+"<br> role: "+userObject.role,
     };
     mailgun.messages().send(data, function (err, body) {
         if (err) {

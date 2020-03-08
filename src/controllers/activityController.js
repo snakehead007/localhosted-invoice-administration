@@ -26,7 +26,6 @@ const Item = require('../models/item');
  */
 exports.getActivity = async (req,res) => {
     const activities = await Activity.find({fromUser:req.session._id}, null,{sort: {time: -1}},(err,activities) => {return activities});
-    console.log(activities);
     const role = (await User.findOne({_id: req.session._id}, (err, user) => {return user})).role;
     const profile = await Profile.findOne({fromUser:req.session._id}, (err,profile) => { return profile});
     const settings = await Settings.findOne({fromUser:req.session._id}, (err,settings) => { return settings});

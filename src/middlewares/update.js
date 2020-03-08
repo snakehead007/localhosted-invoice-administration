@@ -5,14 +5,12 @@ const Item = require('../models/item');
 
 exports.updateUndoAbility = async (req, res, next) => {
     //sets all objects that have no property of "isRemoved" to false
-    let clients = await Client.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
-    let invoices = await Invoice.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
-    let orders = await Order.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
-    let items = await Item.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
-    console.log(clients);
-    console.log(invoices);
-    console.log(orders);
-    console.log(items);
+    await Client.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
+    await Invoice.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
+    await Order.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
+    await Item.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
+    //Adds the isSend property to invoices that doesn't have a isSend property yet. will set it too 'false'
+    await Invoice.updateMany({fromUser:req.session._id,isSend:null},{isSend:false});
 
     //searches all orders for each invoice of the user, and adds it properly to the invoice.orders array
     //this didnt work in the earlier versions

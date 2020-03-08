@@ -19,7 +19,6 @@ const path = require("path");
 const {callGetBase64, createJSON, replaceAll} = require("../utils/pdfCreation");
 require("jspdf-autotable");
 exports.createPDF = async (req, res, style = "invoice", profile, settings, client, invoice, orders,download=false,onlyPrompt=false) => {
-    console.log('download set to: '+download);
     let imgData;
     try {
         imgData = await callGetBase64(req.session._id);

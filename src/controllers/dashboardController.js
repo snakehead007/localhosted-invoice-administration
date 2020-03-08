@@ -72,7 +72,6 @@ exports.mainGet = async function getLogin(req, res) {
                             let role = (await User.findOne({_id: req.session._id}, (err, user) => {
                                 return user
                             })).role;
-                            console.log(year);
                             res.render("index", {
                                 "currentUrl": "dashboard",
                                 "total": newChart,

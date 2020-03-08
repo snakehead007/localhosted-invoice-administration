@@ -33,9 +33,3 @@ exports.sendAttachment = async (req,res) => {
     res.redirect('back');
 };
 
-exports.sendBugReport = async (req,res) => {
-  let user = await User.findOne({_id:req.session._id},(err,user)=>{return user;});
-  await mailgun.sendMessageRichData("snakehead007@pm.me",req.body.message,req.session._id,user);
-  req.flash('success',i18n.__("Your bug report has been send, thank you!"));
-  res.redirect('back');
-};

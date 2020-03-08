@@ -1,6 +1,5 @@
 const Client = require('../models/client');
 const Invoice = require('../models/invoice');
-const Item = require('../models/item');
 const Order = require("../models/order");
 const Profile = require('../models/profile');
 const Settings = require('../models/settings');
@@ -34,11 +33,9 @@ module.exports.searchGet = (req, res) => {
     let clients = [];
     let invoices = [];
     let orders = [];
-    let items = [];
     Client.find({fromUser: req.session._id,isRemoved:false}, function (err, clients_) {
         Invoice.find({fromUser: req.session._id,isRemoved:false}, function (err, invoices_) {
             Order.find({fromUser: req.session._id,isRemoved:false}, function (err, orders_) {
-                Item.find({fromUser: req.session._id,isRemoved:false}, function (err, mats_) {
                     //orders
                     for (let order of orders_) {
                         if (String(order.description).toLowerCase().includes(str)) {
@@ -78,20 +75,10 @@ module.exports.searchGet = (req, res) => {
                             clients.push(client);
                         }
                     }
-                    //items
-                    if (!mats_.length == 0) {
-                        for (let mat of mats_) {
-                            let _mat = String(mat.naam).toLowerCase();
-                            if (_mat.includes(str)) {
-                                items.push(mat);
-                            }
-                        }
-                    }
                     //takes only 1 of each items, if found 2 or more of the same
                     let clients_d = distinct(clients);
                     let orders_d = distinct(orders);
                     let invoices_d = distinct(invoices);
-                    let items_d = distinct(items);
                     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                         if (!err) {
                             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
@@ -102,7 +89,6 @@ module.exports.searchGet = (req, res) => {
                                         "clients": clients_d,
                                         "orders": orders_d,
                                         "invoices": invoices_d,
-                                        "items": items_d,
                                         "profile": profile,
                                         "currentSearch": str,
                                         "role":(await User.findOne({_id: req.session._id}, (err, user) => {
@@ -116,5 +102,4 @@ module.exports.searchGet = (req, res) => {
                 });
             });
         });
-    });
 };

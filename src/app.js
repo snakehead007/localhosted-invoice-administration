@@ -19,7 +19,7 @@ const start = async () => {
             req.connection.remoteAddress ||
             req.socket.remoteAddress ||
             req.connection.socket.remoteAddress;
-        console.log("[%s request]: %s  from %s", req.method, req.url, ((req.session.email) ? req.session.email : "unknown with ip: "+ip));
+        console.log("[%s request]: %s  from %s", req.method, req.url, ((req.session.email) ? req.session.email : "unknown")+" with ip: "+ip);
         next();
     });
     app.use('/',routes);

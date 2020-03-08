@@ -70,6 +70,7 @@ body
             include ../includes/mainMenu
             if currentUrl !== "clientNew"
               include ../includes/invoiceOptionMenu
+            include ../includes/downMenu
         main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
           h2(class="pt-3")=(currentUrl==="clientNew")?__('Add client'):__("Edit client")
           hr

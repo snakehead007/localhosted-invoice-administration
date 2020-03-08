@@ -108,9 +108,6 @@ exports.editProfilePost = async (req, res) => {
         let title = i18n.__((role === "visitor") ? "Create a new profile" : "Edit");
         Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
             if(err) console.trace(err);
-            console.log(settings);
-            console.log(title);
-            console.log(role);
             if (!err) {
                 res.render("edit/edit-profile", {
                     "currentUrl": "edit-profile",
@@ -149,7 +146,6 @@ exports.editProfilePost = async (req, res) => {
             tel: req.body.tel,
             email:  req.body.email
         };
-        console.log(updateProfile);
         Profile.updateOne({fromUser: req.session._id, _id: req.params.idp}, updateProfile, async (err) => {
             if(err) console.trace(err);
             if (!err) {

@@ -9,7 +9,9 @@
                 .modal-body
                         .form-group
                             label.col-form-label(for='bugReport')=__('Report')
-                            textarea#bugReport.form-control( name="message", placeholder="")
+                            textarea#bugReport.form-control( name="message", placeholder="")=__("")
                 .modal-footer
-                    button.btn.btn-secondary(type='button' data-dismiss='modal')=__("Close")
+
+                    button.btn.btn-secondary(type="button" data-dismiss="modal" )=__("Close")
+
                     button.btn.btn-primary(role="button" type='submit')=__("Send bug report")

@@ -120,7 +120,6 @@ let checkForMessage = (req, invalid,message) => {
 };
 
 let checkRegex = (doc="", regex,mustBeFilledIn) => {
-    console.log("doc: "+doc);
     doc = String(doc);
     if(doc==="" && !mustBeFilledIn){
         return false;
