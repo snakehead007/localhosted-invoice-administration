@@ -39,3 +39,5 @@ form(action=((currentUrl==="clientNew")?'/client/new':'/edit/client/'+client._id
             a(href="javascript:void(0);" class="add_button" title="Add field")
                 span.fa-color-buttons
                     i.fas.fa-plus-square.fa-2x
+    hr
+    button(type="submit",class="btn btn-outline-" + settings.theme)=__('Update')

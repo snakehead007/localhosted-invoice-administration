@@ -29,7 +29,7 @@ const activity = require('../utils/activity');
 exports.getClientAll = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
         if (err) console.trace();
-        Client.find({fromUser: req.session._id,isRemoved:false}, function (err, clients) {
+        Client.find({fromUser: req.session._id,isRemoved:false},null,{sort:{lastUpdated:-1}}, function (err, clients) {
             if (err) console.trace();
             Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                 if (err) console.trace();
@@ -280,7 +280,8 @@ exports.postEditClient = (req, res) => {
                     vatPercentage: req.body.vatPercentage,
                     bankNr: (req.body.bankNr)?invalid.formatBEIban(req.body.bankNr):"",
                     postalCode: req.body.postalCode,
-                    place: req.body.place
+                    place: req.body.place,
+                    lastUpdated:Date.now()
                 };
                 Client.updateOne({fromUser: req.session._id, _id: client._id}, updatedClient, async (err) => {
                     if (!error.updateOneHasError(req, res, err)) {

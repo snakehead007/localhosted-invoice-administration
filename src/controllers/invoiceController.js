@@ -153,6 +153,7 @@ exports.invoiceNewGet = (req, res) => {
                                         await client.save();
                                     }
                                 });
+                                await Client.updateOne({fromUser:req.session._id,_id:idc},{lastUpdated:Date.now()});
                                 await newInvoice.save(function (err) {
                                     if (!err) {
                                         activity.addInvoice(newInvoice,req.session._id);
@@ -204,6 +205,7 @@ exports.creditNewGet = (req, res) => {
                                         }, function (err) {
                                             client.invoices.push(newInvoice._id);
                                         });
+                                        await Client.updateOne({fromUser:req.session._id,_id:idc},{lastUpdated:Date.now()});
                                         await newInvoice.save();
                                         activity.addCredit(newInvoice,req.session._id);
                                         res.redirect("/order/all/"+newInvoice._id);
@@ -257,6 +259,7 @@ exports.offerNewGet = (req, res) => {
                                                 client.invoices.push(newInvoice._id);
                                             });
                                             await newInvoice.save();
+                                            await Client.updateOne({fromUser:req.session._id,_id:idc},{lastUpdated:Date.now()});
                                             if (!err) {
                                                 activity.addOffer(newInvoice,req.session._id);
                                                 res.redirect("/order/all/"+newInvoice._id);
@@ -412,9 +415,10 @@ exports.editInvoicePost = (req, res) => {
         if (orders.length > 0) {
             searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient,isRemoved:false};
         }
-        Client.findOne(searchCriteria, function (err, contact) {
-            Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, function (err) {
+        Client.findOne(searchCriteria, function (err, client) {
+            Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, async (err) => {
                 if (!updateOneHasError(req, res, err)) {
+                    await Client.updateOne({fromUser:req.session._id,_id:currentInvoice.fromClient},{lastUpdated:Date.now()});
                     activity.editedInvoice(updateInvoice,req.session._id);
                     req.flash("success", i18n.__("Successfully updated the invoice"));
                     res.redirect("back");
@@ -499,8 +503,9 @@ exports.editOfferPost = (req, res) => {
             searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient,isRemoved:false};
         }
         Client.findOne(searchCriteria, function (err, contact) {
-            Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, function (err) {
+            Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, async (err) => {
                 if (!updateOneHasError(req, res, err)) {
+                    await Client.updateOne({fromUser:req.session._id,_id:currentInvoice.fromClient},{lastUpdated:Date.now()});
                     activity.editedInvoice(updateInvoice,req.session._id);
                     req.flash("success", i18n.__("Successfully updated the offer"));
                     res.redirect("back");
@@ -555,8 +560,9 @@ exports.editCreditPost = (req, res) => {
             searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient,isRemoved:false};
         }
         Client.findOne(searchCriteria, function (err, contact) {
-            Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, function (err) {
+            Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, async (err) => {
                 if (!updateOneHasError(req, res, err)) {
+                    await Client.updateOne({fromUser:req.session._id,_id:currentInvoice.fromClient},{lastUpdated:Date.now()});
                     activity.editedInvoice(updateInvoice,req.session._id);
                     req.flash("success", i18n.__("Successfully updated the creditnote"));
                     res.redirect("back");
@@ -646,7 +652,7 @@ exports.invoicePaidGet = (req, res) => {
                     console.log(_client);
                     let newTotal = (isPaid)?_client.totalPaid+invoice.total:_client.totalPaid-invoice.total;
                     console.log(newTotal);
-                    await Client.updateOne({fromUser:req.session._id,_id:invoice.fromClient},{totalPaid:newTotal});
+                    await Client.updateOne({fromUser:req.session._id,_id:invoice.fromClient},{totalPaid:newTotal,lastUpdated:Date.now()});
                     res.redirect("back");
                 }
             });
@@ -660,8 +666,9 @@ exports.offerAgreedGet = (req, res) => {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
                 isAgreed: !(invoice.isAgreed),
                 lastUpdated: Date.now()
-            }, function (err) {
+            }, async (err) => {
                 if (!updateOneHasError(req, res, err)) {
+                    await Client.updateOne({fromUser:req.session._id,_id:invoice.fromClient},{lastUpdated:Date.now()});
                     activity.setAgreed(invoice,!invoice.isAgreed,req.session._id);
                     res.redirect("back");
                 }
@@ -680,6 +687,7 @@ exports.invoiceUpgradeGet = (req, res) => {
                 offerNr: ""
             }, async (err) => {
                 if (!updateOneHasError(req, res, err)) {
+                    await Client.updateOne({fromUser:req.session._id,_id:invoice.fromClient},{lastUpdated:Date.now()});
                     await Profile.updateOne({fromUser:req.session._id},{invoiceNrCurrent:nr+1});
                     await activity.upgrade(invoice,req.session._id);
                     res.redirect("back");
@@ -695,8 +703,9 @@ exports.invoiceDowngradeGet = (req, res) => {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
                 offerNr: invoice.invoiceNr,
                 invoiceNr: ""
-            }, function (err) {
+            }, async (err) => {
                 if (!updateOneHasError(req, res, err)) {
+                    await Client.updateOne({fromUser:req.session._id,_id:invoice.fromClient},{lastUpdated:Date.now()});
                     activity.downgrade(invoice,req.session._id);
                     res.redirect("back");
                 }
