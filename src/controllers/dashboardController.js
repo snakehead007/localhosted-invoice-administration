@@ -8,6 +8,7 @@ const Invoice = require("../models/invoice");
 const {month, month_small, year} = require("../utils/date");
 const User = require("../models/user");
 const i18n = require("i18n");
+const logger = require('../middlewares/logger');
 /**
  * @apiVersion 3.0.0
  * @api {get} / mainGet
@@ -27,27 +28,31 @@ const i18n = require("i18n");
     }
  */
 exports.mainGet = async function getLogin(req, res) {
-    if (!req.session._id) {
-        res.redirect("/");
-    }
-    let fact_open = [];
     //Finds a profile, if not found will create a new one
     Profile.findOne({fromUser: req.session._id}, async function (err, profile) {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/dashboardController.mainGet on method Profile.findOne trace: "+err.message);
         if (profile === null) {
+            logger.error.log("[WARNING]: No profile found for User "+req.session.email);
             const newProfile = new Profile({
                 fromUser: req.session._id
             });
-            await newProfile.save();
-            profile = await Profile.findOne({fromUser: req.session._id});
-            await User.updateOne({_id: req.session._id}, {profile: profile._Id});
-        }
-        if (err) {
-            console.trace(err);
+            await newProfile.save((err) => {
+                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/dashboardController.mainGet on method Profile.save trace: "+err.message);
+            });
+            profile = await Profile.findOne({fromUser: req.session._id},(err)=> {
+                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/dashboardController.mainGet on method Profile.findOne trace: "+err.message);
+            });
+            await User.updateOne({_id: req.session._id}, {profile: profile._Id},(err)=>{
+                logger.error.log("[ERROR]: thrown at /src/controllers/dashboardController.mainGet on method User.updateOne trace: "+err.message);
+            });
+
         }
         if (!err) {
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/dashboardController.mainGet on method Settings.findOne trace: "+err.message);
                 if (!err) {
                     Invoice.find({fromUser: req.session._id,isRemoved:false}, async (err, invoices) => {
+                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/dashboardController.mainGet on method Invoice.find trace: "+err.message);
                         if (!err) {
                             let chart = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                             let invoice_open = [];
@@ -70,6 +75,7 @@ exports.mainGet = async function getLogin(req, res) {
                                 newChart.push(n.toFixed(2))
                             });
                             let role = (await User.findOne({_id: req.session._id}, (err, user) => {
+                                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/dashboardController.mainGet on method User.findOne trace: "+err.message);
                                 return user
                             })).role;
                             req.flash('info',"Momenteel werken deze functionaliteiten niet:\r\n" +
@@ -117,10 +123,13 @@ exports.mainGet = async function getLogin(req, res) {
 exports.chartYearGet = (req, res) => {
     let fact_open = [];
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/dashboardController.chartYearGet on method Profile.findOne trace: "+err.message);
         if (!err) {
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/dashboardController.chartYearGet on method Settings.findOne trace: "+err.message);
                 if (!err) {
                     Invoice.find({fromUser: req.session._id,isRemoved:false}, async (err, invoices) => {
+                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/dashboardController.chartYearGet on method Invoice.find trace: "+err.message);
                         if (!err) {
                             let chart = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                             let invoice_open = [];
@@ -143,6 +152,7 @@ exports.chartYearGet = (req, res) => {
                                 newChart.push(n.toFixed(2))
                             });
                             let role = (await User.findOne({_id: req.session._id}, (err, user) => {
+                                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/dashboardController.chartYearGet on method User.findOne trace: "+err.message);
                                 return user
                             })).role;
                             res.render("index", {

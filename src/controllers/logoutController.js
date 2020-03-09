@@ -2,8 +2,8 @@
  * @module controller/logoutController
  */
 
-const activity = require('../utils/activity');
 const i18n = require("i18n");
+const logger = require("../middlewares/logger");
 /**
  * @apiVersion 3.0.0
  * @api {get} /logout/ logoutGet
@@ -14,15 +14,16 @@ const i18n = require("i18n");
  *  res.redirect("/");
  */
 exports.logoutGet = async (req, res) => {
-    await activity.logout(req.session._id);
+    let emailofUser = req.session.email;
+    //req.logout() //try this method
     req.session.regenerate(function (err) {
         //new empty session
         req.flash("success", i18n.__("Successfully logged out"));
         if (err) {
-            console.log("[Error]: Got an error on generating session in logout_get");
-            if (process.env.LOGGING > 2) {
-                console.trace("[Error]: " + err);
-            }
+            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/logoutController.logoutGet on method req.session.regenerate trace: "+err.message);
+        }
+        if(!err){
+            logger.info.log.log("[INFO]: User "+emailofUser+" succesfully logged out");
         }
         res.redirect("/");
     })

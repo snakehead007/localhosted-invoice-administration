@@ -3,6 +3,7 @@ const jsvat = require("jsvat");
 const IBAN = require("iban");
 const ibantools = require("ibantools");
 const i18n = require("i18n");
+const logger = require("../middlewares/logger");
 //Method name => [Type]+[invalids when] e.g.valueMustNotBeEmpty(), valueMustBeCorrectZipCode()
 //return value: {invalid: true, doc: [given document parameter]}
 

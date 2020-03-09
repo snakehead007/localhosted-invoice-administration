@@ -8,33 +8,56 @@ const Client = require("../models/client");
 const mailgun = require('../utils/mailgun');
 const {createPDF} = require("../utils/pdfGenerator");
 const {getPathOfInvoice,getOnlyTypeOfInvoice,getDefaultNumberOfInvoice} = require('../utils/invoices');
+const {getIp} = require("../utils/utils");
+const logger = require("../middlewares/logger");
 
 exports.sendAttachment = async (req,res) => {
-    req.flash('warning',"This option is not available yet");
-    res.redirect('back');
-    let user = await User.findOne({_id:req.session._id},(err,user) => {return user;});
-    let nr = await getDefaultNumberOfInvoice(await Invoice.findOne({_id:req.params.idi,fromUser:req.session._id},(err,invoice) => {return invoice}));
+    logger.warning.log("[WARNING]: User "+req.session.email+" tried to send attachment via mail.");
+    let user = await User.findOne({_id:req.session._id},(err,user) => {return user;
+    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on method User.findOne trace: "+err.message);});
+    let nr = await getDefaultNumberOfInvoice(await Invoice.findOne({_id:req.params.idi,fromUser:req.session._id},(err,invoice) => {return invoice;
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on method Invoice.findOne trace: "+err.message);}));
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on method Profile.findOne trace: "+err.message);
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on method Invoice.findOne trace: "+err.message);
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
+                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on method Client.findOne trace: "+err.message);
                 Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
+                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on method Order.find trace: "+err.message);
                     Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
+                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on method Settings.findOne trace: "+err.message);
                         if (!err) {
-                            let type = await getOnlyTypeOfInvoice(invoice);
-                            await createPDF(req, res, type, profile, settings, client, invoice, orders,true,true);
-                            mailgun.sendAttachment(user.email,getPathOfInvoice(req.session._id,invoice),nr.toString());
+                            try {
+                                let type = await getOnlyTypeOfInvoice(invoice);
+                                await createPDF(req, res, type, profile, settings, client, invoice, orders, true, true);
+                                mailgun.sendAttachment(user.email, getPathOfInvoice(req.session._id, invoice), nr.toString());
+                                req.flash('success',i18n.__("Your PDF has mailed to your email"));
+                            }catch(err){
+                                logger.error("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on catch block trace: "+err.message);
+                                req.flash('warning',i18n.__("This option is only available if you contact the administrator"));
+                            }finally {
+                                res.redirect('back');
+                            }
                         }
                     });
                 });
             });
         });
     });
-    req.flash('success',i18n.__("Your PDF has mailed to your email"));
-    res.redirect('back');
 };
 exports.sendBugReport = async (req,res) => {
-    let user = await User.findOne({_id:req.session._id},(err,user)=>{return user;});
-    await mailgun.sendMessageRichData("snakehead007@pm.me",req.body.message,req.session._id,user);
+    let user = await User.findOne({_id:req.session._id},(err,user)=>{return user;
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on method User.findOne trace: "+err.message);});
+    try {
+        await mailgun.sendBugReport("snakehead007@pm.me", req.body.message, req.session._id, user, getIp(req));
+    }catch(err){
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on catch block trace: "+err.message);
+        req.flash('danger',i18n.__("Something happend, please try again"));
+        res.redirect('back');
+        return;
+    }
+    logger.info.log("[INFO]: User "+req.session.email+" send bug report");
     req.flash('success',i18n.__("Your bug report has been send, thank you!"));
     res.redirect('back');
 };

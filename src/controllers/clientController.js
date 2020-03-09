@@ -10,6 +10,7 @@ const error = require("../middlewares/error");
 const i18n = require("i18n");
 const User = require("../models/user");
 const activity = require('../utils/activity');
+const logger = require('../middlewares/logger');
 /**
  * @apiVersion 3.0.0
  * @api {get} /client/all getClientAll
@@ -28,11 +29,11 @@ const activity = require('../utils/activity');
  */
 exports.getClientAll = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
-        if (err) console.trace();
+        if (err) logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.getClientAll on method Profile.findOne trace: "+err.message);
         Client.find({fromUser: req.session._id,isRemoved:false},null,{sort:{lastUpdated:-1}}, function (err, clients) {
-            if (err) console.trace();
+            if (err) logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.getClientAll on method Client.findOne trace: "+err.message);
             Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
-                if (err) console.trace();
+                if (err) logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.getClientAll on method Profile.findOne trace: "+err.message);
                 if (!err) {
                     res.render("clients", {
                         "clients": clients,
@@ -66,9 +67,9 @@ exports.getClientAll = (req, res) => {
  */
 exports.getClientNew = (req, res) => {
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        if (err) console.trace();
+        if (err) logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.getClientNew on method Settings.findOne trace: "+err.message);
         Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
-            if (err) console.trace();
+            if (err)logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.getClientNew on method Profile.findOne trace: "+err.message);
             if (!err) {
                 res.render("new/new-client", {
                     "settings": settings,
@@ -113,8 +114,9 @@ exports.getClientNew = (req, res) => {
 });
  */
 exports.postClientNew = async (req, res) => {
+    logger.info.log("[INFO]: User "+req.session.email+" trying to create new client with :"+JSON.stringify(req.body));
     let nameCheck = invalid.valueMustBeAName(req, res, req.body.clientName, true, "client name not correctly filled in");
-    let firmCheck = invalid.valueMustBeAName(req, res, req.body.firm, false, "firm name not correctly filled in");
+    let firmCheck = invalid.valueMustBeAName(req, res, req.body.firm,   false, "firm name not correctly filled in");
     let streetCheck = (req.body.street) ? invalid.valueMustBeAName(req, res, req.body.street, true) : false;
     let streetNrCheck = (req.body.streetNr) ? invalid.valueMustBeStreetNumber(req, res, req.body.streetNr) : false;
     let emailCheck = false;
@@ -133,13 +135,14 @@ exports.postClientNew = async (req, res) => {
     let placeCheck = (req.body.place) ? invalid.valueMustBeAName(req, res, req.body.place, true, "place name not correctly checked in") : false;
     let isNotValid = nameCheck || firmCheck || streetCheck || vatPercentageCheck || streetNrCheck || emailCheck || vatCheck || bankCheck || postalCheck || placeCheck;
     if (isNotValid) {
+        logger.info.log("[INFO]: User "+req.session.email+" body not valid for creating a client, redirecting back");
         Settings.findOne({fromUser: req.session._id}, function (err, settings) {
             if (err) {
-                console.trace();
+                logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.postClientNew on method Settings.findOne trace: "+err.message);
             }
             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                 if (err) {
-                    console.trace();
+                    logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.postClientNew on method Profile.findOne trace: "+err.message);
                 }
                 if (!err) {
                     res.render("edit/edit-client", {
@@ -165,6 +168,7 @@ exports.postClientNew = async (req, res) => {
             });
         });
     } else {
+        logger.info.log("[INFO]: User"+req.session.email+" body valid for creating a client");
         let newClient = new Client({
             firm: req.body.firm,
             clientName: req.body.clientName,
@@ -180,7 +184,9 @@ exports.postClientNew = async (req, res) => {
             vatPercentage: req.body.vatPercentage,
             invoices: []
         });
-        newClient.save();
+        newClient.save((err)=>{
+            if(err) logger.error.log("[ERROR]: User "+req.session.email+" ")
+        });
         await activity.addClient(newClient,req.session._id);
         res.redirect("/client/all");
     }
@@ -202,13 +208,13 @@ exports.postClientNew = async (req, res) => {
  */
 exports.getClientView = (req, res) => {
     Client.findOne({fromUser: req.session._id, _id: req.params.idc,isRemoved:false}, function (err, client) {
-        if (err) console.trace(err);
+        if (err) logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.getClientView on method Client.findOne trace: "+err.message);
         if (!err) {
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-                if (err) console.trace(err);
+                if (err) logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.getClientView on method Settings.findOne trace: "+err.message);
                 if (!err) {
                     Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
-                        if (err) console.trace(err);
+                        if (err) logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.getClientView on method Profile.findOne trace: "+err.message);
                         if (!err) {
                             res.render("view/view-client", {
                                 "client": client,
@@ -228,10 +234,13 @@ exports.getClientView = (req, res) => {
 
 exports.getEditClient = (req, res) => {
     Client.findOne({fromUser: req.session._id, _id: req.params.idc,isRemoved:false}, function (err, client) {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.getEditClient on method Client.findOne trace: "+err.message);
         if (!error.findOneHasError(req, res, err, client)) {
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.getEditClient on method Settings.findOne trace: "+err.message);
                 if (!error.findOneHasError(req, res, err, settings)) {
                     Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
+                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.getEditClient on method Profile.findOne trace: "+err.message);
                         if (!error.findOneHasError(req, res, err, profile)) {
                             res.render("edit/edit-client", {
                                 "client": client,
@@ -251,7 +260,9 @@ exports.getEditClient = (req, res) => {
 };
 
 exports.postEditClient = (req, res) => {
+    logger.info.log("[INFO]: User "+req.session.email+" trying to edit a client with : "+JSON.stringify(req.body));
     Client.findOne({fromUser: req.session._id, _id: req.params.idc}, function (err, client) {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.postEditClient on method Client.findOne trace: "+err.message);
         if (!error.findOneHasError(req, res, err, client)) {
             let nameCheck = invalid.valueMustBeAName(req, res, req.body.clientName, false, "client name not correctly filled in");
             let firmCheck = invalid.valueMustBeAName(req, res, req.body.firm, false, "firm name not correctly filled in");
@@ -270,6 +281,7 @@ exports.postEditClient = (req, res) => {
             let placeCheck = (req.body.place) ? invalid.valueMustBeAName(req, res, req.body.place, true, "place name not correctly checked in") : false;
             let isNotValid = nameCheck || firmCheck || streetCheck || vatPercentageCheck || streetNrCheck || emailCheck || vatCheck || bankCheck || postalCheck || placeCheck;
             if (!isNotValid) {
+                logger.info.log("[INFO]: User "+req.session.email+" body valid for creating a client");
                 let updatedClient = {
                     clientName: req.body.clientName,
                     firm: req.body.firm,
@@ -284,6 +296,7 @@ exports.postEditClient = (req, res) => {
                     lastUpdated:Date.now()
                 };
                 Client.updateOne({fromUser: req.session._id, _id: client._id}, updatedClient, async (err) => {
+                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.postEditClient on method Client.updateOne trace: "+err.message);
                     if (!error.updateOneHasError(req, res, err)) {
                         await activity.editedClient(client,req.session._id);
                         req.flash("success", i18n.__("Successfully updated client"));
@@ -291,6 +304,7 @@ exports.postEditClient = (req, res) => {
                     }
                 });
             } else {
+                logger.info.log("[INFO]: User "+req.session.email+" body not valid for creating a client");
                 res.redirect("/edit/client/" + client._id);
             }
         }

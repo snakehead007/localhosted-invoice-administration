@@ -11,6 +11,7 @@ const User = require('../models/user');
 const {getGoogleAccountFromCode, checkSignIn} = require('../middlewares/google');
 const Settings = require('../models/settings');
 const {findOneHasError, updateOneHasError} = require('../middlewares/error');
+const logger = require("../middlewares/logger");
 
 
 /**
@@ -24,16 +25,20 @@ const {findOneHasError, updateOneHasError} = require('../middlewares/error');
  * @apiGroup RedirectRouter
  */
 exports.googleLogin = async (req, res, next) => {
-    const userInfo = await checkSignIn(req, await getGoogleAccountFromCode(req.query.code));
+    logger.info.log("[INFO]: got redirection url from google succesfully");
+    let googleCode = await getGoogleAccountFromCode(req.query.code);
+    logger.info.log("[INFO]: Succesfully got user's google login information: "+JSON.stringify(googleCode));
+    const userInfo = await checkSignIn(req, googleCode);
     req.session.loggedIn = userInfo;
     req.session._id = userInfo._id;
     req.session.role = await User.findOne({_id: userInfo._id}, (err, user) => {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/redirectController.googleLogin on method User.findOne trace: "+err.message);
         if (findOneHasError(req, res, err, user)) {
             return user.role;
         }
     });
     Settings.findOne({fromUser: userInfo._id}, function (err, settings) {
-        if (err) console.trace();
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/redirectController.googleLogin on method Settings.findOne trace: "+err.message);
         next();
     });
 };

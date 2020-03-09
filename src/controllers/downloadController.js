@@ -10,7 +10,7 @@ const Client = require("../models/client");
 const error = require("../middlewares/error");
 const {createPDF} = require("../utils/pdfGenerator");
 const activity = require('../utils/activity');
-
+const logger = require("../middlewares/logger");
 /**
  * @api {get} /stream/invoice/:idi streamInvoicePDF
  * @apiDescription Streams the pdf inline on the users browser
@@ -23,23 +23,24 @@ const activity = require('../utils/activity');
  */
 exports.streamInvoicePDF = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamInvoicePDF on method Profile.findOne trace: "+err.message);
         if (!error.findOneHasError(req, res, err, profile)) {
             Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamInvoicePDF on method Invoice.findOne trace: "+err.message);
                 if (!error.findOneHasError(req, res, err, invoice)) {
-                    console.log(invoice);
-                    console.log("idi " + req.params.idi);
                     Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
+                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamInvoicePDF on method Client.findOne trace: "+err.message);
                         if (!error.findOneHasError(req, res, err, client)) {
                             Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
-                                console.log(orders);
+                                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamInvoicePDF on method Order.find trace: "+err.message);
                                 Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
+                                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamInvoicePDF on method Settings.findOne trace: "+err.message);
                                     if (!err) {
                                         try {
                                             await activity.downloadInvoice(invoice,req.session._id);
                                             createPDF(req, res, "invoice", profile, settings, client, invoice, orders);
-
                                         } catch (err) {
-                                            console.trace(err);
+                                            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamInvoicePDF on catch block trace: "+err.message);
                                             req.flash("danger", i18n.__("Something went wrong, please try again"));
                                             req.redirect("back");
                                         }
@@ -66,13 +67,24 @@ exports.streamInvoicePDF = (req, res) => {
  */
 exports.streamOfferPDF = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamOfferPDF on method Profile.findOne trace: "+err.message);
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamOfferPDF on method Invoice.findOne trace: "+err.message);
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
+                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamOfferPDF on method Client.findOne trace: "+err.message);
                 Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
+                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamOfferPDF on method Order.findOne trace: "+err.message);
                     Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
+                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamOfferPDF on method Settings.findOne trace: "+err.message);
                         if (!err) {
-                            await activity.downloadInvoice(invoice,req.session._id);
-                            createPDF(req, res, "offer", profile, settings, client, invoice, orders);
+                           try{
+                                await activity.downloadInvoice(invoice,req.session._id);
+                                createPDF(req, res, "offer", profile, settings, client, invoice, orders);
+                           } catch (err) {
+                               if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamOfferPDF on catch block trace: "+err.message);
+                               req.flash("danger", i18n.__("Something went wrong, please try again"));
+                               req.redirect("back");
+                           }
                         }
                     });
                 });
@@ -93,13 +105,24 @@ exports.streamOfferPDF = (req, res) => {
  */
 exports.streamCreditPDF = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamCreditPDF on method Profile.findOne trace: "+err.message);
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamCreditPDF on method Invoice.findOne trace: "+err.message);
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
+                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamCreditPDF on method Client.findOne trace: "+err.message);
                 Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
+                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamCreditPDF on method Order.find trace: "+err.message);
                     Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
+                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamCreditPDF on method Settings.findOne trace: "+err.message);
                         if (!err) {
-                            await activity.downloadInvoice(invoice,req.session._id);
-                            createPDF(req, res, "credit", profile, settings, client, invoice, orders);
+                            try{
+                                await activity.downloadInvoice(invoice,req.session._id);
+                                createPDF(req, res, "credit", profile, settings, client, invoice, orders);
+                            } catch (err) {
+                                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamCreditPDF on catch block trace: "+err.message);
+                                req.flash("danger", i18n.__("Something went wrong, please try again"));
+                                req.redirect("back");
+                            }
                         }
                     });
                 });
@@ -120,14 +143,24 @@ exports.streamCreditPDF = (req, res) => {
  */
 exports.downloadCreditPDF = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.downloadCreditPDF on method Profile.findOne trace: "+err.message);
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.downloadCreditPDF on method Invoice.findOne trace: "+err.message);
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
+                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.downloadCreditPDF on method Client.findOne trace: "+err.message);
                 Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
+                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.downloadCreditPDF on method Order.findOne trace: "+err.message);
                     Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
+                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.downloadCreditPDF on method Settings.findOne trace: "+err.message);
                         if (!err) {
-
-                            await activity.downloadInvoice(invoice,fromUser);
-                            createPDF(req, res, "credit", profile, settings, client, invoice, orders,true);
+                            try{
+                                await activity.downloadInvoice(invoice,fromUser);
+                                createPDF(req, res, "credit", profile, settings, client, invoice, orders,true);
+                            } catch (err) {
+                                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamCreditPDF on catch block trace: "+err.message);
+                                req.flash("danger", i18n.__("Something went wrong, please try again"));
+                                req.redirect("back");
+                            }
                         }
                     });
                 });
@@ -148,13 +181,24 @@ exports.downloadCreditPDF = (req, res) => {
  */
 exports.downloadInvoicePDF = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.downloadInvoicePDF on method Profile.findOne trace: "+err.message);
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.downloadInvoicePDF on method Invoice.findOne trace: "+err.message);
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
+                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.downloadInvoicePDF on method Client.findOne trace: "+err.message);
                 Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
+                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.downloadInvoicePDF on method Order.find trace: "+err.message);
                     Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
+                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.downloadInvoicePDF on method Settings.findOne trace: "+err.message);
                         if (!err) {
-                            await activity.downloadInvoice(invoice,req.session._id);
-                            createPDF(req, res, "invoice", profile, settings, client, invoice, orders,true);
+                            try{
+                                await activity.downloadInvoice(invoice,req.session._id);
+                                createPDF(req, res, "invoice", profile, settings, client, invoice, orders,true);
+                            } catch (err) {
+                                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamCreditPDF on catch block trace: "+err.message);
+                                req.flash("danger", i18n.__("Something went wrong, please try again"));
+                                req.redirect("back");
+                            }
                         }
                     });
                 });
@@ -175,13 +219,24 @@ exports.downloadInvoicePDF = (req, res) => {
  */
 exports.downloadOfferPDF = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.downloadOfferPDF on method Profile.findOne trace: "+err.message);
         Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.downloadOfferPDF on method Invoice.findOne trace: "+err.message);
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
+                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.downloadOfferPDF on method Client.findOne trace: "+err.message);
                 Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
+                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.downloadOfferPDF on method Order.find trace: "+err.message);
                     Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
+                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.downloadOfferPDF on method Settings.findOne trace: "+err.message);
                         if (!err) {
-                            await activity.downloadInvoice(invoice,req.session._id);
-                            createPDF(req, res, "offer", profile, settings, client, invoice, orders,true);
+                            try{
+                                await activity.downloadInvoice(invoice,req.session._id);
+                                createPDF(req, res, "offer", profile, settings, client, invoice, orders,true);
+                            } catch (err) {
+                                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/downloadController.streamCreditPDF on catch block trace: "+err.message);
+                                req.flash("danger", i18n.__("Something went wrong, please try again"));
+                                req.redirect("back");
+                            }
                         }
                     });
                 });

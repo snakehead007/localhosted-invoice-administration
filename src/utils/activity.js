@@ -3,8 +3,10 @@ const Client = require('../models/client');
 const Invoice = require('../models/invoice');
 const Order = require('../models/order');
 const Item = require('../models/item');
+const logger = require("../middlewares/logger");
 
 exports.addActivity = async (description, fromUser, object,type="time" ,_object="") => {
+    logger.info.log("[INFO]: adding activity "+description+" of type "+type+" for user with id "+fromUser);
     let info = "";
     switch (_object) {
         case "invoice":
@@ -33,40 +35,33 @@ exports.addActivity = async (description, fromUser, object,type="time" ,_object=
             break;
     }
     if(type==="delete"){
-        console.log("deleting "+_object+" : ");
         switch (_object) {
             case "client":
-                let clientDeleted = await Client.updateOne({_id:object._id,fromUser:fromUser},{isRemoved:true});
-                console.log('client removed:');
-                console.log(clientDeleted);
+                await Client.updateOne({_id:object._id,fromUser:fromUser},{isRemoved:true},(err)=>{
+                    if(err) logger.error.log("[ERROR]: thrown at /src/utils/activity.addActivity on method Client.updateOne trace: "+err.message);});
                 for(let invoiceID of object.invoices){
-                    console.log("deleting invoice: ");
-                    let invoiceDeleted = await Invoice.updateOne({_id:invoiceID,fromUser:fromUser},{isRemoved:true});
-                    console.log('invoice removed: ');
-                    console.log(invoiceDeleted);
-                    let invoice = await Invoice.findOne({_id:invoiceID,fromUser:fromUser},(err,invoice) => {return invoice;});
-                    console.log(invoice);
+                    await Invoice.updateOne({_id:invoiceID,fromUser:fromUser},{isRemoved:true},(err)=>{
+                        if(err) logger.error.log("[ERROR]: thrown at /src/utils/activity.addActivity on method Invoice.updateOne trace: "+err.message);});
+                    let invoice = await Invoice.findOne({_id:invoiceID,fromUser:fromUser},(err,invoice) => {return invoice;},(err)=>{
+                        if(err) logger.error.log("[ERROR]: thrown at /src/utils/activity.addActivity on method Invoice.findOn trace: "+err.message);});
                     for(let orderID of invoice.orders){
-                        console.log("deleting line: ");
-                        let orderDeleted = await Order.updateOne({_id:orderID,fromUser:fromUser},{isRemoved:true});
-                        console.log("line removed: ");
-                        console.log(orderDeleted);
+                        await Order.updateOne({_id:orderID,fromUser:fromUser},{isRemoved:true},(err)=>{
+                            if(err) logger.error.log("[ERROR]: thrown at /src/utils/activity.addActivity on method Order.updateOne trace: "+err.message);});
                     }
                 }
+                logger.info.log("[INFO]: succesfully removed the client and all its subdocuments");
                 break;
             case "invoice":
-                let invoiceDeleted = await Invoice.updateOne({_id:object._id,fromUser:fromUser},{isRemoved:true});
-                console.log('invoice removed: ');
+                let invoiceDeleted = await Invoice.updateOne({_id:object._id,fromUser:fromUser},{isRemoved:true},(err)=>{
+                    if(err) logger.error.log("[ERROR]: thrown at /src/utils/activity.addActivity on method Invoice.updateOne trace: "+err.message);});
                 for(let orderID of object.orders){
-                    console.log("deleting line: ");
-                    console.log(orderID);
-                    let orderDeleted = await Order.updateOne({_id:orderID,fromUser:fromUser},{isRemoved:true});
-                    console.log("line removed: ");
-                    console.log(orderDeleted);
+                    let orderDeleted = await Order.updateOne({_id:orderID,fromUser:fromUser},{isRemoved:true},(err)=>{
+                        if(err) logger.error.log("[ERROR]: thrown at /src/utils/activity.addActivity on method Order.updateOne trace: "+err.message);});
                 }
                 break;
             case "line":
-                await Order.updateOne({_id:object._id,fromUser:fromUser},{isRemoved:true});
+                await Order.updateOne({_id:object._id,fromUser:fromUser},{isRemoved:true},(err)=>{
+                    if(err) logger.error.log("[ERROR]: thrown at /src/utils/activity.addActivity on method Order.updateOne trace: "+err.message);});
                 break;
             case "item":
                 break;
@@ -81,7 +76,8 @@ exports.addActivity = async (description, fromUser, object,type="time" ,_object=
        objectName:_object,
        info : info
     });
-    newAct.save();
+    newAct.save((err)=>{
+        if(err) logger.error.log("[ERROR]: thrown at /src/utils/activity.addActivity on method newAct.save trace: "+err.message);});
 };
 
 //Adding

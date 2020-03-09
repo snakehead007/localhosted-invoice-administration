@@ -61,7 +61,6 @@ router.get('/', redirectController.googleLogin, async (req, res) => {
                 return user
             })).role;
             req.session.role = role;
-            await activity.login(req.session._id);
             if (role === "visitor") {
                 mailgun.sendWelcome(req.session.email);
                 res.redirect('/view/profile');

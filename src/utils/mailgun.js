@@ -60,13 +60,13 @@ exports.sendAttachment = (to,attachmentPath,attachmentName) => {
     });
 };
 
-exports.sendBugReport = (to,message,userID,userObject) => {
+exports.sendBugReport = (to,message,userID,userObject,ip) => {
     const mailgun = new Mailgun({apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN});
     const data = {
         from: process.env.MAILGUN_FROM,
         to: to,
         subject: "New Bug report from "+userObject.email,
-        html: message+"<br><hr><br>"+"This data was send on "+Date.now()+"<br> User id: "+userObject._id+"<br> Usermail: "+userObject.email+"<br> role: "+userObject.role,
+        html: message+"<br><hr><br>"+"This data was send on "+Date.now()+"<br> User id: "+userObject._id+"<br> Usermail: "+userObject.email+"<br> role: "+userObject.role+"<br> IP: "+ip,
     };
     mailgun.messages().send(data, function (err, body) {
         if (err) {
