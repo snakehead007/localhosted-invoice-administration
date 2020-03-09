@@ -2,7 +2,7 @@ const Client = require('../models/client');
 const Invoice = require('../models/invoice');
 const Order = require('../models/order');
 const Item = require('../models/item');
-
+const Settings = require('../models/settings');
 exports.updateUndoAbility = async (req, res, next) => {
     //sets all objects that have no property of "isRemoved" to false
     await Client.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
@@ -10,9 +10,10 @@ exports.updateUndoAbility = async (req, res, next) => {
     await Order.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
     await Item.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
     //Adds the isSend property to invoices that doesn't have a isSend property yet. will set it too 'false'
-    await Invoice.updateMany({fromUser:req.session._id,isSend:null},{isSend:false})
+    await Invoice.updateMany({fromUser:req.session._id,isSend:null},{isSend:false});
     await Invoice.updateMany({fromUser:req.session._id,isVatOn:null},{isVatOn:false});
-
+    const newpdf = {titleSize:38,noLogo:false};
+    await Settings.updateMany({fromUser:req.session._id,pdf:null},{pdf:newpdf});
     //searches all orders for each invoice of the user, and adds it properly to the invoice.orders array
     //this didnt work in the earlier versions
     let invoicesAll = await Invoice.find({fromUser:req.session._id},(err,invoices)=>{return invoices;});

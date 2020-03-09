@@ -1,0 +1,40 @@
+#newDocument.modal.fade(tabindex='-1' role='dialog' aria-labelledby='newDocument' aria-hidden='true')
+    .modal-dialog(role='document')
+        .modal-content
+            .modal-header
+                h5#bugReporterLabel.modal-title=__("Adding a new document:")
+                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+            .modal-body
+                .container-fluid
+                    .row
+                        if client
+                            a(class="nav-link",href='/invoice/new/invoice/'+client._id)
+                                i.not-nav-fas(class="fas fa-plus-circle")
+                                span #{__('New invoice')}
+                        else
+                                a(class="nav-link",href='/invoice/new/invoice')
+                                    i.not-nav-fas(class="fas fa-plus-circle")
+                                    span #{__('New invoice')}
+                    .row
+                        if client
+                            a(class="nav-link", href = '/invoice/new/offer/' + client._id)
+                                i.not-nav-fas(class="fas fa-plus-circle")
+                                span #{__('New offer')}
+                        else
+                            a(class="nav-link",href='/invoice/new/offer')
+                                i.not-nav-fas(class="fas fa-plus-circle")
+                                span #{__('New offer')}
+                    .row
+                        if client
+                            a(class = "nav-link", href = '/invoice/new/credit/' + client._id )
+                                i.not-nav-fas(class="fas fa-plus-circle")
+                                span #{__('New creditnote')}
+                        else
+                            a(class="nav-link",href='/invoice/new/credit')
+                                i.not-nav-fas(class="fas fa-plus-circle")
+                                span #{__('New creditnote')}
+
+
+            .modal-footer
+                    button.btn.btn-secondary(type="button" data-dismiss="modal" )=__("Close")

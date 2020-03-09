@@ -9,40 +9,16 @@ const Settings = new mongoose.Schema({
         type: String,
         default: "dark"
     },
-    variables: [
-        {/*s1*/
+    pdf: {
+        titleSize: {
             type: Number,
-            default: 0.039
+            default: 38
         },
-        {/*s2*/
-            type: Number,
-            default: 0.0185
-        },
-        {/*s3*/
-            type: Number,
-            default: 2.23
-        },
-        {/*s4*/
-            type: Number,
-            default: 13.5
-        },
-        {/*e1*/
-            type: Number,
-            default: 0.018
-        },
-        {/*e2*/
-            type: Number,
-            default: 0.018
-        },
-        {/*e3*/
-            type: Number,
-            default: 2
-        },
-        {/*e4*/
-            type: Number,
-            default: 11
-        },
-    ],
+        noLogo:{
+            type:Boolean,
+            default:false
+        }
+    },
     invoiceText: {
         type: String,
         default: ""

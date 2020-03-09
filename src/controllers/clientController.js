@@ -276,7 +276,7 @@ exports.postEditClient = (req, res) => {
                     street: req.body.street,
                     streetNr: req.body.streetNr,
                     email: req.body.emails,
-                    vat: (req.body.vat)?invalid.formatBEVat():"",
+                    vat: (req.body.vat)?invalid.formatBEVat(req.body.vat):"",
                     vatPercentage: req.body.vatPercentage,
                     bankNr: (req.body.bankNr)?invalid.formatBEIban(req.body.bankNr):"",
                     postalCode: req.body.postalCode,

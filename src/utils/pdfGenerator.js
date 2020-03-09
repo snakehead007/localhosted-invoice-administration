@@ -65,11 +65,14 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         });
     }
     try {
+        if(settings.pdf.noLogo){
+            throw Error("I throw it on the ground!! I dont need your image!");
+        }
         doc.addImage(imgData, "JPEG", 15, 5, 50, 50);
     } catch (err) {
         console.log("Putting in place holder name");
         doc.setFontType("bold");
-        doc.setFontSize(42);
+        doc.setFontSize(settings.pdf.titleSize);
         doc.text(15, 20,profile.firm);
     }
     doc.setFontType("bold");
@@ -85,14 +88,14 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     doc.setFontSize(12);
     doc.setFontType("courier");
     c = [20, 60];
-    doc.text(c[0], c[1], profile.name);
+    doc.text(c[0], c[1], profile.firm);
     doc.setFontType("bold");
     /*c[1] += 10;
     doc.text(c[0],c[1],i18n.__("Company info"));
      */
     doc.setFontType("courier");
     c[1] += 5;
-    doc.text(c[0], c[1], profile.firm);
+    doc.text(c[0], c[1], profile.name);
     c[1] += 5;
     doc.text(c[0], c[1], profile.street + " " + profile.streetNr);
     c[1] += 5;

@@ -110,3 +110,20 @@ exports.changeTextGet = (req, res) => {
         }
     });
 };
+
+exports.changePdfOptions = (req, res) => {
+    console.log(req.body);
+    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+        let pdfnew = {
+            titleSize:(req.body.titleSize)?req.body.titleSize:settings.pdf.titleSize,
+            noLogo:(req.body.noLogo==="switch")
+        };
+        if (!err) {
+            Settings.updateOne({fromUser: req.session._id, _id: settings._id}, {pdf:pdfnew}, function (err) {
+                if(err)console.trace(err);
+                req.flash('success',i18n.__("Your settings have been updated"));
+                res.redirect("/settings");
+            });
+        }
+    });
+};

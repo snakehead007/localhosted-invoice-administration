@@ -1,4 +1,4 @@
-html
+html(lang="nl-BE")
     head
         include includes/htmlHead
         include includes/scripts/settingsMenuScript
@@ -46,6 +46,23 @@ html
                                                         button(type="button" class="btn btn-"+((settings.locale==="nl-BE")?"outline-":"")+settings.theme) #{__('Dutch')}
                                                     a(href="/settings/change/lang/en-GB",class="button")
                                                         button(type="button" class="btn btn-"+((settings.locale==="en-GB")?"outline-":"")+settings.theme) #{__('English')}
+                                    tr(onclick="openPdf()",class="settingOption optionPdf")
+                                        td
+                                            p(class="lead")=__("PDF options")
+                                            div(id="pdf",style="display:none;")
+                                                form(action="/settings/change/pdf",method="post")
+                                                    .form-group
+                                                        label.form-label(for="sizePdf")=__("Font-size of your firm on pdf")
+                                                        input.form-control(id="sizePdf" name="titleSize" type="number", step="0.1" value=settings.pdf.titleSize)
+                                                    if profile.logoFile.data
+                                                        .form-group
+                                                            .form-check
+                                                                if settings.pdf.noLogo
+                                                                    input.form-check-input(id="noLogo" name="noLogo" value="switch" type="checkbox" checked="checked")
+                                                                else
+                                                                    input.form-check-input(id="noLogo" name="noLogo" value="switch" type="checkbox")
+                                                                label.form-check-label(for="noLogo")=__("Hide logo on pdf")
+                                                    button.btn(class="btn-"+settings.theme, type="submit")=__("Update")
                                     tr(onclick="openText()",class="settingsOption optionText")
                                         td
                                             p(class="lead") #{__('PDF footnotes')}

@@ -349,7 +349,16 @@
 	"View order information": "Bekijk order informatie",
 	"Without VAT": "Zonder BTW",
 	"With VAT": "met BTW",
-	"--------FROM-HERE-ALL-ABOVE-CHECKED-----------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------",
-	"Preview off": "Preview off",
-	"Preview on": "Preview on"
+	"Preview off": "Voorbeeld af",
+	"Preview on": "Voorbeeld aan",
+	"PDF options": "PDF opties",
+	"New logo upload": "Nieuwe logo uploaden",
+	"Choose file for logo": "Kies een bestand voor je logo (enkel .jpg of .jpeg)",
+	"Upload": "Bijwerken",
+	"Font-size of your firm": "Text groote van de firmanaam",
+	"Font-size of your firm on pdf": "Tekst groote van de firmanaam op de pdf",
+	"Hide logo on pdf": "Verberg logo op de pdf",
+	"Your settings have been updated": "De instellingen zijn bijgewerkt",
+	"Adding a new document:": "Een nieuw document toevoegen:",
+	"--------FROM-HERE-ALL-ABOVE-CHECKED-----------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------"
 }
