@@ -19,3 +19,17 @@ exports.updateOneHasError = (req, res, err) => {
         return false
     }
 };
+
+exports.findHasError = (req, res, err, object) => {
+    return this.findOneHasError(req,res,err,object);
+};
+
+exports.findNullableHasError = (req, res, err, object) => {
+    if (err) {
+        req.flash('danger', "Error: something happened, please try again");
+        res.redirect('back');
+        return true;
+    } else {
+        return false
+    }
+};
