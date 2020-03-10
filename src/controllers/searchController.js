@@ -30,7 +30,7 @@ const logger = require('../middlewares/logger');
 
 module.exports.searchGet = (req, res) => {
     let str = req.body.search.toString().toLowerCase();
-    logger.info.log("[INFO]: User "+req.session.email+" searching for \""+str+"\"");
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' searching for \""+str+"\"");
     let clients = [];
     let invoices = [];
     let orders = [];

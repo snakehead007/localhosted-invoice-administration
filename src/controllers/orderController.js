@@ -120,7 +120,7 @@ exports.newOrderGet = (req, res) => {
     res.redirect("/order/all/" + req.params.idi);
  */
 exports.newOrderPost = async (req, res) => {
-    logger.info.log("[INFO]: User "+req.session.email+" trying to add a new order to invoice with id "+req.params.idi);
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to add a new order to invoice with id "+req.params.idi);
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, async function (err, invoice) {
         let newOrder = new Order({
             description: req.body.description,
@@ -133,7 +133,7 @@ exports.newOrderPost = async (req, res) => {
         });
             invoice.orders.push(newOrder._id);
             await invoice.save();
-        logger.info.log("[INFO]: User "+req.session.email+" new order contains "+JSON.stringify(newOrder));
+        logger.info.log("[INFO]: Email:\'"+req.session.email+"\' new order contains "+JSON.stringify(newOrder));
         await newOrder.save((err) => {
             if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.newOrderPost on method newOrder.save trace: "+err.message);
         });
@@ -266,7 +266,7 @@ exports.viewOrderGet = (req, res) => {
  res.redirect("/order/all/" + invoice._id);
  */
 exports.editOrderPost = (req, res) => {
-    logger.info.log("[INFO]: User "+req.session.email+" is trying to edit order with id "+req.params.ido);
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is trying to edit order with id "+req.params.ido);
     Order.findOne({fromUser: req.session._id, _id: req.params.ido,isRemoved:false}, function (err, order) {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.editOrderPost on method Order.findOne trace: "+err.message);
         if (!findOneHasError(req, res, err, order)) {
@@ -277,7 +277,7 @@ exports.editOrderPost = (req, res) => {
                 total: req.body.price * req.body.amount,
                 lastUpdated: Date.now()
             };
-            logger.info.log("[INFO]: User "+req.session.email+" is updating order with "+JSON.stringify(updateOrder));
+            logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is updating order with "+JSON.stringify(updateOrder));
             Invoice.findOne({fromUser: req.session._id, _id: order.fromInvoice,isRemoved:false}, async function (err, invoice) {
                 if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.editOrderPost on method Invoice.findOne trace: "+err.message);
                 await Order.updateOne({fromUser: req.session._id, _id: req.params.ido}, updateOrder,(err)=>{

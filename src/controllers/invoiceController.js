@@ -127,13 +127,13 @@ exports.creditNewChooseGet = (req, res) => {
  */
 exports.invoiceNewGet = (req, res) => {
     const idc = (req.body.idc) ? req.body.idc : req.params.idc;
-    logger.info.log("[INFO]: User "+req.session.email+" trying to create new invoice using "+((req.params.idc)?"GET":"POST")+" request");
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to create new invoice using "+((req.params.idc)?"GET":"POST")+" request");
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewGet on method Settings.findOne trace: "+err.message);
         Client.findOne({fromUser: req.session._id, _id: idc,isRemoved:false}, function (err, client) {
             if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewGet on method Client.findOne trace: "+err.message);
             if (client === null) {
-                logger.info.log("[INFO]: User "+req.session.email+" tried making new invoice, but had no client. redirected, with message");
+                logger.info.log("[INFO]: Email:\'"+req.session.email+"\' tried making new invoice, but had no client. redirected, with message");
                 req.flash("danger", i18n.__("Cannot make an invoice with a client"));
                 res.redirect("/invoice/new/invoice");
             } else {
@@ -166,7 +166,7 @@ exports.invoiceNewGet = (req, res) => {
                                     description:"",
                                     isRemoved:false
                                 });
-                                logger.info.log("[INFO]: User "+req.session.email+" trying to create new invoice with : "+JSON.stringify(newInvoice));
+                                logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to create new invoice with : "+JSON.stringify(newInvoice));
                                 await Client.findOne({
                                     fromUser: req.session._id,
                                     _id: client._id,isRemoved:false
@@ -205,13 +205,13 @@ exports.invoiceNewGet = (req, res) => {
  */
 exports.creditNewGet = (req, res) => {
     const idc = (req.body.idc) ? req.body.idc : req.params.idc;
-    logger.info.log("[INFO]: User "+req.session.email+" trying to create new creditnote using "+((req.params.idc)?"GET":"POST")+" request");
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to create new creditnote using "+((req.params.idc)?"GET":"POST")+" request");
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.creditNewGet on method Settings.findOne trace: "+err.message);
         Client.findOne({fromUser: req.session._id, _id: idc,isRemoved:false}, function (err, client) {
             if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.creditNewGet on method Client.findOne trace: "+err.message);
             if (client === null) {
-                logger.info.log("[INFO]: User "+req.session.email+" tried making new invoice, but had no client. redirected, with message");
+                logger.info.log("[INFO]: Email:\'"+req.session.email+"\' tried making new invoice, but had no client. redirected, with message");
                 req.flash("danger", i18n.__("Cannot make an creditnote with a client"));
                 res.redirect("/invoice/new/credit");
             } else {
@@ -237,7 +237,7 @@ exports.creditNewGet = (req, res) => {
                                             fromUser: req.session._id
                                             ,isRemoved:false
                                         });
-                                        logger.info.log("[INFO]: User "+req.session.email+" trying to create new invoice with : "+JSON.stringify(newInvoice));
+                                        logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to create new invoice with : "+JSON.stringify(newInvoice));
                                         await Client.findOne({
                                             fromUser: req.session._id,
                                             _id: client._id,isRemoved:false
@@ -270,13 +270,13 @@ exports.creditNewGet = (req, res) => {
  */
 exports.offerNewGet = (req, res) => {
     const idc = (req.body.idc) ? req.body.idc : req.params.idc;
-    logger.info.log("[INFO]: User "+req.session.email+" trying to create new offer using "+((req.params.idc)?"GET":"POST")+" request");
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to create new offer using "+((req.params.idc)?"GET":"POST")+" request");
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerNewGet on method Settings.findOne trace: "+err.message);
         Client.findOne({fromUser: req.session._id, _id: idc,isRemoved:false}, function (err, client) {
             if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerNewGet on method Client.findOne trace: "+err.message);
             if (client === null) {
-                logger.info.log("[INFO]: User "+req.session.email+" tried making new invoice, but had no client. redirected, with message");
+                logger.info.log("[INFO]: Email:\'"+req.session.email+"\' tried making new invoice, but had no client. redirected, with message");
                 req.flash("danger", i18n.__("Cannot make an offer with a client"));
                 res.redirect("/invoice/new/offer");
             } else {
@@ -305,7 +305,7 @@ exports.offerNewGet = (req, res) => {
                                                 fromUser: req.session._id,
                                                 description:"",isRemoved:false
                                             });
-                                            logger.info.log("[INFO]: User "+req.session.email+" trying to create new invoice with : "+JSON.stringify(newInvoice));
+                                            logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to create new invoice with : "+JSON.stringify(newInvoice));
                                             await Client.findOne({
                                                 fromUser: req.session._id,
                                                 _id: client._id,isRemoved:false
@@ -409,7 +409,7 @@ exports.editInvoiceGet = (req, res) => {
  * @param res
  */
 exports.editInvoicePost = (req, res) => {
-    logger.info.log("[INFO]: User "+req.session.email+" trying to edit invoice with: "+JSON.stringify(req.body));
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to edit invoice with: "+JSON.stringify(req.body));
     Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved:false}, async (err, orders) => {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editInvoicePost on method Order.find trace: "+err.message);
         let totOrders = 0;
@@ -425,21 +425,21 @@ exports.editInvoicePost = (req, res) => {
             return invoice
         });
         if(!req.body.invoiceNr||!req.body.date){
-            logger.info.log("[INFO]: User "+req.session.email+" tried editing invoice but no date or invoiceNr were given");
+            logger.info.log("[INFO]: Email:\'"+req.session.email+"\' tried editing invoice but no date or invoiceNr were given");
             req.flash('danger',i18n.__("Please fill in all the required fields"));
             res.redirect('back');
             return;
         }
         if(currentInvoice.isPaid){
             if(!req.body.datePaid||req.body.datePaid!== parseDate(currentInvoice.datePaid)) {
-                logger.info.log("[INFO]: User "+req.session.email+" tried editing the invoice's datePaid but isPaid is turned on");
+                logger.info.log("[INFO]: Email:\'"+req.session.email+"\' tried editing the invoice's datePaid but isPaid is turned on");
                 req.flash('danger', i18n.__("Change this invoice to unpaid first, to remove its pay date."));
                 res.redirect('back');
                 return;
             }
         }
         if(await invoiceUtil.isInvoiceNrAlreadyInUse(req.body.invoiceNr,req.session._id)){
-            logger.info.log("[INFO]: User "+req.session.email+" tried editing the invoiceNr "+req.body.invoiceNr+", but it is already taken.");
+            logger.info.log("[INFO]: Email:\'"+req.session.email+"\' tried editing the invoiceNr "+req.body.invoiceNr+", but it is already taken.");
             req.flash('danger',i18n.__("This invoice number is already in use."));
             res.redirect('back');
             return;
@@ -485,7 +485,7 @@ exports.editInvoicePost = (req, res) => {
                 description:req.body.description
             };
         }
-        logger.info.log("[INFO]: User "+req.session.email+" is updating the invoice with: "+JSON.stringify(updateInvoice));
+        logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is updating the invoice with: "+JSON.stringify(updateInvoice));
         let searchCriteria = {fromUser: req.session._id,isRemoved:false};
         if (orders.length > 0) {
             searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient,isRemoved:false};
@@ -508,7 +508,7 @@ exports.editInvoicePost = (req, res) => {
 };
 
 exports.editOfferPost = (req, res) => {
-    logger.info.log("[INFO]: User "+req.session.email+" trying to edit offer with: "+JSON.stringify(req.body));
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to edit offer with: "+JSON.stringify(req.body));
     Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved:false}, async (err, orders) => {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editOfferPost on method Order.find trace: "+err.message);
         let totOrders = 0;
@@ -524,21 +524,21 @@ exports.editOfferPost = (req, res) => {
             return invoice
         });
         if(!req.body.offerNr||!req.body.date){
-            logger.info.log("[INFO]: User "+req.session.email+" tried editing offer but no date or invoiceNr were given");
+            logger.info.log("[INFO]: Email:\'"+req.session.email+"\' tried editing offer but no date or invoiceNr were given");
             req.flash('danger',i18n.__("Please fill in all the required fields"));
             res.redirect('back');
             return;
         }
         if(currentInvoice.isPaid){
             if(!req.body.datePaid||req.body.datePaid!== parseDate(currentInvoice.datePaid)) {
-                logger.info.log("[INFO]: User "+req.session.email+" tried editing the offer's datePaid but isPaid is turned on");
+                logger.info.log("[INFO]: Email:\'"+req.session.email+"\' tried editing the offer's datePaid but isPaid is turned on");
                 req.flash('danger', i18n.__("Change this invoice to unpaid first, to remove its pay date."));
                 res.redirect('back');
                 return;
             }
         }
         if(await invoiceUtil.isOfferNrAlreadyInUse(req.body.offerNr,req.session._id)){
-            logger.info.log("[INFO]: User "+req.session.email+" tried editing the offerNr "+req.body.offerNr+", but it is already taken.");
+            logger.info.log("[INFO]: Email:\'"+req.session.email+"\' tried editing the offerNr "+req.body.offerNr+", but it is already taken.");
             req.flash('danger',i18n.__("This invoice number is already in use."));
             res.redirect('back');
             return;
@@ -584,7 +584,7 @@ exports.editOfferPost = (req, res) => {
                 description:req.body.description
             };
         }
-        logger.info.log("[INFO]: User "+req.session.email+" is updating the offer with: "+JSON.stringify(updateInvoice));
+        logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is updating the offer with: "+JSON.stringify(updateInvoice));
         let searchCriteria = {fromUser: req.session._id,isRemoved:false};
         if (orders.length > 0) {
             searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient,isRemoved:false};
@@ -727,7 +727,7 @@ exports.invoicePaidGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoicePaidGet on method Invoice.findOne trace: "+err.message);
         let isPaid = !(invoice.isPaid);
-        logger.info.log("[INFO]: User "+req.session.email+" is settings invoice paid status to "+isPaid+" for invoice with id: "+req.params.idi);
+        logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is settings invoice paid status to "+isPaid+" for invoice with id: "+req.params.idi);
         if (!findOneHasError(req, res, err, invoice)) {
             let invoiceUpdate;
             if(!invoice.datePaid){
@@ -762,7 +762,7 @@ exports.invoicePaidGet = (req, res) => {
 exports.offerAgreedGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerAgreedGet on method Invoice.findOne trace: "+err.message);
-        logger.info.log("[INFO]: User "+req.session.email+" is setting its offerAgreed to "+!(invoice.isAgreed)+" for invoice with id "+req.params.idi);
+        logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is setting its offerAgreed to "+!(invoice.isAgreed)+" for invoice with id "+req.params.idi);
         if (!findOneHasError(req, res, err, invoice)) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
                 isAgreed: !(invoice.isAgreed),
@@ -783,7 +783,7 @@ exports.offerAgreedGet = (req, res) => {
 
 exports.setVat = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
-        logger.info.log("[INFO]: User "+req.session.email+" is setting its setVat to "+!(invoice.isVatOn)+" for invoice with id "+req.params.idi);
+        logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is setting its setVat to "+!(invoice.isVatOn)+" for invoice with id "+req.params.idi);
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.setVat on method Invoice.findOne trace: "+err.message);
         if (!findOneHasError(req, res, err, invoice)) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
@@ -803,7 +803,7 @@ exports.setVat = (req, res) => {
 };
 
 exports.invoiceUpgradeGet = (req, res) => {
-    logger.info.log("[INFO]: User "+req.session.email+" is upgrading its offer with id "+req.params.idi);
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is upgrading its offer with id "+req.params.idi);
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, async (err, invoice) => {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceUpgradeGet on method Invoice.findOne trace: "+err.message);
         if (!findOneHasError(req, res, err, invoice)) {
@@ -829,7 +829,7 @@ exports.invoiceUpgradeGet = (req, res) => {
 };
 
 exports.invoiceDowngradeGet = (req, res) => {
-    logger.info.log("[INFO]: User "+req.session.email+" is downgrading its invoice with id "+req.params.idi);
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is downgrading its invoice with id "+req.params.idi);
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceDowngradeGet on method Invoice.findOne trace: "+err.message);
         if (!findOneHasError(req, res, err, invoice)) {

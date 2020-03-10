@@ -63,7 +63,7 @@ exports.deleteLogoGet = (req, res) => {
     let pathOfLogo = path.join(__dirname, "../../public/images/" + req.session._id + "/logo.jpeg");
     fs.access(pathOfLogo, fs.F_OK, (err) => {
         if (err) {
-            logger.info.log("[INFO]: User "+req.session.email+" tried to remove logo, but had none uploaded");
+            logger.info.log("[INFO]: Email:\'"+req.session.email+"\' tried to remove logo, but had none uploaded");
             req.flash("warning", i18n.__("There is no logo to delete"));
             res.redirect("/view/profile");
         } else {

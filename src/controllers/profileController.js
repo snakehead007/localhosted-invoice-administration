@@ -58,7 +58,7 @@ exports.viewProfileGet = async (req, res) => {
  * res.redirect("/view/profile");
  */
 exports.editProfileGet = (req, res) => {
-    logger.warning.log("[WARNING]: User "+req.session.email+" used profileController.editProfileGet method, this should not happen, redirected to /view/profile");
+    logger.warning.log("[WARNING]: Email:\'"+req.session.email+"\' used profileController.editProfileGet method, this should not happen, redirected to /view/profile");
     res.redirect("/view/profile");
 };
 /**
@@ -94,7 +94,7 @@ exports.editProfileGet = (req, res) => {
                 });
  */
 exports.editProfilePost = async (req, res) => {
-    logger.info.log("[INFO]: User "+req.session.email+" is trying to edit its profile with "+JSON.stringify(req.body));
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is trying to edit its profile with "+JSON.stringify(req.body));
     let firmCheck =  valueMustBeAName(req, res, req.body.firm, false, "firm is invalid");
     let nameCheck = valueMustBeAName(req, res, req.body.name, true, "name is invalid");
     let streetCheck = valueMustBeAName(req, res, req.body.street, false, "street name is invalid");
@@ -107,7 +107,7 @@ exports.editProfilePost = async (req, res) => {
     let postalCheck = valueMustBePostalCode(req, res, req.body.postal);
     let streetNrCheck = valueMustBeStreetNumber(req, res, req.body.streetNr);
     if (firmCheck || nameCheck || streetCheck || placeCheck || emailCheck || telCheck || vatCheck || postalCheck || streetCheck || bicCheck || ibanCheck || streetNrCheck) {
-        log.info("[INFO]: User "+req.session.email+" could not edit profile, due to validation.");
+        log.info("[INFO]: Email:\'"+req.session.email+"\' could not edit profile, due to validation.");
         let role = (await User.findOne({_id: req.session._id}, (err, user) => {
             return user
         })).role;
@@ -152,7 +152,7 @@ exports.editProfilePost = async (req, res) => {
             tel: req.body.tel,
             email:  req.body.email
         };
-        logger.info.log("[INFO]: User "+req.session.email+" met validations to edit profile, new profile is"+JSON.stringify(updateProfile));
+        logger.info.log("[INFO]: Email:\'"+req.session.email+"\' met validations to edit profile, new profile is"+JSON.stringify(updateProfile));
         Profile.updateOne({fromUser: req.session._id, _id: req.params.idp}, updateProfile, async (err) => {
             if(err) logger.error.log("[ERROR]: thrown at /src/controllers/profileController.editProfilePost on method Profile.updateOne trace: "+err.message);
             if (!err) {
@@ -164,7 +164,7 @@ exports.editProfilePost = async (req, res) => {
                     }
                 });
                 if (user.role === "visitor") {
-                    logger.info.log("[INFO]: User "+req.session.email+" succesfully updated its role to 'user'");
+                    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' succesfully updated its role to 'user'");
                     await User.updateOne({_id: req.session._id}, {role: "user"}, (err) => {
                         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/profileController.editProfilePost on method User.updateOne trace: "+err.message);
                         req.flash("success", i18n.__("successfully created your profile"));

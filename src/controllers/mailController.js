@@ -12,7 +12,7 @@ const {getIp} = require("../utils/utils");
 const logger = require("../middlewares/logger");
 
 exports.sendAttachment = async (req,res) => {
-    logger.warning.log("[WARNING]: User "+req.session.email+" tried to send attachment via mail.");
+    logger.warning.log("[WARNING]: Email:\'"+req.session.email+"\' tried to send attachment via mail.");
     let user = await User.findOne({_id:req.session._id},(err,user) => {return user;
     if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on method User.findOne trace: "+err.message);});
     let nr = await getDefaultNumberOfInvoice(await Invoice.findOne({_id:req.params.idi,fromUser:req.session._id},(err,invoice) => {return invoice;
@@ -57,7 +57,7 @@ exports.sendBugReport = async (req,res) => {
         res.redirect('back');
         return;
     }
-    logger.info.log("[INFO]: User "+req.session.email+" send bug report");
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' send bug report");
     req.flash('success',i18n.__("Your bug report has been send, thank you!"));
     res.redirect('back');
 };

@@ -114,7 +114,7 @@ exports.getClientNew = (req, res) => {
 });
  */
 exports.postClientNew = async (req, res) => {
-    logger.info.log("[INFO]: User "+req.session.email+" trying to create new client with :"+JSON.stringify(req.body));
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to create new client with :"+JSON.stringify(req.body));
     let nameCheck = invalid.valueMustBeAName(req, res, req.body.clientName, true, "client name not correctly filled in");
     let firmCheck = invalid.valueMustBeAName(req, res, req.body.firm,   false, "firm name not correctly filled in");
     let streetCheck = (req.body.street) ? invalid.valueMustBeAName(req, res, req.body.street, true) : false;
@@ -135,7 +135,7 @@ exports.postClientNew = async (req, res) => {
     let placeCheck = (req.body.place) ? invalid.valueMustBeAName(req, res, req.body.place, true, "place name not correctly checked in") : false;
     let isNotValid = nameCheck || firmCheck || streetCheck || vatPercentageCheck || streetNrCheck || emailCheck || vatCheck || bankCheck || postalCheck || placeCheck;
     if (isNotValid) {
-        logger.info.log("[INFO]: User "+req.session.email+" body not valid for creating a client, redirecting back");
+        logger.info.log("[INFO]: Email:\'"+req.session.email+"\' body not valid for creating a client, redirecting back");
         Settings.findOne({fromUser: req.session._id}, function (err, settings) {
             if (err) {
                 logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.postClientNew on method Settings.findOne trace: "+err.message);
@@ -185,7 +185,7 @@ exports.postClientNew = async (req, res) => {
             invoices: []
         });
         newClient.save((err)=>{
-            if(err) logger.error.log("[ERROR]: User "+req.session.email+" ")
+            if(err) logger.error.log("[ERROR]: Email:\'"+req.session.email+"\' ")
         });
         await activity.addClient(newClient,req.session._id);
         res.redirect("/client/all");
@@ -260,7 +260,7 @@ exports.getEditClient = (req, res) => {
 };
 
 exports.postEditClient = (req, res) => {
-    logger.info.log("[INFO]: User "+req.session.email+" trying to edit a client with : "+JSON.stringify(req.body));
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to edit a client with : "+JSON.stringify(req.body));
     Client.findOne({fromUser: req.session._id, _id: req.params.idc}, function (err, client) {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/clientControllers.postEditClient on method Client.findOne trace: "+err.message);
         if (!error.findOneHasError(req, res, err, client)) {
@@ -281,7 +281,7 @@ exports.postEditClient = (req, res) => {
             let placeCheck = (req.body.place) ? invalid.valueMustBeAName(req, res, req.body.place, true, "place name not correctly checked in") : false;
             let isNotValid = nameCheck || firmCheck || streetCheck || vatPercentageCheck || streetNrCheck || emailCheck || vatCheck || bankCheck || postalCheck || placeCheck;
             if (!isNotValid) {
-                logger.info.log("[INFO]: User "+req.session.email+" body valid for creating a client");
+                logger.info.log("[INFO]: Email:\'"+req.session.email+"\' body valid for creating a client");
                 let updatedClient = {
                     clientName: req.body.clientName,
                     firm: req.body.firm,
@@ -304,7 +304,7 @@ exports.postEditClient = (req, res) => {
                     }
                 });
             } else {
-                logger.info.log("[INFO]: User "+req.session.email+" body not valid for creating a client");
+                logger.info.log("[INFO]: Email:\'"+req.session.email+"\' body not valid for creating a client");
                 res.redirect("/edit/client/" + client._id);
             }
         }

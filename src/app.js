@@ -15,7 +15,7 @@ const start = async () => {
     await load(app);
     const logger = require('./middlewares/logger'); //This is put here, because of process.env not being loaded otherwise
     app.use(function (req, res, next) {
-        logger.request.log("[REQUEST]: "+req.method+" request "+req.url+"  from "+((req.session.email) ? req.session.email : "unknown")+" with ip: "+getIp(req));
+        logger.request.log("[REQUEST]: "+req.method+" request "+req.url+" Email "+((req.session.email) ? req.session.email : "unknown")+", Ip: "+getIp(req)+" Status code: "+res.statusCode+" User-agent: "+req.headers['user-agent']);
         next();
     });
     logger.info.log("[INFO]: Server started");

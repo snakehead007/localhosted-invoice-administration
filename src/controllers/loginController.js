@@ -10,7 +10,7 @@ const logger = require("../middlewares/logger");
 exports.loginGet = function getLogin(req, res) {
     //req.session;
     if(req.session&&req.session._id){
-        logger.info.log("[INFO]: User "+req.session.email+" already in session, redirecting to dashboard");
+        logger.info.log("[INFO]: Email:\'"+req.session.email+"\' already in session, redirecting to dashboard");
         return res.redirect("/dashboard");
     }
     //req.session.regenerate(function(err) {

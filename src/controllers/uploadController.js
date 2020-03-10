@@ -53,7 +53,7 @@ exports.uploadLogoPost = async (req, res) => {
             return res.status(400).send("No files were uploaded.");
         }
         let logoFile = req.files.logoFile;
-        logger.info.log("[INFO]: User "+req.session.email+" is trying to upload logo file of mimetype "+req.files.logoFile.mimetype);
+        logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is trying to upload logo file of mimetype "+req.files.logoFile.mimetype);
         if (logoFile.mimetype === "image/jpeg" || logoFile.mimetype === "image/jpg" || !logoFile.mimetype) {
             Profile.findOne({fromUser: req.session._id}, async function (err, profile) {
                 if(err) logger.error.log("[ERROR]: thrown at /src/controllers/uploadController.uploadLogoPost on method Profile.findOne trace: "+err.message);
@@ -68,6 +68,7 @@ exports.uploadLogoPost = async (req, res) => {
                     if(err) logger.error.log("[ERROR]: thrown at /src/controllers/uploadController.uploadLogoPost on method Profile.save trace: "+err.message);});
                 req.flash("success", i18n.__("succefully updated your logo"));
                 res.redirect("/view/profile/");
+                return;
             });
         } else {
             logger.warning.log("[WARNING]: file type unknown for uploaded file by User "+req.session.email);

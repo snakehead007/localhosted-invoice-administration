@@ -63,7 +63,7 @@ exports.getActivity = async (req,res) => {
 exports.getUndoActivity = async (req,res) => {
     let act = await Activity.findOne({_id:req.params.id,fromUser:req.session._id},(err,activity) => {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getUndoActivity on method Activity.findOne trace: "+err.message);return activity;});
-    logger.info.log("[INFO]: User "+req.session.email+" trying to undo a "+act.objectName);
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to undo a "+act.objectName);
     switch(act.objectName){
         case "client":
             let client = await Client.findOne({_id:act.withObjectId,fromUser:req.session._id,isRemoved:true}, (err,client) => {
@@ -87,7 +87,7 @@ exports.getUndoActivity = async (req,res) => {
             req.flash('success',i18n.__("this url doesnt work yet"));
             break;
     }
-    logger.info.log("[INFO]: User "+req.session.email+" is removing activity: "+JSON.stringify(act));
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is removing activity: "+JSON.stringify(act));
     await Activity.remove({_id:req.params.id,fromUser:req.session._id},(err)=> {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getUndoActivity on method Activity.remove trace: "+err.message)
     });
@@ -108,7 +108,7 @@ exports.getUndoActivity = async (req,res) => {
     redirect to /activity
  */
 exports.removeGet = async (req,res)=> {
-    logger.info.log("[INFO]: User "+req.session.email+" is removing activity: "+req.params.id);
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is removing activity: "+req.params.id);
     await Activity.remove({_id:req.params.id,fromUser:req.session._id},(err) =>{
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.removeGet on method Activity.remove trace: "+err.message)});
     req.flash('success',"Successfully deleted the activity");
