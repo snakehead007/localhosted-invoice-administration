@@ -4,45 +4,45 @@ h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3
 ul(class="nav flex-column option-menu mb-2")
     li(class="nav-item")
         if add==="invoice"
-            a(class="nav-link active",href='/invoice/new/invoice')
+            a(class="nav-link active",href='/invoice/new/invoice' data-toggle="tooltip" data-placement="right" title=__('New invoice'))
                 i.nav-fas(class="fas fa-plus-circle")
                 span #{__('New invoice')}
         else if client
-            a(class="nav-link",href='/invoice/new/invoice/'+client._id)
+            a(class="nav-link",href='/invoice/new/invoice/'+client._id data-toggle="tooltip" data-placement="right" title=__('New invoice'))
                 i.nav-fas(class="fas fa-plus-circle")
                 span #{__('New invoice')}
         else
-            a(class="nav-link",href='/invoice/new/invoice')
+            a(class="nav-link",href='/invoice/new/invoice' data-toggle="tooltip" data-placement="right" title=__('New invoice'))
                 i.nav-fas(class="fas fa-plus-circle")
                 span #{__('New invoice')}
     li(class="nav-item")
         if add==="offer"
-            a(class="nav-link active",href='/invoice/new/offer')
+            a(class="nav-link active",href='/invoice/new/offer' data-toggle="tooltip" data-placement="right" title=__('New offer'))
                 i.nav-fas(class="fas fa-plus-circle")
                 span #{__('New offer')}
         else if client
-            a(class="nav-link", href = '/invoice/new/offer/' + client._id)
+            a(class="nav-link", href = '/invoice/new/offer/' + client._id data-toggle="tooltip" data-placement="right" title=__('New offer'))
                 i.nav-fas(class="fas fa-plus-circle")
                 span #{__('New offer')}
         else
-            a(class="nav-link",href='/invoice/new/offer')
+            a(class="nav-link",href='/invoice/new/offer' data-toggle="tooltip" data-placement="right" title=__('New offer'))
                 i.nav-fas(class="fas fa-plus-circle")
                 span #{__('New offer')}
     li(class="nav-item")
         if add==="creditnote"
-            a(class="nav-link active",href='/invoice/new/credit')
+            a(class="nav-link active",href='/invoice/new/credit' data-toggle="tooltip" data-placement="right" title=__('New creditnote'))
                 i.nav-fas(class="fas fa-plus-circle")
                 span #{__('New creditnote')}
         else if client
-            a(class = "nav-link", href = '/invoice/new/credit/' + client._id )
+            a(class = "nav-link", href = '/invoice/new/credit/' + client._id data-toggle="tooltip" data-placement="right" title=__('New creditnote'))
                 i.nav-fas(class="fas fa-plus-circle")
                 span #{__('New creditnote')}
         else
-            a(class="nav-link",href='/invoice/new/credit')
+            a(class="nav-link",href='/invoice/new/credit' data-toggle="tooltip" data-placement="right" title=__('New creditnote'))
                 i.nav-fas(class="fas fa-plus-circle")
                 span #{__('New creditnote')}
     if client
         li(class="nav-item")
-            a(class="nav-link",href='/edit/client/'+client._id)
+            a(class="nav-link",href='/edit/client/'+client._id data-toggle="tooltip" data-placement="right" title=__('Edit this client'))
                 i.nav-fas(class="fas fa-user-edit")
                 span #{__('Edit this client')}

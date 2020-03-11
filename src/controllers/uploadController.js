@@ -68,16 +68,16 @@ exports.uploadLogoPost = async (req, res) => {
                     if(err) logger.error.log("[ERROR]: thrown at /src/controllers/uploadController.uploadLogoPost on method Profile.save trace: "+err.message);});
                 req.flash("success", i18n.__("succefully updated your logo"));
                 res.redirect("/view/profile/");
-                return;
             });
         } else {
             logger.warning.log("[WARNING]: file type unknown for uploaded file by User "+req.session.email);
             req.flash("danger", i18n.__("Wrong filetype"));
+            res.redirect("/upload/logo");
         }
     } catch (error) {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/uploadController.uploadLogoPost on catch block trace: "+err.message);
         req.flash('danger',i18n.__("Something happend, please try again"));
-    }finally {
         res.redirect("/upload/logo");
     }
+    res.redirect("/view/profile/");
 };

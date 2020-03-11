@@ -1,50 +1,51 @@
 h6(class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
-  span.big-sidebar #{__('This document')} - #{__('options')}
-  span.small-sidebar(style="display:none")
+  span.big-sidebar=__('This document')+" - "+__('options')
+
+  span.small-sidebar(style="display:none") -
 ul(class="nav flex-column option-menu mb-2")
     li(class="nav-item")
       if client
         if currentUrl === "orderNew"
-          a(class="nav-link active",href='/order/new/' + invoice._id )
+          a(class="nav-link active",href='/order/new/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("New line"))
             i.nav-fas(class="fas fa-plus-circle")
             span #{__('New line')}
         else
-          a(class="nav-link",href='/order/new/' + invoice._id )
+          a(class="nav-link",href='/order/new/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("New line"))
             i.nav-fas(class="fas fa-plus-circle")
             span #{__('New line')}
       li(class="nav-item")
         if invoice.offerNr
-          a(class="nav-link",href='/download/offer/' + invoice._id)
+          a(class="nav-link",href='/download/offer/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("Download pdf of this document"))
             i.nav-fas(class="fas fa-file-download")
             span #{__('Download pdf of this document')}
         else if invoice.creditNr
-          a(class="nav-link",href='/download/credit/' + invoice._id)
+          a(class="nav-link",href='/download/credit/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("Download pdf of this document"))
             i.nav-fas(class="fas fa-file-download")
             span #{__('Download pdf of this document')}
         else if invoice.invoiceNr
-          a(class="nav-link",href='/download/invoice/' + invoice._id)
+          a(class="nav-link",href='/download/invoice/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("Download pdf of this document"))
             i.nav-fas(class="fas fa-file-download")
             span #{__('Download pdf of this document')}
     li(class="nav-item")
       if invoice.offerNr
-        a(class="nav-link",href='/stream/offer/' + invoice._id target="_blank")
+        a(class="nav-link",href='/stream/offer/' + invoice._id target="_blank" data-toggle="tooltip" data-placement="right" title=__("View pdf of this document"))
           i.nav-fas(class="fas fa-eye")
           span #{__('View pdf of this document')}
       else if invoice.creditNr
-        a(class="nav-link",href='/stream/credit/' + invoice._id target="_blank")
+        a(class="nav-link",href='/stream/credit/' + invoice._id target="_blank" data-toggle="tooltip" data-placement="right" title=__("View pdf of this document"))
           i.nav-fas(class="fas fa-eye")
           span #{__('View pdf of this document')}
       else if invoice.invoiceNr
-        a(class="nav-link",href='/stream/invoice/' + invoice._id target="_blank")
+        a(class="nav-link",href='/stream/invoice/' + invoice._id target="_blank" data-toggle="tooltip" data-placement="right" title=__("View pdf of this document"))
           i.nav-fas(class="fas fa-eye")
           span #{__('View pdf of this document')}
     if client
       li(class="nav-item")
-        a(class="nav-link",href='/invoice/all/' + client._id )
+        a(class="nav-link",href='/invoice/all/' + client._id data-toggle="tooltip" data-placement="right" title=__("View documents of this client"))
           i.nav-fas(class="fas fa-book-open")
           span #{__('View documents of this client')}
       li(class="nav-item")
-        a(class="nav-link",href='/edit/client/' + client._id )
+        a(class="nav-link",href='/edit/client/' + client._id data-toggle="tooltip" data-placement="right" title=__("Edit this client"))
           i.nav-fas(class="fas fa-user-edit")
           span #{__('Edit this client')}
 
