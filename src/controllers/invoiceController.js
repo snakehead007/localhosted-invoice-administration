@@ -141,8 +141,6 @@ exports.invoiceNewGet = (req, res) => {
                     if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewGet on method Client.save trace: "+err.message);
                     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
                         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewGet on method Profile.findOne trace: "+err.message);
-                        profile.save(function (err) {
-                            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewGet on method Profile.save trace: "+err.message);
                             Profile.updateOne({
                                 fromUser: req.session._id
                             }, {
@@ -190,7 +188,6 @@ exports.invoiceNewGet = (req, res) => {
                                     }
                                 });
                             });
-                        });
                     });
                 });
             }
@@ -219,8 +216,6 @@ exports.creditNewGet = (req, res) => {
                     if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.creditNewGet on method Client.save trace: "+err.message);
                     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
                         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.creditNewGet on method Profile.findOne trace: "+err.message);
-                        profile.save(function (err) {
-                            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.creditNewGet on method Profile.save trace: "+err.message);
                             Profile.updateOne(
                                 {fromUser: req.session._id},
                                 {creditNrCurrent: profile.creditNrCurrent + 1}, async function (err) {
@@ -255,7 +250,6 @@ exports.creditNewGet = (req, res) => {
                                         res.redirect("/order/all/"+newInvoice._id);
                                     }
                                 });
-                        });
                     });
                 });
             }
@@ -285,8 +279,6 @@ exports.offerNewGet = (req, res) => {
                     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
                         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerNewGet on method Profile.findOne trace: "+err.message);
                         if (!err) {
-                            profile.save(function (err) {
-                                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerNewGet on method Profile.save trace: "+err.message);
                                 if (!err) {
                                     Profile.updateOne({
                                         fromUser: req.session._id
@@ -326,7 +318,6 @@ exports.offerNewGet = (req, res) => {
                                         }
                                     });
                                 }
-                            });
                         }
                     });
                 });

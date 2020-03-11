@@ -8,6 +8,9 @@ const {sendMessage} = require('../../messages/messages');
 const {formatBEVat,formatBEBic,formatBEIban,valueMustBeValidBic, valueMustBeValidIban, valueMustBeStreetNumber, valueMustBeAName, valueMustBeEmail, numberMustPhoneNumber, valueMustBeVatNumber, valueMustBePostalCode} = require("../utils/formValidation");
 const activity = require('../utils/activity');
 const logger = require("../middlewares/logger");
+const {getSizeOfImage} = require("../utils/utils");
+const path = require("path");
+const sizeOf = require('image-size');
 /**
  * @api {get} /view/profile viewProfileGet
  * @apiVersion 3.0.0
@@ -34,13 +37,22 @@ exports.viewProfileGet = async (req, res) => {
         if (!err) {
             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                 if(err) logger.error.log("[ERROR]: thrown at /src/controllers/profileController.viewProfileGet on method Profile.findOne trace: "+err.message);
+                let size;
+                try{
+                    let _path = path.resolve(__dirname,"../../public/images/"+req.session._id+"/logo.jpeg");
+                    size = sizeOf(_path);
+                }catch(err){
+                    console.trace(err);
+                }
+                console.log(size);
                 if (!err) {
                     res.render("edit/edit-profile", {
                         "currentUrl": "edit-profile",
                         "profile": profile,
                         "settings": settings,
                         "title": title,
-                        "role": role
+                        "role": role,
+                        "size":size
                     });
                 }
             });

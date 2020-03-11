@@ -146,7 +146,7 @@ exports.checkSignIn = async function checkSignIn(req, {googleId, email, tokens})
         logger.info.log("[INFO]: Succesfully created settings, profile and user for new user "+req.session.email);
         return currentUser;
     } else {//user already added
-        logger.info.log("[INFO]: User logged in, welcome back "+req.session.email);
+        logger.info.log("[INFO]: User logged in, welcome back "+email);
         req.session.email = email;
         return currentUser._id;
     }

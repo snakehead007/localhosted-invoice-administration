@@ -1,5 +1,6 @@
 nav(class="navbar navbar-dark fixed-top bg-"+settings.theme+" flex-md-nowrap p-0 shadow")
-    a(class="navbar-brand col-sm-3 col-md-2 mr-0",href="/view/profile") invoice-administration
+    a#main-brand(class="navbar-brand col-sm-3 col-md-2 mr-0",href="/view/profile") invoice-administration
+    a#off-brand(class="navbar-brand col mr-0",href="/dashboard",style="display:none") I-A
     button.navbar-toggler(id="navbarButton" type='button' data-toggle='collapse' data-target='#navbar' aria-controls='navbar' aria-expanded='false' aria-label='Toggle navigation')
         span.navbar-toggler-icon
     form#navbar-form-small(class="form", method="post",action="/search/")
@@ -13,5 +14,5 @@ nav(class="navbar navbar-dark fixed-top bg-"+settings.theme+" flex-md-nowrap p-0
         button(type="sumbit",style="display:none")
     ul#navbar-logout(class="navbar-nav px-3")
         li(class="nav-item text-nowrap")
-            a(class="nav-link" style="color:#FFF", href="/logout") #{__('Sign out')}
+            a(  style="color:#FFF", href="/logout") #{__('Sign out')}
 
