@@ -60,6 +60,25 @@ exports.sendAttachment = (to,attachmentPath,attachmentName) => {
     });
 };
 
+exports.sendToBasecone = (from,baseconeMail,attachmentPath,attachmentName,subject,description) => {
+    const mailgun = new Mailgun({apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN});
+    const data = {
+        from: from,
+        to: baseconeMail,
+        subject: '['+subject+']',
+        html: '[*'+description+'*]',
+        attachment:attachmentPath
+    };
+    mailgun.messages().send(data, function (err, body) {
+        if (err) {
+            console.log("got an error: ", err);
+        }
+        else {
+            console.log(body);
+        }
+    });
+};
+
 exports.sendBugReport = (to,message,userID,userObject,ip) => {
     const mailgun = new Mailgun({apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN});
     const data = {

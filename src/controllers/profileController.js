@@ -8,7 +8,7 @@ const {sendMessage} = require('../../messages/messages');
 const {formatBEVat,formatBEBic,formatBEIban,valueMustBeValidBic, valueMustBeValidIban, valueMustBeStreetNumber, valueMustBeAName, valueMustBeEmail, numberMustPhoneNumber, valueMustBeVatNumber, valueMustBePostalCode} = require("../utils/formValidation");
 const activity = require('../utils/activity');
 const logger = require("../middlewares/logger");
-const {getSizeOfImage} = require("../utils/utils");
+const {getReformatedImageSize} = require("../utils/utils");
 const path = require("path");
 const sizeOf = require('image-size');
 /**
@@ -44,7 +44,7 @@ exports.viewProfileGet = async (req, res) => {
                 }catch(err){
                     console.trace(err);
                 }
-                console.log(size);
+                size = getReformatedImageSize(size);
                 if (!err) {
                     res.render("edit/edit-profile", {
                         "currentUrl": "edit-profile",

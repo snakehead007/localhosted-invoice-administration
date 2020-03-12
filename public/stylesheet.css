@@ -280,10 +280,6 @@ table tbody tr td a {
     #navbar-form-small{
         display:none;
     }
-    main {
-        flex: 0 0 94% !important;
-        max-width:94% !important;
-    }
     .down {
         bottom: 20px;
         position: fixed;
@@ -332,6 +328,10 @@ table tbody tr td a {
     }
     nav.col-md-2.sidebar{
         max-width:56px !important;
+    }
+    main {
+        flex: 0 0 94% !important;
+        max-width:94% !important;
     }
     .small-sidebar{
         display:flex !important;

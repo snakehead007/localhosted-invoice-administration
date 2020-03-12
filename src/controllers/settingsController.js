@@ -126,3 +126,17 @@ exports.changePdfOptions = (req, res) => {
         }
     });
 };
+
+exports.changeBaseconeMail = (req, res) => {
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' updated their BaseconeMail with "+JSON.stringify(req.body));
+    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/settingsController.changeBaseconeMail on method Settings.findOne trace: "+err.message);
+        if (!err) {
+            Settings.updateOne({fromUser: req.session._id, _id: settings._id}, {baseconeMail:req.body.baseconeMail}, function (err) {
+                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/settingsController.changeBaseconeMail on method Settings.updateOne trace: "+err.message);
+                req.flash('success',i18n.__("Your settings have been updated"));
+                res.redirect("/settings");
+            });
+        }
+    });
+};

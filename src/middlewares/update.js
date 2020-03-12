@@ -14,6 +14,7 @@ exports.updateUndoAbility = async (req, res, next) => {
     await Invoice.updateMany({fromUser:req.session._id,isVatOn:null},{isVatOn:false});
     const newpdf = {titleSize:38,noLogo:false};
     await Settings.updateMany({fromUser:req.session._id,pdf:null},{pdf:newpdf});
+    await Settings.updateMany({fromUser:req.session._id,isSendBasecone:null},{isSendBasecone:false});
     //searches all orders for each invoice of the user, and adds it properly to the invoice.orders array
     //this didnt work in the earlier versions
     let invoicesAll = await Invoice.find({fromUser:req.session._id},(err,invoices)=>{return invoices;});

@@ -16,14 +16,32 @@ exports.getSizeOfImage = (path) => {
             h:dimensions.height
         };
     });
-    /*
-    gm(path).size(function (err, size) {
-        if(err) console.trace(err);
-        console.log(size);
-            if (!err) {
-                width=size.width;
-                height=size.height;
-            }
-        });
-    */
+};
+
+exports.getReformatedImageSize = (sizeOfObj,defaultSize=200) => {
+    console.log(sizeOfObj);
+    let ratio = sizeOfObj.width/sizeOfObj.height;
+    let width = defaultSize;
+    let height= defaultSize;
+    console.log(ratio);
+    if(ratio>2.5||ratio<0.25){
+        height = height/3;
+        width = width/3;
+    }else if(ratio>1.75||ratio<0.75){
+        height = height/1.5;
+        width = width/1.5;
+    }
+    if(ratio>1.0){
+        width = width * ratio;
+    }else if(ratio<1.0){
+        height= height * sizeOfObj.height/sizeOfObj.width;
+    }
+    console.log(height);
+    console.log(width);
+    return {
+        height:height,
+        orientation: sizeOfObj.orientation,
+        width:width,
+        type: sizeOfObj.type
+    };
 };

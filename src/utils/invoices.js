@@ -53,7 +53,7 @@ exports.getPathOfInvoice = (fromUser,invoice) => {
         if (!invoice.offerNr) {
             pdfname= "creditnota "+invoice.creditNr+'.pdf'
         } else {
-            pdfname= "offerte" + invoice.offerNr+".pdf"
+            pdfname= "offerte " + invoice.offerNr+".pdf"
         }
     } else if(invoice.invoiceNr){
         pdfname= invoice.invoiceNr+".pdf"

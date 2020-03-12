@@ -46,6 +46,15 @@ html(lang="nl-BE")
                                                         button(type="button" class="btn btn-"+((settings.locale==="nl-BE")?"outline-":"")+settings.theme) #{__('Dutch')}
                                                     a(href="/settings/change/lang/en-GB",class="button")
                                                         button(type="button" class="btn btn-"+((settings.locale==="en-GB")?"outline-":"")+settings.theme) #{__('English')}
+                                    tr(onclick="openBasecone()",class="settingsOption optionBasecone")
+                                        td
+                                            p(class="lead") #{__('Basecone')}
+                                            div(id="basecone",style="display:none;")
+                                                div.col-6(class="mb-3" role="group" aria-label="Basic example")
+                                                    form(action="/settings/change/basecone",method="post")
+                                                        .form-group
+                                                            label.form-label(for="baseconeMail")=__("Unique Basecone email address")
+                                                            input.form-control(id="baseconeMail" name="baseconeMail" type="email", value=settings.baseconeMail, required="required",placeholder="xxxx.xxxx@mailtobasecone.com")
                                     tr(onclick="openPdf()",class="settingOption optionPdf")
                                         td
                                             p(class="lead")=__("PDF options")

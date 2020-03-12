@@ -11,7 +11,7 @@ const {getPathOfInvoice,getOnlyTypeOfInvoice,getDefaultNumberOfInvoice} = requir
 const {getIp} = require("../utils/utils");
 const logger = require("../middlewares/logger");
 
-exports.sendAttachment = async (req,res) => {
+exports.sendToBasecone = async (req,res) => {
     logger.warning.log("[WARNING]: Email:\'"+req.session.email+"\' tried to send attachment via mail.");
     let user = await User.findOne({_id:req.session._id},(err,user) => {return user;
     if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on method User.findOne trace: "+err.message);});
@@ -28,15 +28,26 @@ exports.sendAttachment = async (req,res) => {
                     Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on method Settings.findOne trace: "+err.message);
                         if (!err) {
+                            if(!settings.baseconeMail){
+                                req.flash("warning",i18n.__("No basecone mail found, add one in the settings"));
+                                res.redirect('back');
+                                return;
+                            }
                             try {
                                 let type = await getOnlyTypeOfInvoice(invoice);
                                 await createPDF(req, res, type, profile, settings, client, invoice, orders, true, true);
-                                mailgun.sendAttachment(user.email, getPathOfInvoice(req.session._id, invoice), nr.toString());
-                                req.flash('success',i18n.__("Your PDF has mailed to your email"));
+                                mailgun.sendToBasecone(user.email,settings.baseconeMail, getPathOfInvoice(req.session._id, invoice), nr.toString(),req.body.subject,req.body.description);
+                                Invoice.updateOne({fromUser:req.session._id,_id:req.params.idi},{isSendToBasecone:true},(err)=>{
+                                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on method Invoice.updateOne trace: "+err.message);
+                                });
+                                req.flash('success',i18n.__("Your invoice has been sent to Basecone"));
                             }catch(err){
-                                logger.error("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on catch block trace: "+err.message);
+                                logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on catch block trace: "+err.message);
                                 req.flash('warning',i18n.__("This option is only available if you contact the administrator"));
                             }finally {
+                                Invoice.updateOne({fromUser:req.session._id,_id:req.params.idi},{isSendToBasecone:true},(err)=>{
+                                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on Invoice.updateOne trace: "+err.message)
+                                });
                                 res.redirect('back');
                             }
                         }

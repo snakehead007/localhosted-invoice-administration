@@ -15,7 +15,8 @@ const JsPDF = require("jspdf");
 window.jsPDF = require("jspdf");
 const i18n = require("i18n");
 const path = require("path");
-
+const sizeOf = require('image-size');
+const {getReformatedImageSize} = require("./utils");
 const {callGetBase64, createJSON, replaceAll} = require("../utils/pdfCreation");
 require("jspdf-autotable");
 exports.createPDF = async (req, res, style = "invoice", profile, settings, client, invoice, orders,download=false,onlyPrompt=false) => {
@@ -68,7 +69,9 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         if(settings.pdf.noLogo){
             throw Error("I throw it on the ground!! I dont need your image!");
         }
-        doc.addImage(imgData, "JPEG", 15, 5, 50, 50);
+        let _path = path.resolve(__dirname,"../../public/images/"+req.session._id+"/logo.jpeg");
+        let sizeOfImage = getReformatedImageSize(sizeOf(_path),40);
+        doc.addImage(imgData, "JPEG", 15, 10, sizeOfImage.width, sizeOfImage.height);
     } catch (err) {
         console.log("Putting in place holder name");
         doc.setFontType("bold");
