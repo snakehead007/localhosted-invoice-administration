@@ -9,6 +9,7 @@ const Profile = require("../models/profile");
 const logger = require("../middlewares/logger");
 const {getIp} = require("../utils/utils");
 exports.loginGet = async (req, res) => {
+    req.flash("warning","test test test test test test test test test test test test ");
     if(req.session._id){
         let user = await User.findOne({_id:req.session._id},(err,user)=>{
             if(err) logger.error.log("[ERROR]: thrown at /src/controllers/loginController.loginGet on method User.findOne trace: "+err.message);

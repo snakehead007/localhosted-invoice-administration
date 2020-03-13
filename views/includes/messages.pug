@@ -7,19 +7,19 @@
     #messages.col-12
         if messages.danger
             each message in messages.danger
-                div(class="alert alert-danger alert-dismissible fade show" role="alert")=message
+                div.alert-message(class="alert alert-danger alert-dismissible fade show" role="alert")=message
                     button(type="button" class="close" data-dismiss="alert" aria-label="Close")
                         span(aria-hidden="true") &times;
         if messages.warning
             each message in messages.warning
-                div(class="alert alert-warning alert-dismissible fade show" role="alert")=message
+                div.alert-message(class="alert alert-warning alert-dismissible fade show" role="alert")=message
                     button(type="button" class="close" data-dismiss="alert" aria-label="Close")
                         span(aria-hidden="true") &times;
         if messages.success
             each message in messages.success
-                div(class="alert alert-success fade show" role="alert")=message
+                div.alert-message(class="alert alert-success fade show" role="alert")=message
         if messages.info
             each message in messages.info
-                div.alert.alert-info.alert-dismissible.fade.fadeOut.show(role="alert")=message
+                div.alert-message.alert.alert-info.alert-dismissible.fade.fadeOut.show(role="alert")=message
                     button.close(type='button', data-dismiss="alert" aria-label="Close")
                         span(aria-hidden="true") &times;

@@ -1,5 +1,5 @@
 #newDocument.modal.fade(tabindex='-1' role='dialog' aria-labelledby='newDocument' aria-hidden='true')
-    .modal-dialog(role='document')
+    .modal-dialog.modal-sm(role='document')
         .modal-content
             .modal-header
                 h5#bugReporterLabel.modal-title=__("Adding a new document:")
@@ -7,7 +7,7 @@
                     span(aria-hidden='true') &times;
             .modal-body
                 .container-fluid
-                    .row
+                    .row.contents
                         if client
                             a(class="nav-link",href='/invoice/new/invoice/'+client._id)
                                 i.not-nav-fas(class="fas fa-plus-circle")
@@ -16,7 +16,7 @@
                                 a(class="nav-link",href='/invoice/new/invoice')
                                     i.not-nav-fas(class="fas fa-plus-circle")
                                     span #{__('New invoice')}
-                    .row
+                    .row.contents
                         if client
                             a(class="nav-link", href = '/invoice/new/offer/' + client._id)
                                 i.not-nav-fas(class="fas fa-plus-circle")
@@ -25,7 +25,7 @@
                             a(class="nav-link",href='/invoice/new/offer')
                                 i.not-nav-fas(class="fas fa-plus-circle")
                                 span #{__('New offer')}
-                    .row
+                    .row.contents
                         if client
                             a(class = "nav-link", href = '/invoice/new/credit/' + client._id )
                                 i.not-nav-fas(class="fas fa-plus-circle")

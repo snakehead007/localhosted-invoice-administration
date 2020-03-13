@@ -35,6 +35,17 @@ body {
     padding: 48px 0 0; /* Height of navbar */
     box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
 }
+.alert-message{
+    opacity: 92%;
+    z-index: 9999;
+    width:95%;
+    position:absolute !important;
+    top:-30px;
+}
+
+.contents{
+    display:contents !important;
+}
 
 .sidebar-sticky {
     position: relative;

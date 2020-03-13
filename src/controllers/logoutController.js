@@ -22,7 +22,7 @@ exports.logoutGet = async (req, res) => {
             if(err) logger.error.log("[ERROR]: thrown at /src/controllers/logoutController.logoutGet on method req.session.regenerate trace: "+err.message);
         }
         if(!err){
-            logger.info.log("[INFO]: User "+emailofUser.toString()+" successfully logged out");
+            logger.info.log("[INFO]: User "+emailofUser+" successfully logged out");
         }
         res.redirect("/");
     })
