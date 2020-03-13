@@ -15,7 +15,6 @@ const logger = require("../middlewares/logger");
  */
 exports.logoutGet = async (req, res) => {
     let emailofUser = req.session.email;
-    //req.logout() //try this method
     req.session.regenerate(function (err) {
         //new empty session
         req.flash("success", i18n.__("Successfully logged out"));
@@ -23,7 +22,7 @@ exports.logoutGet = async (req, res) => {
             if(err) logger.error.log("[ERROR]: thrown at /src/controllers/logoutController.logoutGet on method req.session.regenerate trace: "+err.message);
         }
         if(!err){
-            logger.info.log("[INFO]: User "+emailofUser+" succesfully logged out");
+            logger.info.log("[INFO]: User "+emailofUser.toString()+" successfully logged out");
         }
         res.redirect("/");
     })

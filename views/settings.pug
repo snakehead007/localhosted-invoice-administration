@@ -77,6 +77,7 @@ html(lang="nl-BE")
                                             p(class="lead") #{__('PDF footnotes')}
                                             div(id="text",style="display:none;")
                                                 form(action='/settings/change/text',method='post')
+                                                    p=__("These text will be put on the bottom of the corresponding document")
                                                     button(type="button" class="mb-1 headExtend btn-sm btn btn-outline-"+settings.theme, onclick="info()") #{__('info')}
                                                     div(class="input-group mb-3")
                                                         div(class="input-group-prepend")

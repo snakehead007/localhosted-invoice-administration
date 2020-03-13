@@ -7,9 +7,18 @@ const User = require("../models/user");
 const Settings = require("../models/settings");
 const Profile = require("../models/profile");
 const logger = require("../middlewares/logger");
-exports.loginGet = function getLogin(req, res) {
-    //req.session;
-    if(req.session&&req.session._id){
+const {getIp} = require("../utils/utils");
+exports.loginGet = async (req, res) => {
+    if(req.session._id){
+        let user = await User.findOne({_id:req.session._id},(err,user)=>{
+            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/loginController.loginGet on method User.findOne trace: "+err.message);
+            return user;
+        });
+        if(!user){
+            logger.warning.log("[WARNING]: User on Ip "+getIp(req)+" has session _id, but not valid. session: "+req.session);
+            req.flash("danger","Could not logging, please try again. Or contact us.");
+            return res.redirect("/");
+        }
         logger.info.log("[INFO]: Email:\'"+req.session.email+"\' already in session, redirecting to dashboard");
         return res.redirect("/dashboard");
     }

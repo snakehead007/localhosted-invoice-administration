@@ -41,10 +41,10 @@ exports.viewProfileGet = async (req, res) => {
                 try{
                     let _path = path.resolve(__dirname,"../../public/images/"+req.session._id+"/logo.jpeg");
                     size = sizeOf(_path);
+                    size = getReformatedImageSize(size);
                 }catch(err){
                     console.trace(err);
                 }
-                size = getReformatedImageSize(size);
                 if (!err) {
                     res.render("edit/edit-profile", {
                         "currentUrl": "edit-profile",

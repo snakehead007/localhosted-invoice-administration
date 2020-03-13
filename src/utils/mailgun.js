@@ -65,7 +65,7 @@ exports.sendToBasecone = (from,baseconeMail,attachmentPath,attachmentName,subjec
     const data = {
         from: from,
         to: baseconeMail,
-        subject: '['+subject+']',
+        subject: subject,
         html: '[*'+description+'*]',
         attachment:attachmentPath
     };

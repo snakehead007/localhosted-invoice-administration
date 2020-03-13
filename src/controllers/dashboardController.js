@@ -78,10 +78,6 @@ exports.mainGet = async function getLogin(req, res) {
                                 if(err) logger.error.log("[ERROR]: thrown at /src/controllers/dashboardController.mainGet on method User.findOne trace: "+err.message);
                                 return user
                             })).role;
-                            req.flash('info',"Momenteel werken deze functionaliteiten niet:\r\n" +
-                                            "- Totaal betaalt van de klanten bij \"alle klanten\"\r\n" +
-                                            "\r\n" +
-                                            "Hier wordt aan gewerkt...");
                             res.render("index", {
                                 "currentUrl": "dashboard",
                                 "total": newChart,

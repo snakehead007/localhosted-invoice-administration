@@ -9,6 +9,7 @@ const cookieParser = require("cookie-parser");
 const i18n = require("i18n");
 const toobusy = require('toobusy-js');
 const hpp = require('hpp');
+const logger = require("../middlewares/logger");
 const xssFilter = require('x-xss-protection');
 module.exports.default = function (app) {
     app.locals.title = "invoice-administration";
@@ -47,10 +48,23 @@ module.exports.default = function (app) {
         })
     );
     app.use(flash());
+    app.use(hpp());
+
     app.use(function (req, res, next) {
         res.locals.session = req.session;
         next();
     });
-
     app.listen(process.env.PORT);
+    app.use(function(req, res, next) {
+        if (toobusy()) {
+            req.flash('warning',"Our server is too busy right now, try again later. Or contact us.");
+            res.redirect('back');
+        } else {
+            next();
+        }
+    });
+    toobusy.maxLag(400); //400ms => 4seconds max lag
+    toobusy.onLag(function(currentLag) {
+        logger.warning.log("Event loop lag detected! Latency: " + currentLag + "ms");
+    });
 };

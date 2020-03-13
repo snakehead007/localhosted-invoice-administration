@@ -11,7 +11,7 @@ div.modal.fade(id="viewInvoice"+invoice._id, tabindex='-1' role='dialog' aria-la
                             tr
                                 th(scope="row") #{__('Date')}
                                 td
-                                    h4(id="date" + invoice._id)
+                                    h4(id="dateModal" + invoice._id)
                             if invoice.invoiceNr
                                 tr
                                     th(scope="row") #{__('Invoice Nr')}
@@ -34,7 +34,7 @@ div.modal.fade(id="viewInvoice"+invoice._id, tabindex='-1' role='dialog' aria-la
                                         h4=invoice.advance
                             script.
                                 //date is done via DOM, the locale cannot be set right when using pug
-                                let id = "date" + "#{invoice._id}";
+                                let id = "dateModal" + "#{invoice._id}";
                                 let date = new Date("#{invoice.date}").toLocaleString("#{settings.locale}", {
                                     year: 'numeric',
                                     month: 'numeric',

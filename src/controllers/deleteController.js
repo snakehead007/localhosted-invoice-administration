@@ -44,11 +44,23 @@ exports.deleteClient = (req, res) => {
  *  }
  */
 exports.deleteInvoiceGet = async (req, res) => {
-    let invoice = await Invoice.findOne({_id:req.params.idi,fromUser:req.session._id,isRemoved:false}, async (err,invoice) => {
+    Invoice.findOne({_id:req.params.idi,fromUser:req.session._id,isRemoved:false}, async (err,invoice) => {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/deleteController.deleteInvoiceGet on method Invoice.findOne trace: "+err.message);
-        return invoice;});
-    await activity.deleteInvoice(invoice,req.session._id);
-    res.redirect("/invoice/all");
+        if(invoice.isPaid) {
+            Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, async (err, client) => {
+                if (err) logger.error.log("[ERROR]: thrown at /src/controllers/deleteController.deleteInvoiceGet on method Client.findOne trace: " + err.message);
+                await Client.updateOne({
+                    fromUser: req.session._id,
+                    _id: invoice.fromClient
+                }, {totalPaid: client.totalPaid - invoice.total}, (err) => {
+                    if (err) logger.error.log("[ERROR]: thrown at /src/controllers/deleteController.deleteInvoiceGet on method Client.updateOne trace: " + err.message);
+                });
+            });
+        }
+
+        await activity.deleteInvoice(invoice, req.session._id);
+        res.redirect("/invoice/all");
+    });
 };
 
 /**
@@ -111,6 +123,20 @@ exports.deleteOrderGet = (req, res) => {
                     await Invoice.updateOne({fromUser: req.session._id, _id: invoice._id}, updateInvoice,(err) => {
                         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/deleteController.deleteOrderGet on method Invoice.updateOne trace: "+err.message);
                     });
+                    if(invoice.isPaid) {
+                        await Client.findOne({
+                            fromUser: req.session._id,
+                            _id: invoice.fromClient
+                        }, async (err, client) => {
+                            if (err) logger.error.log("[ERROR]: thrown at /src/controllers/deleteController.deleteOrderGet on method Client.findOne trace: " + err.message);
+                            await Client.updateOne({
+                                fromUser: req.session._id,
+                                _id: invoice.fromClient
+                            }, {totalPaid: client.totalPaid - (order.amount * order.price)}, (err) => {
+                                if (err) logger.error.log("[ERROR]: thrown at /src/controllers/deleteController.deleteOrderGet on method Client.updateOne trace: " + err.message);
+                            });
+                        });
+                    }
                     await activity.deleteOrder(order,req.session._id);
                     req.flash("success", i18n.__("Successfully deleted the order"));
                     res.redirect("/order/all/" + invoice._id);

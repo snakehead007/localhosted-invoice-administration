@@ -33,7 +33,7 @@ body
                 if(size)
                   img#logo(src="/no-logo.jpg" alt="your logo" class="rounded-lg" style="width:"+size.width+"px;height:"+size.height+"px")
                 else
-                  img#logo(src="/no-logo.jpg" alt="your logo" class="rounded-lg" style="width:200px;height:200px")
+                  img(src="/no-logo.jpg" alt="your logo" class="rounded-lg" style="width:200px;height:200px")
   script.
     function info(){
       $("#info").toggle();
@@ -52,9 +52,14 @@ body
       };
       img.src = url;
     }
-    imageExists(src="/images/" + "#{profile.fromUser}" + "/logo.jpeg", function (exists) {
-      if (exists) {
-        document.getElementById("logo").src = src;
-      }
-    });
+    try {
+      imageExists(src = "/images/" + "#{profile.fromUser}" + "/logo.jpeg", function (exists) {
+        if (exists) {
+          document.getElementById("logo").src = src;
+        }
+      });
+    }catch(err) {
+      console.error("No logo found");
+    }
+
   include ../includes/modals/bugReporter

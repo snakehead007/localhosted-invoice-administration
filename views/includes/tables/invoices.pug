@@ -39,13 +39,14 @@ table(class="table table-striped table-sm ",id="tabelInvoices")
                 if !client
                     td
                         a(href='/invoice/all/' + invoice.fromClient)=invoice.clientName
-                td(id="date"+invoice._id)
-                    td
-                        include ../modals/mailToBasecone
-                        if invoice.isVatOn
-                            span=(invoice.total * 1.00).toFixed(2) + "€"
-                        else
-                            span=(invoice.total * 1.21).toFixed(2) + "€"
+                td
+                    span(id="date"+invoice._id)
+                td
+                    include ../modals/mailToBasecone
+                    if invoice.isVatOn
+                        span=(invoice.total * 1.00).toFixed(2) + "€"
+                    else
+                        span=(invoice.total * 1.21).toFixed(2) + "€"
                 td
                     if invoice.invoiceNr
                         div(class="custom-control custom-switch")
@@ -96,8 +97,7 @@ table(class="table table-striped table-sm ",id="tabelInvoices")
             include ../modals/deleteConfirmationInvoice
             script.
                 //date is done via DOM, the locale cannot be set right when using pug
-                let id#{invoice._id} = "date"+"#{invoice._id}";
-                document.getElementById(id#{invoice._id}).innerHTML = new Date("#{invoice.date}").toLocaleString("#{settings.locale}", {
+                document.getElementById("date"+"#{invoice._id}").innerHTML = new Date("#{invoice.date}").toLocaleString("#{settings.locale}", {
                     year: 'numeric',
                     month: 'numeric',
                     day: 'numeric'

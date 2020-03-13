@@ -29,7 +29,7 @@ const i18n = require("i18n");
 exports.getActivity = async (req,res) => {
     const activities = await Activity.find({fromUser:req.session._id}, null,{sort: {time: -1}},(err,activities) => {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getActivity on method Activity.find trace: "+err.message);
-        return activities});
+        return activities}).limit(50);
     const role = (await User.findOne({_id: req.session._id}, (err, user) => {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getActivity on method User.findOne trace: "+err.message);return user;})).role;
     const profile = await Profile.findOne({fromUser:req.session._id}, (err,profile) => {
@@ -75,11 +75,48 @@ exports.getUndoActivity = async (req,res) => {
             let invoice = await Invoice.findOne({_id:act.withObjectId,fromUser:req.session._id,isRemoved:true}, (err,invoice) => {
                 if(err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getUndoActivity on method Invoice.findOne trace: "+err.message);return invoice});
             await undo.undoInvoice(invoice,req.session._id);
+            if(invoice.isPaid) {
+                await Client.findOne({
+                    fromUser: req.session._id,
+                    _id: invoice.fromClient
+                }, async (err, client) => {
+                    if (err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getUndoActivity on method Client.findOne trace: " + err.message);
+                    await Client.updateOne({
+                        fromUser: req.session._id,
+                        _id: invoice.fromClient
+                    }, {totalPaid: client.totalPaid+invoice.total}, (err) => {
+                        if (err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getUndoActivity on method Client.updateOne trace: " + err.message);
+                    });
+                });
+            }
             req.flash('success',i18n.__("Undo of the invoice was successful"));
             break;
         case "line":
             let order = await Order.findOne({_id:act.withObjectId,fromUser:req.session._id,isRemoved:true}, (err,order) => {
                 if(err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getUndoActivity on method Order.findOne trace: "+err.message);return order});
+            console.log(act.withObjectId);
+            let invoiceL = await Invoice.findOne({_id:order.fromInvoice,fromUser:req.session._id}, (err,invoice) => {
+            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getUndoActivity on method Invoice.findOne trace: "+err.message);return invoice});
+            let updateInvoice = {
+                total: invoiceL.total + (order.amount * order.price)
+            };
+            await Invoice.updateOne({fromUser: req.session._id, _id: invoiceL._id}, updateInvoice,(err) => {
+                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getUndoActivity on method Invoice.updateOne trace: "+err.message);
+            });
+            if(invoiceL.isPaid) {
+                await Client.findOne({
+                    fromUser: req.session._id,
+                    _id: invoiceL.fromClient
+                }, async (err, client) => {
+                    if (err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getUndoActivity on method Client.findOne trace: " + err.message);
+                    await Client.updateOne({
+                        fromUser: req.session._id,
+                        _id: invoiceL.fromClient
+                    }, {totalPaid: client.totalPaid + (order.amount * order.price)}, (err) => {
+                        if (err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getUndoActivity on method Client.updateOne trace: " + err.message);
+                    });
+                });
+            }
             await undo.undoOrder(order,req.session._id);
             req.flash('success',i18n.__("Undo of the line was successful"));
             break;
@@ -88,7 +125,7 @@ exports.getUndoActivity = async (req,res) => {
             break;
     }
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is removing activity: "+JSON.stringify(act));
-    await Activity.remove({_id:req.params.id,fromUser:req.session._id},(err)=> {
+    await Activity.deleteOne({_id:req.params.id,fromUser:req.session._id},(err)=> {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getUndoActivity on method Activity.remove trace: "+err.message)
     });
     res.redirect('/activity');
@@ -109,7 +146,7 @@ exports.getUndoActivity = async (req,res) => {
  */
 exports.removeGet = async (req,res)=> {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is removing activity: "+req.params.id);
-    await Activity.remove({_id:req.params.id,fromUser:req.session._id},(err) =>{
+    await Activity.deleteOne({_id:req.params.id,fromUser:req.session._id},(err) =>{
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.removeGet on method Activity.remove trace: "+err.message)});
     req.flash('success',"Successfully deleted the activity");
     res.redirect('/activity');

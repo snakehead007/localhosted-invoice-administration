@@ -2,24 +2,28 @@
     .modal-dialog(role='document')
         .modal-content
             .modal-header
-                h5#bugReporterLabel.modal-title=__("Send this document to Basecone")
+                h5.modal-title=__("Send this document to Basecone")
                 button.close(type='button' data-dismiss='modal' aria-label='Close')
                     span(aria-hidden='true') &times;
             form(action="/mail/sendToBasecone/" + invoice._id , method="post")
                 .modal-body
                     .container-fluid
-                            .form-group
-                                label(for="selectionBasecone")=__("Tag document as")+" "
-                                    a(href="https://support.basecone.co.uk/en/articles/1171776-tagging-of-documents")="("+__("More info")+")"
-                                select.custom-select(id="selectionBasecone", name="subject")
-                                    option(value='PVN')=__("Purchase Invoice – Recognise and book a purchase invoice")
-                                    option(value='SLS')=__("Sales Invoice – Recognise and book a sales invoice")
-                                    option(value='CASH')=__("Booking a cash receipts")
-                                    option(value='BANK')=__("Electronic bank statements.")
-                                    option(value='JNL')=__("Journal – Documents are processed as journal.")
-                            .form-group
-                                label(for="textareaBasecone")=__("Description")
-                                textarea.form-control#textareaBasecone(rows="3", name="description")
+                        //.form-group
+                            label(for="filenameBasecone"+invoice._id)=__("Filename")
+                            input(id="filenameBasecone"+invoice._id, name="filename", value=(invoice.creditNr)?__("invoice")+"-"+invoice.creditNr:__("creditnote")+"-"+invoice.invoiceNr , placeholder="factuur")
+                        .form-group
+                            label(for="selectionBasecone"+invoice._id)=__("Tag document as")+" "
+                                a(href="https://support.basecone.co.uk/en/articles/1171776-tagging-of-documents")="("+__("More info")+")"
+                            select.custom-select(id="selectionBasecone"+invoice._id, name="subject")
+                                option(value='')=__("No tag")
+                                option(value='[PVN]')=__("PVN - Purchase Invoice")
+                                option(value='[SLS]')=__("SLS - Sales Invoice")
+                                option(value='[CASH]')=__("CASH - Booking a cash receipts")
+                                option(value='[BANK]')=__("BANK - Electronic bank statements.")
+                                option(value='[JNL]')=__("JNL - Journal")
+                        .form-group
+                            label(for="textareaBasecone"+invoice._id)=__("Description")
+                            textarea.form-control(id="textareaBasecone"+invoice._id, rows="3", name="description")
                 .modal-footer
                     button.btn.btn-secondary(type="button" data-dismiss="modal" )=__("Close")
                     button.btn.btn-primary(type="submit" role="button"  )=__("Send")
