@@ -6,7 +6,7 @@ const Invoice = require("../models/invoice");
 const Settings = require("../models/settings");
 const Profile = require("../models/profile");
 const Client = require("../models/client");
-
+const i18n = require("i18n");
 const User = require("../models/user");
 const {findOneHasError} = require("../middlewares/error");
 const activity = require('../utils/activity');
@@ -175,14 +175,23 @@ exports.allOrderGet = (req, res) => {
             Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved: false}, function (err, orders) {
                 if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.allOrderGet on method Order.findOne trace: "+err.message);
                 if (!err) {
+                    console.log(invoice);
                     Client.findOne({fromUser: req.session._id, _id: invoice.fromClient,isRemoved:false}, function (err, client) {
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.allOrderGet on method Client.findOne trace: "+err.message);
+                        if(err) {
+                            logger.error.log("[ERROR]: thrown at /src/controllers/orderController.allOrderGet on method Client.findOne trace: "+err.message);
+                        }
+                        if(!client){
+                            req.flash("warning",i18n.__("Client has not been found of this document. If you have removed this, please undo the removal of this client manually. If this warning presists please file a bug report or contact us directly"));
+                            res.redirect("back");
+                            return;
+                        }
                         Settings.findOne({fromUser: req.session._id}, function (err, settings) {
                             if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.allOrderGet on method Settings.findOne trace: "+err.message);
                             if (!err) {
                                 Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                                     if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.allOrderGet on method Profile.findOne trace: "+err.message);
                                     if (!err) {
+                                        console.log(client);
                                         res.render("orders", {
                                             "invoice": invoice,
                                             "orders": orders,

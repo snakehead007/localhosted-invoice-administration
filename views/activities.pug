@@ -11,6 +11,12 @@ html
                         include includes/downMenu
                 main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
                     h2(class="pt-3") #{__('All Activities')}
+                    a(href="/activity")
+                        button(type="button" class="btn btn-sm btn-outline-" + settings.theme)
+                            span=__("Show all activities")
+                    a(href="/activity/deletes")
+                        button(type="button" class="btn btn-sm btn-outline-" + settings.theme)
+                            span=__("Show only deleted items")
                     hr
                     include includes/messages
                     div(class="table-responsive bigger")

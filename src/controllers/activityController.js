@@ -44,6 +44,27 @@ exports.getActivity = async (req,res) => {
         "currentUrl":"activities",
         "activities":activities
     })
+};
+
+
+exports.getDeletesActivity = async (req,res) => {
+    const activities = await Activity.find({fromUser:req.session._id,type:"delete"}, null,{sort: {time: -1}},(err,activities) => {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getDeletesActivity on method Activity.find trace: "+err.message);
+        return activities});
+    const role = (await User.findOne({_id: req.session._id}, (err, user) => {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getDeletesActivity on method User.findOne trace: "+err.message);return user;})).role;
+    const profile = await Profile.findOne({fromUser:req.session._id}, (err,profile) => {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getDeletesActivity on method Profile.findOne trace: "+err.message);
+        return profile;});
+    const settings = await Settings.findOne({fromUser:req.session._id}, (err,settings) => {
+        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/activityController.getDeletesActivity on method Settings.findOne trace: "+err.message);return settings;});
+    res.render('activities',{
+        "settings":settings,
+        "role":role,
+        "profile":profile,
+        "currentUrl":"activities",
+        "activities":activities
+    })
 
 };
 

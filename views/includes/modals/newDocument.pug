@@ -11,29 +11,29 @@
                         if client
                             a(class="nav-link",href='/invoice/new/invoice/'+client._id)
                                 i.not-nav-fas(class="fas fa-plus-circle")
-                                span #{__('New invoice')}
+                                span.no-block #{__('New invoice')}
                         else
                                 a(class="nav-link",href='/invoice/new/invoice')
                                     i.not-nav-fas(class="fas fa-plus-circle")
-                                    span #{__('New invoice')}
+                                    span.no-block #{__('New invoice')}
                     .row.contents
                         if client
                             a(class="nav-link", href = '/invoice/new/offer/' + client._id)
                                 i.not-nav-fas(class="fas fa-plus-circle")
-                                span #{__('New offer')}
+                                span.no-block #{__('New offer')}
                         else
                             a(class="nav-link",href='/invoice/new/offer')
                                 i.not-nav-fas(class="fas fa-plus-circle")
-                                span #{__('New offer')}
+                                span.no-block #{__('New offer')}
                     .row.contents
                         if client
                             a(class = "nav-link", href = '/invoice/new/credit/' + client._id )
                                 i.not-nav-fas(class="fas fa-plus-circle")
-                                span #{__('New creditnote')}
+                                span.no-block #{__('New creditnote')}
                         else
                             a(class="nav-link",href='/invoice/new/credit')
                                 i.not-nav-fas(class="fas fa-plus-circle")
-                                span #{__('New creditnote')}
+                                span.no-block #{__('New creditnote')}
 
 
             .modal-footer

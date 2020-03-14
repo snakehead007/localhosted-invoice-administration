@@ -382,5 +382,8 @@
 	"Undo of the line was successful": "Het terugzetten van de lijn was succesvol",
 	"--------FROM-HERE-ALL-ABOVE-CHECKED-----------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------",
 	"These text will be put on the bottom of the page of the corresponding document": "These text will be put on the bottom of the page of the corresponding document",
-	"These text will be put on the bottom of the corresponding document": "These text will be put on the bottom of the corresponding document"
+	"These text will be put on the bottom of the corresponding document": "These text will be put on the bottom of the corresponding document",
+	"Client has not been found of this document. If you have removed this, please undo the removal of this client manually. If this warning presists please file a bug report or contact us directly": "Client has not been found of this document. If you have removed this, please undo the removal of this client manually. If this warning presists please file a bug report or contact us directly",
+	"Show only deleted items": "Show only deleted items",
+	"Show all activities": "Show all activities"
 }
