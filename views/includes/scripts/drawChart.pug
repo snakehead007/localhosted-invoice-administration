@@ -1,4 +1,22 @@
 script.
+    document.getElementById("customSwitch1").checked = false;
+    $(document).ready(function(){
+        $("#customSwitch1").change(function () {
+            let c = document.getElementById("customSwitch1").checked
+            let context = document.getElementById('myChart').getContext('2d');
+            let canvas = '<canvas class="my-4 w-100 h-60" id="myChart" width="900" height="380"></canvas>'
+            if (c) {
+                $('canvas').remove();
+                //add new canvas
+                $("#canvasBefore").before(canvas);
+                drawChart([#{totalPreview}]);
+            } else {
+                $('canvas').remove();
+                $("#canvasBefore").before(canvas);
+                drawChart([#{total}]);
+            }
+        });
+    })
     function drawChart(totaal) {
         var ctx = document.getElementById('myChart').getContext('2d');
         var maand = ["#{__('January')}", "#{__('February')}", "#{__('March')}", "#{__('April')}", "#{__('May')}", "#{__('June')}", "#{__('July')}", "#{__('August')}", "#{__('September')}", "#{__('October')}", "#{__('November')}", "#{__('December')}"];

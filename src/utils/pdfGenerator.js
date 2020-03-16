@@ -20,6 +20,48 @@ const {getReformatedImageSize} = require("./utils");
 const {callGetBase64, createJSON, replaceAll} = require("../utils/pdfCreation");
 require("jspdf-autotable");
 exports.createPDF = async (req, res, style = "invoice", profile, settings, client, invoice, orders,download=false,onlyPrompt=false) => {
+    console.log(settings);
+    console.log(invoice);
+    console.log(profile);
+    let colorTheme; //normal tone
+    let colorThemeLess; //darker tone for title
+    let blackFont; //true = use black font, false = use white font
+    switch(settings.pdf.color){
+        case "grey":
+            colorTheme = [108,117,125];
+            colorThemeLess = [156,165,173];
+            blackFont = false;
+            break;
+        case "dark":
+            colorTheme = [52,58,64];
+            colorThemeLess = [99,112,124];
+            blackFont = false;
+            break;
+        case "blue":
+            colorTheme = [23,162,184];
+            colorThemeLess = [44,129,142];
+            blackFont = false;
+            break;
+        case "red":
+            colorTheme = [220,53,69];
+            colorThemeLess = [175,43,57];
+            blackFont = false;
+            break;
+        case "green":
+            colorTheme = [40,167,69];
+            colorThemeLess = [31,119,51];
+            blackFont = false;
+            break;
+        case "yellow":
+            colorTheme = [216,167,21];
+            colorThemeLess = [216,167,21];
+            blackFont = true;
+            break;
+        default:
+            colorTheme = [140, 140, 140];
+            colorThemeLess = [180,180,180];
+            blackFont = false;
+    }
     let imgData;
     try {
         imgData = await callGetBase64(req.session._id);
@@ -81,6 +123,9 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     doc.setFontType("bold");
     doc.setFontSize(36);
     doc.setTextColor(170, 170, 170);
+    if(settings.pdf.color==="grey"||settings.pdf.color==="dark"){
+        doc.setTextColor(colorThemeLess[0],colorThemeLess[1],colorThemeLess[2]);
+    }
     if (style === "invoice")
         doc.text(140, 35, i18n.__("Invoice"));
     if (style === "credit")
@@ -186,14 +231,14 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         req.redirect("back");
     }
     doc.autoTable({
-        theme: "grid",
+        theme:"grid",
         columnStyles: {
             0: {fillColor: [255, 255, 255]},
             1: {fillColor: [255, 255, 255], halign: "right"},
             2: {fillColor: [255, 255, 255], halign: "right"},
             3: {fillColor: [255, 255, 255], halign: "right"}
         },
-        styles: {fillColor: [140, 140, 140]},
+        styles: {fillColor: colorTheme},
         startY: 110,
         head: [[i18n.__("Description"), i18n.__("Amount"), i18n.__("Price"), i18n.__("Total")]],
         body: ordersPrint
@@ -204,6 +249,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     console.log(_vat);
     totalExSub = totalEx - invoice.advance;
     totalInc = totalExSub + _vat;
+    let textColor = (blackFont)?[0,0,0,0]:[255,255,255];
     if (invoice.advance == 0) {
         doc.autoTable({
             theme: "plain",
@@ -212,9 +258,8 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
                 0: {fillColor: [255, 255, 255]},
                 1: {fillColor: [255, 255, 255]},
                 2: {fillColor: [255, 255, 255], halign: "right"},
-                3: {fillColor: [180, 180, 180], halign: "right"}
+                3: {fillColor: colorTheme, textColor:textColor,halign: "right"}
             },
-            styles: {fillColor: [140, 140, 140]},
             body: [
                 [[""], ["                               "], [i18n.__("subtotal")], [totalEx.toFixed(2) + " €"]],
                 [[""], ["                               "], [i18n.__("VAT") + " " +vatOfClient + "%"], [_vat.toFixed(2) + " €"]],
@@ -229,9 +274,8 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
                 0: {fillColor: [255, 255, 255]},
                 1: {fillColor: [255, 255, 255]},
                 2: {fillColor: [255, 255, 255], halign: "right"},
-                3: {fillColor: [140, 140, 140], halign: "right"}
+                3: {fillColor: colorTheme, textColor:textColor, halign: "right"}
             },
-            styles: {fillColor: [140, 140, 140]},
             body: [
                 [[""], ["                               "], [i18n.__("subtotal")], [totalEx.toFixed(2) + " €"]],
                 [[""], ["                               "], [i18n.__("advance")], ["-" + invoice.advance.toFixed(2) + " €"]],
@@ -242,7 +286,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         })
     }
         c[0] = 150 + (pdfOrders.length * 7) + 10;
-        c[1] = 20;
+        c[1] = 15;
         if(invoice.description) {
             let description = invoice.description.split('\r\n');
             description.forEach((text) => {

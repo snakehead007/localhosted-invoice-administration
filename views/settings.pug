@@ -26,17 +26,17 @@ html(lang="nl-BE")
                                                 div(class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups")
                                                     div(class="btn-group mr-4" role="group" aria-label="First group")
                                                         a(href='/settings/change/theme/secondary',class="button")
-                                                            button(type="button" class="btn btn-"+((settings.theme==="secondary")?"outline-":"")+"secondary") #{__('grey')}
+                                                            button.theme-button(type="button" class="btn btn-"+((settings.theme==="secondary")?"outline-":"")+"secondary") #{__('grey')}
                                                         a(href='/settings/change/theme/dark',class="button")
-                                                            button(type="button" class="btn btn-"+((settings.theme==="dark")?"outline-":"")+"dark") #{__('dark')}
+                                                            button.theme-button(type="button" class="btn btn-"+((settings.theme==="dark")?"outline-":"")+"dark") #{__('dark')}
                                                         a(href='/settings/change/theme/info',class="button")
-                                                            button(type="button" class="btn btn-"+((settings.theme==="info")?"outline-":"")+"info") #{__('blue')}
+                                                            button.theme-button(type="button" class="btn btn-"+((settings.theme==="info")?"outline-":"")+"info") #{__('blue')}
                                                         a(href='/settings/change/theme/danger',class="button")
-                                                            button(type="button" class="btn btn-"+((settings.theme==="danger")?"outline-":"")+"danger") #{__('red')}
+                                                            button.theme-button(type="button" class="btn btn-"+((settings.theme==="danger")?"outline-":"")+"danger") #{__('red')}
                                                         a(href='/settings/change/theme/success',class="button")
-                                                            button(type="button" class="btn btn-" + ((settings.theme === "success") ? "outline-" : "") + "success") #{__('green')}
+                                                            button.theme-button(type="button" class="btn btn-" + ((settings.theme === "success") ? "outline-" : "") + "success") #{__('green')}
                                                         a(href='/settings/change/theme/warning',class="button")
-                                                            button(type="button" class="btn btn-" + ((settings.theme === "warning") ? "outline-" : "") + "warning") #{__('yellow')}
+                                                            button.theme-button(type="button" class="btn btn-" + ((settings.theme === "warning") ? "outline-" : "") + "warning") #{__('yellow')}
                                     tr(onclick="openLang()",class="settingsOption optionLang")
                                         td
                                             p(class="lead") #{__('Language')}
@@ -55,9 +55,9 @@ html(lang="nl-BE")
                                                         .form-group
                                                             label.form-label(for="baseconeMail")=__("Unique Basecone email address")
                                                             input.form-control(id="baseconeMail" name="baseconeMail" type="email", value=settings.baseconeMail, required="required",placeholder="xxxx.xxxx@mailtobasecone.com")
-                                    tr(onclick="openPdf()",class="settingOption optionPdf")
+                                    tr(onclick="openPdf()",class="settingsOption optionPdf")
                                         td
-                                            p(class="lead")=__("PDF options")
+                                            p(class="lead")=__("PDF style")
                                             div(id="pdf",style="display:none;")
                                                 form(action="/settings/change/pdf",method="post")
                                                     .form-group
@@ -71,6 +71,33 @@ html(lang="nl-BE")
                                                                 else
                                                                     input.form-check-input(id="noLogo" name="noLogo" value="switch" type="checkbox")
                                                                 label.form-check-label(for="noLogo")=__("Hide logo on pdf")
+                                                    .form-group
+                                                        label.form-label(for="colorPdf")=__("Pdf theme color")
+                                                        select.custom-select(name="color")
+                                                            if(settings.pdf.color==="grey")
+                                                                option(value="grey" selected="selected")=__("grey")
+                                                            else
+                                                                option(value="grey")=__("grey")
+                                                            if(settings.pdf.color === "dark")
+                                                                option(value="dark" selected="selected")=__("dark")
+                                                            else
+                                                                option(value="dark")=__("dark")
+                                                            if(settings.pdf.color === "blue")
+                                                                option(value="blue" selected="selected")=__("blue")
+                                                            else
+                                                                option(value="blue")=__("blue")
+                                                            if(settings.pdf.color === "red")
+                                                                option(value="red" selected="selected")=__("red")
+                                                            else
+                                                                option(value="red")=__("red")
+                                                            if(settings.pdf.color === "green")
+                                                                option(value="green" selected="selected")=__("green")
+                                                            else
+                                                                option(value="green")=__("green")
+                                                            if(settings.pdf.color === "yellow")
+                                                                option(value="yellow" selected="selected")=__("yellow")
+                                                            else
+                                                                option(value="yellow")=__("yellow")
                                                     button.btn(class="btn-"+settings.theme, type="submit")=__("Update")
                                     tr(onclick="openText()",class="settingsOption optionText")
                                         td

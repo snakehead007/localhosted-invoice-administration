@@ -12,6 +12,9 @@ html
             main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
                   div(class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom")
                     h1(class="h2") #{__('Dashboard')}
+                    .custom-control.custom-switch
+                        input#customSwitch1.custom-control-input(type='checkbox')
+                        label.custom-control-label(for='customSwitch1')=__("Preview all payments")
                     div(class="btn-group dropleft mb-2 mb-md-0")
                         button(type="button" class="btn btn-sm btn-outline-"+settings.theme+" dropdown-toggle", data-toggle="dropdown",aria-haspopup="true",aria-expanded="false")
                             i.fas.fa-calendar-alt.not-nav-fas
@@ -24,7 +27,7 @@ html
                           a(class="dropdown-item" href="/dashboard/chart/" + String(Number(year) + Number(2)))=String(Number(year) + Number(2))
                   include includes/messages
                   canvas(class="my-4 w-100 h-60" id="myChart" width="900" height="380")
-                  h2 #{__('Unpaid invoices')}
+                  h2#canvasBefore #{__('Unpaid invoices')}
                   if invoices.length == 0
                       div(class="alert alert-info col-lg-12 col-md-12 col-sm-12" role="alert") #{__('No unpaid invoices found.')}
                   else

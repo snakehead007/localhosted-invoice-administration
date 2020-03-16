@@ -55,24 +55,32 @@ exports.mainGet = async function getLogin(req, res) {
                         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/dashboardController.mainGet on method Invoice.find trace: "+err.message);
                         if (!err) {
                             let chart = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            let chartPreview = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                             let invoice_open = [];
                             for (let invoice of invoices) {
                                 if (invoice.invoiceNr) {
-                                    if (!invoice.isPaid) {
+                                    if (!invoice.isPaid) { //not paid
                                         //adds to unpaid invoices
                                         invoice_open.push(invoice);
+                                        if ((new Date()).getFullYear() == invoice.date.getFullYear()) {
+                                            chartPreview[invoice.date.getMonth()] += invoice.total;
+                                        }
                                     } else if(invoice.datePaid){
                                         //Adds to chart data
-                                        let monthOfPayment = invoice.datePaid.getMonth();
                                         if ((new Date()).getFullYear() == invoice.datePaid.getFullYear() && invoice.isPaid) {
-                                            chart[monthOfPayment] += invoice.total;
+                                            chart[invoice.datePaid.getMonth()] += invoice.total;
+                                            chartPreview[invoice.datePaid.getMonth()] += invoice.total;
                                         }
                                     }
                                 }
                             }
                             let newChart = [];
+                            let newCharPreview = [];
                             chart.forEach((n) => {
-                                newChart.push(n.toFixed(2))
+                                newChart.push(n.toFixed(2));
+                            });
+                            chartPreview.forEach((n) => {
+                                newCharPreview.push(n.toFixed(2));
                             });
                             let role = (await User.findOne({_id: req.session._id}, (err, user) => {
                                 if(err) logger.error.log("[ERROR]: thrown at /src/controllers/dashboardController.mainGet on method User.findOne trace: "+err.message);
@@ -81,6 +89,7 @@ exports.mainGet = async function getLogin(req, res) {
                             res.render("index", {
                                 "currentUrl": "dashboard",
                                 "total": newChart,
+                                "totalPreview":newCharPreview,
                                 "settings": settings,
                                 "year": (new Date).getFullYear(),
                                 "profile": profile,
@@ -128,24 +137,30 @@ exports.chartYearGet = (req, res) => {
                         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/dashboardController.chartYearGet on method Invoice.find trace: "+err.message);
                         if (!err) {
                             let chart = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            let chartPreview = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                             let invoice_open = [];
                             for (let invoice of invoices) {
-                                if (invoice.invoiceNr) {
-                                    if (!invoice.isPaid) {
-                                        //adds to unpaid invoices
-                                        invoice_open.push(invoice);
-                                    } else {
-                                        //Adds to chart data
-                                        let monthOfPayment = invoice.datePaid.getMonth();
-                                        if (req.params.year == invoice.datePaid.getFullYear() && invoice.isPaid) {
-                                            chart[monthOfPayment] += invoice.total;
-                                        }
+                                if (!invoice.isPaid) { //not paid
+                                    //adds to unpaid invoices
+                                    invoice_open.push(invoice);
+                                    if (req.params.year == invoice.date.getFullYear()) {
+                                        chartPreview[invoice.date.getMonth()] += invoice.total;
+                                    }
+                                } else if(invoice.datePaid){
+                                    //Adds to chart data
+                                    if (req.params.year == invoice.datePaid.getFullYear() && invoice.isPaid) {
+                                        chart[invoice.datePaid.getMonth()] += invoice.total;
+                                        chartPreview[invoice.datePaid.getMonth()] += invoice.total;
                                     }
                                 }
                             }
                             let newChart = [];
+                            let newCharPreview = [];
                             chart.forEach((n) => {
-                                newChart.push(n.toFixed(2))
+                                newChart.push(n.toFixed(2));
+                            });
+                            chartPreview.forEach((n) => {
+                                newCharPreview.push(n.toFixed(2));
                             });
                             let role = (await User.findOne({_id: req.session._id}, (err, user) => {
                                 if(err) logger.error.log("[ERROR]: thrown at /src/controllers/dashboardController.chartYearGet on method User.findOne trace: "+err.message);
@@ -154,6 +169,7 @@ exports.chartYearGet = (req, res) => {
                             res.render("index", {
                                 "currentUrl": "dashboard",
                                 "total": newChart,
+                                "totalPreview":newCharPreview,
                                 "settings": settings,
                                 "year": req.params.year,
                                 "profile": profile,

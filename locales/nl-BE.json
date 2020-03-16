@@ -380,10 +380,12 @@
 	"Not on Basecone": "Niet op Basecone",
 	"Undo of the invoice was successful": "Het terugzetten van de factuur was succesvol",
 	"Undo of the line was successful": "Het terugzetten van de lijn was succesvol",
-	"--------FROM-HERE-ALL-ABOVE-CHECKED-----------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------",
-	"These text will be put on the bottom of the page of the corresponding document": "These text will be put on the bottom of the page of the corresponding document",
-	"These text will be put on the bottom of the corresponding document": "These text will be put on the bottom of the corresponding document",
-	"Client has not been found of this document. If you have removed this, please undo the removal of this client manually. If this warning presists please file a bug report or contact us directly": "Client has not been found of this document. If you have removed this, please undo the removal of this client manually. If this warning presists please file a bug report or contact us directly",
-	"Show only deleted items": "Show only deleted items",
-	"Show all activities": "Show all activities"
+	"These text will be put on the bottom of the corresponding document": "Deze teksten zullen onderaan geplaatst worden bij hun bijhorend document.",
+	"Client has not been found of this document. If you have removed this, please undo the removal of this client manually. If this warning presists please file a bug report or contact us directly": "Deze klant werd niet gevonden. Als je deze klant hebt verwijderd, kan u deze klant manueel terugzetten. Als deze waarschijnlijk blijft kan u een bug report maken, of ons contacteren",
+	"Show only deleted items": "Toon enkel verwijderingen",
+	"Show all activities": "Toon alle activiteiten",
+	"Pdf theme color": "Pdf thema kleur",
+	"PDF style": "PDF stijl",
+	"Preview all payments": "Voorbeeld alle betalingen",
+	"--------FROM-HERE-ALL-ABOVE-CHECKED-----------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------"
 }

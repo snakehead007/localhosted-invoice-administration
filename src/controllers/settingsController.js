@@ -115,7 +115,8 @@ exports.changePdfOptions = (req, res) => {
         if(err) logger.error.log("[ERROR]: thrown at /src/controllers/settingsController.changePdfOptions on method Settings.findOne trace: "+err.message);
         let pdfnew = {
             titleSize:(req.body.titleSize)?req.body.titleSize:settings.pdf.titleSize,
-            noLogo:(req.body.noLogo==="switch")
+            noLogo:(req.body.noLogo==="switch"),
+            color:req.body.color
         };
         if (!err) {
             Settings.updateOne({fromUser: req.session._id, _id: settings._id}, {pdf:pdfnew}, function (err) {

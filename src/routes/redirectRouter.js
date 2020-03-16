@@ -49,7 +49,7 @@ router.get('/', redirectController.googleLogin, async (req, res) => {
         }
     });
     if(!found){
-        logger.warning.log("[WARNING]: Not found in whitelist, ip "+ip+" redirecting back");
+        logger.warning.log("[WARNING]: Not found in whitelist, ip "+getIp(req)+" redirecting back");
     }
     /*if(process.env.DEVELOP==="false") {
         try{

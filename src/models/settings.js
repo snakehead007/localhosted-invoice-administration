@@ -17,6 +17,10 @@ const Settings = new mongoose.Schema({
         noLogo:{
             type:Boolean,
             default:false
+        },
+        color:{
+            type:String,
+            default:"grey"
         }
     },
     invoiceText: {
