@@ -9,7 +9,7 @@ const view = require('./view/main');
 before(async function () {
 
 });
-
+//test
 //Run all tests
 describe('Dashboard tests', () => dashboard.default());
 describe('Dashboard tests', () => deletes.default());
