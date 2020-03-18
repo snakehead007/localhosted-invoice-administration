@@ -4,13 +4,12 @@
 [![Build Status](https://travis-ci.com/snakehead007/invoice-administration.svg?branch=master)](https://travis-ci.com/snakehead007/invoice-administration)
 
 This program is mainly used for managing and administrating invoices and generating them into .pdf format
-<br> Currently only used for Belgian clients and users.  
+<br> Currently only used for <strong>Belgian clients and users</strong>.  
 <br> Version 3.0.0 (close beta) is out. We are still improving and adding things on a daily basis. 
 <br> To contribute, use and/or test it out, contact me.  
 
 This project is translated in 2 languages, Dutch and English.
-
-This program is created and maintained for [www.mdsart.be/](https://www.mdsart.be/)
+<br>This program is created and maintained for [www.mdsart.be/](https://www.mdsart.be/)
 
 ## demo
 
@@ -28,24 +27,27 @@ Functionalities:
 -   A personalized profile
 -   All documents have a status, to keep that it has been payed or not.
 -   A search function
--   5 different themes
--   Sign in by Google
+-   6 different themes
+-   Sign in by Google ConnectId
 -   Changeable text for the pdf's
 -   2 languages: English and Dutch
-
+-   Ability to upload invoice to Basecone
 ### How to Install locally or host
 
 -   local: 
-       rename .env.bak to .env 
-       <br> and fill in the top most stuff (apis.google.com and mailgun.com info) 
-       <br> command to build the docker: `docker-compose up --build`
-
+       - Rename `.env.bak` to `.env` 
+       - Fill in the top most stuff (apis.google.com, logz.io mailgun.com) 
+       - Choose your whether you want to run using docker or not
+       - On docker: 
+            - Command to build the docker: `docker-compose up --build`
+       - MongoDB / nodejs
+            - Download and install MongoDB [here](https://docs.mongodb.com/manual/administration/install-community/)
+            - Download and install nodejs [here](https://nodejs.org/en/download/)
+            - Startup the MongoDB local on the default port with no credentials
+            - Startup the server with command `node apps.js` inside the `src` folder
 -   synology/hub.docker:
-
-     start container [mongo](https://hub.docker.com/_/mongo) first.
-
-     start container [invoice-administration](https://hub.docker.com/repository/docker/snakehead007/invoice-administration) second, with link to mongo container as 'mongo'.
-
+     - start container [mongo](https://hub.docker.com/_/mongo) first.
+     - start container [invoice-administration](https://hub.docker.com/repository/docker/snakehead007/invoice-administration) second, with link to mongo container as 'mongo'.
 ### About (technical)
 
 All data is stored safely on by mongoDB behind a firewall on my server. unless you use a local version.
