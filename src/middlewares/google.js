@@ -1,5 +1,4 @@
 const {google} = require("googleapis");
-const googleAuth = require("google-auto-auth");
 const User = require("../models/user.js");
 const Profile = require("../models/profile");
 const Settings = require("../models/settings");
@@ -29,10 +28,6 @@ exports.startUp = () => {
     ];
 };
 
-/**
- *
- * @returns {OAuth2Client}
- */
 exports.createConnection = () => {
     return new google.auth.OAuth2(
         googleConfig.clientId,
@@ -66,8 +61,7 @@ exports.getGooglePlusApi = (auth) => {
  */
 exports.urlGoogle = () => {
     const auth = this.createConnection();
-    const url = this.getConnectionUrl(auth);
-    return url;
+    return this.getConnectionUrl(auth);
 };
 
 /**
@@ -94,13 +88,12 @@ exports.getGoogleAccountFromCode = async (code) => {
  * Checks if the user that logged in is new or old.
  * If it"s a new user it creates a default empty User, Settings and profile model.
  * If it"s an old user it set the session parameters correct
- * @param req
- * @param googleId
- * @param email
- * @param tokens
- * @returns {Promise<*>}
- */
-exports.checkSignIn = async function checkSignIn(req, {googleId, email, tokens}) {
+ *
+ **/
+exports.checkSignIn = async function checkSignIn(req) {
+    let googleId = req.session.googleId;
+    let tokens = req.session.tokens;
+    let email = req.session.email;
     const currentUser = await User.findOne({googleId: googleId}, function (err, User) {
         if(err) {
             logger.error.log("[ERROR]: thrown at /src/middlewares/google.checkSignIn on method User.findOne trace: "+err.message);
@@ -109,7 +102,7 @@ exports.checkSignIn = async function checkSignIn(req, {googleId, email, tokens})
         return User;
     });
     if (!currentUser) {//new user, add user to database
-        logger.info("[INFO]: New User found, welcome "+req.session.email+"!");
+        logger.info.log("[INFO]: New User found, welcome "+req.session.email+"!");
         //create user
         const newUser = new User({
             googleId: googleId,
@@ -118,36 +111,24 @@ exports.checkSignIn = async function checkSignIn(req, {googleId, email, tokens})
         });
         await newUser.save((err)=>{
             if(err) logger.error.log("[ERROR]: thrown at /src/middlewares/google.checkSignIn on method newUser.save trace: "+err.message);});
-        //find new user.__id, add ID to database
-        const currentUser = await User.findOne({googleId: googleId}, function (err, User) {
-            if(err){
-                logger.error.log("[ERROR]: thrown at /src/middlewares/google.checkSignIn on method User.findOne trace: "+err.message);
-                throw new Error(err);
-            }
-            return User._id;
-        });
         const newSettings = new Settings({
-            fromUser: currentUser._id
+            fromUser: newUser._id
         });
         await newSettings.save((err)=>{
             if(err) logger.error.log("[ERROR]: thrown at /src/middlewares/google.checkSignIn on method newSettings.save trace: "+err.message);});
         const newProfile = new Profile({
-            fromUser: currentUser._id
+            fromUser: newUser._id
         });
         await newProfile.save((err)=>{
             if(err) logger.error.log("[ERROR]: thrown at /src/middlewares/google.checkSignIn on method newProfile.save trace: "+err.message);});
-        const settings = await Settings.findOne({fromUser: currentUser._id},(err)=>{
-            if(err) logger.error.log("[ERROR]: thrown at /src/middlewares/google.checkSignIn on method Settings.findOne trace: "+err.message);});
-        const profile = await Profile.findOne({fromUser: currentUser._id},(err)=>{
-            if(err) logger.error.log("[ERROR]: thrown at /src/middlewares/google.checkSignIn on method Profile.findOne trace: "+err.message);});
-        await User.updateOne({_id: currentUser._id}, {settings: settings._id, profile: profile._id},(err)=>{
+        await User.updateOne({_id: newUser._id}, {settings: newSettings._id, profile: newProfile._id},(err)=>{
             if(err) logger.error.log("[ERROR]: thrown at /src/middlewares/google.checkSignIn on method User.updateOne trace: "+err.message);});
-        req.session.email = email;
         logger.info.log("[INFO]: Succesfully created settings, profile and user for new user "+req.session.email);
-        return currentUser;
+        req.session._id = newUser._id;
+        return newUser._id;
     } else {//user already added
         logger.info.log("[INFO]: User logged in, welcome back "+email);
-        req.session.email = email;
+        req.session._id = currentUser._id;
         return currentUser._id;
     }
 };
