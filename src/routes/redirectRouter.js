@@ -50,7 +50,6 @@ router.get('/', redirectController.googleLogin, async (req, res) => {
     }
     if (found) {
         await checkSignIn(req);
-        console.log(req.session);
         User.updateOne({_id: req.session._id}, {lastLogin: Date.now()}, async (err) => {
             if(err) logger.error.log("[ERROR]: thrown at /src/controllers/redirectRouter.router.get('/') on method User.updateOne trace: "+err.message);
             await Profile.findOne({fromUser: req.session._id}, async function (err, profile) {
@@ -69,7 +68,6 @@ router.get('/', redirectController.googleLogin, async (req, res) => {
                 if(err) logger.error.log("[ERROR]: thrown at /src/controllers/redirectRouter.router.get('/') on method User.findOne trace: "+err.message);
                 return user
             });
-            console.log(user);
             req.session.role = user.role;
             if (user.role === "visitor") {
                 mailgun.sendWelcome(req.session.email);

@@ -13,6 +13,10 @@ const logger = require("../middlewares/logger");
 
 exports.sendToBasecone = async (req,res) => {
     logger.warning.log("[WARNING]: Email:\'"+req.session.email+"\' tried to send attachment via mail.");
+    req.flash('danger',"This function isnt available");
+    res.redirect('back');
+    return;
+    /////////
     let user = await User.findOne({_id:req.session._id},(err,user) => {return user;
     if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on method User.findOne trace: "+err.message);});
     let nr = await getDefaultNumberOfInvoice(await Invoice.findOne({_id:req.params.idi,fromUser:req.session._id},(err,invoice) => {return invoice;

@@ -4,6 +4,11 @@ html
     script.
       $(document).ready(function () {
       });
+      let backendShow = #{showEditClient};
+      var frontendShow = false;
+      if(backendShow||frontendShow){
+
+      }
   body
     include includes/topBar
     div(class="container-fluid")
@@ -21,6 +26,8 @@ html
               a(href="/edit/client/"+client._id)=(client.firm)?client.firm:client.clientName
           hr
           include includes/messages
+          if client
+            include includes/forms/edit-client
           div(class="table-responsive bigger")
             include includes/tables/invoices
           include includes/scripts/feather

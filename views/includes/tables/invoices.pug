@@ -64,7 +64,7 @@ table(class="table table-striped table-sm ",id="tabelInvoices")
                             if !invoice.isAgreed
                                 input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id, onclick='setAgreedStatus(\"' + invoice._id + '\")')
                                 label(class="custom-control-label" for=invoice._id) #{__('Not agreed')}
-                    if settings.baseconeMail&& (invoice.invoiceNr||invoice.creditNr)
+                    //if settings.baseconeMail&& (invoice.invoiceNr||invoice.creditNr)
                         div(class="custom-control custom-switch")
                             if invoice.isSendToBasecone
                                 input(type="checkbox" class="custom-control-input bg-success" , checked="checked", disabled="disabled")
@@ -92,7 +92,7 @@ table(class="table table-striped table-sm ",id="tabelInvoices")
                                 a.dropdown-item#target(href="/download/offer/"+invoice._id,)=__("Download offer")
                                 if !invoice.invoiceNr
                                     a(class="dropdown-item button", href="/invoice/change/upgrade/" + invoice._id )=__('Upgrade to invoice')
-                            if settings.baseconeMail&& (invoice.invoiceNr||invoice.creditNr)
+                            //if settings.baseconeMail&& (invoice.invoiceNr||invoice.creditNr)
                                 a(class="dropdown-item button", href="#baseconeModal"+invoice._id , data-toggle='modal' data-target="#baseconeModal"+invoice._id )=__("Send to basecone")
             include ../modals/deleteConfirmationInvoice
             script.

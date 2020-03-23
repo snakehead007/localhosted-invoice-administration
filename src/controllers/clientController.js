@@ -120,13 +120,14 @@ exports.postClientNew = async (req, res) => {
     let streetCheck = (req.body.street) ? invalid.valueMustBeAName(req, res, req.body.street, true) : false;
     let streetNrCheck = (req.body.streetNr) ? invalid.valueMustBeStreetNumber(req, res, req.body.streetNr) : false;
     let emailCheck = false;
-    req.body.emails.forEach(email => {
-        if (invalid.valueMustBeEmail(req, res, email)) {
-            emailCheck = true;
-        }
-    });
-    if (req.body.emails.length === 0 || req.body.emails[0] === "") {
+    if (req.body.emails.length === 0 || req.body.emails[0] === ""&& req.body.emails[1] === "" && req.body.emails[3] === "") {
         emailCheck = false;
+    }else{
+        req.body.emails.forEach(email => {
+            if (invalid.valueMustBeEmail(req, res, email)) {
+                emailCheck = true;
+            }
+        });
     }
     let vatCheck = (req.body.vat) ? invalid.valueMustBeVatNumber(req, res, req.body.vat) : false;
     let vatPercentageCheck = invalid.valueMustBeAnInteger(req, res, req.body.vatPercentage, true);
