@@ -1,6 +1,7 @@
 html
   head
     include includes/htmlHead
+    include includes/scripts/edit-client
     script.
       $(document).ready(function () {
       });
@@ -8,6 +9,14 @@ html
       var frontendShow = false;
       if(backendShow||frontendShow){
 
+      }
+    style.
+      span.fa-color-buttons {
+        color: #b1b1b1;
+      }
+
+      span.fa-color-buttons:hover {
+        color: #007bff;
       }
   body
     include includes/topBar

@@ -15,6 +15,19 @@ body {
     vertical-align: text-bottom;
 }
 
+a.add_button span.fa-color-buttons i.fas.fa-plus-square.fa-2x {
+
+    position: relative;
+    top: 35px;
+
+}
+a.remove_button span.fa-color-buttons i.fas.fa-minus-square {
+    position: relative;
+    left: 103%;
+    top: 27px;
+    z-index: 9;
+}
+
 .down{
     bottom:0;
     position: fixed ;
