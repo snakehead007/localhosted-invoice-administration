@@ -17,7 +17,7 @@ script.
             if (x < maxField) {
                 x++; //Increment field counter
                 let currentEmail = (!emails[x - 5]) ? "" : emails[x - 5];
-                let fieldHTML = '' +
+                let fieldHTML = '<div>' +
                     '<a href="javascript:void(0);" class="remove_button">' +
                     '<span class="fa-color-buttons">' +
                     '<i class="fas fa-minus-square"">' +
@@ -25,7 +25,8 @@ script.
                     '</span>' +
                     '\n' +
                     '</a>' +
-                    '<input class="form-control" type="text" placeholder="voorbeeld@email.be" value="' + currentEmail + '" name="emails[]"/>';
+                    '<input class="form-control" type="text" placeholder="voorbeeld@email.be" value="' + currentEmail + '" name="emails[]"/>'+
+                    '</div>';
                 $(wrapper).append(fieldHTML); //Add field html
             }
         });

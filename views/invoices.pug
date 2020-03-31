@@ -1,15 +1,11 @@
 html
   head
     include includes/htmlHead
-    include includes/scripts/edit-client
+    if client
+      include includes/scripts/edit-client
     script.
       $(document).ready(function () {
       });
-      let backendShow = #{showEditClient};
-      var frontendShow = false;
-      if(backendShow||frontendShow){
-
-      }
     style.
       span.fa-color-buttons {
         color: #b1b1b1;
