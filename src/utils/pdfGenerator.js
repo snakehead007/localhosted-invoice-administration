@@ -147,6 +147,14 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     c[1] += 5;
     doc.text(c[0], c[1], profile.street + " " + profile.streetNr);
     c[1] += 5;
+    if (profile.place) {
+        if (profile.postal) {
+            doc.text(c[0], c[1], profile.postal + " " + profile.place);
+        } else {
+            doc.text(c[0], c[1], profile.place);
+        }
+        c[1] += 5;
+    }
     doc.text(c[0], c[1], i18n.__("VAT nr") + ": " + profile.vat);
     doc.setFontType("bold");
     c[1] += 10;

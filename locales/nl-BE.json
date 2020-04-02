@@ -360,7 +360,7 @@
 	"Hide logo on pdf": "Verberg logo op de pdf",
 	"Your settings have been updated": "De instellingen zijn bijgewerkt",
 	"Adding a new document:": "Een nieuw document toevoegen:",
-	"succefully updated your logo": "succefully updated your logo",
+	"succefully updated your logo": "Je logo is succesvol bijgewerkt",
 	"Wrong filetype": "Verkeerd type van file",
 	"Send to basecone": "Verzend naar Basecone",
 	"Send this document to Basecone": "Verzend dit document naar Basecone",
@@ -387,7 +387,8 @@
 	"Pdf theme color": "Pdf thema kleur",
 	"PDF style": "PDF stijl",
 	"Preview all payments": "Voorbeeld alle betalingen",
+	"successfully created your profile": "Je profiel is succesvol aangemaakt",
+	"Telephone Nr": "Telefoon Nr",
+	"successfully updated your profile": "Je profiel is succesvol bijgewerkt",
 	"--------FROM-HERE-ALL-ABOVE-CHECKED-----------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------",
-	"successfully created your profile": "successfully created your profile",
-	"Telephone Nr": "Telephone Nr"
 }

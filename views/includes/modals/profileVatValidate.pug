@@ -1,0 +1,45 @@
+#profileVatValidate.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+    include ../scripts/europa-eu-tools
+    .modal-dialog(role='document')
+        .modal-content
+            .modal-header
+                h5#profileVatValidateLabel.modal-title=__("Welcome to Invoice-Administration")
+            form(action="/profile/validate", method="post")
+                .modal-body
+                    p.lead=__("Start creating your profile with your VAT number. We will validate it.")
+                    .form-group
+                        label.col-form-label(for='vat')=__('Your VAT number')
+                        textarea#vat.form-control( name="vat", placeholder="NL 000-000-000")=__("")
+                    .form-group
+                        label.col-form-label(for='countryCombobox')=__('Member state')
+                        select#countryCombobox(name='memberStateCode' onchange='displaySelectedMemberState(this);')
+                            option(value='AT') AT-Austria
+                            option(value='BE') BE-Belgium
+                            option(value='BG') BG-Bulgaria
+                            option(value='CY') CY-Cyprus
+                            option(value='CZ') CZ-Czech Republic
+                            option(value='DE') DE-Germany
+                            option(value='DK') DK-Denmark
+                            option(value='EE') EE-Estonia
+                            option(value='EL') EL-Greece
+                            option(value='ES') ES-Spain
+                            option(value='FI') FI-Finland
+                            option(value='FR') FR-France
+                            option(value='GB') GB-United Kingdom
+                            option(value='HR') HR-Croatia
+                            option(value='HU') HU-Hungary
+                            option(value='IE') IE-Ireland
+                            option(value='IT') IT-Italy
+                            option(value='LT') LT-Lithuania
+                            option(value='LU') LU-Luxembourg
+                            option(value='LV') LV-Latvia
+                            option(value='MT') MT-Malta
+                            option(value='NL') NL-The Netherlands
+                            option(value='PL') PL-Poland
+                            option(value='PT') PT-Portugal
+                            option(value='RO') RO-Romania
+                            option(value='SE') SE-Sweden
+                            option(value='SI') SI-Slovenia
+                            option(value='SK') SK-Slovakia
+                .modal-footer
+                    button.btn.btn-primary(role="button" type='submit')=__("Validate me")
