@@ -10,6 +10,7 @@ const i18n = require("i18n");
 const User = require("../models/user");
 const {findOneHasError} = require("../middlewares/error");
 const activity = require('../utils/activity');
+const Error = require('../middlewares/error');
 const logger = require("../middlewares/logger");
 /**
  * @apiVersion 3.0.0
@@ -31,13 +32,13 @@ const logger = require("../middlewares/logger");
  */
 exports.editOrderGet = (req, res) => {
     Order.findOne({fromUser: req.session._id, _id: req.params.ido,isRemoved:false}, function (err, order) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.editOrderGet on method Order.findOne trace: "+err.message);
+        Error.handler(req,res,err,'AO0000');
         Invoice.findOne({fromUser: req.session._id, _id: order.fromInvoice}, function (err, invoice) {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.editOrderGet on method Invoice.findOne trace: "+err.message);
+            Error.handler(req,res,err,'AO0001');
             Settings.findOne({fromUser: req.session._id,}, function (err, settings) {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.editOrderGet on method Settings.findOne trace: "+err.message);
+                Error.handler(req,res,err,'AO0002');
                 Profile.findOne({fromUser: req.session._id,}, async (err, profile) => {
-                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.editOrderGet on method Profile.findOne trace: "+err.message);
+                    Error.handler(req,res,err,'AO0003');
                     if (!err) {
                         res.render("edit/edit-order", {
                             "order": order,
@@ -45,6 +46,7 @@ exports.editOrderGet = (req, res) => {
                             "profile": profile,
                             "settings": settings,
                             "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                                Error.handler(req,res,err,'AO0004');
                                 return user;
                             })).role
                         });
@@ -76,16 +78,16 @@ exports.editOrderGet = (req, res) => {
  */
 exports.newOrderGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, function (err, invoice) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.newOrderGet on method Invoice.findOne trace: "+err.message);
+        Error.handler(req,res,err,'AO0100');
         if (!err) {
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient,isRemoved:false}, function (err, client) {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.newOrderGet on method Client.findOne trace: "+err.message);
+                Error.handler(req,res,err,'AO0101');
                 if (!err) {
                     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.newOrderGet on method Settings.findOne trace: "+err.message);
+                        Error.handler(req,res,err,'AO0102');
                         if (!err) {
                             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
-                                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.newOrderGet on method Profile.findOne trace: "+err.message);
+                                Error.handler(req,res,err,'AO0103');
                                 if (!err) {
                                     res.render("new/new-order", {
                                         "invoice": invoice,
@@ -94,6 +96,7 @@ exports.newOrderGet = (req, res) => {
                                         "client": client,
                                         "currentUrl": "orderNew",
                                         "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                                            Error.handler(req,res,err,'AO0104');
                                             return user;
                                         })).role
                                     });
@@ -135,14 +138,14 @@ exports.newOrderPost = async (req, res) => {
             await invoice.save();
         logger.info.log("[INFO]: Email:\'"+req.session.email+"\' new order contains "+JSON.stringify(newOrder));
         await newOrder.save((err) => {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.newOrderPost on method newOrder.save trace: "+err.message);
+            Error.handler(req,res,err,'AO0200');
         });
         let totInvoice = ((((invoice.total + invoice.advance) + (req.body.amount * req.body.price)) - invoice.advance));
         await Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
             total: totInvoice,
             lastUpdated: Date.now()
         }, function (err, invoice) {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.newOrderPost on method Invoice.updateOne trace: "+err.message);
+            Error.handler(req,res,err,'AO0201');
         });
         activity.addOrder(newOrder,req.session._id);
         res.redirect("/order/all/" + req.params.idi);
@@ -170,28 +173,24 @@ exports.newOrderPost = async (req, res) => {
  */
 exports.allOrderGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, function (err, invoice) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.allOrderGet on method Invoice.findOne trace: "+err.message);
+        Error.handler(req,res,err,'AO0300');
         if (!err) {
             Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved: false}, function (err, orders) {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.allOrderGet on method Order.findOne trace: "+err.message);
+                Error.handler(req,res,err,'AO0301');
                 if (!err) {
-                    console.log(invoice);
                     Client.findOne({fromUser: req.session._id, _id: invoice.fromClient,isRemoved:false}, function (err, client) {
                         if(err) {
-                            logger.error.log("[ERROR]: thrown at /src/controllers/orderController.allOrderGet on method Client.findOne trace: "+err.message);
+                            Error.handler(req,res,err,'AO0302');
                         }
                         if(!client){
-                            req.flash("warning",i18n.__("Client has not been found of this document. If you have removed this, please undo the removal of this client manually. If this warning presists please file a bug report or contact us directly"));
-                            res.redirect("back");
-                            return;
+                            Error.handler(req,res,err,'AO0303',"Client has not been found of this document. If you have removed this, please undo the removal of this client manually. If this warning presists please file a bug report or contact us directly");
                         }
                         Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-                            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.allOrderGet on method Settings.findOne trace: "+err.message);
+                            Error.handler(req,res,err,'AO0304');
                             if (!err) {
                                 Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
-                                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.allOrderGet on method Profile.findOne trace: "+err.message);
+                                    Error.handler(req,res,err,'AO0305');
                                     if (!err) {
-                                        console.log(client);
                                         res.render("orders", {
                                             "invoice": invoice,
                                             "orders": orders,
@@ -199,6 +198,7 @@ exports.allOrderGet = (req, res) => {
                                             "client": client,
                                             "settings": settings,
                                             "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                                                Error.handler(req,res,err,'AO0306');
                                                 return user;
                                             })).role
                                         });
@@ -233,16 +233,16 @@ exports.allOrderGet = (req, res) => {
  */
 exports.viewOrderGet = (req, res) => {
     Order.findOne({fromUser: req.session._id, _id: req.params.ido,isRemoved:false}, function (err, order) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.viewOrderGet on method Order.findOne trace: "+err.message);
+        Error.handler(req,res,err,'AO0400');
         if (!err) {
             Invoice.findOne({fromUser: req.session._id, _id: order.fromInvoice,isRemoved:false}, function (err, invoice) {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.viewOrderGet on method Invoice.findOne trace: "+err.message);
+                Error.handler(req,res,err,'AO0401');
                 if (!err) {
                     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.viewOrderGet on method Settings.findOne trace: "+err.message);
+                        Error.handler(req,res,err,'AO0402');
                         if (!err) {
                             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
-                                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.viewOrderGet on method Profile.findOne trace: "+err.message);
+                                Error.handler(req,res,err,'AO0403');
                                 if (!err) {
                                     res.render("view/view-order",{
                                         "order": order,
@@ -250,6 +250,7 @@ exports.viewOrderGet = (req, res) => {
                                         "profile": profile,
                                         "settings": settings,
                                         "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                                            Error.handler(req,res,err,'AO0404');
                                             return user;
                                         })).role
                                     });
@@ -277,7 +278,7 @@ exports.viewOrderGet = (req, res) => {
 exports.editOrderPost = (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is trying to edit order with id "+req.params.ido);
     Order.findOne({fromUser: req.session._id, _id: req.params.ido,isRemoved:false}, function (err, order) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.editOrderPost on method Order.findOne trace: "+err.message);
+        Error.handler(req,res,err,'AO0500');
         if (!findOneHasError(req, res, err, order)) {
             let updateOrder = {
                 description: req.body.description,
@@ -288,9 +289,9 @@ exports.editOrderPost = (req, res) => {
             };
             logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is updating order with "+JSON.stringify(updateOrder));
             Invoice.findOne({fromUser: req.session._id, _id: order.fromInvoice,isRemoved:false}, async function (err, invoice) {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.editOrderPost on method Invoice.findOne trace: "+err.message);
+                Error.handler(req,res,err,'AO0501');
                 await Order.updateOne({fromUser: req.session._id, _id: req.params.ido}, updateOrder,(err)=>{
-                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.editOrderPost on method Order.updateOne trace: "+err.message);});
+                    Error.handler(req,res,err,'AO0502');});
                 //total of the invoice minus old order total minus the advance
                 let tot = invoice.total - (order.amount * order.price) - invoice.advance;
                 let updateInvoice = {
@@ -299,7 +300,7 @@ exports.editOrderPost = (req, res) => {
                     lastUpdated: Date.now()
                 };
                 Invoice.updateOne({fromUser: req.session._id, _id: order.fromInvoice}, updateInvoice, function (err) {
-                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/orderController.editOrderPost on method Invoice.updateOne trace: "+err.message);
+                    Error.handler(req,res,err,'AO0503');
                     activity.editedOrder(order,req.session._id);
                     res.redirect("/order/all/" + invoice._id);
                 });

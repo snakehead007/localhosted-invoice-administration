@@ -7,11 +7,12 @@ const User = require("../models/user");
 const Settings = require("../models/settings");
 const Profile = require("../models/profile");
 const logger = require("../middlewares/logger");
+const Error = require('../middlewares/error');
 const {getIp} = require("../utils/utils");
 exports.loginGet = async (req, res) => {
     if(req.session._id){
         let user = await User.findOne({_id:req.session._id},(err,user)=>{
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/loginController.loginGet on method User.findOne trace: "+err.message);
+            Error.handler(req,res,err,'7L0000','','NO_REDIRECT');
             return user;
         });
         if(!user){
@@ -41,7 +42,7 @@ exports.createUserGet = async function getCreateNewUser(req, res) {
             /// TODO , refactor duplicate lines
             await newUser.save();
             const currentUser = await User.findOne({googleId: googleId}, function (err, User) {
-                if (err) throw new Error(err);
+                if(err) Error.handler(req,res,err,'7L0100','','NO_REDIRECT');
                 return User._id;
             });
             const newSettings = new Settings({
@@ -54,13 +55,14 @@ exports.createUserGet = async function getCreateNewUser(req, res) {
             await newProfile.save();
             const settings = await Settings.findOne({fromUser: currentUser._id});
             const profile = await Profile.findOne({fromUser: currentUser._id});
-            await User.updateOne({_id: currentUser._id}, {settings: settings._id, profile: profile._id});
-
+            await User.updateOne({_id: currentUser._id}, {settings: settings._id, profile: profile._id},(err)=>{
+                if(err) Error.handler(req,res,err,'7L0101');
+            });
             req.session._id = currentUser._id;
             req.session.loggedIn = currentUser;
         } else { //DEVELOP_NO_RANDOM_USER === true
             await User.findOne({}, function (err, User) {
-                if (err) throw new Error(err);
+                if (err) if(err) Error.handler(req,res,err,'7L0102');
                 if (User.length <= 0) {
                 } else {
                     newUser = User[0];

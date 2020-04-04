@@ -4,6 +4,7 @@ const i18n = require("i18n");
 const User = require("../models/user");
 const activity = require('../utils/activity');
 const logger = require("../middlewares/logger");
+const Error = require('../middlewares/error');
 /**
  * @api {get} /settings settingsAllGet
  * @apiVersion 3.0.0
@@ -22,15 +23,16 @@ const logger = require("../middlewares/logger");
  */
 exports.settingsAllGet = (req, res) => {
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/settingsController.settingsAllGet on method Client.findOne trace: "+err.message);
+        Error.handler(req,res,err,'ES0000');
         Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/settingsController.settingsAllGet on method Settings.findOne trace: "+err.message);
+            Error.handler(req,res,err,'ES0001');
             res.render("settings", {
                 "currentUrl": "settings",
                 "settings": settings,
                 "description": "Settings",
                 "profile": profile,
                 "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                    Error.handler(req,res,err,'ES0002');
                     return user;
                 })).role
             });
@@ -52,7 +54,7 @@ exports.settingsAllGet = (req, res) => {
 exports.settingsChangeLangGet = (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' updated their language to "+req.params.lang);
     Settings.updateOne({fromUser: req.session._id}, {locale: req.params.lang}, function (err) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/settingsController.settingsChangeLangGet on method Settings.updateOne trace: "+err.message);
+        Error.handler(req,res,err,'ES0100');
         req.locale = req.params.lang;
         i18n.setLocale(req, req.params.lang);
         i18n.setLocale(res, req.params.lang);
@@ -75,7 +77,7 @@ exports.settingsChangeLangGet = (req, res) => {
 exports.settingsChangeThemeGet = (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' updated their theme to "+req.params.theme);
     Settings.updateOne({fromUser: req.session._id}, {theme: req.params.theme}, function (err) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/settingsController.settingsChangeThemeGet on method Settings.updateOne trace: "+err.message);
+        Error.handler(req,res,err,'ES0200');
         activity.changedTheme(req.params.theme,req.session._id);
         res.redirect("/settings");
     });
@@ -94,7 +96,7 @@ exports.settingsChangeThemeGet = (req, res) => {
 exports.changeTextGet = (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' updated their footer texts with "+JSON.stringify(req.body));
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/settingsController.changeTextGet on method Settings.findOne trace: "+err.message);
+        Error.handler(req,res,err,'ES0300');
         if (!err) {
             let updateSettings = {
                 invoiceText: String(req.body.invoiceText),
@@ -102,7 +104,7 @@ exports.changeTextGet = (req, res) => {
                 offerText: String(req.body.offerText)
             };
             Settings.updateOne({fromUser: req.session._id, _id: settings._id}, updateSettings, function (err) {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/settingsController.changeTextGet on method Settings.updateOne trace: "+err.message);
+                Error.handler(req,res,err,'ES0400');
                 res.redirect("/settings");
             });
         }
@@ -112,7 +114,7 @@ exports.changeTextGet = (req, res) => {
 exports.changePdfOptions = (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' updated their pdf options with "+JSON.stringify(req.body));
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/settingsController.changePdfOptions on method Settings.findOne trace: "+err.message);
+        Error.handler(req,res,err,'ES0400');
         let pdfnew = {
             titleSize:(req.body.titleSize)?req.body.titleSize:settings.pdf.titleSize,
             noLogo:(req.body.noLogo==="switch"),
@@ -120,7 +122,7 @@ exports.changePdfOptions = (req, res) => {
         };
         if (!err) {
             Settings.updateOne({fromUser: req.session._id, _id: settings._id}, {pdf:pdfnew}, function (err) {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/settingsController.changePdfOptions on method Settings.updateOne trace: "+err.message);
+                Error.handler(req,res,err,'ES0401');
                 req.flash('success',i18n.__("Your settings have been updated"));
                 res.redirect("/settings");
             });
@@ -131,10 +133,10 @@ exports.changePdfOptions = (req, res) => {
 exports.changeBaseconeMail = (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' updated their BaseconeMail with "+JSON.stringify(req.body));
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/settingsController.changeBaseconeMail on method Settings.findOne trace: "+err.message);
+        Error.handler(req,res,err,'ES0500');
         if (!err) {
             Settings.updateOne({fromUser: req.session._id, _id: settings._id}, {baseconeMail:req.body.baseconeMail}, function (err) {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/settingsController.changeBaseconeMail on method Settings.updateOne trace: "+err.message);
+                Error.handler(req,res,err,'ES0501');
                 req.flash('success',i18n.__("Your settings have been updated"));
                 res.redirect("/settings");
             });

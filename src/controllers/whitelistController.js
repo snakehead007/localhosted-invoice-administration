@@ -1,6 +1,7 @@
 const Whitelist = require('../models/whitelist');
 const logger = require("../middlewares/logger");
 const {getIp} = require("../utils/utils");
+const Error = require('../middlewares/error');
 /**
  * @apiVersion 3.0.0
  * @api {get} /whitelist/:secret/:mail addToWhitelist
@@ -28,7 +29,7 @@ exports.addToWhitelist = async (req, res) => {
         });
         await newWhitelist.save((err) => {
             if (err) {
-                logger.error.log("[ERROR]: thrown at /src/controllers/whitelistController.addToWhitelist on method newWhitelist.save trace: "+err.message);
+                Error.handler(req,res,err,'GW0000','','NO_REDIRECT');
                 res.send('error');
             } else {
                 logger.info.log("[INFO]: email "+req.params.mail+" added to the whitelist");

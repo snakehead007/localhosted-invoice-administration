@@ -4,6 +4,7 @@
 
 const i18n = require("i18n");
 const logger = require("../middlewares/logger");
+const Error = require('../middlewares/error');
 /**
  * @apiVersion 3.0.0
  * @api {get} /logout/ logoutGet
@@ -19,7 +20,7 @@ exports.logoutGet = async (req, res) => {
         //new empty session
         req.flash("success", i18n.__("Successfully logged out"));
         if (err) {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/logoutController.logoutGet on method req.session.regenerate trace: "+err.message);
+            Error.handler(req,res,err,'8L0000','','NO_REDIRECT');
         }
         if(!err){
             logger.info.log("[INFO]: User "+emailofUser+" successfully logged out");

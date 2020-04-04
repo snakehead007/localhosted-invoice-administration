@@ -32,14 +32,21 @@ exports.updateUndoAbility = async (req, res, next) => {
 
     //adds the totalPaid on the clients that doesn't have a totalPaid property
     let clientsAll = await Client.find({fromUser:req.session._id,totalPaid:null},(err,clients)=>{return clients;});
-    for(let i of clientsAll){
-        let invoices = await Invoice.find({fromUser:req.session._id,fromClient:i._id,isPaid:true},(err,invoices)=>{return invoices;});
+    for(let c of clientsAll){
+        let invoices = await Invoice.find({fromUser:req.session._id,fromClient:c._id,isPaid:true},(err,invoices)=>{return invoices;});
         let total = 0.0;
         for(let i of invoices){
             total+=i.total;
         }
-        await Client.updateOne({fromUser:req.session._id,_id:i._id},{totalPaid:total});
+        await Client.updateOne({fromUser:req.session._id,_id:c._id},{totalPaid:total});
     }
-
+    //adds firmName to invoices
+    let clients = await Client.find({fromUser:req.session._id},(err,clients)=>{return clients;});
+    for(let c of clients){
+        await Invoice.updateMany({fromUser:req.session._id,fromClient:c._id},{firmName:(c.firm)?c.firm:''},(err,info)=>
+        {
+            console.log(info);
+        });
+    }
     next();
 };

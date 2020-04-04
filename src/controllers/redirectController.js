@@ -9,6 +9,7 @@ const {getGoogleAccountFromCode} = require('../middlewares/google');
 const logger = require("../middlewares/logger");
 
 
+
 /**
  * @apiVersion 3.0.0
  * @api {get} /redirect/ googleLogin

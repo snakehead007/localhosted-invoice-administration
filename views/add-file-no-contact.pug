@@ -26,9 +26,9 @@ body
                             div(class="input-group mb-3")
                                 span
                                     p(class="lead nextToInput")=__("For client")+":"
-                                select(class="custom-select" id="inputGroupSelect03"  name="idc")
+                                select(class="custom-select" id="inputGroupSelect03", name="idc")
                                     each client in clients
-                                        option(value=client._id)=client.clientName
+                                        option(value=client._id)=(client.firm)?client.firm:client.client
                     hr
                     button(type="submit",class="btn btn-outline-"+settings.theme)=__("Create new document")+" ("+add+")"
     include includes/modals/bugReporter

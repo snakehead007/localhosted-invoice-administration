@@ -390,5 +390,9 @@
 	"successfully created your profile": "Je profiel is succesvol aangemaakt",
 	"Telephone Nr": "Telefoon Nr",
 	"successfully updated your profile": "Je profiel is succesvol bijgewerkt",
+	"Please fill in all the required fields": "Vul alle nodige velden in.",
+	"Firms": "Firma's",
 	"--------FROM-HERE-ALL-ABOVE-CHECKED-----------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------",
+	"Clone": "Clone",
+	"Invoice successfully cloned": "Invoice successfully cloned"
 }

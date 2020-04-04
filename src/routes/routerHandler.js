@@ -28,9 +28,10 @@ const whitelistRouter = require("./whitelistRouter");
 const streamRouter = require("./streamRouter");
 const activityRouter = require('./activityRouter');
 const mailRouter = require('./mailRouter');
+const autoFix = require('../middlewares/automaticFixers');
 //Controllers
 try {
-    router.use("/dashboard", stillSignedInCheck, update.updateUndoAbility, dashboardRouter);
+    router.use("/dashboard", stillSignedInCheck, update.updateUndoAbility,autoFix.automaticFixer, dashboardRouter);
     router.use("/logout", stillSignedInCheck, logoutRouter);
     router.use("/view", stillSignedInCheck, viewRouter);
     router.use("/order", stillSignedInCheck, orderRouter);

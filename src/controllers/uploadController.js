@@ -4,6 +4,7 @@ const Profile = require("../models/profile");
 const fs = require("fs");
 const logger = require("../middlewares/logger");
 const i18n = require("i18n");
+const Error = require('../middlewares/error');
 /**
  * @apiVersion 3.0.0
  * @api {get} /upload/logo uploadLogoGet
@@ -21,14 +22,15 @@ const i18n = require("i18n");
  */
 exports.uploadLogoGet = (req, res) => {
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/uploadController.uploadLogoGet on method Settings.findOne trace: "+err.message);
+        Error.handler(req,res,err,'FU0000');
         Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/uploadController.uploadLogoGet on method Profile.findOne trace: "+err.message);
+            Error.handler(req,res,err,'FU0001');
             res.render("upload", {
                 "settings": settings,
                 "description": "Upload logo",
                 "profile": profile,
                 "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                    Error.handler(req,res,err,'FU0002');
                     return user
                 })).role
             });
@@ -56,7 +58,7 @@ exports.uploadLogoPost = async (req, res) => {
         logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is trying to upload logo file of mimetype "+req.files.logoFile.mimetype);
         if (logoFile.mimetype === "image/jpeg" || logoFile.mimetype === "image/jpg" || !logoFile.mimetype) {
             Profile.findOne({fromUser: req.session._id}, async function (err, profile) {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/uploadController.uploadLogoPost on method Profile.findOne trace: "+err.message);
+                Error.handler(req,res,err,'FU0100');
                 let url = "public/images/" + req.session._id + "/logo.jpeg";
                 if (!fs.existsSync("public/images/" + req.session._id)) {
                     await fs.mkdirSync("public/images/" + req.session._id);
@@ -65,7 +67,7 @@ exports.uploadLogoPost = async (req, res) => {
                 profile.logoFile.data = fs.readFileSync(url);
                 profile.logoFile.contentType = "image/jpeg";
                 await profile.save((err)=>{
-                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/uploadController.uploadLogoPost on method Profile.save trace: "+err.message);});
+                    Error.handler(req,res,err,'FU0101');});
                 req.flash("success", i18n.__("succefully updated your logo"));
                 res.redirect("/view/profile/");
             });
@@ -75,7 +77,7 @@ exports.uploadLogoPost = async (req, res) => {
             res.redirect("/upload/logo");
         }
     } catch (error) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/uploadController.uploadLogoPost on catch block trace: "+err.message);
+        Error.handler(req,res,err,'FU0102');
         req.flash('danger',i18n.__("Something happend, please try again"));
         res.redirect("/upload/logo");
     }

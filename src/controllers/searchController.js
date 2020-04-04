@@ -8,6 +8,7 @@ const {distinct} = require('../utils/array');
 const i18n = require('i18n');
 const User = require('../models/user');
 const logger = require('../middlewares/logger');
+const Error = require('../middlewares/error');
 /**
  * @apiVersion 3.0.0
  * @api {post} /search searchGet
@@ -35,11 +36,11 @@ module.exports.searchGet = (req, res) => {
     let invoices = [];
     let orders = [];
     Client.find({fromUser: req.session._id,isRemoved:false}, function (err, clients_) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/searchController.searchGet on method Client.find trace: "+err.message);
+        Error.handler(req,res,err,'DS0000');
         Invoice.find({fromUser: req.session._id,isRemoved:false}, function (err, invoices_) {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/searchController.searchGet on method Invoice.find trace: "+err.message);
+            Error.handler(req,res,err,'DS0001');
             Order.find({fromUser: req.session._id,isRemoved:false}, function (err, orders_) {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/searchController.searchGet on method Order.find trace: "+err.message);
+                Error.handler(req,res,err,'DS0002');
                     //orders
                     for (let order of orders_) {
                         if (String(order.description).toLowerCase().includes(str)) {
@@ -84,10 +85,10 @@ module.exports.searchGet = (req, res) => {
                     let orders_d = distinct(orders);
                     let invoices_d = distinct(invoices);
                     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/searchController.searchGet on method Settings.findOne trace: "+err.message);
+                        Error.handler(req,res,err,'DS0003');
                         if (!err) {
                             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
-                                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/searchController.searchGet on method Profile.findOne trace: "+err.message);
+                                Error.handler(req,res,err,'DS0004');
                                 if (!err) {
                                     res.render('search', {
                                         "description": i18n.__("search on ") + "\"" + str + "\"",

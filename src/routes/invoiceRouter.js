@@ -7,4 +7,5 @@ router.get('/all', invoiceController.invoiceAllGet);
 router.get('/all/:idc', invoiceController.invoiceAllClient);
 router.use('/new', invoiceNewSubRouter);
 router.use('/change', invoiceUpgradeSubRouter);
+router.get('/clone/:idi',invoiceController.invoiceCloneGet);
 module.exports = router;

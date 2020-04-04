@@ -16,6 +16,9 @@ const {parseDateDDMMYYYY, parseDateSwapDayMonth,parseDate} = require("../utils/d
 const {getFullNr} = require("../utils/invoices");
 const activity = require('../utils/activity');
 const logger = require("../middlewares/logger");
+const Error = require('../middlewares/error');
+///TODO when changing an nr: if its profileNrCurrent is lower, change the profileNrCurrent+1
+
 /**
  *
  * @param req
@@ -23,17 +26,18 @@ const logger = require("../middlewares/logger");
  */
 exports.invoiceAllGet = (req, res) => {
     Invoice.find({fromUser: req.session._id,isRemoved:false}, null, {sort: {date: -1}}, function (err, invoices) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceAllGet on method Invoice.find trace: "+err.message);
+        Error.handler(req,res,err,'5C0000');
         Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceAllGet on method Settings.findOne trace: "+err.message);
+            Error.handler(req,res,err,'5C0001');
             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceAllGet on method Profile.findOne trace: "+err.message);
+                Error.handler(req,res,err,'5C0002');
                 res.render("invoices", {
                     "currentUrl": "invoices",
                     "invoices": invoices,
                     "profile": profile,
                     "settings": settings,
                     "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                        Error.handler(req,res,err,'5C0003');
                         return user;
                     })).role
                 });
@@ -48,11 +52,11 @@ exports.invoiceAllGet = (req, res) => {
  */
 exports.invoiceNewChooseGet = (req, res) => {
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewChooseGet on method Settings.findOne trace: "+err.message);
+        Error.handler(req,res,err,'5C0100');
         Profile.findOne({fromUser: req.session._id}, function (err, profile) {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewChooseGet on method Profile.findOne trace: "+err.message);
+            Error.handler(req,res,err,'5C0101');
             Client.find({fromUser: req.session._id,isRemoved:false}, async (err, clients) => {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewChooseGet on method Client.find trace: "+err.message);
+                Error.handler(req,res,err,'5C0102');
                 res.render("add-file-no-contact", {
                     "profile": profile,
                     "settings": settings,
@@ -60,6 +64,7 @@ exports.invoiceNewChooseGet = (req, res) => {
                     "addlink": "invoice",
                     "clients": clients,
                     "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                        Error.handler(req,res,err,'5C0103');
                         return user;
                     })).role
                 });
@@ -74,11 +79,11 @@ exports.invoiceNewChooseGet = (req, res) => {
  */
 exports.offerNewChooseGet = (req, res) => {
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerNewChooseGet on method Settings.findOne trace: "+err.message);
+        Error.handler(req,res,err,'5C0200');
         Profile.findOne({fromUser: req.session._id,isRemoved:false}, function (err, profile) {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerNewChooseGet on method Profile.findOne trace: "+err.message);
+            Error.handler(req,res,err,'5C0201');
             Client.find({fromUser: req.session._id,isRemoved:false}, async (err, clients) => {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerNewChooseGet on method Client.find trace: "+err.message);
+                Error.handler(req,res,err,'5C0202');
                 res.render("add-file-no-contact", {
                     "profile": profile,
                     "settings": settings,
@@ -86,6 +91,7 @@ exports.offerNewChooseGet = (req, res) => {
                     "addlink": "offer",
                     "clients": clients,
                     "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                        Error.handler(req,res,err,'5C0203');
                         return user;
                     })).role
                 });
@@ -100,11 +106,11 @@ exports.offerNewChooseGet = (req, res) => {
  */
 exports.creditNewChooseGet = (req, res) => {
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.creditNewChooseGet on method Settings.findOne trace: "+err.message);
+        Error.handler(req,res,err,'5C0300');
         Profile.findOne({fromUser: req.session._id}, function (err, profile) {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.creditNewChooseGet on method Profile.findOne trace: "+err.message);
+            Error.handler(req,res,err,'5C0301');
             Client.find({fromUser: req.session._id,isRemoved:false}, async (err, clients) => {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.creditNewChooseGet on method Client.findOne trace: "+err.message);
+                Error.handler(req,res,err,'5C0302');
                 let givenObjects = {
                     "profile": profile,
                     "settings": settings,
@@ -112,6 +118,7 @@ exports.creditNewChooseGet = (req, res) => {
                     "addlink": "credit",
                     "clients": clients,
                     "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                        Error.handler(req,res,err,'5C0303');
                         return user;
                     })).role
                 };
@@ -129,36 +136,32 @@ exports.invoiceNewGet = (req, res) => {
     const idc = (req.body.idc) ? req.body.idc : req.params.idc;
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to create new invoice using "+((req.params.idc)?"GET":"POST")+" request");
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewGet on method Settings.findOne trace: "+err.message);
+        Error.handler(req,res,err,'5C0400');
         Client.findOne({fromUser: req.session._id, _id: idc,isRemoved:false}, function (err, client) {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewGet on method Client.findOne trace: "+err.message);
+            Error.handler(req,res,err,'5C0401');
             if (client === null) {
                 logger.info.log("[INFO]: Email:\'"+req.session.email+"\' tried making new invoice, but had no client. redirected, with message");
                 req.flash("danger", i18n.__("Cannot make an invoice with a client"));
                 res.redirect("/invoice/new/invoice");
             } else {
                 client.save(function (err) {
-                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewGet on method Client.save trace: "+err.message);
+                    Error.handler(req,res,err,'5C0402');
                     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewGet on method Profile.findOne trace: "+err.message);
+                        Error.handler(req,res,err,'5C0403');
                             Profile.updateOne({
                                 fromUser: req.session._id
                             }, {
                                 invoiceNrCurrent: profile.invoiceNrCurrent + 1
                             }, async function (err) {
-                                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewGet on method Profile.UpdateOne trace: "+err.message);
+                                Error.handler(req,res,err,'5C04004');
                                 if(!err) logger.info.log("[INFO]: profile from User "+req.session.email+" has updated its invoiceNrCurrent to "+profile.invoiceNrCurrent+1);
-                                let invoiceNr;
-                                if (profile.invoiceNrCurrent.toString().length === 1) {
-                                    invoiceNr = "00" + profile.invoiceNrCurrent.toString();
-                                } else if (profile.invoiceNrCurrent.toString().length === 2) {
-                                    invoiceNr = "0" + profile.invoiceNrCurrent.toString();
-                                }
+                                let _invoiceNr = getFullNr(profile.invoiceNrCurrent);
                                 let newInvoice = new Invoice({
                                     fromClient: client._id,
                                     date: Date.now(),
-                                    invoiceNr: String(new Date().getFullYear() + invoiceNr),
+                                    invoiceNr: _invoiceNr,
                                     clientName: client.clientName,
+                                    firmName: client.firm,
                                     total: 0,
                                     fromUser: req.session._id,
                                     description:"",
@@ -169,19 +172,19 @@ exports.invoiceNewGet = (req, res) => {
                                     fromUser: req.session._id,
                                     _id: client._id,isRemoved:false
                                 }, async function (err) {
-                                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewGet on method Client.findOne trace: "+err.message);
+                                    Error.handler(req,res,err,'5C0405');
                                     if (!err) {
                                         client.invoices.push(newInvoice._id);
                                         await client.save((err)=>{
-                                            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewGet on method Client.save trace: "+err.message);
+                                            Error.handler(req,res,err,'5C0406');
                                         });
                                     }
                                 });
                                 await Client.updateOne({fromUser:req.session._id,_id:idc},{lastUpdated:Date.now()},(err)=>{
-                                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewGet on method Client.UpdateOne trace: "+err.message);
+                                    Error.handler(req,res,err,'5C0407');
                                 });
                                 await newInvoice.save(function (err) {
-                                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceNewGet on method newInvoice.save trace: "+err.message);
+                                    Error.handler(req,res,err,'5C0408');
                                     if (!err) {
                                         activity.addInvoice(newInvoice,req.session._id);
                                         res.redirect("/order/all/"+newInvoice._id);
@@ -204,23 +207,23 @@ exports.creditNewGet = (req, res) => {
     const idc = (req.body.idc) ? req.body.idc : req.params.idc;
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to create new creditnote using "+((req.params.idc)?"GET":"POST")+" request");
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.creditNewGet on method Settings.findOne trace: "+err.message);
+        Error.handler(req,res,err,'5C0500');
         Client.findOne({fromUser: req.session._id, _id: idc,isRemoved:false}, function (err, client) {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.creditNewGet on method Client.findOne trace: "+err.message);
+            Error.handler(req,res,err,'5C0501');
             if (client === null) {
                 logger.info.log("[INFO]: Email:\'"+req.session.email+"\' tried making new invoice, but had no client. redirected, with message");
                 req.flash("danger", i18n.__("Cannot make an creditnote with a client"));
                 res.redirect("/invoice/new/credit");
             } else {
                 client.save(function (err) {
-                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.creditNewGet on method Client.save trace: "+err.message);
+                    Error.handler(req,res,err,'5C0502');
                     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.creditNewGet on method Profile.findOne trace: "+err.message);
+                        Error.handler(req,res,err,'5C0503');
                             Profile.updateOne(
                                 {fromUser: req.session._id},
                                 {creditNrCurrent: profile.creditNrCurrent + 1}, async function (err) {
-                                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.creditNewGet on method Profile.UpdateOne trace: "+err.message);
-                                    if(!err) logger.info.log("[INFO]: profile from User "+req.session.email+" has updated its invoiceNrCurrent to "+profile.invoiceNrCurrent+1);
+                                    Error.handler(req,res,err,'5C0504');
+                                    if(!err) logger.info.log("[INFO]: profile from User "+req.session.email+" has updated its invoiceNrCurrent to "+profile.creditNrCurrent+1);
                                     if (!err) {
                                         let creditNr = getFullNr(profile.creditNrCurrent);
                                         let newInvoice = new Invoice({
@@ -228,6 +231,7 @@ exports.creditNewGet = (req, res) => {
                                             date: Date.now(),
                                             creditNr: creditNr,
                                             clientName: client.clientName,
+                                            firmName: client.firm,
                                             total: 0,
                                             fromUser: req.session._id
                                             ,isRemoved:false
@@ -237,14 +241,14 @@ exports.creditNewGet = (req, res) => {
                                             fromUser: req.session._id,
                                             _id: client._id,isRemoved:false
                                         }, function (err) {
-                                            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.creditNewGet on method Client.findOne trace: "+err.message);
+                                            Error.handler(req,res,err,'5C0505');
                                             client.invoices.push(newInvoice._id);
                                         });
                                         await Client.updateOne({fromUser:req.session._id,_id:idc},{lastUpdated:Date.now()},(err)=>{
-                                            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.creditNewGet on method Client.updateOne trace: "+err.message);
+                                            Error.handler(req,res,err,'5C0506');
                                         });
                                         await newInvoice.save((err)=>{
-                                            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.creditNewGet on method newInvoice.save trace: "+err.message);
+                                            Error.handler(req,res,err,'5C0507');
                                         });
                                         activity.addCredit(newInvoice,req.session._id);
                                         res.redirect("/order/all/"+newInvoice._id);
@@ -266,18 +270,18 @@ exports.offerNewGet = (req, res) => {
     const idc = (req.body.idc) ? req.body.idc : req.params.idc;
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to create new offer using "+((req.params.idc)?"GET":"POST")+" request");
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerNewGet on method Settings.findOne trace: "+err.message);
+        Error.handler(req,res,err,'5C0600');
         Client.findOne({fromUser: req.session._id, _id: idc,isRemoved:false}, function (err, client) {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerNewGet on method Client.findOne trace: "+err.message);
+            Error.handler(req,res,err,'5C0601');
             if (client === null) {
                 logger.info.log("[INFO]: Email:\'"+req.session.email+"\' tried making new invoice, but had no client. redirected, with message");
                 req.flash("danger", i18n.__("Cannot make an offer with a client"));
                 res.redirect("/invoice/new/offer");
             } else {
                 client.save(function (err) {
-                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerNewGet on method Client.save trace: "+err.message);
+                    Error.handler(req,res,err,'5C0602');
                     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerNewGet on method Profile.findOne trace: "+err.message);
+                        Error.handler(req,res,err,'5C0603');
                         if (!err) {
                                 if (!err) {
                                     Profile.updateOne({
@@ -285,8 +289,8 @@ exports.offerNewGet = (req, res) => {
                                     }, {
                                         offerNrCurrent: profile.offerNrCurrent + 1
                                     }, async function (err) {
-                                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerNewGet on method Profile.UpdateOne trace: "+err.message);
-                                        if(!err) logger.info.log("[INFO]: profile from User "+req.session.email+" has updated its invoiceNrCurrent to "+profile.invoiceNrCurrent+1);
+                                        Error.handler(req,res,err,'5C0604');
+                                        if(!err) logger.info.log("[INFO]: profile from User "+req.session.email+" has updated its invoiceNrCurrent to "+profile.offerNrCurrent+1);
                                         if (!err) {
                                             let offerNr = getFullNr(profile.offerNrCurrent);
                                             let newInvoice = new Invoice({
@@ -294,6 +298,7 @@ exports.offerNewGet = (req, res) => {
                                                 date: Date.now(),
                                                 offerNr: offerNr,
                                                 clientName: client.clientName,
+                                                firmName: client.firm,
                                                 fromUser: req.session._id,
                                                 description:"",isRemoved:false
                                             });
@@ -302,14 +307,14 @@ exports.offerNewGet = (req, res) => {
                                                 fromUser: req.session._id,
                                                 _id: client._id,isRemoved:false
                                             }, function (err) {
-                                                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerNewGet on method Client.findOne trace: "+err.message);
+                                                Error.handler(req,res,err,'5C0605');
                                                 client.invoices.push(newInvoice._id);
                                             });
                                             await newInvoice.save((err)=>{
-                                                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerNewGet on method newInvoice.save trace: "+err.message);
+                                                Error.handler(req,res,err,'5C0606');
                                             });
                                             await Client.updateOne({fromUser:req.session._id,_id:idc},{lastUpdated:Date.now()},(err)=>{
-                                                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerNewGet on method Client.updateOne trace: "+err.message);
+                                                Error.handler(req,res,err,'5C0607');
                                             });
                                             if (!err) {
                                                 activity.addOffer(newInvoice,req.session._id);
@@ -333,16 +338,16 @@ exports.offerNewGet = (req, res) => {
  */
 exports.invoiceAllClient = (req, res) => {
     Client.findOne({fromUser: req.session._id, _id: req.params.idc,isRemoved:false}, function (err, client) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceAllClient on method Client.findOne trace: "+err.message);
+        Error.handler(req,res,err,'5C0700');
         Invoice.find({
             fromUser: req.session._id,
             fromClient: req.params.idc,isRemoved:false
         }).sort("-invoiceNr").exec(function (err, invoices) {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceAllClient on method Invoice.find trace: "+err.message);
+            Error.handler(req,res,err,'5C0701');
             Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceAllClient on method Settings.findOne trace: "+err.message);
+                Error.handler(req,res,err,'5C0702');
                 Profile.findOne({fromUser:req.session._id}, async (err, profile) => {
-                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceAllClient on method Profile.findOne trace: "+err.message);
+                    Error.handler(req,res,err,'5C0703');
                     if (!err) {
                         let givenObject = {
                             "client": client,
@@ -351,6 +356,7 @@ exports.invoiceAllClient = (req, res) => {
                             "profile": profile,
                             "currentUrl": "invoiceClient",
                             "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                                Error.handler(req,res,err,'5C0704');
                                 return user;
                             })).role
                         };
@@ -369,13 +375,13 @@ exports.invoiceAllClient = (req, res) => {
  */
 exports.editInvoiceGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, function (err, invoice) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editInvoiceGet on method Invoice.findOne trace: "+err.message);
+        Error.handler(req,res,err,'5C0800');
         Client.findOne({fromUser: req.session._id, _id: invoice.fromClient,isRemoved:false}, function (err, client) {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editInvoiceGet on method Client.findOne trace: "+err.message);
+            Error.handler(req,res,err,'5C0801');
             Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editInvoiceGet on method Settings.findOne trace: "+err.message);
+                Error.handler(req,res,err,'5C0802');
                 Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
-                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editInvoiceGet on method Profile.findOne trace: "+err.message);
+                    Error.handler(req,res,err,'5C0803');
                     let givenObject = {
                         "invoice": invoice,
                         "client": client,
@@ -383,6 +389,7 @@ exports.editInvoiceGet = (req, res) => {
                         "profile": profile,
                         "currentUrl": "invoiceEdit",
                         "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                            Error.handler(req,res,err,'5C0804');
                             return user;
                         })).role
                     };
@@ -399,20 +406,30 @@ exports.editInvoiceGet = (req, res) => {
  * @param req
  * @param res
  */
-exports.editInvoicePost = (req, res) => {
+exports.editInvoicePost = async (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to edit invoice with: "+JSON.stringify(req.body));
+    let profile = await Profile.findOne({fromUser:req.session._id},(err,profile)=>{return profile;});
+    let invoiceNrWithoutYear;
+    if(req.body.invoiceNr){
+        invoiceNrWithoutYear = Number(req.body.invoiceNr.substr(4,req.body.invoiceNr.length));
+        if(invoiceNrWithoutYear>998){
+            req.flash('danger',i18n.__("Invoice number is too high"));
+            res.redirect('back');
+            return;
+        }
+    }
     Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved:false}, async (err, orders) => {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editInvoicePost on method Order.find trace: "+err.message);
+        Error.handler(req,res,err,'5C0900');
         let totOrders = 0;
         for (let i = 0; i <= orders.length - 1; i++) {
             totOrders += (orders[i].price * orders[i].amount);
         }
         let settings = await Settings.findOne({fromUser: req.session._id}, (err, settings) => {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editInvoicePost on method Settings.findOne trace: "+err.message);
+            Error.handler(req,res,err,'5C0901');
             return settings
         });
         let currentInvoice = await Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, (err, invoice) => {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editInvoicePost on method Invoice.findOne trace: "+err.message);
+            Error.handler(req,res,err,'5C0902');
             return invoice
         });
         if(!req.body.invoiceNr||!req.body.date){
@@ -481,13 +498,20 @@ exports.editInvoicePost = (req, res) => {
         if (orders.length > 0) {
             searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient,isRemoved:false};
         }
+        if(req.body.invoiceNr){
+            if(invoiceNrWithoutYear>profile.invoiceNrCurrent){
+                Profile.updateOne({_id:profile._id},{invoiceNrCurrent:invoiceNrWithoutYear+1},(err)=>{
+                    Error.handler(req,res,err,'5C0903');
+                });
+            }
+        }
         Client.findOne(searchCriteria, function (err, client) {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editInvoicePost on method Client.findOne trace: "+err.message);
+            Error.handler(req,res,err,'5C0904');
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, async (err) => {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editInvoicePost on method Update.findone trace: "+err.message);
+                Error.handler(req,res,err,'5C0905');
                 if (!updateOneHasError(req, res, err)) {
                     await Client.updateOne({fromUser:req.session._id,_id:currentInvoice.fromClient},{lastUpdated:Date.now()},(err)=>{
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editInvoicePost on method Client.updateOne trace: "+err.message);
+                        Error.handler(req,res,err,'5C0906');
                     });
                     activity.editedInvoice(updateInvoice,req.session._id);
                     req.flash("success", i18n.__("Successfully updated the invoice"));
@@ -498,20 +522,30 @@ exports.editInvoicePost = (req, res) => {
     });
 };
 
-exports.editOfferPost = (req, res) => {
+exports.editOfferPost = async (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to edit offer with: "+JSON.stringify(req.body));
+    let profile = await Profile.findOne({fromUser:req.session._id},(err,profile)=>{return profile;});
+    let invoiceNrWithoutYear;
+    if(req.body.offerNr){
+        invoiceNrWithoutYear = Number(req.body.offerNr.substr(4,req.body.offerNr.length));
+        if(invoiceNrWithoutYear>998){
+            req.flash('danger',i18n.__("Invoice number is too high"));
+            res.redirect('back');
+            return;
+        }
+    }
     Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved:false}, async (err, orders) => {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editOfferPost on method Order.find trace: "+err.message);
+        Error.handler(req,res,err,'5C1000');
         let totOrders = 0;
         for (let i = 0; i <= orders.length - 1; i++) {
             totOrders += (orders[i].price * orders[i].amount);
         }
         let settings = await Settings.findOne({fromUser: req.session._id}, (err, settings) => {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editOfferPost on method Settings.findOne trace: "+err.message);
+            Error.handler(req,res,err,'5C1001');
             return settings
         });
         let currentInvoice = await Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, (err, invoice) => {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editOfferPost on method Invoice.findOne trace: "+err.message);
+            Error.handler(req,res,err,'5C1002');
             return invoice
         });
         if(!req.body.offerNr||!req.body.date){
@@ -580,9 +614,17 @@ exports.editOfferPost = (req, res) => {
         if (orders.length > 0) {
             searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient,isRemoved:false};
         }
+        if(req.body.offerNr){
+            if(invoiceNrWithoutYear>profile.offerNrCurrent){
+                Profile.updateOne({_id:profile._id},{offerNrCurrent:invoiceNrWithoutYear+1},(err)=>{
+                    Error.handler(req,res,err,'5C1003');
+                });
+            }
+        }
         Client.findOne(searchCriteria, function (err, contact) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, async (err) => {
                 if (!updateOneHasError(req, res, err)) {
+                    Error.handler(req,res,err,'5C1004');
                     await Client.updateOne({fromUser:req.session._id,_id:currentInvoice.fromClient},{lastUpdated:Date.now()});
                     activity.editedInvoice(updateInvoice,req.session._id);
                     req.flash("success", i18n.__("Successfully updated the offer"));
@@ -593,7 +635,17 @@ exports.editOfferPost = (req, res) => {
     });
 };
 
-exports.editCreditPost = (req, res) => {
+exports.editCreditPost = async (req, res) => {
+    let profile = await Profile.findOne({fromUser:req.session._id},(err,profile)=>{return profile;});
+    let invoiceNrWithoutYear;
+    if(req.body.creditNr){
+        invoiceNrWithoutYear = Number(req.body.creditNr.substr(4,req.body.creditNr.length));
+        if(invoiceNrWithoutYear>998){
+            req.flash('danger',i18n.__("Invoice number is too high"));
+            res.redirect('back');
+            return;
+        }
+    }
     Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved:false}, async (err, orders) => {
         let totOrders = 0;
         for (let i = 0; i <= orders.length - 1; i++) {
@@ -637,13 +689,23 @@ exports.editCreditPost = (req, res) => {
         if (orders.length > 0) {
             searchCriteria = {fromUser: req.session._id, _id: orders[0].fromClient,isRemoved:false};
         }
+        if(req.body.creditNr){
+            if(invoiceNrWithoutYear>profile.creditNrCurrent){
+                Profile.updateOne({_id:profile._id},{creditNrCurrent:invoiceNrWithoutYear+1},(err)=>{
+                    if(err) {
+                        Error.handler(req,res,err,'5C1100');
+                        req.flash('danger',i18n.__('We experienced an error on our part, please '))
+                    }
+                });
+            }
+        }
         Client.findOne(searchCriteria, function (err, contact) {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editOfferPost on method Client.findOne trace: "+err.message);
+            Error.handler(req,res,err,'5C1101');
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, updateInvoice, async (err) => {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editOfferPost on method Invoice.updateOne trace: "+err.message);
+                Error.handler(req,res,err,'5C1102');
                 if (!updateOneHasError(req, res, err)) {
                     await Client.updateOne({fromUser:req.session._id,_id:currentInvoice.fromClient},{lastUpdated:Date.now()},(err)=> {
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.editOfferPost on method Client.updateOne trace: "+err.message);
+                        Error.handler(req,res,err,'5C1103');
                     });
                     activity.editedInvoice(updateInvoice,req.session._id);
                     req.flash("success", i18n.__("Successfully updated the creditnote"));
@@ -676,16 +738,16 @@ exports.editCreditPost = (req, res) => {
  */
 exports.viewInvoiceGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, function (err, invoice) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.viewInvoiceGet on method Invoice.findOne trace: "+err.message);
+        Error.handler(req,res,err,'5C1200');
         if (!findOneHasError(req, res, err, invoice)) {
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient,isRemoved:false}, function (err, client) {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.viewInvoiceGet on method Client.findOne trace: "+err.message);
+                Error.handler(req,res,err,'5C1201');
                 if (!findOneHasError(req, res, err, client)) {
                     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.viewInvoiceGet on method Settings.findOne trace: "+err.message);
+                        Error.handler(req,res,err,'5C1202');
                         if (!findOneHasError(req, res, err, settings)) {
                             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
-                                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.viewInvoiceGet on method Profile.findOne trace: "+err.message);
+                                Error.handler(req,res,err,'5C1203');
                                 if (!findOneHasError(req, res, err, profile)) {
                                     let description = (invoice.creditNr) ? "View credit of" : "View invoice of";
                                     res.render("view/view-invoice", {
@@ -696,6 +758,7 @@ exports.viewInvoiceGet = (req, res) => {
                                         "currentUrl": "creditView",
                                         "profile": profile,
                                         "role": (await User.findOne({_id: req.session._id}, (err, user) => {
+                                            Error.handler(req,res,err,'5C1203');
                                             return user
                                         })).role
                                     })
@@ -716,7 +779,7 @@ exports.viewInvoiceGet = (req, res) => {
  */
 exports.invoicePaidGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoicePaidGet on method Invoice.findOne trace: "+err.message);
+        Error.handler(req,res,err,'5C1300');
         let isPaid = !(invoice.isPaid);
         logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is settings invoice paid status to "+isPaid+" for invoice with id: "+req.params.idi);
         if (!findOneHasError(req, res, err, invoice)) {
@@ -734,14 +797,17 @@ exports.invoicePaidGet = (req, res) => {
                 };
             }
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, invoiceUpdate, async (err) =>  {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoicePaidGet on method Invoice.updateOne trace: "+err.message);
+                Error.handler(req,res,err,'5C1301');
                 if (!updateOneHasError(req, res, err)) {
+                    Error.handler(req,res,err,'5C1302');
                     activity.setPaid(invoice,isPaid,req.session._id);
-                    let _client = await Client.findOne({fromUser:req.session._id,_id:invoice.fromClient},(err,client) => {return client;
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoicePaidGet on method Client.findOne trace: "+err.message);});
+                    let _client = await Client.findOne({fromUser:req.session._id,_id:invoice.fromClient},(err,client) => {
+                        Error.handler(req, res, err, '5C1303');
+                        return client;
+                    });
                     let newTotal = (isPaid)?_client.totalPaid+invoice.total:_client.totalPaid-invoice.total;
                     await Client.updateOne({fromUser:req.session._id,_id:invoice.fromClient},{totalPaid:newTotal,lastUpdated:Date.now()},(err)=>{
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoicePaidGet on method Client.updateOne trace: "+err.message);
+                        Error.handler(req,res,err,'5C1304');
                     });
                     res.redirect("back");
                 }
@@ -752,17 +818,17 @@ exports.invoicePaidGet = (req, res) => {
 
 exports.offerAgreedGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerAgreedGet on method Invoice.findOne trace: "+err.message);
+        Error.handler(req,res,err,'5C1400');
         logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is setting its offerAgreed to "+!(invoice.isAgreed)+" for invoice with id "+req.params.idi);
         if (!findOneHasError(req, res, err, invoice)) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
                 isAgreed: !(invoice.isAgreed),
                 lastUpdated: Date.now()
             }, async (err) => {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerAgreedGet on method Invoice.updateOne trace: "+err.message);
+                Error.handler(req,res,err,'5C1401');
                 if (!updateOneHasError(req, res, err)) {
                     await Client.updateOne({fromUser:req.session._id,_id:invoice.fromClient},{lastUpdated:Date.now()},(err)=>{
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.offerAgreedGet on method Client.updateOne trace: "+err.message);
+                        Error.handler(req,res,err,'5C1402');
                     });
                     activity.setAgreed(invoice,!invoice.isAgreed,req.session._id);
                     res.redirect("back");
@@ -775,16 +841,16 @@ exports.offerAgreedGet = (req, res) => {
 exports.setVat = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
         logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is setting its setVat to "+!(invoice.isVatOn)+" for invoice with id "+req.params.idi);
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.setVat on method Invoice.findOne trace: "+err.message);
+        Error.handler(req,res,err,'5C1500');
         if (!findOneHasError(req, res, err, invoice)) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
                 isVatOn: !(invoice.isVatOn),
                 lastUpdated: Date.now()
             }, async (err) => {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.setVat on method Invoice.updateOne trace: "+err.message);
+                Error.handler(req,res,err,'5C1501');
                 if (!updateOneHasError(req, res, err)) {
                     await Client.updateOne({fromUser:req.session._id,_id:invoice.fromClient},{lastUpdated:Date.now()},(err) => {
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.setVat on method Client.updateOne trace: "+err.message);
+                        Error.handler(req,res,err,'5C1502');
                     });
                     res.redirect("back");
                 }
@@ -796,21 +862,22 @@ exports.setVat = (req, res) => {
 exports.invoiceUpgradeGet = (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is upgrading its offer with id "+req.params.idi);
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, async (err, invoice) => {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceUpgradeGet on method Invoice.findOne trace: "+err.message);
+        Error.handler(req,res,err,'5C1600');
         if (!findOneHasError(req, res, err, invoice)) {
-            let profile = await Profile.findOne({fromUser:req.session._id},(err,profile)=> {return profile;
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceUpgradeGet on method Profile.findOne trace: "+err.message);});
+            let profile = await Profile.findOne({fromUser:req.session._id},(err,profile)=> {
+                Error.handler(req,res,err,'5C1602');
+                return profile;});
             let nr = getFullNr(profile.invoiceNrCurrent);
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
                 invoiceNr: nr ,
                 offerNr: ""
             }, async (err) => {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceUpgradeGet on method Invoice.updateOne trace: "+err.message);
+                Error.handler(req,res,err,'5C1603');
                 if (!updateOneHasError(req, res, err)) {
                     await Client.updateOne({fromUser:req.session._id,_id:invoice.fromClient},{lastUpdated:Date.now()},(err) => {
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceUpgradeGet on method Client.updateOne trace: "+err.message);});
+                        Error.handler(req,res,err,'5C1604');});
                     await Profile.updateOne({fromUser:req.session._id},{invoiceNrCurrent:nr+1},(err) => {
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceUpgradeGet on method Profile.updateOne trace: "+err.message);});
+                        Error.handler(req,res,err,'5C1605');});
                     await activity.upgrade(invoice,req.session._id);
                     res.redirect("back");
                 }
@@ -822,20 +889,119 @@ exports.invoiceUpgradeGet = (req, res) => {
 exports.invoiceDowngradeGet = (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is downgrading its invoice with id "+req.params.idi);
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceDowngradeGet on method Invoice.findOne trace: "+err.message);
+        Error.handler(req,res,err,'5C1700');
         if (!findOneHasError(req, res, err, invoice)) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
                 offerNr: invoice.invoiceNr,
                 invoiceNr: ""
             }, async (err) => {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceDowngradeGet on method Invoice.updateOne trace: "+err.message);
+                Error.handler(req,res,err,'5C1701');
                 if (!updateOneHasError(req, res, err)) {
                     await Client.updateOne({fromUser:req.session._id,_id:invoice.fromClient},{lastUpdated:Date.now()},(err)=> {
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/invoiceController.invoiceDowngradeGet on method Client.updateOne trace: "+err.message);});
+                        Error.handler(req,res,err,'5C1702');});
                     activity.downgrade(invoice,req.session._id);
                     res.redirect("back");
                 }
             });
         }
     });
+};
+
+exports.invoiceCloneGet = async (req,res) => {
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is trying to clone invoice with id "+req.params.idi);
+    let invoice = await Invoice.findOne({_id:req.params.idi,fromUser:req.session._id,isRemoved:false},(err,invoice)=>{
+        Error.handler(req,res,err,'5C1800');
+        return invoice;
+    });
+    let orders = await Order.find({fromInvoice:req.params.idi,fromUser:req.session._id},(err,orders)=>{
+        Error.handler(req,res,err,'5C1801');
+        return orders;
+    });
+    let profile = await Profile.findOne({fromUser:req.session._id},(err,profile)=>{
+        Error.handler(req,res,err,'5C1802');
+        return profile;
+    });
+
+    let client = await Client.findOne({fromUser:req.session._id,_id:invoice.fromClient},(err,client)=>{
+        Error.handler(req,res,err,'5C1802');
+        return client;
+    });
+    //create invoice
+    let newInvoice = new Invoice({
+        fromClient: invoice.fromClient,
+        total: invoice.total,
+        fromUser: req.session._id,
+        description: invoice.description,
+        isVatOn: invoice.isVatOn,
+        firmName:invoice.firmName,
+        clientName:invoice.clientName,
+    });
+
+    //update invoice, nr. update profile, nr
+    let type = invoiceUtil.getOnlyTypeOfInvoice(invoice);
+    switch(type){
+        case 'invoice':
+            Profile.updateOne({fromUser:req.session._id},{invoiceNrCurrent:profile.invoiceNrCurrent+1},(err)=>{
+                Error.handler(req,res,err,'5C1803');
+            });
+            Object.assign(newInvoice,{
+                invoiceNr: getFullNr(profile.invoiceNrCurrent)
+            });
+            break;
+        case 'offer':
+            Profile.updateOne({fromUser:req.session._id},{offerNrCurrent:profile.offerNrCurrent+1},(err)=>{
+                Error.handler(req,res,err,'5C1804');
+            });
+            Object.assign(newInvoice,{
+                offerNr: getFullNr(profile.offerNrCurrent)
+            });
+            break;
+        case 'credit':
+            Profile.updateOne({fromUser:req.session._id},{offerNrCurrent:profile.offerNrCurrent+1},(err)=>{
+                Error.handler(req,res,err,'5C1805');
+            });
+            Object.assign(newInvoice,{
+                creditNr: getFullNr(profile.creditNrCurrent)
+            });
+            break;
+        default:
+            Error.handler(req,res,err,'5C1806');
+            break;
+    }
+    //create orders
+    let newOrders = [];
+    for(let o of orders){
+        let newOrder = new Order({
+            description: o.description,
+            amount: o.amount,
+            price: o.price,
+            total: o.total,
+            fromUser: o.fromUser,
+            fromInvoice: newInvoice._id,
+            fromClient: o.fromClient,
+            isRemoved: o.isRemoved
+            });
+        await newOrder.save((err)=>{
+            Error.handler(req,res,err,'5C1807');
+        });
+        newOrders.push(newOrder._id);
+    }
+
+    //update invoice, orders
+    Object.assign(newInvoice,{orders:newOrders});
+    await newInvoice.save((err)=>{
+        Error.handler(req,res,err,'5C1808');
+    });
+
+    //update client, invoices
+    let invoicesOfClient = client.invoices;
+    invoicesOfClient.push(newInvoice._id);
+    console.log(invoicesOfClient);
+    ///TODO does not add correctly
+    await Client.updateOne({_id:client._id},{invoices:invoicesOfClient},(err)=>{
+        Error.handler(req,res,err,'5C1809');
+    });
+
+    req.flash('success',i18n.__('Invoice successfully cloned'));
+    res.redirect('back');
 };

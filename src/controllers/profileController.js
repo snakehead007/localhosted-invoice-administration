@@ -10,6 +10,7 @@ const activity = require('../utils/activity');
 const logger = require("../middlewares/logger");
 const {getReformatedImageSize} = require("../utils/utils");
 const path = require("path");
+const Error = require('../middlewares/error');
 const sizeOf = require('image-size');
 /**
  * @api {get} /view/profile viewProfileGet
@@ -29,21 +30,22 @@ const sizeOf = require('image-size');
  */
 exports.viewProfileGet = async (req, res) => {
     let role = (await User.findOne({_id: req.session._id}, (err, user) => {
+        Error.handler(req,res,err,'BP0000');
         return user
     })).role;
     let title = i18n.__((role === "visitor") ? "Create a new profile" : "Edit");
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/profileController.viewProfileGet on method Settings.findOne trace: "+err.message);
+        Error.handler(req,res,err,'BP0001');
         if (!err) {
             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/profileController.viewProfileGet on method Profile.findOne trace: "+err.message);
+                Error.handler(req,res,err,'BP0002');
                 let size;
                 try{
                     let _path = path.resolve(__dirname,"../../public/images/"+req.session._id+"/logo.jpeg");
                     size = sizeOf(_path);
                     size = getReformatedImageSize(size);
                 }catch(err){
-                    console.trace(err);
+                    //no logo to find
                 }
                 if (!err) {
                     res.render("edit/edit-profile", {
@@ -121,11 +123,12 @@ exports.editProfilePost = async (req, res) => {
     if (firmCheck || nameCheck || streetCheck || placeCheck || emailCheck || telCheck || vatCheck || postalCheck || streetCheck || bicCheck || ibanCheck || streetNrCheck) {
         log.info("[INFO]: Email:\'"+req.session.email+"\' could not edit profile, due to validation.");
         let role = (await User.findOne({_id: req.session._id}, (err, user) => {
+            Error.handler(req,res,err,'BP0200');
             return user
         })).role;
         let title = i18n.__((role === "visitor") ? "Create a new profile" : "Edit");
         Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/profileController.editProfilePost on method Settings.findOne trace: "+err.message);
+            Error.handler(req,res,err,'BP0201');
             if (!err) {
                 res.render("edit/edit-profile", {
                     "currentUrl": "edit-profile",
@@ -166,19 +169,19 @@ exports.editProfilePost = async (req, res) => {
         };
         logger.info.log("[INFO]: Email:\'"+req.session.email+"\' met validations to edit profile, new profile is"+JSON.stringify(updateProfile));
         Profile.updateOne({fromUser: req.session._id, _id: req.params.idp}, updateProfile, async (err) => {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/profileController.editProfilePost on method Profile.updateOne trace: "+err.message);
+            Error.handler(req,res,err,'BP0202');
             if (!err) {
                 let user = await User.findOne({_id: req.session._id}, (err, user) => {
-                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/profileController.editProfilePost on method User.findOne trace: "+err.message);
+                    Error.handler(req,res,err,'BP0203');
                     if (findOneHasError(req, res, err, user)) {
-                        if(err) console.trace(err);
+                        Error.handler(req,res,err,'BP0204');
                         return user;
                     }
                 });
                 if (user.role === "visitor") {
                     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' succesfully updated its role to 'user'");
                     await User.updateOne({_id: req.session._id}, {role: "user"}, (err) => {
-                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/profileController.editProfilePost on method User.updateOne trace: "+err.message);
+                        Error.handler(req,res,err,'BP0205');
                         req.flash("success", i18n.__("successfully created your profile"));
                         res.redirect("/view/profile");
                     });

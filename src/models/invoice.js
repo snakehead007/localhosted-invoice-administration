@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const Invoice = new mongoose.Schema({
-    date: Date,
+    date: {
+        type:Date,
+        default:Date.now()
+    },
     datePaid: Date,
     invoiceNr: Number,
     offerNr: Number,
@@ -18,6 +21,7 @@ const Invoice = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    firmName:String,
     clientName: String,
     total: {
         type: Number,

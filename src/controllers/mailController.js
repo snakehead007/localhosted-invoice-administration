@@ -10,10 +10,11 @@ const {createPDF} = require("../utils/pdfGenerator");
 const {getPathOfInvoice,getOnlyTypeOfInvoice,getDefaultNumberOfInvoice} = require('../utils/invoices');
 const {getIp} = require("../utils/utils");
 const logger = require("../middlewares/logger");
+const Error = require('../middlewares/error');
 
 exports.sendToBasecone = async (req,res) => {
     logger.warning.log("[WARNING]: Email:\'"+req.session.email+"\' tried to send attachment via mail.");
-    req.flash('danger',"This function isnt available");
+    req.flash('danger',"This function is not available");
     res.redirect('back');
     return;
     /////////
@@ -62,15 +63,14 @@ exports.sendToBasecone = async (req,res) => {
     });
 };
 exports.sendBugReport = async (req,res) => {
-    let user = await User.findOne({_id:req.session._id},(err,user)=>{return user;
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on method User.findOne trace: "+err.message);});
+    let user = await User.findOne({_id:req.session._id},(err,user)=>{
+        Error.handler(req,res,err,'9M0100');
+        return user;
+        });
     try {
         await mailgun.sendBugReport("snakehead007@pm.me", req.body.message, req.session._id, user, getIp(req));
     }catch(err){
-        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/mailController.sendAttachment on catch block trace: "+err.message);
-        req.flash('danger',i18n.__("Something happend, please try again"));
-        res.redirect('back');
-        return;
+        Error.handler(req,res,err,'9M0101');
     }
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' send bug report");
     req.flash('success',i18n.__("Your bug report has been send, thank you!"));
