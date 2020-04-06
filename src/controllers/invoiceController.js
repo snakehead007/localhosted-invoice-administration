@@ -144,8 +144,32 @@ exports.invoiceNewGet = (req, res) => {
                 req.flash("danger", i18n.__("Cannot make an invoice with a client"));
                 res.redirect("/invoice/new/invoice");
             } else {
-                client.save(function (err) {
+                client.save( async (err) => {
                     Error.handler(req,res,err,'5C0402');
+                    //find latest invoiceNr and update profile with it.
+                    let invoices = await Invoice.find({fromUser:req.session._id},null,{sort:{invoiceNr:-1}},(err,invoices)=>{
+                        Error.handler(req,res,err,'5C0409');
+                        return invoices;
+                    });
+                try{
+                    let lastInvoiceNrFull = invoices[0].invoiceNr;
+                    console.log("invoice: "+lastInvoiceNrFull);
+                    if(!lastInvoiceNrFull){
+                        throw new Error();
+                    }
+                    if(lastInvoiceNrFull) {
+                        let lastInvoiceNr = Number(String(lastInvoiceNrFull).substr(4, lastInvoiceNrFull.length)) + 1;
+                        await Profile.updateOne({fromUser: req.session._id}, {invoiceNrCurrent: lastInvoiceNr}, (err) => {
+                            Error.handler(req, res, err, '5C0410');
+                        });
+                    }
+                }catch(err){
+                    console.trace(err);
+                    logger.info.log("[INFO]: Email:'"+req.session.email+"' first invoice created");
+                    await Profile.updateOne({fromUser: req.session._id}, {invoiceNrCurrent: 1}, (err) => {
+                        Error.handler(req, res, err, '5C0410');
+                    });
+                }
                     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
                         Error.handler(req,res,err,'5C0403');
                             Profile.updateOne({
@@ -215,8 +239,33 @@ exports.creditNewGet = (req, res) => {
                 req.flash("danger", i18n.__("Cannot make an creditnote with a client"));
                 res.redirect("/invoice/new/credit");
             } else {
-                client.save(function (err) {
+                client.save( async (err) => {
                     Error.handler(req,res,err,'5C0502');
+                    //find latest invoiceNr and update profile with it.
+                    let invoices = await Invoice.find({fromUser:req.session._id},null,{sort:{creditNr:-1}},(err,invoices)=>{
+                        Error.handler(req,res,err,'5C0509');
+                        return invoices;
+                    });
+                try{
+                    let lastCreditNrFull = invoices[0].creditNr;
+
+                    console.log("credit: "+lastCreditNrFull);
+                    if(!lastCreditNrFull){
+                        throw "throwing error";
+                    }
+                    if(lastCreditNrFull) {
+                        let lastCreditNr = Number(String(lastCreditNrFull).substr(4, lastCreditNrFull.length)) + 1;
+                        await Profile.updateOne({fromUser: req.session._id}, {creditNrCurrent: lastCreditNr}, (err) => {
+                            Error.handler(req, res, err, '5C0510');
+                        });
+                    }
+                }catch(err){
+                    console.trace(err);
+                    logger.info.log("[INFO]: Email:'"+req.session.email+"' first credit created");
+                    await Profile.updateOne({fromUser: req.session._id}, {creditNrCurrent: 1}, (err) => {
+                        Error.handler(req, res, err, '5C0510');
+                    });
+                }
                     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
                         Error.handler(req,res,err,'5C0503');
                             Profile.updateOne(
@@ -278,8 +327,32 @@ exports.offerNewGet = (req, res) => {
                 req.flash("danger", i18n.__("Cannot make an offer with a client"));
                 res.redirect("/invoice/new/offer");
             } else {
-                client.save(function (err) {
+                client.save( async (err) => {
                     Error.handler(req,res,err,'5C0602');
+                    //find latest invoiceNr and update profile with it.
+                    let invoices = await Invoice.find({fromUser:req.session._id},null,{sort:{offerNr:-1}},(err,invoices)=>{
+                        Error.handler(req,res,err,'5C0609');
+                        return invoices;
+                    });
+                    try {
+                        let lastOfferNrFull = invoices[0].offerNr;
+                        console.log(lastOfferNrFull);
+                        if(!lastOfferNrFull){
+                            throw "throwing error";
+                        }
+                        if (lastOfferNrFull) {
+                            let lastOfferNr = Number(String(lastOfferNrFull).substr(4, lastOfferNrFull.length)) + 1;
+                            await Profile.updateOne({fromUser: req.session._id}, {offerNrCurrent: lastOfferNr}, (err) => {
+                                Error.handler(req, res, err, '5C0610');
+                            });
+                        }
+                    }catch(err){
+                        console.trace(err);
+                        logger.info.log("[INFO]: Email:'"+req.session.email+"' first offer created");
+                        await Profile.updateOne({fromUser: req.session._id}, {offerNrCurrent: 1}, (err) => {
+                            Error.handler(req, res, err, '5C0610');
+                        });
+                    }
                     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
                         Error.handler(req,res,err,'5C0603');
                         if (!err) {
@@ -410,14 +483,14 @@ exports.editInvoicePost = async (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to edit invoice with: "+JSON.stringify(req.body));
     let profile = await Profile.findOne({fromUser:req.session._id},(err,profile)=>{return profile;});
     let invoiceNrWithoutYear;
-    if(req.body.invoiceNr){
+    /*if(req.body.invoiceNr){
         invoiceNrWithoutYear = Number(req.body.invoiceNr.substr(4,req.body.invoiceNr.length));
         if(invoiceNrWithoutYear>998){
             req.flash('danger',i18n.__("Invoice number is too high"));
             res.redirect('back');
             return;
         }
-    }
+    }*/
     Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved:false}, async (err, orders) => {
         Error.handler(req,res,err,'5C0900');
         let totOrders = 0;
@@ -432,6 +505,12 @@ exports.editInvoicePost = async (req, res) => {
             Error.handler(req,res,err,'5C0902');
             return invoice
         });
+
+        if(currentInvoice.isSend){
+            req.flash('warning',i18n.__('You cannot edit this invoice when it is already send'));
+            res.redirect('back');
+            return;
+        }
         if(!req.body.invoiceNr||!req.body.date){
             logger.info.log("[INFO]: Email:\'"+req.session.email+"\' tried editing invoice but no date or invoiceNr were given");
             req.flash('danger',i18n.__("Please fill in all the required fields"));
@@ -526,14 +605,14 @@ exports.editOfferPost = async (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to edit offer with: "+JSON.stringify(req.body));
     let profile = await Profile.findOne({fromUser:req.session._id},(err,profile)=>{return profile;});
     let invoiceNrWithoutYear;
-    if(req.body.offerNr){
+    /*if(req.body.offerNr){
         invoiceNrWithoutYear = Number(req.body.offerNr.substr(4,req.body.offerNr.length));
         if(invoiceNrWithoutYear>998){
             req.flash('danger',i18n.__("Invoice number is too high"));
             res.redirect('back');
             return;
         }
-    }
+    }*/
     Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved:false}, async (err, orders) => {
         Error.handler(req,res,err,'5C1000');
         let totOrders = 0;
@@ -548,6 +627,11 @@ exports.editOfferPost = async (req, res) => {
             Error.handler(req,res,err,'5C1002');
             return invoice
         });
+        if(currentInvoice.isSend){
+            req.flash('warning',i18n.__('You cannot edit this offer when it is already send'));
+            res.redirect('back');
+            return;
+        }
         if(!req.body.offerNr||!req.body.date){
             logger.info.log("[INFO]: Email:\'"+req.session.email+"\' tried editing offer but no date or invoiceNr were given");
             req.flash('danger',i18n.__("Please fill in all the required fields"));
@@ -638,14 +722,14 @@ exports.editOfferPost = async (req, res) => {
 exports.editCreditPost = async (req, res) => {
     let profile = await Profile.findOne({fromUser:req.session._id},(err,profile)=>{return profile;});
     let invoiceNrWithoutYear;
-    if(req.body.creditNr){
+    /*if(req.body.creditNr){
         invoiceNrWithoutYear = Number(req.body.creditNr.substr(4,req.body.creditNr.length));
         if(invoiceNrWithoutYear>998){
             req.flash('danger',i18n.__("Invoice number is too high"));
             res.redirect('back');
             return;
         }
-    }
+    }*/
     Order.find({fromUser: req.session._id, fromInvoice: req.params.idi,isRemoved:false}, async (err, orders) => {
         let totOrders = 0;
         for (let i = 0; i <= orders.length - 1; i++) {
@@ -657,6 +741,11 @@ exports.editCreditPost = async (req, res) => {
         let currentInvoice = await Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, (err, invoice) => {
             return invoice
         });
+        if(currentInvoice.isSend){
+            req.flash('warning',i18n.__('You cannot edit this credit when it is already send'));
+            res.redirect('back');
+            return;
+        }
         if(!req.body.creditNr||!req.body.date){
             req.flash('danger',i18n.__("Please fill in all the required fields"));
             res.redirect('back');
@@ -739,6 +828,7 @@ exports.editCreditPost = async (req, res) => {
 exports.viewInvoiceGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, function (err, invoice) {
         Error.handler(req,res,err,'5C1200');
+
         if (!findOneHasError(req, res, err, invoice)) {
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient,isRemoved:false}, function (err, client) {
                 Error.handler(req,res,err,'5C1201');
@@ -780,19 +870,24 @@ exports.viewInvoiceGet = (req, res) => {
 exports.invoicePaidGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
         Error.handler(req,res,err,'5C1300');
-        let isPaid = !(invoice.isPaid);
+        if(!invoice.isSend){
+            req.flash('warning',i18n.__('You cannot set invoice to paid, when it is not send'));
+            res.redirect('back');
+            return;
+        }
+        let isPaid = true; //can only set to true, not false
         logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is settings invoice paid status to "+isPaid+" for invoice with id: "+req.params.idi);
         if (!findOneHasError(req, res, err, invoice)) {
             let invoiceUpdate;
             if(!invoice.datePaid){
                 invoiceUpdate ={
-                    isPaid: isPaid,
+                    isPaid: true,
                     datePaid: Date.now(),
                     lastUpdated: Date.now()
                 };
             }else{
                 invoiceUpdate ={
-                    isPaid: isPaid,
+                    isPaid: true,
                     lastUpdated: Date.now()
                 };
             }
@@ -819,10 +914,16 @@ exports.invoicePaidGet = (req, res) => {
 exports.offerAgreedGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
         Error.handler(req,res,err,'5C1400');
+        if(!invoice.isSend){
+            req.flash('warning',i18n.__('You cannot set offer to agreed, when it is not send'));
+            res.redirect('back');
+            return;
+        }
         logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is setting its offerAgreed to "+!(invoice.isAgreed)+" for invoice with id "+req.params.idi);
+        //can only set agreed to true
         if (!findOneHasError(req, res, err, invoice)) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
-                isAgreed: !(invoice.isAgreed),
+                isAgreed: true,
                 lastUpdated: Date.now()
             }, async (err) => {
                 Error.handler(req,res,err,'5C1401');
@@ -841,6 +942,11 @@ exports.offerAgreedGet = (req, res) => {
 exports.setVat = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
         logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is setting its setVat to "+!(invoice.isVatOn)+" for invoice with id "+req.params.idi);
+        if(invoice.isSend){
+            req.flash('warning',i18n.__('You cannot change the VAT of this invoice when it is already send'));
+            res.redirect('back');
+            return;
+        }
         Error.handler(req,res,err,'5C1500');
         if (!findOneHasError(req, res, err, invoice)) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
@@ -862,6 +968,11 @@ exports.setVat = (req, res) => {
 exports.invoiceUpgradeGet = (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is upgrading its offer with id "+req.params.idi);
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, async (err, invoice) => {
+        if(invoice.isSend){
+            req.flash('warning',i18n.__('You cannot upgrade this offer when it is already send'));
+            res.redirect('back');
+            return;
+        }
         Error.handler(req,res,err,'5C1600');
         if (!findOneHasError(req, res, err, invoice)) {
             let profile = await Profile.findOne({fromUser:req.session._id},(err,profile)=> {
@@ -889,6 +1000,11 @@ exports.invoiceUpgradeGet = (req, res) => {
 exports.invoiceDowngradeGet = (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is downgrading its invoice with id "+req.params.idi);
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+        if(invoice.isSend){
+            req.flash('warning',i18n.__('You cannot downgrade this invoice when it is already send'));
+            res.redirect('back');
+            return;
+        }
         Error.handler(req,res,err,'5C1700');
         if (!findOneHasError(req, res, err, invoice)) {
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
@@ -1004,4 +1120,19 @@ exports.invoiceCloneGet = async (req,res) => {
 
     req.flash('success',i18n.__('Invoice successfully cloned'));
     res.redirect('back');
+};
+
+exports.turnOnIsSend = (req, res) => {
+    Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {
+        logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is setting its isSend true for invoice with id "+req.params.idi);
+        Error.handler(req,res,err,'5C1900');
+        Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
+            isSend: true,
+            lastUpdated: Date.now(),
+            sendDate: Date.now()
+        }, async (err) => {
+            Error.handler(req,res,err,'5C1901');
+            res.redirect("back");
+        });
+    })
 };

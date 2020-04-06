@@ -15,6 +15,7 @@ router.get('/order/:ido', orderController.editOrderGet);
 router.get('/item/:idi', itemController.editItemGet);
 router.get('/invoice/paid/:idi', invoiceController.invoicePaidGet);
 router.get('/invoice/setVat/:idi',invoiceController.setVat);
+router.get('/invoice/send/:idi',invoiceController.turnOnIsSend);
 router.get('/offer/agreed/:idi',invoiceController.offerAgreedGet);
 router.get('/client/:idc', clientController.getEditClient);
 router.post('/client/:idc', clientController.postEditClient);

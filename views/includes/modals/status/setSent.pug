@@ -1,0 +1,10 @@
+.modal.fade(id="setSent"+invoice._id , tabindex='-1' role='dialog' aria-labelledby='newDocument' aria-hidden='true')
+    .modal-dialog(role='document')
+        .modal-content
+            .modal-header
+                h5.modal-title=__("Are you sure to set this document to send?")
+                button.close(type='button' onclick="hideModal('"+invoice._id+"','setSent')" aria-label='Close')
+                    span(aria-hidden='true') &times;
+            .modal-footer
+                button.btn.btn-secondary(type="button" onclick="hideModal('"+invoice._id+"','setSent')" )=__("Close")
+                a.btn.btn-primary( role="button" href="/edit/invoice/send/"+invoice.id )=__("Set to send")

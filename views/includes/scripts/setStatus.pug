@@ -1,10 +1,24 @@
 script.
     function setStatus(id) {
-        window.location = "/edit/invoice/paid/" + id;
+        $('#setPaid' + id).modal('show');
+       //window.location = "/edit/invoice/paid/" + id;
     }
     function setAgreedStatus(id){
-        window.location = "/edit/offer/agreed/"+ id;
+        $('#setAgreed' + id).modal('show');
+        //window.location = "/edit/offer/agreed/"+ id;
     }
     function setVat(id) {
         window.location = "/edit/invoice/setVat/" + id;
+    }
+    function setSent(id){
+        $('#setSent'+id).modal('show');
+        //window.location = "/edit/invoice/send/" + id;
+    }
+    function hideModal(id,str){
+        $('#'+str+id).modal('hide');
+        if(str!=='setSent'){
+            $('#'+id).prop('checked',false);
+        }else{
+            $('#'+str+id).prop('checked',false);
+        }
     }

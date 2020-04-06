@@ -56,6 +56,7 @@ const Invoice = new mongoose.Schema({
         type:Boolean,
         default:false
     },
+    sendDate:Date,
     isVatOn:{
         type:Boolean,
         default:false

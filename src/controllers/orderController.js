@@ -34,6 +34,11 @@ exports.editOrderGet = (req, res) => {
     Order.findOne({fromUser: req.session._id, _id: req.params.ido,isRemoved:false}, function (err, order) {
         Error.handler(req,res,err,'AO0000');
         Invoice.findOne({fromUser: req.session._id, _id: order.fromInvoice}, function (err, invoice) {
+            if(invoice.isSend){
+                req.flash('warning',i18n.__('You cannot edit this invoice when it is already send'));
+                res.redirect('back');
+                return;
+            }
             Error.handler(req,res,err,'AO0001');
             Settings.findOne({fromUser: req.session._id,}, function (err, settings) {
                 Error.handler(req,res,err,'AO0002');
@@ -79,6 +84,11 @@ exports.editOrderGet = (req, res) => {
 exports.newOrderGet = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, function (err, invoice) {
         Error.handler(req,res,err,'AO0100');
+        if(invoice.isSend){
+            req.flash('warning',i18n.__('You cannot edit this invoice when it is already send'));
+            res.redirect('back');
+            return;
+        }
         if (!err) {
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient,isRemoved:false}, function (err, client) {
                 Error.handler(req,res,err,'AO0101');
@@ -125,6 +135,11 @@ exports.newOrderGet = (req, res) => {
 exports.newOrderPost = async (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to add a new order to invoice with id "+req.params.idi);
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi,isRemoved:false}, async function (err, invoice) {
+        if(invoice.isSend){
+            req.flash('warning',i18n.__('You cannot edit this invoice when it is already send'));
+            res.redirect('back');
+            return;
+        }
         let newOrder = new Order({
             description: req.body.description,
             amount: req.body.amount,
@@ -290,6 +305,11 @@ exports.editOrderPost = (req, res) => {
             logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is updating order with "+JSON.stringify(updateOrder));
             Invoice.findOne({fromUser: req.session._id, _id: order.fromInvoice,isRemoved:false}, async function (err, invoice) {
                 Error.handler(req,res,err,'AO0501');
+                if(invoice.isSend){
+                    req.flash('warning',i18n.__('You cannot edit this invoice when it is already send'));
+                    res.redirect('back');
+                    return;
+                }
                 await Order.updateOne({fromUser: req.session._id, _id: req.params.ido}, updateOrder,(err)=>{
                     Error.handler(req,res,err,'AO0502');});
                 //total of the invoice minus old order total minus the advance

@@ -46,6 +46,11 @@ exports.deleteClient = (req, res) => {
 exports.deleteInvoiceGet = async (req, res) => {
     Invoice.findOne({_id:req.params.idi,fromUser:req.session._id,isRemoved:false}, async (err,invoice) => {
         error.handler(req,res,err,'3D0100');
+        if(invoice.isSend){
+            req.flash('warning',i18n.__('You cannot edit this invoice when it is already send'));
+            res.redirect('back');
+            return;
+        }
         if(invoice.isPaid) {
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, async (err, client) => {
                 error.handler(req,res,err,'3D0101');
@@ -115,6 +120,11 @@ exports.deleteOrderGet = (req, res) => {
         if (!error.findOneHasError(req, res, err, order)) {
             Invoice.findOne({fromUser: req.session._id, _id: order.fromInvoice}, async (err, invoice) => {
                 error.handler(req,res,err,'3D0301');
+                if(invoice.isSend){
+                    req.flash('warning',i18n.__('You cannot edit this invoice when it is already send'));
+                    res.redirect('back');
+                    return;
+                }
                 if (!error.findOneHasError(req, res, err, invoice)) {
                     let updateInvoice = {
                         total: invoice.total - (order.amount * order.price)
