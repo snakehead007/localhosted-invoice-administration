@@ -8,7 +8,13 @@
 const {getGoogleAccountFromCode} = require('../middlewares/google');
 const logger = require("../middlewares/logger");
 
+const Profile = require('../models/profile');
+const User = require('../models/user');
+const Whitelist = require('../models/whitelist');
+const {checkSignIn} = require('../middlewares/google');
 
+const mailgun = require('../utils/mailgun');
+const {getIp} = require("../utils/utils");
 
 /**
  * @apiVersion 3.0.0
@@ -23,10 +29,73 @@ const logger = require("../middlewares/logger");
 exports.googleLogin = async (req, res, next) => {
     logger.info.log("[INFO]: got redirection url from google succesfully");
     let googleCode = await getGoogleAccountFromCode(req.query.code);
+    if(googleCode==='error'){
+        req.flash('danger','Error: invalid grant');
+        res.redirect('back');
+        return;
+    }
     logger.info.log("[INFO]: Succesfully got user's google login information: "+JSON.stringify(googleCode));
+    console.log(googleCode);
     req.session.email = googleCode.email;
     req.session.googleId = googleCode.googleId;
     req.session.tokens = googleCode.tokens;
     next();
 };
 
+
+exports.checkWhitelistGet = async (req, res) => {
+    let found = false;
+    await Whitelist.find({}, async (err, whitelistUsers) => {
+        if (err) {
+            logger.error.log("[ERROR]: thrown at /src/controllers/redirectRouter.router.get('/') on method Profile.findOne trace: "+err.message);
+            res.flash('danger', 'Something happen, try again');
+        } else {
+            console.log(whitelistUsers);
+            await whitelistUsers.forEach(o => {
+                console.log(req.session.email+" ? "+o.mail);
+                if (req.session.email === o.mail) {
+                    console.log('found');
+                    found = true;
+                }
+            });
+        }
+    });
+    if(!found){
+        console.log('not found');
+        logger.warning.log("[WARNING]: Not found in whitelist, ip "+getIp(req)+" redirecting back");
+    }
+    if (found) {
+        await checkSignIn(req);
+        User.updateOne({_id: req.session._id}, {lastLogin: Date.now()}, async (err) => {
+            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/redirectRouter.router.get('/') on method User.updateOne trace: "+err.message);
+            await Profile.findOne({fromUser: req.session._id}, async function (err, profile) {
+                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/redirectRouter.router.get('/') on method Profile.findOne trace: "+err.message);
+                if (profile === null) {
+                    const newProfile = new Profile({
+                        fromUser: req.session._id
+                    });
+                    await newProfile.save();
+                    profile = await Profile.findOne({fromUser: req.session._id});
+                    await User.updateOne({_id: req.session._id}, {profile: profile._Id});
+                }
+            });
+            if (err) console.trace(err);
+            let user = await User.findOne({_id: req.session._id}, (err, user) => {
+                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/redirectRouter.router.get('/') on method User.findOne trace: "+err.message);
+                return user
+            });
+            req.session.role = user.role;
+            if (user.role === "visitor") {
+                mailgun.sendWelcome(req.session.email);
+                res.redirect('/view/profile');
+            } else {
+                res.redirect('/dashboard');
+            }
+        });
+        return;
+    }
+    if(!found){
+        req.flash('warning', 'You are not whitelisted, please contact the administrator');
+        res.redirect('/');
+    }
+};

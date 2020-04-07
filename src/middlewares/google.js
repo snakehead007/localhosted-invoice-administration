@@ -69,20 +69,25 @@ exports.urlGoogle = () => {
  * @param {String} code - query string after succesfully logging in with Google
  */
 exports.getGoogleAccountFromCode = async (code) => {
-    const oAuth2Client = await this.createConnection();
-    const {tokens} = await oAuth2Client.getToken(code);
-    oAuth2Client.setCredentials(tokens);
-    const oauth2 = google.oauth2("v2");
-    const {
-        data: {email, id: google_id}
-    } = await oauth2.userinfo.v2.me.get({
-        auth: oAuth2Client
-    });
-    return {
-        googleId: google_id,
-        email: email,
-        tokens: tokens
-    };
+    try {
+        const oAuth2Client = await this.createConnection();
+        const {tokens} = await oAuth2Client.getToken(code);
+        oAuth2Client.setCredentials(tokens);
+        const oauth2 = google.oauth2("v2");
+        const {
+            data: {email, id: google_id}
+        } = await oauth2.userinfo.v2.me.get({
+            auth: oAuth2Client
+        });
+        return {
+            googleId: google_id,
+            email: email,
+            tokens: tokens
+        };
+    }catch(err){
+        return 'error';
+    }
+
 };
 /**
  * Checks if the user that logged in is new or old.

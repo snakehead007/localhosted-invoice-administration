@@ -20,7 +20,6 @@ body
           h2(class="pt-3")=__("New logo upload")
           hr
           include includes/messages
-          form(ref='uploadForm',id='uploadForm' ,action='/upload/logo/',method='post',encType="multipart/form-data")
             div(class="input-group form-group col-md-5 mr-auto")
               label(for="inputGroupFile04")=__("Choose file for logo")
               input(type="file",name="logoFile",class="form-control-file" id="inputGroupFile04")
