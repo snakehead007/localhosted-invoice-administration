@@ -45,7 +45,6 @@ exports.updateUndoAbility = async (req, res, next) => {
     for(let c of clients){
         await Invoice.updateMany({fromUser:req.session._id,fromClient:c._id},{firmName:(c.firm)?c.firm:''},(err,info)=>
         {
-            console.log(info);
         });
     }
     next();

@@ -20,9 +20,6 @@ const {getReformatedImageSize} = require("./utils");
 const {callGetBase64, createJSON, replaceAll} = require("../utils/pdfCreation");
 require("jspdf-autotable");
 exports.createPDF = async (req, res, style = "invoice", profile, settings, client, invoice, orders,download=false,onlyPrompt=false) => {
-    console.log(settings);
-    console.log(invoice);
-    console.log(profile);
     let colorTheme; //normal tone
     let colorThemeLess; //darker tone for title
     let blackFont; //true = use black font, false = use white font

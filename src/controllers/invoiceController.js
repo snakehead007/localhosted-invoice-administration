@@ -531,6 +531,11 @@ exports.editInvoicePost = async (req, res) => {
             res.redirect('back');
             return;
         }
+        if(req.body.nickname.trim().length>=46){
+            req.flash('warning',i18n.__('Maximum characters for nickname exceeded. use 45 or less characters'));
+            res.redirect('back');
+            return;
+        }
         let datePaid = (req.body.datePaid)?parseDateDDMMYYYY(req.body.datePaid):"";
         let updateInvoice;
         if (req.body.date) {
@@ -541,7 +546,8 @@ exports.editInvoicePost = async (req, res) => {
                 datePaid:datePaid,
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
-                description:req.body.description
+                description:req.body.description,
+                nickname:req.body.nickname
             };
         } else if (!req.body.date) {
             updateInvoice = {
@@ -550,7 +556,8 @@ exports.editInvoicePost = async (req, res) => {
                 datePaid: datePaid,
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
-                description:req.body.description
+                description:req.body.description,
+                nickname:req.body.nickname
             };
         } else if (req.body.date && req.body.datePaid) {
             updateInvoice = {
@@ -560,7 +567,8 @@ exports.editInvoicePost = async (req, res) => {
                 datePaid: datePaid,
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
-                description:req.body.description
+                description:req.body.description,
+                nickname:req.body.nickname
             };
         } else {
             updateInvoice = {
@@ -569,7 +577,8 @@ exports.editInvoicePost = async (req, res) => {
                 offerNr: req.body.offerNr,
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
-                description:req.body.description
+                description:req.body.description,
+                nickname:req.body.nickname
             };
         }
         logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is updating the invoice with: "+JSON.stringify(updateInvoice));
@@ -652,6 +661,11 @@ exports.editOfferPost = async (req, res) => {
             res.redirect('back');
             return;
         }
+        if(req.body.nickname.trim().length>=46){
+            req.flash('warning',i18n.__('Maximum characters for nickname exceeded. use 45 or less characters'));
+            res.redirect('back');
+            return;
+        }
         let datePaid = (req.body.datePaid)?parseDateDDMMYYYY(req.body.datePaid):"";
         let updateInvoice;
         if (req.body.date) {
@@ -662,7 +676,8 @@ exports.editOfferPost = async (req, res) => {
                 datePaid:datePaid,
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
-                description:req.body.description
+                description:req.body.description,
+                nickname:req.body.nickname
             };
         } else if (!req.body.date) {
             updateInvoice = {
@@ -671,7 +686,8 @@ exports.editOfferPost = async (req, res) => {
                 datePaid: datePaid,
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
-                description:req.body.description
+                description:req.body.description,
+                nickname:req.body.nickname
             };
         } else if (req.body.date && req.body.datePaid) {
             updateInvoice = {
@@ -681,7 +697,8 @@ exports.editOfferPost = async (req, res) => {
                 datePaid: datePaid,
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
-                description:req.body.description
+                description:req.body.description,
+                nickname:req.body.nickname
             };
         } else {
             updateInvoice = {
@@ -690,7 +707,8 @@ exports.editOfferPost = async (req, res) => {
                 offerNr: req.body.offerNr,
                 lastUpdated: Date.now(),
                 total: totOrders - req.body.advance,
-                description:req.body.description
+                description:req.body.description,
+                nickname:req.body.nickname
             };
         }
         logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is updating the offer with: "+JSON.stringify(updateInvoice));
@@ -763,6 +781,11 @@ exports.editCreditPost = async (req, res) => {
             res.redirect('back');
             return;
         }
+        if(req.body.nickname.trim().length>=46){
+            req.flash('warning',i18n.__('Maximum characters for nickname exceeded. use 45 or less characters'));
+            res.redirect('back');
+            return;
+        }
         let datePaid = (req.body.datePaid)?parseDateDDMMYYYY(req.body.datePaid):"";
         let updateInvoice;
         updateInvoice = {
@@ -772,6 +795,7 @@ exports.editCreditPost = async (req, res) => {
             offerNr: req.body.offerNr,
             lastUpdated: Date.now(),
             total: totOrders - req.body.advance,
+            nickname:req.body.nickName,
             description:req.body.description
         };
         let searchCriteria = {fromUser: req.session._id,isRemoved:false};

@@ -1,7 +1,6 @@
 exports.start = (err,req,res,next) => {
   //All timing events here
     onHour(8,18,()=>{
-        console.log("test");
     });
     next();
 };

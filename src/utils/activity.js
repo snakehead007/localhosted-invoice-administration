@@ -106,7 +106,7 @@ exports.editedClient = async (client, fromUser) => {
     this.addActivity("Edited client "+client.clientName,fromUser,client,"edit","client");
 };
 exports.editedInvoice = async (invoice, fromUser) => {
-    this.addActivity("Edited invoice "+invoicesUtils.getDefaultNumberOfInvoice(invoice)+client.clientName,fromUser,invoice,"edit","invoice");
+    this.addActivity("Edited invoice "+invoicesUtils.getDefaultNumberOfInvoice(invoice),fromUser,invoice,"edit","invoice");
 };
 exports.editedOffer = async (invoice, fromUser) => {
     this.addActivity("Edited offer "+invoicesUtils.getDefaultNumberOfInvoice(invoice),fromUser,invoice,"edit","invoice");

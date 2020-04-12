@@ -10,6 +10,7 @@ const Item = require('../models/item');
 const logger = require("../middlewares/logger");
 const i18n = require("i18n");
 const Error = require('../middlewares/error');
+const M = require('../utils/mongooseSchemas');
 /**
  * @apiVersion 3.0.0
  * @api {get} / getActivity
@@ -28,45 +29,24 @@ const Error = require('../middlewares/error');
    }
  */
 exports.getActivity = async (req,res) => {
-    const activities = await Activity.find({fromUser:req.session._id}, null,{sort: {time: -1}},(err,activities) => {
-        Error.handler(req,res,err,'0A0000');
-        return activities}).limit(50);
-    const role = (await User.findOne({_id: req.session._id}, (err, user) => {
-        Error.handler(req,res,err,'0A0001');return user;})).role;
-    const profile = await Profile.findOne({fromUser:req.session._id}, (err,profile) => {
-        Error.handler(req,res,err,'0A0002');
-        return profile;});
-    const settings = await Settings.findOne({fromUser:req.session._id}, (err,settings) => {
-        Error.handler(req,res,err,'0A0003');return settings;});
     res.render('activities',{
-        "settings":settings,
-        "role":role,
-        "profile":profile,
+        "settings":await new M.settings().findOne(req,res,{fromUser:req.session._id}),
+        "role":(await new M.user().findOne(req,res,{_id: req.session._id})).role,
+        "profile":await new M.profile().findOne(req,res,{fromUser:req.session._id}),
         "currentUrl":"activities",
-        "activities":activities
+        "activities":await new M.activity().find(req,res,{fromUser:req.session._id}, null,{sort: {time: -1}})
     })
 };
 
 
 exports.getDeletesActivity = async (req,res) => {
-    const activities = await Activity.find({fromUser:req.session._id,type:"delete"}, null,{sort: {time: -1}},(err,activities) => {
-        Error.handler(req,res,err,'0A0100');
-        return activities});
-    const role = (await User.findOne({_id: req.session._id}, (err, user) => {
-        Error.handler(req,res,err,'0A0101');return user;})).role;
-    const profile = await Profile.findOne({fromUser:req.session._id}, (err,profile) => {
-        Error.handler(req,res,err,'0A0102');
-        return profile;});
-    const settings = await Settings.findOne({fromUser:req.session._id}, (err,settings) => {
-        Error.handler(req,res,err,'0A0103');return settings;});
     res.render('activities',{
-        "settings":settings,
-        "role":role,
-        "profile":profile,
+        "settings":await new M.settings().findOne(req,res,{fromUser:req.session._id}),
+        "role":(await new M.user().findOne(req,res,{_id: req.session._id})).role,
+        "profile":await new M.profile().findOne(req,res,{fromUser:req.session._id}),
         "currentUrl":"activities",
-        "activities":activities
+        "activities":await new M.activity().find(req,res,{fromUser:req.session._id,type:"delete"}, null,{sort: {time: -1}})
     })
-
 };
 
 /**

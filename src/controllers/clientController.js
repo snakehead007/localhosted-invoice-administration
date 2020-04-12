@@ -11,6 +11,7 @@ const i18n = require("i18n");
 const User = require("../models/user");
 const activity = require('../utils/activity');
 const logger = require('../middlewares/logger');
+const M = require('../utils/mongooseSchemas');
 /**
  * @apiVersion 3.0.0
  * @api {get} /client/all getClientAll
@@ -27,26 +28,14 @@ const logger = require('../middlewares/logger');
     "role": role
 });
  */
-exports.getClientAll = (req, res) => {
-    Profile.findOne({fromUser: req.session._id}, function (err, profile) {
-        error.handler(req,res,err,'1C0000');
-        Client.find({fromUser: req.session._id,isRemoved:false},null,{sort:{lastUpdated:-1}}, function (err, clients) {
-            error.handler(req,res,err,'1C0001');
-            Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
-                error.handler(req,res,err,'1C0002');
-                if (!err) {
-                    res.render("clients", {
-                        "clients": clients,
-                        "settings": settings,
-                        "profile": profile,
-                        "currentUrl": "clientAll",
-                        "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                            return user
-                        })).role
-                    }); 
-                }
-            });
-        });
+exports.getClientAll = async (req, res) => {
+    //renders /view/clients, currently url clients
+    res.render("clients", {
+        "clients": await new M.client().find(req,res,{fromUser: req.session._id,isRemoved:false},null,{sort:{lastUpdated:-1}}),
+        "settings": await new M.settings().findOne(req,res,{fromUser: req.session._id}),
+        "profile": await new M.profile().findOne(req,res,{fromUser:req.session._id}),
+        "currentUrl": "clientAll",
+        "role": (await new M.user().findOne(req,res,{_id:req.session._id})).role
     });
 };
 
@@ -65,23 +54,12 @@ exports.getClientAll = (req, res) => {
     "role": role
 });
  */
-exports.getClientNew = (req, res) => {
-    Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-        error.handler(req,res,err,'1C0100');
-        Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
-            error.handler(req,res,err,'1C0101');
-            if (!err) {
-                res.render("new/new-client", {
-                    "settings": settings,
-                    "profile": profile,
-                    "currentUrl": "clientNew",
-                    "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                        error.handler(req,res,err,'1C0102');
-                        return user
-                    })).role
-                });
-            }
-        });
+exports.getClientNew = async (req, res) => {
+    res.render("new/new-client", {
+        "settings": await new M.settings().findOne(req,res,{fromUser:req.session._id}),
+        "profile": await new M.profile().findOne(req,res,{fromUser:req.session._id}),
+        "currentUrl": "clientNew",
+        "role": (await new M.user().findOne(req,res,{_id:req.session._id})).role
     });
 };
 
@@ -115,20 +93,35 @@ exports.getClientNew = (req, res) => {
 });
  */
 exports.postClientNew = async (req, res) => {
+    let emails = [];
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to create new client with :"+JSON.stringify(req.body));
     let nameCheck = invalid.valueMustBeAName(req, res, req.body.clientName, true, "client name not correctly filled in");
     let firmCheck = invalid.valueMustBeAName(req, res, req.body.firm,   false, "firm name not correctly filled in");
     let streetCheck = (req.body.street) ? invalid.valueMustBeAName(req, res, req.body.street, true) : false;
     let streetNrCheck = (req.body.streetNr) ? invalid.valueMustBeStreetNumber(req, res, req.body.streetNr) : false;
     let emailCheck = false;
-    if (req.body.emails.length === 0 || req.body.emails[0] === ""&& req.body.emails[1] === "" && req.body.emails[3] === "") {
-        emailCheck = false;
-    }else{
-        req.body.emails.forEach(email => {
-            if (invalid.valueMustBeEmail(req, res, email)) {
-                emailCheck = true;
-            }
-        });
+    try{
+        if(req.body.emails0){
+            emails.push(req.body.emails0);
+        }if(req.body.emails1){
+            emails.push(req.body.emails1);
+        }if(req.body.emails2){
+            emails.push(req.body.emails2);
+        }if(req.body.emails3){
+            emails.push(req.body.emails3);
+        }if(req.body.emails4){
+            emails.push(req.body.emails4);
+        }
+        if(emails){
+            console.log(emails);
+            emails.forEach((email) => {
+                if (invalid.valueMustBeEmail(req, res, email)) {
+                    emailCheck = true;
+                }
+            });
+        }}catch(err){
+        error.handler(req,res,err,'1C05A0');
+        return;
     }
     let vatCheck = (req.body.vat) ? invalid.valueMustBeVatNumber(req, res, req.body.vat) : false;
     let vatPercentageCheck = invalid.valueMustBeAnInteger(req, res, req.body.vatPercentage, true);
@@ -181,7 +174,7 @@ exports.postClientNew = async (req, res) => {
             place: req.body.place,
             vat: (req.body.vat)?invalid.formatBEVat(req.body.vat):"",
             lang: req.body.lang,
-            email: req.body.emails,
+            email: emails,
             bankNr: (req.body.bankNr)?invalid.formatBEIban(req.body.bankNr):"",
             fromUser: req.session._id,
             vatPercentage: req.body.vatPercentage,
@@ -209,30 +202,18 @@ exports.postClientNew = async (req, res) => {
         "settings": settings
  *  }
  */
-exports.getClientView = (req, res) => {
-    Client.findOne({fromUser: req.session._id, _id: req.params.idc,isRemoved:false}, function (err, client) {
-        error.handler(req,res,err,'1C0300');
-        if (!err) {
-            Settings.findOne({fromUser: req.session._id}, function (err, settings) {
-                error.handler(req,res,err,'1C0301');
-                if (!err) {
-                    Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
-                        error.handler(req,res,err,'1C0302');
-                        if (!err) {
-                            res.render("view/view-client", {
-                                "client": client,
-                                "profile": profile,
-                                "settings": settings,
-                                "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                                    return user
-                                })).role
-                            });
-                        }
-                    });
-                }
-            });
-        }
-    });
+exports.getClientView = async (req, res) => {
+        res.render("view/view-client", {
+                "client": await M.client().findOne(req, res, {
+                    fromUser: req.session._id,
+                    _id: req.params.idc,
+                    isRemoved: false
+                }),
+                "settings": await M.settings().findOne(req, res, {fromUser: req.session._id}),
+                "profile": await M.profile().findOne(req, res, {fromUser: req.session._id}),
+                "role": (await M.user().findOne(req, res, {_id: req.session._id})).role
+            }
+        )
 };
 
 exports.getEditClient = (req, res) => {
@@ -265,6 +246,7 @@ exports.getEditClient = (req, res) => {
 
 exports.postEditClient = (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to edit a client with : "+JSON.stringify(req.body));
+    let emails = [];
     Client.findOne({fromUser: req.session._id, _id: req.params.idc}, function (err, client) {
         error.handler(req,res,err,'1C0500');
         if (!error.findOneHasError(req, res, err, client)) {
@@ -273,13 +255,31 @@ exports.postEditClient = (req, res) => {
             let streetCheck = (req.body.street) ? invalid.valueMustBeAName(req, res, req.body.street, true) : false;
             let streetNrCheck = (req.body.streetNr) ? invalid.valueMustBeStreetNumber(req, res, req.body.streetNr) : false;
             let emailCheck = false;
-            if(req.body.emails){
-                req.body.emails.forEach((email) => {
+            console.log(req.body);
+            try{
+                if(req.body.emails0){
+                    emails.push(req.body.emails0);
+                }if(req.body.emails1){
+                    emails.push(req.body.emails1);
+                }if(req.body.emails2){
+                    emails.push(req.body.emails2);
+                }if(req.body.emails3){
+                    emails.push(req.body.emails3);
+                }if(req.body.emails4){
+                    emails.push(req.body.emails4);
+                }
+            if(emails){
+                console.log(emails);
+                emails.forEach((email) => {
                     if (invalid.valueMustBeEmail(req, res, email)) {
                         emailCheck = true;
                     }
                 });
+            }}catch(err){
+                error.handler(req,res,err,'1C0500');
+                return;
             }
+
             let vatCheck = (req.body.vat) ? invalid.valueMustBeVatNumber(req, res, req.body.vat,false,client.locale) : false;
             let vatPercentageCheck = invalid.valueMustBeAnInteger(req, res, req.body.vatPercentage, true);
             let bankCheck = (req.body.bankNr) ? invalid.valueMustBeValidIban(req, res, req.body.bankNr) : false;
@@ -293,7 +293,7 @@ exports.postEditClient = (req, res) => {
                     firm: req.body.firm,
                     street: req.body.street,
                     streetNr: req.body.streetNr,
-                    email: req.body.emails,
+                    email: emails,
                     vat: (req.body.vat)?invalid.formatBEVat(req.body.vat):"",
                     vatPercentage: req.body.vatPercentage,
                     bankNr: (req.body.bankNr)?invalid.formatBEIban(req.body.bankNr):"",

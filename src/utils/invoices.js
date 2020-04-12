@@ -17,7 +17,6 @@ exports.isInvoiceNrAlreadyInUse = async (invoiceNr,userId) => {
   let invoices = await Invoice.find({fromUser:userId},(err,invoices)=>{return invoices;});
   let timesFound = 0;
   for(let i of invoices){
-      console.log(i.invoiceNr+" ? "+invoiceNr);
       if(i.invoiceNr==invoiceNr){
           timesFound++;
       }

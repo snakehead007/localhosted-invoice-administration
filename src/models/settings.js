@@ -44,8 +44,11 @@ const Settings = new mongoose.Schema({
     },
     baseconeMail:{
         type:String
+    },currency:{
+        type:String,
+        default:'EUR'
     }
 });
-
+//CURRENCY ISO: https://www.xe.com/iso4217.php
 const settings = mongoose.model('Settings', Settings);
 module.exports = settings;

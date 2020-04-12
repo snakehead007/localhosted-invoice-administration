@@ -13,14 +13,17 @@ form(action='/edit'+((invoice.creditNr)?"/credit/":((invoice.offerNr)?"/offer/":
     if invoice.offerNr
         include ../modals/status/setAgreed
     div(class="form-row")
-        div(class="form-group col-md-2")
+        .form-group.col-md-3
+            label(for="nicname")=__('Nickname')
+            input#nickname.form-control(type="text", placeholder=__("My document name"), value=invoice.nickname, name="nickname", maxlength="45")
+        div(class="form-group col-md-1")
             label(for="title")=__("Date")
             if invoice.isSend
                 input#datepicker(type="text",class="form-control",name="date", disabled='disabled')
             else
                 input#datepicker(type="text",class="form-control",name="date")
         if invoice.invoiceNr
-            div(class="form-group col-md-2")
+            div(class="form-group col-md-1")
                 label(for="title")=__('Pay date')
                 if invoice.isSend
                     input#datepicker2(type="text",class="form-control",name="datePaid", disabled='disabled')
@@ -52,8 +55,9 @@ form(action='/edit'+((invoice.creditNr)?"/credit/":((invoice.offerNr)?"/offer/":
                 input(type="number",class="form-control",value=invoice.advance,name="advance",step="any", disabled='disabled')
             else
                 input(type="number",class="form-control",value=invoice.advance,name="advance",step="any")
+    .form-row
         if invoice.invoiceNr
-            div.col-1.form-group
+            div.col-2.form-group
                 label(for="status")=__("status")
                 if invoice.isPaid
                     div(class="custom-control custom-switch" )
@@ -64,7 +68,7 @@ form(action='/edit'+((invoice.creditNr)?"/credit/":((invoice.offerNr)?"/offer/":
                         input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id )
                         label(class="custom-control-label" for=invoice._id) #{__('Unpaid')}
         else if invoice.offerNr
-            div.col-1.form-group
+            div.col-2.form-group
                 label(for="status")=__("status")
                 if invoice.isAgreed
                     div(class="custom-control custom-switch" )
@@ -74,7 +78,7 @@ form(action='/edit'+((invoice.creditNr)?"/credit/":((invoice.offerNr)?"/offer/":
                     div(class="custom-control custom-switch" onclick='setAgreedStatus("' + invoice._id + '")')
                         input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id )
                         label(class="custom-control-label" for=invoice._id) #{__('Not agreed')}
-        div.col-1.form-group
+        div.col-2.form-group
             label(for="status")=__("VAT")
             if invoice.isVatOn
                 div(class="custom-control custom-switch" )
@@ -91,7 +95,7 @@ form(action='/edit'+((invoice.creditNr)?"/credit/":((invoice.offerNr)?"/offer/":
                         input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id+"VAT", onclick='setVat(\"' + invoice._id + '\")',)
                     label(class="custom-control-label" for=invoice._id+"VAT") #{__('With VAT')}
 
-        div.col-1.form-group
+        div.col-2.form-group
             label(for="status")=__("Send status")
             if invoice.isSend
                 div(class="custom-control custom-switch" )
@@ -101,7 +105,7 @@ form(action='/edit'+((invoice.creditNr)?"/credit/":((invoice.offerNr)?"/offer/":
                 div(class="custom-control custom-switch" onclick="setSent('" + invoice._id + "')" )
                     input(type="checkbox" class="custom-control-input bg-success", id='setSent' + invoice._id  )
                     label(class="custom-control-label", for='setSent' + invoice._id )=__("Not sent")
-        div.form-row
+    div.form-row
             div(class="col-10 input-group mb-3")
                 div(class="input-group-prepend")
                     span(class="input-group-text") #{__('Description')}

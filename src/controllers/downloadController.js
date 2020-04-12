@@ -31,7 +31,7 @@ exports.streamInvoicePDF = (req, res) => {
                     Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
                         error.handler(req,res,err,'4D0002');
                         if (!error.findOneHasError(req, res, err, client)) {
-                            Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
+                            Order.find({fromUser: req.session._id, fromInvoice: invoice._id,isRemoved:false}, function (err, orders) {
                                 error.handler(req,res,err,'4D0003');
                                 Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                                     error.handler(req,res,err,'4D0004');
@@ -72,7 +72,7 @@ exports.streamOfferPDF = (req, res) => {
             error.handler(req,res,err,'4D0101');
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
                 error.handler(req,res,err,'4D0102');
-                Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
+                Order.find({fromUser: req.session._id, fromInvoice: invoice._id,isRemoved:false}, function (err, orders) {
                     error.handler(req,res,err,'4D0103');
                     Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                         error.handler(req,res,err,'4D0104');
@@ -108,7 +108,7 @@ exports.streamCreditPDF = (req, res) => {
             error.handler(req,res,err,'4D0201');
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
                 error.handler(req,res,err,'4D0202');
-                Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
+                Order.find({fromUser: req.session._id, fromInvoice: invoice._id,isRemoved:false}, function (err, orders) {
                     error.handler(req,res,err,'4D0203');
                     Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                         error.handler(req,res,err,'4D0204');
@@ -144,7 +144,7 @@ exports.downloadCreditPDF = (req, res) => {
             error.handler(req,res,err,'4D0301');
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
                 error.handler(req,res,err,'4D0302');
-                Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
+                Order.find({fromUser: req.session._id, fromInvoice: invoice._id,isRemoved:false}, function (err, orders) {
                     error.handler(req,res,err,'4D0303');
                     Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                         error.handler(req,res,err,'4D0304');
@@ -180,7 +180,7 @@ exports.downloadInvoicePDF = (req, res) => {
             error.handler(req,res,err,'4D0401');
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
                 error.handler(req,res,err,'4D0401');
-                Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
+                Order.find({fromUser: req.session._id, fromInvoice: invoice._id,isRemoved:false}, function (err, orders) {
                     error.handler(req,res,err,'4D0402');
                     Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                         error.handler(req,res,err,'4D0403');
@@ -216,7 +216,7 @@ exports.downloadOfferPDF = (req, res) => {
             error.handler(req,res,err,'4D0501');
             Client.findOne({fromUser: req.session._id, _id: invoice.fromClient}, function (err, client) {
                 error.handler(req,res,err,'4D0502');
-                Order.find({fromUser: req.session._id, fromInvoice: invoice._id}, function (err, orders) {
+                Order.find({fromUser: req.session._id, fromInvoice: invoice._id,isRemoved:false}, function (err, orders) {
                     error.handler(req,res,err,'4D0503');
                     Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
                         error.handler(req,res,err,'4D0504');

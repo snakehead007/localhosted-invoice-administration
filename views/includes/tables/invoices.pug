@@ -33,12 +33,21 @@ table(class="table table-striped table-sm ",id="tabelInvoices")
                     include ../modals/status/setSent
                     if invoice.invoiceNr
                         include ../modals/status/setPaid
-                        a(href='/order/all/' + invoice._id )=invoice.invoiceNr
+                        if invoice.nickname
+                            a(href='/order/all/' + invoice._id )=invoice.nickname
+                        else
+                            a(href='/order/all/' + invoice._id )=invoice.invoiceNr
                     if invoice.offerNr
                         include ../modals/status/setAgreed
-                        a(href='/order/all/' + invoice._id) #{__('Offer')}  #{" "+invoice.offerNr}
+                        if invoice.nickname
+                            a(href='/order/all/' + invoice._id)=invoice.nickname
+                        else
+                            a(href='/order/all/' + invoice._id) #{__('Offer')}  #{" "+invoice.offerNr}
                     if invoice.creditNr
-                        a(href='/order/all/' + invoice._id ) #{__('Creditnote')} #{" "+invoice.creditNr}
+                        if invoice.nickname
+                            a(href='/order/all/' + invoice._id )=invoice.nickname
+                        else
+                            a(href='/order/all/' + invoice._id ) #{__('Creditnote')} #{" "+invoice.creditNr}
                 if !client
                     td
                         a(href='/invoice/all/' + invoice.fromClient)

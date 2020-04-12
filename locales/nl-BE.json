@@ -412,5 +412,8 @@
 	"You cannot edit this credit when it is already send": "Je kan deze creditnota niet aanpassen, als het al verzonden is",
 	"You cannot edit this invoice when it is already send": "Je kan deze factuur niet aanpassen, als het al verzonden is",
 	"--------FROM-HERE-ALL-ABOVE-CHECKED-----------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------",
-	"Invoice number is too high": "Invoice number is too high"
+	"Invoice number is too high": "Invoice number is too high",
+	"Nickname": "Nickname",
+	"My document name": "My document name",
+	"Maximum characters for nickname exceeded. use 15 or less characters": "Maximum characters for nickname exceeded. use 15 or less characters"
 }

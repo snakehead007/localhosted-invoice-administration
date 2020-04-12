@@ -22,7 +22,6 @@ exports.sendTestMail = (to) => {
 exports.sendWelcome = (to) => {
     const mailgun = new Mailgun({apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN});
     let _path = path.resolve(__dirname,'../../mails/welcome.html');
-    console.log(_path);
     fs.readFile(_path, 'utf8', function(err, text) {
          const data = {
             from: process.env.MAILGUN_FROM,

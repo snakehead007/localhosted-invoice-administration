@@ -8,7 +8,6 @@ script.
         let addButton = $('.add_button'); //Add button selector
         let wrapper = $('.field_wrapper'); //Input field wrappe
         let x = 5; //Initial field counter is 1
-        let emails = "#{client.email}".split(',');
         //New input field html
 
         //Once add button is clicked
@@ -16,8 +15,7 @@ script.
             //Check maximum number of input fields
             if (x < maxField) {
                 x++; //Increment field counter
-                let currentEmail = (!emails[x - 5]) ? "" : emails[x - 5];
-                let fieldHTML = '<div>' +
+                let fieldHTML = '' +
                     '<a href="javascript:void(0);" class="remove_button">' +
                     '<span class="fa-color-buttons">' +
                     '<i class="fas fa-minus-square"">' +
@@ -25,8 +23,8 @@ script.
                     '</span>' +
                     '\n' +
                     '</a>' +
-                    '<input class="form-control" type="text" placeholder="voorbeeld@email.be" value="' + currentEmail + '" name="emails[]"/>'+
-                    '</div>';
+                    '<input class="form-control" type="email" placeholder="voorbeeld@email.be" name="emails'+(Math.abs(x-5))+'"/>'+
+                    '';
                 $(wrapper).append(fieldHTML); //Add field html
             }
         });

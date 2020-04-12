@@ -19,11 +19,9 @@ exports.getSizeOfImage = (path) => {
 };
 
 exports.getReformatedImageSize = (sizeOfObj,defaultSize=200) => {
-    console.log(sizeOfObj);
     let ratio = sizeOfObj.width/sizeOfObj.height;
     let width = defaultSize;
     let height= defaultSize;
-    console.log(ratio);
     if(ratio>2.5||ratio<0.25){
         height = height/3;
         width = width/3;

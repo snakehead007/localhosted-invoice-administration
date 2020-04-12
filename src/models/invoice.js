@@ -64,7 +64,8 @@ const Invoice = new mongoose.Schema({
     isSendToBasecone:{
         type:Boolean,
         default:false
-    }
+    },
+    nickname:String
 });
 
 const invoice = mongoose.model('Invoice', Invoice);
