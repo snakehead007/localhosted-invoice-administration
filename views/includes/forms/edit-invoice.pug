@@ -57,7 +57,7 @@ form(action='/edit'+((invoice.creditNr)?"/credit/":((invoice.offerNr)?"/offer/":
                 input(type="number",class="form-control",value=invoice.advance,name="advance",step="any")
     .form-row
         if invoice.invoiceNr
-            div.col-2.form-group
+            div.col-md-2.col-sm-3.form-group
                 label(for="status")=__("status")
                 if invoice.isPaid
                     div(class="custom-control custom-switch" )
@@ -68,7 +68,7 @@ form(action='/edit'+((invoice.creditNr)?"/credit/":((invoice.offerNr)?"/offer/":
                         input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id )
                         label(class="custom-control-label" for=invoice._id) #{__('Unpaid')}
         else if invoice.offerNr
-            div.col-2.form-group
+            div.col-md-2.col-sm-3.form-group
                 label(for="status")=__("status")
                 if invoice.isAgreed
                     div(class="custom-control custom-switch" )
@@ -78,7 +78,7 @@ form(action='/edit'+((invoice.creditNr)?"/credit/":((invoice.offerNr)?"/offer/":
                     div(class="custom-control custom-switch" onclick='setAgreedStatus("' + invoice._id + '")')
                         input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id )
                         label(class="custom-control-label" for=invoice._id) #{__('Not agreed')}
-        div.col-2.form-group
+        div.col-md-2.col-sm-3.form-group
             label(for="status")=__("VAT")
             if invoice.isVatOn
                 div(class="custom-control custom-switch" )
@@ -95,7 +95,7 @@ form(action='/edit'+((invoice.creditNr)?"/credit/":((invoice.offerNr)?"/offer/":
                         input(type="checkbox" class="custom-control-input bg-danger" id=invoice._id+"VAT", onclick='setVat(\"' + invoice._id + '\")',)
                     label(class="custom-control-label" for=invoice._id+"VAT") #{__('With VAT')}
 
-        div.col-2.form-group
+        div.col-md-2.col-sm-3.form-group
             label(for="status")=__("Send status")
             if invoice.isSend
                 div(class="custom-control custom-switch" )
@@ -106,7 +106,7 @@ form(action='/edit'+((invoice.creditNr)?"/credit/":((invoice.offerNr)?"/offer/":
                     input(type="checkbox" class="custom-control-input bg-success", id='setSent' + invoice._id  )
                     label(class="custom-control-label", for='setSent' + invoice._id )=__("Not sent")
     div.form-row
-            div(class="col-10 input-group mb-3")
+            div(class="col-12 input-group mb-3")
                 div(class="input-group-prepend")
                     span(class="input-group-text") #{__('Description')}
                 if invoice.isSend

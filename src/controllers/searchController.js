@@ -58,6 +58,11 @@ module.exports.searchGet = (req, res) => {
                                 invoices.push(invoice);
                             }
                         }
+                        if(invoice.nickname){
+                            if (invoice.nickname.includes(str)){
+                                invoices.push(invoice);
+                            }
+                        }
                     }
                     //clients
                     for (let client of clients_) {

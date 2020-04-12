@@ -9,6 +9,10 @@ nav(class="navbar navbar-dark fixed-top bg-"+settings.theme+" flex-md-nowrap p-0
     #navbar.collapse.navbar-collapse
         .navbar-nav
             include ./mainMenu
+            include ./clientOptionMenu
+            include ./invoiceOptionMenu
+            if invoice
+                include ./orderOptionMenu
     form#navbar-form-big(class="form", method="post",action="/search/")
         input(class="form-control form-control-"+settings.theme+" w-100" type="text",name="search", placeholder=__('search'),value=currentSearch, aria-label=__("search") )
         button(type="sumbit",style="display:none")
