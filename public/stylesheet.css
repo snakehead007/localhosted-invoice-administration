@@ -5,10 +5,6 @@
 body {
     font-size: .875rem;
 }
-*{
-    touch-action: none;
-}
-
 .feather {
     width: 16px;
     height: 16px;
@@ -16,10 +12,8 @@ body {
 }
 
 a.add_button span.fa-color-buttons i.fas.fa-plus-square.fa-2x {
-
     position: relative;
     top: 35px;
-
 }
 a.remove_button span.fa-color-buttons i.fas.fa-minus-square {
     position: relative;
@@ -27,7 +21,13 @@ a.remove_button span.fa-color-buttons i.fas.fa-minus-square {
     top: 27px;
     z-index: 9;
 }
-
+.nav-item .dropdown-menu{
+    background-color: transparent !important;
+}
+li.nav-item.dropdown a.nav-link{
+    padding-left:10px !important;
+    font-style: oblique;
+}
 .down{
     bottom:0;
     position: fixed ;
@@ -358,6 +358,13 @@ span.no-block{
         bottom: 20px;
         position: fixed;
     }
+    #main-brand{
+        font-size: 17px;
+        -ms-flex: 0 0 16.666667%;
+        flex: 0 0 16.666667%;
+        max-width: 16.666667%;
+        padding: 6px 0px 6px 14px;
+    }
 }
 .documentHeaderBig {
     display: contents !important;
@@ -373,8 +380,28 @@ span.no-block{
 }
 /*small screen*/
 @media only screen and (max-width: 767px){
+    .navbar-brand{
+        box-shadow:none !important;
+    }
+    .navbar-brand{
+        padding-left:25px;
+        padding-right:25px;
+        box-shadow:none !important;
+        background-color: transparent !important;
+    }
+    .nav-link,.nav-item{
+        color: #FFFFFF !important;
+    }
+    .nav-link.active,.nav-item.active{
+        color: #a6e1ec !important;
+    }
     .documentHeaderSmall {
         display: contents !important;
+        color: #ebf0fa !important;
+    }
+    .documentHeaderSmall span{
+        color: #ebf0fa !important;
+        font-style: oblique;
     }
     .documentHeaderBig {
         display:none !important;
@@ -409,12 +436,6 @@ span.no-block{
     .pl-4, .px-4{
         padding: 80px 0 0 !important;
     }
-    .navbar-brand{
-        max-width:80% !important;
-    }
-    .navbarButton{
-        max-width:20% !important;
-    }
     #navbar-form-big{
         display:none;
     }
@@ -434,12 +455,12 @@ span.no-block{
         margin-left: 43px !important;
     }
     #main-brand{
-        background-color:#343a40 !important;
     }
     i.nav-fas {
         left:12px !important;
     }
 }
+/*Between screen*/
 @media only screen and (min-width:768px) and (max-width: 1167px){
     li.nav-item a.nav-link span{
         display:none
@@ -453,7 +474,9 @@ span.no-block{
     }
     #off-brand{
         display:block !important;
-        width:5.667% !important;
+        width:63px !important;
+        padding-left: 10px;
+        padding-right: 10px;
     }
     nav.col-md-2.sidebar{
         max-width:56px !important;

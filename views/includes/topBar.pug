@@ -1,6 +1,6 @@
 nav(class="navbar navbar-dark fixed-top bg-"+settings.theme+" flex-md-nowrap p-0 shadow")
-    a#main-brand(class="navbar-brand col-sm-3 col-md-2 mr-0",href="/view/profile") invoice-administration
-    a#off-brand(class="navbar-brand col mr-0",href="/dashboard",style="display:none") I-A
+    a#main-brand(class="navbar-brand spacing mr-0",href="/dashboard") Invoice-Administration
+    a#off-brand(class="navbar-brand spacing mr-0",href="/dashboard",style="display:none") I-A
     button.navbar-toggler(id="navbarButton" type='button' data-toggle='collapse' data-target='#navbar' aria-controls='navbar' aria-expanded='false' aria-label='Toggle navigation')
         span.navbar-toggler-icon
     form#navbar-form-small(class="form", method="post",action="/search/")
@@ -9,10 +9,107 @@ nav(class="navbar navbar-dark fixed-top bg-"+settings.theme+" flex-md-nowrap p-0
     #navbar.collapse.navbar-collapse
         .navbar-nav
             include ./mainMenu
-            include ./clientOptionMenu
-            include ./invoiceOptionMenu
+            li.nav-item.dropdown
+                a.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                    | #{__('Clients')} - #{__('options')}
+                .dropdown-menu(aria-labelledby='navbarDropdownMenuLink')
+                    if currentUrl === "clientNew"
+                        a.dropdown-item(class="nav-link active",href='/client/new' data-toggle="tooltip" data-placement="right" title=__('New client'))
+                            i.nav-fas(class="fas fa-user-plus")
+                            span #{__('New client')}
+                    else
+                        a.dropdown-item(class="nav-link",href='/client/new' data-toggle="tooltip" data-placement="right" title=__('New client'))
+                            i.nav-fas(class="fas fa-user-plus")
+                            span #{__('New client')}
+            li.nav-item.dropdown
+                a.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                    | #{__('Invoices')} - #{__('options')}
+                .dropdown-menu(aria-labelledby='navbarDropdownMenuLink')
+                    if add === "invoice"
+                        a.dropdown-item(class="nav-link active",href='/invoice/new/invoice' data-toggle="tooltip" data-placement="right" title=__('New client'))
+                            i.nav-fas(class="fas fa-plus-circle")
+                                span #{__('New invoice')}
+                    else if client
+                        a.dropdown-item(class="nav-link",href='/invoice/new/invoice/' + client._id data-toggle="tooltip" data-placement="right" title=__('New invoice'))
+                            i.nav-fas(class="fas fa-plus-circle")
+                            span #{__('New invoice')}
+                    else
+                        a.dropdown-item(class="nav-link",href='/invoice/new/invoice' data-toggle="tooltip" data-placement="right" title=__('New invoice'))
+                            i.nav-fas(class="fas fa-plus-circle")
+                            span #{__('New invoice')}
+                    if add === "offer"
+                        a.dropdown-item(class="nav-link active",href='/invoice/new/offer' data-toggle="tooltip" data-placement="right" title=__('New offer'))
+                            i.nav-fas(class="fas fa-plus-circle")
+                            span #{__('New offer')}
+                    else if client
+                        a.dropdown-item(class="nav-link", href = '/invoice/new/offer/' + client._id data-toggle="tooltip" data-placement="right" title=__('New offer'))
+                            i.nav-fas(class="fas fa-plus-circle")
+                            span #{__('New offer')}
+                    else
+                        a.dropdown-item(class="nav-link",href='/invoice/new/offer' data-toggle="tooltip" data-placement="right" title=__('New offer'))
+                            i.nav-fas(class="fas fa-plus-circle")
+                            span #{__('New offer')}
+                    if add === "creditnote"
+                        a.dropdown-item(class="nav-link active",href='/invoice/new/credit' data-toggle="tooltip" data-placement="right" title=__('New creditnote'))
+                            i.nav-fas(class="fas fa-plus-circle")
+                            span #{__('New creditnote')}
+                    else if client
+                        a(class = "nav-link", href = '/invoice/new/credit/' + client._id data-toggle="tooltip" data-placement="right" title=__('New creditnote'))
+                            i.nav-fas(class="fas fa-plus-circle")
+                            span #{__('New creditnote')}
+                    else
+                        a.dropdown-item(class="nav-link",href='/invoice/new/credit' data-toggle="tooltip" data-placement="right" title=__('New creditnote'))
+                            i.nav-fas(class="fas fa-plus-circle")
+                            span #{__('New creditnote')}
+                    if client
+                        a.dropdown-item(class="nav-link",href='/edit/client/' + client._id data-toggle="tooltip" data-placement="right" title=__('Edit this client'))
+                            i.nav-fas(class="fas fa-user-edit")
+                            span #{__('Edit this client')}
             if invoice
-                include ./orderOptionMenu
+                li.nav-item.dropdown
+                    a.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                        | #{__('This document')} - #{__('options')}
+                    .dropdown-menu(aria-labelledby='navbarDropdownMenuLink')
+                        if client
+                            if currentUrl === "orderNew"
+                                a.dropdown-item(class="nav-link active",href='/order/new/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("New line"))
+                                    i.nav-fas(class="fas fa-plus-circle")
+                                    span #{__('New line')}
+                            else
+                                a.dropdown-item(class="nav-link",href='/order/new/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("New line"))
+                                    i.nav-fas(class="fas fa-plus-circle")
+                                    span #{__('New line')}
+                        if invoice.offerNr
+                            a.dropdown-item(class="nav-link",href='/download/offer/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("Download pdf of this document"))
+                                i.nav-fas(class="fas fa-file-download")
+                                span #{__('Download pdf of this document')}
+                        else if invoice.creditNr
+                            a.dropdown-item(class="nav-link",href='/download/credit/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("Download pdf of this document"))
+                                i.nav-fas(class="fas fa-file-download")
+                                span #{__('Download pdf of this document')}
+                        else if invoice.invoiceNr
+                            a.dropdown-item(class="nav-link",href='/download/invoice/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("Download pdf of this document"))
+                                i.nav-fas(class="fas fa-file-download")
+                                span #{__('Download pdf of this document')}
+                        if invoice.offerNr
+                            a.dropdown-item(class="nav-link",href='/stream/offer/' + invoice._id target="_blank" data-toggle="tooltip" data-placement="right" title=__("View pdf of this document"))
+                                i.nav-fas(class="fas fa-eye")
+                                span #{__('View pdf of this document')}
+                        else if invoice.creditNr
+                            a.dropdown-item(class="nav-link",href='/stream/credit/' + invoice._id target="_blank" data-toggle="tooltip" data-placement="right" title=__("View pdf of this document"))
+                                i.nav-fas(class="fas fa-eye")
+                                span #{__('View pdf of this document')}
+                        else if invoice.invoiceNr
+                            a.dropdown-item(class="nav-link",href='/stream/invoice/' + invoice._id target="_blank" data-toggle="tooltip" data-placement="right" title=__("View pdf of this document"))
+                                i.nav-fas(class="fas fa-eye")
+                                span #{__('View pdf of this document')}
+                        if client
+                            a.dropdown-item(class="nav-link",href='/invoice/all/' + client._id data-toggle="tooltip" data-placement="right" title=__("View documents of this client"))
+                                i.nav-fas(class="fas fa-book-open")
+                                span #{__('View documents of this client')}
+                            a.dropdown-item(class="nav-link",href='/edit/client/' + client._id data-toggle="tooltip" data-placement="right" title=__("Edit this client"))
+                                i.nav-fas(class="fas fa-user-edit")
+                                span #{__('Edit this client')}
     form#navbar-form-big(class="form", method="post",action="/search/")
         input(class="form-control form-control-"+settings.theme+" w-100" type="text",name="search", placeholder=__('search'),value=currentSearch, aria-label=__("search") )
         button(type="sumbit",style="display:none")

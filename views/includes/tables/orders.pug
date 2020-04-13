@@ -28,9 +28,9 @@ table(class="table table-striped table-sm ",id="tabelOrders")
                     td
                 tr#addNewSmall(style="display:none;")
                     td
-                        a(href="/client/new/")
+                        a(href="/order/new/" + invoice._id)
                             i.not-nav-fas.fas.fa-plus-circle
-                            span=__("Add a new client")
+                            span=__("Add a new line")
         each order in orders
             tr
                 td
