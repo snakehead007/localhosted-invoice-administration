@@ -50,10 +50,7 @@ exports.uploadLogoGet = (req, res) => {
  */
 exports.uploadLogoPost = async (req, res) => {
     try {
-        if (Object.keys(req.files).length === 0) {
-            logger.warning.log("[WARNING]: no file found while trying upload, files :"+req.files);
-            return res.status(400).send("No files were uploaded.");
-        }
+        console.log(req.files);
         let logoFile = req.files.logoFile;
         logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is trying to upload logo file of mimetype "+req.files.logoFile.mimetype);
         if (logoFile.mimetype === "image/jpeg" || logoFile.mimetype === "image/jpg" || !logoFile.mimetype) {
@@ -70,16 +67,19 @@ exports.uploadLogoPost = async (req, res) => {
                     Error.handler(req,res,err,'FU0101');});
                 req.flash("success", i18n.__("succefully updated your logo"));
                 res.redirect("/view/profile/");
+                return;
             });
         } else {
             logger.warning.log("[WARNING]: file type unknown for uploaded file by User "+req.session.email);
             req.flash("danger", i18n.__("Wrong filetype"));
             res.redirect("/upload/logo");
+            return;
         }
     } catch (error) {
-        Error.handler(req,res,err,'FU0102');
+        Error.handler(req,res,error,'FU0102');
         req.flash('danger',i18n.__("Something happend, please try again"));
         res.redirect("/upload/logo");
+        return;
     }
     res.redirect("/view/profile/");
 };
