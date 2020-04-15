@@ -57,6 +57,12 @@ exports.user = class user{
             return user;
         });
     }
+    find = async (req,res,identifier,extra=null,sort=null)=>{
+        return await User.find(identifier,extra,sort,(err,invoices)=>{
+            Error.handler(req,res,err,'7M4I01') ;
+            return invoices;
+        });
+    }
 };
 
 exports.invoice = class invoice{

@@ -52,7 +52,8 @@ const User = new mongoose.Schema({
         isDeveloper:{
             type: Boolean,
             default:false
-        }
+        },
+        isBlocked:false
     },
 );
 

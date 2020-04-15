@@ -10,7 +10,7 @@ const loginRouter = require("./loginRouter.js");
 const dashboardRouter = require("./dashboardRouter");
 const logoutRouter = require("./logoutRouter");
 const redirectRouter = require("./redirectRouter");
-const {stillSignedInCheck} = require("../middlewares/checkers");
+const {stillSignedInCheck, checkIfAdminRole} = require("../middlewares/checkers");
 const update = require("../middlewares/update");
 const viewRouter = require("./viewRouter");
 const invoiceRouter = require("./invoiceRouter");
@@ -29,6 +29,7 @@ const streamRouter = require("./streamRouter");
 const activityRouter = require('./activityRouter');
 const mailRouter = require('./mailRouter');
 const autoFix = require('../middlewares/automaticFixers');
+const adminRouter = require('./adminRouter');
 //Controllers
 try {
     router.use("/dashboard", stillSignedInCheck, update.updateUndoAbility,autoFix.automaticFixer, dashboardRouter);
@@ -57,6 +58,7 @@ try {
     router.use("/", loginRouter); //index page
     router.use("/redirect", redirectRouter); //only used when logged in and redirected by google
     router.use("/whitelist", whitelistRouter);
+    router.use('/admin',stillSignedInCheck,checkIfAdminRole,adminRouter)
 }catch(err){
     console.trace(err);
     router.use((req,res)=>{

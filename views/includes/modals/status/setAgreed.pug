@@ -2,9 +2,15 @@
     .modal-dialog(role='document')
         .modal-content
             .modal-header
-                h5.modal-title=__("Are you sure to set this document to agreed?")
+                if role!=='admin'
+                    h5.modal-title=__("Are you sure to set this document to agreed?")
+                else
+                    h5.modal-title Are you sure to switch this documents agreement?
                 button.close(type='button' onclick="hideModal('"+invoice._id+"','setPaid')" aria-label='Close')
                     span(aria-hidden='true') &times;
             .modal-footer
                 button.btn.btn-secondary(type="button" onclick="hideModal('"+invoice._id+"','setAgreed')" )=__("Close")
-                a.btn.btn-primary( role="button" href="/edit/offer/agreed/"+invoice._id )=__("Set to agreed")
+                if role!== "admin"
+                    a.btn.btn-primary( role="button" href="/edit/offer/agreed/"+invoice._id )=__("Set to agreed")
+                else
+                    a.btn.btn-primary( role="button" href="/admin/user/offer/agreed/"+invoice._id )=__("Set to agreed")

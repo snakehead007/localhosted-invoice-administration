@@ -84,12 +84,18 @@ exports.checkWhitelistGet = async (req, res) => {
                 if(err) logger.error.log("[ERROR]: thrown at /src/controllers/redirectRouter.router.get('/') on method User.findOne trace: "+err.message);
                 return user
             });
-            req.session.role = user.role;
-            if (user.role === "visitor") {
-                mailgun.sendWelcome(req.session.email);
-                res.redirect('/view/profile');
-            } else {
-                res.redirect('/dashboard');
+            if(user.isBlocked){
+                req.flash('warning','You are blocked from the site, please contact us if this was a mistake');
+                req.session.destroy();
+                res.redirect('/');
+            }else{
+                req.session.role = user.role;
+                if (user.role === "visitor") {
+                    mailgun.sendWelcome(req.session.email);
+                    res.redirect('/view/profile');
+                } else {
+                    res.redirect('/dashboard');
+                }
             }
         });
         return;

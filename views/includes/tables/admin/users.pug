@@ -1,0 +1,84 @@
+script( type="text/javascript"  src="/dist/tablesorter-master/js/jquery.tablesorter.combined.js")
+script.
+    $(function () {
+        $("#tabelusers").tablesorter();
+    });
+table(class="table table-striped table-sm ",id="tabelusers")
+    thead(style="color:#FFF",class="thead shadow bg-" + settings.theme)
+        tr
+            th(scope="col") #{__('_id')}
+            th(scope="col") #{__('email')}
+            th(scope="col") #{__('role')}
+            th(scope="col") #{__('last login')}
+    tbody
+        each user in users
+            tr
+                td
+                    a(href='/admin/user/'+user._id )
+                        span.badge.badge-pill.badge-dark=user._id
+                td
+                    a(href='/admin/user/'+user._id )=user.email
+                td
+                    div.btn-group.dropleft
+                        case user.role
+                            when 'visitor'
+                                a(role="button", class="btn btn-secondary btn-sm dropdown-toggle", href="#", id=user._id, data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+                                    span visitor
+                                div(class="dropdown-menu", aria-labelledby=user._id )
+                                    a(class="dropdown-item", href='/admin/user/' + user._id+'/delete' ) Delete
+                                    a(class="dropdown-item", href='/admin/user/' + user._id+'/block' )
+                                        span Blocked
+                                        if user.isBlocked
+                                            i.nav-fas(class="fas fa-check")
+                                    a(class="dropdown-item", href='/admin/user/' + user._id+'/role' ) Change role
+                                    a(class="dropdown-item", href='/admin/user/' + user._id + '/edit' ) Edit
+                            when 'user'
+                                a(role="button", class="btn btn-primary btn-sm dropdown-toggle", href="#", id=user._id , data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+                                    span user
+                                div(class="dropdown-menu", aria-labelledby=user._id )
+                                    a(class="dropdown-item", href='/admin/user/' + user._id + '/delete' ) Delete
+                                    a(class="dropdown-item", href='/admin/user/' + user._id + '/block' )
+                                        span Block
+                                        if user.isBlocked
+                                            i.nav-fas(class="fas fa-check")
+                                    a(class="dropdown-item", href='/admin/user/' + user._id + '/role' ) Change role
+                                    a(class="dropdown-item", href='/admin/user/' + user._id + '/edit' ) Edit
+                                    a(class="dropdown-item", href='/admin/user/' + user._id + '/credits' ) CR
+                            when 'support'
+                                a(role="button", class="btn btn-info btn-sm dropdown-toggle", href="#", id=user._id, data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+                                    span support
+                                div(class="dropdown-menu", aria-labelledby=user._id )
+                                    a(class="dropdown-item", href='/admin/user/' + user._id + '/delete' ) Delete
+                                    a(class="dropdown-item", href='/admin/user/' + user._id + '/block' )
+                                        span Block
+                                        if user.isBlocked
+                                            i.nav-fas(class="fas fa-check")
+                                    a(class="dropdown-item", href='/admin/user/' + user._id + '/role' ) Change role
+                                    a(class="dropdown-item", href='/admin/user/' + user._id + '/edit' ) Edit
+                                    a(class="dropdown-item", href='/admin/user/' + user._id + '/credits' ) CR
+                            when 'admin'
+                                a(role="button", class="btn btn-danger btn-sm dropdown-toggle", href="#", id=user._id, data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+                                    span admin
+                                div(class="dropdown-menu", aria-labelledby=user._id )
+                                    a(class="dropdown-item", href='/admin//' + user._id)
+                                    a(class="dropdown-item", href='/admin/user/' + user._id + '/credits' ) CR
+                            default
+                                a(role="button", class="btn btn-warning btn-sm dropdown-toggle", href="#", id=user._id, data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+                                    span INVALID_ROLE
+                                div(class="dropdown-menu", aria-labelledby=user._id )
+                                    a(class="dropdown-item", href='/admin/user/' + user._id + '/delete' ) Delete
+                                    a(class="dropdown-item", href='/admin/user/' + user._id + '/block' )
+                                        span Block
+                                        if user.isBlocked
+                                            i.nav-fas(class="fas fa-check")
+                                    a(class="dropdown-item", href='/admin/user/' + user._id + '/role' ) Change role
+                                    a(class="dropdown-item", href='/admin/user/' + user._id + '/edit' ) Edit
+                td(id="date"+user._id)=user.lastLogin
+            script.
+                //date is done via DOM, the locale cannot be set right when using pug
+                let id#{user._id} = "date" + "#{user._id}";
+                document.getElementById(id#{user._id}).innerHTML = new Date("#{user.lastLogin}").toLocaleString("#{settings.locale}", {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric'
+                });

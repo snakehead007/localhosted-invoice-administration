@@ -1,0 +1,15 @@
+const express = require("express");
+const router = express.Router();
+const adminController = require('../controllers/adminController');
+router.get('/users', adminController.getAllUser);
+router.get('/', adminController.getAdminPanel);
+router.get('/user/:uid',adminController.getUser);
+router.get('/user/:uid/clients',adminController.getUserClients);
+router.get('/user/:uid/invoices',adminController.getUserInvoices);
+router.get('/user/:uid/orders',adminController.getUserOrders);
+router.get('/user/:uid/activities',adminController.getUserActivities);
+router.get('/user/:uid/block',adminController.getUserBlock);
+router.get('/user/invoice/paid/:idi',adminController.getPaid);
+router.get('/user/invoice/send/:idi',adminController.switchSend);
+router.get('/user/offer/agreed/:idi',adminController.offerAgreedGet);
+module.exports = router;

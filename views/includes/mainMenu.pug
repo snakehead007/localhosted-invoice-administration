@@ -1,10 +1,11 @@
 ul(class="nav flex-column")
-    if role === "user"
+    if role !== "visitor"
         li(class="nav-item")
-                a(class=(currentUrl==="dashboard" || currentUrl==="chart")?"nav-link active":"nav-link" href="/dashboard" data-toggle="tooltip" data-placement="right" title=__('Home'))
+                a(class=(currentUrl==="dashboard" || currentUrl==="chart")?"nav-link active":"nav-link" href=(role==='admin')?'/admin':'/dashboard' data-toggle="tooltip" data-placement="right" title=__('Home'))
                     i.nav-fas(class="fas fa-home")
                     span #{__('Home')}
-    li(class="nav-item")
+    if role === "user" || role === 'visitor'
+        li(class="nav-item")
             a(class=(currentUrl==="edit-profile")?"nav-link active":"nav-link" href="/view/profile" data-toggle="tooltip" data-placement="right" title=__('My profile'))
                 i.nav-fas(class="fas fa-user")
                 span #{__('My profile')}
@@ -15,7 +16,7 @@ ul(class="nav flex-column")
                 span #{__('Clients')}
         li(class="nav-item")
                 a(class=(currentUrl==="invoices")?"nav-link active":"nav-link" href="/invoice/all" data-toggle="tooltip" data-placement="right" title=__('All invoices'))
-                    i.nav-fas(class="fas fa-file-alt")
+                    i.nav-fas(class="fas fa-file-invoice")
                     span #{__('All invoices')}
         li(class="nav-item")
             a(class=(currentUrl === "activities") ? "nav-link active": "nav-link" href="/activity" data-toggle="tooltip" data-placement="right" title=__('My activities'))
@@ -25,11 +26,12 @@ ul(class="nav flex-column")
                 a(class=(currentUrl === 'settings' || currentUrl === "password")?"nav-link active":"nav-link" href="/settings" data-toggle="tooltip" data-placement="right" title=__('Settings'))
                     i.nav-fas(class="fas fa-cog ")
                     span #{__('Settings')}
-        ul(class="nav flex-column")
-            li(class="nav-item")
-                a(class="nav-link", href="https://identity.basecone.com/authentication/login" data-toggle="tooltip" data-placement="right" title="Basecone login")
-                    i.nav-fas(class="fas fa-bookmark")
-                    span Basecone login
+        li(class="nav-item")
+            a(class="nav-link", href="https://identity.basecone.com/authentication/login" data-toggle="tooltip" data-placement="right" title="Basecone login")
+                i.nav-fas(class="fas fa-bookmark")
+                span Basecone login
+    include ./adminOptionsMenu
+    if role !== 'admin'
         li.nav-item
             a.nav-link(href="#bugReporter" data-toggle='modal' data-target='#bugReporter' )
                 i.nav-fas(class="fas fa-bug " data-toggle="tooltip" data-placement="right" title=__("Bug reporter"))

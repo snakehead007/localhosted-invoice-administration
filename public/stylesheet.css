@@ -378,6 +378,10 @@ span.no-block{
 #actionHeaderSmall{
     display: none ;
 }
+.modal-body .container-fluid .row .nav-link{
+    color:black !important;
+}
+
 /*small screen*/
 @media only screen and (max-width: 767px){
     .navbar-brand{
@@ -408,16 +412,6 @@ span.no-block{
     }
     .invoiceStatus{
         display: none !important;
-    }
-    #addNewBig{
-        display: none;
-    }
-    #addNewSmall{
-        display:block !important;
-    }
-    #addNewSmall td{
-        width: 100% !important;
-        display: block ruby;
     }
     #actionHeaderSmall{
         padding-left:20px;

@@ -1,0 +1,37 @@
+script( type="text/javascript"  src="/dist/tablesorter-master/js/jquery.tablesorter.combined.js")
+script.
+    $(function () {
+        $("#tabelClients").tablesorter();
+    });
+table(class="table table-striped table-sm ",id="tabelClients")
+    thead(style="color:#FFF",class="thead shadow bg-" + settings.theme)
+        tr
+            th _id
+            th(scope="col") #{__('Firms')}
+            th#actionHeaderBig(scope="col")=__('Action')
+            th#actionHeaderSmall(scope="col", style="display='none';")
+                div
+                    i.fas.fa-eye
+    tbody
+        each client in clients
+            tr
+                td
+                    span.badge.badge-pill.badge-dark=client._id
+                td
+                    include ../../modals/view/client
+                    a(href='/invoice/all/' + client._id)
+                        if(!client.firm)
+                            span=client.clientName
+                        else
+                            span=client.firm
+                td
+                    div.btn-group.dropleft
+                        a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+                            span.actionBig=__('Actions')
+                            div.actionSmall(style="display:none;")
+                                i.action-fas(class="fas fa-ellipsis-v")
+                        div(class="dropdown-menu", aria-labelledby="actionsDropdown")
+                            a(class="dropdown-item", href="#viewClient"+ client._id, data-toggle='modal' data-target='#viewClient'+ client._id ) #{__('View')}
+                            a(class="dropdown-item", href='/edit/client/' + client._id) #{__('Edit')}
+                            a(class="dropdown-item", href="#deleteConfirmationClient" + client._id, data-toggle='modal' data-target='#deleteConfirmationClient' + client._id ) #{__('Delete')}
+            include ../../modals/deleteConfirmationClient

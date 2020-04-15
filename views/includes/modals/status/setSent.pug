@@ -2,9 +2,15 @@
     .modal-dialog(role='document')
         .modal-content
             .modal-header
-                h5.modal-title=__("Are you sure to set this document to send?")
+                if role!=='admin'
+                    h5.modal-title=__("Are you sure to set this document to send?")
+                else
+                    h5.modal-title Are you sure to switch this document send value?
                 button.close(type='button' onclick="hideModal('"+invoice._id+"','setSent')" aria-label='Close')
                     span(aria-hidden='true') &times;
             .modal-footer
                 button.btn.btn-secondary(type="button" onclick="hideModal('"+invoice._id+"','setSent')" )=__("Close")
-                a.btn.btn-primary( role="button" href="/edit/invoice/send/"+invoice.id )=__("Set to send")
+                if role!=='admin'
+                    a.btn.btn-primary( role="button" href="/edit/invoice/send/"+invoice.id )=__("Set to send")
+                else
+                    a.btn.btn-primary( role="button" href="/admin/user/invoice/send/"+invoice.id )=__("Set to send")

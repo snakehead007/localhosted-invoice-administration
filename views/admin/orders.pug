@@ -1,0 +1,28 @@
+//- V1.8
+html
+    head
+        include ../includes/htmlHead
+        script.
+            function info(){$("#info").toggle();};
+            $(document).ready(function () {
+                feather.replace();
+            });
+body
+    header
+        include ../includes/topBar
+        div(class="container-fluid")
+            div(class ="row")
+                nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
+                    div(class="sidebar-sticky")
+                        include ../includes/mainMenu
+                        include ../includes/downMenu
+                main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+                    h2(class="pt-3")="User "+currentUser.email+": orders"
+                    hr
+                    include ../includes/messages
+                    .row
+                        .col-12
+                            include ../includes/tables/orders
+
+
+    include ../includes/modals/bugReporter

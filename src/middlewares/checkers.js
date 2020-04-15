@@ -3,6 +3,8 @@ const Settings = require('../models/settings');
 const i18n = require('i18n');
 const logger = require("./logger");
 const {getIp} = require("../utils/utils");
+const User = require('../models/user');
+const Error = require('../middlewares/error');
 /**
  * @apiVersion 3.0.0
  * @apiDefine stillSignedInCheck session checker for sign in
@@ -27,4 +29,18 @@ exports.stillSignedInCheck = (req, res, next) => {
         res.locals.language = settings.locale;
         next();
     });
+};
+
+exports.checkIfAdminRole = async (req,res,next) => {
+  let user = await User.findOne({_id:req.session._id},(err,user)=>{
+      Error.handler(req,res,err,"A9F100");
+      return user;
+  });
+  if(user && user.role && user.role==="admin"){
+      next();
+  }else{
+      req.flash('warning',"You are not allowed there");
+      req.session = {};
+      res.redirect('/');
+  }
 };
