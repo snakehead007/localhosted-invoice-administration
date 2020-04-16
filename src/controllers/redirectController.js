@@ -50,7 +50,6 @@ exports.checkWhitelistGet = async (req, res) => {
             logger.error.log("[ERROR]: thrown at /src/controllers/redirectRouter.router.get('/') on method Profile.findOne trace: "+err.message);
             res.flash('danger', 'Something happen, try again');
         } else {
-            console.log(whitelistUsers);
             await whitelistUsers.forEach(o => {
                 console.log(req.session.email+" ? "+o.mail);
                 if (req.session.email === o.mail) {
@@ -58,50 +57,52 @@ exports.checkWhitelistGet = async (req, res) => {
                     found = true;
                 }
             });
+            if (found) {
+                await checkSignIn(req);
+                User.updateOne({_id: req.session._id}, {lastLogin: Date.now()}, async (err) => {
+                    if(err) logger.error.log("[ERROR]: thrown at /src/controllers/redirectRouter.router.get('/') on method User.updateOne trace: "+err.message);
+                    await Profile.findOne({fromUser: req.session._id}, async function (err, profile) {
+                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/redirectRouter.router.get('/') on method Profile.findOne trace: "+err.message);
+                        if (profile === null) {
+                            const newProfile = new Profile({
+                                fromUser: req.session._id
+                            });
+                            await newProfile.save();
+                            profile = await Profile.findOne({fromUser: req.session._id});
+                            await User.updateOne({_id: req.session._id}, {profile: profile._Id});
+                        }
+                    });
+                    if (err) console.trace(err);
+                    let user = await User.findOne({_id: req.session._id}, (err, user) => {
+                        if(err) logger.error.log("[ERROR]: thrown at /src/controllers/redirectRouter.router.get('/') on method User.findOne trace: "+err.message);
+                        return user
+                    });
+                    if(user.isBlocked){
+                        req.session.regenerate(function (err) {
+                            if(err){
+                                console.trace(err);
+                            }else {
+
+                            }
+                                req.flash('warning','You are blocked from the site, please contact us if this was a mistake');
+                                res.redirect('/');
+                            });
+                    }else{
+                        req.session.role = user.role;
+                        if (user.role === "visitor") {
+                            mailgun.sendWelcome(req.session.email);
+                            res.redirect('/view/profile');
+                        } else {
+                            res.redirect('/dashboard');
+                        }
+                    }
+                });
+                return;
+            }
+            if(!found){
+                req.flash('warning', 'You are not whitelisted, please contact the administrator');
+                res.redirect('/');
+            }
         }
     });
-    if(!found){
-        console.log('not found');
-        logger.warning.log("[WARNING]: Not found in whitelist, ip "+getIp(req)+" redirecting back");
-    }
-    if (found) {
-        await checkSignIn(req);
-        User.updateOne({_id: req.session._id}, {lastLogin: Date.now()}, async (err) => {
-            if(err) logger.error.log("[ERROR]: thrown at /src/controllers/redirectRouter.router.get('/') on method User.updateOne trace: "+err.message);
-            await Profile.findOne({fromUser: req.session._id}, async function (err, profile) {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/redirectRouter.router.get('/') on method Profile.findOne trace: "+err.message);
-                if (profile === null) {
-                    const newProfile = new Profile({
-                        fromUser: req.session._id
-                    });
-                    await newProfile.save();
-                    profile = await Profile.findOne({fromUser: req.session._id});
-                    await User.updateOne({_id: req.session._id}, {profile: profile._Id});
-                }
-            });
-            if (err) console.trace(err);
-            let user = await User.findOne({_id: req.session._id}, (err, user) => {
-                if(err) logger.error.log("[ERROR]: thrown at /src/controllers/redirectRouter.router.get('/') on method User.findOne trace: "+err.message);
-                return user
-            });
-            if(user.isBlocked){
-                req.flash('warning','You are blocked from the site, please contact us if this was a mistake');
-                req.session.destroy();
-                res.redirect('/');
-            }else{
-                req.session.role = user.role;
-                if (user.role === "visitor") {
-                    mailgun.sendWelcome(req.session.email);
-                    res.redirect('/view/profile');
-                } else {
-                    res.redirect('/dashboard');
-                }
-            }
-        });
-        return;
-    }
-    if(!found){
-        req.flash('warning', 'You are not whitelisted, please contact the administrator');
-        res.redirect('/');
-    }
 };
