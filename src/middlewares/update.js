@@ -5,7 +5,7 @@ const Item = require('../models/item');
 const Settings = require('../models/settings');
 exports.updateUndoAbility = async (req, res, next) => {
     //sets all objects that have no property of "isRemoved" to false
-    await Client.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
+    /*await Client.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
     await Invoice.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
     await Order.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
     await Item.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
@@ -46,6 +46,6 @@ exports.updateUndoAbility = async (req, res, next) => {
         await Invoice.updateMany({fromUser:req.session._id,fromClient:c._id},{firmName:(c.firm)?c.firm:''},(err,info)=>
         {
         });
-    }
+    }*/
     next();
 };

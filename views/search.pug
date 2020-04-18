@@ -40,6 +40,28 @@ body
           h4=__("Orders")
           div(class="table-responsive")
             include includes/tables/orders
-        if orders.length==0 && invoices.length==0 && clients.length==0
+        if role==='user'
+          if orders.length==0 && invoices.length==0 && clients.length==0
+              div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert")=__('Nothing was found')
+        else
+          if users.length != 0
+            hr
+            h4=__('Users')
+            div(class="table-responsive")
+              include includes/tables/admin/users
+
+          if profiles.length != 0
+            hr
+            h4=__('Profiles')
+            div(class="table-responsive")
+              include includes/tables/admin/profiles
+
+          if activities.length != 0
+            hr
+            h4=__('Activities')
+            div(class="table-responsive")
+              include includes/tables/admin/activities
+
+          if orders.length == 0 && invoices.length == 0 && clients.length == 0 && users.length == 0 && profiles.length == 0 && activities.length == 0
             div(class="alert alert-danger col-lg-8 col-md-10 col-sm-12" role="alert")=__('Nothing was found')
 include includes/modals/bugReporter

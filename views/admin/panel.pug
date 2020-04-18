@@ -20,5 +20,9 @@ body
                     h2(class="pt-3")=__("Administrator panel")
                     hr
                     include ../includes/messages
+                    if broadcast
+                        .row.justify-content-center
+                            .col-12
+                                div#messages.alert-message(class="alert alert-" + broadcast.type + " fade show" role="alert")=broadcast.message
                     //here panel
     include ../includes/modals/bugReporter

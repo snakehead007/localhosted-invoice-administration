@@ -1,5 +1,8 @@
 nav(class="navbar navbar-dark fixed-top bg-"+settings.theme+" flex-md-nowrap p-0 shadow")
-    a#main-brand(class="navbar-brand spacing mr-0",href="/dashboard") Invoice-Administration
+    if role==='admin' || role==='support'
+        a#main-brand(class="navbar-brand spacing mr-0",href="/dashboard")='Invoice-Administration : '+role
+    else
+        a#main-brand(class="navbar-brand spacing mr-0",href="/dashboard")='Invoice-Administration'
     a#off-brand(class="navbar-brand spacing mr-0",href="/dashboard",style="display:none") I-A
     button.navbar-toggler(id="navbarButton" type='button' data-toggle='collapse' data-target='#navbar' aria-controls='navbar' aria-expanded='false' aria-label='Toggle navigation')
         span.navbar-toggler-icon

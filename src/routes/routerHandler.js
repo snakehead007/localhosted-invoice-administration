@@ -30,6 +30,7 @@ const activityRouter = require('./activityRouter');
 const mailRouter = require('./mailRouter');
 const autoFix = require('../middlewares/automaticFixers');
 const adminRouter = require('./adminRouter');
+const supportRouter = require('./supportRouter');
 //Controllers
 try {
     router.use("/dashboard", stillSignedInCheck, update.updateUndoAbility,autoFix.automaticFixer, dashboardRouter);
@@ -47,6 +48,7 @@ try {
     router.use("/stream", stillSignedInCheck, streamRouter);
     router.use('/activity', stillSignedInCheck, activityRouter);
     router.use('/mail', stillSignedInCheck, mailRouter);
+    router.use('/support', stillSignedInCheck, supportRouter);
 }catch(err){
     console.trace(err);
     router.use((req,res)=>{
@@ -58,7 +60,7 @@ try {
     router.use("/", loginRouter); //index page
     router.use("/redirect", redirectRouter); //only used when logged in and redirected by google
     router.use("/whitelist", whitelistRouter);
-    router.use('/admin',stillSignedInCheck,checkIfAdminRole,adminRouter)
+    router.use('/admin',stillSignedInCheck,adminRouter)
 }catch(err){
     console.trace(err);
     router.use((req,res)=>{

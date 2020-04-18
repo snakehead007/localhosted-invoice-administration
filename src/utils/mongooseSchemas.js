@@ -21,6 +21,12 @@ exports.profile = class profile {
             return profile;
         });
     }
+    find = async (req,res,identifier,extra=null,sort=null) => {
+        return await Profile.find(identifier,extra,sort,(err,profile)=>{
+            Error.handler(req,res,err,'7M0P00');
+            return profile;
+        });
+    }
 };
 
 //client
@@ -59,6 +65,18 @@ exports.user = class user{
     }
     find = async (req,res,identifier,extra=null,sort=null)=>{
         return await User.find(identifier,extra,sort,(err,invoices)=>{
+            Error.handler(req,res,err,'7M4I01') ;
+            return invoices;
+        });
+    }
+    updateOne = async (req,res,identifier,updatedata)=>{
+        return await User.updateOne(identifier,updatedata,(err,user)=>{
+            Error.handler(req,res,err,'7M3U00') ;
+            return user;
+        });
+    }
+    update = async (req,res,identifier,updatedata)=>{
+        return await User.update(identifier,updatedata,(err,invoices)=>{
             Error.handler(req,res,err,'7M4I01') ;
             return invoices;
         });

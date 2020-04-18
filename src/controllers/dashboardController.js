@@ -9,6 +9,7 @@ const {month, month_small, year} = require("../utils/date");
 const User = require("../models/user");
 const i18n = require("i18n");
 const logger = require('../middlewares/logger');
+const Broadcast = require('../models/broadcast');
 const Error = require('../middlewares/error');
 /**
  * @apiVersion 3.0.0
@@ -29,6 +30,7 @@ const Error = require('../middlewares/error');
     }
  */
 exports.mainGet = async function getLogin(req, res) {
+    let broadcast = await Broadcast.findOne({});
     //Finds a profile, if not found will create a new one
     Profile.findOne({fromUser: req.session._id}, async function (err, profile) {
         Error.handler(req,res,err,'2D0000');
@@ -95,7 +97,8 @@ exports.mainGet = async function getLogin(req, res) {
                                 "year": (new Date).getFullYear(),
                                 "profile": profile,
                                 "invoices": invoice_open,
-                                "role": role
+                                "role": role,
+                                'broadcast':broadcast
                             });
                         }
                     });

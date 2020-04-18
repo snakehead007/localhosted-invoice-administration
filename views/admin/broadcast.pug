@@ -1,0 +1,39 @@
+//- V1.8
+html
+    head
+        include ../includes/htmlHead
+        script.
+            function info(){$("#info").toggle();};
+            $(document).ready(function () {
+                feather.replace();
+            });
+body
+    header
+        include ../includes/topBar
+        div(class="container-fluid")
+            div(class ="row")
+                nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
+                    div(class="sidebar-sticky")
+                        include ../includes/mainMenu
+                        include ../includes/downMenu
+                main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+                    h2(class="pt-3")=__("New logo upload")
+                    hr
+                    include ../includes/messages
+                    form(ref='form',id='form' ,action='/admin/broadcast/new',method='post')
+                        div.form-group
+                            label(for='broadcast') Broadcast type
+                            input#broadcast.form-control(type='text',name='type')
+                        div.form-group
+                            label(for='message') Message
+                            input#message.form-control(type='text', name='message')
+                        div(class="input-group-append col-2")
+                            button(class="btn-sm btn-outline-"+settings.theme+" form-control", type="submit", id="inputGroupFileAddon04") Add broadcast
+                    hr
+                    if broadcast
+                        .row.justify-content-center
+                            #messages.col-12
+                                div.alert-message(class="alert alert-" + broadcast.type + " fade show" role="alert")=broadcast.message
+                                    a(role="button" class="close" href='/admin/broadcast/remove/' + broadcast._id aria-label="Close")
+                                        span(aria-hidden="true") &times;
+    include ../includes/modals/bugReporter

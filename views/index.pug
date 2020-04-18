@@ -10,29 +10,39 @@ html
                           include includes/mainMenu
                           include includes/downMenu
             main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-                  div(class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom")
-                    h1(class="h2") #{__('Dashboard')}
-                    .custom-control.custom-switch
-                        input#customSwitch1.custom-control-input(type='checkbox')
-                        label.custom-control-label(for='customSwitch1')=__("Preview all payments")
-                    div(class="btn-group dropleft mb-2 mb-md-0")
-                        button(type="button" class="btn btn-sm btn-outline-"+settings.theme+" dropdown-toggle", data-toggle="dropdown",aria-haspopup="true",aria-expanded="false")
-                            i.fas.fa-calendar-alt.not-nav-fas
-                            span=year
-                        div(class="dropdown-menu")
-                          a(class="dropdown-item" href="/dashboard/chart/"+String(year-2))=year-2
-                          a(class="dropdown-item" href="/dashboard/chart/" + String(year - 1) )=year - 1
-                          a(class="dropdown-item active" href="/dashboard/chart/" + year )=year
-                          a(class="dropdown-item" href="/dashboard/chart/" + String(Number(year) + Number(1)))=String(Number(year) + Number(1))
-                          a(class="dropdown-item" href="/dashboard/chart/" + String(Number(year) + Number(2)))=String(Number(year) + Number(2))
-                  include includes/messages
-                  canvas(class="my-4 w-100 h-60" id="myChart" width="900" height="380")
-                  h2#canvasBefore #{__('Unpaid invoices')}
-                  if invoices.length == 0
-                      div(class="alert alert-info col-lg-12 col-md-12 col-sm-12" role="alert") #{__('No unpaid invoices found.')}
-                  else
-                      div(class="table-responsive bigger")
-                        include includes/tables/invoices
+                div(class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom")
+                h1(class="h2") #{__('Dashboard')}
+                .row
+                    .col-md-3.col-sm-0
+                    .col-md-5.col-sm-12.text-center
+                        .custom-control.custom-switch
+                            input#customSwitch1.custom-control-input(type='checkbox')
+                            label.custom-control-label(for='customSwitch1')=__("Preview all payments")
+                    .col.text-right
+                        div(class="btn-group dropleft mb-2 mb-md-0")
+                            button(type="button" class="btn btn-sm btn-outline-"+settings.theme+" dropdown-toggle", data-toggle="dropdown",aria-haspopup="true",aria-expanded="false")
+                                i.fas.fa-calendar-alt.not-nav-fas
+                                span=year
+                            div(class="dropdown-menu")
+                              a(class="dropdown-item" href="/dashboard/chart/"+String(year-2))=year-2
+                              a(class="dropdown-item" href="/dashboard/chart/" + String(year - 1) )=year - 1
+                              a(class="dropdown-item active" href="/dashboard/chart/" + year )=year
+                              a(class="dropdown-item" href="/dashboard/chart/" + String(Number(year) + Number(1)))=String(Number(year) + Number(1))
+                              a(class="dropdown-item" href="/dashboard/chart/" + String(Number(year) + Number(2)))=String(Number(year) + Number(2))
+
+                if broadcast
+                    .row.justify-content-center
+                        .col-12
+                            div#messages.alert-message(class="alert alert-" + broadcast.type + " fade show" role="alert")=broadcast.message
+                include includes/messages
+
+                canvas(class="my-4 w-100 h-60" id="myChart" width="900" height="380")
+                h2#canvasBefore #{__('Unpaid invoices')}
+                if invoices.length == 0
+                  div(class="alert alert-info col-lg-12 col-md-12 col-sm-12" role="alert") #{__('No unpaid invoices found.')}
+                else
+                  div(class="table-responsive bigger")
+                    include includes/tables/invoices
 
 
 include includes/scripts/feather

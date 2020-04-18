@@ -36,3 +36,8 @@ ul(class="nav flex-column")
             a.nav-link(href="#bugReporter" data-toggle='modal' data-target='#bugReporter' )
                 i.nav-fas(class="fas fa-bug " data-toggle="tooltip" data-placement="right" title=__("Bug reporter"))
                 span=__("Bug reporter")
+    if role !== 'admin' && role !== 'support'
+        li(class="nav-item")
+            a(class="nav-link",href='/support' data-toggle="tooltip" data-placement="right" title="All users" )
+                i.nav-fas(class="fas fa-headset")
+                span Support

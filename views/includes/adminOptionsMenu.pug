@@ -1,33 +1,48 @@
-if role==='admin'
+if role==='admin' || role === 'support'
     h6.documentHeaderBig(style="display:none;" class="sidebar-heading justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
-        span.big-sidebar Admin tools
+        span.big-sidebar Tools
         span.small-sidebar(style="display:none")
     h6.documentHeaderSmall(style="display:none;" class="sidebar-heading justify-content-between align-items-center px-3 text-muted")
-        span.big-sidebar Admin tools
+        span.big-sidebar Tools
         span.small-sidebar(style="display:none")
     ul(class="nav flex-column option-menu mb-2")
+        li(class="nav-item")
+            a(class="nav-link",href='/admin/support/' data-toggle="tooltip" data-placement="right" title="All users" )
+                i.nav-fas(class="fas fa-headset")
+                span Support
+        if role === 'admin'
+            li(class="nav-item")
+                a(class="nav-link",href='/admin/database/' data-toggle="tooltip" data-placement="right" title="All users" )
+                    i.nav-fas(class="fas fa-server")
+                    span Database
+            li(class="nav-item")
+                a(class="nav-link",href='/admin/broadcast/' data-toggle="tooltip" data-placement="right" title="Broadcast" )
+                    i.nav-fas(class="fas fa-bullhorn")
+                    span Broadcast
         li(class="nav-item")
             a(class="nav-link",href='/admin/users/' data-toggle="tooltip" data-placement="right" title="All users" )
                 i.nav-fas(class="fas fa-users")
                 span All users
-        if currentUser
-            li(class="nav-item")
-                a(class="nav-link",href='/admin/user/'+currentUser._id+'/clients' data-toggle="tooltip" data-placement="right" title="All clients" )
-                    i.nav-fas(class="fas fa-user-friends")
-                    span This users clients
-            li(class="nav-item")
-                a(class="nav-link",href='/admin/user/' + currentUser._id + '/invoices' data-toggle="tooltip" data-placement="right" title="All invoices" )
-                    i.nav-fas(class="fas fa-folder-open")
-                    span This users invoices
-            li(class="nav-item")
-                a(class="nav-link", href='/admin/user/'+currentUser._id+'/orders' data-toggle="tooltip" data-placement="right" title="All orders" )
-                    i.nav-fas(class="fas fa-file-alt")
-                    span This users orders
-            li(class="nav-item")
-                a(class="nav-link",href='/admin/user/'+currentUser._id+'/activities' data-toggle="tooltip" data-placement="right" title="All activities" )
-                    i.nav-fas(class="fas fa-align-left")
-                    span This users activities
-        li(class="nav-item")
-            a(class="nav-link",href='/admin/broadcast/' data-toggle="tooltip" data-placement="right" title="Broadcast" )
-                i.nav-fas(class="fas fa-bullhorn")
-                span Broadcast
+if currentUser
+    h6.documentHeaderBig(style="display:none;" class="sidebar-heading justify-content-between align-items-center px-3 mt-4 mb-1 text-muted")
+        span.big-sidebar Tools
+        span.small-sidebar(style="display:none")
+    h6.documentHeaderSmall(style="display:none;" class="sidebar-heading justify-content-between align-items-center px-3 text-muted")
+        span.big-sidebar Tools
+        span.small-sidebar(style="display:none")
+    li(class="nav-item")
+        a(class="nav-link",href='/admin/user/'+currentUser._id+'/clients' data-toggle="tooltip" data-placement="right" title="All clients" )
+            i.nav-fas(class="fas fa-user-friends")
+            span This users clients
+    li(class="nav-item")
+        a(class="nav-link",href='/admin/user/' + currentUser._id + '/invoices' data-toggle="tooltip" data-placement="right" title="All invoices" )
+            i.nav-fas(class="fas fa-folder-open")
+            span This users invoices
+    li(class="nav-item")
+        a(class="nav-link", href='/admin/user/'+currentUser._id+'/orders' data-toggle="tooltip" data-placement="right" title="All orders" )
+            i.nav-fas(class="fas fa-file-alt")
+            span This users orders
+    li(class="nav-item")
+        a(class="nav-link",href='/admin/user/'+currentUser._id+'/activities' data-toggle="tooltip" data-placement="right" title="All activities" )
+            i.nav-fas(class="fas fa-align-left")
+            span This users activities

@@ -44,3 +44,17 @@ exports.checkIfAdminRole = async (req,res,next) => {
       res.redirect('/');
   }
 };
+
+exports.checkIfAdminOrSupportRole = async (req,res,next) => {
+    let user = await User.findOne({_id:req.session._id},(err,user)=>{
+        Error.handler(req,res,err,"A9F100");
+        return user;
+    });
+    if(user && user.role && user.role==="admin" || user.role==='support'){
+        next();
+    }else{
+        req.flash('warning',"You are not allowed there");
+        req.session = {};
+        res.redirect('/');
+    }
+};

@@ -9,6 +9,8 @@ const i18n = require('i18n');
 const User = require('../models/user');
 const logger = require('../middlewares/logger');
 const Error = require('../middlewares/error');
+const M = require('../utils/mongooseSchemas');
+const adminController = require('./adminController');
 /**
  * @apiVersion 3.0.0
  * @api {post} /search searchGet
@@ -29,7 +31,17 @@ const Error = require('../middlewares/error');
 });
  */
 
-module.exports.searchGet = (req, res) => {
+module.exports.searchGet = async (req, res) => {
+    let user = await new M.user().findOne(req,res,{_id:req.session._id});
+    if(user.role==='admin'||user.role==='support'){
+        return await adminController.adminSearchGet(req,res);
+
+    }
+    if(user.role!=='user'){
+        req.flash('warning','You do not have access to this functionality');
+        res.redirect('back');
+        return;
+    }
     let str = req.body.search.toString().toLowerCase();
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' searching for \""+str+"\"");
     let clients = [];

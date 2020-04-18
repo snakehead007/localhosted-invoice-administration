@@ -96,7 +96,11 @@ exports.checkWhitelistGet = async (req, res) => {
                                 mailgun.sendWelcome(req.session.email);
                                 res.redirect('/view/profile');
                             } else {
-                                res.redirect('/dashboard');
+                                if(user.role==='admin'||user.role==='support')
+                                {res.redirect('/admin');}
+                                else{
+                                    res.redirect('/dashboard');
+                                }
                             }
                         }
                     });

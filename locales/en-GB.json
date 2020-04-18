@@ -408,5 +408,16 @@
 	"You cannot edit this offer when it is already send": "You cannot edit this offer when it is already send",
 	"You cannot edit this credit when it is already send": "You cannot edit this credit when it is already send",
 	"You cannot edit this invoice when it is already send": "You cannot edit this invoice when it is already send",
+	"Invoice number is too high": "Invoice number is too high",
+	"Nickname": "Nickname",
+	"My document name": "My document name",
+	"Maximum characters for nickname exceeded. use 15 or less characters": "Maximum characters for nickname exceeded. use 15 or less characters",
+	"Something happend, please try again": "Something happend, please try again",
+	"_id": "_id",
+	"role": "role",
+	"last login": "last login",
+	"Administrator panel": "Administrator panel",
+	"All users": "All users",
+	"User ": "User ",
 	"--------FROM-HERE-ALL-ABOVE-CHECKED-----------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------"
 }
