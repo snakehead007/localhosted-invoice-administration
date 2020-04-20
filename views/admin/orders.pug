@@ -17,12 +17,15 @@ body
                         include ../includes/mainMenu
                         include ../includes/downMenu
                 main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-                    h2(class="pt-3")="User "+currentUser.email+": orders"
+                    if title
+                        h2(class="pt-3")=title
+                    else
+                        h2(class="pt-3")="User "+currentUser.email+": orders"
                     hr
                     include ../includes/messages
                     .row
                         .col-12
-                            include ../includes/tables/orders
+                            include ../includes/tables/admin/orders
 
 
     include ../includes/modals/bugReporter

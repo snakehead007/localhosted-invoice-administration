@@ -115,9 +115,8 @@ module.exports.searchGet = async (req, res) => {
                                         "invoices": invoices_d,
                                         "profile": profile,
                                         "currentSearch": str,
-                                        "role":(await User.findOne({_id: req.session._id}, (err, user) => {
-                                            return user
-                                        })).role
+                                        "role":user.role,
+                                        'credits' : user.credits
                                     });
                                 }
                             });

@@ -44,16 +44,15 @@ exports.editOrderGet = (req, res) => {
                 Error.handler(req,res,err,'AO0002');
                 Profile.findOne({fromUser: req.session._id,}, async (err, profile) => {
                     Error.handler(req,res,err,'AO0003');
+                    let user = await User.findOne({_id: req.session._id});
                     if (!err) {
                         res.render("edit/edit-order", {
                             "order": order,
                             "invoice": invoice,
                             "profile": profile,
                             "settings": settings,
-                            "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                                Error.handler(req,res,err,'AO0004');
-                                return user;
-                            })).role
+                            "role": user.role,
+                            'credits':user.credits
                         });
                     }
                 });
@@ -98,6 +97,7 @@ exports.newOrderGet = (req, res) => {
                         if (!err) {
                             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                                 Error.handler(req,res,err,'AO0103');
+                                let user = await User.findOne({_id: req.session._id});
                                 if (!err) {
                                     res.render("new/new-order", {
                                         "invoice": invoice,
@@ -105,10 +105,8 @@ exports.newOrderGet = (req, res) => {
                                         "settings": settings,
                                         "client": client,
                                         "currentUrl": "orderNew",
-                                        "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                                            Error.handler(req,res,err,'AO0104');
-                                            return user;
-                                        })).role
+                                        "role": user.role,
+                                        'credits':user.credits
                                     });
                                 }
                             });
@@ -205,6 +203,7 @@ exports.allOrderGet = (req, res) => {
                             if (!err) {
                                 Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                                     Error.handler(req,res,err,'AO0305');
+                                    let user = await User.findOne({_id: req.session._id});
                                     if (!err) {
                                         res.render("orders", {
                                             "invoice": invoice,
@@ -212,10 +211,8 @@ exports.allOrderGet = (req, res) => {
                                             "profile": profile,
                                             "client": client,
                                             "settings": settings,
-                                            "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                                                Error.handler(req,res,err,'AO0306');
-                                                return user;
-                                            })).role
+                                            "role": user.role,
+                                            'credits':user.credits
                                         });
                                     }
                                 });
@@ -258,16 +255,15 @@ exports.viewOrderGet = (req, res) => {
                         if (!err) {
                             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                                 Error.handler(req,res,err,'AO0403');
+                                let user = await User.findOne({_id: req.session._id});
                                 if (!err) {
                                     res.render("view/view-order",{
                                         "order": order,
                                         "invoice": invoice,
                                         "profile": profile,
                                         "settings": settings,
-                                        "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                                            Error.handler(req,res,err,'AO0404');
-                                            return user;
-                                        })).role
+                                        "role": user.role,
+                                        'credits': user.credits
                                     });
                                 }
                             });

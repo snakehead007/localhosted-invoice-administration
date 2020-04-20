@@ -29,10 +29,6 @@ const sizeOf = require('image-size');
     });
  */
 exports.viewProfileGet = async (req, res) => {
-    let role = (await User.findOne({_id: req.session._id}, (err, user) => {
-        Error.handler(req,res,err,'BP0000');
-        return user
-    })).role;
     let title = i18n.__((role === "visitor") ? "Create a new profile" : "Edit");
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
         Error.handler(req,res,err,'BP0001');
@@ -47,13 +43,15 @@ exports.viewProfileGet = async (req, res) => {
                 }catch(err){
                     //no logo to find
                 }
+                let user = await User.findOne({_id: req.session._id});
                 if (!err) {
                     res.render("edit/edit-profile", {
                         "currentUrl": "edit-profile",
                         "profile": profile,
                         "settings": settings,
                         "title": title,
-                        "role": role,
+                        "role": user.role,
+                        'credits':user.credits,
                         "size":size
                     });
                 }
@@ -109,6 +107,7 @@ exports.editProfileGet = (req, res) => {
  */
 exports.editProfilePost = async (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is trying to edit its profile with "+JSON.stringify(req.body));
+    let user = await User.findOne({_id: req.session._id});
     let firmCheck =  valueMustBeAName(req, res, req.body.firm, false, "firm is invalid");
     let nameCheck = valueMustBeAName(req, res, req.body.name, true, "name is invalid");
     let streetCheck = valueMustBeAName(req, res, req.body.street, false, "street name is invalid");
@@ -149,7 +148,8 @@ exports.editProfilePost = async (req, res) => {
                     },
                     "settings": settings,
                     "title": title,
-                    "role": role
+                    "role": user.role,
+                    'credits': user.credits
                 });
             }
         });

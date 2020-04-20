@@ -25,14 +25,13 @@ exports.uploadLogoGet = (req, res) => {
         Error.handler(req,res,err,'FU0000');
         Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
             Error.handler(req,res,err,'FU0001');
+            let user = await User.findOne({_id: req.session._id});
             res.render("upload", {
                 "settings": settings,
                 "description": "Upload logo",
                 "profile": profile,
-                "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                    Error.handler(req,res,err,'FU0002');
-                    return user
-                })).role
+                "role": user.role,
+                'credits':user.credits
             });
         });
     });

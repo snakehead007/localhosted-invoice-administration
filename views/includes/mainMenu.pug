@@ -22,14 +22,24 @@ ul(class="nav flex-column")
             a(class=(currentUrl === "activities") ? "nav-link active": "nav-link" href="/activity" data-toggle="tooltip" data-placement="right" title=__('My activities'))
                 i.nav-fas(class="fas fa-list-ul")
                 span #{__('My activities')}
+    if role !== 'visitor'
         li(class="nav-item")
                 a(class=(currentUrl === 'settings' || currentUrl === "password")?"nav-link active":"nav-link" href="/settings" data-toggle="tooltip" data-placement="right" title=__('Settings'))
                     i.nav-fas(class="fas fa-cog ")
                     span #{__('Settings')}
+    if role === 'user'
         li(class="nav-item")
             a(class="nav-link", href="https://identity.basecone.com/authentication/login" data-toggle="tooltip" data-placement="right" title="Basecone login")
                 i.nav-fas(class="fas fa-bookmark")
                 span Basecone login
+    if role !== 'visitor'
+        li(class="nav-item")
+            a(class="nav-link", href="#" data-toggle="tooltip" data-placement="right" title="Wallet")
+                i.nav-fas(class="fas fa-wallet")
+                if Number(credits)>999
+                    span My wallet: 999+ CR
+                else
+                    span='My wallet: '+credits+' CR'
     include ./adminOptionsMenu
     if role !== 'admin'
         li.nav-item
@@ -38,6 +48,6 @@ ul(class="nav flex-column")
                 span=__("Bug reporter")
     if role !== 'admin' && role !== 'support'
         li(class="nav-item")
-            a(class="nav-link",href='/support' data-toggle="tooltip" data-placement="right" title="All users" )
+            a(class="nav-link",href='/support' data-toggle="tooltip" data-placement="right" title="Support" )
                 i.nav-fas(class="fas fa-headset")
                 span Support

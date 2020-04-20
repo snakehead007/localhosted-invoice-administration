@@ -30,12 +30,14 @@ const M = require('../utils/mongooseSchemas');
  */
 exports.getClientAll = async (req, res) => {
     //renders /view/clients, currently url clients
+    let user = await new M.user().findOne(req,res,{_id: req.session._id});
     res.render("clients", {
         "clients": await new M.client().find(req,res,{fromUser: req.session._id,isRemoved:false},null,{sort:{lastUpdated:-1}}),
         "settings": await new M.settings().findOne(req,res,{fromUser: req.session._id}),
         "profile": await new M.profile().findOne(req,res,{fromUser:req.session._id}),
         "currentUrl": "clientAll",
-        "role": (await new M.user().findOne(req,res,{_id:req.session._id})).role
+        "role": user.role,
+        'credits':user.credits
     });
 };
 
@@ -55,11 +57,13 @@ exports.getClientAll = async (req, res) => {
 });
  */
 exports.getClientNew = async (req, res) => {
+    let user = await new M.user().findOne(req,res,{_id: req.session._id});
     res.render("new/new-client", {
         "settings": await new M.settings().findOne(req,res,{fromUser:req.session._id}),
         "profile": await new M.profile().findOne(req,res,{fromUser:req.session._id}),
         "currentUrl": "clientNew",
-        "role": (await new M.user().findOne(req,res,{_id:req.session._id})).role
+        "role": user.role,
+        'credits':user.credits
     });
 };
 
@@ -94,6 +98,7 @@ exports.getClientNew = async (req, res) => {
  */
 exports.postClientNew = async (req, res) => {
     let emails = [];
+    let user = await new M.user().findOne(req,res,{_id: req.session._id});
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to create new client with :"+JSON.stringify(req.body));
     let nameCheck = invalid.valueMustBeAName(req, res, req.body.clientName, true, "client name not correctly filled in");
     let firmCheck = invalid.valueMustBeAName(req, res, req.body.firm,   false, "firm name not correctly filled in");
@@ -155,10 +160,8 @@ exports.postClientNew = async (req, res) => {
                             "place": req.body.place,
                             "vatPercentage": req.body.vatPercentage
                         },
-                        "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                            error.handler(req,res,err,'1C0202');
-                            return user
-                        })).role
+                        "role": user.role,
+                        'çredits':user.credits
                     });
                 }
             });
@@ -203,6 +206,7 @@ exports.postClientNew = async (req, res) => {
  *  }
  */
 exports.getClientView = async (req, res) => {
+    let user = await new M.user().findOne(req,res,{_id: req.session._id});
         res.render("view/view-client", {
                 "client": await M.client().findOne(req, res, {
                     fromUser: req.session._id,
@@ -211,12 +215,14 @@ exports.getClientView = async (req, res) => {
                 }),
                 "settings": await M.settings().findOne(req, res, {fromUser: req.session._id}),
                 "profile": await M.profile().findOne(req, res, {fromUser: req.session._id}),
-                "role": (await M.user().findOne(req, res, {_id: req.session._id})).role
+                "role": user.role,
+                'credits':user.credits
             }
         )
 };
 
-exports.getEditClient = (req, res) => {
+exports.getEditClient = async (req, res) => {
+    let user = await new M.user().findOne(req,res,{_id: req.session._id});
     Client.findOne({fromUser: req.session._id, _id: req.params.idc,isRemoved:false}, function (err, client) {
         error.handler(req,res,err,'1C0400');
         if (!error.findOneHasError(req, res, err, client)) {
@@ -231,10 +237,8 @@ exports.getEditClient = (req, res) => {
                                 "profile": profile,
                                 "settings": settings,
                                 "currentUrl": "clientEdit",
-                                "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                                    error.handler(req,res,err,'1C0403');
-                                    return user;
-                                })).role
+                                "role": user.role,
+                                'credits':user.credits
                             })
                         }
                     });
@@ -244,7 +248,7 @@ exports.getEditClient = (req, res) => {
     });
 };
 
-exports.postEditClient = (req, res) => {
+exports.postEditClient = async (req, res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to edit a client with : "+JSON.stringify(req.body));
     let emails = [];
     Client.findOne({fromUser: req.session._id, _id: req.params.idc}, function (err, client) {

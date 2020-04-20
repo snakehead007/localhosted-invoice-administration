@@ -31,15 +31,14 @@ exports.invoiceAllGet = (req, res) => {
             Error.handler(req,res,err,'5C0001');
             Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                 Error.handler(req,res,err,'5C0002');
+                let user = await User.findOne({_id: req.session._id});
                 res.render("invoices", {
                     "currentUrl": "invoices",
                     "invoices": invoices,
                     "profile": profile,
                     "settings": settings,
-                    "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                        Error.handler(req,res,err,'5C0003');
-                        return user;
-                    })).role
+                    "role": user.role,
+                    'credits':user.credits
                 });
             });
         });
@@ -57,16 +56,15 @@ exports.invoiceNewChooseGet = (req, res) => {
             Error.handler(req,res,err,'5C0101');
             Client.find({fromUser: req.session._id,isRemoved:false}, async (err, clients) => {
                 Error.handler(req,res,err,'5C0102');
+                let user = await User.findOne({_id: req.session._id});
                 res.render("add-file-no-contact", {
                     "profile": profile,
                     "settings": settings,
                     "add": "invoice",
                     "addlink": "invoice",
                     "clients": clients,
-                    "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                        Error.handler(req,res,err,'5C0103');
-                        return user;
-                    })).role
+                    "role": user.role,
+                    'credits': user.credits
                 });
             });
         });
@@ -84,16 +82,15 @@ exports.offerNewChooseGet = (req, res) => {
             Error.handler(req,res,err,'5C0201');
             Client.find({fromUser: req.session._id,isRemoved:false}, async (err, clients) => {
                 Error.handler(req,res,err,'5C0202');
+                let user = await User.findOne({_id: req.session._id});
                 res.render("add-file-no-contact", {
                     "profile": profile,
                     "settings": settings,
                     "add": "offer",
                     "addlink": "offer",
                     "clients": clients,
-                    "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                        Error.handler(req,res,err,'5C0203');
-                        return user;
-                    })).role
+                    "role": user.role,
+                    'credits':user.credits
                 });
             });
         })
@@ -111,16 +108,15 @@ exports.creditNewChooseGet = (req, res) => {
             Error.handler(req,res,err,'5C0301');
             Client.find({fromUser: req.session._id,isRemoved:false}, async (err, clients) => {
                 Error.handler(req,res,err,'5C0302');
+                let user = await User.findOne({_id: req.session._id});
                 let givenObjects = {
                     "profile": profile,
                     "settings": settings,
                     "add": "creditnote",
                     "addlink": "credit",
                     "clients": clients,
-                    "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                        Error.handler(req,res,err,'5C0303');
-                        return user;
-                    })).role
+                    "role": user.role,
+                    'credits': user.credits
                 };
                 res.render("add-file-no-contact", givenObjects);
             });
@@ -422,16 +418,15 @@ exports.invoiceAllClient = (req, res) => {
                 Profile.findOne({fromUser:req.session._id}, async (err, profile) => {
                     Error.handler(req,res,err,'5C0703');
                     if (!err) {
+                        let user = await User.findOne({_id: req.session._id});
                         let givenObject = {
                             "client": client,
                             "invoices": invoices,
                             "settings": settings,
                             "profile": profile,
                             "currentUrl": "invoiceClient",
-                            "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                                Error.handler(req,res,err,'5C0704');
-                                return user;
-                            })).role
+                            "role": user.role,
+                            'credits':user.credits
                         };
                         res.render("invoices", givenObject);
                     }
@@ -455,16 +450,15 @@ exports.editInvoiceGet = (req, res) => {
                 Error.handler(req,res,err,'5C0802');
                 Profile.findOne({fromUser: req.session._id}, async (err, profile) => {
                     Error.handler(req,res,err,'5C0803');
+                    let user = await User.findOne({_id: req.session._id});
                     let givenObject = {
                         "invoice": invoice,
                         "client": client,
                         "settings": settings,
                         "profile": profile,
                         "currentUrl": "invoiceEdit",
-                        "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                            Error.handler(req,res,err,'5C0804');
-                            return user;
-                        })).role
+                        "role": user.role,
+                        'credits':user.credits
                     };
                     res.render("edit/edit-invoice", givenObject);
                 });
@@ -864,6 +858,7 @@ exports.viewInvoiceGet = (req, res) => {
                                 Error.handler(req,res,err,'5C1203');
                                 if (!findOneHasError(req, res, err, profile)) {
                                     let description = (invoice.creditNr) ? "View credit of" : "View invoice of";
+                                    let user = await User.findOne({_id: req.session._id});
                                     res.render("view/view-invoice", {
                                         "invoice": invoice,
                                         "client": client,
@@ -871,10 +866,8 @@ exports.viewInvoiceGet = (req, res) => {
                                         "settings": settings,
                                         "currentUrl": "creditView",
                                         "profile": profile,
-                                        "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                                            Error.handler(req,res,err,'5C1203');
-                                            return user
-                                        })).role
+                                        "role": user.role,
+                                        'çredits':user.credits
                                     })
                                 }
                             });

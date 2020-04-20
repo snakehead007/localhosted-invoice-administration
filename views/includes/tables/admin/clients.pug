@@ -3,6 +3,9 @@ script.
     $(function () {
         $("#tabelClients").tablesorter();
     });
+    function changeRemove(id){
+        window.location = "/admin/client/switchRemove/"+ id;
+    }
 table(class="table table-striped table-sm ",id="tabelClients")
     thead(style="color:#FFF",class="thead shadow bg-" + settings.theme)
         tr
@@ -18,20 +21,16 @@ table(class="table table-striped table-sm ",id="tabelClients")
                 td
                     span.badge.badge-pill.badge-dark=client._id
                 td
-                    include ../../modals/view/client
-                    a(href='/invoice/all/' + client._id)
+                    a(href='/admin/invoice/all/' + client._id)
                         if(!client.firm)
                             span=client.clientName
                         else
                             span=client.firm
                 td
-                    div.btn-group.dropleft
-                        a(role="button", class="btn btn-outline-"+settings.theme+" btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
-                            span.actionBig=__('Actions')
-                            div.actionSmall(style="display:none;")
-                                i.action-fas(class="fas fa-ellipsis-v")
-                        div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                            a(class="dropdown-item", href="#viewClient"+ client._id, data-toggle='modal' data-target='#viewClient'+ client._id ) #{__('View')}
-                            a(class="dropdown-item", href='/edit/client/' + client._id) #{__('Edit')}
-                            a(class="dropdown-item", href="#deleteConfirmationClient" + client._id, data-toggle='modal' data-target='#deleteConfirmationClient' + client._id ) #{__('Delete')}
-            include ../../modals/deleteConfirmationClient
+                    div(class="custom-control custom-switch" onclick='changeRemove("' + client._id + '")' )
+                        if client.isRemoved
+                            input(type="checkbox" class="custom-control-input bg-success", checked='true', id=client._id)
+                            label(class="custom-control-label" for=client._id) Removed
+                        else
+                            input(type="checkbox" class="custom-control-input bg-danger" id=client._id )
+                            label(class="custom-control-label" for=client._id) not removed

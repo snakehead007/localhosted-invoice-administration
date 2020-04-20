@@ -3,6 +3,9 @@ script.
     $(function () {
         $("#tabelInvoices").tablesorter();
     });
+    function changeRemove(id) {
+        window.location = "/admin/invoice/switchRemove/" + id;
+    }
 table(class="table table-striped table-sm ",id="tabelInvoices")
     thead(style="color:#FFF",class="thead shadow bg-"+settings.theme)
         tr
@@ -21,18 +24,17 @@ table(class="table table-striped table-sm ",id="tabelInvoices")
                 td
                     span.badge.badge-pill.badge-dark=invoice._id
                 td
-                    a(href='/order/all/' + invoice._id )=invoice.nickname
+                    a(href='/admin/order/all/' + invoice._id )=invoice.nickname
                 td
-                    include ../../modals/view/invoice
                     include ../../modals/status/setSent
                     if invoice.invoiceNr
                         include ../../modals/status/setPaid
-                        a(href='/admin/user/order/all/' + invoice._id )=invoice.invoiceNr
+                        a(href='/admin/order/all/' + invoice._id )=invoice.invoiceNr
                     if invoice.offerNr
                         include ../../modals/status/setAgreed
-                        a(href='/order/all/' + invoice._id) #{__('Offer')}  #{" "+invoice.offerNr}
+                        a(href='/admin/order/all/' + invoice._id) #{__('Offer')}  #{" "+invoice.offerNr}
                     if invoice.creditNr
-                        a(href='/order/all/' + invoice._id ) #{__('Creditnote')} #{" "+invoice.creditNr}
+                        a(href='/admin/order/all/' + invoice._id ) #{__('Creditnote')} #{" "+invoice.creditNr}
                 td
                     span(id="date"+invoice._id)
                 td.invoiceStatus
@@ -59,6 +61,13 @@ table(class="table table-striped table-sm ",id="tabelInvoices")
                         else
                             input(type="checkbox" class="custom-control-input bg-success", id='setSent' + invoice._id  )
                             label(class="custom-control-label", for='setSent' + invoice._id )=__("Not sent")
+                    div(class="custom-control custom-switch" onclick='changeRemove("' + invoice._id + '")' )
+                        if invoice.isRemoved
+                            input(type="checkbox" class="custom-control-input bg-success", checked='true', id="removed"+invoice._id )
+                            label(class="custom-control-label" for="removed"+invoice._id) Removed
+                        else
+                            input(type="checkbox" class="custom-control-input bg-danger" id="removed"+invoice._id )
+                            label(class="custom-control-label" for="removed"+invoice._id) not removed
                 td
                     div(class="btn-group dropleft front")
                         a(role="button", class="btn btn-outline-" + settings.theme + " btn-sm dropdown-toggle", href="#", id="actionsDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
@@ -66,11 +75,10 @@ table(class="table table-striped table-sm ",id="tabelInvoices")
                             div.actionSmall(style="display:none;")
                                 i.action-fas(class="fas fa-ellipsis-v")
                         div(class="dropdown-menu", aria-labelledby="actionsDropdown")
-                            a(class="dropdown-item", href='/invoice/change/downgrade/' + invoice._id ) #{__('Downgrade to offer')}
-                            a(class="dropdown-item button", href="/invoice/change/upgrade/" + invoice._id )=__('Upgrade to invoice')
+                            a(class="dropdown-item", href='/admin/invoice/change/downgrade/' + invoice._id ) #{__('Downgrade to offer')}
+                            a(class="dropdown-item button", href="/admin/invoice/change/upgrade/" + invoice._id )=__('Upgrade to invoice')
                             //if settings.baseconeMail&& (invoice.invoiceNr||invoice.creditNr)
                                 a(class="dropdown-item button", href="#baseconeModal"+invoice._id , data-toggle='modal' data-target="#baseconeModal"+invoice._id )=__("Send to basecone")
-            include ../../modals/deleteConfirmationInvoice
             script.
                 //date is done via DOM, the locale cannot be set right when using pug
                 document.getElementById("date"+"#{invoice._id}").innerHTML = new Date("#{invoice.date}").toLocaleString("#{settings.locale}", {

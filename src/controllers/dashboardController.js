@@ -85,10 +85,7 @@ exports.mainGet = async function getLogin(req, res) {
                             chartPreview.forEach((n) => {
                                 newCharPreview.push(n.toFixed(2));
                             });
-                            let role = (await User.findOne({_id: req.session._id}, (err, user) => {
-                                Error.handler(req,res,err,'2D0006');
-                                return user
-                            })).role;
+                            let user = await User.findOne({_id: req.session._id});
                             res.render("index", {
                                 "currentUrl": "dashboard",
                                 "total": newChart,
@@ -97,7 +94,8 @@ exports.mainGet = async function getLogin(req, res) {
                                 "year": (new Date).getFullYear(),
                                 "profile": profile,
                                 "invoices": invoice_open,
-                                "role": role,
+                                "role": user.role,
+                                'credits': user.credits,
                                 'broadcast':broadcast
                             });
                         }
@@ -166,10 +164,7 @@ exports.chartYearGet = (req, res) => {
                             chartPreview.forEach((n) => {
                                 newCharPreview.push(n.toFixed(2));
                             });
-                            let role = (await User.findOne({_id: req.session._id}, (err, user) => {
-                                Error.handler(req,res,err,'2D0103');
-                                return user
-                            })).role;
+                            let user = await User.findOne({_id: req.session._id});
                             res.render("index", {
                                 "currentUrl": "dashboard",
                                 "total": newChart,
@@ -178,7 +173,8 @@ exports.chartYearGet = (req, res) => {
                                 "year": req.params.year,
                                 "profile": profile,
                                 "invoices": invoice_open,
-                                "role": role
+                                "role": user.role,
+                                'credits':user.credits
                             });
                         }
                     });

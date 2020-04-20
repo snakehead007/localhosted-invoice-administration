@@ -2,6 +2,11 @@ const express = require("express");
 const router = express.Router();
 const adminController = require('../controllers/adminController');
 const {stillSignedInCheck, checkIfAdminRole, checkIfAdminOrSupportRole} = require("../middlewares/checkers");
+
+router.get('/client/switchRemove/:idc',checkIfAdminOrSupportRole,adminController.getSwitchRemoveClient);
+router.get('/invoice/switchRemove/:idi',checkIfAdminOrSupportRole,adminController.getSwitchRemoveInvoice);
+router.get('/order/switchRemove/:ido',checkIfAdminOrSupportRole,adminController.getSwitchRemoveOrder);
+router.get('/user/:id/delete',checkIfAdminRole,adminController.getDeleteUserAndAllOfObjects);
 router.get('/users', checkIfAdminOrSupportRole,adminController.getAllUser);
 router.get('/',checkIfAdminOrSupportRole, adminController.getAdminPanel);
 router.get('/broadcast',checkIfAdminOrSupportRole, adminController.getBroadcastPage);
@@ -25,5 +30,8 @@ router.post('/search',checkIfAdminOrSupportRole,adminController.adminSearchGet);
 router.post('/broadcast/new',checkIfAdminRole,adminController.postCreateBroadcast);
 router.get('/broadcast/remove/:id',checkIfAdminRole,adminController.getRemoveBroadcast);
 router.get('/support',checkIfAdminOrSupportRole,adminController.getSupportAdmingPage);
-
+router.get('/invoice/all/:idc',checkIfAdminOrSupportRole,adminController.getAllInvoicesOfClientAdmin);
+router.get('/order/all/:idi',checkIfAdminOrSupportRole,adminController.getAllOrdersOfInvoiceAdmin);
+router.get('/invoice/change/downgrade/:idi',checkIfAdminOrSupportRole,adminController.invoiceDowngradeAdminGet);
+router.get('/invoice/change/upgrade/:idi',checkIfAdminOrSupportRole,adminController.invoiceUpgradeAdminGet);
 module.exports = router;

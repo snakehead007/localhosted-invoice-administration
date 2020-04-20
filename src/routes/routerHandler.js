@@ -31,6 +31,7 @@ const mailRouter = require('./mailRouter');
 const autoFix = require('../middlewares/automaticFixers');
 const adminRouter = require('./adminRouter');
 const supportRouter = require('./supportRouter');
+const walletRouter = require('./walletRouter');
 //Controllers
 try {
     router.use("/dashboard", stillSignedInCheck, update.updateUndoAbility,autoFix.automaticFixer, dashboardRouter);
@@ -49,6 +50,7 @@ try {
     router.use('/activity', stillSignedInCheck, activityRouter);
     router.use('/mail', stillSignedInCheck, mailRouter);
     router.use('/support', stillSignedInCheck, supportRouter);
+    router.use('/wallet',stillSignedInCheck,walletRouter);
 }catch(err){
     console.trace(err);
     router.use((req,res)=>{

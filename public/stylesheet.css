@@ -5,11 +5,20 @@
 body {
     font-size: .875rem;
 }
-#messages {
-    position: relative  !important;
-    top: 0 !important;
-    width:100% !important;
+.alert-message {
+    width:93% !important;
+    z-index:10 !important;
 }
+#broadcastMessage {
+
+    position: absolute !important;
+    top: -124px !important;
+    width: 98% !important;
+    opacity: 100% !important;
+    text-align: center;
+}
+
+
 .feather {
     width: 16px;
     height: 16px;

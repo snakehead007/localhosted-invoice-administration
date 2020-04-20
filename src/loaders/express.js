@@ -57,7 +57,6 @@ module.exports.default = function (app) {
     app.listen(process.env.PORT);
     app.use(function(req, res, next) {
         if (toobusy()) {
-            req.flash('warning',"Our server is too busy right now, try again later. Or contact us.");
             res.redirect('back');
         } else {
             next();

@@ -33,7 +33,7 @@ html
                 if broadcast
                     .row.justify-content-center
                         .col-12
-                            div#messages.alert-message(class="alert alert-" + broadcast.type + " fade show" role="alert")=broadcast.message
+                            div#broadcastMessage.alert-message(class="alert alert-" + broadcast.type + " fade show" role="alert")=broadcast.message
                 include includes/messages
 
                 canvas(class="my-4 w-100 h-60" id="myChart" width="900" height="380")

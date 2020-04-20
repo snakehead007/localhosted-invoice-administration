@@ -1,0 +1,29 @@
+script( type="text/javascript"  src="/dist/tablesorter-master/js/jquery.tablesorter.combined.js")
+script.
+    $(function () {
+        $("#tabelOrders").tablesorter();
+    });
+    function changeRemove(id) {
+        window.location = "/admin/order/switchRemove/" + id;
+    }
+table(class="table table-striped table-sm ",id="tabelOrders")
+    thead(style="color:#FFF",class="thead shadow bg-" + settings.theme)
+        tr
+            th(scope="col") _id
+            th(scope="col") #{__('Description')}
+            th(scope="col") action
+    tbody
+        each order in orders
+            tr
+                td
+                    span.badge.badge-pill.badge-dark=order._id
+                td
+                    span=order.description
+                td
+                    div(class="custom-control custom-switch" onclick='changeRemove("' + order._id + '")' )
+                        if order.isRemoved
+                            input(type="checkbox" class="custom-control-input bg-success", checked='true', id=order._id)
+                            label(class="custom-control-label" for=order._id) Removed
+                        else
+                            input(type="checkbox" class="custom-control-input bg-danger" id=order._id )
+                            label(class="custom-control-label" for=order._id) not removed

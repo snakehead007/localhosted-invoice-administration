@@ -3,58 +3,50 @@ html(lang="nl-BE")
         include includes/htmlHead
         include includes/scripts/settingsMenuScript
     body
-            include includes/topBar
-            div(class="container-fluid")
-                div(class ="row")
-                    nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
-                        div(class="sidebar-sticky")
-                            include includes/mainMenu
-                            include includes/downMenu
-                    main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-                        h2(class="pt-3") Settings
-                        include includes/messages
-                        if error == 1
-                            div(class="alert alert-success col-lg-8 col-md-10 col-sm-12" role="alert")=__("Succesfully updated")+"!"
-                        div(class="table-responsive")
-                            table(class="table")
-                                tbody
-                                    tr(onclick="openTheme()",class="settingsOption optionTheme")
-                                        td
-                                            p(class="lead")
-                                                span #{__('Theme')}
-                                            div(id="theme",style="display:none;")
-                                                div(class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups")
-                                                    div(class="btn-group mr-4" role="group" aria-label="First group")
-                                                        a(href='/settings/change/theme/secondary',class="button")
-                                                            button.theme-button(type="button" class="btn btn-"+((settings.theme==="secondary")?"outline-":"")+"secondary") #{__('grey')}
-                                                        a(href='/settings/change/theme/dark',class="button")
-                                                            button.theme-button(type="button" class="btn btn-"+((settings.theme==="dark")?"outline-":"")+"dark") #{__('dark')}
-                                                        a(href='/settings/change/theme/info',class="button")
-                                                            button.theme-button(type="button" class="btn btn-"+((settings.theme==="info")?"outline-":"")+"info") #{__('blue')}
-                                                        a(href='/settings/change/theme/danger',class="button")
-                                                            button.theme-button(type="button" class="btn btn-"+((settings.theme==="danger")?"outline-":"")+"danger") #{__('red')}
-                                                        a(href='/settings/change/theme/success',class="button")
-                                                            button.theme-button(type="button" class="btn btn-" + ((settings.theme === "success") ? "outline-" : "") + "success") #{__('green')}
-                                                        a(href='/settings/change/theme/warning',class="button")
-                                                            button.theme-button(type="button" class="btn btn-" + ((settings.theme === "warning") ? "outline-" : "") + "warning") #{__('yellow')}
-                                    tr(onclick="openLang()",class="settingsOption optionLang")
-                                        td
-                                            p(class="lead") #{__('Language')}
-                                            div(id="lang",style="display:none;")
-                                                div(class="btn-group mb-3" role="group" aria-label="Basic example")
-                                                    a(href="/settings/change/lang/nl-BE",class="button")
-                                                        button(type="button" class="btn btn-"+((settings.locale==="nl-BE")?"outline-":"")+settings.theme) #{__('Dutch')}
-                                                    a(href="/settings/change/lang/en-GB",class="button")
-                                                        button(type="button" class="btn btn-"+((settings.locale==="en-GB")?"outline-":"")+settings.theme) #{__('English')}
-                                    //tr(onclick="openBasecone()",class="settingsOption optionBasecone")
-                                        td
-                                            p(class="lead") #{__('Basecone')}
-                                            div(id="basecone",style="display:none;")
-                                                div.col-6(class="mb-3" role="group" aria-label="Basic example")
-                                                    form(action="/settings/change/basecone",method="post")
-                                                        .form-group
-                                                            label.form-label(for="baseconeMail")=__("Unique Basecone email address")
-                                                            input.form-control(id="baseconeMail" name="baseconeMail" type="email", value=settings.baseconeMail, required="required",placeholder="xxxx.xxxx@mailtobasecone.com")
+        include includes/topBar
+        div(class="container-fluid")
+            div(class ="row")
+                nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
+                    div(class="sidebar-sticky")
+                        include includes/mainMenu
+                        include includes/downMenu
+                main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+                    h2(class="pt-3") Settings
+                    include includes/messages
+                    if error == 1
+                        div(class="alert alert-success col-lg-8 col-md-10 col-sm-12" role="alert")=__("Succesfully updated")+"!"
+                    div(class="table-responsive")
+                        table(class="table")
+                            tbody
+                                tr(onclick="openTheme()",class="settingsOption optionTheme")
+                                    td
+                                        p(class="lead")
+                                            span #{__('Theme')}
+                                        div(id="theme", style="display:none;")
+                                            div(class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups")
+                                                div(class="btn-group mr-4" role="group" aria-label="First group")
+                                                    a(href='/settings/change/theme/secondary',class="button")
+                                                        button.theme-button(type="button" class="btn btn-"+((settings.theme==="secondary")?"outline-":"")+"secondary") #{__('grey')}
+                                                    a(href='/settings/change/theme/dark',class="button")
+                                                        button.theme-button(type="button" class="btn btn-"+((settings.theme==="dark")?"outline-":"")+"dark") #{__('dark')}
+                                                    a(href='/settings/change/theme/info',class="button")
+                                                        button.theme-button(type="button" class="btn btn-"+((settings.theme==="info")?"outline-":"")+"info") #{__('blue')}
+                                                    a(href='/settings/change/theme/danger',class="button")
+                                                        button.theme-button(type="button" class="btn btn-"+((settings.theme==="danger")?"outline-":"")+"danger") #{__('red')}
+                                                    a(href='/settings/change/theme/success',class="button")
+                                                        button.theme-button(type="button" class="btn btn-" + ((settings.theme === "success") ? "outline-" : "") + "success") #{__('green')}
+                                                    a(href='/settings/change/theme/warning',class="button")
+                                                        button.theme-button(type="button" class="btn btn-" + ((settings.theme === "warning") ? "outline-" : "") + "warning") #{__('yellow')}
+                                tr(onclick="openLang()",class="settingsOption optionLang")
+                                    td
+                                        p(class="lead") #{__('Language')}
+                                        div(id="lang",style="display:none;")
+                                            div(class="btn-group mb-3" role="group" aria-label="Basic example")
+                                                a(href="/settings/change/lang/nl-BE",class="button")
+                                                    button(type="button" class="btn btn-"+((settings.locale==="nl-BE")?"outline-":"")+settings.theme) #{__('Dutch')}
+                                                a(href="/settings/change/lang/en-GB",class="button")
+                                                    button(type="button" class="btn btn-"+((settings.locale==="en-GB")?"outline-":"")+settings.theme) #{__('English')}
+                                if role ==='user'
                                     tr(onclick="openPdf()",class="settingsOption optionPdf")
                                         td
                                             p(class="lead")=__("PDF style")
@@ -99,6 +91,7 @@ html(lang="nl-BE")
                                                             else
                                                                 option(value="yellow")=__("yellow")
                                                     button.btn(class="btn-"+settings.theme, type="submit")=__("Update")
+                                if role==='user'
                                     tr(onclick="openText()",class="settingsOption optionText")
                                         td
                                             p(class="lead") #{__('PDF footnotes')}
@@ -139,8 +132,8 @@ html(lang="nl-BE")
                                                                 code &#91;datum.m&#93;  : Volledige maand van vandaag (maand)
                                                                 code &#91;datum.j&#93;  : Volledig jaar van vandaag (yyyy)
                                                                 code my blog : mypersonalblog.blogger.com
-    script.
-        $(document).ready(function () {
-            feather.replace();
-        });
-    include includes/modals/bugReporter
+        script.
+            $(document).ready(function () {
+                feather.replace();
+            });
+        include includes/modals/bugReporter

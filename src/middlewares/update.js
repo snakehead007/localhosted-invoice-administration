@@ -3,7 +3,11 @@ const Invoice = require('../models/invoice');
 const Order = require('../models/order');
 const Item = require('../models/item');
 const Settings = require('../models/settings');
+const User = require('../models/user');
 exports.updateUndoAbility = async (req, res, next) => {
+    //new update 20/04/2020
+    await User.updateOne({_id:req.session._id,credits:null},{credits:15});
+    //old updates
     //sets all objects that have no property of "isRemoved" to false
     /*await Client.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});
     await Invoice.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});

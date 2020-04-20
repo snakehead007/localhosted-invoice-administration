@@ -53,7 +53,11 @@ const User = new mongoose.Schema({
             type: Boolean,
             default:false
         },
-        isBlocked:false
+        isBlocked:false,
+        credits:{
+            type:Number,
+            default: 15
+        }
     },
 );
 

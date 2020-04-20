@@ -17,7 +17,10 @@ body
                         include ../includes/mainMenu
                         include ../includes/downMenu
                 main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
-                    h2(class="pt-3")="User "+currentUser.email+": invoices"
+                    if title
+                        h2(class="pt-3")=title
+                    else
+                        h2(class="pt-3")="User "+currentUser.email+": invoices"
                     hr
                     include ../includes/messages
                     .row

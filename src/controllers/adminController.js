@@ -8,11 +8,112 @@ const Invoice = require('../models/invoice');
 const Order = require('../models/order');
 const Item = require('../models/item');
 const logger = require("../middlewares/logger");
+const invoiceUtils = require("../utils/invoices");
 const i18n = require("i18n");
 const Error = require('../middlewares/error');
 const M = require('../utils/mongooseSchemas');
 const Broadcast = require('../models/broadcast');
 const {distinct} = require('../utils/array');
+
+exports.getDeleteUserAndAllOfObjects = async (req,res) => {
+    await User.deleteOne({_id:req.params.id});
+    await Order.deleteMany({fromUser:req.params.id});
+    await Invoice.deleteMany({fromUser:req.params.id});
+    await Client.deleteMany({fromUser:req.params.id});
+    req.flash('success','Successfully delete user and oll of its objects');
+    res.redirect('back');
+};
+
+exports.invoiceDowngradeAdminGet = (req, res) => {
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is downgrading its invoice with id "+req.params.idi);
+    Invoice.findOne({ _id: req.params.idi}, function (err, invoice) {
+        if(invoice.isSend){
+            req.flash('warning',i18n.__('You cannot downgrade this invoice when it is already send'));
+            res.redirect('back');
+            return;
+        }
+        Error.handler(req,res,err,'5C1700');
+            Invoice.updateOne({ _id: req.params.idi}, {
+                offerNr: invoice.invoiceNr,
+                invoiceNr: ""
+            }, async (err) => {
+                Error.handler(req,res,err,'5C1701');
+                    await Client.updateOne({_id:invoice.fromClient},{lastUpdated:Date.now()},(err)=> {
+                        Error.handler(req,res,err,'5C1702');});
+                    res.redirect("back");
+
+            });
+
+    });
+};
+
+exports.invoiceUpgradeAdminGet = (req, res) => {
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is upgrading its offer with id "+req.params.idi);
+    Invoice.findOne({_id: req.params.idi}, async (err, invoice) => {
+        if(invoice.isSend){
+            req.flash('warning',i18n.__('You cannot upgrade this offer when it is already send'));
+            res.redirect('back');
+            return;
+        }
+        Error.handler(req,res,err,'5C1600');
+            let profile = await Profile.findOne({fromUser:invoice.fromUser},(err,profile)=> {
+                Error.handler(req,res,err,'5C1602');
+                return profile;});
+            let nr = invoiceUtils.getFullNr(profile.invoiceNrCurrent);
+            Invoice.updateOne({ _id: req.params.idi}, {
+                invoiceNr: nr ,
+                offerNr: ""
+            }, async (err) => {
+                Error.handler(req,res,err,'5C1603');
+                    await Client.updateOne({_id:invoice.fromClient},{lastUpdated:Date.now()},(err) => {
+                        Error.handler(req,res,err,'5C1604');});
+                    await Profile.updateOne({fromUser:invoice.fromUser},{invoiceNrCurrent:nr+1},(err) => {
+                        Error.handler(req,res,err,'5C1605');});
+                    res.redirect("back");
+
+            });
+
+    });
+};
+
+exports.getAllOrdersOfInvoiceAdmin = async (req,res) =>{
+    let invoice = await Invoice.findOne({_id:req.params.idi});
+    let orders = await Order.find({fromInvoice:req.params.idi});
+    let settings = await new M.settings().findOne(req,res,{fromUser:req.session._id});
+    let user = await new M.user().findOne(req,res,{_id:req.session._id});
+    let profile = await new M.profile().findOne(req.res,{fromUser:req.session._id});
+    let title = "Orders of "+invoiceUtils.getOnlyTypeOfInvoice(invoice)+' '+invoiceUtils.getDefaultNumberOfInvoice(invoice)+((invoice.nickname)?" ("+invoice.nickname+")":"");
+    res.render('admin/orders',
+        {
+            'settings':settings,
+            'role':user.role,
+            "credits":user.credits,
+            'profile':profile,
+            'currentUrl':"invoices",
+            'orders':orders,
+            'title':title
+        }
+    )
+};
+
+exports.getAllInvoicesOfClientAdmin = async (req,res) =>{
+    let client = await Client.findOne({_id:req.params.idc});
+    let invoices = await Invoice.find({fromClient:req.params.idc});
+    let settings = await new M.settings().findOne(req,res,{fromUser:req.session._id});
+    let user = await new M.user().findOne(req,res,{_id:req.session._id});
+    let profile = await new M.profile().findOne(req.res,{fromUser:req.session._id});
+    res.render('admin/invoices',
+        {
+            'settings':settings,
+            'role':user.role,
+            'profile':profile,
+            "credits":user.credits,
+            'currentUrl':"invoices",
+            'invoices':invoices,
+            'title':'invoices of '+client.clientName
+        }
+    )
+};
 
 exports.postCreateBroadcast = async (req,res)=>{
     let message = req.body.message;
@@ -28,6 +129,7 @@ exports.postCreateBroadcast = async (req,res)=>{
 };
 
 exports.adminSearchGet = async (req, res) => {
+    let user = await new M.user().findOne(req,res,{_id: req.session._id});
     let str = req.body.search.toString().toLowerCase();
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' searching for \""+str+"\"");
     let clients = [];
@@ -218,10 +320,9 @@ exports.adminSearchGet = async (req, res) => {
                                     'activities':activities_d,
                                     'profiles': profiles_d,
                                     "profile": profile,
+                                    'credits': user.credits,
                                     "currentSearch": str,
-                                    "role":(await User.findOne({_id: req.session._id}, (err, user) => {
-                                        return user
-                                    })).role
+                                    "role":user.role
                                 });
                             }
                         });
@@ -257,6 +358,7 @@ exports.getBroadcastPage = async (req,res) => {
         {
             'settings':settings,
             'role':user.role,
+            'credits':user.credits,
             'profile':profile,
             'currentUrl':"broadcast",
             'broadcast':broadcast
@@ -389,6 +491,7 @@ exports.getUserOrders = async (req,res) => {
         {
             'settings':settings,
             'role':user.role,
+            'credits':user.credits,
             'profile':profile,
             'currentUrl':"admin",
             'currentUser':currentUser,
@@ -404,6 +507,35 @@ exports.getRemovePermanent = async (req,res) => {
 
 exports.getRemoveActivity = async (req,res) => {
     req.flash('danger', 'We are currently working on this feature, will be available soon.');
+    res.redirect('back');
+};
+
+exports.getSwitchRemoveClient = async (req,res) => {
+    let client = await Client.findOne({_id:req.params.idc});
+    let removedStatusNew = !client.isRemoved;
+    let invoices = await Invoice.find({fromClient:req.params.idc});
+    for(invoice of invoices){
+        await Order.updateMany({fromInvoice:invoice._id},{isRemoved:removedStatusNew});
+    }
+    await Invoice.updateMany({fromClient:req.params.idc},{isRemoved:removedStatusNew});
+    await Client.updateOne({_id:req.params.idc},{isRemoved:removedStatusNew});
+    req.flash('success','succesfully made '+((removedStatusNew)?'remove':'undo'));
+    res.redirect('back');
+};
+
+exports.getSwitchRemoveInvoice = async (req,res)=> {
+    let invoice = await Invoice.findOne({_id:req.params.idi});
+    let removedStatusNew = !invoice.isRemoved;
+    await Order.updateMany({fromInvoice:req.params.idi},{isRemoved:removedStatusNew});
+    await Invoice.updateOne({_id:req.params.idi},{isRemoved:removedStatusNew});
+    req.flash('success','succesfully made '+((removedStatusNew)?'remove':'undo'));
+    res.redirect('back');
+};
+
+exports.getSwitchRemoveOrder = async (req,res) => {
+    let order = await Order.findOne({_id:req.params.ido});
+    await Order.updateOne({_id:req.params.ido},{isRemoved:!order.isRemoved});
+    req.flash('success','succesfully made '+((order.isRemoved)?'remove':'undo'));
     res.redirect('back');
 };
 
@@ -494,6 +626,7 @@ exports.getUserActivities = async (req,res) => {
         {
             'settings':settings,
             'role':user.role,
+            'credits':user.credits,
             'profile':profile,
             'currentUrl':"admin",
             'currentUser':currentUser,
@@ -517,6 +650,7 @@ exports.getUserInvoices = async (req,res) => {
         {
             'settings':settings,
             'role':user.role,
+            'credits':user.credits,
             'profile':profile,
             'currentUrl':"admin",
             'currentUser':currentUser,
@@ -540,6 +674,7 @@ exports.getUserClients = async (req,res) => {
         {
             'settings':settings,
             'role':user.role,
+            'credits':user.credits,
             'profile':profile,
             'currentUrl':"admin",
             'currentUser':currentUser,
@@ -563,6 +698,7 @@ exports.getUser = async (req,res) => {
         {
             'settings':settings,
             'role':user.role,
+            'credits':user.credits,
             'profile':profile,
             'currentUrl':"admin",
             'currentUser':currentUser,
@@ -580,6 +716,7 @@ exports.getAllUser = async (req,res) => {
     {
         'settings':settings,
         'role':user.role,
+        'credits':user.credits,
         'profile':profile,
         'currentUrl':"admin",
         'users':allUsers
@@ -595,6 +732,7 @@ exports.getAdminPanel = async (req,res) => {
     res.render('admin/panel',{
         'settings':settings,
         'role':user.role,
+        'credits':user.credits,
         'profile':profile,
         'currentUrl':"admin",
         'broadcast':broadcast

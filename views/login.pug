@@ -289,13 +289,17 @@ style.
     #formContent {
       width: 300.867px !important;
     }
+    #loginMessageBox{
+      z-index 999 !important;
+    }
   }
 
 
 
 
 .wrapper.fadeInDown.container-fluid
-  include includes/messages
+  div#loginMessageBox(style='z-index: 999 !important;')
+    include includes/messages
   #formContent
     h3.title Invoice-administration
     .fadeIn

@@ -21,7 +21,8 @@ const Error = require('../middlewares/error');
                 "role": role
             });
  */
-exports.settingsAllGet = (req, res) => {
+exports.settingsAllGet = async (req, res) => {
+    let user = await User.findOne({_id: req.session._id});
     Profile.findOne({fromUser: req.session._id}, function (err, profile) {
         Error.handler(req,res,err,'ES0000');
         Settings.findOne({fromUser: req.session._id}, async (err, settings) => {
@@ -31,10 +32,8 @@ exports.settingsAllGet = (req, res) => {
                 "settings": settings,
                 "description": "Settings",
                 "profile": profile,
-                "role": (await User.findOne({_id: req.session._id}, (err, user) => {
-                    Error.handler(req,res,err,'ES0002');
-                    return user;
-                })).role
+                "role": user.role,
+                'credits':user.credits
             });
         });
     });

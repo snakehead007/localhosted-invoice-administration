@@ -29,9 +29,11 @@ const M = require('../utils/mongooseSchemas');
    }
  */
 exports.getActivity = async (req,res) => {
+    let user = await new M.user().findOne(req,res,{_id: req.session._id});
     res.render('activities',{
         "settings":await new M.settings().findOne(req,res,{fromUser:req.session._id}),
-        "role":(await new M.user().findOne(req,res,{_id: req.session._id})).role,
+        "role":user.role,
+        'credits':user.credits,
         "profile":await new M.profile().findOne(req,res,{fromUser:req.session._id}),
         "currentUrl":"activities",
         "activities":await new M.activity().find(req,res,{fromUser:req.session._id}, null,{sort: {time: -1}})
@@ -40,9 +42,11 @@ exports.getActivity = async (req,res) => {
 
 
 exports.getDeletesActivity = async (req,res) => {
+    let user = await new M.user().findOne(req,res,{_id: req.session._id});
     res.render('activities',{
         "settings":await new M.settings().findOne(req,res,{fromUser:req.session._id}),
-        "role":(await new M.user().findOne(req,res,{_id: req.session._id})).role,
+        "role":user.role,
+        "credits":user.credits,
         "profile":await new M.profile().findOne(req,res,{fromUser:req.session._id}),
         "currentUrl":"activities",
         "activities":await new M.activity().find(req,res,{fromUser:req.session._id,type:"delete"}, null,{sort: {time: -1}})
