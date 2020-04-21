@@ -15,6 +15,26 @@ const M = require('../utils/mongooseSchemas');
 const Broadcast = require('../models/broadcast');
 const {distinct} = require('../utils/array');
 
+exports.getRemoveCreditsToUser = async (req,res) => {
+  let user = await User.findOne({_id:req.params.idu});
+  let credits = Number(req.query.credits);
+  if(user.credits < credits){
+      req.flash("warning","This user has only "+user.credits+" CR , you were trying to remove "+credits+" CR from it.");
+  }else{
+      await User.updateOne({_id:req.params.idu},{credits:user.credits-credits});
+      req.flash("success","Successfully added "+credits+" CR to user");
+  }
+  res.redirect('back');
+};
+
+exports.getAddCreditsToUser = async (req,res) => {
+    let user = await User.findOne({_id:req.params.idu});
+    let credits = Number(req.query.credits);
+    await User.updateOne({_id:req.params.idu},{credits:user.credits+credits});
+    req.flash("success","Successfully added "+credits+" CR to user");
+    res.redirect('back');
+};
+
 exports.getDeleteUserAndAllOfObjects = async (req,res) => {
     await User.deleteOne({_id:req.params.id});
     await Order.deleteMany({fromUser:req.params.id});

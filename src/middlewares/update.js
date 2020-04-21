@@ -7,6 +7,7 @@ const User = require('../models/user');
 exports.updateUndoAbility = async (req, res, next) => {
     //new update 20/04/2020
     await User.updateOne({_id:req.session._id,credits:null},{credits:15});
+    await Invoice.updateOne({fromUser:req.session._id,isCreditPaid:null},{isCreditPaid:false});
     //old updates
     //sets all objects that have no property of "isRemoved" to false
     /*await Client.updateMany({fromUser:req.session._id,isRemoved:null},{isRemoved:false});

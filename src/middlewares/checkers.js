@@ -5,6 +5,7 @@ const logger = require("./logger");
 const {getIp} = require("../utils/utils");
 const User = require('../models/user');
 const Error = require('../middlewares/error');
+const Invoice = require('../models/invoice');
 /**
  * @apiVersion 3.0.0
  * @apiDefine stillSignedInCheck session checker for sign in
@@ -57,4 +58,26 @@ exports.checkIfAdminOrSupportRole = async (req,res,next) => {
         req.session = {};
         res.redirect('/');
     }
+};
+
+exports.checkIfCreditPaid = async (req,res,next) => {
+    let invoice = await Invoice.findOne({_id:req.params.idi,fromUser:req.session._id});
+    if(!invoice){
+        req.flash('danger','No invoice found, please try again or report a bug');
+        res.redirect('back');
+        return;
+    }
+    if(!invoice.isCreditPaid){
+        let user = await User.findOne({_id:req.session._id});
+        if(user.credits < 1){
+            req.flash('warning',i18n.__("You do not have any credits left to pay for this invoice. Please purchase more."));
+            res.redirect('back');
+            return;
+        }else if(user.credits > 1){
+            await Invoice.updateOne({_id:req.params.idi,fromUser:req.session._id},{isCreditPaid:true});
+            await User.updateOne({_id:req.session._id},{credits:user.credits-1});
+            req.flash('success',i18n.__('Successfully paid 1 CR for this invoice'));
+        }
+    }
+    next();
 };

@@ -65,7 +65,11 @@ const Invoice = new mongoose.Schema({
         type:Boolean,
         default:false
     },
-    nickname:String
+    nickname:String,
+    isCreditPaid:{
+        type:Boolean,
+        default:false
+    }
 });
 
 const invoice = mongoose.model('Invoice', Invoice);

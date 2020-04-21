@@ -9,6 +9,7 @@ table(class="table table-striped table-sm ",id="tabelusers")
             th(scope="col") #{__('_id')}
             th(scope="col") #{__('email')}
             th(scope="col") #{__('role')}
+            th(scope="col") credits
             th(scope="col") #{__('last login')}
     tbody
         each user in users
@@ -49,7 +50,24 @@ table(class="table table-striped table-sm ",id="tabelusers")
                                 a(class="dropdown-item", href='/admin/user/' + user._id + '/changeRole/user' ) user
                                 a(class="dropdown-item", href='/admin/user/' + user._id + '/changeRole/support' ) support
                                 a(class="dropdown-item", href='/admin/user/' + user._id + '/changeRole/admin' ) admin
-                            a(class="dropdown-item", href='/admin/user/' + user._id + '/credits' ) CR
+                td
+                    div.btn-group.dropleft
+                        a(class="dropdown-toggle", href='#' id="cr" + user._id, data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+                            span=user.credits+' CR'
+                        div(class="dropdown-menu", aria-labelledby="cr" + user._id )
+                            div(class="dropdown-item") Add
+                                form(action="/admin/user/"+user._id+"/credits/add")
+                                    .form-group
+                                        label(for="addCr"+user._id) Amount of credits to remove
+                                        input.form-control(type="number", name="credits", id="addCr"+user._id, placeholder="10")
+                                        button(type="sumbit", style="display:none")
+                            div(class="dropdown-item") Remove
+                                form(action="/admin/user/" + user._id + "/credits/remove")
+                                    .form-group
+                                        label(for="remCr" + user._id) Amount of credits to remove
+                                        input.form-control(type="number", name="credits", id="remCr" + user._id, placeholder="10")
+                                        button(type="sumbit", style="display:none")
+
                 td(id="date"+user._id)=user.lastLogin
             script.
                 //date is done via DOM, the locale cannot be set right when using pug
