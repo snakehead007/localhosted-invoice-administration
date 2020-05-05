@@ -22,6 +22,10 @@ const Profile = new mongoose.Schema({
         type: Number,
         default: 1,
     },
+    countryCode:{
+        default:"BE",
+        type:String
+    },
     tel: String,
     email: String,
     bookmarks: [[String, String]],

@@ -72,14 +72,9 @@ exports.createUserGet = async function getCreateNewUser(req, res) {
         if (process.env.LOGGING > 1) {
         }
         req.session.email = newUser.email;
-        req.session.role = "visitor";
         res.redirect("/dashboard");
     } else {
         res.redirect(google.urlGoogle());
     }
 };
 
-exports.logoutGet = function getLogout(req, res) {
-    req.logout();
-    res.redirect("/login");
-};

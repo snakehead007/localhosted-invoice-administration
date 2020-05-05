@@ -1,6 +1,7 @@
 const {sendMessage} = require('../../messages/messages');
 const logger = require("./logger");
 const i18n = require('i18n');
+const toobusy = require('toobusy-js');
 exports.findOneHasError = (req, res, err, object) => {
     if (err || !object || object === "null" || object === "undefined" || JSON.stringify(object) === "null") {
         req.flash('danger', "Error: something happened, please try again");
@@ -19,6 +20,19 @@ exports.updateOneHasError = (req, res, err) => {
         return true;
     } else {
         return false
+    }
+};
+
+exports.checkOnLag= async (req,res,next) =>{
+    toobusy.maxLag(50); //400ms => 4seconds max lag
+    toobusy.onLag(function(currentLag) {
+        //logger.warning.log("Event loop lag detected! Latency: " + currentLag + "ms");
+    });
+    if (toobusy()) {
+        //req.flash('warning','Our server is too busy right now, please try again later')
+        res.redirect('back');
+    } else {
+        next();
     }
 };
 

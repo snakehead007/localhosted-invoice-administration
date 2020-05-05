@@ -11,6 +11,7 @@ const toobusy = require('toobusy-js');
 const hpp = require('hpp');
 const logger = require("../middlewares/logger");
 const xssFilter = require('x-xss-protection');
+const paypal = require('paypal-rest-sdk');
 module.exports.default = function (app) {
     app.locals.title = "invoice-administration";
     app.locals.email = "snakehead007@pm.me";
@@ -55,15 +56,17 @@ module.exports.default = function (app) {
         next();
     });
     app.listen(process.env.PORT);
-    app.use(function(req, res, next) {
-        if (toobusy()) {
-            res.redirect('back');
-        } else {
-            next();
-        }
-    });
-    toobusy.maxLag(400); //400ms => 4seconds max lag
-    toobusy.onLag(function(currentLag) {
-        logger.warning.log("Event loop lag detected! Latency: " + currentLag + "ms");
-    });
+    if(process.env.DEVELOP==='true'){
+        paypal.configure({
+            'mode': 'sandbox', //sandbox or live
+            'client_id': process.env.PAYPAL_CLIENT_ID_SANDBOX, // please provide your client id here
+            'client_secret': process.env.PAYPAL_CLIENT_SECRET_SANBOX // provide your client secret here
+        });
+    }else{
+        paypal.configure({
+            'mode': 'live', //sandbox or live
+            'client_id': process.env.PAYPAL_CLIENT_ID, // please provide your client id here
+            'client_secret': process.env.PAYPAL_CLIENT_SECRET // provide your client secret here
+        });
+    }
 };

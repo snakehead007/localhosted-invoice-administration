@@ -1,0 +1,15 @@
+#welcomeModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+    .modal-dialog(role='document')
+        .modal-content
+            .modal-header
+                h5#bugReporterLabel.modal-title=__("Welcome to invoice-administation")
+                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+            form(action="/welcome", method="post")
+                .modal-body
+                    p.lead=__("Welcome, first things we need is your preferenced language and VAT.")
+                    .form-group
+                        label.col-form-label(for='vat')=__('vat')
+                        input#vat.form-control(type="text" name="message", placeholder="")=__("")
+                .modal-footer
+                    button.btn.btn-primary(role="button" type='submit')=__("Create your profile")

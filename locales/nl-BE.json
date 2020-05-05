@@ -427,5 +427,9 @@
 	"Activities": "Activities",
 	"Users": "Users",
 	"You do not have any credits left to pay for this invoice. Please purchase more.": "You do not have any credits left to pay for this invoice. Please purchase more.",
-	"Successfully paid 1 CR for this invoice": "Successfully paid 1 CR for this invoice"
+	"Successfully paid 1 CR for this invoice": "Successfully paid 1 CR for this invoice",
+	"My wallet": "My wallet",
+	"You currently have": "You currently have",
+	"The payment was canceled. If you think this is a mistake, please create a ticket at support": "The payment was canceled. If you think this is a mistake, please create a ticket at support",
+	"Something happend with the payment, error code: AD19F": "Something happend with the payment, error code: AD19F"
 }

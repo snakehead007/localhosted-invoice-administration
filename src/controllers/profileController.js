@@ -29,7 +29,6 @@ const sizeOf = require('image-size');
     });
  */
 exports.viewProfileGet = async (req, res) => {
-    let title = i18n.__((role === "visitor") ? "Create a new profile" : "Edit");
     Settings.findOne({fromUser: req.session._id}, function (err, settings) {
         Error.handler(req,res,err,'BP0001');
         if (!err) {
@@ -44,6 +43,7 @@ exports.viewProfileGet = async (req, res) => {
                     //no logo to find
                 }
                 let user = await User.findOne({_id: req.session._id});
+                let title = i18n.__((user.role === "visitor") ? "Create a new profile" : "Edit");
                 if (!err) {
                     res.render("edit/edit-profile", {
                         "currentUrl": "edit-profile",

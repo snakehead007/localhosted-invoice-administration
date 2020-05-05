@@ -449,7 +449,7 @@ exports.offerAgreedGet = (req, res) => {
         logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is setting its offerAgreed to "+!(invoice.isAgreed)+" for invoice with id "+req.params.idi);
         //can only set agreed to true
             Invoice.updateOne({ _id: req.params.idi}, {
-                isAgreed: true,
+                isAgreed: !invoice.isAgreed,
                 lastUpdated: Date.now()
             }, async (err) => {
                 Error.handler(req,res,err,'5C1401');
@@ -470,13 +470,13 @@ exports.getPaid = async (req,res)=>{
                     let invoiceUpdate;
             if(!invoice.datePaid){
                 invoiceUpdate ={
-                    isPaid: true,
+                    isPaid: !invoice.isPaid,
                     datePaid: Date.now(),
                     lastUpdated: Date.now()
                 };
             }else{
                 invoiceUpdate ={
-                    isPaid: true,
+                    isPaid: !invoice.isPaid,
                     lastUpdated: Date.now()
                 };
             Invoice.updateOne({_id: req.params.idi}, invoiceUpdate, async (err) =>  {

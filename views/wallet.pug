@@ -1,0 +1,33 @@
+//- V1.8
+html
+    head
+        include includes/htmlHead
+        script.
+            function info(){$("#info").toggle();};
+            $(document).ready(function () {
+                feather.replace();
+            });
+body
+    header
+        include includes/topBar
+        div(class="container-fluid")
+            div(class ="row")
+                nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
+                    div(class="sidebar-sticky")
+                        include includes/mainMenu
+                        include includes/downMenu
+                main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+                    h2(class="pt-3")=__("My wallet")
+                    hr
+                    p.lead=__('You currently have')+' '+credits+' CR'
+                    p Choose how much credits you want to add in your account (1 credit = 0.50 EUR)
+                    form(action="/wallet/process")
+                        div(class="form-row")
+                            div(class="form-group col-md-5")
+                                div(class="input-group mb-3 col-6")
+                                    label#labelCredits(for="credits") Buy 0 amount of credits
+                                    input.form-control#credits(type="number", name='amount')
+                            div(class="form-group col-md-5")
+                                input.btn.btn-primary(type="submit" value="Add credits")
+                    include includes/messages
+    include includes/modals/bugReporter

@@ -32,25 +32,26 @@ const autoFix = require('../middlewares/automaticFixers');
 const adminRouter = require('./adminRouter');
 const supportRouter = require('./supportRouter');
 const walletRouter = require('./walletRouter');
+const {checkOnLag} = require('../middlewares/error');
 //Controllers
 try {
-    router.use("/dashboard", stillSignedInCheck, update.updateUndoAbility,autoFix.automaticFixer, dashboardRouter);
-    router.use("/logout", stillSignedInCheck, logoutRouter);
-    router.use("/view", stillSignedInCheck, viewRouter);
-    router.use("/order", stillSignedInCheck, orderRouter);
-    router.use("/invoice", stillSignedInCheck, invoiceRouter);
-    router.use("/client", stillSignedInCheck, clientRouter);
-    router.use("/settings", stillSignedInCheck, settingsRouter);
-    router.use("/edit", stillSignedInCheck, editRouter);
-    router.use("/upload", stillSignedInCheck, uploadRouter);
-    router.use("/download", stillSignedInCheck, downloadRouter);
-    router.use("/delete", stillSignedInCheck, deleteRouter);
-    router.use("/search", stillSignedInCheck, searchRouter);
-    router.use("/stream", stillSignedInCheck, streamRouter);
-    router.use('/activity', stillSignedInCheck, activityRouter);
-    router.use('/mail', stillSignedInCheck, mailRouter);
-    router.use('/support', stillSignedInCheck, supportRouter);
-    router.use('/wallet',stillSignedInCheck,walletRouter);
+    router.use("/dashboard", checkOnLag,stillSignedInCheck, update.updateUndoAbility,autoFix.automaticFixer, dashboardRouter);
+    router.use("/logout", checkOnLag, stillSignedInCheck, logoutRouter);
+    router.use("/view", checkOnLag, stillSignedInCheck, viewRouter);
+    router.use("/order", checkOnLag, stillSignedInCheck, orderRouter);
+    router.use("/invoice", checkOnLag, stillSignedInCheck, invoiceRouter);
+    router.use("/client", checkOnLag, stillSignedInCheck, clientRouter);
+    router.use("/settings", checkOnLag, stillSignedInCheck, settingsRouter);
+    router.use("/edit", checkOnLag, stillSignedInCheck, editRouter);
+    router.use("/upload", checkOnLag, stillSignedInCheck, uploadRouter);
+    router.use("/download", checkOnLag, stillSignedInCheck, downloadRouter);
+    router.use("/delete", checkOnLag, stillSignedInCheck, deleteRouter);
+    router.use("/search", checkOnLag, stillSignedInCheck, searchRouter);
+    router.use("/stream", checkOnLag, stillSignedInCheck, streamRouter);
+    router.use('/activity', checkOnLag, stillSignedInCheck, activityRouter);
+    router.use('/mail', checkOnLag, stillSignedInCheck, mailRouter);
+    router.use('/support', checkOnLag, stillSignedInCheck, supportRouter);
+    router.use('/wallet', checkOnLag,stillSignedInCheck,walletRouter);
 }catch(err){
     console.trace(err);
     router.use((req,res)=>{
@@ -59,10 +60,10 @@ try {
     })
 }
 try {
-    router.use("/", loginRouter); //index page
-    router.use("/redirect", redirectRouter); //only used when logged in and redirected by google
-    router.use("/whitelist", whitelistRouter);
-    router.use('/admin',stillSignedInCheck,adminRouter)
+    router.use("/", checkOnLag, loginRouter); //index page
+    router.use("/redirect", checkOnLag, redirectRouter); //only used when logged in and redirected by google
+    router.use("/whitelist", checkOnLag, whitelistRouter);
+    router.use('/admin', checkOnLag,stillSignedInCheck,adminRouter)
 }catch(err){
     console.trace(err);
     router.use((req,res)=>{
