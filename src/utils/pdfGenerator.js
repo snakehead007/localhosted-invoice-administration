@@ -20,6 +20,7 @@ const {getReformatedImageSize} = require("./utils");
 const {callGetBase64, createJSON, replaceAll} = require("../utils/pdfCreation");
 require("jspdf-autotable");
 exports.createPDF = async (req, res, style = "invoice", profile, settings, client, invoice, orders,download=false,onlyPrompt=false) => {
+    /// SETTING UP COLOURS ///
     let colorTheme; //normal tone
     let colorThemeLess; //darker tone for title
     let blackFont; //true = use black font, false = use white font
@@ -59,6 +60,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
             colorThemeLess = [180,180,180];
             blackFont = false;
     }
+    /// SETTING UP IMAGE and DATATEXT ///
     let imgData;
     try {
         imgData = await callGetBase64(req.session._id);
@@ -72,6 +74,8 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         dataText = replaceAll(settings.offerText, profile, client, invoice, settings.locale);
     if (style === "credit")
         dataText = replaceAll(settings.creditText, profile, client, invoice, settings.locale);
+
+    /// SETTING UP JSPDF ///
     let c = [0, 0];
     let dateObject = new Date(invoice.date);
     let date = dateObject.getDate() + "/" + (dateObject.getMonth()+1) + "/" + dateObject.getFullYear();
@@ -104,6 +108,42 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
             creator: profile.firm + " " + i18n.__("invoice administration")
         });
     }
+
+
+    /// SETTING UP ORDERS ///
+    let pages = [];
+    let maxItemsForInvoice = 12;
+    let maxItemsForOffer = 6;
+    let maxItemsPerPage = (style==="offer")?maxItemsForOffer-1:maxItemsForInvoice-1;
+    let totalEx = 0;
+    let _vat;
+    let totalInc;
+    let pdfOrders = [];
+    try {
+        let i=0;
+        orders.forEach((o) => {
+            let currentOrder = [o.description, o.amount, o.price.toFixed(2)+ " €", o.total.toFixed(2) + " €"];
+            pdfOrders.push(currentOrder);
+            if(orders[Object.keys(orders)[Object.keys(orders).length - 1]]._id===o._id || i===maxItemsPerPage){
+                pages.push(pdfOrders);
+                pdfOrders = [];
+                i=0;
+            }else{
+                i++;
+            }
+        });
+    } catch (e) {
+        console.trace(e);
+
+        req.flash("danger", i18n.__("Something went wrong, please try again"));
+        req.redirect("back");
+    }
+    orders.forEach((o)=>{
+        totalEx += o.total;
+    });
+
+
+    /// DRAWING HEADER ///
     try {
         if(settings.pdf.noLogo){
             throw Error("I throw it on the ground!! I dont need your image!");
@@ -207,36 +247,10 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     if (client.vat) {
         doc.text(c[0], c[1], i18n.__("VAT nr") + ": " + client.vat);
     }
-    let pdfOrders = [];
-    let totalEx = 0;
-    let _vat;
-    let totalInc;
-    try {
-        orders.forEach((o) => {
-            pdfOrders.push([o.description, o.amount, o.price, o.total]);
-        });
-    } catch (e) {
-        console.trace(e);
-
-        req.flash("danger", i18n.__("Something went wrong, please try again"));
-        req.redirect("back");
-    }
-    for (let i = 0; i <= pdfOrders.length - 1; i++) {
-        totalEx += pdfOrders[i][3];
-    }
-    let ordersPrint = [];
-    try {
-        orders.forEach((o) => {
-            ordersPrint.push([o.description, o.amount, o.price.toFixed(2) + " €", o.total.toFixed(2) + " €"]);
-
-        });
-    } catch (err) {
-        console.trace(err);
-        req.flash("danger", i18n.__("Something went wrong, please try again"));
-        req.redirect("back");
-    }
+    console.log(pages);
+    /// DRAWING TABLE WITH ORDERS ///
     doc.autoTable({
-        theme:"grid",
+        theme: "grid",
         columnStyles: {
             0: {fillColor: [255, 255, 255]},
             1: {fillColor: [255, 255, 255], halign: "right"},
@@ -246,12 +260,12 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         styles: {fillColor: colorTheme},
         startY: 110,
         head: [[i18n.__("Description"), i18n.__("Amount"), i18n.__("Price"), i18n.__("Total")]],
-        body: ordersPrint
+        body: pages[0]
     });
+
+    /// DRAWING TOTAL ///
     let vatOfClient = (invoice.isVatOn)?0.0:client.vatPercentage;
-    console.log(vatOfClient);
     _vat = Math.round((totalEx - invoice.advance) *vatOfClient) / 100;
-    console.log(_vat);
     totalExSub = totalEx - invoice.advance;
     totalInc = totalExSub + _vat;
     let textColor = (blackFont)?[0,0,0,0]:[255,255,255];
@@ -290,15 +304,18 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
             ]
         })
     }
-        c[0] = 150 + (pdfOrders.length * 7) + 10;
-        c[1] = 15;
-        if(invoice.description) {
-            let description = invoice.description.split('\r\n');
-            description.forEach((text) => {
-                doc.text(c[1], c[0], text);
-                c[0] += 5;
-            });
-        }
+
+    /// DRAWING DESCRIPTION TEXT ///
+
+    c[0] = 150 + (pages[0].length * 7) + 10;
+    c[1] = 15;
+    if(invoice.description) {
+        let description = invoice.description.split('\r\n');
+        description.forEach((text) => {
+            doc.text(c[1], c[0], text);
+            c[0] += 5;
+        });
+    }
     if(invoice.offerNr){
         c[0] += 10;
         doc.setFontType("courier");
@@ -314,8 +331,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         doc.text(c[1], c[0], i18n.__("Signature for agreement") + ":");
     }
 
-
-    /**Footer & Disclaimer**/
+    /// DRAWING FOOTER AND DISCLAIMER ///
     doc.setFontType("courier");
     doc.setFontSize(10);
     let textC = 270;
@@ -324,6 +340,8 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         doc.text(px, textC, text);
         textC += 5
     });
+
+    /// SETTING UP STREAM/DOWNLOAD ///
     let filename;
     if (style === "invoice")
         filename = invoice.invoiceNr + ".pdf";
