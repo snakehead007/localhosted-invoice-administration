@@ -15,19 +15,16 @@ ul(class="nav flex-column option-menu mb-2")
           a(class="nav-link",href='/order/new/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("New line"))
             i.nav-fas(class="fas fa-plus-circle")
             span #{__('New line')}
+
+    if client
       li(class="nav-item")
-        if invoice.offerNr
-          a(class="nav-link",href='/download/offer/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("Download pdf of this document"))
-            i.nav-fas(class="fas fa-file-download")
-            span #{__('Download pdf of this document')}
-        else if invoice.creditNr
-          a(class="nav-link",href='/download/credit/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("Download pdf of this document"))
-            i.nav-fas(class="fas fa-file-download")
-            span #{__('Download pdf of this document')}
-        else if invoice.invoiceNr
-          a(class="nav-link",href='/download/invoice/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("Download pdf of this document"))
-            i.nav-fas(class="fas fa-file-download")
-            span #{__('Download pdf of this document')}
+        a(class="nav-link",href='/invoice/all/' + client._id data-toggle="tooltip" data-placement="right" title=__("View documents of this client"))
+          i.nav-fas(class="fas fa-book-open")
+          span #{__('View documents of this client')}
+      li(class="nav-item")
+        a(class="nav-link",href='/edit/client/' + client._id data-toggle="tooltip" data-placement="right" title=__("Edit this client"))
+          i.nav-fas(class="fas fa-user-edit")
+          span #{__('Edit this client')}
     li(class="nav-item")
       if invoice.offerNr
         a(class="nav-link",href='/stream/offer/' + invoice._id target="_blank" data-toggle="tooltip" data-placement="right" title=__("View pdf of this document"))
@@ -41,13 +38,35 @@ ul(class="nav flex-column option-menu mb-2")
         a(class="nav-link",href='/stream/invoice/' + invoice._id target="_blank" data-toggle="tooltip" data-placement="right" title=__("View pdf of this document"))
           i.nav-fas(class="fas fa-eye")
           span #{__('View pdf of this document')}
-    if client
+    li(class="nav-item")
+      if invoice.offerNr
+        a(class="nav-link",href='/download/offer/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("Download pdf of this document"))
+          i.nav-fas(class="fas fa-file-download")
+          span #{__('Download pdf of this document')}
+      else if invoice.creditNr
+        a(class="nav-link",href='/download/credit/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("Download pdf of this document"))
+          i.nav-fas(class="fas fa-file-download")
+          span #{__('Download pdf of this document')}
+      else if invoice.invoiceNr
+        a(class="nav-link",href='/download/invoice/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("Download pdf of this document"))
+          i.nav-fas(class="fas fa-file-download")
+          span #{__('Download pdf of this document')}
+    li(class="nav-item")
+      a(class="nav-link",href='/invoice/clone/redirect/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("Clone this document"))
+        i.nav-fas(class="fas fa-copy")
+        span #{__('Clone this document')}
+    li(class="nav-item")
+      a(class="nav-link",href="#deleteConfirmationInvoice" + invoice._id data-toggle="modal" data-target='#deleteConfirmationInvoice'+ invoice._id data-placement="right" title=__("Delete this document"))
+        i.nav-fas(class="fas fa-trash-alt")
+        span #{__('Delete this document')}
+    if invoice.offerNr
       li(class="nav-item")
-        a(class="nav-link",href='/invoice/all/' + client._id data-toggle="tooltip" data-placement="right" title=__("View documents of this client"))
-          i.nav-fas(class="fas fa-book-open")
-          span #{__('View documents of this client')}
+        a(class="nav-link",href='/invoice/change/upgrade/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("Upgrade this document"))
+          i.nav-fas(class="fas fa-angle-double-up")
+          span #{__('Upgrade this document')}
+    if invoice.invoiceNr
       li(class="nav-item")
-        a(class="nav-link",href='/edit/client/' + client._id data-toggle="tooltip" data-placement="right" title=__("Edit this client"))
-          i.nav-fas(class="fas fa-user-edit")
-          span #{__('Edit this client')}
+        a(class="nav-link",href='/invoice/change/downgrade/' + invoice._id data-toggle="tooltip" data-placement="right" title=__("Downgrade this document"))
+          i.nav-fas(class="fas fa-angle-double-down")
+          span #{__('Downgrade this document')}
 

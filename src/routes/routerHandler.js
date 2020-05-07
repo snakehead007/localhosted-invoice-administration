@@ -15,9 +15,8 @@ const update = require("../middlewares/update");
 const viewRouter = require("./viewRouter");
 const invoiceRouter = require("./invoiceRouter");
 const clientRouter = require("./clientRouter");
-//const projectRouter = require("./projectRouter");
+const unimplemented = require('../controllers/unimplementedControler');
 const settingsRouter = require("./settingsRouter");
-//const calcRouter = require("./calcRouter");
 const editRouter = require("./editRouter");
 const uploadRouter = require("./uploadRouter");
 const orderRouter = require("./orderRouter");
@@ -50,8 +49,8 @@ try {
     router.use("/stream", checkOnLag, stillSignedInCheck, streamRouter);
     router.use('/activity', checkOnLag, stillSignedInCheck, activityRouter);
     router.use('/mail', checkOnLag, stillSignedInCheck, mailRouter);
-    router.use('/support', checkOnLag, stillSignedInCheck, supportRouter);
-    router.use('/wallet', checkOnLag,stillSignedInCheck,walletRouter);
+    router.use('/support', checkOnLag, stillSignedInCheck, unimplemented.notAvailable);
+    router.use('/wallet', checkOnLag,stillSignedInCheck,unimplemented.notAvailable);
 }catch(err){
     console.trace(err);
     router.use((req,res)=>{

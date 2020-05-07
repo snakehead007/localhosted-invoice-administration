@@ -431,5 +431,11 @@
 	"My wallet": "My wallet",
 	"You currently have": "You currently have",
 	"The payment was canceled. If you think this is a mistake, please create a ticket at support": "The payment was canceled. If you think this is a mistake, please create a ticket at support",
-	"Something happend with the payment, error code: AD19F": "Something happend with the payment, error code: AD19F"
+	"Something happend with the payment, error code: AD19F": "Something happend with the payment, error code: AD19F",
+	"Page": "Page",
+	"This is feature is not available yet.": "This is feature is not available yet.",
+	"Clone this document": "Clone this document",
+	"This document has no lines, please add some": "This document has no lines, please add some",
+	"Downgrade this document": "Downgrade this document",
+	"Upgrade this document": "Upgrade this document"
 }

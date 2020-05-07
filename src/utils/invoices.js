@@ -88,6 +88,8 @@ exports.getFullNr = (nr) => {
     } else if (nr_str.toString().length === 2) {
         nr_str = "0" + nr.toString();
     }
+    console.log(new Date().getFullYear());
+    console.log(nr_str);
     return Number(new Date().getFullYear() + nr_str);
 };
 

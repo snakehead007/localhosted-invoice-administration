@@ -1042,6 +1042,29 @@ exports.invoiceDowngradeGet = (req, res) => {
 
 exports.invoiceCloneGet = async (req,res) => {
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' is trying to clone invoice with id "+req.params.idi);
+    let invoices = await Invoice.find({fromUser:req.session._id},null,{sort:{invoiceNr:-1}},(err,invoices)=>{
+        Error.handler(req,res,err,'5C0409');
+        return invoices;
+    });
+    try{
+        let lastInvoiceNrFull = invoices[0].invoiceNr;
+        console.log("invoice: "+lastInvoiceNrFull);
+        if(!lastInvoiceNrFull){
+            throw new Error();
+        }
+        if(lastInvoiceNrFull) {
+            let lastInvoiceNr = Number(String(lastInvoiceNrFull).substr(4, lastInvoiceNrFull.length)) + 1;
+            await Profile.updateOne({fromUser: req.session._id}, {invoiceNrCurrent: lastInvoiceNr}, (err) => {
+                Error.handler(req, res, err, '5C0410');
+            });
+        }
+    }catch(err){
+        console.trace(err);
+        logger.info.log("[INFO]: Email:'"+req.session.email+"' first invoice created");
+        await Profile.updateOne({fromUser: req.session._id}, {invoiceNrCurrent: 1}, (err) => {
+            Error.handler(req, res, err, '5C0410');
+        });
+    }
     let invoice = await Invoice.findOne({_id:req.params.idi,fromUser:req.session._id,isRemoved:false},(err,invoice)=>{
         Error.handler(req,res,err,'5C1800');
         return invoice;
@@ -1134,10 +1157,15 @@ exports.invoiceCloneGet = async (req,res) => {
     await Client.updateOne({_id:client._id},{invoices:invoicesOfClient},(err)=>{
         Error.handler(req,res,err,'5C1809');
     });
-
-    req.flash('success',i18n.__('Invoice successfully cloned'));
-    res.redirect('back');
+    req.flash('success', i18n.__('Invoice successfully cloned'));
+    if(req.params.redirect) {
+        res.redirect('/order/all/'+newInvoice._id);
+    }else{
+        res.redirect('back');
+    }
 };
+
+
 
 exports.turnOnIsSend = (req, res) => {
     Invoice.findOne({fromUser: req.session._id, _id: req.params.idi}, function (err, invoice) {

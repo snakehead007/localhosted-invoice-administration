@@ -24,7 +24,7 @@ exports.updateOneHasError = (req, res, err) => {
 };
 
 exports.checkOnLag= async (req,res,next) =>{
-    toobusy.maxLag(50); //400ms => 4seconds max lag
+    toobusy.maxLag(500); //400ms => 4seconds max lag
     toobusy.onLag(function(currentLag) {
         //logger.warning.log("Event loop lag detected! Latency: " + currentLag + "ms");
     });

@@ -64,8 +64,9 @@ exports.deleteInvoiceGet = async (req, res) => {
         }
 
         await activity.deleteInvoice(invoice, req.session._id);
+        req.flash(i18n.__('succesfully removed'));
         res.redirect("/invoice/all");
-    });
+        });
 };
 
 /**
@@ -97,7 +98,6 @@ exports.deleteLogoGet = (req, res) => {
                     });
                     req.flash("success", i18n.__("Successfully deleted your current logo"));
                     res.redirect("/view/profile");
-
                 }
             });
         }

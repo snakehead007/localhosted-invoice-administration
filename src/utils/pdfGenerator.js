@@ -115,6 +115,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     let maxItemsForInvoice = 12;
     let maxItemsForOffer = 6;
     let maxItemsPerPage = (style==="offer")?maxItemsForOffer-1:maxItemsForInvoice-1;
+    let maxItemsPerPageOnMorePages = (style==="offer")?maxItemsForOffer-1:maxItemsForInvoice-1;
     let totalEx = 0;
     let _vat;
     let totalInc;
@@ -124,7 +125,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         orders.forEach((o) => {
             let currentOrder = [o.description, o.amount, o.price.toFixed(2)+ " €", o.total.toFixed(2) + " €"];
             pdfOrders.push(currentOrder);
-            if(orders[Object.keys(orders)[Object.keys(orders).length - 1]]._id===o._id || i===maxItemsPerPage){
+            if(orders[Object.keys(orders)[Object.keys(orders).length - 1]]._id===o._id || i===((pages.length===0)?maxItemsPerPage:maxItemsPerPageOnMorePages)){
                 pages.push(pdfOrders);
                 pdfOrders = [];
                 i=0;
@@ -142,8 +143,187 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         totalEx += o.total;
     });
 
+    if(pages.length===0){ // 1 page
+        drawheader(doc,settings,imgData,colorThemeLess,style,profile,req,res,invoice,client,date);
+        drawOrders(doc,colorTheme,pages,false);
+        drawTotal(invoice,client,totalEx,blackFont,doc,colorTheme);
+    }else{ //more than 1 page
+        skippedFirstPage = false;
+        let currentPage = 0;
+        pages.forEach((innerPages)=>{
+            if(!skippedFirstPage){
+                skippedFirstPage=true;
+            }else{
+                doc.addPage();
+            }
+            currentPage++;
+            doc.setFontSize(8);
+            doc.text(100,290,i18n.__('Page')+' '+currentPage+' / '+pages.length);
+            drawheader(doc,settings,imgData,colorThemeLess,style,profile,req,res,invoice,client,date);
+            drawOrders(doc,colorTheme,innerPages,true);
+            if(currentPage===pages.length){//if running last page
+                drawTotal(invoice,client,totalEx,blackFont,doc,colorTheme);
+            }
+        })
+    }
+    c[0] = 150 + ((pages[0]===undefined)?0:pages[0].length * 7) + 10;
+    c[1] = 15;
+    if(invoice.description) {
+        let description = invoice.description.split('\r\n');
+        description.forEach((text) => {
+            doc.text(c[1], c[0], text);
+            c[0] += 5;
+        });
+    }
+    if(invoice.offerNr){
+        c[0] += 10;
+        doc.setFontType("courier");
+        doc.setFontSize(12);
+        doc.text(c[1], c[0], i18n.__("Name") + ":");
+        c[0] += 15;
+        doc.setFontSize(12);
+        doc.text(c[1], c[0], i18n.__("Date") + ":");
+        c[0] -= 15;
+        c[1] += 105;
+        doc.setFontType("courier");
+        doc.setFontSize(12);
+        doc.text(c[1], c[0], i18n.__("Signature for agreement") + ":");
+    }
 
-    /// DRAWING HEADER ///
+    /// DRAWING FOOTER AND DISCLAIMER ///
+    doc.setFontType("courier");
+    doc.setFontSize(10);
+    let textC = 270;
+    dataText.forEach((text) => {
+        let px = 92.0 - visualLength(text);
+        doc.text(px, textC, text);
+        textC += 5
+    });
+
+    /// SETTING UP STREAM/DOWNLOAD ///
+    let filename;
+    if (style === "invoice")
+        filename = invoice.invoiceNr + ".pdf";
+    if (style === "credit")
+        filename = i18n.__("creditnote") + " " + invoice.creditNr + ".pdf";
+    if (style === "offer")
+        filename = i18n.__("offer") + " " + invoice.offerNr + ".pdf";
+    try{
+        await fs.mkdirSync("./temp/"+req.session._id);
+    }catch(e){
+        console.error(e);
+    }
+    let file = "./temp/" + req.session._id + "/" + filename;
+    console.log(file);
+    await fs.writeFileSync(file, doc.output(), "binary");
+    if(!onlyPrompt) {
+        if (download) {
+            res.download(file);
+        } else {
+            fs.readFile(file, function (err, data) {
+                res.contentType("application/pdf");
+                res.send(data);
+            });
+            /*await fs.readFile(file, function (err, data) {
+                if (data) {
+                    res.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
+                    res.setHeader("Content-Type", "application/pdf");
+                    res.setHeader("Content-Length", data.length);
+                    res.status(200).end(data, "binary");
+                } else {
+                    req.flash("danger", "something went wrong, please try again");
+                    res.redirect("back");
+                }
+            });*/
+        }
+    }
+    delete global.window;
+    delete global.navigator;
+    delete global.btoa;
+    delete global.html2pdf;
+};
+visualLength = (string) => {
+    return string.length * 0.7;
+};
+String.prototype.splice = function(start, delCount, newSubStr) {
+    return this.slice(0, start) + newSubStr + this.slice(start + Math.abs(delCount));
+};
+
+function addreturnsInString(s) {
+    let newStr = "";
+    for(let i = 0; i < 5;i++){
+        console.log(i);
+        let cur = s.substring(i,78*(i+1));
+        console.log(cur);
+        if(cur.indexOf('\r\n')=== -1){
+            cur = cur.splice(78,0,"\r\n");
+        }
+        newStr+=cur;
+
+    }
+    return newStr;
+}
+function drawTotal(invoice,client,totalEx,blackFont,doc,colorTheme){
+    let vatOfClient = (invoice.isVatOn)?0.0:client.vatPercentage;
+    _vat = Math.round((totalEx - invoice.advance) *vatOfClient) / 100;
+    totalExSub = totalEx - invoice.advance;
+    totalInc = totalExSub + _vat;
+    let textColor = (blackFont)?[0,0,0,0]:[255,255,255];
+    if (invoice.advance == 0) {
+        doc.autoTable({
+            theme: "plain",
+            startX: 200,
+            columnStyles: {
+                0: {fillColor: [255, 255, 255]},
+                1: {fillColor: [255, 255, 255]},
+                2: {fillColor: [255, 255, 255], halign: "right"},
+                3: {fillColor: colorTheme, textColor:textColor,halign: "right"}
+            },
+            body: [
+                [[""], ["                               "], [i18n.__("subtotal")], [totalEx.toFixed(2) + " €"]],
+                [[""], ["                               "], [i18n.__("VAT") + " " +vatOfClient + "%"], [_vat.toFixed(2) + " €"]],
+                [[""], ["                               "], [i18n.__("total")], [totalInc.toFixed(2) + " €"]]
+            ]
+        })
+    } else {
+        doc.autoTable({
+            theme: "plain",
+            startX: 200,
+            columnStyles: {
+                0: {fillColor: [255, 255, 255]},
+                1: {fillColor: [255, 255, 255]},
+                2: {fillColor: [255, 255, 255], halign: "right"},
+                3: {fillColor: colorTheme, textColor:textColor, halign: "right"}
+            },
+            body: [
+                [[""], ["                               "], [i18n.__("subtotal")], [totalEx.toFixed(2) + " €"]],
+                [[""], ["                               "], [i18n.__("advance")], ["-" + invoice.advance.toFixed(2) + " €"]],
+                [[""], ["                               "], [i18n.__("subtotal")], [totalExSub.toFixed(2) + " €"]],
+                [[""], ["                               "], [i18n.__("VAT") + " " + vatOfClient + "%"], [_vat.toFixed(2) + " €"]],
+                [[""], ["                               "], [i18n.__("total")], [totalInc.toFixed(2) + " €"]]
+            ]
+        })
+    }
+}
+
+function drawOrders(doc,colorTheme,pages,morepages){
+    doc.autoTable({
+        theme: "grid",
+        columnStyles: {
+            0: {fillColor: [255, 255, 255]},
+            1: {fillColor: [255, 255, 255], halign: "right"},
+            2: {fillColor: [255, 255, 255], halign: "right"},
+            3: {fillColor: [255, 255, 255], halign: "right"}
+        },
+        styles: {fillColor: colorTheme},
+        startY: 110,
+        head: [[i18n.__("Description"), i18n.__("Amount"), i18n.__("Price"), i18n.__("Total")]],
+        body: (morepages)?pages:pages[0]
+    });
+}
+
+function drawheader(doc,settings,imgData,colorThemeLess,style,profile,req,res,invoice,client,date){
+    let c = [0, 0];
     try {
         if(settings.pdf.noLogo){
             throw Error("I throw it on the ground!! I dont need your image!");
@@ -247,160 +427,4 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     if (client.vat) {
         doc.text(c[0], c[1], i18n.__("VAT nr") + ": " + client.vat);
     }
-    console.log(pages);
-    /// DRAWING TABLE WITH ORDERS ///
-    doc.autoTable({
-        theme: "grid",
-        columnStyles: {
-            0: {fillColor: [255, 255, 255]},
-            1: {fillColor: [255, 255, 255], halign: "right"},
-            2: {fillColor: [255, 255, 255], halign: "right"},
-            3: {fillColor: [255, 255, 255], halign: "right"}
-        },
-        styles: {fillColor: colorTheme},
-        startY: 110,
-        head: [[i18n.__("Description"), i18n.__("Amount"), i18n.__("Price"), i18n.__("Total")]],
-        body: pages[0]
-    });
-
-    /// DRAWING TOTAL ///
-    let vatOfClient = (invoice.isVatOn)?0.0:client.vatPercentage;
-    _vat = Math.round((totalEx - invoice.advance) *vatOfClient) / 100;
-    totalExSub = totalEx - invoice.advance;
-    totalInc = totalExSub + _vat;
-    let textColor = (blackFont)?[0,0,0,0]:[255,255,255];
-    if (invoice.advance == 0) {
-        doc.autoTable({
-            theme: "plain",
-            startX: 200,
-            columnStyles: {
-                0: {fillColor: [255, 255, 255]},
-                1: {fillColor: [255, 255, 255]},
-                2: {fillColor: [255, 255, 255], halign: "right"},
-                3: {fillColor: colorTheme, textColor:textColor,halign: "right"}
-            },
-            body: [
-                [[""], ["                               "], [i18n.__("subtotal")], [totalEx.toFixed(2) + " €"]],
-                [[""], ["                               "], [i18n.__("VAT") + " " +vatOfClient + "%"], [_vat.toFixed(2) + " €"]],
-                [[""], ["                               "], [i18n.__("total")], [totalInc.toFixed(2) + " €"]]
-            ]
-        })
-    } else {
-        doc.autoTable({
-            theme: "plain",
-            startX: 200,
-            columnStyles: {
-                0: {fillColor: [255, 255, 255]},
-                1: {fillColor: [255, 255, 255]},
-                2: {fillColor: [255, 255, 255], halign: "right"},
-                3: {fillColor: colorTheme, textColor:textColor, halign: "right"}
-            },
-            body: [
-                [[""], ["                               "], [i18n.__("subtotal")], [totalEx.toFixed(2) + " €"]],
-                [[""], ["                               "], [i18n.__("advance")], ["-" + invoice.advance.toFixed(2) + " €"]],
-                [[""], ["                               "], [i18n.__("subtotal")], [totalExSub.toFixed(2) + " €"]],
-                [[""], ["                               "], [i18n.__("VAT") + " " + vatOfClient + "%"], [_vat.toFixed(2) + " €"]],
-                [[""], ["                               "], [i18n.__("total")], [totalInc.toFixed(2) + " €"]]
-            ]
-        })
-    }
-
-    /// DRAWING DESCRIPTION TEXT ///
-
-    c[0] = 150 + (pages[0].length * 7) + 10;
-    c[1] = 15;
-    if(invoice.description) {
-        let description = invoice.description.split('\r\n');
-        description.forEach((text) => {
-            doc.text(c[1], c[0], text);
-            c[0] += 5;
-        });
-    }
-    if(invoice.offerNr){
-        c[0] += 10;
-        doc.setFontType("courier");
-        doc.setFontSize(12);
-        doc.text(c[1], c[0], i18n.__("Name") + ":");
-        c[0] += 15;
-        doc.setFontSize(12);
-        doc.text(c[1], c[0], i18n.__("Date") + ":");
-        c[0] -= 15;
-        c[1] += 105;
-        doc.setFontType("courier");
-        doc.setFontSize(12);
-        doc.text(c[1], c[0], i18n.__("Signature for agreement") + ":");
-    }
-
-    /// DRAWING FOOTER AND DISCLAIMER ///
-    doc.setFontType("courier");
-    doc.setFontSize(10);
-    let textC = 270;
-    dataText.forEach((text) => {
-        let px = 92.0 - visualLength(text);
-        doc.text(px, textC, text);
-        textC += 5
-    });
-
-    /// SETTING UP STREAM/DOWNLOAD ///
-    let filename;
-    if (style === "invoice")
-        filename = invoice.invoiceNr + ".pdf";
-    if (style === "credit")
-        filename = i18n.__("creditnote") + " " + invoice.creditNr + ".pdf";
-    if (style === "offer")
-        filename = i18n.__("offer") + " " + invoice.offerNr + ".pdf";
-    try{
-        await fs.mkdirSync("./temp/"+req.session._id);
-    }catch(e){
-        console.error(e);
-    }
-    let file = "./temp/" + req.session._id + "/" + filename;
-    console.log(file);
-    await fs.writeFileSync(file, doc.output(), "binary");
-    if(!onlyPrompt) {
-        if (download) {
-            res.download(file);
-        } else {
-            fs.readFile(file, function (err, data) {
-                res.contentType("application/pdf");
-                res.send(data);
-            });
-            /*await fs.readFile(file, function (err, data) {
-                if (data) {
-                    res.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
-                    res.setHeader("Content-Type", "application/pdf");
-                    res.setHeader("Content-Length", data.length);
-                    res.status(200).end(data, "binary");
-                } else {
-                    req.flash("danger", "something went wrong, please try again");
-                    res.redirect("back");
-                }
-            });*/
-        }
-    }
-    delete global.window;
-    delete global.navigator;
-    delete global.btoa;
-    delete global.html2pdf;
-};
-visualLength = (string) => {
-    return string.length * 0.7;
-};
-String.prototype.splice = function(start, delCount, newSubStr) {
-    return this.slice(0, start) + newSubStr + this.slice(start + Math.abs(delCount));
-};
-
-function addreturnsInString(s) {
-    let newStr = "";
-    for(let i = 0; i < 5;i++){
-        console.log(i);
-        let cur = s.substring(i,78*(i+1));
-        console.log(cur);
-        if(cur.indexOf('\r\n')=== -1){
-            cur = cur.splice(78,0,"\r\n");
-        }
-        newStr+=cur;
-
-    }
-    return newStr;
 }
