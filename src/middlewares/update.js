@@ -5,6 +5,9 @@ const Item = require('../models/item');
 const Settings = require('../models/settings');
 const User = require('../models/user');
 exports.updateUndoAbility = async (req, res, next) => {
+    //new update 08/05/2020
+    let defaultTableSettings = {invoices:{client:true,date:true,totalExl:false,totalIncl:true,status:true,action:true}};
+    await Settings.updateOne({fromUser:req.session._id,table:null},{table:defaultTableSettings});
     //new update 20/04/2020
     await User.updateOne({_id:req.session._id,credits:null},{credits:15});
     await Invoice.updateOne({fromUser:req.session._id,isCreditPaid:null},{isCreditPaid:false});

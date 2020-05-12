@@ -5,6 +5,25 @@ const User = require("../models/user");
 const activity = require('../utils/activity');
 const logger = require("../middlewares/logger");
 const Error = require('../middlewares/error');
+
+exports.settingsAllInvoicesTable = async (req,res) =>{
+    let body = req.body;
+    console.log(body);
+    let updateSettingsObject = {invoices:{
+        client:(body.client==="true"),
+        date:(body.date==="true"),
+        totalExl:(body.totalExl==="true"),
+        totalIncl:(body.totalIncl==="true"),
+        status:(body.status==="true"),
+        action:(body.action==="true")}
+    };
+    console.log(updateSettingsObject);
+    await Settings.updateOne({fromUser:req.session._id},{table:updateSettingsObject});
+    req.flash('success',i18n.__("Settings succesfully updated"));
+    res.redirect('back');
+};
+
+
 /**
  * @api {get} /settings settingsAllGet
  * @apiVersion 3.0.0

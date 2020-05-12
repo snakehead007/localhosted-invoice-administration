@@ -47,6 +47,33 @@ const Settings = new mongoose.Schema({
     },currency:{
         type:String,
         default:'EUR'
+    },table:{
+        invoices:{
+            client:{
+                type:Boolean,
+                default:true
+            },
+            date:{
+                type:Boolean,
+                default:true
+            },
+            totalExl:{
+                type:Boolean,
+                default:false
+            },
+            totalIncl:{
+                type:Boolean,
+                default:true
+            },
+            status:{
+                type:Boolean,
+                default:true
+            },
+            action:{
+                type:Boolean,
+                default:true
+            }
+        }
     }
 });
 //CURRENCY ISO: https://www.xe.com/iso4217.php

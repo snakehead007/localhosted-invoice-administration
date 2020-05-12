@@ -8,5 +8,6 @@ router.post('/change/text', settingsController.changeTextGet);
 router.post('/change/pdf', settingsController.changePdfOptions);
 router.post('/change/basecone', settingsController.changeBaseconeMail);
 router.get('/change/theme/:theme', settingsController.settingsChangeThemeGet);
+router.post('/allInvoices', settingsController.settingsAllInvoicesTable);
 
 module.exports = router;

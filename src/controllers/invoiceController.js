@@ -991,26 +991,24 @@ exports.invoiceUpgradeGet = (req, res) => {
             return;
         }
         Error.handler(req,res,err,'5C1600');
-        if (!findOneHasError(req, res, err, invoice)) {
             let profile = await Profile.findOne({fromUser:req.session._id},(err,profile)=> {
                 Error.handler(req,res,err,'5C1602');
                 return profile;});
             let nr = getFullNr(profile.invoiceNrCurrent);
             Invoice.updateOne({fromUser: req.session._id, _id: req.params.idi}, {
-                invoiceNr: nr ,
+                invoiceNr: invoice.invoiceNr ,
                 offerNr: ""
             }, async (err) => {
                 Error.handler(req,res,err,'5C1603');
                 if (!updateOneHasError(req, res, err)) {
                     await Client.updateOne({fromUser:req.session._id,_id:invoice.fromClient},{lastUpdated:Date.now()},(err) => {
                         Error.handler(req,res,err,'5C1604');});
-                    await Profile.updateOne({fromUser:req.session._id},{invoiceNrCurrent:nr+1},(err) => {
+                    await Profile.updateOne({fromUser:req.session._id},{invoiceNrCurrent:invoiceNr+1},(err) => {
                         Error.handler(req,res,err,'5C1605');});
                     await activity.upgrade(invoice,req.session._id);
                     res.redirect("back");
                 }
             });
-        }
     });
 };
 
