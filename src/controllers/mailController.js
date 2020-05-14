@@ -68,11 +68,28 @@ exports.sendBugReport = async (req,res) => {
         return user;
         });
     try {
-        await mailgun.sendBugReport("snakehead007@pm.me", req.body.message, req.session._id, user, getIp(req));
+        let email = ((req.body.email)?req.body.email:req.session.email);
+        await mailgun.sendBugReport("br@invoice-administration.atlassian.net", req.body.message, req.session._id, user, getIp(req),email);
     }catch(err){
         Error.handler(req,res,err,'9M0101');
     }
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' send bug report");
     req.flash('success',i18n.__("Your bug report has been send, thank you!"));
+    res.redirect('back');
+};
+
+exports.sendSupport = async (req,res) => {
+    let user = await User.findOne({_id:req.session._id},(err,user)=>{
+        Error.handler(req,res,err,'9M0100');
+        return user;
+    });
+    try {
+        let email = ((req.body.email)?req.body.email:req.session.email);
+        await mailgun.sendBugReport("support@invoice-administration.atlassian.net", req.body.message, req.session._id, user, getIp(req),email,req.body.subject);
+    }catch(err){
+        Error.handler(req,res,err,'9M0102');
+    }
+    logger.info.log("[INFO]: Email:\'"+req.session.email+"\' send support");
+    req.flash('success',i18n.__("Your support question has been send. we will answer you by email"));
     res.redirect('back');
 };

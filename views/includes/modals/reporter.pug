@@ -1,0 +1,40 @@
+#reporter.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true')
+    .modal-dialog(role='document')
+        .modal-content
+            .modal-header
+                h5#reporterLabel.modal-title=__("Support reporter tool")
+                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+            .modal-body
+                select#reportSelect.custom-select
+                    option(value='support' selected) Support
+                    option(value='bug') Bug report
+            #supportForm
+                form(action="/mail/support", method="post")
+                    .modal-body
+                        .form-group
+                            label(for='exampleInputEmail1')=__('Email address')
+                            input.form-control(type='email' aria-describedby='emailHelp' placeholder='Enter email')
+                            small.form-text.text-muted=__('We will use this email to get back to you')
+                        .form-group
+                            label(for='subjectSupport') Subject of your question
+                            input#subjectSupport.form-control(type='text', name="subject")
+                        .form-group
+                            label.col-form-label(for='support')=__('Enter you question or request')
+                            textarea#support.form-control( name="message", placeholder="")=__("")
+                    .modal-footer
+                        button.btn.btn-secondary(type="button" data-dismiss="modal" )=__("Close")
+                        button.btn.btn-primary(role="button" type='submit')=__("Send to support")
+            #bugReportForm(style="display:none;")
+                form(action="/mail/bugreport", method="post")
+                    .modal-body
+                        .form-group
+                            label(for='exampleInputEmail1')=__('Email address')
+                            input.form-control(type='email' aria-describedby='emailHelp' placeholder='Enter email')
+                            small.form-text.text-muted=__('We will use this email to get back to you')
+                        .form-group
+                            label.col-form-label(for='bugReport')=__('Report')
+                            textarea#bugReport.form-control( name="message", placeholder="")=__("")
+                    .modal-footer
+                        button.btn.btn-secondary(type="button" data-dismiss="modal" )=__("Close")
+                        button.btn.btn-primary(role="button" type='submit')=__("Send bug report")

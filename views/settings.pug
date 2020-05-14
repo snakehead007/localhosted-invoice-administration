@@ -113,7 +113,7 @@ html(lang="nl-BE")
                                                         div(class="input-group-prepend")
                                                             span(class="input-group-text") #{__('Offer footer')}
                                                         textarea#offerText(input="text",name="offerText",class="form-control" aria-label="With textarea")=settings.offerText
-                                                    button#textUpdate(class="btn btn-outline-"+settings.theme)=__("Update")
+                                                    button#textUpdate(class="btn btn-"+settings.theme)=__("Update")
                                                     div(class="",id="info",style="display:none")
                                                         p #{__('In order to use variables of the database, type them like below')}:
                                                         samp(class="text")
@@ -177,61 +177,68 @@ html(lang="nl-BE")
                                                         else
                                                             input#invoicesAction.custom-control-input(type='checkbox', name="action")
                                                         label.custom-control-label(for='invoicesAction')=__("Action")
-                                                    button#updateInvoices.btn(class="btn-outline-"+settings.theme)=__("Update")
+                                                    button#updateInvoices.btn(class="btn-"+settings.theme)=__("Update")
         script.
             $(document).ready(function () {
                 feather.replace();
-                postAjax("/settings/allInvoices","#updateInvoices", {
-                    client: $('#invoicesClient').is(':checked'),
-                    date: $('#invoicesDate').is(':checked'),
-                    totalIncl: $('#invoicesTotalIncl').is(':checked'),
-                    totalExl: $('#invoicesTotalExl').is(':checked'),
-                    status: $('#invoicesStatus').is(':checked'),
-                    action: $('#invoicesAction').is(':checked'),
-                });
-                postAjax("/settings/change/text","#textUpdate",{
-                    invoiceText: $('#invoiceText').val(),
-                    creditText: $("#creditText").val(),
-                    offerText: $("#offerText").val()
-                })
-                postAjax("/settings/change/pdf","#pdfStyleUpdate",{
-                    nologo:$("#noLogo").val(),
-                    color:$("#color").val(),
-                    titleSize:$("titleSize").val()
-                })
+
                 function postAjax(url,element,updateObject){
-                    $(element).click(function () {
-                        $("#loading").remove();
-                        $(element).append($("<span id='loading'></span>"));
-                        let maxtwo = 0;
-                        let done = "<i id=\"check\" class=\"fas fa-check\" style=\"margin-left: 15px;\"></i>"
-                        let loading = "<div id=\"spinner\" class=\"spinner-border spinner-border-sm text-#{settings.theme} role=\"status\" style=\"margin-left: 15px;\">\n" +
-                            "  <span class=\"sr-only\">Loading...</span>\n" +
-                            "</div>";
-                        let error = "<i id=\"error\" class=\"fas fa-exclamation-triangle\" style=\"margin-left: 15px;\"></i>"
-                        $(document).ajaxSend(function (event, xhr, settings) {
-                            if (settings.url === url && maxtwo!==2) {
-                                $("#loading").append($(loading));
-                                maxtwo++;
-                            }
-                        });
-                        $(document).ajaxError(function (event, xhr, settings) {
-                            if (settings.url === url && maxtwo !== 2) {
-                                $("#spinner").remove();
-                                $("#loading").append($(error));
-                                maxtwo++;
-                            }
-                        });
-                        $(document).ajaxSuccess(function (event, xhr, settings) {
-                            if (settings.url === url && maxtwo !== 2) {
-                                $("#spinner").remove();
-                                $("#loading").append($(done));
-                                maxtwo++;
-                            }
-                        });
-                        $.post(url, updateObject, function (data, status) {
-                        });
+                    //use a .click() function to trigger this function.
+                    $("#loading").remove();
+                    $(element).append($("<span id='loading'></span>"));
+                    let maxtwo = 0;
+                    let done = "<i id=\"check\" class=\"fas fa-check\" style=\"margin-left: 15px;\"></i>"
+                    let loading = "<div id=\"spinner\" class=\"spinner-border spinner-border-sm text-#{settings.theme} role=\"status\" style=\"margin-left: 15px;\">\n" +
+                        "  <span class=\"sr-only\">Loading...</span>\n" +
+                        "</div>";
+                    let error = "<i id=\"error\" class=\"fas fa-exclamation-triangle\" style=\"margin-left: 15px;\"></i>"
+                    $(document).ajaxSend(function (event, xhr, settings) {
+                        if (settings.url === url && maxtwo!==2) {
+                            $("#loading").append($(loading));
+                            maxtwo++;
+                        }
+                    });
+                    $(document).ajaxError(function (event, xhr, settings) {
+                        if (settings.url === url && maxtwo !== 2) {
+                            $("#spinner").remove();
+                            $("#loading").append($(error));
+                            maxtwo++;
+                        }
+                    });
+                    $(document).ajaxSuccess(function (event, xhr, settings) {
+                        if (settings.url === url && maxtwo !== 2) {
+                            $("#spinner").remove();
+                            $("#loading").append($(done));
+                            maxtwo++;
+                        }
+                    });
+                    $.post(url, updateObject, function (data, status) {
                     });
                 }
+
+                $("#updateInvoices").click(function(){
+                    postAjax("/settings/allInvoices", "#updateInvoices", {
+                        client: $('#invoicesClient').is(':checked'),
+                        date: $('#invoicesDate').is(':checked'),
+                        totalIncl: $('#invoicesTotalIncl').is(':checked'),
+                        totalExl: $('#invoicesTotalExl').is(':checked'),
+                        status: $('#invoicesStatus').is(':checked'),
+                        action: $('#invoicesAction').is(':checked'),
+                    })}
+                );
+                $("#textUpdate").click(function(){
+                    postAjax("/settings/change/text", "#textUpdate", {
+                        invoiceText: $('#invoiceText').val(),
+                        creditText: $("#creditText").val(),
+                        offerText: $("#offerText").val()
+                    })}
+                );
+                $("#pdfStyleUpdate").click(function(){
+                    postAjax("/settings/change/pdf", "#pdfStyleUpdate", {
+                        nologo: $("#noLogo").val(),
+                        color: $("#color").val(),
+                        titleSize: $("titleSize").val()
+                    })}
+                )
             });
-        include includes/modals/bugReporter
+        include includes/modals/reporter
