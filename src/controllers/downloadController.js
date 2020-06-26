@@ -150,7 +150,7 @@ exports.downloadCreditPDF = (req, res) => {
                         error.handler(req,res,err,'4D0304');
                         if (!err) {
                             try{
-                                await activity.downloadInvoice(invoice,fromUser);
+                                await activity.downloadInvoice(invoice,req.session._id);
                                 createPDF(req, res, "credit", profile, settings, client, invoice, orders,true);
                             } catch (err) {
                                 error.handler(req,res,err,'4D0305');
