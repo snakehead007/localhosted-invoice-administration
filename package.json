@@ -24,7 +24,7 @@
     "connect-mongo": "^3.2.0",
     "connect-redis": "^4.0.4",
     "connect-timeout": "^1.9.0",
-    "constantinople": "^3.1.2",
+    "constantinople": "^4.0.0",
     "content-disposition": "^0.5.3",
     "cookie-parser": "^1.4.4",
     "cookie-session": "^1.4.0",
