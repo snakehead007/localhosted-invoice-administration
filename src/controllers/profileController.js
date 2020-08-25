@@ -120,7 +120,7 @@ exports.editProfilePost = async (req, res) => {
     let postalCheck = valueMustBePostalCode(req, res, req.body.postal);
     let streetNrCheck = valueMustBeStreetNumber(req, res, req.body.streetNr);
     if (firmCheck || nameCheck || streetCheck || placeCheck || emailCheck || telCheck || vatCheck || postalCheck || streetCheck || bicCheck || ibanCheck || streetNrCheck) {
-        log.info("[INFO]: Email:\'"+req.session.email+"\' could not edit profile, due to validation.");
+        logger.info.log.info("[INFO]: Email:\'"+req.session.email+"\' could not edit profile, due to validation.");
         let role = (await User.findOne({_id: req.session._id}, (err, user) => {
             Error.handler(req,res,err,'BP0200');
             return user

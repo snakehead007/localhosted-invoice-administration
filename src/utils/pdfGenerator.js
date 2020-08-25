@@ -168,6 +168,9 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     }
     c[0] = 150 + ((pages[0]===undefined)?0:pages[0].length * 7) + 10;
     c[1] = 15;
+    if(invoice.isVatOn) {
+        doc.text(c[1] + 5, c[0], String.raw`Dienstverrichting niet onderworpen aan Belgische BTW ingevolge art.44, §3, 11°, van het WBTW.`);
+    }
     if(invoice.description) {
         let description = invoice.description.split('\r\n');
         description.forEach((text) => {
