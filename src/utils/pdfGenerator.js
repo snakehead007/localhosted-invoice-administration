@@ -205,12 +205,13 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
 
     /// SETTING UP STREAM/DOWNLOAD ///
     let filename;
+    console.log(style==="invoice");
     if (style === "invoice")
-        filename = invoice.invoiceNr + ".pdf";
+        filename = invoice.invoiceNr.toString() + ((invoice.firm)?invoice.firm:invoice.clientName) +".pdf";
     if (style === "credit")
-        filename = i18n.__("creditnote") + " " + invoice.creditNr + ".pdf";
+        filename = i18n.__("creditnote") + " " + invoice.creditNr + ((invoice.firm)?invoice.firm:invoice.clientName) + ".pdf";
     if (style === "offer")
-        filename = i18n.__("offer") + " " + invoice.offerNr + ".pdf";
+        filename = i18n.__("offer") + " " + invoice.offerNr + ((invoice.firm)?invoice.firm:invoice.clientName) + ".pdf";
     try{
         await fs.mkdirSync("./temp/"+req.session._id);
     }catch(e){
@@ -221,11 +222,13 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     await fs.writeFileSync(file, doc.output(), "binary");
     if(!onlyPrompt) {
         if (download) {
-            res.download(file);
+            res.download(file,filename);
         } else {
             fs.readFile(file, function (err, data) {
+                res.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
                 res.contentType("application/pdf");
-                res.send(data);
+                res.setHeader("Content-Length", data.length);
+                res.status(200).end(data, "binary");
             });
             /*await fs.readFile(file, function (err, data) {
                 if (data) {
