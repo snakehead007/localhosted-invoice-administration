@@ -131,9 +131,8 @@ exports.postClientNew = async (req, res) => {
     let vatCheck = (req.body.vat) ? invalid.valueMustBeVatNumber(req, res, req.body.vat) : false;
     let vatPercentageCheck = invalid.valueMustBeAnInteger(req, res, req.body.vatPercentage, true);
     let bankCheck = (req.body.bankNr) ? invalid.valueMustBeValidIban(req, res, req.body.bankNr) : false;
-    let postalCheck = (req.body.postalCode) ? invalid.valueMustBePostalCode(req, res, req.body.postalCode) : false;
     let placeCheck = (req.body.place) ? invalid.valueMustBeAName(req, res, req.body.place, true, "place name not correctly checked in") : false;
-    let isNotValid = nameCheck || firmCheck || streetCheck || vatPercentageCheck || streetNrCheck || emailCheck || vatCheck || bankCheck || postalCheck || placeCheck;
+    let isNotValid = nameCheck || firmCheck || streetCheck || vatPercentageCheck || streetNrCheck || emailCheck || vatCheck || bankCheck || placeCheck;
     if (isNotValid) {
         logger.info.log("[INFO]: Email:\'"+req.session.email+"\' body not valid for creating a client, redirecting back");
         Settings.findOne({fromUser: req.session._id}, function (err, settings) {
@@ -287,9 +286,8 @@ exports.postEditClient = async (req, res) => {
             let vatCheck = (req.body.vat) ? invalid.valueMustBeVatNumber(req, res, req.body.vat,false,client.locale) : false;
             let vatPercentageCheck = invalid.valueMustBeAnInteger(req, res, req.body.vatPercentage, true);
             let bankCheck = (req.body.bankNr) ? invalid.valueMustBeValidIban(req, res, req.body.bankNr) : false;
-            let postalCheck = (req.body.postalCode) ? invalid.valueMustBePostalCode(req, res, req.body.postalCode) : false;
             let placeCheck = (req.body.place) ? invalid.valueMustBeAName(req, res, req.body.place, true, "place name not correctly checked in") : false;
-            let isNotValid = nameCheck || firmCheck || streetCheck || vatPercentageCheck || streetNrCheck || emailCheck || vatCheck || bankCheck || postalCheck || placeCheck;
+            let isNotValid = nameCheck || firmCheck || streetCheck || vatPercentageCheck || streetNrCheck || emailCheck || vatCheck || bankCheck || placeCheck;
             if (!isNotValid) {
                 logger.info.log("[INFO]: Email:\'"+req.session.email+"\' body valid for creating a client");
                 let updatedClient = {

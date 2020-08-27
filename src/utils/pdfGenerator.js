@@ -168,6 +168,9 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     }
     c[0] = 150 + ((pages[0]===undefined)?0:pages[0].length * 7) + 10;
     c[1] = 15;
+    if(invoice.isVatOn) {
+        doc.text(c[1] + 5, c[0], String.raw`Dienstverrichting niet onderworpen aan Belgische BTW ingevolge art.44, §3, 11°, van het WBTW.`);
+    }
     if(invoice.description) {
         let description = invoice.description.split('\r\n');
         description.forEach((text) => {
@@ -202,12 +205,13 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
 
     /// SETTING UP STREAM/DOWNLOAD ///
     let filename;
+    console.log(style==="invoice");
     if (style === "invoice")
-        filename = invoice.invoiceNr + ".pdf";
+        filename = invoice.invoiceNr.toString() + ((invoice.firm)?invoice.firm:invoice.clientName) +".pdf";
     if (style === "credit")
-        filename = i18n.__("creditnote") + " " + invoice.creditNr + ".pdf";
+        filename = i18n.__("creditnote") + " " + invoice.creditNr + ((invoice.firm)?invoice.firm:invoice.clientName) + ".pdf";
     if (style === "offer")
-        filename = i18n.__("offer") + " " + invoice.offerNr + ".pdf";
+        filename = i18n.__("offer") + " " + invoice.offerNr + ((invoice.firm)?invoice.firm:invoice.clientName) + ".pdf";
     try{
         await fs.mkdirSync("./temp/"+req.session._id);
     }catch(e){
@@ -218,11 +222,13 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     await fs.writeFileSync(file, doc.output(), "binary");
     if(!onlyPrompt) {
         if (download) {
-            res.download(file);
+            res.download(file,filename);
         } else {
             fs.readFile(file, function (err, data) {
+                res.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
                 res.contentType("application/pdf");
-                res.send(data);
+                res.setHeader("Content-Length", data.length);
+                res.status(200).end(data, "binary");
             });
             /*await fs.readFile(file, function (err, data) {
                 if (data) {
@@ -231,7 +237,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
                     res.setHeader("Content-Length", data.length);
                     res.status(200).end(data, "binary");
                 } else {
-                    req.flash("danger", "something went wrong, please try again");
+                    req.flash("danger", "something went wrong, please try again");x
                     res.redirect("back");
                 }
             });*/
