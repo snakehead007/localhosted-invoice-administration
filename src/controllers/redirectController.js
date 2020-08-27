@@ -16,6 +16,7 @@ const {checkSignIn} = require('../middlewares/google');
 const mailgun = require('../utils/mailgun');
 const {getIp} = require("../utils/utils");
 
+
 /**
  * @apiVersion 3.0.0
  * @api {get} /redirect/ googleLogin
@@ -51,16 +52,18 @@ exports.checkWhitelistGet = async (req, res) => {
             logger.error.log("[ERROR]: thrown at /src/controllers/redirectRouter.router.get('/') on method Profile.findOne trace: "+err.message);
             res.flash('danger', 'Something happen, try again');
         } else {
-            try{
-                await whitelistUsers.forEach(o => {
-                    console.log(req.session.email+" ? "+o.mail);
-                    if (req.session.email === o.mail) {
-                        console.log('found');
-                        throw BreakException;
-                    }
-                });
-            }catch(err){
-                if(err === BreakException) {
+                // await whitelistUsers.forEach(o => {
+                //     console.log(req.session.email+" ? "+o.mail);
+                //     if (req.session.email === o.mail) {
+                //         console.log('found');
+                //         throw BreakException;
+                //     }
+                // });
+                let ip = getIp(req);
+                let lookup = require('geoip-lite').lookup(ip);
+                console.log('new login',lookup);
+                if(ip==="127.0.0.1"||ip==="::1"||ip.includes('192.168.') || lookup.country==='BE'){
+                    console.log("allowed to login");
                     await checkSignIn(req);
                     User.updateOne({_id: req.session._id}, {lastLogin: Date.now()}, async (err) => {
                         if (err) logger.error.log("[ERROR]: thrown at /src/controllers/redirectRouter.router.get('/') on method User.updateOne trace: " + err.message);
@@ -106,13 +109,12 @@ exports.checkWhitelistGet = async (req, res) => {
                     });
                     return;
                 }else{
-                    req.flash('danger','Something went wrong please try again');
+                    req.flash('danger','Invoice-administration is only available in Belgium');
                     res.redirect('/');
                     return;
                 }
             }
             req.flash('warning', 'You are not whitelisted, please contact the administrator');
             res.redirect('/');
-        }
     });
 };

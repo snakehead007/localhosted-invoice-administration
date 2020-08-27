@@ -49,7 +49,7 @@
             div(class="form-group col-md-1")
                 label(for="title")=__('Postal')
                 if client
-                    input(type="number",class="form-control",value=(client.postalCode)?client.postalCode:"", name="postalCode")
+                    input(type="text",class="form-control",value=(client.postalCode)?client.postalCode:"", name="postalCode")
                 else
                     input(type="number",class="form-control", name="postalCode")
             div(class="form-group col-md-2")
