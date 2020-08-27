@@ -5,16 +5,20 @@
 
 This program is mainly used for managing and administrating invoices and generating them into .pdf format
 <br> Currently only used for <strong>Belgian clients and users</strong>.  
-<br> Version 3.0.0 (close beta) is out. We are still improving and adding things on a daily basis. 
-<br> To contribute, use and/or test it out, contact me.  
+<br> Version 3.0.0 (open beta) is out. We are still improving and adding things on a daily basis. 
+<br> To contribute contact me.  
+<br> Feel free to use the platform and give feedback on anything that you can find.
 
 This project is translated in 2 languages, Dutch and English.
 <br>This program is created and maintained for [www.mdsart.be/](https://www.mdsart.be/)
 
 ## demo
 
-If you want to test it out and help make this program better, you can contact me so I can whitelist you.
-After that, you'll be able to go to [account.karel.be](https://account.karel.be/) and use it.
+You have free access to use the platform, you are able to download freely 15 distinct documents. 
+This is currently restricted using the Credits system, which you get 15 for free. 
+There is currently no option to buy more, but contact me if you need more. 
+
+You can visit the platform at [account.karel.be](https://account.karel.be/), thanks for testing it.
 
 ## about
 
