@@ -237,7 +237,7 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
                     res.setHeader("Content-Length", data.length);
                     res.status(200).end(data, "binary");
                 } else {
-                    req.flash("danger", "something went wrong, please try again");
+                    req.flash("danger", "something went wrong, please try again");x
                     res.redirect("back");
                 }
             });*/
