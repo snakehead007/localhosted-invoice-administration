@@ -19,7 +19,8 @@ table(class="table table-striped table-sm ",id="tabelClients")
         each client in clients
             tr
                 td
-                    span.badge.badge-pill.badge-dark=client._id
+                    a(href="/admin/edit/client/" + client._id)
+                        span.badge.badge-pill.badge-dark=client._id
                 td
                     a(href='/admin/invoice/all/' + client._id)
                         if(!client.firm)

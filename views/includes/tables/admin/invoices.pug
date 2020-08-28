@@ -22,7 +22,8 @@ table(class="table table-striped table-sm ",id="tabelInvoices")
         each invoice in invoices
             tr
                 td
-                    span.badge.badge-pill.badge-dark=invoice._id
+                    a(href="/admin/edit/invoice/"+invoice._id)
+                        span.badge.badge-pill.badge-dark=invoice._id
                 td
                     a(href='/admin/order/all/' + invoice._id )=invoice.nickname
                 td

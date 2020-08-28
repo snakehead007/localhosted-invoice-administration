@@ -769,3 +769,60 @@ exports.getUserBlock = async (req,res) => {
     await User.updateOne({_id:req.params.uid},{isBlocked:!currentUser.isBlocked});
     res.redirect('back');
 };
+
+
+exports.getEditInvoice = async (req,res) => {
+    let id = req.params.idi;
+    let invoice = await Invoice.findOne({_id:id});
+    let invoiceString = JSON.stringify(invoice);
+
+    let settings = await new M.settings().findOne(req,res,{fromUser:req.session._id});
+    let user = await new M.user().findOne(req,res,{_id:req.session._id});
+    let profile = await new M.profile().findOne(req.res,{fromUser:req.session._id});
+    res.render('admin/json',{
+        'settings':settings,
+        'role':user.role,
+        'credits':user.credits,
+        'profile':profile,
+        'currentUrl':"json",
+        'json':invoiceString,
+        'title':'Editing invoice',
+        'updateUrl':'/admin/edit/invoice/'+req.params.idi+'/update'
+    })
+};
+
+exports.postEditUpdateInvoice = async (req,res) => {
+    let json = JSON.parse(req.body.json);
+    await Invoice.updateOne({_id:json._id},json);
+    req.flash('success','successfully updated this document');
+    res.redirect('back');
+};
+
+exports.getEditClient = async (req,res) => {
+    let id = req.params.idc;
+    let client = await Client.findOne({_id:id});
+    let clientString = JSON.stringify(client);
+
+    let settings = await new M.settings().findOne(req,res,{fromUser:req.session._id});
+    let user = await new M.user().findOne(req,res,{_id:req.session._id});
+    let profile = await new M.profile().findOne(req.res,{fromUser:req.session._id});
+    res.render('admin/json',{
+        'settings':settings,
+        'role':user.role,
+        'credits':user.credits,
+        'profile':profile,
+        'currentUrl':"json",
+        'json':clientString,
+        'title':'Editing client',
+        'updateUrl':'/admin/edit/client/'+req.params.idc+'/update'
+    })
+};
+
+exports.postEditUpdateClient = async (req,res) => {
+    let json = JSON.parse(req.body.json);
+    await Client.updateOne({_id:json._id},json,(err)=>{
+        console.trace(err);
+    });
+    req.flash('success','successfully updated this document');
+    res.redirect('back');
+};

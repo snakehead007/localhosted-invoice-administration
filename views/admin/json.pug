@@ -1,0 +1,59 @@
+//- V1.8
+html
+    head
+        include ../includes/htmlHead
+        script.
+            function info(){$("#info").toggle();};
+            $(document).ready(function () {
+                feather.replace();
+            });
+        style.
+            #json {
+                width: 100%;
+                height: 100%;
+            }
+body
+    header
+        include ../includes/topBar
+        div(class="container-fluid")
+            div(class ="row")
+                nav(class="col-md-2 d-none d-md-block bg-light sidebar").fixed
+                    div(class="sidebar-sticky")
+                        include ../includes/mainMenu
+                        include ../includes/downMenu
+                main(role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4")
+                    if title
+                        h2(class="pt-3")=title
+                    else
+                        h2(class="pt-3") no title found
+                    hr
+                    include ../includes/messages
+                    form(action=updateUrl, method="post")
+                        textarea#json(name='json')
+                        button.btn.btn-success(type='submit') Update
+    script.
+        let obj = JSON.parse("#{json}".replace(/&quot;/g, '"'));
+        let json = JSON.stringify(obj, null, "\t");
+        $("#json").val(json);
+
+        function FitToContent(id, maxHeight) {
+            var text = id && id.style ? id : document.getElementById(id);
+            if (!text)
+                return;
+
+            /* Accounts for rows being deleted, pixel value may need adjusting */
+            if (text.clientHeight == text.scrollHeight) {
+                text.style.height = "30px";
+            }
+
+            var adjustedHeight = text.clientHeight;
+            if (!maxHeight || maxHeight > adjustedHeight) {
+                adjustedHeight = Math.max(text.scrollHeight, adjustedHeight);
+                if (maxHeight)
+                    adjustedHeight = Math.min(maxHeight, adjustedHeight);
+                if (adjustedHeight > text.clientHeight)
+                    text.style.height = adjustedHeight + "px";
+            }
+        }
+        FitToContent("json",99999999)
+
