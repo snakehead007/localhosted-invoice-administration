@@ -30,11 +30,11 @@ const M = require('../utils/mongooseSchemas');
  */
 exports.getClientAll = async (req, res) => {
     //renders /view/clients, currently url clients
-    let user = await new M.user().findOne(req,res,{_id: req.session._id});
+    let user = await User.findOne(req,res,{_id: req.session._id});
     res.render("clients", {
-        "clients": await new M.client().find(req,res,{fromUser: req.session._id,isRemoved:false},null,{sort:{lastUpdated:-1}}),
-        "settings": await new M.settings().findOne(req,res,{fromUser: req.session._id}),
-        "profile": await new M.profile().findOne(req,res,{fromUser:req.session._id}),
+        "clients": await Client.find(req,res,{fromUser: req.session._id,isRemoved:false},null,{sort:{lastUpdated:-1}}),
+        "settings": await Settings.findOne(req,res,{fromUser: req.session._id}),
+        "profile": await Profile.findOne(req,res,{fromUser:req.session._id}),
         "currentUrl": "clientAll",
         "role": user.role,
         'credits':user.credits
@@ -57,10 +57,10 @@ exports.getClientAll = async (req, res) => {
 });
  */
 exports.getClientNew = async (req, res) => {
-    let user = await new M.user().findOne(req,res,{_id: req.session._id});
+    let user = await User.findOne(req,res,{_id: req.session._id});
     res.render("new/new-client", {
-        "settings": await new M.settings().findOne(req,res,{fromUser:req.session._id}),
-        "profile": await new M.profile().findOne(req,res,{fromUser:req.session._id}),
+        "settings": await Settings.findOne(req,res,{fromUser:req.session._id}),
+        "profile": await Profile.findOne(req,res,{fromUser:req.session._id}),
         "currentUrl": "clientNew",
         "role": user.role,
         'credits':user.credits
@@ -98,7 +98,7 @@ exports.getClientNew = async (req, res) => {
  */
 exports.postClientNew = async (req, res) => {
     let emails = [];
-    let user = await new M.user().findOne(req,res,{_id: req.session._id});
+    let user = await User().findOne(req,res,{_id: req.session._id});
     logger.info.log("[INFO]: Email:\'"+req.session.email+"\' trying to create new client with :"+JSON.stringify(req.body));
     let nameCheck = invalid.valueMustBeAName(req, res, req.body.clientName, true, "client name not correctly filled in");
     let firmCheck = invalid.valueMustBeAName(req, res, req.body.firm,   false, "firm name not correctly filled in");
@@ -207,12 +207,12 @@ exports.postClientNew = async (req, res) => {
 exports.getClientView = async (req, res) => {
     let user = await new M.user().findOne(req,res,{_id: req.session._id});
         res.render("view/view-client", {
-                "client": await M.client().findOne(req, res, {
+                "client": await Client.findOne(req, res, {
                     fromUser: req.session._id,
                     _id: req.params.idc,
                     isRemoved: false
                 }),
-                "settings": await M.settings().findOne(req, res, {fromUser: req.session._id}),
+                "settings": await Settings.findOne(req, res, {fromUser: req.session._id}),
                 "profile": await M.profile().findOne(req, res, {fromUser: req.session._id}),
                 "role": user.role,
                 'credits':user.credits
