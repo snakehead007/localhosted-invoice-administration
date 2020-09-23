@@ -53,7 +53,7 @@
     "ibantools": "^3.0.0",
     "iconv-lite": "^0.6.0",
     "image-size": "^0.8.3",
-    "image-to-base64": "^2.0.1",
+    "image-to-base64": "^2.1.1",
     "jsdom": "^16.2.1",
     "jsonwebtoken": "^8.5.1",
     "jspdf": "^1.5.3",
