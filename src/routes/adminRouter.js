@@ -36,4 +36,9 @@ router.get('/invoice/change/downgrade/:idi',checkIfAdminOrSupportRole,adminContr
 router.get('/invoice/change/upgrade/:idi',checkIfAdminOrSupportRole,adminController.invoiceUpgradeAdminGet);
 router.get('/user/:idu/credits/remove',checkIfAdminRole,adminController.getRemoveCreditsToUser);
 router.get('/user/:idu/credits/add',checkIfAdminRole,adminController.getAddCreditsToUser);
+router.get('/edit/invoice/:idi',checkIfAdminRole,adminController.getEditInvoice);
+router.post('/edit/invoice/:idi/update',checkIfAdminRole,adminController.postEditUpdateInvoice);
+router.get('/edit/client/:idc',checkIfAdminRole,adminController.getEditClient);
+router.post('/edit/client/:idc/update',checkIfAdminRole,adminController.postEditUpdateClient);
+
 module.exports = router;
