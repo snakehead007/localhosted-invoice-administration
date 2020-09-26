@@ -56,7 +56,7 @@ exports.checkIfAdminOrSupportRole = async (req,res,next) => {
     }else{
         req.flash('warning',"You are not allowed there");
         req.session = {};
-        res.redirect('/');
+        res.redirect('/');  
     }
 };
 
