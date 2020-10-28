@@ -44,7 +44,7 @@
     "geoip-lite": "^1.4.2",
     "global": "^4.4.0",
     "google-auto-auth": "^0.10.1",
-    "googleapis": "^61.0.0",
+    "googleapis": "^62.0.0",
     "helmet": "^4.0.0",
     "hpp": "^0.2.3",
     "http": "0.0.0",
