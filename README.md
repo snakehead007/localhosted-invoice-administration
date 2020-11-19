@@ -2,7 +2,7 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2b050f3946714359aaca43cc883f5115)](https://www.codacy.com/manual/snakehead007/invoice-administration?utm_source=github.com&utm_medium=referral&utm_content=snakehead007/invoice-administration&utm_campaign=Badge_Grade)
 [![Build Status](https://travis-ci.com/snakehead007/invoice-administration.svg?branch=master)](https://travis-ci.com/snakehead007/invoice-administration)
-
+#### Discontinued
 This program is mainly used for managing and administrating invoices and generating them into .pdf format
 <br> Currently only used for <strong>Belgian clients and users</strong>.  
 <br> Version 3.0.0 (open beta) is out. We are still improving and adding things on a daily basis. 
@@ -77,8 +77,3 @@ The API documentation are hosted on [snakehead007.github.io/invoice-administrati
 ![Invoices and others of 1 contact](screenshots/6.png)
 
 ![the chart](screenshots/7.png)
-
-## Future plans
-
--   In the future the view engine, Pug, will be replace by React.
--   When this project comes out of beta, you'll be able to create an account  for a monthly fee.
