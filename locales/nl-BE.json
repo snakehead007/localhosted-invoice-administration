@@ -446,9 +446,12 @@
 	"succesfully removed": "succesvol verwijdert",
 	"--------FROM-HERE-ALL-ABOVE-CHECKED-----------": "--------FROM-HERE-ALL-ABOVE-CHECKED-----------",
 	"Support reporter tool": "Support reporter tool",
-	"Send to support": "Send to support",
+	"Send to support": "Verstuur naar support",
 	"Support": "Support",
 	"Email address": "Email address",
-	"We will use this email to get back to you": "We will use this email to get back to you",
-	"Enter you question or request": "Enter you question or request"
+	"We will use this email to get back to you": "We gebruiken dit email om u terug te contacteren",
+	"Enter you question or request": "Geef uw vraag of aanvraag",
+	"Your firm name will be shown instead": "Your firm name will be shown instead",
+	"Provision of services not subject to VAT art.44, §3, 11° as a result of VAT": "Dienstverrichting niet onderworpen aan Belgische BTW ingevolge art.44, §3, 11°, van het BTW. ",
+	"Dienstverrichting niet onderworpen aan Belgische BTW ingevolge art.44, §3, 11°, van het WBTW.": "Dienstverrichting niet onderworpen aan Belgische BTW ingevolge art.44, §3, 11°, van het WBTW."
 }
