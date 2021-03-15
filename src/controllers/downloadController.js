@@ -7,6 +7,7 @@ const Invoice = require("../models/invoice");
 const Order = require("../models/order");
 const Settings = require("../models/settings");
 const Client = require("../models/client");
+const i18n = require("i18n");
 const error = require("../middlewares/error");
 const {createPDF} = require("../utils/pdfGenerator");
 const activity = require('../utils/activity');
@@ -37,6 +38,11 @@ exports.streamInvoicePDF = (req, res) => {
                                     error.handler(req,res,err,'4D0004');
                                     if (!err) {
                                         try {
+                                            const settings = await Settings.findOne({fromUser: req.session._id});
+                                            console.log(settings.locale);
+                                            i18n.setLocale(req, settings.locale);
+                                            i18n.setLocale(res,settings.locale);
+                                            req.setLocale(res,settings.locale);
                                             await activity.downloadInvoice(invoice,req.session._id);
                                             createPDF(req, res, "invoice", profile, settings, client, invoice, orders);
                                         } catch (err) {

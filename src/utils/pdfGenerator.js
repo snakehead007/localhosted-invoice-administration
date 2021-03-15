@@ -20,6 +20,7 @@ const {getReformatedImageSize} = require("./utils");
 const {callGetBase64, createJSON, replaceAll} = require("../utils/pdfCreation");
 require("jspdf-autotable");
 exports.createPDF = async (req, res, style = "invoice", profile, settings, client, invoice, orders,download=false,onlyPrompt=false) => {
+    console.log(i18n.getLocale())
     /// SETTING UP COLOURS ///
     let colorTheme; //normal tone
     let colorThemeLess; //darker tone for title
@@ -198,14 +199,14 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
     doc.setFontSize(10);
     let textC = 270;
     dataText.forEach((text) => {
-        let px = 92.0 - visualLength(text);
+        let px = 140 - visualLength(text);
+        console.log(px, visualLength(text));
         doc.text(px, textC, text);
         textC += 5
     });
 
     /// SETTING UP STREAM/DOWNLOAD ///
     let filename;
-    console.log(style==="invoice");
     if (style === "invoice")
         filename = invoice.invoiceNr.toString() + ((invoice.firm)?invoice.firm:invoice.clientName) +".pdf";
     if (style === "credit")
@@ -218,7 +219,6 @@ exports.createPDF = async (req, res, style = "invoice", profile, settings, clien
         console.error(e);
     }
     let file = "./temp/" + req.session._id + "/" + filename;
-    console.log(file);
     await fs.writeFileSync(file, doc.output(), "binary");
     if(!onlyPrompt) {
         if (download) {
@@ -258,9 +258,7 @@ String.prototype.splice = function(start, delCount, newSubStr) {
 function addreturnsInString(s) {
     let newStr = "";
     for(let i = 0; i < 5;i++){
-        console.log(i);
         let cur = s.substring(i,78*(i+1));
-        console.log(cur);
         if(cur.indexOf('\r\n')=== -1){
             cur = cur.splice(78,0,"\r\n");
         }
