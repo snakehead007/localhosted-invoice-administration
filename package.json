@@ -106,7 +106,7 @@
   },
   "devDependencies": {
     "babel-eslint": "10.0.3",
-    "@types/express": "4.17.9",
+    "@types/express": "4.17.11",
     "gm": "1.23.1"
   },
   "scripts": {
